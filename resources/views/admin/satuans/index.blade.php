@@ -26,7 +26,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       
-      <a href="/satuan/create" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('satuans.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="row">
         <table class="table table-bordered">
             <thead>
@@ -40,7 +40,7 @@
             </thead>
             <tbody>
                     <?php 
-                        foreach ($data as $satuan) { ?>
+                        foreach ($satuans as $satuan) { ?>
                         <tr>
                             <td scope="row">{{ $satuan->id }}</td>
                             <td>{{ $satuan->kode }}</td>
@@ -49,7 +49,7 @@
                             <td>
                                 <div class="input-group">
                                     <div class="input-group-append" id="button-addon4">
-                                    <a href="/satuan/edit/{{ $satuan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                                    <a href="{{ route('satuans.edit', $satuan->id) }}" class="btn btn-outline-secondary" type="button">Edit</a>
                                     <a class="btn btn-outline-danger" type="button">Delete</a>
                                     </div>
                                 </div>

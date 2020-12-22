@@ -20,12 +20,9 @@
                     </div>
                 @endif
 
-                <form action="/satuan/update" method="POST">
+                <form action="{{ route('satuans.update', $satuan->id) }}" method="POST">
                     @csrf
-
-                    <?php 
-                        foreach ($data as $satuan) {
-                    ?>
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -51,13 +48,11 @@
                                 <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $satuan->branch }}">
                             </div>
                         </div>
-                        <input type="hidden" class="form-control txt_line" name="updateBy" id="updateBy" value="{{ Auth::user()->name }}">
+                        <input type="text" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
-                    <?php }
-                ?>
                 </form>
             </div>
         </div>

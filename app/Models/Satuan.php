@@ -15,6 +15,7 @@ class Satuan extends Model
         'kode',
         'nama',
         'branch',
-        'createdBy'
+        'createdBy',
+        'lastUpdatedBy'
     ];
 }

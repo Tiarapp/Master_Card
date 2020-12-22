@@ -20,7 +20,7 @@
                     </div>
                 @endif
 
-                <form action="/satuan/store" method="POST">
+                <form action="{{ route('satuans.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

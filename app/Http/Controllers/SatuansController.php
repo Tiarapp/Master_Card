@@ -17,10 +17,17 @@ class SatuansController extends Controller
     public function index()
     {
         // return view('satuan.index');
-        $satuan = DB::table('satuan')->get()
-        ->where('deleted', '0');
+        // $satuan = DB::table('satuan')->get()
+        // ->where('deleted', '0');
 
-        return view('admin.satuans.index', ['data' => $satuan]);
+        // return view('admin.satuans.index', ['data' => $satuan]);
+
+        $satuans = Satuan::latest()->paginate(5);
+
+        return view('admin.satuans.index', compact('satuans'))
+            ->with('i', (request()->input('page', 1)-1)*5);
+
+        // dd(Auth::user()->nama);
     }
 
     /**
@@ -50,8 +57,8 @@ class SatuansController extends Controller
         ]);
 
         Satuan::create($request->all());
-        return redirect('/satuan')
-        ->with('success', 'Satuan Created Successfully');
+        return redirect()->route('satuans.index')
+            ->with('success', 'Satuan Created Successfully');
     }
 
     /**
@@ -62,7 +69,7 @@ class SatuansController extends Controller
      */
     public function show(Satuan $satuan)
     {
-        //
+        return view('admin.satuans.show', compact('satuan'));
     }
 
     /**
@@ -73,10 +80,7 @@ class SatuansController extends Controller
      */
     public function edit(Satuan $satuan)
     {
-        $satuan = DB::table('satuan')
-        ->where('id', )
-        ->get();
-        return view('admin.satuans.edit', ['data' => $satuan]);
+        return view('admin.satuans.edit', compact('satuan'));
     }
 
     /**
@@ -88,7 +92,18 @@ class SatuansController extends Controller
      */
     public function update(Request $request, Satuan $satuan)
     {
-        //
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'branch' => 'required',
+            'lastUpdatedBy' => 'required'
+        ]);
+
+        $satuan->update($request->all());
+
+       
+        return redirect()->route('satuans.index')
+                ->with('success', 'Update Success');
     }
 
     /**
@@ -99,6 +114,9 @@ class SatuansController extends Controller
      */
     public function destroy(Satuan $satuan)
     {
-        //
+        $satuan->delete();
+
+        return redirect()->route('admin.satuans.index')
+                ->with('success', 'Delete success');
     }
 }
