@@ -73,7 +73,10 @@ class SatuansController extends Controller
      */
     public function edit(Satuan $satuan)
     {
-        //
+        $satuan = DB::table('satuan')
+        ->where('id', )
+        ->get();
+        return view('admin.satuans.edit', ['data' => $satuan]);
     }
 
     /**

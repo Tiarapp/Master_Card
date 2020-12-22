@@ -49,8 +49,8 @@
                             <td>
                                 <div class="input-group">
                                     <div class="input-group-append" id="button-addon4">
-                                    <button class="btn btn-outline-secondary" type="button">Edit</button>
-                                    <button class="btn btn-outline-danger" type="button">Delete</button>
+                                    <a href="/satuan/edit/{{ $satuan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                                    <a class="btn btn-outline-danger" type="button">Delete</a>
                                     </div>
                                 </div>
                             </td>
