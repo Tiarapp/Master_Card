@@ -1,21 +1,30 @@
 <?php
 
 use App\Http\Controllers\SatuansController;
+use App\Http\Controllers\SuppliersController;
+use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('admin.index');
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-})->middleware(['auth'])->name('admin');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::resource('satuans',SatuansController::class);
-
-// Route::get('/satuan', [\App\Http\Controllers\SatuansController::class, 'index']);
-// Route::get('/satuan/create', [\App\Http\Controllers\SatuansController::class, 'create']);
-// Route::post('/satuan/store', [\App\Http\Controllers\SatuansController::class, 'store']);
-// Route::get('/satuan/edit/{id}', [\App\Http\Controllers\SatuansController::class, 'edit']);
+Route::resource('satuans', SatuansController::class);
+Route::resource('supplier', SuppliersController::class);
 
 require __DIR__.'/auth.php';

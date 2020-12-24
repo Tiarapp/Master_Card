@@ -22,10 +22,9 @@ class SatuansController extends Controller
 
         // return view('admin.satuans.index', ['data' => $satuan]);
 
-        $satuans = Satuan::latest()->paginate(5);
+        $satuans = DB::table('satuan')->simplePaginate(25);
 
-        return view('admin.satuans.index', compact('satuans'))
-            ->with('i', (request()->input('page', 1)-1)*5);
+        return view('admin.satuans.index', compact('satuans'));
 
         // dd(Auth::user()->nama);
     }

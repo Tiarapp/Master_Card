@@ -45,15 +45,15 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('satuans.index') }}" class="nav-link active">
+                <a href="{{ route('satuans.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Satuan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
+                <a href="{{ route('supplier.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
+                  <p>Supplier</p>
                 </a>
               </li>
               <li class="nav-item">
