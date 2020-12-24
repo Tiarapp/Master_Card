@@ -48,7 +48,7 @@
                                 <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $satuan->branch }}">
                             </div>
                         </div>
-                        <input type="text" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
+                        <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>

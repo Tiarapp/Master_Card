@@ -55,7 +55,7 @@
                             <td>
                                 <div class="input-group">
                                     <div class="input-group-append" id="button-addon4">
-                                    <a href="#" class="btn btn-outline-secondary" type="button">Edit</a>
+                                    <a href="{{ route('satuans.edit', $supp->id) }}" class="btn btn-outline-secondary" type="button">Edit</a>
                                     <a class="btn btn-outline-danger" type="button">Delete</a>
                                     </div>
                                 </div>

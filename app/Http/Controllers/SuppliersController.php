@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class SuppliersController extends Controller
@@ -17,6 +16,7 @@ class SuppliersController extends Controller
     public function index()
     {
         $suppliers = DB::table('f_tsupplier')->simplePaginate(25);
+
 
         return view('admin.supplier.index', compact('suppliers'));
     }
