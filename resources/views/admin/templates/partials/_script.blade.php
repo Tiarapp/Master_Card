@@ -33,9 +33,6 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('asset/dist/js/pages/dashboard.js') }}"></script>
 
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{ asset('asset/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- DataTables  & Plugins -->
 <script src="{{ asset('asset/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('asset/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -49,7 +46,7 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('asset/dist/js/adminlte.min.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('asset/dist/js/demo.js') }}"></script>
+
+<!-- DataTable -->
+<script href="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script href="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>

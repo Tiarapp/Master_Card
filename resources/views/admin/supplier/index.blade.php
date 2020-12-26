@@ -27,7 +27,7 @@
       <!-- Small boxes (Stat box) -->
       
       <a href="#" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
-      <div class="row">
+      <div class="card-body">
         <table class="table table-bordered" id="data_supplier">
             <thead>
                 <tr>
@@ -77,12 +77,27 @@
 @section('javascripts')
 <!-- DataTables -->
 <script> 
-    $(function () {
-    $("#data_supplier").DataTable({
-      "responsive": false, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#data_supplier_wrapper .col-md-6:eq(0)');
-  });
+   $(document).ready(function(){
+     $("#data_supplier").DataTable({
+       dom: 'Bfrtip',
+       buttons: [
+         'copy',
+         'csv',
+         'excel',
+         'pdf',
+         {
+           extend: 'print',
+           text: 'Print',
+           exportOption:{
+             modifier: {
+               selected: null
+             }
+           }
+         }
+       ],
+       select: true
+     });
+   });
 </script>
 
 @endsection
