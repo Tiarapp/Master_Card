@@ -15,7 +15,7 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-        $suppliers = DB::table('f_tsupplier')->simplePaginate(25);
+        $suppliers = DB::table('f_tsupplier')->get();
 
 
         return view('admin.supplier.index', compact('suppliers'));
@@ -50,7 +50,7 @@ class SuppliersController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return view('admin.supplier.view', compact('supplier'));
     }
 
     /**

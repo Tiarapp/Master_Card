@@ -6,7 +6,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong> Tambah Satuan</strong> </h4>
+                <h4 class="modal-title">Tambah Satuan</h4>
                 <hr>
 
                 @if ($errors->any())

@@ -28,7 +28,7 @@
       
       <a href="#" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="row">
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="data_supplier">
             <thead>
                 <tr>
                     <th scope="col">No.</th>
@@ -55,6 +55,7 @@
                             <td>
                                 <div class="input-group">
                                     <div class="input-group-append" id="button-addon4">
+                                    <a href="{{ route('supplier.show', $supp->id) }}" class="btn btn-outline-secondary" type="button">View</a>
                                     <a href="{{ route('satuans.edit', $supp->id) }}" class="btn btn-outline-secondary" type="button">Edit</a>
                                     <a class="btn btn-outline-danger" type="button">Delete</a>
                                     </div>
@@ -66,10 +67,22 @@
                     ?>
             </tbody>
         </table>
-        {{ $suppliers->links() }}
       </div>
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
   @endsection
+
+@section('javascripts')
+<!-- DataTables -->
+<script> 
+    $(function () {
+    $("#data_supplier").DataTable({
+      "responsive": false, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#data_supplier_wrapper .col-md-6:eq(0)');
+  });
+</script>
+
+@endsection
