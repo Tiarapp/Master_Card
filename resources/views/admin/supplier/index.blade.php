@@ -85,6 +85,7 @@
          'csv',
          'excel',
          'pdf',
+         'colvis',
          {
            extend: 'print',
            text: 'Print',
