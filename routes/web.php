@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AutoCompleteController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\SatuansController;
 use App\Http\Controllers\SuppliersController;
-use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +28,8 @@ Route::get('/dashboard', function () {
 
 Route::resource('satuans', SatuansController::class);
 Route::resource('supplier', SuppliersController::class);
+Route::resource('barang', BarangController::class);
+Route::resource('mastercard', MastercardController::class);
+Route::get('autocomplete', AutoCompleteController::class, 'autoComplete');
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,5 @@
 <!-- jQuery -->
 <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
-
 @extends('admin.templates.partials.default')
 
 
@@ -29,34 +28,34 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       
-      <a href="{{ route('satuans.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('mastercard.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
-        <table class="table table-bordered" id="data_satuan">
+        <table class="table table-bordered" id="data_mc">
             <thead>
                 <tr>
                     <th scope="col">No.</th>
                     <th scope="col">Kode</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Nama Barang</th>
+                    <th scope="col">Tipe Box</th>
+                    <th scope="col">Flute</th>
+                    <th scope="col">Koli</th>
+                    <th scope="col">Keterangan</th>
+                    <th scope="col">Warna</th>
+                    <th scope="col">Box</th>
                 </tr>
             </thead>
             <tbody>
                     <?php 
-                        foreach ($satuans as $satuan) { ?>
+                        $no = 1;
+                        foreach ($mc as $mc) { ?>
                         <tr>
-                            <td scope="row">{{ $satuan->id }}</td>
-                            <td>{{ $satuan->kode }}</td>
-                            <td>{{ $satuan->nama }}</td>
-                            <td>{{ $satuan->branch }}</td>
-                            <td>
-                                <div class="input-group">
-                                    <div class="input-group-append" id="button-addon4">
-                                    <a href="{{ route('satuans.edit', $satuan->id) }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                                    <a class="btn btn-outline-danger" type="button">Delete</a>
-                                    </div>
-                                </div>
-                            </td>
+                            <td scope="row">{{ $no++ }}</td>
+                            <td>{{ $mc->Kode }}</td>
+                            <td>{{ $mc->Nama }}</td>
+                            <td>{{ $mc->AlamatKantor }}</td>
+                            <td>{{ $mc->KotaKantor }}</td>
+                            <td>{{ $mc->TelpKantor }}</td>
+                            <td>{{ $mc->PIC }}</td>
                         </tr>
                             <?php
                         }    
@@ -70,11 +69,11 @@
   <!-- /.content -->
   @endsection
 
-  @section('javascripts')
+@section('javascripts')
 <!-- DataTables -->
 <script> 
    $(document).ready(function(){
-     $("#data_satuan").DataTable({
+     $("#data_mc").DataTable({
        dom: 'Bfrtip',
        buttons: [
          'copy',

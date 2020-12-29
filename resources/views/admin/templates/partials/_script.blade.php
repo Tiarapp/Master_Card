@@ -1,5 +1,4 @@
-<!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
+
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('asset/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -48,5 +47,7 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
 <!-- DataTable -->
-<script href="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script href="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+
+<!-- Select2 -->
+{{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> --}}
