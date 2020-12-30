@@ -46,14 +46,16 @@ class MastercardController extends Controller
         //     $format2= str_replace('~99999~', str_pad($count, 5, '0', STR_PAD_LEFT), $format2);
 
         // }
-        // dd($format2);
 
+        // $id = 2;
         // $sssh = DB::table('substance_sheet')
         //     ->join('substance', 'substance_sheet.substance_id', '=', 'substance.id')
         //     ->join('sheet', 'substance_sheet.sheet_id', '=', 'sheet.id')
-        //     ->select('substance_sheet.*', 'sheet.lebarSheet', 'sheet.panjangSheet')
+        //     ->select('sheet.lebarSheet', 'sheet.panjangSheet')
+        //     ->where('substance_sheet.id', '=', $id)
+        //     // ->pluck('sheet.lebarSheet',)
         //     ->get();
-        // dd($sssh);
+        // dd($sssh[0]->lebarSheet);
 
         $item = DB::connection('firebird')->table('TBarangConv')->get();
         $boxes = DB::table('box')->get();

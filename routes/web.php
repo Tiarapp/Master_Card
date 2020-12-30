@@ -30,6 +30,5 @@ Route::resource('satuans', SatuansController::class);
 Route::resource('supplier', SuppliersController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('mastercard', MastercardController::class);
-// Route::get('/generateNumberSequence', MastercardController::class, 'generateNumberSequence');
 
 require __DIR__.'/auth.php';

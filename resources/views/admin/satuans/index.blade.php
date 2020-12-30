@@ -53,7 +53,7 @@
                                 <div class="input-group">
                                     <div class="input-group-append" id="button-addon4">
                                     <a href="{{ route('satuans.edit', $satuan->id) }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                                    <a class="btn btn-outline-danger" type="button">Delete</a>
+                                    <a href="{{ route('satuans.destroy'), $satuan->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                                     </div>
                                 </div>
                             </td>
