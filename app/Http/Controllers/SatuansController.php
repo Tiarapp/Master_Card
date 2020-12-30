@@ -22,7 +22,9 @@ class SatuansController extends Controller
 
         // return view('admin.satuans.index', ['data' => $satuan]);
 
-        $satuans = DB::table('satuan')->simplePaginate(25);
+        $satuans = DB::table('satuan')
+            ->where('deleted', '=', '0')
+            ->simplePaginate(25);
 
         return view('admin.satuans.index', compact('satuans'));
 
@@ -47,7 +49,7 @@ class SatuansController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
@@ -77,9 +79,10 @@ class SatuansController extends Controller
      * @param  \App\Models\Satuan  $satuan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Satuan $satuan)
+    public function edit($id)
     {
-        return view('admin.satuans.edit', compact('satuan'));
+        $satuan = Satuan::find($id);
+        return view('/admin/satuans/edit', ['satuan' => $satuan,]);
     }
 
     /**
@@ -89,7 +92,7 @@ class SatuansController extends Controller
      * @param  \App\Models\Satuan  $satuan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Satuan $satuan)
+    public function update($id, Request $request)
     {
         $request->validate([
             'kode' => 'required',
@@ -98,12 +101,30 @@ class SatuansController extends Controller
             'lastUpdatedBy' => 'required'
         ]);
 
-        $satuan->update($request->all());
+        $satuan = Satuan::find($id);
 
-       
-        return redirect()->route('satuans.index')
-                ->with('success', 'Update Success');
+        $satuan->nama = $request->nama;
+        $satuan->branch = $request->branch;
+
+        $satuan->save();
+
+        return redirect('/admin/satuans')
+            ->with('success', 'Update Success');
     }
+
+    public function updateDeleted($id)
+    {
+        $satuan = Satuan::find($id);
+
+        $satuan->deleted = 1;
+        $satuan->deletedAt = date('Y-m-d h:i:s');
+        $satuan->deletedBy = Auth::user()->name;
+
+        $satuan->save();
+
+        return redirect('/admin/satuans');
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -116,6 +137,6 @@ class SatuansController extends Controller
         $satuan->delete();
 
         return redirect()->route('admin.satuans.index')
-                ->with('success', 'Delete success');
+            ->with('success', 'Delete success');
     }
 }

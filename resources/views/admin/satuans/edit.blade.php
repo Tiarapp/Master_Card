@@ -10,28 +10,25 @@
                 <hr>
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> 
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li></li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
-                <form action="{{ route('satuans.update', $satuan->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+                <form action="/admin/satuans/update/{{ $satuan->id }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="hidden" name="id" value="{{ $satuan->id }}">                                
-                            </div>
-                            <div class="form-group">
                                 <label>Kode</label>
                                 {{-- <div class="row"> --}}
-                                    {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
+                                {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
                                 <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $satuan->kode }}" readonly>
                                 {{-- </div> --}}
                             </div>
@@ -56,7 +53,7 @@
                 </form>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 @endsection

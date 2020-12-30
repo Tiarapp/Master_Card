@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AutoCompleteController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\SatuansController;
@@ -26,9 +25,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::resource('satuans', SatuansController::class);
+Route::get('/admin/satuans', 'SatuansController@index');
+Route::get('/admin/satuans/edit/{id}', 'SatuansController@edit');
+Route::put('/admin/satuans/update/{id}', 'SatuansController@update');
+Route::get('/admin/satuans/delete/{id}', 'SatuansController@updateDeleted');
+
+
+
 Route::resource('supplier', SuppliersController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('mastercard', MastercardController::class);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
