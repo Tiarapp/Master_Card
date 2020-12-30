@@ -28,10 +28,43 @@ class MastercardController extends Controller
      */
     public function create()
     {
+        // $nobukti = 2;
+        // $number = DB::table('number_sequence')
+        //     ->select('format')
+        //     ->get();
+        // $format1 = $nobukti-1;
+        // $temp = $number[$format1];
+        // $format2 = $temp->format;
+        
+        // if ($format2 === $format2) {
+        //     $format2 = str_replace('~yyyy~',date('Y'), $format2);
+        //     $format2 = str_replace('~mm~',date('m'), $format2);
+        //     $result = DB::table('number_sequence')
+        //                 ->select(DB::raw('MONTH(created_at) month'))
+        //                 ->get();
+        //             $count = count($result) +1;
+        //     $format2= str_replace('~99999~', str_pad($count, 5, '0', STR_PAD_LEFT), $format2);
+
+        // }
+        // dd($format2);
+
+        // $sssh = DB::table('substance_sheet')
+        //     ->join('substance', 'substance_sheet.substance_id', '=', 'substance.id')
+        //     ->join('sheet', 'substance_sheet.sheet_id', '=', 'sheet.id')
+        //     ->select('substance_sheet.*', 'sheet.lebarSheet', 'sheet.panjangSheet')
+        //     ->get();
+        // dd($sssh);
+
         $item = DB::connection('firebird')->table('TBarangConv')->get();
         $boxes = DB::table('box')->get();
+        $substance_sheet = DB::table('substance_sheet')->get();
+        
+        return view('admin.mastercard.create', compact([
+            'item',
+            'boxes',
+            'substance_sheet'
+        ]));
 
-        return view('admin.mastercard.create', compact('item','boxes'));
     }
 
     /**
@@ -88,6 +121,13 @@ class MastercardController extends Controller
     public function destroy(Mastercard $mastercard)
     {
         //
+    }
+
+    public function generateNumberSequence()
+    {   
+        
+
+        
     }
 
 }

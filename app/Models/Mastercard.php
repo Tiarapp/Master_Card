@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Mastercard extends Model
 {
@@ -31,4 +32,10 @@ class Mastercard extends Model
         'box_id',
         'colorCombine_id',
     ];
+
+    public function jenisGramLinerAtas_id($jenisGramLinerAtas_id = 'jenisGramLinerAtas_id')
+    {
+        return $this-$jenisGramLinerAtas_id([]);
+    }
+    
 }
