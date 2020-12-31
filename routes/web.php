@@ -18,19 +18,43 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('admin.index');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/admin', function () {
+    return view('admin.index');
+})->middleware(['auth'])->name('admin');
+
+//Satuan
 Route::get('/admin/satuans', 'SatuansController@index');
+Route::get('/admin/satuans/create', 'SatuansController@create');
+Route::post('/admin/satuans/store', 'SatuansController@store');
 Route::get('/admin/satuans/edit/{id}', 'SatuansController@edit');
 Route::put('/admin/satuans/update/{id}', 'SatuansController@update');
+Route::get('/admin/satuans/show/{id}', 'SatuansController@show');
 Route::get('/admin/satuans/delete/{id}', 'SatuansController@updateDeleted');
 
+//Divisi
+Route::get('/admin/divisi', 'DivisiController@index');
+Route::get('/admin/divisi/create', 'DivisiController@create');
+Route::post('/admin/divisi/store', 'DivisiController@store');
+Route::get('/admin/divisi/show/{id}', 'DivisiController@show');
+Route::get('/admin/divisi/edit/{id}', 'DivisiController@edit');
+Route::put('/admin/divisi/update/{id}', 'DivisiController@update');
+Route::get('/admin/divisi/delete/{id}', 'DivisiController@updateDeleted');
 
+//Flute
+Route::get('/admin/flute', 'FluteController@index');
+Route::get('/admin/flute/create', 'FluteController@create');
+Route::post('/admin/flute/store', 'FluteController@store');
+Route::get('/admin/flute/show/{id}', 'FluteController@show');
+Route::get('/admin/flute/edit/{id}', 'FluteController@edit');
+Route::put('/admin/flute/update/{id}', 'FluteController@update');
+Route::get('/admin/flute/delete/{id}', 'FluteController@updateDeleted');
 
 Route::resource('supplier', SuppliersController::class);
 Route::resource('barang', BarangController::class);

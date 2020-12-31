@@ -39,7 +39,7 @@
            <a href="#" class="nav-link active">
              <i class="nav-icon fas fa-tachometer-alt"></i>
              <p>
-               Dashboard
+               Master
                <i class="right fas fa-angle-left"></i>
              </p>
            </a>
@@ -62,6 +62,18 @@
                  <p>Barang</p>
                </a>
              </li>
+             <li class="nav-item">
+              <a href="/admin/divisi" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Divisi</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/flute" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Flute</p>
+              </a>
+            </li>
            </ul>
          </li>
          <li class="nav-item">

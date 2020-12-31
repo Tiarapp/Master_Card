@@ -6,45 +6,46 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Satuan</h4>
+                <h4 class="modal-title"><strong>Edit Divisi</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> 
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li></li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
-                <form action="/admin/satuans/store" method="POST">
-                    @csrf
+                <form action="/admin/divisi/update/{{ $divisi->id }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kode</label>
                                 {{-- <div class="row"> --}}
-                                    {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                <input type="text" class="form-control txt_line" name="kode" id="kode">
+                                {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $divisi->kode }}" readonly>
                                 {{-- </div> --}}
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama">
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $divisi->nama }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch">
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $divisi->branch }}">
                             </div>
                         </div>
-                        <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
+                        <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
@@ -52,7 +53,7 @@
                 </form>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 @endsection
