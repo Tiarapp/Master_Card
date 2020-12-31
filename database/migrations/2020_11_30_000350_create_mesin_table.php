@@ -15,8 +15,8 @@ class CreateMesinTable extends Migration
     {
         Schema::create('mesin', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode');                 //INPUT PPIC
-            $table->string('nama');                 //INPUT PPIC
+            $table->string('kode')->index();                 //INPUT PPIC
+            $table->string('nama')->index();                 //INPUT PPIC
             $table->string('ip');                   //INPUT PPIC
             $table->integer('kapasitas');           //INPUT PPIC
             $table->foreignId('satuanKapasitas');   //INPUT PPIC
@@ -30,7 +30,7 @@ class CreateMesinTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

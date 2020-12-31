@@ -15,10 +15,10 @@ class CreateBomComponentTable extends Migration
     {
         Schema::create('bom_component', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode');                         //AUTO NUMBER SEQUENCE
-            $table->string('nama');                         //INPUT PPIC
+            $table->string('kode')->unique()->index();   //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();             //INPUT PPIC
             $table->foreignId('satuanBomComponent');     //INPUT PPIC
-            $table->float('avgPrice',20,2);                 //INPUT ACC
+            $table->float('avgPrice',20,2);              //INPUT ACC
             $table->foreignId('mataUang')->nullable();   //INPUT ACC
             //RELATION
             $table->foreign('satuanBomComponent')->references('id')->on('satuan')->cascadeOnDelete();
@@ -29,7 +29,7 @@ class CreateBomComponentTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

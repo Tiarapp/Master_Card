@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJenisGramTable extends Migration
+class CreateSalesMTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,20 @@ class CreateJenisGramTable extends Migration
      */
     public function up()
     {
-        Schema::create('jenis_gram', function (Blueprint $table) {
+        Schema::create('sales_m', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
-            $table->string('nama')->nullable()->index();     //INPUT MARKETING
-            $table->string('jenisKertas')->index();          //INPUT MARKETING
-            $table->string('gramKertas')->index();           //INPUT MARKETING
+            $table->string('nama')->index();
+            $table->string('alias')->nullable()->index();
+            $table->string('hp');
+            $table->float('komisi',5,2)->nullable();
+            $table->boolean('aktif')->default(1)->index()->comment('1:Aktif,2:non Aktif');
             // TRACKING
-            $table->string('createdBy');        //Auto ambil dari login
+            $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }
@@ -37,6 +38,6 @@ class CreateJenisGramTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jenis_gram');
+        Schema::dropIfExists('sales_m');
     }
 }

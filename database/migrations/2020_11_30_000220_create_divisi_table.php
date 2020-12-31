@@ -15,15 +15,15 @@ class CreateDivisiTable extends Migration
     {
         Schema::create('divisi', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();   //INPUT IT
-            $table->string('nama');             //INPUT IT
+            $table->string('kode')->unique()->index();   //INPUT IT
+            $table->string('nama')->index();             //INPUT IT
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

@@ -15,10 +15,10 @@ class CreateNumberSequenceTable extends Migration
     {
         Schema::create('number_sequence', function (Blueprint $table) {
             $table->id('id');
-            $table->string('noBukti')->unique();          //INPUT IT
-            $table->foreignId('divisi_id');     //INPUT IT
-            $table->string('format');           //INPUT IT
-            $table->string('next');             //INPUT IT
+            $table->string('noBukti')->unique()->index();   //INPUT IT
+            $table->foreignId('divisi_id')->index();        //INPUT IT
+            $table->string('format');                       //INPUT IT
+            $table->enum('reset',['Date','Month','Year'])->default('Month')->comment('Jika Month, butuh (Month & Year), Jika Date, butuh (Date, Month & Year)');   //INPUT IT
             //RELATION
             $table->foreign('divisi_id')->references('id')->on('divisi')->cascadeOnDelete();
             // TRACKING
@@ -27,7 +27,7 @@ class CreateNumberSequenceTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

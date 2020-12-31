@@ -15,15 +15,15 @@ class CreateBomMTable extends Migration
     {
         Schema::create('bom_m', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();                       //AUTO NUMBER SEQUENCE
-            $table->string('nama')->nullable();                     //INPUT PPIC
-            $table->foreignId('flute_id');                          //INPUT PPIC
-            $table->foreignId('substance_id');                      //INPUT PPIC
-            $table->integer('luas')->nullable();                    //INPUT PPIC
+            $table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
+            $table->string('nama')->nullable()->index();         //INPUT PPIC
+            $table->foreignId('flute_id')->index();              //INPUT PPIC
+            $table->foreignId('substance_id')->nullable();       //INPUT PPIC
+            $table->integer('luas')->nullable();                 //INPUT PPIC
             $table->foreignId('satuanLuas')->nullable();         //INPUT PPIC
-            $table->integer('beratPerLuas')->nullable();            //INPUT PPIC
+            $table->integer('beratPerLuas')->nullable();         //INPUT PPIC
             $table->foreignId('satuanBeratPerLuas')->nullable(); //INPUT PPIC
-            $table->integer('avgPrice')->nullable();                //INPUT ACC
+            $table->integer('avgPrice')->nullable();             //INPUT ACC
             $table->foreignId('mataUang')->nullable();           //INPUT ACC
             //RELATION
             $table->foreign('flute_id')->references('id')->on('flute')->cascadeOnDelete();
@@ -37,7 +37,7 @@ class CreateBomMTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }

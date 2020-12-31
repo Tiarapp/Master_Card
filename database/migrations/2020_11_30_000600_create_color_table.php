@@ -15,16 +15,16 @@ class CreateColorTable extends Migration
     {
         Schema::create('color', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();   //AUTO NUMBER SEQUENCE
-            $table->string('nama');             //INPUT DESAIN
-            $table->integer('mudaTua');         //INPUT DESAIN
+            $table->string('kode')->unique()->index();   //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();             //INPUT DESAIN
+            $table->integer('mudaTua')->index();         //INPUT DESAIN
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

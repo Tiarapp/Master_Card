@@ -15,12 +15,12 @@ class CreateKontrakmTable extends Migration
     {
         Schema::create('kontrak_m', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode');                     //AUTO NUMBER SEQUENCE
-            $table->date('tglKontrak');                 //AUTO NUMBER SEQUENCE
-            $table->foreignId('customer_id');           //Input Marketing
-            $table->string('poCustomer');               //Input Marketing
-            $table->foreignId('top_id');                //Input Marketing
-            $table->enum('caraKirim',['Kirim','Ambil Sendiri']);    //Input Marketing
+            $table->string('kode')->index();                     //AUTO NUMBER SEQUENCE
+            $table->date('tglKontrak')->index();                 //AUTO NUMBER SEQUENCE
+            $table->foreignId('customer_id')->index();           //Input Marketing
+            $table->string('poCustomer')->index();               //Input Marketing
+            $table->foreignId('top_id')->index();                //Input Marketing
+            $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
             $table->foreignId('alamatKirim_id');        //Input Marketing
             $table->foreignId('alamatKantor_id');       //Input Marketing
             $table->foreignId('alamatTagihan_id');      //Input Marketing
@@ -34,8 +34,8 @@ class CreateKontrakmTable extends Migration
             $table->integer('amountTotal');             //Auto amountBeforeTax + Tax
             $table->float('rpKg',20,2);                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
             $table->integer('sisaPlafon');              //Next Auto Sisa Plafon per customer - amount
-            $table->string('status');                   //Auto (Finish/Kurang xxx pcs)
-            $table->foreignId('sales_id');              //INPUT MARKETING
+            $table->string('status')->index();                   //Auto (Finish/Kurang xxx pcs)
+            $table->foreignId('sales_m_id')->index();              //INPUT MARKETING
             $table->foreignId('mataUang');              //INPUT MARKETING
             
             //RELATION
@@ -44,7 +44,7 @@ class CreateKontrakmTable extends Migration
             $table->foreign('alamatKirim_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatTagihan_id')->references('id')->on('alamat')->cascadeOnDelete();
-            $table->foreign('sales_id')->references('id')->on('sales')->cascadeOnDelete();
+            $table->foreign('sales_m_id')->references('id')->on('sales_m')->cascadeOnDelete();
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
 
             // TRACKING
@@ -53,7 +53,7 @@ class CreateKontrakmTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

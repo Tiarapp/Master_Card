@@ -15,10 +15,10 @@ class CreateBBRollMTable extends Migration
     {
         Schema::create('bb_roll_m', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();   //AUTO NUMBER SEQUENCE
-            $table->foreignId('supplier_id');   //INPUT LOG
-            $table->foreignId('jenisGram_id');  //INPUT LOG
-            $table->foreignId('lebarRoll_id');  //INPUT LOG
+            $table->string('kode')->unique()->index();   //AUTO NUMBER SEQUENCE
+            $table->foreignId('supplier_id')->index();   //INPUT LOG
+            $table->foreignId('jenisGram_id')->index();  //INPUT LOG
+            $table->foreignId('lebarRoll_id')->index();  //INPUT LOG
             $table->integer('qtyPcsAll');       //Auto count(where bb_roll_d.supplier.id, bb_roll_d.jenis_GramSpa.id, bb_roll_d.lebarRollSpa.id)
             $table->integer('qtyKgAll');        //Auto sum(bb_roll_d.qtyKgSisa)
             $table->integer('qtyPcsFree');      //Auto (All-Picked-Reserved)
@@ -40,7 +40,7 @@ class CreateBBRollMTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }
