@@ -15,10 +15,10 @@ class CreateSupplierTable extends Migration
     {
         Schema::create('supplier', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();           //AUTO NUMBER SEQUENCE
-            $table->string('nama');                     //INPUT IT
-            $table->string('KodeNamaAcc')->nullable();  //INPUT IT
-            $table->string('NamaAcc')->nullable();      //INPUT IT
+            $table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();                     //INPUT IT
+            $table->string('KodeNamaAcc')->nullable()->index();  //INPUT IT
+            $table->string('NamaAcc')->nullable()->index();      //INPUT IT
             $table->foreignId('alamatKantor_id');       //INPUT IT
             $table->foreignId('alamatToko_id');         //INPUT IT
             $table->string('npwp')->nullable();         //INPUT IT
@@ -28,7 +28,7 @@ class CreateSupplierTable extends Migration
             $table->string('namaRekening')->nullable();  //INPUT IT
             $table->float('plafond',20,2);               //INPUT IT
             $table->integer('top');                      //INPUT IT
-            $table->enum('jenisBayar',['TUNAI','HUTANG']);  //INPUT IT
+            $table->enum('jenisBayar',['TUNAI','HUTANG'])->index();  //INPUT IT
             //RELATION
             $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatToko_id')->references('id')->on('alamat')->cascadeOnDelete();
@@ -38,7 +38,7 @@ class CreateSupplierTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

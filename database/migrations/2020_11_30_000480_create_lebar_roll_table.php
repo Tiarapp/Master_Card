@@ -15,9 +15,9 @@ class CreateLebarRollTable extends Migration
     {
         Schema::create('lebar_roll', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();       //AUTO NUMBER SEQUENCE
-            $table->string('nama');                 //Input Purch Kertas
-            $table->integer('lebar');               //Input Purch Kertas
+            $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();                 //Input Purch Kertas
+            $table->integer('lebar')->index();               //Input Purch Kertas
             $table->foreignId('satuanLebar');    //Input Purch Kertas
             //RELATION
             $table->foreign('satuanLebar')->references('id')->on('satuan')->cascadeOnDelete();
@@ -27,7 +27,7 @@ class CreateLebarRollTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

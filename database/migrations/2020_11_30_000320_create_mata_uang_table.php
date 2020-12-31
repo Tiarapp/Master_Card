@@ -15,15 +15,15 @@ class CreateMataUangTable extends Migration
     {
         Schema::create('mata_uang', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');             //INPUT ACC
-            $table->string('nama');             //INPUT ACC
+            $table->string('kode')->index();             //INPUT ACC
+            $table->string('nama')->index();             //INPUT ACC
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

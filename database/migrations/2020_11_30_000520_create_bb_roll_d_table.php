@@ -16,16 +16,16 @@ class CreateBbRollDTable extends Migration
         Schema::create('bb_roll_d', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('bb_roll_m_id');          //AUTO NUMBER SEQUENCE
-            $table->foreignId('jenisGramSj_id');        //Input Log
-            $table->foreignId('jenisGramSpa_id');       //Input QC
-            $table->foreignId('lebarRollSj_id');        //Input Log
-            $table->foreignId('lebarRollSpa_id');       //Input Log
-            $table->string('kodeRollSupplier');         //Input Log
-            $table->string('kodeRollIntern');           //Input Log, next Auto
-            $table->integer('diameter')->nullable();    //Input Log
-            $table->float('kadarAir',10,2)->nullable(); //Input QC
-            $table->float('cobbSize',10,2)->nullable(); //Input QC
-            $table->float('rct',10,2)->nullable();      //Input QC
+            $table->foreignId('jenisGramSj_id')->index();        //Input Log
+            $table->foreignId('jenisGramSpa_id')->index();       //Input QC
+            $table->foreignId('lebarRollSj_id')->index();        //Input Log
+            $table->foreignId('lebarRollSpa_id')->index();       //Input Log
+            $table->string('kodeRollSupplier')->index();         //Input Log
+            $table->string('kodeRollIntern')->index();           //Input Log, next Auto
+            $table->integer('diameter')->nullable()->index();    //Input Log
+            $table->float('kadarAir',10,2)->nullable()->index(); //Input QC
+            $table->float('cobbSize',10,2)->nullable()->index(); //Input QC
+            $table->float('rct',10,2)->nullable()->index();      //Input QC
             $table->integer('qtyKgSj');                 //Input Log
             $table->integer('qtyKgSpa');                //Input Log
             $table->integer('qtyKgPakai');              //Auto qtyKgSpa-qtyKgSisa
@@ -45,7 +45,7 @@ class CreateBbRollDTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

@@ -19,7 +19,6 @@ class CreateMcView extends Migration
                         sh.luasSheet as luas_sheet_corr,
                         stnLuasSheetCorr.nama as satuan_luas_sheet_corr,
                         ss.gramSheetCorr as gram_sheet_corr,
-                        stnGramSheetCorr.nama as satuan_gram_sheet_corr,
                         sk.nama as substance_kontrak,
                         sp.nama as substance_produksi,
                         fl.nama as flute,
@@ -60,7 +59,6 @@ class CreateMcView extends Migration
                         LEFT JOIN substance as subs ON ss.substance_id = subs.id
                         LEFT JOIN satuan as stnSizeSheetCorr ON sh.satuanSizeSheet = stnSizeSheetCorr.id
                         LEFT JOIN satuan as stnLuasSheetCorr ON sh.satuanLuasSheet = stnLuasSheetCorr.id
-                        LEFT JOIN satuan as stnGramSheetCorr ON ss.satuanGramSheetCorr = stnGramSheetCorr.id
                         LEFT JOIN box as bx ON mc.box_id = bx.id
                         LEFT JOIN satuan as stnSizeDalamBox ON bx.satuanSizeDalamBox = stnSizeDalamBox.id
                         LEFT JOIN satuan as stnCreas ON bx.satuanCreas = stnCreas.id
@@ -69,7 +67,7 @@ class CreateMcView extends Migration
                         LEFT JOIN joint as jt ON mc.joint_id = jt.id
                         LEFT JOIN wax ON mc.wax_id = wax.id
                         LEFT JOIN koli as ko ON mc.koli_id = ko.id
-                        LEFT JOIN flute as fl ON mc.flute_id = fl.id
+                        LEFT JOIN flute as fl ON ss.flute_id = fl.id
                         LEFT JOIN substance as sk ON mc.substanceKontrak_id = sk.id
                         LEFT JOIN substance as sp ON mc.substanceProduksi_id = sp.id
                         LEFT JOIN bom_m as bom ON mc.bom_m_id = bom.id

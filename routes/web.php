@@ -56,6 +56,15 @@ Route::get('/admin/flute/edit/{id}', 'FluteController@edit');
 Route::put('/admin/flute/update/{id}', 'FluteController@update');
 Route::get('/admin/flute/delete/{id}', 'FluteController@updateDeleted');
 
+//Sales
+Route::get('/admin/sales', 'SalesController@index');
+Route::get('/admin/sales/create', 'SalesController@create');
+Route::post('/admin/sales/store', 'SalesController@store');
+Route::get('/admin/sales/show/{id}', 'SalesController@show');
+Route::get('/admin/sales/edit/{id}', 'SalesController@edit');
+Route::put('/admin/sales/update/{id}', 'SalesController@update');
+Route::get('/admin/sales/delete/{id}', 'SalesController@updateDeleted');
+
 Route::resource('supplier', SuppliersController::class);
 Route::resource('barang', BarangController::class);
 Route::resource('mastercard', MastercardController::class);

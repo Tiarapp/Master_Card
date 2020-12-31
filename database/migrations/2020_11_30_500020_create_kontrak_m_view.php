@@ -35,7 +35,7 @@ class CreateKontrakMView extends Migration
                        LEFT JOIN top ON km.top_id = top.id
                        LEFT JOIN alamat as akm ON km.alamatKirim_id = akm.id
                        LEFT JOIN customer as cst ON km.customer_id = cst.id
-                       LEFT JOIN sales as sls ON km.sales_id = sls.id
+                       LEFT JOIN sales_m as sls ON km.sales_m_id = sls.id
                        LEFT JOIN mata_uang as mu ON km.mataUang = mu.id
                     ");
     }

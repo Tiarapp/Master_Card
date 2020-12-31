@@ -15,13 +15,13 @@ class CreateSubstanceTable extends Migration
     {
         Schema::create('substance', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();                           //AUTO NUMBER SEQUENCE
-            $table->string('nama');                                     //AUTO jenis+...
-            $table->foreignId('jenisGramLinerAtas_id');                 //Input Marketing
-            $table->foreignId('jenisGramBF_id');                        //Input Marketing
-            $table->foreignId('jenisGramLinerTengah_id')->nullable();   //Input Marketing
-            $table->foreignId('jenisGramCF_id')->nullable();            //Input Marketing
-            $table->foreignId('jenisGramLinerBawah_id');                //Input Marketing
+            $table->string('kode')->unique()->index();                           //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();                                     //AUTO jenis+...
+            $table->foreignId('jenisGramLinerAtas_id')->index();                 //Input Marketing
+            $table->foreignId('jenisGramBF_id')->index();                        //Input Marketing
+            $table->foreignId('jenisGramLinerTengah_id')->nullable()->index();   //Input Marketing
+            $table->foreignId('jenisGramCF_id')->nullable()->index();            //Input Marketing
+            $table->foreignId('jenisGramLinerBawah_id')->nullable()->index();    //Input Marketing
             //RELATION
             $table->foreign('jenisGramLinerAtas_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramBF_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
@@ -34,7 +34,7 @@ class CreateSubstanceTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

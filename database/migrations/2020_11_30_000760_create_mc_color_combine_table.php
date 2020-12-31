@@ -15,9 +15,9 @@ class CreateMcColorCombineTable extends Migration
     {
         Schema::create('mc_color_combine', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode');                 //AUTO NUMBER SEQUENCE
-            $table->foreignId('mc_id');             //Auto waktu Create/Update MC
-            $table->foreignId('color_combine_id');  //Auto waktu Create/Update MC
+            $table->string('kode')->index();                 //AUTO NUMBER SEQUENCE
+            $table->foreignId('mc_id')->index();             //Auto waktu Create/Update MC
+            $table->foreignId('color_combine_id')->index();  //Auto waktu Create/Update MC
             //RELATION
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
             $table->foreign('color_combine_id')->references('id')->on('color_combine')->cascadeOnDelete();
@@ -27,7 +27,7 @@ class CreateMcColorCombineTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

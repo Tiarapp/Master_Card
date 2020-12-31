@@ -15,8 +15,8 @@ class CreateSheetTable extends Migration
     {
         Schema::create('sheet', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();           //AUTO NUMBER SEQUENCE
-            $table->string('nama');                     //Input MARKETING
+            $table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();                     //AUTO lebarSheet x panjang sheet
             $table->integer('lebarSheet');              //Input MARKETING
             $table->integer('panjangSheet');            //Input MARKETING
             $table->foreignId('satuanSizeSheet');    //Input MARKETING
@@ -31,7 +31,7 @@ class CreateSheetTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

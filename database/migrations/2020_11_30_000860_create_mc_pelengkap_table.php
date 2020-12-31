@@ -15,8 +15,8 @@ class CreateMcPelengkapTable extends Migration
     {
         Schema::create('mc_pelengkap', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('mc_box');
-            $table->foreignId('mc_pelengkap');
+            $table->foreignId('mc_box')->index();
+            $table->foreignId('mc_pelengkap')->index();
             //RELATION
             $table->foreign('mc_box')->references('id')->on('mc')->cascadeOnDelete();
             $table->foreign('mc_pelengkap')->references('id')->on('mc')->cascadeOnDelete();
@@ -26,7 +26,7 @@ class CreateMcPelengkapTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

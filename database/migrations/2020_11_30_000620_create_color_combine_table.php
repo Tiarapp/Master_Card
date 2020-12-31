@@ -15,12 +15,12 @@ class CreateColorCombineTable extends Migration
     {
         Schema::create('color_combine', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();           //AUTO NUMBER SEQUENCE
-            $table->string('nama')->nullable();         //CONCATENATE idColor1+....
-            $table->foreignId('idColor1')->nullable();  //INPUT DESAIN
-            $table->foreignId('idColor2')->nullable();  //INPUT DESAIN
-            $table->foreignId('idColor3')->nullable();  //INPUT DESAIN
-            $table->foreignId('idColor4')->nullable();  //INPUT DESAIN
+            $table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
+            $table->string('nama')->nullable()->index();         //CONCATENATE idColor1+....
+            $table->foreignId('idColor1')->nullable()->index();  //INPUT DESAIN
+            $table->foreignId('idColor2')->nullable()->index();  //INPUT DESAIN
+            $table->foreignId('idColor3')->nullable()->index();  //INPUT DESAIN
+            $table->foreignId('idColor4')->nullable()->index();  //INPUT DESAIN
             //RELATION
             $table->foreign('idColor1')->references('id')->on('color')->cascadeOnDelete();
             $table->foreign('idColor2')->references('id')->on('color')->cascadeOnDelete();
@@ -32,7 +32,7 @@ class CreateColorCombineTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

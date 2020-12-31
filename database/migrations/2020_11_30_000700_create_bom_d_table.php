@@ -15,8 +15,8 @@ class CreateBomDTable extends Migration
     {
         Schema::create('bom_d', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('bom_m_id');          //AUTO
-            $table->foreignId('bomComponent_id');   //INPUT PPIC
+            $table->foreignId('bom_m_id')->index();          //AUTO
+            $table->foreignId('bomComponent_id')->index();   //INPUT PPIC
             $table->integer('qty');                 //INPUT PPIC
             $table->foreignId('satuan');         //INPUT PPIC
             $table->integer('avg_price');           //INPUT ACC
@@ -32,7 +32,7 @@ class CreateBomDTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

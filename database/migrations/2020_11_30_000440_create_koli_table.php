@@ -15,9 +15,9 @@ class CreateKoliTable extends Migration
     {
         Schema::create('koli', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique();                       //AUTO = QTYBOX
-            $table->string('nama');                                 //AUTO = QTYBOX
-            $table->integer('qtyBox');                              //Input Mark
+            $table->string('kode')->unique()->index();                       //AUTO = QTYBOX
+            $table->string('nama')->index();                                 //AUTO = QTYBOX
+            $table->integer('qtyBox')->index();                              //Input Mark
             $table->foreignId('satuanBox');                      //Input Mark
             $table->integer('qtyStrapping')->nullable();            //Input PPIC
             $table->foreignId('satuanStrapping')->nullable();    //Input PPIC
@@ -33,7 +33,7 @@ class CreateKoliTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch');           //Auto ambil dari login awal
+            $table->string('branch')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

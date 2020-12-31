@@ -17,8 +17,8 @@ class CreateOpiMTable extends Migration
             $table->id('id');
             $table->string('kode');     //AUTO
             $table->string('nama');     //AUTO
-            $table->foreignId('dt_id'); //INPUT PPIC
-            $table->text('keterangan'); //INPUT PPIC
+            $table->foreignId('dt_id')->nullable(); //INPUT PPIC
+            $table->text('keterangan')->nullable(); //INPUT PPIC
             //RELATION
             $table->foreign('dt_id')->references('id')->on('dt')->cascadeOnDelete();
             // TRACKING
