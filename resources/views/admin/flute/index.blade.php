@@ -11,12 +11,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Dashboard</h1>
+          <h1 class="m-0">Flute</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item active">Flute</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -28,32 +28,36 @@
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
-      <a href="/admin/satuans/create" style="margin-left: 20px;" data-toggle="tooltip" title="Add New"> <i class="fas fa-plus-circle fa-2x"></i></a>
+
+      <a href="/admin/flute/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
-        <table class="table table-bordered" id="data_satuan">
+        <table class="table table-bordered" id="data_flute">
           <thead>
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
+              <th scope="col">Tur</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             <?php
-            foreach ($satuans as $satuan) { ?>
+            $no = 1;
+            foreach ($flute as $data) { ?>
               <tr>
-                <td scope="row">{{ $satuan->id }}</td>
-                <td>{{ $satuan->kode }}</td>
-                <td>{{ $satuan->nama }}</td>
-                <td>{{ $satuan->branch }}</td>
+                <td scope="row">{{ $no++ }}</td>
+                <td>{{ $data->kode }}</td>
+                <td>{{ $data->nama }}</td>
+                <td>{{ $data->tur }}</td>
+                <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/satuans/show/{{ $satuan->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/satuans/edit/{{ $satuan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/satuans/delete/{{ $satuan->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="/admin/flute/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="/admin/flute/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="/admin/flute/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>
@@ -74,8 +78,7 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-      $('[data-toggle="tooltip"]').tooltip();
-      $("#data_satuan").DataTable({
+      $("#data_flute").DataTable({
         dom: 'Bfrtip',
         buttons: [
           'copy',

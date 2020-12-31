@@ -6,7 +6,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Satuan</h4>
+                <h4 class="modal-title">Tambah Flute</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -20,7 +20,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/satuans/store" method="POST">
+                <form action="/admin/flute/store" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -36,6 +36,12 @@
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" name="nama" id="nama">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Tur</label>
+                                <input type="text" class="form-control txt_line" name="tur" id="tur">
                             </div>
                         </div>
                         <div class="col-md-12">

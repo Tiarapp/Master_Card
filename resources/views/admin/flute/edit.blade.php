@@ -6,7 +6,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Edit Satuan</strong> </h4>
+                <h4 class="modal-title"><strong>Edit Flute</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/satuans/update/{{ $satuan->id }}" method="POST">
+                <form action="/admin/flute/update/{{ $flute->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
@@ -29,20 +29,26 @@
                                 <label>Kode</label>
                                 {{-- <div class="row"> --}}
                                 {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $satuan->kode }}" readonly>
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $flute->kode }}" readonly>
                                 {{-- </div> --}}
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $satuan->nama }}">
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $flute->nama }}">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Tur</label>
+                                <input type="text" class="form-control txt_line" name="tur" id="tur" value="{{ $flute->tur }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $satuan->branch }}">
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $flute->branch }}">
                             </div>
                         </div>
                         <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">

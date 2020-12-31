@@ -4,19 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Satuan extends Model
+class Flute extends Model
 {
     use HasFactory;
-    // use SoftDeletes;
-    protected $table = 'satuan';
+
+    protected $table = 'flute';
 
     protected $fillable = [
         'kode',
         'nama',
-        'branch',
+        'tur',
         'createdBy',
-        'lastUpdatedBy',
+        'lastUpdateBy',
+        'deletedBy',
+        'branch'
     ];
 }

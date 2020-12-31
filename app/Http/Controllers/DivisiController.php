@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Satuan;
+use App\Models\Divisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class SatuansController extends Controller
+class DivisiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,19 +16,11 @@ class SatuansController extends Controller
      */
     public function index()
     {
-        // return view('satuan.index');
-        // $satuan = DB::table('satuan')->get()
-        // ->where('deleted', '0');
-
-        // return view('admin.satuans.index', ['data' => $satuan]);
-
-        $satuans = DB::table('satuan')
+        $divisi = DB::table('divisi')
             ->where('deleted', '=', '0')
             ->simplePaginate(25);
-
-        return view('admin.satuans.index', compact('satuans'));
-
-        // dd(Auth::user()->nama);
+        
+        return view('admin.divisi.index', compact('divisi'));
     }
 
     /**
@@ -38,7 +30,7 @@ class SatuansController extends Controller
      */
     public function create()
     {
-        return view('admin.satuans.create');
+        return view('admin.divisi.create');
     }
 
     /**
@@ -49,7 +41,6 @@ class SatuansController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
@@ -57,40 +48,42 @@ class SatuansController extends Controller
             'createdBy' => 'required'
         ]);
 
-        Satuan::create($request->all());
-        return redirect('/admin/satuans')
-            ->with('success', 'Satuan Created Successfully');
+        Divisi::create($request->all());
+
+        return redirect('/admin/divisi');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Satuan  $satuan
+     * @param  \App\Models\Divisi  $divisi
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $satuan = Satuan::find($id);
-        return view('/admin/satuans/show', ['satuan' => $satuan,]);
+        $divisi = Divisi::find($id);
+
+        return view('admin.divisi.show', ['divisi' => $divisi]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Satuan  $satuan
+     * @param  \App\Models\Divisi  $divisi
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $satuan = Satuan::find($id);
-        return view('/admin/satuans/edit', ['satuan' => $satuan,]);
+        $divisi = Divisi::find($id);
+
+        return view('admin.divisi.edit', ['divisi' => $divisi]);        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Satuan  $satuan
+     * @param  \App\Models\Divisi  $divisi
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -102,43 +95,38 @@ class SatuansController extends Controller
             'lastUpdatedBy' => 'required'
         ]);
 
-        $satuan = Satuan::find($id);
+        $divisi = Divisi::find($id);
 
-        $satuan->nama = $request->nama;
-        $satuan->branch = $request->branch;
+        $divisi->nama = $request->nama;
+        $divisi->branch = $request->branch;
+        $divisi->lastUpdatedBy = Auth::user()->name;
 
-        $satuan->save();
+        $divisi->save();
 
-        return redirect('/admin/satuans')
+        return redirect('/admin/divisi')
             ->with('success', 'Update Success');
     }
-
+    
     public function updateDeleted($id)
     {
-        $satuan = Satuan::find($id);
+        $divisi = Divisi::find($id);
 
-        $satuan->deleted = 1;
-        $satuan->deletedAt = date('Y-m-d h:i:s');
-        $satuan->lastUpdatedBy = Auth::user()->name;
-        $satuan->deletedBy = Auth::user()->name;
+        $divisi->deleted = 1;
+        $divisi->deletedAt = date('Y-m-d h:i:s');
+        $divisi->deletedBy = Auth::user()->name;
 
-        $satuan->save();
+        $divisi->save();
 
-        return redirect('/admin/satuans');
+        return redirect('/admin/divisi');
     }
-
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Satuan  $satuan
+     * @param  \App\Models\Divisi  $divisi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Satuan $satuan)
+    public function destroy(Divisi $divisi)
     {
-        $satuan->delete();
-
-        return redirect()->route('admin.satuans.index')
-            ->with('success', 'Delete success');
+        //
     }
 }
