@@ -30,7 +30,7 @@ Route::get('/admin', function () {
 })->middleware(['auth'])->name('admin');
 
 //Satuan
-Route::get('/admin/satuans', 'SatuansController@index');
+Route::get('/admin/satuans', 'SatuansController@index')->name('satuans');
 Route::get('/admin/satuans/create', 'SatuansController@create');
 Route::post('/admin/satuans/store', 'SatuansController@store');
 Route::get('/admin/satuans/edit/{id}', 'SatuansController@edit');
