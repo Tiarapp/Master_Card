@@ -51,13 +51,13 @@
                </a>
              </li>
              <li class="nav-item">
-               <a href="{{ route('supplier.index') }}" class="nav-link">
+               <a href="{{ route('supplier') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Supplier</p>
                </a>
              </li>
              <li class="nav-item">
-               <a href="{{ route('barang.index') }}" class="nav-link">
+               <a href="{{ route('barang') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Barang</p>
                </a>
@@ -80,10 +80,28 @@
                  <p>Sales</p>
                </a>
              </li>
+             <li class="nav-item">
+              <a href="{{ route('matauang') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Mata Uang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+             <a href="{{ route('joint') }}" class="nav-link">
+               <i class="far fa-circle nav-icon"></i>
+               <p>Joint</p>
+             </a>
+           </li>
+           <li class="nav-item">
+            <a href="{{ route('wax') }}" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Wax</p>
+            </a>
+          </li>
            </ul>
          </li>
          <li class="nav-item">
-           <a href="{{ route('mastercard.index') }}" class="nav-link">
+           <a href="{{ route('mastercard') }}" class="nav-link">
              <i class="nav-icon fas fa-th"></i>
              <p>Master Card</p>
            </a>
