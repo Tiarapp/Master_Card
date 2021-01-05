@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
+use App\Models\BoxType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class BarangController extends Controller
+class BoxTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,7 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = DB::connection('firebird')->table('TBarang')->get();
-
-        return view('admin.barang.index', compact('barang'));
+        //
     }
 
     /**
@@ -44,10 +41,10 @@ class BarangController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Barang  $barang
+     * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function show(Barang $barang)
+    public function show(BoxType $boxType)
     {
         //
     }
@@ -55,10 +52,10 @@ class BarangController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Barang  $barang
+     * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function edit(Barang $barang)
+    public function edit(BoxType $boxType)
     {
         //
     }
@@ -67,10 +64,10 @@ class BarangController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Barang  $barang
+     * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Barang $barang)
+    public function update(Request $request, BoxType $boxType)
     {
         //
     }
@@ -78,10 +75,10 @@ class BarangController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Barang  $barang
+     * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Barang $barang)
+    public function destroy(BoxType $boxType)
     {
         //
     }

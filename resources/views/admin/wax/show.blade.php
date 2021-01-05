@@ -25,43 +25,61 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $joint->kode }}" readonly>
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $wax->kode }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $joint->nama }}" readonly>
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $wax->nama }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>QTY Joint</label>
-                                <input type="text" class="form-control txt_line" name="qtyjoint" id="qtyjoint" value="{{ $joint->qtyJoint }}" readonly>
+                                <label>Luas</label>
+                                <input type="text" class="form-control txt_line" name="luas" id="luas" value="{{ $wax->luas }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Satuan Joint</label>
-                                <input type="text" class="form-control txt_line" name="satuanjoint" id="satuanjoint" value="{{ $joint->satuanJoint }}" readonly>
+                                <label>In Out</label>
+                                <input type="text" class="form-control txt_line" name="inOut" id="inOut" value="{{ $wax->inOut }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Luas</label>
+                                <input type="text" class="form-control txt_line" name="satuanLuas" id="satuanLuas" value="{{ $wax->satuanLuas }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Gram Wax</label>
+                                <input type="text" class="form-control txt_line" name="gramWax" id="gramWax" value="{{ $wax->gramWax }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Gram Wax</label>
+                                <input type="text" class="form-control txt_line" name="satuanGramWax" id="satuanGramWax" value="{{ $wax->satuanGramWax }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Average Price</label>
-                                <input type="text" class="form-control txt_line" name="avgprice" id="avgprice" value="{{ $joint->avgPrice }}" readonly>
+                                <input type="text" class="form-control txt_line" name="avgPrice" id="avgPrice" value="{{ $wax->avgPrice }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Mata Uang</label>
-                                <input type="text" class="form-control txt_line" name="matauang" id="matauang" value="{{ $joint->mataUang }}" readonly>
+                                <input type="text" class="form-control txt_line" name="mataUang" id="mataUang" value="{{ $wax->mataUang }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $joint->branch }}" readonly>
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $wax->branch }}" readonly>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">

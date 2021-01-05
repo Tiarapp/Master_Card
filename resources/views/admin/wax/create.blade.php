@@ -47,6 +47,16 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label>In Out</label>
+                                <select class="js-example-basic-single col-md-12" name="inOut" id="inOut">
+                                    <option value="INSIDE">INSIDE</option>
+                                    <option value="OUTSIDE">OUTSIDE</option>
+                                    <option value="IN & OUT">IN & OUT</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label>Satuan Luas</label>
                                 <select class="js-example-basic-single col-md-12" name="satuanLuas" id="satuanLuas">
                                     @foreach ($satuan as $data)
