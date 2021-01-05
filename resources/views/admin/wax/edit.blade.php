@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Edit Mata Uang</strong> </h4>
+                <h4 class="modal-title"><strong>Edit Wax</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
@@ -22,31 +22,58 @@
                 </div>
                 @endif
 
-                <form action="/admin/joint/update/{{ $joint->id }}" method="POST">
+                <form action="/admin/wax/update/{{ $wax->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $joint->kode }}" readonly>
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $wax->kode }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $joint->nama }}">
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $wax->nama }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>QTY Joint</label>
-                                <input type="text" class="form-control txt_line" name="qtyJoint" id="qtyJoint" value="{{ $joint->qtyJoint }}">
+                                <label>Luas</label>
+                                <input type="text" class="form-control txt_line" name="luas" id="luas" value="{{ $wax->luas }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <select class="js-example-basic-single col-md-12" name="satuanJoint" id="satuanJoint" value="{{ $joint->satuanJoint }}">
+                                <label>In Out</label>
+                                <select class="js-example-basic-single col-md-12" name="inOut" id="inOut">
+                                    <option value="INSIDE">INSIDE</option>
+                                    <option value="OUTSIDE">OUTSIDE</option>
+                                    <option value="IN & OUT">IN & OUT</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Luas</label>
+                                <select class="js-example-basic-single col-md-12" name="satuanLuas" id="satuanLuas">
+                                    @foreach ($satuan as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Gram Wax</label>
+                                <input type="text" class="form-control txt_line" name="gramWax" id="gramWax" value="{{ $wax->gramWax }}">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Gram Wax</label>
+                                <select class="js-example-basic-single col-md-12" name="satuanGramWax" id="satuanGramWax">
                                     @foreach ($satuan as $data)
                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                     @endforeach
@@ -56,19 +83,23 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Average Price</label>
-                                <input type="text" class="form-control txt_line" name="avgPrice" id="avgPrice" value="{{ $joint->avgPrice }}">
+                                <input type="text" class="form-control txt_line" name="avgPrice" id="avgPrice" value="{{ $wax->avgPrice }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Mata Uang</label>
-                                <input type="text" class="form-control txt_line" name="mataUang" id="mataUang" value="{{ $joint->mataUang }}" >
+                                <select class="js-example-basic-single col-md-12" name="mataUang" id="mataUang">
+                                    @foreach ($matauang as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $joint->branch }}">
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $wax->branch }}">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">

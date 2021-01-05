@@ -88,8 +88,17 @@ class WaxController extends Controller
     public function edit($id)
     {
         $wax = Wax::find($id);
+        $satuan = DB::table('satuan')
+            ->where('deleted', '=', '0')
+            ->get();
+        $matauang = DB::table('mata_uang')
+            ->where('deleted', '=', '0')
+            ->get();
 
-        return view('admin.wax.edit', ['wax' => $wax]);
+        return view('admin.wax.edit', ['wax' => $wax], compact([
+            'satuan',
+            'matauang'
+        ]));
     }
 
     /**
@@ -145,7 +154,7 @@ class WaxController extends Controller
 
         $wax->save();
 
-        return redirect('/admin/joint');
+        return redirect('/admin/wax');
     }
 
     /**

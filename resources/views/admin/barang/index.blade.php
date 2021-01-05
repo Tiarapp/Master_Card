@@ -10,7 +10,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">Barang</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -31,51 +31,38 @@
       <a href="#" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_barang">
-            <thead>
-                <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Kode Barang</th>
-                    <th scope="col">Nama Barang</th>
-                    <th scope="col">Satuan</th>
-                    <th scope="col">Isi Per Karton</th>
-                    <th scope="col">Berat Standart</th>
-                    <th scope="col">Berat CRT</th>
-                    <th scope="col">Weight Value</th>
-                    <th scope="col">Weight Sheet</th>
-                    <th scope="col">Warna</th>
-                    <th scope="col">Packing</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <?php 
-                        $no = 1;
-                        foreach ($barang as $brg) { ?>
-                        <tr>
-                            <td scope="row">{{ $no++ }}</td>
-                            <td>{{ $brg->KodeBrg }}</td>
-                            <td>{{ $brg->NamaBrg }}</td>
-                            <td>{{ $brg->Satuan }}</td>
-                            <td>{{ $brg->IsiPerKarton }}</td>
-                            <td>{{ $brg->BeratStandart }}</td>
-                            <td>{{ $brg->BeratCRT }}</td>
-                            <td>{{ $brg->WeightValue }}</td>
-                            <td>{{ $brg->WeightSheet }}</td>
-                            <td>{{ $brg->Warna }}</td>
-                            <td>{{ $brg->Packing }}</td>
-                            {{-- <td>
-                                <div class="input-group">
-                                    <div class="input-group-append" id="button-addon4">
-                                    <a href="#" class="btn btn-outline-secondary" type="button">View</a>
-                                    <a href="#" class="btn btn-outline-secondary" type="button">Edit</a>
-                                    <a class="btn btn-outline-danger" type="button">Delete</a>
-                                    </div>
-                                </div>
-                            </td> --}}
-                        </tr>
-                            <?php
-                        }    
-                    ?>
-            </tbody>
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Kode</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Branch</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $no = 1;
+            foreach ($barang as $data) { ?>
+              <tr>
+                <td scope="row">{{ $no++ }}</td>
+                <td>{{ $data->KodeBrg }}</td>
+                <td>{{ $data->NamaBrg }}</td>
+                <td>{{ $data->SatuanP }}</td>
+                <td>
+                  <div class="input-group">
+                    <div class="input-group-append" id="button-addon4">
+                      <a href="/admin/divisi/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="/admin/divisi/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="/admin/divisi/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <?php
+            }
+            ?>
+          </tbody>
         </table>
       </div>
       <!-- /.row -->
