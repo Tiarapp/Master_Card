@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Warna extends Model
+class ColorCombine extends Model
 {
     use HasFactory;
 
-    protected $table = 'color';
+    protected $table = 'color_combine';
 
     protected $fillable = [
         'kode',
         'nama',
-        'mudaTua',
         'createdBy',
         'lastUpdatedBy',
         'deleted',
-        'deletedBy',
         'deletedAt',
+        'deletedBy',
         'branch'
     ];
 }

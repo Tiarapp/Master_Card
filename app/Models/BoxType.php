@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class BoxType extends Model
 {
     use HasFactory;
+
+    protected $table = 'tipe_box';
+
+    protected $fillable = [
+        'kode',
+        'nama',
+        'createdBy',
+        'lastUpdatedBy',
+        'deleted',
+        'deletedBy',
+        'deletedAt',
+        'branch'
+    ];
 }

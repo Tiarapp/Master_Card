@@ -19,7 +19,7 @@ class WaxController extends Controller
         $wax = DB::table('wax')
             ->where('deleted', '=', '0')
             ->get();
-        
+
         return view('admin.wax.index', ['wax' => $wax]);
     }
 
@@ -33,10 +33,7 @@ class WaxController extends Controller
         $satuan = DB::table('satuan')->where('deleted', '=', '0')->get();
         $matauang = DB::table('mata_uang')->where('deleted', '=', '0')->get();
 
-        return view('admin.wax.create', compact([
-            'satuan',
-            'matauang'
-        ]));
+        return view('admin.wax.create', compact('satuan', 'matauang'));
     }
 
     /**
