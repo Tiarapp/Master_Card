@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BoxType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BoxTypeController extends Controller
 {
@@ -14,7 +16,10 @@ class BoxTypeController extends Controller
      */
     public function index()
     {
-        //
+        $boxtype = DB::table('tipe_box')
+            ->where('deleted', '=', '0')
+            ->get();
+        return view('admin.boxtype.index', ['boxtype' => $boxtype]);
     }
 
     /**
@@ -24,7 +29,7 @@ class BoxTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.boxtype.create');
     }
 
     /**
@@ -35,7 +40,16 @@ class BoxTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'createdBy' => 'required',
+            'branch' => 'required'
+        ]);
+
+        BoxType::create($request->all());
+
+        return redirect('admin/boxtype');
     }
 
     /**
@@ -44,9 +58,11 @@ class BoxTypeController extends Controller
      * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function show(BoxType $boxType)
+    public function show($id)
     {
-        //
+        $boxtype = BoxType::find($id);
+
+        return view('admin.boxtype.show', ['boxtype' => $boxtype]);
     }
 
     /**
@@ -55,9 +71,11 @@ class BoxTypeController extends Controller
      * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function edit(BoxType $boxType)
+    public function edit($id)
     {
-        //
+        $boxtype = BoxType::find($id);
+
+        return view('admin.boxtype.edit', ['boxtype' => $boxtype]);
     }
 
     /**
@@ -67,9 +85,38 @@ class BoxTypeController extends Controller
      * @param  \App\Models\BoxType  $boxType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BoxType $boxType)
+    public function update($id, Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'branch' => 'required',
+            'lastUpdatedBy' => 'required',
+        ]);
+
+        $boxtype = BoxType::find($id);
+
+        $boxtype->kode = $request->kode;
+        $boxtype->nama = $request->nama;
+        $boxtype->branch = $request->branch;
+        $boxtype->lastUpdatedBy = $request->lastUpdatedBy;
+
+        $boxtype->save();
+
+        return redirect('admin/boxtype');
+    }
+
+    public function updateDeleted($id)
+    {
+        $boxtype = BoxType::find($id);
+
+        $boxtype->deleted = 1;
+        $boxtype->deletedAt = date('Y-m-d h:i:s');
+        $boxtype->deletedBy = Auth::user()->name;
+
+        $boxtype->save();
+
+        return redirect('/admin/boxtype');
     }
 
     /**

@@ -79,6 +79,24 @@ Route::get('/admin/wax/edit/{id}', 'WaxController@edit');
 Route::put('/admin/wax/update/{id}', 'WaxController@update');
 Route::get('/admin/wax/delete/{id}', 'WaxController@updateDeleted');
 
+//Tipe Box
+Route::get('/admin/boxtype', 'BoxTypeController@index')->name('boxtype');
+Route::get('/admin/boxtype/create', 'BoxTypeController@create');
+Route::post('/admin/boxtype/store', 'BoxTypeController@store');
+Route::get('/admin/boxtype/show/{id}', 'BoxTypeController@show');
+Route::get('/admin/boxtype/edit/{id}', 'BoxTypeController@edit');
+Route::put('/admin/boxtype/update/{id}', 'BoxTypeController@update');
+Route::get('/admin/boxtype/delete/{id}', 'BoxTypeController@updateDeleted');
+
+//Warna
+Route::get('/admin/warna', 'WarnaController@index')->name('warna');
+Route::get('/admin/warna/create', 'WarnaController@create');
+Route::post('/admin/warna/store', 'WarnaController@store');
+Route::get('/admin/warna/show/{id}', 'WarnaController@show');
+Route::get('/admin/warna/edit/{id}', 'WarnaController@edit');
+Route::put('/admin/warna/update/{id}', 'WarnaController@update');
+Route::get('/admin/warna/delete/{id}', 'WarnaController@updateDeleted');
+
 //Sales
 Route::get('/admin/sales', 'SalesController@index');
 Route::get('/admin/sales/create', 'SalesController@create');

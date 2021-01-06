@@ -35,7 +35,7 @@
        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
          <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-         <li class="nav-item menu-open">
+         <li class="nav-item">
            <a href="#" class="nav-link active">
              <i class="nav-icon fas fa-tachometer-alt"></i>
              <p>
@@ -81,23 +81,35 @@
                </a>
              </li>
              <li class="nav-item">
-              <a href="{{ route('matauang') }}" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Mata Uang</p>
-              </a>
-            </li>
-            <li class="nav-item">
-             <a href="{{ route('joint') }}" class="nav-link">
-               <i class="far fa-circle nav-icon"></i>
-               <p>Joint</p>
-             </a>
-           </li>
-           <li class="nav-item">
-            <a href="{{ route('wax') }}" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Wax</p>
-            </a>
-          </li>
+               <a href="{{ route('matauang') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Mata Uang</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="{{ route('joint') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Joint</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="{{ route('wax') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Wax</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="{{ route('boxtype') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Tipe Box</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="{{ route('warna') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Warna</p>
+               </a>
+             </li>
            </ul>
          </li>
          <li class="nav-item">
