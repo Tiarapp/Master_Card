@@ -14,6 +14,10 @@ class ColorCombine extends Model
     protected $fillable = [
         'kode',
         'nama',
+        'idColor1',
+        'idColor2',
+        'idColor3',
+        'idColor4',
         'createdBy',
         'lastUpdatedBy',
         'deleted',

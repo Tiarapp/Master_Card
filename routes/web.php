@@ -97,6 +97,12 @@ Route::get('/admin/warna/edit/{id}', 'WarnaController@edit');
 Route::put('/admin/warna/update/{id}', 'WarnaController@update');
 Route::get('/admin/warna/delete/{id}', 'WarnaController@updateDeleted');
 
+//Warna Combine
+Route::get('/admin/colorcombine', 'ColorCombineController@index')->name('colorcombine');
+Route::get('/admin/colorcombine/create', 'ColorCombineController@create');
+Route::post('/admin/colorcombine/store', 'ColorCombineController@store');
+
+
 //Sales
 Route::get('/admin/sales', 'SalesController@index');
 Route::get('/admin/sales/create', 'SalesController@create');
