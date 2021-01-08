@@ -21,8 +21,8 @@ class CreateKoliTable extends Migration
             $table->foreignId('satuanBox');                      //Input Mark
             $table->integer('qtyStrapping')->nullable();            //Input PPIC
             $table->foreignId('satuanStrapping')->nullable();    //Input PPIC
-            $table->float('avgPrice',20,2);         //Auto/input by Acc
-            $table->foreignId('mataUang');       //Auto/input by Acc
+            $table->float('avgPrice',20,2)->nullable();         //Auto/input by Acc
+            $table->foreignId('mataUang')->nullable();       //Auto/input by Acc
             //RELATION
             $table->foreign('satuanBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanStrapping')->references('id')->on('satuan')->cascadeOnDelete();
@@ -33,7 +33,7 @@ class CreateKoliTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

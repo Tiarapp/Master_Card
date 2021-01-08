@@ -22,21 +22,21 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('top_id')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
             $table->foreignId('alamatKirim_id');        //Input Marketing
-            $table->foreignId('alamatKantor_id');       //Input Marketing
-            $table->foreignId('alamatTagihan_id');      //Input Marketing
+            $table->foreignId('alamatKantor_id')->nullable();       //Input Marketing
+            $table->foreignId('alamatTagihan_id')->nullable();      //Input Marketing
             $table->integer('pcsKontrak');              //AUTO SUM(kontrak_d.pcsKontrak)
-            $table->float('pctToleransiKontrak',5,2);   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
-            $table->integer('pcsToleransiKontrak');     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
-            $table->integer('kgKontrak');               //AUTO SUM(kontrak_d.kgKontrak)
-            $table->integer('kgToleransiKontrak');      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->integer('amountBeforeTax');         //AUTO DPP Auto harga * pcsKontrak
-            $table->integer('tax');                     //AUTO amountBeforeTax / 10
-            $table->integer('amountTotal');             //Auto amountBeforeTax + Tax
-            $table->float('rpKg',20,2);                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
-            $table->integer('sisaPlafon');              //Next Auto Sisa Plafon per customer - amount
-            $table->string('status')->index();                   //Auto (Finish/Kurang xxx pcs)
-            $table->foreignId('sales_m_id')->index();              //INPUT MARKETING
-            $table->foreignId('mataUang');              //INPUT MARKETING
+            $table->float('pctToleransiKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
+            $table->integer('pcsToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
+            $table->integer('kgKontrak')->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
+            $table->integer('kgToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
+            $table->integer('amountBeforeTax')->nullable();         //AUTO DPP Auto harga * pcsKontrak
+            $table->integer('tax')->nullable();                     //AUTO amountBeforeTax / 10
+            $table->integer('amountTotal')->nullable();             //Auto amountBeforeTax + Tax
+            $table->float('rpKg',20,2)->nullable();                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
+            $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
+            $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
+            $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
+            $table->foreignId('mataUang');                          //INPUT MARKETING
             
             //RELATION
             $table->foreign('customer_id')->references('id')->on('customer')->cascadeOnDelete();
@@ -53,7 +53,7 @@ class CreateKontrakmTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

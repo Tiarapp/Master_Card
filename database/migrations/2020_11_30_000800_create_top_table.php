@@ -15,8 +15,8 @@ class CreateTopTable extends Migration
     {
         Schema::create('top', function (Blueprint $table) {
             $table->id('id');
-            $table->string('nama');     //AUTO top.hari + " hari"
-            $table->integer('hari');    //INPUT IT
+            $table->string('nama')->index();     //AUTO top.hari + " hari"
+            $table->integer('hari')->index();    //INPUT IT
             $table->timestamps();
         });
     }

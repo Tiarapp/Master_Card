@@ -16,11 +16,11 @@ class CreateBoxTable extends Migration
         Schema::create('box', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();      //AUTO NUMBER SEQUENCE
-            $table->text('nama')->nullable();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
-            //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
-            //     CREASING CORR : sizeCreasCorr satuanCreas
-            //     CREASING CONV : sizeCreasConv satuanCreas
-            $table->enum('tipeCreasCorr', ['MALE-FLAT', 'MALE-MALE', 'MALE-FEMALE', 'TANPA CREASE']);   //INPUT MARKETING
+            $table->text('nama')->nullable()->index();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
+                                                            //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
+                                                            //     CREASING CORR : sizeCreasCorr satuanCreas
+                                                            //     CREASING CONV : sizeCreasConv satuanCreas
+            $table->enum('tipeCreasCorr',['MALE-FLAT','MALE-MALE','MALE-FEMALE','TANPA CREASE']);   //INPUT MARKETING
             // SHEET BOX
             $table->integer('lebarSheetBox');           //INPUT MARKETING
             $table->integer('panjangSheetBox');         //INPUT MARKETING
@@ -47,7 +47,7 @@ class CreateBoxTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();              //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }
