@@ -15,9 +15,10 @@ class CreateLogTable extends Migration
     {
         Schema::create('log', function (Blueprint $table) {
             $table->id('id');
-            $table->string('username')->nullable()->comment('Nama User');
-            $table->dateTime('login')->nullable();
+            $table->string('username')->comment('Nama User');
+            $table->dateTime('login');
             $table->dateTime('logout')->nullable();
+            $table->dateTime('dateTimeTransaksi')->nullable();
             $table->string('transaksi')->nullable()->comment('Transaksi yang dilakukan');
             $table->string('ip')->nullable();
             $table->timestamps();

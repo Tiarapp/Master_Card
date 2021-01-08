@@ -15,20 +15,20 @@ class CreateAlamatTable extends Migration
     {
         Schema::create('alamat', function (Blueprint $table) {
             $table->id('id');
-            $table->enum('jenis', ['Kantor', 'Kirim', 'Tagihan', 'Toko'])->index();  //INPUT
+            $table->enum('jenis',['Kantor','Kirim','Tagihan','Toko'])->index();  //INPUT
             $table->integer('customer_id')->nullable()->index();     //AUTO
             $table->integer('supplier_id')->nullable()->index();     //AUTO
-            $table->decimal('latitude', 9, 6)->nullable();    //INPUT
-            $table->decimal('longitude', 9, 6)->nullable();   //INPUT
+            $table->decimal('latitude',9,6)->nullable();    //INPUT
+            $table->decimal('longitude',9,6)->nullable();   //INPUT
             $table->string('pic');                      //INPUT
             $table->string('telpPic');                  //INPUT
             $table->string('alamat');                   //INPUT
             $table->string('perumahanNamaTempat')->nullable();               //INPUT
             $table->string('rt')->nullable();           //INPUT
             $table->string('rw')->nullable();           //INPUT
-            $table->enum('kelurahanDesa', ['Kelurahan', 'Desa'])->nullable(); //INPUT
+            $table->enum('kelurahanDesa',['Kelurahan','Desa'])->nullable(); //INPUT
             $table->string('kecamatan')->nullable();            //INPUT
-            $table->enum('kotaKabupaten', ['Kota', 'Kabupaten']); //INPUT
+            $table->enum('kotaKabupaten',['Kota','Kabupaten']); //INPUT
             $table->string('provinsi');                         //INPUT
             $table->string('kodePos')->nullable();              //INPUT
             $table->string('negara');                           //INPUT
@@ -40,7 +40,7 @@ class CreateAlamatTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }

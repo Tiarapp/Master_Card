@@ -21,7 +21,7 @@ class CreateItemBjTable extends Migration
             $table->string('mc_id')->index();           //Auto dari kode Barang Firebird
             $table->integer('gram')->nullable();        //Auto Stock
             $table->integer('pcs')->nullable();         //Auto Stock
-            $table->integer('kg')->nullable();         //Auto Stock
+            $table->integer('kg')->nullable();          //Auto Stock
             $table->foreignId('mataUang')->nullable();  //Input Acc
             $table->string('lokasi')->index();          //Input Logistik BJ
             //RELATION
@@ -32,7 +32,7 @@ class CreateItemBjTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();              //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }

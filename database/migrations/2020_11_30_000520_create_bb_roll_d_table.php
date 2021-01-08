@@ -31,7 +31,7 @@ class CreateBbRollDTable extends Migration
             $table->integer('qtyKgPakai');              //Auto qtyKgSpa-qtyKgSisa
             $table->integer('qtyKgSisa');               //Input Log
             $table->integer('avgPrice')->nullable();    //Auto / Input Acc
-            $table->foreignId('mataUang')->nullable();   //Auto / Input Acc
+            $table->foreignId('mataUang')->nullable();  //Auto / Input Acc
             //RELATION
             $table->foreign('bb_roll_m_id')->references('id')->on('bb_roll_m')->cascadeOnDelete();
             $table->foreign('jenisGramSj_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
@@ -45,7 +45,7 @@ class CreateBbRollDTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }
