@@ -18,15 +18,15 @@ class CreateSubstanceTable extends Migration
             $table->string('kode')->unique()->index();                           //AUTO NUMBER SEQUENCE
             $table->string('nama')->index();                                     //AUTO jenis+...
             $table->foreignId('jenisGramLinerAtas_id')->index();                 //Input Marketing
-            $table->foreignId('jenisGramBF_id')->index();                        //Input Marketing
+            $table->foreignId('jenisGramBf_id')->index();                        //Input Marketing
             $table->foreignId('jenisGramLinerTengah_id')->nullable()->index();   //Input Marketing
-            $table->foreignId('jenisGramCF_id')->nullable()->index();            //Input Marketing
+            $table->foreignId('jenisGramCf_id')->nullable()->index();            //Input Marketing
             $table->foreignId('jenisGramLinerBawah_id')->nullable()->index();    //Input Marketing
             //RELATION
             $table->foreign('jenisGramLinerAtas_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
-            $table->foreign('jenisGramBF_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
+            $table->foreign('jenisGramBf_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramLinerTengah_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
-            $table->foreign('jenisGramCF_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
+            $table->foreign('jenisGramCf_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramLinerBawah_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
@@ -34,7 +34,7 @@ class CreateSubstanceTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();           //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
             $table->timestamps();
         });
     }
