@@ -18,7 +18,8 @@ class CreateMcView extends Migration
                         stnSizeSheetCorr.nama as satuan_size_sheet_corr,
                         sh.luasSheet as luas_sheet_corr,
                         stnLuasSheetCorr.nama as satuan_luas_sheet_corr,
-                        ss.gramSheetCorr as gram_sheet_corr,
+                        mc.gramSheetCorrKontrak as gram_sheet_corr_kontrak,
+                        mc.gramSheetCorrProduksi as gram_sheet_corr_produksi,
                         sk.nama as substance_kontrak,
                         sp.nama as substance_produksi,
                         fl.nama as flute,
@@ -49,14 +50,11 @@ class CreateMcView extends Migration
                         mc.bungkus,
                         mc.keterangan,
                         bx.id as box_id,
-                        ss.sheet_id,
-                        ss.substance_id
+                        mc.sheet_id
                         FROM mc
                         LEFT JOIN item_bj as bj ON mc.bj_id = bj.id
                         LEFT JOIN tipe_box as tb ON mc.tipeBox_id = tb.id
-                        LEFT JOIN substance_sheet as ss ON mc.substanceSheet_id = ss.id
-                        LEFT JOIN sheet as sh ON ss.sheet_id = sh.id
-                        LEFT JOIN substance as subs ON ss.substance_id = subs.id
+                        LEFT JOIN sheet as sh ON mc.sheet_id = sh.id
                         LEFT JOIN satuan as stnSizeSheetCorr ON sh.satuanSizeSheet = stnSizeSheetCorr.id
                         LEFT JOIN satuan as stnLuasSheetCorr ON sh.satuanLuasSheet = stnLuasSheetCorr.id
                         LEFT JOIN box as bx ON mc.box_id = bx.id
@@ -67,7 +65,7 @@ class CreateMcView extends Migration
                         LEFT JOIN joint as jt ON mc.joint_id = jt.id
                         LEFT JOIN wax ON mc.wax_id = wax.id
                         LEFT JOIN koli as ko ON mc.koli_id = ko.id
-                        LEFT JOIN flute as fl ON ss.flute_id = fl.id
+                        LEFT JOIN flute as fl ON mc.flute_id = fl.id
                         LEFT JOIN substance as sk ON mc.substanceKontrak_id = sk.id
                         LEFT JOIN substance as sp ON mc.substanceProduksi_id = sp.id
                         LEFT JOIN bom_m as bom ON mc.bom_m_id = bom.id

@@ -25,7 +25,7 @@ class CreateFTSupplierTable extends Migration
             $table->string('FaxKantor')->nullable();
             $table->string('PIC')->nullable();
             $table->string('TelpPIC')->nullable();
-            $table->float('Plafond',20,2)->nullable();
+            $table->float('Plafond',20,2);
             $table->integer('WaktuBayar')->nullable();
             $table->string('JenisBayar')->nullable();
             $table->string('Area')->nullable();

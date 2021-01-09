@@ -17,7 +17,9 @@ class CreateDtTable extends Migration
             $table->id('id');
             $table->string('opi')->nullable()->index();     //AUTO UPDATE KETIKA SIMPAN/UPDATE DIPLANNING PPIC
             $table->string('noMod')->nullable()->index();   //INPUT MARKETING NEXT AUTO
+            $table->foreignId('kontrak_m_id')->index();     //INPUT MARKETING
             $table->foreignId('kontrak_d_id')->index();     //INPUT MARKETING
+            $table->foreignId('mc_id')->index();            //AUTO
             $table->date('tglKirimDt')->index();            //INPUT MARKETING
             $table->string('hariKirimDt');                  //AUTO
             $table->integer('pcsDt')->nullable();           //INPUT MARKETING
@@ -41,14 +43,16 @@ class CreateDtTable extends Migration
             $table->integer('outstandingPiutang')->nullable()->comment('Piutang belum terbayar')->index();  //AUTO UPDATE SETELAH INSERT FAKTUR
             $table->boolean('lock')->default(0);        //AUTO WHEN PPIC INSERT/UPDATE PLANNING
             //RELATION
+            $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
             $table->foreign('kontrak_d_id')->references('id')->on('kontrak_d')->cascadeOnDelete();
+            $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();                       //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();                       //Auto ambil dari login awal
             $table->timestamps();
         });
     }

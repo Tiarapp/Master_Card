@@ -19,8 +19,8 @@ class CreateJointTable extends Migration
             $table->string('nama')->index();                 //Input Mark
             $table->integer('qtyJoint')->nullable();         //Input Mark
             $table->foreignId('satuanJoint')->nullable();    //Input Mark
-            $table->float('avgPrice',20,2);                  //Auto/input by Acc
-            $table->foreignId('mataUang');                   //Auto/input by Acc
+            $table->float('avgPrice',20,2)->nullable();      //Auto/input by Acc
+            $table->foreignId('mataUang')->nullable();                   //Auto/input by Acc
             //RELATION
             $table->foreign('satuanJoint')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
@@ -30,7 +30,7 @@ class CreateJointTable extends Migration
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->index();              //Auto ambil dari login awal
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }
