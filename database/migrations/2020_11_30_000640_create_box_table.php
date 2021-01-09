@@ -28,7 +28,7 @@ class CreateBoxTable extends Migration
             $table->foreignId('satuanSizeSheetBox');    //INPUT MARKETING
             $table->integer('luasSheetBox');            //INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox');    //INPUT MARKETING
-            $table->integer('gramSheetBox');            //INPUT MARKETING
+            $table->float('gramSheetBox',8,2);            //INPUT MARKETING
             // DALAM BOX
             $table->integer('panjangDalamBox');         //INPUT MARKETING
             $table->integer('lebarDalamBox');           //INPUT MARKETING

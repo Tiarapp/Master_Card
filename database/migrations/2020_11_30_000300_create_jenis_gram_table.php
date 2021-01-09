@@ -18,7 +18,7 @@ class CreateJenisGramTable extends Migration
             $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
             $table->string('nama')->nullable()->index();     //INPUT MARKETING
             $table->string('jenisKertas')->index();          //INPUT MARKETING
-            $table->string('gramKertas')->index();           //INPUT MARKETING
+            $table->float('gramKertas',8,2)->index();           //INPUT MARKETING
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

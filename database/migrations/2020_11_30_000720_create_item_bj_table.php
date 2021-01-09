@@ -17,15 +17,12 @@ class CreateItemBjTable extends Migration
             $table->id('id');
             $table->string('kode')->unique()->index();  //Import Firebird
             $table->string('nama')->index();            //Import Firebird
-            $table->string('alias')->index();           //Input (pilihan cetaknya 2 macam bisa nama atau alias)
+            $table->string('alias')->nullable()->index();           //Input (pilihan cetaknya 2 macam bisa nama atau alias)
             $table->string('mc_id')->index();           //Auto dari kode Barang Firebird
-            $table->integer('gram')->nullable();        //Auto Stock
+            $table->float('gram',8,2)->nullable();        //Auto Stock
             $table->integer('pcs')->nullable();         //Auto Stock
             $table->integer('kg')->nullable();          //Auto Stock
-            $table->foreignId('mataUang')->nullable();  //Input Acc
-            $table->string('lokasi')->index();          //Input Logistik BJ
-            //RELATION
-            $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
+            $table->string('lokasi')->nullable()->index();          //Input Logistik BJ
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

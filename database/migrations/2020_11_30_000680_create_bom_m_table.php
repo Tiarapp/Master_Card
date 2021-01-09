@@ -19,7 +19,7 @@ class CreateBomMTable extends Migration
             $table->string('nama')->nullable()->index();         //INPUT PPIC
             $table->foreignId('flute_id')->index();              //INPUT PPIC
             $table->foreignId('substance_id')->nullable();       //INPUT PPIC
-            $table->integer('luas')->nullable();                 //INPUT PPIC
+            $table->float('luas',8,2)->nullable();                 //INPUT PPIC
             $table->foreignId('satuanLuas')->nullable();         //INPUT PPIC
             $table->integer('beratPerLuas')->nullable();         //INPUT PPIC
             $table->foreignId('satuanBeratPerLuas')->nullable(); //INPUT PPIC
