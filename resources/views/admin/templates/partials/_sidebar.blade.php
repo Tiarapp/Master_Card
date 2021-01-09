@@ -44,6 +44,48 @@
              </p>
            </a>
            <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('barang') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Barang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('colorcombine') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Color Combine</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/divisi" class="nav-link">
+                <i class="far fa-circle nav-icon" style="font-size:48px;color:red"></i>
+                <p>Divisi</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/flute" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Flute</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('joint') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Joint</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('matauang') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Mata Uang</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/sales" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sales</p>
+              </a>
+            </li>
              <li class="nav-item">
                <a href="{{ route('satuans') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
@@ -57,48 +99,6 @@
                </a>
              </li>
              <li class="nav-item">
-               <a href="{{ route('barang') }}" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Barang</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="/admin/divisi" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Divisi</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="/admin/flute" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Flute</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="/admin/sales" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Sales</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="{{ route('matauang') }}" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Mata Uang</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="{{ route('joint') }}" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Joint</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="{{ route('wax') }}" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Wax</p>
-               </a>
-             </li>
-             <li class="nav-item">
                <a href="{{ route('boxtype') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Tipe Box</p>
@@ -108,6 +108,12 @@
                <a href="{{ route('warna') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Warna</p>
+               </a>
+             </li>
+             <li class="nav-item">
+               <a href="{{ route('wax') }}" class="nav-link">
+                 <i class="far fa-circle nav-icon"></i>
+                 <p>Wax</p>
                </a>
              </li>
            </ul>

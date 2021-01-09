@@ -36,8 +36,10 @@
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
+              <th scope="col">Satuan</th>
+              <th scope="col">Berat Standart</th>
+              <th scope="col">Harga Jual</th>
+              <th scope="col">Berat CRT</th>
             </tr>
           </thead>
           <tbody>
@@ -48,8 +50,11 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->KodeBrg }}</td>
                 <td>{{ $data->NamaBrg }}</td>
-                <td>{{ $data->SatuanP }}</td>
-                <td>
+                <td>{{ $data->Satuan }}</td>
+                <td>{{ $data->BeratStandart }}</td>
+                <td>{{ $data->HargaJualRp }}</td>
+                <td>{{ $data->BeratCRT }}</td>
+                {{-- <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
                       <a href="/admin/divisi/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
@@ -57,7 +62,7 @@
                       <a href="/admin/divisi/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
-                </td>
+                </td> --}}
               </tr>
             <?php
             }
