@@ -46,7 +46,7 @@
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
                         <div class="col-md-12">
                             <button type="submit" id="save" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Save">
-                                <i class='far fa-save'></i>
+                                <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
                                 <a href="/admin/divisi">

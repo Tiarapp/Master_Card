@@ -34,8 +34,8 @@ class CreateMcTable extends Migration
             $table->string('gambar');                               //UPLOAD BY DESAIN
             $table->foreignId('substanceKontrak_id')->index();      //SUBSTANCE KONTRAK INPUT MARKETING
             $table->foreignId('substanceProduksi_id')->index();     //SUBSTANCE PRODUKSI INPUT MARKETING
-            $table->integer('gramSheetCorrKontrak');                //AUTO RUMUS MASIH DIPIKIR
-            $table->integer('gramSheetCorrProduksi');               //AUTO RUMUS MASIH DIPIKIR
+            $table->float('gramSheetCorrKontrak',8,2);                //AUTO RUMUS MASIH DIPIKIR
+            $table->float('gramSheetCorrProduksi',8,2);               //AUTO RUMUS MASIH DIPIKIR
             $table->foreignId('bom_m_id')->index();                 //BOM INPUT MARKETING
             $table->foreignId('box_id')->index();                   //SHEET BOX INPUT MARKETING
             $table->foreignId('satuanSizeSheetBox')->nullable()->index();   //COLOR ID INPUT MARKETING

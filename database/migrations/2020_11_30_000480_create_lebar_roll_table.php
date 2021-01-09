@@ -17,7 +17,7 @@ class CreateLebarRollTable extends Migration
             $table->id('id');
             $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
             $table->string('nama')->index();                 //Input Purch Kertas
-            $table->integer('lebar')->index();               //Input Purch Kertas
+            $table->float('lebar',8,2)->index();               //Input Purch Kertas
             $table->foreignId('satuanLebar');    //Input Purch Kertas
             //RELATION
             $table->foreign('satuanLebar')->references('id')->on('satuan')->cascadeOnDelete();
