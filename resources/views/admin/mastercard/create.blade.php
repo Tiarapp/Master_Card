@@ -47,17 +47,35 @@
                                 </div>
                             </div>
                         </div>  
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="control-label">No. Item</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="row">
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" placeholder="No. Item" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group">                                    
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label>Item</label>
+                                            <label>Nama Item</label>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="bj_id" readonly>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item">
+                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="bj_id" name="bj_id">
+                                                <input type="text" class="form-control txt_line col-md-11" value="" id="namaitem" readonly>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
@@ -76,13 +94,12 @@
                                                                 <table class="table table-bordered" id="data_barang">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th scope="col">No.</th>
+                                                                            <th scope="col">ID.</th>
                                                                             <th scope="col">Kode</th>
                                                                             <th scope="col">Nama</th>
-                                                                            <th scope="col">Satuan</th>
-                                                                            <th scope="col">Berat Standart</th>
-                                                                            <th scope="col">Harga Jual</th>
-                                                                            <th scope="col">Berat CRT</th>
+                                                                            <th scope="col">MC ID</th>
+                                                                            <th scope="col">Pcs</th>
+                                                                            <th scope="col">Gram</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -90,22 +107,12 @@
                                                                         $no = 1;
                                                                         foreach ($item as $data) { ?>
                                                                             <tr>
-                                                                                <td scope="row">{{ $no++ }}</td>
-                                                                                <td>{{ $data->KodeBrg }}</td>
-                                                                                <td>{{ $data->NamaBrg }}</td>
-                                                                                <td>{{ $data->Satuan }}</td>
-                                                                                <td>{{ $data->BeratStandart }}</td>
-                                                                                <td>{{ $data->HargaJualRp }}</td>
-                                                                                <td>{{ $data->BeratCRT }}</td>
-                                                                                {{-- <td>
-                                                                                    <div class="input-group">
-                                                                                        <div class="input-group-append" id="button-addon4">
-                                                                                            <a href="/admin/divisi/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
-                                                                                            <a href="/admin/divisi/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                                                                                            <a href="/admin/divisi/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td> --}}
+                                                                                <td scope="row">{{ $data->id }}</td>
+                                                                                <td>{{ $data->kode }}</td>
+                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->mc_id }}</td>
+                                                                                <td>{{ $data->pcs }}</td>
+                                                                                <td>{{ $data->gram }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -121,11 +128,6 @@
                                                     
                                                 </div>
                                             </div>
-                                            {{-- <select class="js-example-basic-single col-md-12">
-                                                @foreach ($item as $item)
-                                                <option value="{{ $item->KodeBrg }}">{{ $item->KodeBrg }} || {{ $item->NamaBrg }}</option>
-                                                @endforeach
-                                            </select> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -142,7 +144,7 @@
                                             <div class="row">
                                                 <select class="js-example-basic-single col-md-12">
                                                     @foreach ($boxes as $box)
-                                                    <option value="">{{ $box->id }} || {{ $box->nama }}</option>
+                                                    <option value="{{ $box->id }}">{{ $box->nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -181,8 +183,9 @@
             var kodeBrg = (table.row(this).data());
             var namaBrg = (table.row(this).data())
             
-            document.getElementById('bj_id').value = kodeBrg[1];
-            console.log(kodeBrg[1],namaBrg[2]);
+            document.getElementById('bj_id').value = kodeBrg[0];
+            document.getElementById('noitem').value = kodeBrg[1];
+            document.getElementById('namaitem').value = kodeBrg[2];
         } );
         //  alert.row();
     } );
