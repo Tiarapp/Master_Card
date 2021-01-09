@@ -57,7 +57,7 @@ class MastercardController extends Controller
         //     ->get();
         // dd($sssh[0]->lebarSheet);
 
-        $item = DB::connection('firebird')->table('TBarangConv')->get();
+        $item = DB::table('item_bj')->get();
         $boxes = DB::table('box')->get();
         $substance_sheet = DB::table('substance_sheet')->get();
         
