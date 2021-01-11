@@ -42,7 +42,7 @@ class CreateFTFakturConvTable extends Migration
             $table->string('Posting')->nullable();
             $table->integer('PPHSign')->nullable();
             $table->string('TOTALBAYAR')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

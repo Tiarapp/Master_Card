@@ -34,7 +34,7 @@ class CreateFTSupplierTable extends Migration
             $table->string('Bank')->nullable();
             $table->string('NoAcc')->nullable();
             $table->string('NamaRek')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

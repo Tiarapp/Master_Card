@@ -58,7 +58,7 @@
             </li>
             <li class="nav-item">
               <a href="/admin/divisi" class="nav-link">
-                <i class="far fa-circle nav-icon" style="font-size:48px;color:red"></i>
+                <i class="far fa-circle nav-icon"></i>
                 <p>Divisi</p>
               </a>
             </li>

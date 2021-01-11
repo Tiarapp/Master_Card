@@ -35,7 +35,7 @@ class CreateFTDetSJTable extends Migration
             $table->integer('ReffNoUrut')->nullable();
             $table->string('NomerBC',18,4)->nullable();
             $table->date('BCDate',18,4)->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

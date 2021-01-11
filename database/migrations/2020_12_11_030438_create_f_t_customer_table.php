@@ -47,7 +47,7 @@ class CreateFTCustomerTable extends Migration
             $table->integer('WAKTUBAYAR')->nullable();
             $table->integer('DILIMIT')->nullable();
             $table->integer('TRBANK')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

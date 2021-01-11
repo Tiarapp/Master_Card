@@ -24,7 +24,7 @@ class CreateSCustTTTable extends Migration
             // $table->string('CustName')->nullable();
             // $table->string('NoResi')->nullable();
             // $table->string('Ekspedisi')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 
