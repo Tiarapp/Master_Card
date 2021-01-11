@@ -70,6 +70,15 @@ Route::get('/admin/joint/edit/{id}', 'JointController@edit');
 Route::put('/admin/joint/update/{id}', 'JointController@update');
 Route::get('/admin/joint/delete/{id}', 'JointController@updateDeleted');
 
+//Sheet
+Route::get('/admin/sheet', 'SheetController@index')->name('sheet');
+Route::get('/admin/sheet/create', 'SheetController@create');
+Route::post('/admin/sheet/store', 'SheetController@store');
+Route::get('/admin/sheet/show/{id}', 'SheetController@show');
+Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
+Route::put('/admin/sheet/update/{id}', 'SheetController@update');
+Route::get('/admin/sheet/delete/{id}', 'SheetController@updateDeleted');
+
 //Wax
 Route::get('/admin/wax', 'WaxController@index')->name('wax');
 Route::get('/admin/wax/create', 'WaxController@create');
