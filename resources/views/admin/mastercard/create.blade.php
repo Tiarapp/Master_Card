@@ -153,6 +153,75 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Sheet</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="sheet_id" name="sheet_id">
+                                                <input type="text" class="form-control txt_line col-md-11" value="" id="namasheet" readonly>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Sheet">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="Sheet">
+                                                <div class="modal-dialog modal-xl">
+                                                    
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Modal Header</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body Item">
+                                                            <div class="card-body">
+                                                                <table class="table table-bordered" id="data_sheet">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">ID.</th>
+                                                                            <th scope="col">Kode</th>
+                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Lebar</th>
+                                                                            <th scope="col">Panjang</th>
+                                                                            <th scope="col">Luas</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                        $no = 1;
+                                                                        foreach ($sheet as $data) { ?>
+                                                                            <tr>
+                                                                                <td scope="row">{{ $data->id }}</td>
+                                                                                <td>{{ $data->kode }}</td>
+                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->lebarSheet }}</td>
+                                                                                <td>{{ $data->panjangSheet }}</td>
+                                                                                <td>{{ $data->luasSheet }}</td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div> 
             </form>
@@ -169,9 +238,6 @@
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
     });
-    $(".itemSearch").click(function() {
-        $("#Item").modal('show');
-    });
     // Datatable Barang(Item)
     $(".Item").ready(function(){
         
@@ -180,6 +246,23 @@
         });
         
         $('#data_barang tbody').on( 'click', 'td', function () {
+            var kodeBrg = (table.row(this).data());
+            var namaBrg = (table.row(this).data())
+            
+            document.getElementById('bj_id').value = kodeBrg[0];
+            document.getElementById('noitem').value = kodeBrg[1];
+            document.getElementById('namaitem').value = kodeBrg[2];
+        } );
+        //  alert.row();
+    } );
+
+    $(".Sheet").ready(function(){
+        
+        var table = $("#data_sheet").DataTable({
+            select: true,
+        });
+        
+        $('#data_sheet tbody').on( 'click', 'td', function () {
             var kodeBrg = (table.row(this).data());
             var namaBrg = (table.row(this).data())
             

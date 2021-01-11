@@ -59,12 +59,12 @@ class MastercardController extends Controller
 
         $item = DB::table('item_bj')->get();
         $boxes = DB::table('box')->get();
-        $substance_sheet = DB::table('substance_sheet')->get();
+        $sheet = DB::table('sheet')->get();
         
         return view('admin.mastercard.create', compact([
             'item',
             'boxes',
-            'substance_sheet'
+            'sheet'
         ]));
 
     }

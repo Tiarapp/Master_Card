@@ -92,6 +92,13 @@
                  <p>Satuan</p>
                </a>
              </li>
+             
+             <li class="nav-item">
+              <a href="{{ route('sheet') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sheet</p>
+              </a>
+            </li>
              <li class="nav-item">
                <a href="{{ route('supplier') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
