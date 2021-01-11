@@ -42,7 +42,7 @@ class CreateSTbKasKecilDetailTable extends Migration
             $table->string('PO_No')->nullable();
             $table->dateTime('DataTransferred')->nullable();
             $table->float('DefAmount',18,4)->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

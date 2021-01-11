@@ -54,7 +54,7 @@ class CreateSTPiutangTable extends Migration
             $table->string('Salesman')->nullable();
             $table->float('Setting')->nullable();
             $table->string('External')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

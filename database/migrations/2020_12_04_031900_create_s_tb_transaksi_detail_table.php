@@ -54,7 +54,7 @@ class CreateSTbTransaksiDetailTable extends Migration
             $table->float('DefAmount',18,4)->nullable();
             $table->string('NoFP')->nullable();
             $table->string('NoKwitansi')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

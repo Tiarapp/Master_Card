@@ -48,7 +48,7 @@ class CreateFSuratJalanTable extends Migration
             $table->float('TotalAkhir',18,4)->nullable();
             $table->float('PPH22',18,4)->nullable();
             $table->float('PPHSign')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

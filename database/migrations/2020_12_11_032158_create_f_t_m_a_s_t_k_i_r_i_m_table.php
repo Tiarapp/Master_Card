@@ -22,7 +22,7 @@ class CreateFTMASTKIRIMTable extends Migration
             $table->string('KOTAKIRIM')->nullable();
             $table->string('NEGARAKIRIM')->nullable();
             $table->string('TELPKIRIM')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

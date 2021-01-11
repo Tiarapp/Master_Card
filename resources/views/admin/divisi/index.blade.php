@@ -53,9 +53,15 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/divisi/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/divisi/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/divisi/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="/admin/divisi/show/{{ $data->id }}" class="btn btn-outline-success" type="button">
+                        <i class="fa fa-eye" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
+                      </a>
+                      <a href="/admin/divisi/edit/{{ $data->id }}" class="btn btn-outline-warning" type="button">
+                        <i class="fa fa-edit" data-toggle="tooltip" data-placement="bottom" title="edit" id="edit"></i>
+                      </a>
+                      <a href="/admin/divisi/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">
+                        <i class="far fa-window-close" data-toggle="tooltip" data-placement="bottom" title="delete" id="delete"></i>
+                      </a>
                     </div>
                   </div>
                 </td>

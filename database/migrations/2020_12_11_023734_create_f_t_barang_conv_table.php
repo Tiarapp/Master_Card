@@ -35,7 +35,7 @@ class CreateFTBarangConvTable extends Migration
             $table->float('HargaJualRp',10,2)->nullable();
             $table->float('HargaJualUSD',10,2)->nullable();
             $table->float('BeratCRT',10,2)->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 
