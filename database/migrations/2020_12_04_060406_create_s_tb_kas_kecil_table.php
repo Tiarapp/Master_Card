@@ -35,7 +35,7 @@ class CreateSTbKasKecilTable extends Migration
             $table->string('UserEntry')->nullable();
             $table->string('userUpdate')->nullable();
             $table->dateTime('tglUpdate')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

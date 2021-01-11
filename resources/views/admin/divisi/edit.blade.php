@@ -47,8 +47,15 @@
                         </div>
                         <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" id="save" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="save">
+                                <i class='far fa-check-square'></i>
+                            </button>
+                            <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="cancel">
+                                <a href="/admin/divisi"> <i class='far fa-window-close' style='color:red'></i></a>
+                            </button>
+
                         </div>
+                        
                     </div>
                 </form>
             </div>

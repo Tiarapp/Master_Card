@@ -38,7 +38,7 @@ class CreateSTbBPBTable extends Migration
             $table->string('KodeAktiva')->nullable();
             $table->string('Tick')->nullable();
             $table->integer('BBKCount')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

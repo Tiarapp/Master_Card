@@ -51,7 +51,7 @@ class CreateSTbBPBDetailTable extends Migration
             $table->string('SupplierRef')->nullable();
             $table->string('Warehouse')->nullable();
             $table->integer('TOP_PO')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

@@ -55,7 +55,7 @@ class CreateSTbVoucherBayarDetailTable extends Migration
             $table->string('KdUnit')->nullable();
             $table->float('DefAmount',18,4)->nullable();
             $table->string('RefOther')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

@@ -43,7 +43,7 @@ class CreateSTbVoucherBayarTable extends Migration
             $table->string('userUpdate')->nullable();
             $table->dateTime('tglentry')->nullable();
             $table->dateTime('tglupdate')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 

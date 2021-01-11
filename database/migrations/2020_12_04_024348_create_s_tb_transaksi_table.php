@@ -53,7 +53,7 @@ class CreateSTbTransaksiTable extends Migration
             $table->string('Pay_From')->nullable();
             $table->dateTime('Due_date')->nullable();
             $table->string('Ext')->nullable();
-            $table->timestamps();
+            $table->datetime('created_at')->default(now());
         });
     }
 
