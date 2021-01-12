@@ -16,11 +16,11 @@ class CreateBoxTable extends Migration
         Schema::create('box', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();      //AUTO NUMBER SEQUENCE
-            $table->text('nama')->nullable()->index();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
-                                                            //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
-                                                            //     CREASING CORR : sizeCreasCorr satuanCreas
-                                                            //     CREASING CONV : sizeCreasConv satuanCreas
-            $table->enum('tipeCreasCorr',['MALE-FLAT','MALE-MALE','MALE-FEMALE','TANPA CREASE']);   //INPUT MARKETING
+            $table->string('nama')->nullable()->index();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
+            //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
+            //     CREASING CORR : sizeCreasCorr satuanCreas
+            //     CREASING CONV : sizeCreasConv satuanCreas
+            $table->enum('tipeCreasCorr', ['MALE-FLAT', 'MALE-MALE', 'MALE-FEMALE', 'TANPA CREASE']);   //INPUT MARKETING
             // SHEET BOX
             $table->integer('lebarSheetBox');           //INPUT MARKETING
             $table->integer('panjangSheetBox');         //INPUT MARKETING
@@ -28,7 +28,7 @@ class CreateBoxTable extends Migration
             $table->foreignId('satuanSizeSheetBox');    //INPUT MARKETING
             $table->integer('luasSheetBox');            //INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox');    //INPUT MARKETING
-            $table->float('gramSheetBox',8,2);            //INPUT MARKETING
+            $table->float('gramSheetBox', 8, 2);            //INPUT MARKETING
             // DALAM BOX
             $table->integer('panjangDalamBox');         //INPUT MARKETING
             $table->integer('lebarDalamBox');           //INPUT MARKETING
