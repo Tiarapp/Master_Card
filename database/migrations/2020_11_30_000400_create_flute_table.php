@@ -17,7 +17,8 @@ class CreateFluteTable extends Migration
             $table->id('id');
             $table->string('kode')->unique()->index();   //Input IT
             $table->string('nama')->index();            //Input IT
-            $table->float('tur',4,2);           //Input IT
+            $table->float('tur1',4,2);                  //Input IT
+            $table->float('tur2',4,2)->nullable();      //Input IT
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

@@ -37,7 +37,8 @@
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
-              <th scope="col">Tur</th>
+              <th scope="col">Tur 1</th>
+              <th scope="col">Tur 2</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -50,7 +51,8 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
-                <td>{{ $data->tur }}</td>
+                <td>{{ $data->tur1 }}</td>
+                <td>{{ $data->tur2 }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">

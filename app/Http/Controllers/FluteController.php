@@ -44,7 +44,8 @@ class FluteController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'tur' => 'required|numeric',
+            'tur1' => 'required',
+            'tur2' => 'nullable',
             'branch' => 'required',
             'createdBy' => 'required'
         ]);
@@ -92,7 +93,8 @@ class FluteController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'tur' => 'required|numeric',
+            'tur1' => 'required',
+            'tur2' => 'nullable',
             'branch' => 'required',
             'lastUpdatedBy' => 'required',
         ]);
@@ -100,7 +102,8 @@ class FluteController extends Controller
         $flute = Flute::find($id);
 
         $flute->nama = $request->nama;
-        $flute->tur = $request->tur;
+        $flute->tur1 = $request->tur1;
+        $flute->tur2 = $request->tur2;
         $flute->branch = $request->branch;
         $flute->lastUpdatedBy = Auth::user()->name;
 

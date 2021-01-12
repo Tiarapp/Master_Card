@@ -28,7 +28,7 @@ class CreateMcTable extends Migration
             $table->string('mesin')->index();                       //AUTO RUMUS MASIH DIPIKIR
             $table->integer('outConv')->index();                    //AUTO RUMUS MASIH DIPIKIR
             $table->foreignId('koli_id')->index();                  //INPUT MARKETING
-            $table->boolean('bungkus')->default(FALSE)->nullable(); //INPUT MARKETING
+            $table->enum('bungkus',['Kertas'])->nullable(); //INPUT MARKETING
             $table->text('keterangan')->nullable();                 //INPUT MARKETING
             $table->boolean('lock')->default(TRUE);                 //AUTO
             $table->string('gambar');                               //UPLOAD BY DESAIN

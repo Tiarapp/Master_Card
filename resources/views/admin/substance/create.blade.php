@@ -14,7 +14,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Sheet</h4>
+                <h4 class="modal-title">Tambah Substance</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -28,60 +28,28 @@
                     </div>
                 @endif
 
-                <form action="/admin/sheet/store" method="POST" class="inputSheet">
+                <form action="/admin/substance/store" method="POST" class="inputSubstance">
                     @csrf
                     <div class="row was-validated">
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode sheet">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode substance">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input kode sheet" name="kode" id="kode" required>
+                                <input type="text" class="form-control txt_line" placeholder="Input kode substance" name="kode" id="kode" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input nama sheet">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input nama substance">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input nama sheet" name="nama" id="nama" required readonly>
+                                <input type="text" class="form-control txt_line" placeholder="Input nama substance" name="nama" id="nama" required readonly>
                             </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input lebar sheet">
+                        </div>                        
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
                             <div class="form-group">
-                                <label>Lebar</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input Lebar Sheet" name="lebarSheet" id="lebarSheet" onchange="luas()" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input panjang sheet">
-                            <div class="form-group">
-                                <label>Panjang</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input panjang sheet" name="panjangSheet" id="panjangSheet" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input satuan size sheet">
-                            <div class="form-group">
-                                <label>Satuan Size</label>
-                                <select class="js-example-basic-single col-md-12" name="satuanSizeSheet" id="satuanSizeSheet">
-                                    @foreach ($satuan as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Luas sheet">
-                            <div class="form-group">
-                                <label>Luas</label>
-                                <input type="text" class="form-control txt_line" name="luasSheet" id="luasSheet" required readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input satuan luas sheet">
-                            <div class="form-group">
-                                <label>Satuan Luas</label>
-                                <select class="js-example-basic-single col-md-12" name="satuanLuasSheet" id="satuanLuasSheet">
-                                    @foreach ($satuan as $data)
+                                <label>Gram Liner Atas</label>
+                                <select class="js-example-basic-single col-md-12" name="jenisGramLinerAtas_id" id="jenisGramLinerAtas_id">
+                                    @foreach ($jenisgram as $data)
                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
@@ -93,7 +61,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                                <a href="/admin/sheet">
+                                <a href="/admin/substance">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
                         </div>
