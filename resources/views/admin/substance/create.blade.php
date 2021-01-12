@@ -18,14 +18,14 @@
                 <hr>
 
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> 
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li></li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
                 <form action="/admin/substance/store" method="POST" class="inputSubstance">
@@ -44,13 +44,56 @@
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" placeholder="Input nama substance" name="nama" id="nama" required readonly>
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
                             <div class="form-group">
                                 <label>Gram Liner Atas</label>
                                 <select class="js-example-basic-single col-md-12" name="jenisGramLinerAtas_id" id="jenisGramLinerAtas_id">
                                     @foreach ($jenisgram as $data)
+                                    <option value=" {{ $data->id }}" name="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
+                            <div class="form-group">
+                                <label>Gram BF</label>
+                                <select class="js-example-basic-single col-md-12" name="jenisGramBf_id" id="jenisGramBf_id" onchange="getBf(this);">
+                                    <option value=''>Select</option>
+                                    @foreach ($jenisgram as $data)
                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
+                            <div class="form-group">
+                                <label>Gram Liner Tengah</label>
+                                <select class="js-example-basic-single col-md-12" name="jenisGramLinerTengah_id" id="jenisGramLinerTengah_id" onchange="getNama();">
+                                    @foreach ($jenisgram as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
+                            <div class="form-group">
+                                <label>Gram CF</label>
+                                <select class="js-example-basic-single col-md-12" name="jenisGramCf_id" id="jenisGramCf_id" onchange="getNama();">
+                                    @foreach ($jenisgram as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    <!-- <input type="hidden" name="cf" id="cf" value="{{ $data->nama }}"> -->
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
+                            <div class="form-group">
+                                <label>Gram Liner Bawah</label>
+                                <select class="js-example-basic-single col-md-12" name="jenisGramLinerBawah_id" id="jenisGramLinerBawah_id" onchange="getNama();">
+                                    @foreach ($jenisgram as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    <!-- <input type="hidden" name="linerBawah" id="linerBawah" value="{{ $data->nama }}"> -->
                                     @endforeach
                                 </select>
                             </div>
@@ -69,47 +112,20 @@
                 </form>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 @endsection
 
 <script type="text/javascript">
-
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
     });
 
-function luas(){
-    var panjang = document.getElementById("panjangSheet").value;
-    var lebar = document.getElementById("lebarSheet").value;
-    var luas;
+    var atas = document.getElementById('jenisGramLinerAtas_id')
+    atas.onchange = function() {
+        var lineratas = atas.options[atas.selectedIndex].getAttribute('name');
 
-        // panjang = document.getElementById("panjangSheet").value;
-        // lebar = document.getElementById("lebarSheet").value;
-        // if (panjang == ""){
-        //     alert("Panjang Harus diisi !");
-        //     return;
-        // }else if (lebar == ""){
-        //     alert("Lebar Harus diisi !");
-        //     return;
-        // }
-        // if (isNaN(panjang)){
-        //     alert("Panjang Harus diisi dengan angka !");
-        //     return;
-        // }if (isNaN(lebar)){
-        //     alert("Lebar Harus diisi dengan angka !");
-        //     return;
-        // }
-        luas = panjang * lebar;
-        document.getElementById("luasSheet").value =  luas;
-}
-
-function getNama(){
-    var panjang = document.getElementById("panjangSheet").value;
-    var lebar = document.getElementById("lebarSheet").value;
-
-    document.getElementById("nama").value = panjang +' x '+ lebar;
-}
-
+        console.log(lineratas);
+    }
 </script>

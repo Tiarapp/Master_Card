@@ -21,7 +21,7 @@ class SubstanceController extends Controller
             ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
             ->leftJoin('jenis_gram as cf', 'jenisGramCf_id', '=', 'cf.id')
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
-            ->select('substance.*', 'linerAtas.nama', 'bf.nama', 'linerTengah.nama', 'cf.nama', 'linerBawah.nama')
+            ->select('substance.*', 'linerAtas.nama AS linerAtas', 'bf.nama AS bf', 'linerTengah.nama AS linerTengah', 'cf.nama AS cf', 'linerBawah.nama AS linerBawah')
             ->get();
 
         return view('admin.substance.index', ['substance' => $substance]);
