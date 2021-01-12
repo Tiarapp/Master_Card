@@ -28,8 +28,9 @@ class SheetController extends Controller
      */
     public function create()
     {
+        $satuan = DB::table('satuan')->get();
         
-        return view('admin.sheet.create');
+        return view('admin.sheet.create', compact('satuan'));
     }
 
     /**
@@ -54,7 +55,7 @@ class SheetController extends Controller
 
         Sheet::create($request->all());
 
-        return redirect('admin/warna');
+        return redirect('admin/sheet');
     }
 
     /**
@@ -100,7 +101,7 @@ class SheetController extends Controller
             'satuanSizeSheet' => 'numeric',
             'luasSheet' => 'numeric',
             'satuanLuasSheet' => 'numeric',
-            'createdBy' => 'required',
+            'lastUpdatedBy' => 'required',
         ]);
 
         $sheet = Sheet::find($id);

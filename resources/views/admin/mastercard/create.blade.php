@@ -46,24 +46,23 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
-                        <div class="form-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="control-label">No. Item</label>
-                                            </div>
-                                            <div class="col-md-9">
-                                                <div class="row">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" placeholder="No. Item" readonly>
-                                                </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="control-label">No. Item</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <input type="text" class="form-control txt_line" name="noitem" id="noitem" placeholder="No. Item" readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">                                    
@@ -127,6 +126,27 @@
                                                     </div>
                                                     
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Flute</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <select class="js-example-basic-single col-md-12" name="flute" id="flute">
+                                                    <option value="-">Select ...</option>
+                                                    <option value="BF">BF</option>
+                                                    <option value="CF">CF</option>
+                                                    <option value="BCF">BCF</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -211,11 +231,27 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
                                                         </div>
                                                     </div>
                                                     
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="control-label">Luas Sheet</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <input type="text" class="form-control txt_line" name="luasSheet" id="luasSheet" placeholder="No. Item" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -246,16 +282,31 @@
         });
         
         $('#data_barang tbody').on( 'click', 'td', function () {
-            var kodeBrg = (table.row(this).data());
-            var namaBrg = (table.row(this).data())
+            var item = (table.row(this).data());
             
-            document.getElementById('bj_id').value = kodeBrg[0];
-            document.getElementById('noitem').value = kodeBrg[1];
-            document.getElementById('namaitem').value = kodeBrg[2];
+            document.getElementById('bj_id').value = item[0];
+            document.getElementById('noitem').value = item[1];
+            document.getElementById('namaitem').value = item[2];
         } );
         //  alert.row();
     } );
 
+    $(".Item").ready(function(){
+        
+        var table = $("#data_flute").DataTable({
+            select: true,
+        });
+        
+        $('#data_flute tbody').on( 'click', 'td', function () {
+            var flute = (table.row(this).data());
+            
+            document.getElementById('flute_id').value = flute[0];
+            document.getElementById('namaflute').value = flute[1];
+            document.getElementById('tur').value = flute[3];
+        } );
+        //  alert.row();
+    } );
+    
     $(".Sheet").ready(function(){
         
         var table = $("#data_sheet").DataTable({
@@ -263,15 +314,14 @@
         });
         
         $('#data_sheet tbody').on( 'click', 'td', function () {
-            var kodeBrg = (table.row(this).data());
-            var namaBrg = (table.row(this).data())
+            var sheet = (table.row(this).data());
             
-            document.getElementById('bj_id').value = kodeBrg[0];
-            document.getElementById('noitem').value = kodeBrg[1];
-            document.getElementById('namaitem').value = kodeBrg[2];
+            document.getElementById('namasheet').value = sheet[2];
+            document.getElementById('luasSheet').value = sheet[5];
         } );
         //  alert.row();
     } );
+
     
     
 </script>

@@ -69,6 +69,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('jenisgram') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Jenis Gram</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('joint') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Joint</p>
@@ -92,13 +98,18 @@
                  <p>Satuan</p>
                </a>
              </li>
-             
              <li class="nav-item">
               <a href="{{ route('sheet') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Sheet</p>
               </a>
             </li>
+            <li class="nav-item">
+             <a href="{{ route('substance') }}" class="nav-link">
+               <i class="far fa-circle nav-icon"></i>
+               <p>Substance</p>
+             </a>
+           </li>
              <li class="nav-item">
                <a href="{{ route('supplier') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
