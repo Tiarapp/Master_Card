@@ -77,11 +77,29 @@ select.form-control:focus {
     /* font-size:48px; */
 }
 
+#new {
+    background-color: transparent;
+    color:blue;
+    border: none;
+    /* padding: 15px 25px; */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 1px 3px;
+    cursor: pointer;
+    /* font-size:48px; */
+}
+
 .btn {
   border: none;
 }
 
 th {
   background-color: lightslategray;
-  color: rgb(214, 226, 238);
+  color: azure;
+  /* color: rgb(244, 247, 215); */
+}
+
+tr:nth-child(even) {
+  background-color:#f4f6f9 !important;
 }
