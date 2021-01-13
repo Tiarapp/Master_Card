@@ -15,13 +15,13 @@ class CreateSubstanceTable extends Migration
     {
         Schema::create('substance', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique()->index();                           //AUTO NUMBER SEQUENCE
-            $table->string('nama')->index();                                     //AUTO jenis+...
-            $table->foreignId('jenisGramLinerAtas_id')->index();                 //Input Marketing
-            $table->foreignId('jenisGramBf_id')->index();                        //Input Marketing
-            $table->foreignId('jenisGramLinerTengah_id')->nullable()->index();   //Input Marketing
-            $table->foreignId('jenisGramCf_id')->nullable()->index();            //Input Marketing
-            $table->foreignId('jenisGramLinerBawah_id')->nullable()->index();    //Input Marketing
+            $table->string('kode')->unique()->index();                          //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();                                    //AUTO jenis+...
+            $table->foreignId('jenisGramLinerAtas_id')->index();                //Input Marketing
+            $table->foreignId('jenisGramBf_id')->nullable()->index();           //Input Marketing
+            $table->foreignId('jenisGramLinerTengah_id')->nullable()->index();  //Input Marketing
+            $table->foreignId('jenisGramCf_id')->nullable()->index();           //Input Marketing
+            $table->foreignId('jenisGramLinerBawah_id')->index();               //Input Marketing
             //RELATION
             $table->foreign('jenisGramLinerAtas_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramBf_id')->references('id')->on('jenis_gram')->cascadeOnDelete();

@@ -5,20 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Flute extends Model
+class Sheet extends Model
 {
     use HasFactory;
 
-    protected $table = 'flute';
+    protected $table = 'sheet';
 
     protected $fillable = [
         'kode',
         'nama',
-        'tur1',
-        'tur2',
+        'lebarSheet',
+        'panjangSheet',
+        'satuanSizeSheet',
+        'luasSheet',
+        'satuanLuasSheet',
         'createdBy',
-        'lastUpdateBy',
+        'lastUpdatedBy',
+        'deleted',
+        'deletedAt',
         'deletedBy',
-        'branch'
     ];
 }

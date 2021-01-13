@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
-            <div class="col-md-5">
+            <div class="col-md-9">
                 <h4 class="modal-title">Tambah Color Combine</h4>
                 <hr>
 
@@ -29,6 +29,7 @@
                             <div class="form-group">
                                 <label>Kode</label>
                                 <input type="text" class="form-control txt_line" name="kode" id="kode">
+    
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -37,50 +38,61 @@
                                 <input type="text" class="form-control txt_line" name="nama" id="nama">
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Warna 1</label>
-                                <select class="js-example-basic-single col-md-12" name="idColor1" id="idColor1">
-                                    <option value="">Tidak Ada</option>
-                                    @foreach ($color as $data)
-                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-12">
+                                <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{-- <label>Warna 1</label> --}}
+                                        <select class="js-example-basic-single col-md-12" name="idColor1" id="idColor1">
+                                            <option value="" disabled selected>Warna 1</option>
+                                            <option value="">Tidak Ada</option>
+                                            @foreach ($color as $data)
+                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{-- <label>Warna 2</label> --}}
+                                        <select class="js-example-basic-single col-md-12" name="idColor2" id="idColor2">
+                                            <option value="" disabled selected>Warna 2</option>
+                                            <option value="">Tidak Ada</option>
+                                            @foreach ($color as $data)
+                                            <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{-- <label>Warna 3</label> --}}
+                                        <select class="js-example-basic-single col-md-12" name="idColor3" id="idColor3">
+                                            <option value="" disabled selected>Warna 3</option>
+                                            <option value="">Tidak Ada</option>
+                                            @foreach ($color as $data)
+                                            <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        {{-- <label>Warna 4</label> --}}
+                                        <select class="js-example-basic-single col-md-12" name="idColor4" id="idColor4">
+                                            <option value="" disabled selected>Warna 4</option>
+                                            <option value="">Tidak Ada</option>
+                                            @foreach ($color as $data)
+                                            <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Warna 2</label>
-                                <select class="js-example-basic-single col-md-12" name="idColor2" id="idColor2">
-                                    <option value="">Tidak Ada</option>
-                                    @foreach ($color as $data)
-                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Warna 3</label>
-                                <select class="js-example-basic-single col-md-12" name="idColor3" id="idColor3">
-                                    <option value="">Tidak Ada</option>
-                                    @foreach ($color as $data)
-                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Warna 4</label>
-                                <select class="js-example-basic-single col-md-12" name="idColor4" id="idColor4">
-                                    <option value="">Tidak Ada</option>
-                                    @foreach ($color as $data)
-                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                        <button type="submit" id="new" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="save">
+                            <i class='fas fa-plus-circle'></i>
+                        </button>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>

@@ -11,12 +11,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Divisi</h1>
+          <h1 class="m-0">Sheet</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Divisi</li>
+            <li class="breadcrumb-item active">Sheet</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/divisi/create" style="margin-bottom: 20px;margin-left: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="/admin/sheet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_divisi">
           <thead>
@@ -37,6 +37,11 @@
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
+              <th scope="col">Lebar</th>
+              <th scope="col">Panjang</th>
+              <th scope="col">Satuan Size</th>
+              <th scope="col">Luas</th>
+              <th scope="col">Satuan Luas</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -44,24 +49,23 @@
           <tbody>
             <?php
             $no = 1;
-            foreach ($divisi as $data) { ?>
+            foreach ($sheet as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
+                <td>{{ $data->lebarSheet }}</td>
+                <td>{{ $data->panjangSheet }}</td>
+                <td>{{ $data->satuanSizeSheet }}</td>
+                <td>{{ $data->luasSheet }}</td>
+                <td>{{ $data->satuanLuasSheet }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/divisi/show/{{ $data->id }}" class="btn btn-outline-success" type="button">
-                        <i class="fa fa-eye" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
-                      </a>
-                      <a href="/admin/divisi/edit/{{ $data->id }}" class="btn btn-outline-warning" type="button">
-                        <i class="fa fa-edit" data-toggle="tooltip" data-placement="bottom" title="edit" id="edit"></i>
-                      </a>
-                      <a href="/admin/divisi/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">
-                        <i class="far fa-window-close" data-toggle="tooltip" data-placement="bottom" title="delete" id="delete"></i>
-                      </a>
+                      <a href="/admin/sheet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="/admin/sheet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="/admin/sheet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>

@@ -70,6 +70,33 @@ Route::get('/admin/joint/edit/{id}', 'JointController@edit');
 Route::put('/admin/joint/update/{id}', 'JointController@update');
 Route::get('/admin/joint/delete/{id}', 'JointController@updateDeleted');
 
+//Sheet
+Route::get('/admin/sheet', 'SheetController@index')->name('sheet');
+Route::get('/admin/sheet/create', 'SheetController@create');
+Route::post('/admin/sheet/store', 'SheetController@store');
+Route::get('/admin/sheet/show/{id}', 'SheetController@show');
+Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
+Route::put('/admin/sheet/update/{id}', 'SheetController@update');
+Route::get('/admin/sheet/delete/{id}', 'SheetController@updateDeleted');
+
+//Substance
+Route::get('/admin/substance', 'SubstanceController@index')->name('substance');
+Route::get('/admin/substance/create', 'SubstanceController@create');
+Route::post('/admin/substance/store', 'SubstanceController@store');
+Route::get('/admin/substance/show/{id}', 'SubstanceController@show');
+Route::get('/admin/substance/edit/{id}', 'SubstanceController@edit');
+Route::put('/admin/substance/update/{id}', 'SubstanceController@update');
+Route::get('/admin/substance/delete/{id}', 'SubstanceController@updateDeleted');
+
+//Jenis Gram
+Route::get('/admin/jenisgram', 'JenisGramController@index')->name('jenisgram');
+Route::get('/admin/jenisgram/create', 'JenisGramController@create');
+Route::post('/admin/jenisgram/store', 'JenisGramController@store');
+Route::get('/admin/jenisgram/show/{id}', 'JenisGramController@show');
+Route::get('/admin/jenisgram/edit/{id}', 'JenisGramController@edit');
+Route::put('/admin/jenisgram/update/{id}', 'JenisGramController@update');
+Route::get('/admin/jenisgram/delete/{id}', 'JenisGramController@updateDeleted');
+
 //Wax
 Route::get('/admin/wax', 'WaxController@index')->name('wax');
 Route::get('/admin/wax/create', 'WaxController@create');

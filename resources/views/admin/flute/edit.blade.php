@@ -41,8 +41,14 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Tur</label>
-                                <input type="text" class="form-control txt_line" name="tur" id="tur" value="{{ $flute->tur }}">
+                                <label>Tur 1</label>
+                                <input type="text" class="form-control txt_line" name="tur1" id="tur1" value="{{ $flute->tur1 }}">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Tur 2</label>
+                                <input type="text" class="form-control txt_line" name="tur2" id="tur2" value="{{ $flute->tur2 }}">
                             </div>
                         </div>
                         <div class="col-md-12">
