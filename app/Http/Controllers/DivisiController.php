@@ -44,7 +44,6 @@ class DivisiController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'branch' => 'required',
             'createdBy' => 'required'
         ]);
 
