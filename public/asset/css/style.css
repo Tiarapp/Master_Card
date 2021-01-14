@@ -100,10 +100,5 @@ th {
   /* color: rgb(244, 247, 215); */
 }
 
-tr:nth-child(even) {
+/* tr:nth-child(even) {
   background-color:#f4f6f9 !important;
-}
-
-.ex_highlight_row #data_sheet tr.even:hover td.sorting_2 {
-	background-color: #E7FF9E;
-}
