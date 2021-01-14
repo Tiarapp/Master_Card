@@ -54,8 +54,7 @@ class ColorCombineController extends Controller
             'idColor2' => 'nullable',
             'idColor3' => 'nullable',
             'idColor4' => 'nullable',
-            'createdBy' => 'required',
-            'branch' => 'required'
+            'createdBy' => 'required'
         ]);
 
         ColorCombine::create($request->all());

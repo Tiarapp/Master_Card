@@ -35,8 +35,12 @@ class SubstanceController extends Controller
     public function create()
     {
         $jenisgram = DB::table('jenis_gram')->get();
+        $flute = DB::table('flute')->get();
 
-        return view('admin.substance.create', compact('jenisgram'));
+        return view('admin.substance.create', compact(
+            'jenisgram',
+            'flute'
+        ));
     }
 
     /**
@@ -47,7 +51,21 @@ class SubstanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'jenisGramLinerAtas_id' => 'required',
+            'jenisGramBf_id' => 'nullable',
+            'jenisGramLinerTengah_id' => 'nullable',
+            'jenisGramCf_id' => 'nullable',
+            'jenisGramLinerBawah_id' => 'required',
+            'createdBy' => 'required'
+        ]);
+
+        Substance::create($request->all());
+
+        return redirect('admin/substance');
     }
 
     /**
