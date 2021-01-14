@@ -15,7 +15,7 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = DB::connection('firebird')->table('TBarangConv')->get();
+        $barang = DB::table('item_bj')->get();
 
         return view('admin.barang.index', compact('barang'));
     }
