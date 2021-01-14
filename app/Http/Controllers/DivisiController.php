@@ -90,14 +90,12 @@ class DivisiController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'branch' => 'required',
             'lastUpdatedBy' => 'required'
         ]);
 
         $divisi = Divisi::find($id);
 
         $divisi->nama = $request->nama;
-        $divisi->branch = $request->branch;
         $divisi->lastUpdatedBy = Auth::user()->name;
 
         $divisi->save();
