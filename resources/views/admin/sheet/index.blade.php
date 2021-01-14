@@ -31,7 +31,7 @@
 
       <a href="/admin/sheet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
-        <table class="table table-bordered" id="data_divisi">
+        <table class="table table-bordered" id="data_sheet">
           <thead>
             <tr>
               <th scope="col">No.</th>
@@ -86,7 +86,8 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-      $("#data_divisi").DataTable({
+      $("#data_sheet").DataTable({
+        "stripeClasses": [ 'strip1', 'strip2', 'strip3' ],
         dom: 'Bfrtip',
         buttons: [
           'copy',
