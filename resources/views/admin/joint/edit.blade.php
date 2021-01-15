@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Edit Mata Uang</strong> </h4>
+                <h4 class="modal-title"><strong>Edit Joint</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
@@ -36,33 +36,6 @@
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $joint->nama }}">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>QTY Joint</label>
-                                <input type="text" class="form-control txt_line" name="qtyJoint" id="qtyJoint" value="{{ $joint->qtyJoint }}">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <select class="js-example-basic-single col-md-12" name="satuanJoint" id="satuanJoint" value="{{ $joint->satuanJoint }}">
-                                    @foreach ($satuan as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Average Price</label>
-                                <input type="text" class="form-control txt_line" name="avgPrice" id="avgPrice" value="{{ $joint->avgPrice }}">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Mata Uang</label>
-                                <input type="text" class="form-control txt_line" name="mataUang" id="mataUang" value="{{ $joint->mataUang }}" >
                             </div>
                         </div>
                         <div class="col-md-12">

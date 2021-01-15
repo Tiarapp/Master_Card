@@ -45,7 +45,7 @@ class CreateMcView extends Migration
                         cc.nama as warna,
                         mc.mesin,
                         jt.nama as joint,
-                        wax.nama as wax,
+                        mc.wax,
                         ko.nama as koli,
                         mc.bungkus,
                         mc.keterangan,
@@ -63,7 +63,6 @@ class CreateMcView extends Migration
                         LEFT JOIN satuan as stnSizeSheetBox ON bx.satuanSizeSheetBox = stnSizeSheetBox.id
                         LEFT JOIN satuan as stnLuasSheetBox ON bx.satuanLuasSheetBox = stnLuasSheetBox.id
                         LEFT JOIN joint as jt ON mc.joint_id = jt.id
-                        LEFT JOIN wax ON mc.wax_id = wax.id
                         LEFT JOIN koli as ko ON mc.koli_id = ko.id
                         LEFT JOIN flute as fl ON mc.flute_id = fl.id
                         LEFT JOIN substance as sk ON mc.substanceKontrak_id = sk.id
