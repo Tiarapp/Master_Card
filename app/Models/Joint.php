@@ -14,10 +14,6 @@ class Joint extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'qtyJoint',
-        'satuanJoint',
-        'avgPrice',
-        'mataUang',
         'createdBy',
         'lastUpdatedBy',
         'deletedBy',

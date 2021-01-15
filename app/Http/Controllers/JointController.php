@@ -17,12 +17,7 @@ class JointController extends Controller
      */
     public function index()
     {
-        $joint = DB::table('joint')
-            ->join('satuan', 'satuanJoint', '=', 'satuan.id')
-            ->join('mata_uang', 'mataUang', '=', 'mata_uang.id')
-            ->select('joint.*', 'satuan.nama AS satuan', 'mata_uang.nama AS mataUang' )
-            ->where('joint.deleted', '=', '0')
-            ->get();
+        $joint = DB::table('joint')->get();
 
         // dd($joint);
         return view('admin.joint.index', ['joint' => $joint]);
@@ -35,13 +30,7 @@ class JointController extends Controller
      */
     public function create()
     {
-
-        $satuan = DB::table('satuan')->where('deleted', '=', '0')->get();
-        $matauang = DB::table('mata_uang')->where('deleted', '=', '0')->get();
-        return view('admin/joint/create', compact([
-            'satuan',
-            'matauang'
-        ]));
+        return view('admin/joint/create');
     }
 
     /**
@@ -55,10 +44,6 @@ class JointController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'qtyJoint' => 'required',
-            'satuanJoint' => 'required',
-            'avgPrice' => 'required',
-            'mataUang' => 'required',
             'createdBy' => 'required',
             'branch' => 'required'
         ]);
@@ -90,13 +75,8 @@ class JointController extends Controller
     public function edit($id)
     {
         $joint = Joint::find($id);
-        $satuan = DB::table('satuan')->get();
-        $matauang = DB::table('mata_uang')->get();
 
-        return view('admin.joint.edit', ['joint' => $joint], compact([
-            'satuan',
-            'matauang'
-        ]));
+        return view('admin.joint.edit', ['joint' => $joint]);
     }
 
     /**
@@ -111,10 +91,6 @@ class JointController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'qtyJoint' => 'required',
-            'satuanJoint' => 'required',
-            'avgPrice' => 'required',
-            'mataUang' => 'required',
             'branch' => 'required',
             'lastUpdatedBy' => 'required',
         ]);
@@ -123,10 +99,6 @@ class JointController extends Controller
 
         $joint->kode = $request->kode;
         $joint->nama = $request->nama;
-        $joint->qtyJoint = $request->qtyJoint;
-        $joint->satuanJoint = $request->satuanJoint;
-        $joint->avgPrice = $request->avgPrice;
-        $joint->mataUang = $request->mataUang;
         $joint->branch = $request->branch;
         $joint->lastUpdatedBy = $request->lastUpdatedBy;
 

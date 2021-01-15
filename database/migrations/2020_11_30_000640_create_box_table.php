@@ -25,21 +25,22 @@ class CreateBoxTable extends Migration
             $table->integer('lebarSheetBox');           //INPUT MARKETING
             $table->integer('panjangSheetBox');         //INPUT MARKETING
             $table->integer('tinggiSheetBox');          //INPUT MARKETING
-            $table->foreignId('satuanSizeSheetBox');    //INPUT MARKETING
+            $table->foreignId('satuanSizeSheetBox')->nullable();    //INPUT MARKETING
             $table->integer('luasSheetBox');            //INPUT MARKETING
-            $table->foreignId('satuanLuasSheetBox');    //INPUT MARKETING
+            $table->foreignId('satuanLuasSheetBox')->nullable();    //INPUT MARKETING
             $table->float('gramSheetBox', 8, 2);            //INPUT MARKETING
             // DALAM BOX
             $table->integer('panjangDalamBox');         //INPUT MARKETING
             $table->integer('lebarDalamBox');           //INPUT MARKETING
             $table->integer('tinggiDalamBox');          //INPUT MARKETING
-            $table->foreignId('satuanSizeDalamBox');    //INPUT MARKETING
+            $table->foreignId('satuanSizeDalamBox')->nullable();    //INPUT MARKETING
             $table->integer('sizeCreasCorr');           //INPUT MARKETING
             $table->integer('sizeCreasConv');           //INPUT MARKETING
             $table->foreignId('satuanCreas');           //INPUT MARKETING
             //RELATION
             $table->foreign('satuanSizeSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanLuasSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
+            $table->foreign('satuanSizeDalamBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanCreas')->references('id')->on('satuan')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login

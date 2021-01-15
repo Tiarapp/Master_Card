@@ -162,13 +162,13 @@
             var namaflute = getNama(flute);
             
 
-            if (namaflute == 'CF') {
+            if (namaflute == 'BF') {
                 document.getElementById('linerAtas').disabled = false;
                 document.getElementById('bf').disabled = false;
                 document.getElementById('linerTengah').disabled = true;
                 document.getElementById('cf').disabled = true;
                 document.getElementById('linerBawah').disabled = false;
-            } else if(namaflute == 'BF') {
+            } else if(namaflute == 'CF') {
                 document.getElementById('linerAtas').disabled = false;
                 document.getElementById('bf').disabled = true;
                 document.getElementById('linerTengah').disabled = true;

@@ -79,6 +79,15 @@ Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
 Route::put('/admin/sheet/update/{id}', 'SheetController@update');
 Route::get('/admin/sheet/delete/{id}', 'SheetController@updateDeleted');
 
+//Box
+Route::get('/admin/box', 'BoxController@index')->name('box');
+Route::get('/admin/box/create', 'BoxController@create');
+Route::post('/admin/box/store', 'BoxController@store');
+Route::get('/admin/box/show/{id}', 'BoxController@show');
+Route::get('/admin/box/edit/{id}', 'BoxController@edit');
+Route::put('/admin/box/update/{id}', 'BoxController@update');
+Route::get('/admin/box/delete/{id}', 'BoxController@updateDeleted');
+
 //Substance
 Route::get('/admin/substance', 'SubstanceController@index')->name('substance');
 Route::get('/admin/substance/create', 'SubstanceController@create');

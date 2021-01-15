@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Mata Uang</h4>
+                <h4 class="modal-title">Tambah Joint</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -35,36 +35,6 @@
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" name="nama" id="nama">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>QTY Joint</label>
-                                <input type="text" class="form-control txt_line" name="qtyJoint" id="qtyJoint">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <select class="js-example-basic-single col-md-12" name="satuanJoint" id="satuanJoint">
-                                    @foreach ($satuan as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Average Price</label>
-                                <input type="text" class="form-control txt_line" name="avgPrice" id="avgPrice">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <select class="js-example-basic-single col-md-12" name="mataUang" id="mataUang">
-                                    @foreach ($matauang as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                         <div class="col-md-12">
