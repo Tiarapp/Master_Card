@@ -14,6 +14,7 @@ class Box extends Model
     protected $fillable =[
         'kode',
         'nama',
+        'tipebox_id',
         'tipeCreasCorr',
         'lebarSheetBox,',
         'panjangSheetBox',

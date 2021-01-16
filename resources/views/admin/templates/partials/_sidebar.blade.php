@@ -51,6 +51,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('box') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Box</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('colorcombine') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Color Combine</p>
