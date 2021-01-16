@@ -29,9 +29,9 @@ class BoxController extends Controller
      */
     public function create()
     {
-        $satuan = DB::table('satuan')->get();
+        $tipebox = DB::table('tipe_box')->get();
 
-        return view('admin.box.create', compact('satuan'));
+        return view('admin.box.create', compact('tipebox'));
     }
 
     /**
@@ -45,6 +45,7 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
+            'boxtpie_id' => 'required',
             'tipeCreasCorr' => 'required',
             'lebarSheetCorr' => 'required|numeric',
             'panjangSheetBox' => 'required|numeric',
@@ -89,10 +90,10 @@ class BoxController extends Controller
      */
     public function edit($id)
     {
-        $satuan = DB::table('satuan')->get();
+        $tipebox = DB::table('tipe_box')->get();
         $box = Box::find($id);
 
-        return view('admin.box.show', ['box' => $box], compact('satuan'));
+        return view('admin.box.show', ['box' => $box], compact('tipebox'));
     }
 
     /**
@@ -107,6 +108,7 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
+            'boxtpie_id' => 'required',
             'tipeCreasCorr' => 'required',
             'lebarSheetCorr' => 'required|numeric',
             'panjangSheetBox' => 'required|numeric',
@@ -129,6 +131,7 @@ class BoxController extends Controller
 
         $box->kode = $request->kode;
         $box->nama = $request->nama;
+        $box->tipebox_id = $request->tipebox_id;
         $box->tipeCreasCorr = $request->tipeCreasCorr;
         $box->lebarSheetCorr = $request->lebarSheetCorr;
         $box->panjangSheetBox = $request->panjangSheetBox;

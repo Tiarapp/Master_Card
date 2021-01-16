@@ -16,18 +16,18 @@
             <div class="col-md-5">
                 <h4 class="modal-title">Tambah Box</h4>
                 <hr>
-
+                
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> 
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> 
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li></li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
-
+                
                 <form action="/admin/box/store" method="POST" class="inputSheet">
                     @csrf
                     <div class="row was-validated">
@@ -43,6 +43,17 @@
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" placeholder="" name="nama" id="nama" required readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                            <div class="form-group">
+                                <label>Tipe Box</label>
+                                <input type="hidden" name="tboxnama" id="tboxnama">
+                                <select class="js-example-basic-single col-md-12" name="tipebox_id" id="tipebox_id">
+                                    @foreach ($tipebox as $item)
+                                        <option value="{{ $tipebox->id }} {{ $tipebox->nama }}">MALE-FLAT</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
@@ -143,35 +154,35 @@
                                 <a href="/admin/sheet">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-    </div>    
-</div>
-
-@endsection
-
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-
-function luas(){
-    var panjang = document.getElementById("panjangSheet").value;
-    var lebar = document.getElementById("lebarSheet").value;
-    var luas;
-        luas = panjang * lebar;
-        document.getElementById("luasSheet").value =  luas;
-}
-
-function getNama(){
-    var panjang = document.getElementById("panjangSheet").value;
-    var lebar = document.getElementById("lebarSheet").value;
-
-    document.getElementById("nama").value = panjang +' x '+ lebar;
-}
-
-</script>
+        </div>    
+    </div>
+    
+    @endsection
+    
+    <script type="text/javascript">
+        
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
+        
+        function luas(){
+            var panjang = document.getElementById("panjangSheet").value;
+            var lebar = document.getElementById("lebarSheet").value;
+            var luas;
+            luas = panjang * lebar;
+            document.getElementById("luasSheet").value =  luas;
+        }
+        
+        function getNama(){
+            var panjang = document.getElementById("panjangSheet").value;
+            var lebar = document.getElementById("lebarSheet").value;
+            
+            document.getElementById("nama").value = panjang +' x '+ lebar;
+        }
+        
+    </script>

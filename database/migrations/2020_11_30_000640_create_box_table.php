@@ -20,6 +20,7 @@ class CreateBoxTable extends Migration
             //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
             //     CREASING CORR : sizeCreasCorr satuanCreas
             //     CREASING CONV : sizeCreasConv satuanCreas
+            $table->foreignId('tipebox_id')->unsigned();
             $table->enum('tipeCreasCorr', ['MALE-FLAT', 'MALE-MALE', 'MALE-FEMALE', 'TANPA CREASE']);   //INPUT MARKETING
             // SHEET BOX
             $table->integer('lebarSheetBox');           //INPUT MARKETING
@@ -38,6 +39,7 @@ class CreateBoxTable extends Migration
             $table->integer('sizeCreasConv');           //INPUT MARKETING
             $table->foreignId('satuanCreas');           //INPUT MARKETING
             //RELATION
+            $table->foreign('tipebox_id')->references('id')->on('tipe_box')->cascadeOnDelete();
             $table->foreign('satuanSizeSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanLuasSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanSizeDalamBox')->references('id')->on('satuan')->cascadeOnDelete();
