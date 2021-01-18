@@ -22,7 +22,6 @@ class Box extends Model
         'satuanSizeSheetBox',
         'luasSheetBox',
         'satuanLuasSheetBox',
-        'gramSheetBox',
         'panjangDalamBox',
         'lebarDalamBox',
         'tinggiDalamBox',

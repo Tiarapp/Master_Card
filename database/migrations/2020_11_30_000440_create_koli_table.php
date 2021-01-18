@@ -18,15 +18,9 @@ class CreateKoliTable extends Migration
             $table->string('kode')->unique()->index();                       //AUTO = QTYBOX
             $table->string('nama')->index();                                 //AUTO = QTYBOX
             $table->integer('qtyBox')->index();                              //Input Mark
-            $table->foreignId('satuanBox');                      //Input Mark
-            $table->integer('qtyStrapping')->nullable();            //Input PPIC
-            $table->foreignId('satuanStrapping')->nullable();    //Input PPIC
-            $table->float('avgPrice',20,2)->nullable();         //Auto/input by Acc
-            $table->foreignId('mataUang')->nullable();       //Auto/input by Acc
+            $table->foreignId('satuanBox');                                 //Input Mark
             //RELATION
             $table->foreign('satuanBox')->references('id')->on('satuan')->cascadeOnDelete();
-            $table->foreign('satuanStrapping')->references('id')->on('satuan')->cascadeOnDelete();
-            $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

@@ -87,6 +87,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('koli') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Koli</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('matauang') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Mata Uang</p>

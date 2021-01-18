@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Box;
-use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +28,13 @@ class BoxController extends Controller
      */
     public function create()
     {
+        $flute = DB::table('flute')->get();
         $tipebox = DB::table('tipe_box')->get();
 
-        return view('admin.box.create', compact('tipebox'));
+        return view('admin.box.create', compact([
+            'tipebox',
+            'flute'
+            ]));
     }
 
     /**
@@ -45,7 +48,7 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'boxtpie_id' => 'required',
+            'boxtipe_id' => 'required',
             'tipeCreasCorr' => 'required',
             'lebarSheetCorr' => 'required|numeric',
             'panjangSheetBox' => 'required|numeric',
@@ -53,7 +56,6 @@ class BoxController extends Controller
             'satuanSizeSheetBox' => 'required',
             'luasSheetBox' => 'required|numeric',
             'satuanLuasSheetBox' => 'required',
-            'gramSheetBox' => 'required',
             'panjangDalamBox' => 'required',
             'lebarDalamBox' => 'required',
             'tinggiDalamBox' => 'required',
@@ -108,7 +110,7 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'boxtpie_id' => 'required',
+            'boxtipe_id' => 'required',
             'tipeCreasCorr' => 'required',
             'lebarSheetCorr' => 'required|numeric',
             'panjangSheetBox' => 'required|numeric',
@@ -116,7 +118,6 @@ class BoxController extends Controller
             'satuanSizeSheetBox' => 'required',
             'luasSheetBox' => 'required|numeric',
             'satuanLuasSheetBox' => 'required',
-            'gramSheetBox' => 'required',
             'panjangDalamBox' => 'required',
             'lebarDalamBox' => 'required',
             'tinggiDalamBox' => 'required',

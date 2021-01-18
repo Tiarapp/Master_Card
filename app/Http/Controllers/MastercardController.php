@@ -16,7 +16,7 @@ class MastercardController extends Controller
      */
     public function index()
     {
-        $mc = DB::table('mc_view')->get();
+        $mc = DB::table('mc')->get();
 
         return view('admin.mastercard.index', compact('mc'));
     }
