@@ -19,13 +19,15 @@ class CreateMcTable extends Migration
             $table->integer('revisi');                              //AUTO REVISI KE
             $table->foreignId('bj_id')->index();                    //INPUT MARKETING
             $table->foreignId('tipeBox_id')->index();               //INPUT MARKETING
-            $table->foreignId('sheet_id')->index();                 //INPUT MARKETING
             $table->string('CreasCorrP');                           
             $table->string('CreasCorrL');
             $table->foreignId('satuanSizeSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('satuanLuasSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('joint_id')->index();                 //INPUT MARKETING
             $table->foreignId('flute_id')->index();                 //INPUT MARKETING
+            $table->integer('lebarSheet');              //Input MARKETING
+            $table->integer('panjangSheet');            //Input MARKETING
+            $table->integer('luasSheet');               //Auto lebarSheet * panjangSheet
             $table->string('mesin')->index();                       //AUTO RUMUS MASIH DIPIKIR
             $table->integer('outConv')->index();                    //AUTO RUMUS MASIH DIPIKIR
             $table->foreignId('koli_id')->index();                  //INPUT MARKETING
@@ -48,7 +50,6 @@ class CreateMcTable extends Migration
             //RELATION
             $table->foreign('bj_id')->references('id')->on('item_bj')->cascadeOnDelete();
             $table->foreign('tipeBox_id')->references('id')->on('tipe_box')->cascadeOnDelete();
-            $table->foreign('sheet_id')->references('id')->on('sheet')->cascadeOnDelete();
             $table->foreign('joint_id')->references('id')->on('joint')->cascadeOnDelete();
             $table->foreign('koli_id')->references('id')->on('koli')->cascadeOnDelete();
             $table->foreign('flute_id')->references('id')->on('flute')->cascadeOnDelete();

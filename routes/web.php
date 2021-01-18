@@ -88,6 +88,15 @@ Route::get('/admin/box/edit/{id}', 'BoxController@edit');
 Route::put('/admin/box/update/{id}', 'BoxController@update');
 Route::get('/admin/box/delete/{id}', 'BoxController@updateDeleted');
 
+//Koli
+Route::get('/admin/koli', 'KoliController@index')->name('koli');
+Route::get('/admin/koli/create', 'KoliController@create');
+Route::post('/admin/koli/store', 'KoliController@store');
+Route::get('/admin/koli/show/{id}', 'KoliController@show');
+Route::get('/admin/koli/edit/{id}', 'KoliController@edit');
+Route::put('/admin/koli/update/{id}', 'KoliController@update');
+Route::get('/admin/koli/delete/{id}', 'KoliController@updateDeleted');
+
 //Substance
 Route::get('/admin/substance', 'SubstanceController@index')->name('substance');
 Route::get('/admin/substance/create', 'SubstanceController@create');

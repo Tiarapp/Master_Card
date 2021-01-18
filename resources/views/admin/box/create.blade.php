@@ -47,11 +47,22 @@
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
+                                <label>Flute</label>
+                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute()">
+                                    <option value="">Pilih Flute ..</option>
+                                    @foreach ($flute as $data)
+                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                            <div class="form-group">
                                 <label>Tipe Box</label>
-                                <input type="hidden" name="tboxnama" id="tboxnama">
-                                <select class="js-example-basic-single col-md-12" name="tipebox_id" id="tipebox_id">
-                                    @foreach ($tipebox as $item)
-                                        <option value="{{ $tipebox->id }} {{ $tipebox->nama }}">MALE-FLAT</option>
+                                <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
+                                    <option value="">Pilih Tipe ..</option>
+                                    @foreach ($tipebox as $data)
+                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -99,16 +110,8 @@
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
-                                <label>Berat Sheet Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="gramSheetBox" id="gramSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
-                            <div class="form-group">
                                 <label>Panjang Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="luas(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_cress_corr()" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -116,7 +119,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Lebar Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="luas(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_cress_corr()" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -124,7 +127,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Tinggi Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="luas(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_cress_corr()" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -132,7 +135,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="luas(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" readonly>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -140,7 +143,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="luas(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" readonly>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -171,11 +174,13 @@
         });
         
         function luas(){
-            var panjang = document.getElementById("panjangSheet").value;
-            var lebar = document.getElementById("lebarSheet").value;
+            var panjang = document.getElementById("panjangSheetBox").value;
+            var lebar = document.getElementById("lebarSheetBox").value;
+            var tinggi = document.getElementById("tinggiSheetBox").value;
             var luas;
-            luas = panjang * lebar;
-            document.getElementById("luasSheet").value =  luas;
+            luas = panjang * lebar * tinggi;
+
+            document.getElementById("luasSheetBox").value =  luas;
         }
         
         function getNama(){
@@ -184,5 +189,84 @@
             
             document.getElementById("nama").value = panjang +' x '+ lebar;
         }
+
+        function getFlute(){
+        var data = document.getElementById('flute_id').value;
+        var array = data.split(" ");
+        
+        document.getElementById('flute').value = array[3];
+        // console.log(array);
+        
+        // return flute;
+        // getGramKontrak();
+    }
+
+    function getTipe(){
+        var tipe = document.getElementById('tipebox').value;
+
+        if (tipe == 'B1') {
+            document.getElementById('lebarSheetBox').disabled = true;
+            document.getElementById('panjangSheetBox').disabled = true;
+            document.getElementById('tinggiSheetBox').disabled = true;
+            document.getElementById('lebarDalamBox').disabled = false;
+            document.getElementById('panjangDalamBox').disabled = false;
+            document.getElementById('tinggiDalamBox').disabled = false;
+        } else {
+            document.getElementById('lebarDalamBox').disabled = true;
+            document.getElementById('panjangDalamBox').disabled = true;
+            document.getElementById('tinggiDalamBox').disabled = true;
+            document.getElementById('lebarSheetBox').disabled = false;
+            document.getElementById('panjangSheetBox').disabled = false;
+            document.getElementById('tinggiSheetBox').disabled = false;
+        }
+    }
+
+    function update_cress_corr() {
+        var box_p = document.getElementById("panjangDalamBox").value;
+        var box_l = document.getElementById("lebarDalamBox").value;
+        var box_t = document.getElementById("tinggiDalamBox").value;
+        var flute = document.getElementById("flute").value;
+        var cress_p, cress_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
+        var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
+
+        if (flute == "BF"){
+            flap_trim = 2;
+            tinggi_trim = 5;
+            p1_trim = 3;
+            l1_trim = 3;
+            l2_trim = 0;
+            kuping = 30;
+        }
+        if (flute == "CF"){
+            flap_trim = 3;
+            tinggi_trim = 7;
+            p1_trim = 4;
+            l1_trim = 4;
+            l2_trim = 2;
+            kuping = 30;
+        }
+        if (flute == "BCF"){
+            flap_trim = 5;
+            tinggi_trim = 13;
+            p1_trim = 6;
+            l1_trim = 6;
+            l2_trim = 4;
+            kuping = 35;
+        }
+        flap =  ((box_l / 2) + flap_trim);
+        tinggi = ((box_t*1) + tinggi_trim);
+        sheet_l = (flap*2) + tinggi;
+        cress_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
+
+        p1 = ((box_p*1) + p1_trim);
+        l1 = ((box_l*1) + l1_trim);
+        l2 = ((box_l*1) + l2_trim);
+        sheet_p = (p1*2) + l1 + l2 + kuping;
+        cress_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
+
+        document.getElementById("sizeCreasCorr").value = cress_p;
+        document.getElementById("sizeCreasConv").value = cress_l;
+    }
+
         
     </script>

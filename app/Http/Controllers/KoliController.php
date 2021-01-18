@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Koli;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class KoliController extends Controller
 {
@@ -14,7 +16,9 @@ class KoliController extends Controller
      */
     public function index()
     {
-        //
+        $koli = DB::table('koli')->get();
+
+        return view('admin.koli.index', compact('koli'));
     }
 
     /**
@@ -24,7 +28,9 @@ class KoliController extends Controller
      */
     public function create()
     {
-        //
+        $satuan = DB::table('satuan')->get();
+
+        return view('admin.koli.create', compact('satuan'));
     }
 
     /**
@@ -35,7 +41,17 @@ class KoliController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'qtyBox' => 'required',
+            'satuanBox' => 'required',
+            'createdBy' => 'required'
+        ]);
+
+        Koli::create($request->all());
+
+        return redirect('admin/koli');
     }
 
     /**
@@ -44,9 +60,11 @@ class KoliController extends Controller
      * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
-    public function show(Koli $koli)
+    public function show($id)
     {
-        //
+        $koli = Koli::find($id);
+
+        return view('admin.koli.show', compact('koli'));
     }
 
     /**
@@ -55,9 +73,12 @@ class KoliController extends Controller
      * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
-    public function edit(Koli $koli)
+    public function edit($id)
     {
-        //
+        $satuan = DB::table('satuan')->get();
+        $koli = Koli::find($id);
+
+        return view('admin.koli.edit', compact('koli','satuan'));
     }
 
     /**
@@ -67,9 +88,40 @@ class KoliController extends Controller
      * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Koli $koli)
+    public function update($id, Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+            'qtyBox' => 'required',
+            'satuanBox' => 'required',
+            'lastUpdatedBy' => 'required',
+        ]);
+
+        $koli = Koli::find($id);
+
+        $koli->kode = $request->kode;
+        $koli->nama = $request->nama;
+        $koli->qtyBox = $request->qtyBox;
+        $koli->satuanBox = $request->satuanBox;
+        $koli->lastUpdatedBy = $request->lastUpdatedBy;
+
+        $koli->save();
+
+        return redirect('admin/koli');
+    }
+
+    public function updateDeleted($id)
+    {
+        $koli = Koli::find($id);
+
+        $koli->deleted = 1;
+        $koli->deletedAt = date('Y-m-d h:i:s');
+        $koli->deletedBy = Auth::user()->name;
+
+        $koli->save();
+
+        return redirect('/admin/box');
     }
 
     /**
