@@ -58,9 +58,6 @@ class MastercardController extends Controller
         // dd($sssh[0]->lebarSheet);
 
         $item = DB::table('item_bj')->get();
-        $tipebox = DB::table('tipe_box')->get();
-        $sheet = DB::table('sheet')->get();
-        $flute = DB::table('flute')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramBf_id', '=', 'bf.id')
@@ -72,9 +69,6 @@ class MastercardController extends Controller
         
         return view('admin.mastercard.create', compact([
             'item',
-            'tipebox',
-            'sheet',
-            'flute',
             'substance'
         ]));
 

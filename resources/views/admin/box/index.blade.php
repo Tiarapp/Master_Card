@@ -37,14 +37,16 @@
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
+              <th scope="col">Tipe Box</th>
               <th scope="col">Panjang Box</th>
               <th scope="col">Lebar Box</th>
               <th scope="col">Tinggi Box</th>
               <th scope="col">Luas Box</th>
-              <th scope="col">Berat Box</th>
               <th scope="col">Panjang Dalam Box</th>
               <th scope="col">Lebar Dalam Box</th>
               <th scope="col">Tinggi Dalam Box</th>
+              <th scope="col">Ukuran Creas Corr</th>
+              <th scope="col">Ukuran Creas Conv</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -57,11 +59,16 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
-                <td>{{ $data->lebarSheet }}</td>
-                <td>{{ $data->panjangSheet }}</td>
-                <td>{{ $data->satuanSizeSheet }}</td>
-                <td>{{ $data->luasSheet }}</td>
-                <td>{{ $data->satuanLuasSheet }}</td>
+                <td>{{ $data->tipenama }}</td>
+                <td>{{ $data->lebarSheetBox }}</td>
+                <td>{{ $data->panjangSheetBox }}</td>
+                <td>{{ $data->tinggiSheetBox }}</td>
+                <td>{{ $data->luasSheetBox }}</td>
+                <td>{{ $data->lebarDalamBox }}</td>
+                <td>{{ $data->panjangDalamBox }}</td>
+                <td>{{ $data->tinggiDalamBox }}</td>
+                <td>{{ $data->sizeCreasCorr }}</td>
+                <td>{{ $data->sizeCreasConv }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">
@@ -89,8 +96,8 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-      $("#data_sheet").DataTable({
-        "stripeClasses": [ 'strip1', 'strip2', 'strip3' ],
+      $("#data_box").DataTable({
+        "scrollY": "400px",
         dom: 'Bfrtip',
         buttons: [
           'copy',

@@ -16,7 +16,10 @@ class BoxController extends Controller
      */
     public function index()
     {
-        $box = Box::get();
+        $box = DB::table('box')
+            ->leftJoin('tipe_box','box.tipebox_id', '=', 'tipe_box.id')
+            ->select('box.*', 'tipe_box.nama as tipenama')
+            ->get();
 
         return view('admin.box.index', ['box' => $box]);
     }
@@ -48,27 +51,23 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'boxtipe_id' => 'required',
+            'tipebox_id' => 'required',
             'tipeCreasCorr' => 'required',
-            'lebarSheetCorr' => 'required|numeric',
-            'panjangSheetBox' => 'required|numeric',
-            'tinggiSheetBox' => 'required|numeric',
-            'satuanSizeSheetBox' => 'required',
-            'luasSheetBox' => 'required|numeric',
-            'satuanLuasSheetBox' => 'required',
-            'panjangDalamBox' => 'required',
-            'lebarDalamBox' => 'required',
-            'tinggiDalamBox' => 'required',
-            'satuanSizeDalamBox' => 'required',
-            'sizeCreasCorr' => 'required',
-            'sizeCreasConv' => 'required',
-            'satuanCreas' => 'required',
+            'lebarSheetBox' => 'nullable',
+            'panjangSheetBox' => 'nullable',
+            'tinggiSheetBox' => 'nullable',
+            'luasSheetBox' => 'nullable',
+            'panjangDalamBox' => 'nullable',
+            'lebarDalamBox' => 'nullable',
+            'tinggiDalamBox' => 'nullable',
+            'sizeCreasCorr' => 'nullable',
+            'sizeCreasConv' => 'nullable',
             'createdBy' => 'required'
         ]);
 
-        Box::create($request->all());
+       var_dump( Box::create($request->all()));
 
-        return redirect('admin/box');
+        // return redirect('admin/box');
     }
 
     /**
