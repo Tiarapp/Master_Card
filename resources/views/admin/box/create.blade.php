@@ -42,13 +42,13 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="nama" id="nama" required readonly>
+                                <textarea name="nama" id="nama" cols="30" rows="10"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Flute</label>
-                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute()">
+                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute(); update_cress_corr()">
                                     <option value="">Pilih Flute ..</option>
                                     @foreach ($flute as $data)
                                         <option value="{{ $data->nama }}">{{ $data->nama }}</option>
@@ -59,10 +59,12 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Tipe Box</label>
-                                <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
+                                <input type="hidden" name="tipebox_id" id="tipebox_id">
+                                <input type="hidden" name="tipebox" id="tipebox">
+                                <select class="js-example-basic-single col-md-12" name="tipe" id="tipe" onchange="getTipe()">
                                     <option value="">Pilih Tipe ..</option>
                                     @foreach ($tipebox as $data)
-                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                        <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -111,7 +113,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Panjang Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_cress_corr()" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_cress_corr(); getNama();" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -119,7 +121,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Lebar Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_cress_corr()" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_cress_corr(); getNama();" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -127,7 +129,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Tinggi Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_cress_corr()" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_cress_corr(); getNama();" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -135,7 +137,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -143,7 +145,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -184,15 +186,33 @@
         }
         
         function getNama(){
-            var panjang = document.getElementById("panjangSheet").value;
-            var lebar = document.getElementById("lebarSheet").value;
+            tipe = getTipe();
+
+            var panjangbox = document.getElementById("panjangSheetBox").value;
+            var lebarbox = document.getElementById("lebarSheetBox").value;
+            var tinggibox = document.getElementById("tinggiSheetBox").value;
+            var luasbox = document.getElementById("luasSheetBox").value;
+
+            var panjangdalam = document.getElementById("panjangDalamBox").value;
+            var lebardalam = document.getElementById("lebarDalamBox").value;
+            var tinggidalam = document.getElementById("tinggiDalamBox").value;
+
+            var creascorr = document.getElementById("sizeCreasCorr").value;
+            var creasconv = document.getElementById("sizeCreasConv").value;
+
+            if (tipe == 'B1') {
+                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+creascorr+"\n"+creasconv
+            }
+            if (tipe == 'DC') {
+                document.getElementById("nama").value = panjangbox +'x'+ lebarbox+'x'+tinggibox+' MM | '+luasbox+'M2' ;    
+            }
             
-            document.getElementById("nama").value = panjang +' x '+ lebar;
         }
 
         function getFlute(){
         var data = document.getElementById('flute_id').value;
         var array = data.split(" ");
+        // var flute = array[3];
         
         document.getElementById('flute').value = array[3];
         // console.log(array);
@@ -202,23 +222,35 @@
     }
 
     function getTipe(){
-        var tipe = document.getElementById('tipebox').value;
+        var box = document.getElementById('tipe').value;
+        var array = box.split(" ");
+        var tipe = array[1];
+        document.getElementById("tipebox_id").value = array[0];
+
 
         if (tipe == 'B1') {
             document.getElementById('lebarSheetBox').disabled = true;
             document.getElementById('panjangSheetBox').disabled = true;
             document.getElementById('tinggiSheetBox').disabled = true;
+            document.getElementById('luasSheetBox').disabled = true;
             document.getElementById('lebarDalamBox').disabled = false;
             document.getElementById('panjangDalamBox').disabled = false;
             document.getElementById('tinggiDalamBox').disabled = false;
+            document.getElementById('sizeCreasCorr').disabled = false;
+            document.getElementById('sizeCreasConv').disabled = false;
         } else {
             document.getElementById('lebarDalamBox').disabled = true;
             document.getElementById('panjangDalamBox').disabled = true;
             document.getElementById('tinggiDalamBox').disabled = true;
+            document.getElementById('sizeCreasCorr').disabled = true;
+            document.getElementById('sizeCreasConv').disabled = true;
             document.getElementById('lebarSheetBox').disabled = false;
             document.getElementById('panjangSheetBox').disabled = false;
             document.getElementById('tinggiSheetBox').disabled = false;
+            document.getElementById('luasSheetBox').disabled = false;
         }
+
+        return tipe;
     }
 
     function update_cress_corr() {
@@ -267,6 +299,7 @@
         document.getElementById("sizeCreasCorr").value = cress_p;
         document.getElementById("sizeCreasConv").value = cress_l;
     }
+
 
         
     </script>

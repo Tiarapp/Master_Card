@@ -141,16 +141,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
-                                                <input type="hidden" name="flute_id" id="flute_id">
-                                                <input type="hidden" name="tur1" id="tur1">
-                                                <input type="hidden" name="tur2" id="tur2">
-                                                <input type="hidden" name="flutenama" id="flutenama">
-                                                <select class="js-example-basic-single col-md-12" name="" id="flute" onchange="getFlute()">
-                                                    <option value="-">Select ...</option>
-                                                    @foreach ($flute as $data)
-                                                    <option value="{{ $data->id }} {{ $data->tur1 }} {{ $data->tur2 }} {{ $data->nama }}">{{ $data->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control txt_line col-md-11" value="" id="flute" name="flute" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -162,15 +153,11 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label>BOX</label>
+                                            <label>Tipe Box</label>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
-                                                <select class="js-example-basic-single col-md-12">
-                                                    @foreach ($tipebox as $box)
-                                                    <option value="{{ $box->id }}">{{ $box->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control txt_line col-md-11" value="" id="tipebox" name="flute" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -181,81 +168,21 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Sheet</label>
+                                        <div class="col-md-12">
+                                            <label class="control-label">Ukuran Sheet</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-12">
                                             <div class="row">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="sheet_id" name="sheet_id">
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="namasheet" readonly>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Sheet">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="Sheet">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Sheet</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body Sheet">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_sheet">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID.</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Lebar</th>
-                                                                            <th scope="col">Panjang</th>
-                                                                            <th scope="col">Luas</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($sheet as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->lebarSheet }}</td>
-                                                                                <td>{{ $data->panjangSheet }}</td>
-                                                                                <td>{{ $data->luasSheet }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <label class="control-label">Panjang</label>
+                                                        <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" placeholder="No. Item" readonly>
+                                                    </div>                                                    
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="control-label">Luas Sheet</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="text" class="form-control txt_line" name="luasSheet" id="luasSheet" placeholder="No. Item" readonly>
+                                                <div class="col-md-6">
+                                                    <label class="control-label">Lebar</label>
+                                                    <input type="text" class="form-control txt_line" name="Lebar Sheet" id="Lebar Sheet" placeholder="No. Item" readonly>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
