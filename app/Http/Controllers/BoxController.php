@@ -17,8 +17,6 @@ class BoxController extends Controller
     public function index()
     {
         $box = DB::table('box')
-            ->leftJoin('tipe_box','box.tipebox_id', '=', 'tipe_box.id')
-            ->select('box.*', 'tipe_box.nama as tipenama')
             ->get();
 
         return view('admin.box.index', ['box' => $box]);
@@ -51,7 +49,8 @@ class BoxController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'tipebox_id' => 'required',
+            'tipebox' => 'required',
+            'flute' => 'required',
             'tipeCreasCorr' => 'required',
             'lebarSheetBox' => 'nullable',
             'panjangSheetBox' => 'nullable',
@@ -65,9 +64,9 @@ class BoxController extends Controller
             'createdBy' => 'required'
         ]);
 
-       var_dump( Box::create($request->all()));
+        Box::create($request->all());
 
-        // return redirect('admin/box');
+        return redirect('admin/box');
     }
 
     /**

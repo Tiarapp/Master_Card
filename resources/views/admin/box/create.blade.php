@@ -48,7 +48,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Flute</label>
-                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute(); update_cress_corr()">
+                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_cress_corr()">
                                     <option value="">Pilih Flute ..</option>
                                     @foreach ($flute as $data)
                                         <option value="{{ $data->nama }}">{{ $data->nama }}</option>
@@ -59,12 +59,10 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Tipe Box</label>
-                                <input type="hidden" name="tipebox_id" id="tipebox_id">
-                                <input type="hidden" name="tipebox" id="tipebox">
-                                <select class="js-example-basic-single col-md-12" name="tipe" id="tipe" onchange="getTipe()">
+                                <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
                                     <option value="">Pilih Tipe ..</option>
                                     @foreach ($tipebox as $data)
-                                        <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
+                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -209,23 +207,8 @@
             
         }
 
-        function getFlute(){
-        var data = document.getElementById('flute_id').value;
-        var array = data.split(" ");
-        // var flute = array[3];
-        
-        document.getElementById('flute').value = array[3];
-        // console.log(array);
-        
-        // return flute;
-        // getGramKontrak();
-    }
-
     function getTipe(){
-        var box = document.getElementById('tipe').value;
-        var array = box.split(" ");
-        var tipe = array[1];
-        document.getElementById("tipebox_id").value = array[0];
+        var tipe = document.getElementById('tipebox').value;
 
 
         if (tipe == 'B1') {

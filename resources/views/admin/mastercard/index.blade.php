@@ -43,6 +43,7 @@
                     <th scope="col">Keterangan</th>
                     <th scope="col">Warna</th>
                     <th scope="col">Box</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,7 @@
                             <td>{{ $mc->KotaKantor }}</td>
                             <td>{{ $mc->TelpKantor }}</td>
                             <td>{{ $mc->PIC }}</td>
+                            <a href="/admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
                         </tr>
                             <?php
                         }    
