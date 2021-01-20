@@ -130,9 +130,15 @@ class MastercardController extends Controller
         //
     }
 
-    public function generateNumberSequence()
+    public function pdfprint()
     {   
-        
+        $item = DB::table('item_bj')->get();
+        $box = DB::table('box')->get();
+
+        return view('admin.mastercard.pdf', compact(
+            'item',
+            'box'
+        ));
 
         
     }

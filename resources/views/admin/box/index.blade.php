@@ -23,12 +23,12 @@
     </div><!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
-
+  
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
-
+      
       <a href="/admin/box/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_box">
@@ -38,6 +38,7 @@
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
               <th scope="col">Tipe Box</th>
+              <th scope="col">flute</th>
               <th scope="col">Panjang Box</th>
               <th scope="col">Lebar Box</th>
               <th scope="col">Tinggi Box</th>
@@ -59,7 +60,8 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
-                <td>{{ $data->tipenama }}</td>
+                <td>{{ $data->tipebox }}</td>
+                <td>{{ $data->flute }}</td>
                 <td>{{ $data->lebarSheetBox }}</td>
                 <td>{{ $data->panjangSheetBox }}</td>
                 <td>{{ $data->tinggiSheetBox }}</td>
@@ -80,7 +82,7 @@
                   </div>
                 </td>
               </tr>
-            <?php
+              <?php
             }
             ?>
           </tbody>
@@ -91,33 +93,50 @@
   </section>
   <!-- /.content -->
   @endsection
-
+  
   @section('javascripts')
   <!-- DataTables -->
   <script>
+    function strtrunc(str, max, add){
+      add = add || '...';
+      return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
     $(document).ready(function() {
       $("#data_box").DataTable({
-        "scrollY": "400px",
+        "scrollX": true,
+        "scrollY": "auto",
+        "columnDefs": [
+        {
+          'targets': 2,
+          'render': function(data, type, full, meta){
+            if(type === 'display'){
+              data = strtrunc(data, 10);
+            }
+            
+            return data;
+          }
+        }
+        ],
         dom: 'Bfrtip',
         buttons: [
-          'copy',
-          'csv',
-          'excel',
-          'pdf',
-          'colvis',
-          {
-            extend: 'print',
-            text: 'Print',
-            exportOption: {
-              modifier: {
-                selected: null
-              }
+        'copy',
+        'csv',
+        'excel',
+        'pdf',
+        'colvis',
+        {
+          extend: 'print',
+          text: 'Print',
+          exportOption: {
+            modifier: {
+              selected: null
             }
           }
+        }
         ],
         select: true
       });
     });
   </script>
-
+  
   @endsection
