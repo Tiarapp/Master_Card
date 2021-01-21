@@ -39,10 +39,6 @@
               <th scope="col">Nama</th>
               <th scope="col">Tipe Box</th>
               <th scope="col">flute</th>
-              <th scope="col">Panjang Box</th>
-              <th scope="col">Lebar Box</th>
-              <th scope="col">Tinggi Box</th>
-              <th scope="col">Luas Box</th>
               <th scope="col">Panjang Dalam Box</th>
               <th scope="col">Lebar Dalam Box</th>
               <th scope="col">Tinggi Dalam Box</th>
@@ -62,10 +58,6 @@
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->tipebox }}</td>
                 <td>{{ $data->flute }}</td>
-                <td>{{ $data->lebarSheetBox }}</td>
-                <td>{{ $data->panjangSheetBox }}</td>
-                <td>{{ $data->tinggiSheetBox }}</td>
-                <td>{{ $data->luasSheetBox }}</td>
                 <td>{{ $data->lebarDalamBox }}</td>
                 <td>{{ $data->panjangDalamBox }}</td>
                 <td>{{ $data->tinggiDalamBox }}</td>
