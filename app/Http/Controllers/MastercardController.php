@@ -66,10 +66,12 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
             ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
             ->get();
+        $box = DB::table('box')->get();
         
         return view('admin.mastercard.create', compact([
             'item',
-            'substance'
+            'substance',
+            'box'
         ]));
 
     }

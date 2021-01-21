@@ -42,18 +42,8 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <textarea name="nama" id="nama" cols="30" rows="10"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
-                            <div class="form-group">
-                                <label>Flute</label>
-                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_cress_corr()">
-                                    <option value="">Pilih Flute ..</option>
-                                    @foreach ($flute as $data)
-                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                    @endforeach
-                                </select>
+                                {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" readonly>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
@@ -62,7 +52,18 @@
                                 <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
                                     <option value="">Pilih Tipe ..</option>
                                     @foreach ($tipebox as $data)
-                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                            <div class="form-group">
+                                <label>Flute</label>
+                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_cress_corr()">
+                                    <option value="">Pilih Flute ..</option>
+                                    @foreach ($flute as $data)
+                                    <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -77,7 +78,7 @@
                                     <option value="TANPA CREASE">TANPA CREASE</option>
                                 </select>
                             </div>
-                        </div>
+                        {{-- </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Lebar</label>
@@ -107,7 +108,7 @@
                                 <label>Luas</label>
                                 <input type="text" class="form-control txt_line" name="luasSheetBox" id="luasSheetBox" required readonly>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Panjang Dalam Box</label>
@@ -179,110 +180,101 @@
             var tinggi = document.getElementById("tinggiSheetBox").value;
             var luas;
             luas = panjang * lebar * tinggi;
-
+            
             document.getElementById("luasSheetBox").value =  luas;
         }
         
         function getNama(){
             tipe = getTipe();
-
-            var panjangbox = document.getElementById("panjangSheetBox").value;
-            var lebarbox = document.getElementById("lebarSheetBox").value;
-            var tinggibox = document.getElementById("tinggiSheetBox").value;
-            var luasbox = document.getElementById("luasSheetBox").value;
-
+            
+            // var panjangbox = document.getElementById("panjangSheetBox").value;
+            // var lebarbox = document.getElementById("lebarSheetBox").value;
+            // var tinggibox = document.getElementById("tinggiSheetBox").value;
+            // var luasbox = document.getElementById("luasSheetBox").value;
+            
             var panjangdalam = document.getElementById("panjangDalamBox").value;
             var lebardalam = document.getElementById("lebarDalamBox").value;
             var tinggidalam = document.getElementById("tinggiDalamBox").value;
-
+            
             var creascorr = document.getElementById("sizeCreasCorr").value;
             var creasconv = document.getElementById("sizeCreasConv").value;
-
+            
             if (tipe == 'B1') {
-                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+creascorr+"\n"+creasconv
+                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+creascorr+"\n"+creasconv;
             }
             if (tipe == 'DC') {
-                document.getElementById("nama").value = panjangbox +'x'+ lebarbox+'x'+tinggibox+' MM | '+luasbox+'M2' ;    
+                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM';  
             }
             
         }
-
-    function getTipe(){
-        var tipe = document.getElementById('tipebox').value;
-
-
-        if (tipe == 'B1') {
-            document.getElementById('lebarSheetBox').disabled = true;
-            document.getElementById('panjangSheetBox').disabled = true;
-            document.getElementById('tinggiSheetBox').disabled = true;
-            document.getElementById('luasSheetBox').disabled = true;
-            document.getElementById('lebarDalamBox').disabled = false;
-            document.getElementById('panjangDalamBox').disabled = false;
-            document.getElementById('tinggiDalamBox').disabled = false;
-            document.getElementById('sizeCreasCorr').disabled = false;
-            document.getElementById('sizeCreasConv').disabled = false;
-        } else {
-            document.getElementById('lebarDalamBox').disabled = true;
-            document.getElementById('panjangDalamBox').disabled = true;
-            document.getElementById('tinggiDalamBox').disabled = true;
-            document.getElementById('sizeCreasCorr').disabled = true;
-            document.getElementById('sizeCreasConv').disabled = true;
-            document.getElementById('lebarSheetBox').disabled = false;
-            document.getElementById('panjangSheetBox').disabled = false;
-            document.getElementById('tinggiSheetBox').disabled = false;
-            document.getElementById('luasSheetBox').disabled = false;
+        
+        function getTipe(){
+            var tipe = document.getElementById('tipebox').value;
+            
+            
+            if (tipe == 'B1') {
+                document.getElementById('sizeCreasCorr').disabled = false;
+                document.getElementById('sizeCreasConv').disabled = false;
+            } else {
+                document.getElementById('sizeCreasCorr').disabled = true;
+                document.getElementById('sizeCreasConv').disabled = true;
+            }
+            
+            return tipe;
         }
-
-        return tipe;
-    }
-
-    function update_cress_corr() {
-        var box_p = document.getElementById("panjangDalamBox").value;
-        var box_l = document.getElementById("lebarDalamBox").value;
-        var box_t = document.getElementById("tinggiDalamBox").value;
-        var flute = document.getElementById("flute").value;
-        var cress_p, cress_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
-        var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
-
-        if (flute == "BF"){
-            flap_trim = 2;
-            tinggi_trim = 5;
-            p1_trim = 3;
-            l1_trim = 3;
-            l2_trim = 0;
-            kuping = 30;
+        
+        function update_cress_corr() {
+            var tipe = document.getElementById("tipebox").value;
+            
+            var box_p = document.getElementById("panjangDalamBox").value;
+            var box_l = document.getElementById("lebarDalamBox").value;
+            var box_t = document.getElementById("tinggiDalamBox").value;
+            var flute = document.getElementById("flute").value;
+            var cress_p, cress_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
+            var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
+            
+            if (tipe == "B1") {
+                if (flute == "BF"){
+                    flap_trim = 2;
+                    tinggi_trim = 5;
+                    p1_trim = 3;
+                    l1_trim = 3;
+                    l2_trim = 0;
+                    kuping = 30;
+                }
+                if (flute == "CF"){
+                    flap_trim = 3;
+                    tinggi_trim = 7;
+                    p1_trim = 4;
+                    l1_trim = 4;
+                    l2_trim = 2;
+                    kuping = 30;
+                }
+                if (flute == "BCF"){
+                    flap_trim = 5;
+                    tinggi_trim = 13;
+                    p1_trim = 6;
+                    l1_trim = 6;
+                    l2_trim = 4;
+                    kuping = 35;
+                }
+                flap =  ((box_l / 2) + flap_trim);
+                tinggi = ((box_t*1) + tinggi_trim);
+                sheet_l = (flap*2) + tinggi;
+                cress_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
+                
+                p1 = ((box_p*1) + p1_trim);
+                l1 = ((box_l*1) + l1_trim);
+                l2 = ((box_l*1) + l2_trim);
+                sheet_p = (p1*2) + l1 + l2 + kuping;
+                cress_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
+                
+                document.getElementById("sizeCreasCorr").value = cress_p;
+                document.getElementById("sizeCreasConv").value = cress_l;
+            } 
+            
         }
-        if (flute == "CF"){
-            flap_trim = 3;
-            tinggi_trim = 7;
-            p1_trim = 4;
-            l1_trim = 4;
-            l2_trim = 2;
-            kuping = 30;
-        }
-        if (flute == "BCF"){
-            flap_trim = 5;
-            tinggi_trim = 13;
-            p1_trim = 6;
-            l1_trim = 6;
-            l2_trim = 4;
-            kuping = 35;
-        }
-        flap =  ((box_l / 2) + flap_trim);
-        tinggi = ((box_t*1) + tinggi_trim);
-        sheet_l = (flap*2) + tinggi;
-        cress_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
-
-        p1 = ((box_p*1) + p1_trim);
-        l1 = ((box_l*1) + l1_trim);
-        l2 = ((box_l*1) + l2_trim);
-        sheet_p = (p1*2) + l1 + l2 + kuping;
-        cress_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
-
-        document.getElementById("sizeCreasCorr").value = cress_p;
-        document.getElementById("sizeCreasConv").value = cress_l;
-    }
-
-
+        
+        
         
     </script>

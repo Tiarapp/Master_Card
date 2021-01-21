@@ -52,10 +52,10 @@ class BoxController extends Controller
             'tipebox' => 'required',
             'flute' => 'required',
             'tipeCreasCorr' => 'required',
-            'lebarSheetBox' => 'nullable',
-            'panjangSheetBox' => 'nullable',
-            'tinggiSheetBox' => 'nullable',
-            'luasSheetBox' => 'nullable',
+            // 'lebarSheetBox' => 'nullable',
+            // 'panjangSheetBox' => 'nullable',
+            // 'tinggiSheetBox' => 'nullable',
+            // 'luasSheetBox' => 'nullable',
             'panjangDalamBox' => 'nullable',
             'lebarDalamBox' => 'nullable',
             'tinggiDalamBox' => 'nullable',
@@ -64,9 +64,9 @@ class BoxController extends Controller
             'createdBy' => 'required'
         ]);
 
-        Box::create($request->all());
+       Box::create($request->all());
 
-        return redirect('admin/box');
+       return redirect('admin/box');
     }
 
     /**

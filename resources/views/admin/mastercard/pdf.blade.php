@@ -47,7 +47,7 @@
                     @csrf
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
@@ -65,7 +65,7 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem">
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
                                                     <i class="fas fa-search"></i>
@@ -131,7 +131,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section">Ukuran Box</h4>
                                     <div class="row">
@@ -155,79 +155,85 @@
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
+                                            <div class="modal fade" id="Box">
+                                                <div class="modal-dialog modal-xl">
+                                                    
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Box</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body Box">
+                                                            <div class="card-body">
+                                                                <table class="table table-bordered" id="data_box">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">ID.</th>
+                                                                            <th scope="col">Kode</th>
+                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Tipe Box</th>
+                                                                            <th scope="col">flute</th>
+                                                                            <th scope="col">Panjang Box</th>
+                                                                            <th scope="col">Lebar Box</th>
+                                                                            <th scope="col">Tinggi Box</th>
+                                                                            <th scope="col">Luas Box</th>
+                                                                            <th scope="col">Panjang Dalam Box</th>
+                                                                            <th scope="col">Lebar Dalam Box</th>
+                                                                            <th scope="col">Tinggi Dalam Box</th>
+                                                                            <th scope="col">Ukuran Creas Corr</th>
+                                                                            <th scope="col">Ukuran Creas Conv</th>
+                                                                            <th scope="col">Branch</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                        $no = 1;
+                                                                        foreach ($box as $data) { ?>
+                                                                            <tr>
+                                                                                <td>{{ $data->id }}</td>
+                                                                                <td>{{ $data->kode }}</td>
+                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->tipebox }}</td>
+                                                                                <td>{{ $data->flute }}</td>
+                                                                                <td>{{ $data->lebarSheetBox }}</td>
+                                                                                <td>{{ $data->panjangSheetBox }}</td>
+                                                                                <td>{{ $data->tinggiSheetBox }}</td>
+                                                                                <td>{{ $data->luasSheetBox }}</td>
+                                                                                <td>{{ $data->lebarDalamBox }}</td>
+                                                                                <td>{{ $data->panjangDalamBox }}</td>
+                                                                                <td>{{ $data->tinggiDalamBox }}</td>
+                                                                                <td>{{ $data->sizeCreasCorr }}</td>
+                                                                                <td>{{ $data->sizeCreasConv }}</td>
+                                                                                <td>{{ $data->branch }}</td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
-                                        <div class="modal fade" id="Box">
-                                            <div class="modal-dialog modal-xl">
-                                                
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Box</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body Box">
-                                                        <div class="card-body">
-                                                            <table class="table table-bordered" id="data_box">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">ID.</th>
-                                                                        <th scope="col">Kode</th>
-                                                                        <th scope="col">Nama</th>
-                                                                        <th scope="col">Tipe Box</th>
-                                                                        <th scope="col">flute</th>
-                                                                        <th scope="col">Panjang Box</th>
-                                                                        <th scope="col">Lebar Box</th>
-                                                                        <th scope="col">Tinggi Box</th>
-                                                                        <th scope="col">Luas Box</th>
-                                                                        <th scope="col">Panjang Dalam Box</th>
-                                                                        <th scope="col">Lebar Dalam Box</th>
-                                                                        <th scope="col">Tinggi Dalam Box</th>
-                                                                        <th scope="col">Ukuran Creas Corr</th>
-                                                                        <th scope="col">Ukuran Creas Conv</th>
-                                                                        <th scope="col">Branch</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php
-                                                                    $no = 1;
-                                                                    foreach ($box as $data) { ?>
-                                                                        <tr>
-                                                                            <td>{{ $data->id }}</td>
-                                                                            <td>{{ $data->kode }}</td>
-                                                                            <td>{{ $data->nama }}</td>
-                                                                            <td>{{ $data->tipebox }}</td>
-                                                                            <td>{{ $data->flute }}</td>
-                                                                            <td>{{ $data->lebarSheetBox }}</td>
-                                                                            <td>{{ $data->panjangSheetBox }}</td>
-                                                                            <td>{{ $data->tinggiSheetBox }}</td>
-                                                                            <td>{{ $data->luasSheetBox }}</td>
-                                                                            <td>{{ $data->lebarDalamBox }}</td>
-                                                                            <td>{{ $data->panjangDalamBox }}</td>
-                                                                            <td>{{ $data->tinggiDalamBox }}</td>
-                                                                            <td>{{ $data->sizeCreasCorr }}</td>
-                                                                            <td>{{ $data->sizeCreasConv }}</td>
-                                                                            <td>{{ $data->branch }}</td>
-                                                                        </tr>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Out Conv</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -261,30 +267,6 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Creas Corr</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Creas Conv</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Ukuran Sheet Box</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
                                             <label class="control-label">Luas Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
@@ -299,9 +281,25 @@
                                             <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Creas Corr</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Creas Conv</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section">Ukuran Sheet</h4>
                                     <div class="row">
@@ -376,15 +374,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
-                                    <h4 class="form-section">Kualitas Kertas</h4>
+                                    <h4 class="form-section">Deskripsi Detail</h4>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Flute</label>
+                                            <label class="control-label">Warna</label>
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Wax</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Packing</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Bungkus</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Keterangan</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Gambar</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="" alt="">
                                         </div>
                                     </div>
                                 </div>

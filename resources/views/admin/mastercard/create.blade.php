@@ -9,12 +9,12 @@
 
 
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper" style="height: auto !important">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Buat Master Card</h4>
+                <h4 class="modal-title">Print Master Card</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -32,86 +32,166 @@
                     @csrf
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
+                                    <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="control-label">No. MasterCard</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Tanggal MC</label>
                                         </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="No. MasterCard">
-                                            </div>
+                                        <div class="col-md-2">
+                                            <input type="datetime-local" class="form-control txt_line" name="tglmc" id="tglmc" placeholder="No. Item" required>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="control-label">No. Item</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">No Item</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-8">
                                             <div class="row">
-                                                <input type="text" class="form-control txt_line" name="noitem" id="noitem" placeholder="No. Item" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">                                    
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Nama Item</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="bj_id" name="bj_id">
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="namaitem" readonly>
+                                                <div class="col-md-5">
+                                                    <input type="hidden" name="bj_id" id="bj_id">
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
+                                                </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="Item">
+                                        </div>
+                                        <div class="modal fade" id="Item">
+                                            <div class="modal-dialog modal-xl">
+                                                
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Barang PHP</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body Item">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered" id="data_barang">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">ID.</th>
+                                                                        <th scope="col">Kode</th>
+                                                                        <th scope="col">Nama</th>
+                                                                        <th scope="col">MC ID</th>
+                                                                        <th scope="col">Pcs</th>
+                                                                        <th scope="col">Gram</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                    $no = 1;
+                                                                    foreach ($item as $data) { ?>
+                                                                        <tr>
+                                                                            <td scope="row">{{ $data->id }}</td>
+                                                                            <td>{{ $data->kode }}</td>
+                                                                            <td>{{ $data->nama }}</td>
+                                                                            <td>{{ $data->mc_id }}</td>
+                                                                            <td>{{ $data->pcs }}</td>
+                                                                            <td>{{ $data->gram }}</td>
+                                                                        </tr>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Nama Item</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
+                                <div class="form-group">
+                                    <h4 class="form-section">Ukuran Box</h4>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Tipe Box</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Box</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
+                                                </div>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                            <div class="modal fade" id="Box">
                                                 <div class="modal-dialog modal-xl">
                                                     
                                                     <!-- Modal content-->
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title">Barang PHP</h4>
+                                                            <h4 class="modal-title">Box</h4>
                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                         </div>
-                                                        <div class="modal-body Item">
+                                                        <div class="modal-body Box">
                                                             <div class="card-body">
-                                                                <table class="table table-bordered" id="data_barang">
+                                                                <table class="table table-bordered" id="data_box">
                                                                     <thead>
                                                                         <tr>
                                                                             <th scope="col">ID.</th>
                                                                             <th scope="col">Kode</th>
                                                                             <th scope="col">Nama</th>
-                                                                            <th scope="col">MC ID</th>
-                                                                            <th scope="col">Pcs</th>
-                                                                            <th scope="col">Gram</th>
+                                                                            <th scope="col">Tipe Box</th>
+                                                                            <th scope="col">flute</th>
+                                                                            <th scope="col">Panjang Box</th>
+                                                                            <th scope="col">Lebar Box</th>
+                                                                            <th scope="col">Tinggi Box</th>
+                                                                            <th scope="col">Luas Box</th>
+                                                                            <th scope="col">Panjang Dalam Box</th>
+                                                                            <th scope="col">Lebar Dalam Box</th>
+                                                                            <th scope="col">Tinggi Dalam Box</th>
+                                                                            <th scope="col">Ukuran Creas Corr</th>
+                                                                            <th scope="col">Ukuran Creas Conv</th>
+                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
                                                                         $no = 1;
-                                                                        foreach ($item as $data) { ?>
+                                                                        foreach ($box as $data) { ?>
                                                                             <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
+                                                                                <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
                                                                                 <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->mc_id }}</td>
-                                                                                <td>{{ $data->pcs }}</td>
-                                                                                <td>{{ $data->gram }}</td>
+                                                                                <td>{{ $data->tipebox }}</td>
+                                                                                <td>{{ $data->flute }}</td>
+                                                                                <td>{{ $data->lebarSheetBox }}</td>
+                                                                                <td>{{ $data->panjangSheetBox }}</td>
+                                                                                <td>{{ $data->tinggiSheetBox }}</td>
+                                                                                <td>{{ $data->luasSheetBox }}</td>
+                                                                                <td>{{ $data->lebarDalamBox }}</td>
+                                                                                <td>{{ $data->panjangDalamBox }}</td>
+                                                                                <td>{{ $data->tinggiDalamBox }}</td>
+                                                                                <td>{{ $data->sizeCreasCorr }}</td>
+                                                                                <td>{{ $data->sizeCreasConv }}</td>
+                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -124,257 +204,211 @@
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
-                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Flute</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="flute" name="flute" readonly>
-                                            </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Out Conv</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Tipe Box</label>
+                                        <div class="col-md-2" style="margin-top: 30px;">
+                                            <label class="control-label">Ukuran Dalam Box</label> 
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-2">
+                                            <span class="x">P</span>
                                             <div class="row">
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="tipebox" name="flute" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="control-label">Ukuran Sheet</label>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="row">
-                                                        <label class="control-label">Panjang</label>
-                                                        <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" placeholder="No. Item" readonly>
-                                                    </div>                                                    
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" name="panjangbox" id="panjangbox" readonly>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label class="control-label">Lebar</label>
-                                                    <input type="text" class="form-control txt_line" name="Lebar Sheet" id="Lebar Sheet" placeholder="No. Item" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="x">L</span>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="x">T</span>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" name="tinggibox" id="tinggibox" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Box</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Sheet Box</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Creas Corr</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Creas Conv</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
+                                    <h4 class="form-section">Ukuran Sheet</h4>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Susbtance Kontrak</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Flute</label>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2" style="margin-top: 30px;">
+                                            <label class="control-label">Ukuran Dalam Box</label> 
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="x">P</span>
                                             <div class="row">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="substanceKontrak_id" name="substanceKontrak_id">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Katas" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbf" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ktengah" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kcf" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbawah" readonly>
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="subskontrak" onchange="getGramKontrak()" readonly>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#SubstanceKontrak">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" name="panjangbox" id="panjangbox" readonly>
+                                                </div>
                                             </div>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="SubstanceKontrak">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Substance</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body SubstanceKontrak">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_substanceKontrak">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Liner Atas</th>
-                                                                            <th scope="col">BF</th>
-                                                                            <th scope="col">Liner Tengah</th>
-                                                                            <th scope="col">CF</th>
-                                                                            <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php 
-                                                                        foreach ($substance as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->linerAtas }}</td>
-                                                                                <td>{{ $data->bf }}</td>
-                                                                                <td>{{ $data->linerTengah }}</td>
-                                                                                <td>{{ $data->cf }}</td>
-                                                                                <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="x">L</span>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox" readonly>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    MM
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Susbtance Produksi</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Corr</label>
                                         </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="substanceProduksi_id" name="substanceProduksi_id">
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Patas" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbf" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ptengah" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pcf" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbawah" readonly>
-                                                <input type="text" class="form-control txt_line col-md-11" value="" id="subsProduksi" readonly>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#SubstanceProduksi">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="SubstanceProduksi">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Substance</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body SubstanceProduksi">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_substanceProduksi">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Liner Atas</th>
-                                                                            <th scope="col">BF</th>
-                                                                            <th scope="col">Liner Tengah</th>
-                                                                            <th scope="col">CF</th>
-                                                                            <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($substance as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->linerAtas }}</td>
-                                                                                <td>{{ $data->bf }}</td>
-                                                                                <td>{{ $data->linerTengah }}</td>
-                                                                                <td>{{ $data->cf }}</td>
-                                                                                <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            M<sup>2</sup>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Sheet Corr</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            Gram
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Substance Kontrak</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Substance Produksi</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
+                                    <h4 class="form-section">Deskripsi Detail</h4>
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="control-label">Berat Sheet Corr Kontrak</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Warna</label>
                                         </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="text" class="form-control txt_line" name="gramSheetCorrKontrak" id="gramSheetCorrKontrak" placeholder="No. Item" readonly>
-                                            </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="control-label">Berat Sheet Corr Produksi</label>
+                                        <div class="col-md-2">
+                                            <label class="control-label">Wax</label>
                                         </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <input type="text" class="form-control txt_line" name="gramSheetCorrProduksi" id="gramSheetCorrProduksi" placeholder="No. Item" readonly>
-                                            </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Packing</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Bungkus</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Keterangan</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Gambar</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="" alt="">
                                         </div>
                                     </div>
                                 </div>
