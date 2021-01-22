@@ -67,11 +67,17 @@ class MastercardController extends Controller
             ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
             ->get();
         $box = DB::table('box')->get();
+        $colorcombine = DB::table('color_combine')->get();
+        $joint = DB::table('joint')->get();
+        $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
             'item',
             'substance',
-            'box'
+            'box',
+            'colorcombine',
+            'joint',
+            'koli'
         ]));
 
     }
@@ -84,7 +90,28 @@ class MastercardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'revisi' => 'nullable',
+            'bj_id' => 'required',
+            'tipebox' => 'required',
+            'CreasCorrP' => 'nullable',
+            'CreasCorrL' => 'nullable',
+            'joint' => 'nullable',
+            'flute' => 'required',
+            'lebarSheet' => 'required',
+            'panjangSheet' => 'required',
+            'luasSheet' => 'required',
+            'mesin' => 'required',
+            'outConv' => 'required',
+            'koli' => 'required',
+            'bungkus' => 'required',
+            'wax' => 'required',
+            'box_id' => 'required',
+            'gramSheetBox' => 'required',
+            'colorCombine_id' => 'required',
+            'gambar' => 'nullable',
+            'createdBy' => 'required',
+        ]);
     }
 
     /**

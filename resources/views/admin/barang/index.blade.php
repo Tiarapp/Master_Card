@@ -81,7 +81,7 @@
 <script> 
    $(document).ready(function(){
      $("#data_barang").DataTable({
-        "scrollX": true,
+        // "scrollX": true,
        dom: 'Bfrtip',
        buttons: [
          'copy',

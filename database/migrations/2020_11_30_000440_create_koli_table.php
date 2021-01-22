@@ -18,7 +18,7 @@ class CreateKoliTable extends Migration
             $table->string('kode')->unique()->index();                       //AUTO = QTYBOX
             $table->string('nama')->index();                                 //AUTO = QTYBOX
             $table->integer('qtyBox')->index();                              //Input Mark
-            $table->foreignId('satuanBox');                                 //Input Mark
+            $table->foreignId('satuanBox')->nullable();                                 //Input Mark
             //RELATION
             $table->foreign('satuanBox')->references('id')->on('satuan')->cascadeOnDelete();
             // TRACKING

@@ -140,12 +140,12 @@
                  <p>Warna</p>
                </a>
              </li>
-             <li class="nav-item">
+             {{-- <li class="nav-item">
                <a href="{{ route('wax') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Wax</p>
                </a>
-             </li>
+             </li> --}}
            </ul>
          </li>
          <li class="nav-item">
