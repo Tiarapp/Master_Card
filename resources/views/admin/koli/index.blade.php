@@ -38,7 +38,6 @@
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
               <th scope="col">Qty Box</th>
-              <th scope="col">Satuan Box</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -52,7 +51,6 @@
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->qtyBox }}</td>
-                <td>{{ $data->satuanBox }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">

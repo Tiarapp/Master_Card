@@ -45,7 +45,6 @@ class KoliController extends Controller
             'kode' => 'required',
             'nama' => 'required',
             'qtyBox' => 'required',
-            'satuanBox' => 'required',
             'createdBy' => 'required'
         ]);
 
@@ -94,7 +93,6 @@ class KoliController extends Controller
             'kode' => 'required',
             'nama' => 'required',
             'qtyBox' => 'required',
-            'satuanBox' => 'required',
             'lastUpdatedBy' => 'required',
         ]);
 
