@@ -166,7 +166,7 @@ Route::get('/admin/barang', 'BarangController@index')->name('barang');
 
 Route::get('/admin/mastercard', 'MastercardController@index')->name('mastercard');
 Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
-Route::get('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
+Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
 Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
 Route::get('/admin/mastercard/pdf', 'MastercardController@pdfprint');
 

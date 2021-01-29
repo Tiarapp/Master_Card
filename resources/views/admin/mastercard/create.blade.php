@@ -17,18 +17,18 @@
                 <h4 class="modal-title">Print Master Card</h4>
                 <hr>
                 
-                @if ($errors->any())
+                @if (count($errors) > 0)
                 <div class="alert alert-danger">
                     <strong>Error!</strong> 
                     <ul>
                         @foreach ($errors->all() as $error)
-                        <li></li>
+                        <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
                 @endif
                 
-                <form action="/admin/mastercard/store" method="POST">
+                <form action="/admin/mastercard/store" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-body">
                         <div class="row">
@@ -37,10 +37,10 @@
                                     <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Tanggal MC</label>
+                                            <label class="control-label">Kode</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="datetime-local" class="form-control txt_line" name="tglmc" id="tglmc" placeholder="No. Item">
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -204,7 +204,7 @@
                                             <label class="control-label">Out Conv</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="text" class="form-control txt_line" name="outConv" id="outConv">
+                                            <input type="number" class="form-control txt_line" name="outConv" id="outConv">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -290,7 +290,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" readonly>
+                                                    <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" onchange="getLuasDC()">
                                                 </div>
                                             </div>
                                         </div>
@@ -298,7 +298,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarSheet" id="lebarSheet" readonly>
+                                                    <input type="text" class="form-control txt_line" name="lebarSheet" id="lebarSheet" onchange="getLuasDC()">
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -496,7 +496,7 @@
                                             <label class="control-label">Wax</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="wax" id="wax" readonly>
+                                            <input type="text" class="form-control txt_line" name="wax" id="wax">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -531,7 +531,15 @@
                                             <label class="control-label">Bungkus</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="bungkus" id="bungkus" readonly>
+                                            <input type="text" class="form-control txt_line" name="bungkus" id="bungkus">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Mesin</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="mesin" id="mesin">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -539,7 +547,7 @@
                                             <label class="control-label">Keterangan</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="keterangan" id="keterangan" readonly>
+                                            <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -629,6 +637,7 @@
                 var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
                 document.getElementById("luasSheet").value = luas.toFixed(3);
             } else {
+
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
                 document.getElementById("luasSheet").value = null;
@@ -771,6 +780,15 @@
         return result;
     }
     
+    function getLuasDC(){
+        $panjang = document.getElementById("panjangSheet").value;
+        $lebar = document.getElementById("lebarSheet").value;
+
+        $result = ($panjang * $lebar)/1000000;
+
+        document.getElementById('luasSheet').value = $result;
+    }
+
     function getGramProduksi(){
         
         var flutenama = document.getElementById('flute').value;

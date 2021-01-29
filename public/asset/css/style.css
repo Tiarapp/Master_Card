@@ -8,6 +8,16 @@ select.form-control {
   border-radius: 0;
 }
 
+input[type="number"],
+select.form-control {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
 input[type="text"]:focus,
 select.form-control:focus {
   background: transparent;
@@ -100,5 +110,7 @@ th {
   /* color: rgb(244, 247, 215); */
 }
 
-/* tr:nth-child(even) {
+td:nth-child(even) {
   background-color:#f4f6f9 !important;
+
+}
