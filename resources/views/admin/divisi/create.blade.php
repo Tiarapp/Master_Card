@@ -31,16 +31,16 @@
                             <div class="form-group">
                                 <label>Kode</label>
                                 <input type="text" class="form-control txt_line" placeholder="Input kode divisi" name="kode" id="kode" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Input kode divisi</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="bottom" title="Input nama divisi">
                             <div class="form-group">
                                 <label>Nama</label>
                                 <input type="text" class="form-control txt_line" placeholder="Input nama divisi" name="nama" id="nama" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Input nama divisi</div>
                             </div>
                         </div>
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">

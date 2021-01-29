@@ -15,6 +15,7 @@ select.form-control:focus {
   box-shadow: none;
 }
 
+/* Button Save */
 #save {
     background-color: transparent;
     border: none;
@@ -29,6 +30,7 @@ select.form-control:focus {
     
 }
 
+/* Button Cancel */
 #cancel {
     background-color: transparent;
     border: none;
@@ -41,6 +43,7 @@ select.form-control:focus {
     font-size:48px;
 }
 
+/* Button View */
 #view {
     background-color: transparent;
     border: none;
@@ -53,6 +56,7 @@ select.form-control:focus {
     /* font-size:48px; */
   }
 
+/* Button Edit */
 #edit {
     background-color: transparent;
     border: none;
@@ -65,6 +69,7 @@ select.form-control:focus {
     /* font-size:48px; */
 }
 
+/* Button Delete */
 #delete {
     background-color: transparent;
     border: none;
@@ -77,6 +82,7 @@ select.form-control:focus {
     /* font-size:48px; */
 }
 
+/* Button New */
 #new {
     background-color: transparent;
     color:blue;
@@ -90,15 +96,18 @@ select.form-control:focus {
     /* font-size:48px; */
 }
 
+/* All Button */
 .btn {
   border: none;
 }
 
+/* Judul Data Table */
 th {
   background-color: lightslategray;
   color: azure;
   /* color: rgb(244, 247, 215); */
 }
 
-/* tr:nth-child(even) {
+
+tr:nth-child(even) {
   background-color:#f4f6f9 !important;
