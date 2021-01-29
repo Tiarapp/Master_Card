@@ -33,38 +33,70 @@ class InitSeeder extends Seeder
 
         // jenis_gram
         DB::table('jenis_gram')->insert([
-        	'kode' => 'K125',
-        	'nama' => 'K125',
-        	'jenisKertas' => 'K',
+        	'kode' => 'BK125',
+        	'nama' => 'BK125',
+        	'jenisKertas' => 'BK',
         	'gramKertas' => '125',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'M125',
-        	'nama' => 'M125',
-        	'jenisKertas' => 'M',
+        	'kode' => 'MF125',
+        	'nama' => 'MF125',
+        	'jenisKertas' => 'MF',
         	'gramKertas' => '125',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'K125',
-        	'nama' => 'K125',
-        	'jenisKertas' => 'K',
+        	'kode' => 'TL125',
+        	'nama' => 'TL125',
+        	'jenisKertas' => 'TL',
         	'gramKertas' => '125',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML127',
+        	'nama' => 'ML127',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '127',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML120',
+        	'nama' => 'ML120',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '120',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML125',
+        	'nama' => 'ML125',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '125',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF127',
+        	'nama' => 'MF127',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '127',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML110',
+        	'nama' => 'ML110',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '110',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF150',
+        	'nama' => 'MF150',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '150',
         	'createdBy' => 'SEEDER'
         ]);
     }
 }
-
-BK125
-MF125
-TL125
-ML127
-ML120
-ML125
-MF127
-ML110
-ML150
 MF150
 TL150
 TL200
