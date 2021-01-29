@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Joint;
+use App\Models\Koli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-
-class JointController extends Controller
+class KoliController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +16,9 @@ class JointController extends Controller
      */
     public function index()
     {
-        $joint = DB::table('joint')->get();
+        $koli = DB::table('koli')->get();
 
-        // dd($joint);
-        return view('admin.joint.index', ['joint' => $joint]);
+        return view('admin.koli.index', compact('koli'));
     }
 
     /**
@@ -30,7 +28,9 @@ class JointController extends Controller
      */
     public function create()
     {
-        return view('admin/joint/create');
+        $satuan = DB::table('satuan')->get();
+
+        return view('admin.koli.create', compact('satuan'));
     }
 
     /**
@@ -44,46 +44,47 @@ class JointController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'createdBy' => 'required',
-            'branch' => 'required'
+            'qtyBox' => 'required',
+            'createdBy' => 'required'
         ]);
 
-        Joint::create($request->all());
+        Koli::create($request->all());
 
-        return redirect('admin/joint');
+        return redirect('admin/koli');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Joint  $joint
+     * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $joint = Joint::find($id);
+        $koli = Koli::find($id);
 
-        return view('admin.joint.show', ['joint' => $joint ]);
+        return view('admin.koli.show', compact('koli'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Joint  $joint
+     * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $joint = Joint::find($id);
+        $satuan = DB::table('satuan')->get();
+        $koli = Koli::find($id);
 
-        return view('admin.joint.edit', ['joint' => $joint]);
+        return view('admin.koli.edit', compact('koli','satuan'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Joint  $joint
+     * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -91,43 +92,43 @@ class JointController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
-            'branch' => 'required',
+            'qtyBox' => 'required',
             'lastUpdatedBy' => 'required',
         ]);
 
-        $joint = Joint::find($id);
+        $koli = Koli::find($id);
 
-        $joint->kode = $request->kode;
-        $joint->nama = $request->nama;
-        $joint->branch = $request->branch;
-        $joint->lastUpdatedBy = $request->lastUpdatedBy;
+        $koli->kode = $request->kode;
+        $koli->nama = $request->nama;
+        $koli->qtyBox = $request->qtyBox;
+        $koli->satuanBox = $request->satuanBox;
+        $koli->lastUpdatedBy = $request->lastUpdatedBy;
 
-        $joint->save();
+        $koli->save();
 
-        return redirect('admin/joint');
+        return redirect('admin/koli');
     }
 
     public function updateDeleted($id)
     {
-        $joint = Joint::find($id);
+        $koli = Koli::find($id);
 
-        $joint->deleted = 1;
-        $joint->deletedAt = date('Y-m-d h:i:s');
-        $joint->lastUpdatedBy = Auth::user()->name;
-        $joint->deletedBy = Auth::user()->name;
+        $koli->deleted = 1;
+        $koli->deletedAt = date('Y-m-d h:i:s');
+        $koli->deletedBy = Auth::user()->name;
 
-        $joint->save();
+        $koli->save();
 
-        return redirect('/admin/joint');
+        return redirect('/admin/box');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Joint  $joint
+     * @param  \App\Models\Koli  $koli
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Joint $joint)
+    public function destroy(Koli $koli)
     {
         //
     }

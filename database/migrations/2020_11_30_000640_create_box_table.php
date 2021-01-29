@@ -20,26 +20,28 @@ class CreateBoxTable extends Migration
             //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
             //     CREASING CORR : sizeCreasCorr satuanCreas
             //     CREASING CONV : sizeCreasConv satuanCreas
+            $table->string('tipebox');
+            $table->string('flute');
             $table->enum('tipeCreasCorr', ['MALE-FLAT', 'MALE-MALE', 'MALE-FEMALE', 'TANPA CREASE']);   //INPUT MARKETING
             // SHEET BOX
-            $table->integer('lebarSheetBox');           //INPUT MARKETING
-            $table->integer('panjangSheetBox');         //INPUT MARKETING
-            $table->integer('tinggiSheetBox');          //INPUT MARKETING
-            $table->foreignId('satuanSizeSheetBox');    //INPUT MARKETING
-            $table->integer('luasSheetBox');            //INPUT MARKETING
-            $table->foreignId('satuanLuasSheetBox');    //INPUT MARKETING
-            $table->float('gramSheetBox', 8, 2);            //INPUT MARKETING
+            $table->integer('lebarSheetBox')->nullable();           //INPUT MARKETING
+            $table->integer('panjangSheetBox')->nullable();         //INPUT MARKETING
+            $table->integer('tinggiSheetBox')->nullable();          //INPUT MARKETING
+            $table->foreignId('satuanSizeSheetBox')->nullable();    //INPUT MARKETING
+            $table->integer('luasSheetBox')->nullable();            //INPUT MARKETING
+            $table->foreignId('satuanLuasSheetBox')->nullable();    //INPUT MARKETING
             // DALAM BOX
-            $table->integer('panjangDalamBox');         //INPUT MARKETING
-            $table->integer('lebarDalamBox');           //INPUT MARKETING
-            $table->integer('tinggiDalamBox');          //INPUT MARKETING
-            $table->foreignId('satuanSizeDalamBox');    //INPUT MARKETING
-            $table->integer('sizeCreasCorr');           //INPUT MARKETING
-            $table->integer('sizeCreasConv');           //INPUT MARKETING
-            $table->foreignId('satuanCreas');           //INPUT MARKETING
+            $table->integer('panjangDalamBox')->nullable();         //INPUT MARKETING
+            $table->integer('lebarDalamBox')->nullable();           //INPUT MARKETING
+            $table->integer('tinggiDalamBox')->nullable();          //INPUT MARKETING
+            $table->foreignId('satuanSizeDalamBox')->nullable();    //INPUT MARKETING
+            $table->string('sizeCreasCorr')->nullable();           //INPUT MARKETING
+            $table->string('sizeCreasConv')->nullable();           //INPUT MARKETING
+            $table->foreignId('satuanCreas')->nullable();           //INPUT MARKETING
             //RELATION
             $table->foreign('satuanSizeSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanLuasSheetBox')->references('id')->on('satuan')->cascadeOnDelete();
+            $table->foreign('satuanSizeDalamBox')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanCreas')->references('id')->on('satuan')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');        //Auto ambil dari login

@@ -17,13 +17,7 @@ class CreateJointTable extends Migration
             $table->id('id');
             $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
             $table->string('nama')->index();                 //Input Mark
-            $table->integer('qtyJoint')->nullable();         //Input Mark
-            $table->foreignId('satuanJoint')->nullable();    //Input Mark
-            $table->float('avgPrice',20,2)->nullable();      //Auto/input by Acc
-            $table->foreignId('mataUang')->nullable();                   //Auto/input by Acc
             //RELATION
-            $table->foreign('satuanJoint')->references('id')->on('satuan')->cascadeOnDelete();
-            $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

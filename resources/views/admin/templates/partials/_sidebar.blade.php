@@ -51,6 +51,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('box') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Box</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('colorcombine') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Color Combine</p>
@@ -78,6 +84,12 @@
               <a href="{{ route('joint') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Joint</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('koli') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Koli</p>
               </a>
             </li>
             <li class="nav-item">
@@ -128,12 +140,12 @@
                  <p>Warna</p>
                </a>
              </li>
-             <li class="nav-item">
+             {{-- <li class="nav-item">
                <a href="{{ route('wax') }}" class="nav-link">
                  <i class="far fa-circle nav-icon"></i>
                  <p>Wax</p>
                </a>
-             </li>
+             </li> --}}
            </ul>
          </li>
          <li class="nav-item">

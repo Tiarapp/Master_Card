@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Joint</h4>
+                <h4 class="modal-title">Tambah Koli</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/joint/store" method="POST">
+                <form action="/admin/koli/store" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -39,10 +39,20 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch">
+                                <label>Qty Box</label>
+                                <input type="text" class="form-control txt_line" name="qtyBox" id="qtyBox">
                             </div>
                         </div>
+                        {{-- <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Box</label>
+                                <select class="js-example-basic-single col-md-12" name="satuanBox" id="satuanBox">
+                                    @foreach ($satuan as $data)
+                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> --}}
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>

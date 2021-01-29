@@ -7,6 +7,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+<style>
+    .row {
+        margin-top: 5px;
+    }
+    
+    h4 {
+        margin-bottom: 20px !important;
+    }
+    
+    span.x {
+        display: inline-block;
+        padding-left: 70px;
+    }
+</style>
+
 
 @section('content')
 <div class="content-wrapper" style="height: auto !important">
@@ -28,7 +43,7 @@
                 </div>
                 @endif
                 
-                <form action="/admin/mastercard/store" method="POST">
+                <form action="#" method="POST">
                     @csrf
                     <div class="form-body">
                         <div class="row">
@@ -40,7 +55,7 @@
                                             <label class="control-label">Tanggal MC</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="datetime-local" class="form-control txt_line" name="tglmc" id="tglmc" placeholder="No. Item">
+                                            <input type="text" class="form-control txt_line" name="tglmc" id="tglmc" placeholder="No. Item" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -50,8 +65,7 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="hidden" name="bj_id" id="bj_id">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem">
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
                                                     <i class="fas fa-search"></i>
@@ -124,11 +138,18 @@
                                         <div class="col-md-2">
                                             <label class="control-label">Tipe Box</label>
                                         </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Box</label>
+                                        </div>
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="hidden" name="box_id" id="box_id">
-                                                    <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" readonly>
+                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
                                                     <i class="fas fa-search"></i>
@@ -153,6 +174,10 @@
                                                                             <th scope="col">Nama</th>
                                                                             <th scope="col">Tipe Box</th>
                                                                             <th scope="col">flute</th>
+                                                                            <th scope="col">Panjang Box</th>
+                                                                            <th scope="col">Lebar Box</th>
+                                                                            <th scope="col">Tinggi Box</th>
+                                                                            <th scope="col">Luas Box</th>
                                                                             <th scope="col">Panjang Dalam Box</th>
                                                                             <th scope="col">Lebar Dalam Box</th>
                                                                             <th scope="col">Tinggi Dalam Box</th>
@@ -171,6 +196,10 @@
                                                                                 <td>{{ $data->nama }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
+                                                                                <td>{{ $data->lebarSheetBox }}</td>
+                                                                                <td>{{ $data->panjangSheetBox }}</td>
+                                                                                <td>{{ $data->tinggiSheetBox }}</td>
+                                                                                <td>{{ $data->luasSheetBox }}</td>
                                                                                 <td>{{ $data->lebarDalamBox }}</td>
                                                                                 <td>{{ $data->panjangDalamBox }}</td>
                                                                                 <td>{{ $data->tinggiDalamBox }}</td>
@@ -198,20 +227,20 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="sheetbox" id="sheetbox" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="text" class="form-control txt_line" name="outConv" id="outConv">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2" style="margin-top: 30px;">
                                             <label class="control-label">Ukuran Dalam Box</label> 
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
@@ -219,7 +248,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
@@ -227,7 +256,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <span class="x">T</span>
                                             <div class="row">
                                                 <div class="col-md-10">
@@ -241,7 +270,7 @@
                                             <label class="control-label">Luas Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="luasSheetBox" id="luasSheetBox" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -249,7 +278,7 @@
                                             <label class="control-label">Berat Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="beratSheetBox" id="beratSheetBox" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -257,7 +286,7 @@
                                             <label class="control-label">Creas Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="creasCorr" id="creasCorr" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -265,12 +294,11 @@
                                             <label class="control-label">Creas Conv</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="creasConv" id="creasConv" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section">Ukuran Sheet</h4>
@@ -279,18 +307,18 @@
                                             <label class="control-label">Flute</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="flute" id="flute" onchange="getSheet()"  readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2" style="margin-top: 30px;">
-                                            <label class="control-label">Ukuran Sheet</label> 
+                                            <label class="control-label">Ukuran Dalam Box</label> 
                                         </div>
                                         <div class="col-md-2">
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" readonly>
+                                                    <input type="text" class="form-control txt_line" name="panjangbox" id="panjangbox" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -298,7 +326,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarSheet" id="lebarSheet" readonly>
+                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox" readonly>
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -311,7 +339,7 @@
                                             <label class="control-label">Luas Sheet Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="luasSheet" id="luasSheet" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             M<sup>2</sup>
@@ -322,7 +350,7 @@
                                             <label class="control-label">Berat Sheet Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="beratSheet" id="beratSheet" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             Gram
@@ -330,147 +358,19 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label>Susbtance Kontrak</label>
+                                            <label class="control-label">Substance Kontrak</label>
                                         </div>
-                                        <div class="col-md-3">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="substanceKontrak_id" name="substanceKontrak_id">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Katas" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ktengah" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kcf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbawah" readonly>
-                                            <input type="text" class="form-control txt_line col-md-11" value="" id="subskontrak" onchange="getGramKontrak()" readonly>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="SubstanceKontrak">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Substance</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body SubstanceKontrak">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_substanceKontrak">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Liner Atas</th>
-                                                                            <th scope="col">BF</th>
-                                                                            <th scope="col">Liner Tengah</th>
-                                                                            <th scope="col">CF</th>
-                                                                            <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php 
-                                                                        foreach ($substance as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->linerAtas }}</td>
-                                                                                <td>{{ $data->bf }}</td>
-                                                                                <td>{{ $data->linerTengah }}</td>
-                                                                                <td>{{ $data->cf }}</td>
-                                                                                <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
-                                        <button type="button" data-toggle="modal" data-target="#SubstanceKontrak">
-                                            <i class="fas fa-search"></i>
-                                        </button>
                                     </div>
-                                    
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label>Susbtance Produksi</label>
+                                            <label class="control-label">Substance Produksi</label>
                                         </div>
-                                        <div class="col-md-3">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="substanceProduksi_id" name="substanceProduksi_id">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Patas" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ptengah" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pcf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbawah" readonly>
-                                            <input type="text" class="form-control txt_line col-md-11" value="" id="subsProduksi" readonly>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="SubstanceProduksi">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Substance</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body SubstanceProduksi">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_substanceProduksi">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Liner Atas</th>
-                                                                            <th scope="col">BF</th>
-                                                                            <th scope="col">Liner Tengah</th>
-                                                                            <th scope="col">CF</th>
-                                                                            <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($substance as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->linerAtas }}</td>
-                                                                                <td>{{ $data->bf }}</td>
-                                                                                <td>{{ $data->linerTengah }}</td>
-                                                                                <td>{{ $data->cf }}</td>
-                                                                                <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
-                                        <button type="button" data-toggle="modal" data-target="#SubstanceProduksi">
-                                            <i class="fas fa-search"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -482,13 +382,7 @@
                                             <label class="control-label">Warna</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="hidden" name="colorCombine_id" id="colorCombine_id">
-                                            <select class="js-example-basic-single col-md-12" name="warna" id="warna" onchange="getColor()">
-                                                <option value=''>--</option>
-                                                @foreach ($colorcombine as $data)
-                                                <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -496,20 +390,7 @@
                                             <label class="control-label">Wax</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="wax" id="wax" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Joint</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="joint" id="joint" >
-                                                <option value=''>--</option>
-                                                @foreach ($joint as $data)
-                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -517,21 +398,15 @@
                                             <label class="control-label">Packing</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="koli" id="koli" >
-                                                <option value=''>--</option>
-                                                @foreach ($koli as $data)
-                                                <option value="{{ $data->qtyBox }}">{{ $data->qtyBox }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
-                                        /Koli
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Bungkus</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="bungkus" id="bungkus" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -539,7 +414,7 @@
                                             <label class="control-label">Keterangan</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="keterangan" id="keterangan" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -547,29 +422,17 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" name="gambar" id="gambar">
+                                            <img src="" alt="">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
-            <div class="col-md-12">
-                <button type="submit" id="save" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Save">
-                    <i class='far fa-check-square'></i>
-                </button>
-                <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                    <a href="/admin/substance">
-                        <i class='far fa-window-close' style='color:red'></i>
-                    </a></button>
-                </div>
-            </div> 
-        </form>
+                </div> 
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
 </div>    
@@ -598,72 +461,29 @@
         //  alert.row();
     } );
     
+    function strtrunc(str, max, add){
+        add = add || '...';
+        return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
+    
     //Datatable Box
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": "100%",
-            // "scrollY": "400px",
+            "scrollX": "100%",
+            "scrollY": "400px",
             select: true,
         });
         
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
-            document.getElementById('tipebox').value = Box[3];
-            document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[5];
-            document.getElementById('lebarbox').value = Box[6];
-            document.getElementById('tinggibox').value = Box[7];
-            document.getElementById('creasCorr').value = Box[8];
-            document.getElementById('creasConv').value = Box[9];
-            document.getElementById('flute').value = Box[4];
-            
-            if (Box[3] == 'B1') {
-                var resultP = getID(Box[8]);
-                var resultL = getID(Box[9]);
-                document.getElementById("panjangSheet").value = parseInt(resultP);
-                document.getElementById("lebarSheet").value = parseInt(resultL);
-                
-                document.getElementById("sheetbox").value = parseInt(resultP)+'x'+parseInt(resultL)+'x 1'
-                var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
-                document.getElementById("luasSheet").value = luas.toFixed(3);
-            } else {
-                document.getElementById("panjangSheet").value = null;
-                document.getElementById("lebarSheet").value = null;
-                document.getElementById("luasSheet").value = null;
-            }
+            // document.getElementById('bj_id').value = Box[0];
+            // document.getElementById('noBox').value = Box[1];
+            // document.getElementById('namaBox').value = Box[2];
         } );
-        
-        
         //  alert.row();
     } );
-    
-    function getID(a){
-        var pos = a.indexOf('=');
-        var panjang = a.length;
-        var creas = a.substr(pos+1);
-        
-        return creas;
-    }
-
-    function getColorCombine(a){
-        var pos = a.indexOf('|');
-        var panjang = a.length;
-        var id = a.substr(0,pos);
-        
-        return id;
-    }
-
-
-    function getColor(){
-        var color = document.getElementById("warna").value;
-
-        var combine = getColorCombine(color);
-
-        document.getElementById("colorCombine_id").value = combine;
-    }
-    
     
     $(".SubstanceKontrak").ready(function(){
         
@@ -709,15 +529,47 @@
         } );
     } );
     
+    $(".Sheet").ready(function(){
+        
+        var table = $("#data_sheet").DataTable({
+            select: true,
+        });
+        
+        $('#data_sheet tbody').on( 'click', 'td', function () {
+            var sheet = (table.row(this).data());
+            
+            document.getElementById('namasheet').value = sheet[2];
+            document.getElementById('luasSheet').value = sheet[5];
+        } );
+        //  alert.row();
+    } );
+    
+    function getFlute(){
+        var data = document.getElementById('flute').value;
+        var array = data.split(" ");
+        var flute = array[3];
+        
+        document.getElementById('flute_id').value = array[0];
+        document.getElementById('tur1').value = array[1];
+        document.getElementById('tur2').value = array[2];
+        document.getElementById('flutenama').value = array[3];
+        // console.log(array);
+        
+        return flute;
+        getGramKontrak();
+    }
+    
     function getGramKontrak(){
         
-        var flutenama = document.getElementById('flute').value;
+        var flutenama = document.getElementById('flutenama').value;
         var Katas = parseInt(document.getElementById('Katas').value);
         var Kbf = parseFloat(document.getElementById('Kbf').value);
         var Ktengah = parseFloat(document.getElementById('Ktengah').value);
         var Kcf = parseFloat(document.getElementById('Kcf').value);
         var Kbawah = parseFloat(document.getElementById('Kbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
+        var tur1 = parseFloat(document.getElementById('tur1').value);
+        var tur2 = parseFloat(document.getElementById('tur2').value);
         
         var result;
         
@@ -737,11 +589,13 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
+            if (isNaN(tur2)) {
+                tur2 = 0;
+            }
             
-            // result = Kbf*1.36;
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
+            result = (luasSheet * (Katas + (Kbf*tur1) + Ktengah + (Kcf*tur2) + Kbawah))/1000000;
             
-            document.getElementById('beratSheet').value = result.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -759,27 +613,30 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
+            if (isNaN(tur2)) {
+                tur2 = 0;
+            }
             
-            result = (luasSheet * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
-            document.getElementById('beratSheet').value = result.toFixed(2);
+            result = (luasSheet * (Katas + (Kcf*tur1) + Ktengah + (Kbf*tur2) + Kbawah))/1000000;
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             
         } else {
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
-            document.getElementById('beratSheet').value = result.toFixed(2);
+            result = (luasSheet * (Katas + (Kbf*tur1) + Ktengah + (Kcf*tur2) + Kbawah))/1000000;
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
         }
-        
-        return result;
     }
     
     function getGramProduksi(){
         
-        var flutenama = document.getElementById('flute').value;
+        var flutenama = document.getElementById('flutenama').value;
         var Patas = parseInt(document.getElementById('Patas').value);
         var Pbf = parseFloat(document.getElementById('Pbf').value);
         var Ptengah = parseFloat(document.getElementById('Ptengah').value);
         var Pcf = parseFloat(document.getElementById('Pcf').value);
         var Pbawah = parseFloat(document.getElementById('Pbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
+        var tur1 = parseFloat(document.getElementById('tur1').value);
+        var tur2 = parseFloat(document.getElementById('tur2').value);
         
         var result;
         

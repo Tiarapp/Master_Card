@@ -16,7 +16,7 @@ class MastercardController extends Controller
      */
     public function index()
     {
-        $mc = DB::table('mc_view')->get();
+        $mc = DB::table('mc')->get();
 
         return view('admin.mastercard.index', compact('mc'));
     }
@@ -58,9 +58,6 @@ class MastercardController extends Controller
         // dd($sssh[0]->lebarSheet);
 
         $item = DB::table('item_bj')->get();
-        $tipebox = DB::table('tipe_box')->get();
-        $sheet = DB::table('sheet')->get();
-        $flute = DB::table('flute')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramBf_id', '=', 'bf.id')
@@ -69,13 +66,18 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
             ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
             ->get();
+        $box = DB::table('box')->get();
+        $colorcombine = DB::table('color_combine')->get();
+        $joint = DB::table('joint')->get();
+        $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
             'item',
-            'tipebox',
-            'sheet',
-            'flute',
-            'substance'
+            'substance',
+            'box',
+            'colorcombine',
+            'joint',
+            'koli'
         ]));
 
     }
@@ -88,7 +90,28 @@ class MastercardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'revisi' => 'nullable',
+            'bj_id' => 'required',
+            'tipebox' => 'required',
+            'CreasCorrP' => 'nullable',
+            'CreasCorrL' => 'nullable',
+            'joint' => 'nullable',
+            'flute' => 'required',
+            'lebarSheet' => 'required',
+            'panjangSheet' => 'required',
+            'luasSheet' => 'required',
+            'mesin' => 'required',
+            'outConv' => 'required',
+            'koli' => 'required',
+            'bungkus' => 'required',
+            'wax' => 'required',
+            'box_id' => 'required',
+            'gramSheetBox' => 'required',
+            'colorCombine_id' => 'required',
+            'gambar' => 'nullable',
+            'createdBy' => 'required',
+        ]);
     }
 
     /**
@@ -136,9 +159,15 @@ class MastercardController extends Controller
         //
     }
 
-    public function generateNumberSequence()
+    public function pdfprint()
     {   
-        
+        $item = DB::table('item_bj')->get();
+        $box = DB::table('box')->get();
+
+        return view('admin.mastercard.pdf', compact(
+            'item',
+            'box'
+        ));
 
         
     }

@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Edit Joint</strong> </h4>
+                <h4 class="modal-title"><strong>Edit Koli</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
@@ -22,26 +22,36 @@
                 </div>
                 @endif
 
-                <form action="/admin/joint/update/{{ $joint->id }}" method="POST">
+                <form action="/admin/koli/update/{{ $koli->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $joint->kode }}" readonly>
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $koli->kode }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $joint->nama }}">
+                                <input type="text" class="form-control txt_line" value="{{ $koli->nama }}" name="nama" id="nama">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $joint->branch }}">
+                                <label>Qty Box</label>
+                                <input type="text" class="form-control txt_line" value="{{ $koli->qtyBox }}" name="qtyBox" id="qtyBox">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Box</label>
+                                <select class="js-example-basic-single col-md-12" name="satuanBox" id="satuanBox">
+                                    @foreach ($satuan as $data)
+                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">

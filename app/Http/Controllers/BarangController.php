@@ -15,7 +15,7 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = DB::table('item_bj')->get();
+        $barang = Barang::orderBy('kode', 'asc')->get();
 
         return view('admin.barang.index', compact('barang'));
     }

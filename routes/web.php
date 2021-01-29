@@ -79,6 +79,24 @@ Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
 Route::put('/admin/sheet/update/{id}', 'SheetController@update');
 Route::get('/admin/sheet/delete/{id}', 'SheetController@updateDeleted');
 
+//Box
+Route::get('/admin/box', 'BoxController@index')->name('box');
+Route::get('/admin/box/create', 'BoxController@create');
+Route::post('/admin/box/store', 'BoxController@store');
+Route::get('/admin/box/show/{id}', 'BoxController@show');
+Route::get('/admin/box/edit/{id}', 'BoxController@edit');
+Route::put('/admin/box/update/{id}', 'BoxController@update');
+Route::get('/admin/box/delete/{id}', 'BoxController@updateDeleted');
+
+//Koli
+Route::get('/admin/koli', 'KoliController@index')->name('koli');
+Route::get('/admin/koli/create', 'KoliController@create');
+Route::post('/admin/koli/store', 'KoliController@store');
+Route::get('/admin/koli/show/{id}', 'KoliController@show');
+Route::get('/admin/koli/edit/{id}', 'KoliController@edit');
+Route::put('/admin/koli/update/{id}', 'KoliController@update');
+Route::get('/admin/koli/delete/{id}', 'KoliController@updateDeleted');
+
 //Substance
 Route::get('/admin/substance', 'SubstanceController@index')->name('substance');
 Route::get('/admin/substance/create', 'SubstanceController@create');
@@ -148,6 +166,8 @@ Route::get('/admin/barang', 'BarangController@index')->name('barang');
 
 Route::get('/admin/mastercard', 'MastercardController@index')->name('mastercard');
 Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
+Route::get('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
 Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
+Route::get('/admin/mastercard/pdf', 'MastercardController@pdfprint');
 
 require __DIR__ . '/auth.php';

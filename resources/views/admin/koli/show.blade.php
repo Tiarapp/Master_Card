@@ -1,14 +1,12 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Edit Joint</strong> </h4>
+                <h4 class="modal-title"><strong>Show Koli</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
@@ -22,31 +20,40 @@
                 </div>
                 @endif
 
-                <form action="/admin/joint/update/{{ $joint->id }}" method="POST">
-                    {{ csrf_field() }}
-                    {{ method_field('PUT') }}
+                <form>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $joint->kode }}" readonly>
+                                <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $koli->kode }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $joint->nama }}">
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" value="{{ $koli->nama }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>QTY Box</label>
+                                <input type="text" class="form-control txt_line" name="qtyBox" id="qtyBox" value="{{ $koli->qtyBox }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Satuan Box</label>
+                                <input type="text" class="form-control txt_line" name="satuanBox" id="satuanBox" value="{{ $koli->satuanBox }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $joint->branch }}">
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $koli->branch }}" readonly>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
-                            <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="submit" class="btn btn-primary">Back</button>
                         </div>
                     </div>
                 </form>
@@ -56,8 +63,3 @@
 </div>
 
 @endsection
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-</script>

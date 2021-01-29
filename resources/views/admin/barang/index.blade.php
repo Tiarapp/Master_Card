@@ -36,10 +36,10 @@
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
-              <th scope="col">Satuan</th>
-              <th scope="col">Berat Standart</th>
-              <th scope="col">Harga Jual</th>
-              <th scope="col">Berat CRT</th>
+              <th scope="col">Gram</th>
+              <th scope="col">Pcs</th>
+              <th scope="col">lokasi</th>
+              <th scope="col">Mastercard ID</th>
             </tr>
           </thead>
           <tbody>
@@ -48,12 +48,12 @@
             foreach ($barang as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->KodeBrg }}</td>
-                <td>{{ $data->NamaBrg }}</td>
-                <td>{{ $data->Satuan }}</td>
-                <td>{{ $data->BeratStandart }}</td>
-                <td>{{ $data->HargaJualRp }}</td>
-                <td>{{ $data->BeratCRT }}</td>
+                <td>{{ $data->kode }}</td>
+                <td>{{ $data->nama }}</td>
+                <td>{{ $data->gram }}</td>
+                <td>{{ $data->pcs }}</td>
+                <td>{{ $data->lokasi }}</td>
+                <td>{{ $data->mc_id }}</td>
                 {{-- <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
@@ -81,7 +81,7 @@
 <script> 
    $(document).ready(function(){
      $("#data_barang").DataTable({
-        "scrollX": true,
+        // "scrollX": true,
        dom: 'Bfrtip',
        buttons: [
          'copy',
