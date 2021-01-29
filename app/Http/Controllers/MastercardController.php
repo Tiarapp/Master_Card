@@ -90,7 +90,12 @@ class MastercardController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $messages = [
+            'koli.required' => 'Mohon isi Kolom Koli'
+        ];
+
+        $this->validate($request, [
+            'kode' => 'required',
             'revisi' => 'nullable',
             'bj_id' => 'required',
             'tipebox' => 'required',
@@ -101,17 +106,55 @@ class MastercardController extends Controller
             'lebarSheet' => 'required',
             'panjangSheet' => 'required',
             'luasSheet' => 'required',
-            'mesin' => 'required',
+            'mesin' => 'nullable',
             'outConv' => 'required',
+            'substanceKontrak_id' => 'required',
+            'substanceProduksi_id' => 'required',
             'koli' => 'required',
             'bungkus' => 'required',
-            'wax' => 'required',
+            'wax' => 'nullable',
             'box_id' => 'required',
-            'gramSheetBox' => 'required',
+            'gramSheetBox' => 'nullable',
             'colorCombine_id' => 'required',
-            'gambar' => 'nullable',
+            'keterangan' => 'nullable',
+            'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
+        ], $messages);
+
+        $file = $request->file('gambar');
+        $nama_file = time()."_".$file->getClientOriginalName();
+
+        $tujuan_upload = 'upload';
+        $file->move($tujuan_upload, $nama_file);
+
+        Mastercard::create([
+            'kode' => $request->kode,
+            'bj_id' => $request->bj_id,
+            'tipebox' => $request->tipebox,
+            'CreasCorrP' => $request->creasCorr,
+            'CreasCorrL' => $request->creasConv,
+            'joint' => $request->joint,
+            'flute' => $request->flute,
+            'lebarSheet' => $request->lebarSheet,
+            'panjangSheet' => $request->panjangSheet,
+            'tinggiSheet' => $request->tinggiSheet,
+            'luasSheet' => $request->luasSheet,
+            'substanceKontrak_id' => $request->substanceKontrak_id,
+            'substanceProduksi_id' => $request->substanceProduksi_id,
+            'mesin' => $request->mesin,
+            'outConv' => $request->outConv,
+            'koli' => $request->koli,
+            'bungkus' => $request->bungkus,
+            'wax' => $request->wax,
+            'box_id' => $request->box_id,
+            'gramSheetBox' => $request->beratSheetBox,
+            'colorCombine_id' => $request->colorCombine_id,
+            'keterangan' => $request->keterangan,
+            'gambar' => $nama_file,
+            'createdBy' => $request->createdBy
         ]);
+
+        return redirect('admin/mastercard');
     }
 
     /**

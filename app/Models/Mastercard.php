@@ -15,14 +15,22 @@ class Mastercard extends Model
     protected $fillable = [
         'kode',
         'bj_id',
-        'tipeBox_id',
+        'tipebox',
+        'CreasCorrP',
+        'CreasCorrL',
+        'lebarSheet',
+        'panjangSheet',
+        'luasSheet',
         'subtanceSheet_id',
         'wax_id',
-        'joint_id',
+        'joint',
         'mesin',
         'outConv',
-        'flute_id',
-        'koli_id',
+        'flute',
+        'koli',
+        'gramSheetBox',
+        'gramSheetCorrKontrak',
+        'gramSheetCorrProduksi',
         'bungkus',
         'keterangan',
         'gambar',
@@ -31,11 +39,7 @@ class Mastercard extends Model
         'bom_m_id',
         'box_id',
         'colorCombine_id',
+        'createdBy'
     ];
-
-    public function jenisGramLinerAtas_id($jenisGramLinerAtas_id = 'jenisGramLinerAtas_id')
-    {
-        return $this-$jenisGramLinerAtas_id([]);
-    }
     
 }
