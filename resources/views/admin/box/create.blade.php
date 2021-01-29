@@ -35,18 +35,18 @@
                             <div class="form-group">
                                 <label>Kode</label>
                                 <input type="text" class="form-control txt_line" placeholder="" name="kode" id="kode" required>
-                                <div class="valid-feedback">Valid.</div>
+                                <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
                             <div class="form-group">
                                 <label>Nama</label>
                                 {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
                                 <input type="text" class="form-control txt_line" name="nama" id="nama" readonly>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
                             <div class="form-group">
                                 <label>Tipe Box</label>
                                 <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
@@ -57,10 +57,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Flute">
                             <div class="form-group">
                                 <label>Flute</label>
-                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_cress_corr()">
+                                <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_crease_corr()">
                                     <option value="">Pilih Flute ..</option>
                                     @foreach ($flute as $data)
                                     <option value="{{ $data->nama }}">{{ $data->nama }}</option>
@@ -68,10 +68,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Crease Corr">
                             <div class="form-group">
-                                <label>Tipe Creas Corr</label>
-                                <select class="js-example-basic-single col-md-12" name="tipeCreasCorr" id="tipeCreasCorr">
+                                <label>Tipe Crease Corr</label>
+                                <select class="js-example-basic-single col-md-12" name="tipeCreaseCorr" id="tipeCreaseCorr">
                                     <option value="MALE-FLAT">MALE-FLAT</option>
                                     <option value="MALE-MALE">MALE-MALE</option>
                                     <option value="MALE-FEMALE">MALE-FEMALE</option>
@@ -79,27 +79,27 @@
                                 </select>
                             </div>
                         {{-- </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="input Lebar Sheet Box (mm)">
                             <div class="form-group">
                                 <label>Lebar</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="lebarSheetBox" id="lebarSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="lebarSheetBox" id="lebarSheetBox" onchange="luas(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Masukkan Lebar Sheet Box (mm)</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Panjang</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="panjangSheetBox" id="panjangSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
+                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="panjangSheetBox" id="panjangSheetBox" onchange="luas(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Tinggi</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiSheetBox" id="tinggiSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
+                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="tinggiSheetBox" id="tinggiSheetBox" onchange="luas(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
@@ -109,43 +109,43 @@
                                 <input type="text" class="form-control txt_line" name="luasSheetBox" id="luasSheetBox" required readonly>
                             </div>
                         </div> --}}
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan panjang dalam box (mm)">
                             <div class="form-group">
                                 <label>Panjang Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_cress_corr(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Masukkan panjang dalam box (mm)</div>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan lebar dalam box (mm)">
                             <div class="form-group">
                                 <label>Lebar Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_cress_corr(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Masukkan lebar dalam box (mm)</div>
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan tinggi dalam box (mm)">
                             <div class="form-group">
                                 <label>Tinggi Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_cress_corr(); getNama();" required>
-                                <div class="valid-feedback">Valid.</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <div class="valid-feedback">Terima kasih</div>
+                                <div class="invalid-feedback">Masukkan tinggi dalam box (mm)</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="getNama();" readonly>
-                                <div class="valid-feedback">Valid.</div>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreaseCorr" id="sizeCreaseCorr" onchange="getNama();" readonly>
+                                <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
-                                <div class="valid-feedback">Valid.</div>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreaseConv" id="sizeCreaseConv" onchange="getNama();" readonly>
+                                <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
@@ -196,11 +196,11 @@
             var lebardalam = document.getElementById("lebarDalamBox").value;
             var tinggidalam = document.getElementById("tinggiDalamBox").value;
             
-            var creascorr = document.getElementById("sizeCreasCorr").value;
-            var creasconv = document.getElementById("sizeCreasConv").value;
+            var CreaseCorr = document.getElementById("sizeCreaseCorr").value;
+            var CreaseConv = document.getElementById("sizeCreaseConv").value;
             
             if (tipe == 'B1') {
-                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+creascorr+"\n"+creasconv;
+                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+CreaseCorr+"\n"+CreaseConv;
             }
             if (tipe == 'DC') {
                 document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM';  
@@ -213,24 +213,24 @@
             
             
             if (tipe == 'B1') {
-                document.getElementById('sizeCreasCorr').disabled = false;
-                document.getElementById('sizeCreasConv').disabled = false;
+                document.getElementById('sizeCreaseCorr').disabled = false;
+                document.getElementById('sizeCreaseConv').disabled = false;
             } else {
-                document.getElementById('sizeCreasCorr').disabled = true;
-                document.getElementById('sizeCreasConv').disabled = true;
+                document.getElementById('sizeCreaseCorr').disabled = true;
+                document.getElementById('sizeCreaseConv').disabled = true;
             }
             
             return tipe;
         }
         
-        function update_cress_corr() {
+        function update_crease_corr() {
             var tipe = document.getElementById("tipebox").value;
             
             var box_p = document.getElementById("panjangDalamBox").value;
             var box_l = document.getElementById("lebarDalamBox").value;
             var box_t = document.getElementById("tinggiDalamBox").value;
             var flute = document.getElementById("flute").value;
-            var cress_p, cress_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
+            var crease_p, crease_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
             var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
             
             if (tipe == "B1") {
@@ -261,16 +261,16 @@
                 flap =  ((box_l / 2) + flap_trim);
                 tinggi = ((box_t*1) + tinggi_trim);
                 sheet_l = (flap*2) + tinggi;
-                cress_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
+                crease_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
                 
                 p1 = ((box_p*1) + p1_trim);
                 l1 = ((box_l*1) + l1_trim);
                 l2 = ((box_l*1) + l2_trim);
                 sheet_p = (p1*2) + l1 + l2 + kuping;
-                cress_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
+                crease_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
                 
-                document.getElementById("sizeCreasCorr").value = cress_p;
-                document.getElementById("sizeCreasConv").value = cress_l;
+                document.getElementById("sizeCreaseCorr").value = crease_p;
+                document.getElementById("sizeCreaseConv").value = crease_l;
             } 
             
         }

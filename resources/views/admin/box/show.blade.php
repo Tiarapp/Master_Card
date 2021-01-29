@@ -7,7 +7,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title"><strong>Show Divisi</strong> </h4>
+                <h4 class="modal-title"><strong>Divisi</strong> </h4>
                 <hr>
 
                 @if ($errors->any())
