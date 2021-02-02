@@ -64,9 +64,9 @@ class BoxController extends Controller
             'createdBy' => 'required'
         ]);
 
-       Box::create($request->all());
+        Box::create($request->all());
 
-       return redirect('admin/box');
+        return redirect('admin/box');
     }
 
     /**

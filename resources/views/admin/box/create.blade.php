@@ -22,7 +22,7 @@
                     <strong>Error!</strong> 
                     <ul>
                         @foreach ($errors->all() as $error)
-                        <li></li>
+                        <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -71,7 +71,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Crease Corr">
                             <div class="form-group">
                                 <label>Tipe Crease Corr</label>
-                                <select class="js-example-basic-single col-md-12" name="tipeCreaseCorr" id="tipeCreaseCorr">
+                                <select class="js-example-basic-single col-md-12" name="tipeCreasCorr" id="tipeCreasCorr">
                                     <option value="MALE-FLAT">MALE-FLAT</option>
                                     <option value="MALE-MALE">MALE-MALE</option>
                                     <option value="MALE-FEMALE">MALE-FEMALE</option>
@@ -136,7 +136,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreaseCorr" id="sizeCreaseCorr" onchange="getNama();" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -144,7 +144,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreaseConv" id="sizeCreaseConv" onchange="getNama();" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -196,8 +196,8 @@
             var lebardalam = document.getElementById("lebarDalamBox").value;
             var tinggidalam = document.getElementById("tinggiDalamBox").value;
             
-            var CreaseCorr = document.getElementById("sizeCreaseCorr").value;
-            var CreaseConv = document.getElementById("sizeCreaseConv").value;
+            var CreaseCorr = document.getElementById("sizeCreasCorr").value;
+            var CreaseConv = document.getElementById("sizeCreasConv").value;
             
             if (tipe == 'B1') {
                 document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+CreaseCorr+"\n"+CreaseConv;
@@ -213,11 +213,11 @@
             
             
             if (tipe == 'B1') {
-                document.getElementById('sizeCreaseCorr').disabled = false;
-                document.getElementById('sizeCreaseConv').disabled = false;
+                document.getElementById('sizeCreasCorr').disabled = false;
+                document.getElementById('sizeCreasConv').disabled = false;
             } else {
-                document.getElementById('sizeCreaseCorr').disabled = true;
-                document.getElementById('sizeCreaseConv').disabled = true;
+                document.getElementById('sizeCreasCorr').disabled = true;
+                document.getElementById('sizeCreasConv').disabled = true;
             }
             
             return tipe;
@@ -269,8 +269,8 @@
                 sheet_p = (p1*2) + l1 + l2 + kuping;
                 crease_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
                 
-                document.getElementById("sizeCreaseCorr").value = crease_p;
-                document.getElementById("sizeCreaseConv").value = crease_l;
+                document.getElementById("sizeCreasCorr").value = crease_p;
+                document.getElementById("sizeCreasConv").value = crease_l;
             } 
             
         }
