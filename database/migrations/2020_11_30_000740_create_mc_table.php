@@ -27,7 +27,10 @@ class CreateMcTable extends Migration
             $table->string('flute')->index();                 //INPUT MARKETING
             $table->integer('lebarSheet');              //Input MARKETING
             $table->integer('panjangSheet');            //Input MARKETING
+            $table->integer('lebarSheetBox');              //Input MARKETING
+            $table->integer('panjangSheetBox');            //Input MARKETING
             $table->integer('luasSheet');               //Auto lebarSheet * panjangSheet
+            $table->integer('luasSheetBox');               //Auto lebarSheet * panjangSheet
             $table->string('mesin')->index();                       //AUTO RUMUS MASIH DIPIKIR
             $table->integer('outConv')->index();                    //AUTO RUMUS MASIH DIPIKIR
             $table->string('koli')->index();                  //INPUT MARKETING
@@ -36,6 +39,7 @@ class CreateMcTable extends Migration
             $table->boolean('lock')->default(TRUE);                 //AUTO
             $table->string('gambar');                 //AUTO
             $table->enum('wax',['INSIDE', 'OUTSIDE', 'IN & OUT']);
+            $table->enum('tipemc',['BOX', 'BOX TUMBU', 'BOX TUTUP', 'PARTISI', 'LAYER']);
             $table->foreignId('substanceKontrak_id')->index();      //SUBSTANCE KONTRAK INPUT MARKETING
             $table->foreignId('substanceProduksi_id')->index();     //SUBSTANCE PRODUKSI INPUT MARKETING
             $table->float('gramSheetBox', 8, 2);            //INPUT MARKETING

@@ -38,27 +38,35 @@
                     <th scope="col">Kode</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
-                    <th scope="col">Flute</th>
-                    <th scope="col">Koli</th>
+                    <th scope="col">Creas Corr P</th>
+                    <th scope="col">Creas Corr L</th>
+                    <th scope="col">Joint</th>
+                    <th scope="col">Lebar Sheet</th>
+                    <th scope="col">Panjang Sheet</th>
+                    <th scope="col">Luas Sheet</th>
                     <th scope="col">Keterangan</th>
-                    <th scope="col">Warna</th>
-                    <th scope="col">Box</th>
+                    <th scope="col">Gambar</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                     <?php 
                         $no = 1;
-                        foreach ($mc as $mc) { ?>
+                        foreach ($mc as $data) { ?>
                         <tr>
                             <td scope="row">{{ $no++ }}</td>
-                            <td>{{ $mc->Kode }}</td>
-                            <td>{{ $mc->Nama }}</td>
-                            <td>{{ $mc->AlamatKantor }}</td>
-                            <td>{{ $mc->KotaKantor }}</td>
-                            <td>{{ $mc->TelpKantor }}</td>
-                            <td>{{ $mc->PIC }}</td>
-                            <a href="/admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                            <td>{{ $data->kode }}</td>
+                            <td>{{ $data->bj_id }}</td>
+                            <td>{{ $data->tipebox }}</td>
+                            <td>{{ $data->CreasCorrP }}</td>
+                            <td>{{ $data->CreasCorrL }}</td>
+                            <td>{{ $data->joint }}</td>
+                            <td>{{ $data->lebarSheet }}</td>
+                            <td>{{ $data->panjangSheet }}</td>
+                            <td>{{ $data->luasSheet }}</td>
+                            <td>{{ $data->keterangan }}</td>
+                            <td><a href="/upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
+                            <td> <a href="/admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> </td>
                         </tr>
                             <?php
                         }    
@@ -76,8 +84,9 @@
 @section('javascripts')
 <!-- DataTables -->
 <script> 
-   $(document).ready(function(){
+    $(document).ready(function(){
      $("#data_mc").DataTable({
+        "scrollX": true,
        dom: 'Bfrtip',
        buttons: [
          'copy',
