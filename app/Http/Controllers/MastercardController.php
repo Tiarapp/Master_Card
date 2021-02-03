@@ -210,15 +210,18 @@ class MastercardController extends Controller
 
     public function pdfprint($id)
     {   
-        $mc = Mastercard::find($id, )
+        $mc = DB::table('mc')
             ->leftJoin('item_bj','bj_id','=','item_bj.id')
             ->leftJoin('substance as SubsProduksi','substanceProduksi_id', '=', 'SubsProduksi.id')
             ->leftJoin('substance as SubsKontrak', 'substanceKontrak_id', '=', 'SubsKontrak.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            ->select('mc.*', 'item_bj.kode AS kodeBrg', 'item_bj.nama AS namaBrg', 'SubsProduksi.nama AS SubsProduksiNama', 'SubsKontrak.nama AS SubsKontrakNama', 'color_combine.nama AS colComNama');
+            ->leftJoin('box', 'box_id', 'box.id')
+            ->select('mc.*', 'item_bj.kode AS kodeBrg', 'item_bj.nama AS namaBrg', 'SubsProduksi.nama AS SubsProduksiNama', 'SubsKontrak.nama AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox')
+            ->where('mc.id', $id)
+            ->first();
 
-        // var_dump($mc);
-        return view('admin.mastercard.pdf', ['mc' => $mc]);
+        // var_dump($mc->tipebox);
+        return view('admin.mastercard.pdf', compact('mc'));
     }
 
 }
