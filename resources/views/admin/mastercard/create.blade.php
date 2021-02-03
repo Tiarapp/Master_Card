@@ -198,7 +198,10 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="sheetbox" id="sheetbox" readonly>
+                                            <input type="text" class="form-control txt_line" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC()">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC()">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
@@ -632,15 +635,23 @@
                 var resultL = getID(Box[9]);
                 document.getElementById("panjangSheet").value = parseInt(resultP);
                 document.getElementById("lebarSheet").value = parseInt(resultL);
+
+                document.getElementById("panjangSheetBox").value = parseInt(resultP);
+                document.getElementById("lebarSheetBox").value = parseInt(resultL);
                 
-                document.getElementById("sheetbox").value = parseInt(resultP)+'x'+parseInt(resultL)+'x 1'
                 var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
                 document.getElementById("luasSheet").value = luas.toFixed(3);
+                document.getElementById("luasSheetBox").value = luas.toFixed(3);
             } else {
 
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
                 document.getElementById("luasSheet").value = null;
+                document.getElementById("panjangSheetBox").value = null;
+                document.getElementById("lebarSheetBox").value = null;
+                document.getElementById("luasSheetBox").value = null;
+                document.getElementById("substanceKontrak").value = null;
+                document.getElementById("substanceProduksi").value = null;
             }
         } );
         
@@ -727,8 +738,10 @@
         var Kcf = parseFloat(document.getElementById('Kcf').value);
         var Kbawah = parseFloat(document.getElementById('Kbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
+        var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
         
         var result;
+        var result2;
         
         if (flutenama == 'BF') {
             if (isNaN(Katas)) {
@@ -749,8 +762,10 @@
             
             // result = Kbf*1.36;
             result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
+            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
             
             document.getElementById('beratSheet').value = result.toFixed(2);
+            document.getElementById('beratSheetBox').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -770,11 +785,17 @@
             }
             
             result = (luasSheet * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
+            result2 = (luasSheetBox * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
+
             document.getElementById('beratSheet').value = result.toFixed(2);
+            document.getElementById('beratSheetBox').value = result2.toFixed(2);
             
         } else {
             result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
+            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
+
             document.getElementById('beratSheet').value = result.toFixed(2);
+            document.getElementById('beratSheetBox').value = result2.toFixed(2);
         }
         
         return result;
@@ -783,10 +804,14 @@
     function getLuasDC(){
         $panjang = document.getElementById("panjangSheet").value;
         $lebar = document.getElementById("lebarSheet").value;
+        $panjangbox = document.getElementById("panjangSheetBox").value;
+        $lebarbox = document.getElementById("lebarSheetBox").value;
 
         $result = ($panjang * $lebar)/1000000;
+        $result2 = ($panjangbox * $lebarbox)/1000000;
 
         document.getElementById('luasSheet').value = $result;
+        document.getElementById('luasSheetBox').value = $result2;
     }
 
     function getGramProduksi(){
