@@ -30,13 +30,85 @@ class InitSeeder extends Seeder
         	'nama' => 'MARKETING',
         	'createdBy' => 'SEEDER'
         ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'PURCH',
+        	'nama' => 'PURCHASING',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'PPIC',
+        	'nama' => 'PRODUCTION PLANNING AND INVENTORY CONTROL',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'LOG',
+        	'nama' => 'LOGISTIK',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'PROD',
+        	'nama' => 'PRODUKSI',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'MTC',
+        	'nama' => 'MAINTENANCE',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('divisi')->insert([
+        	'kode' => 'HRDGA',
+        	'nama' => 'HUMAN RESOURCE DEVELOPMENT & GENERAL AFFAIR',
+        	'createdBy' => 'SEEDER'
+        ]);
 
         // jenis_gram
         DB::table('jenis_gram')->insert([
-        	'kode' => 'BK125',
-        	'nama' => 'BK125',
-        	'jenisKertas' => 'BK',
-        	'gramKertas' => '125',
+        	'kode' => 'MF100',
+        	'nama' => 'MF100',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '100',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF105',
+        	'nama' => 'MF105',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '105',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF110',
+        	'nama' => 'MF110',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '110',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF112',
+        	'nama' => 'MF112',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '112',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF115',
+        	'nama' => 'MF115',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '115',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF120',
+        	'nama' => 'MF120',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '120',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF122',
+        	'nama' => 'MF122',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '122',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
@@ -47,17 +119,94 @@ class InitSeeder extends Seeder
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'TL125',
-        	'nama' => 'TL125',
-        	'jenisKertas' => 'TL',
-        	'gramKertas' => '125',
+        	'kode' => 'MF130',
+        	'nama' => 'MF130',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '130',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'ML127',
-        	'nama' => 'ML127',
+        	'kode' => 'MF135',
+        	'nama' => 'MF135',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '135',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF140',
+        	'nama' => 'MF140',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF145',
+        	'nama' => 'MF145',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '145',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF150',
+        	'nama' => 'MF150',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF160',
+        	'nama' => 'MF160',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '160',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF180',
+        	'nama' => 'MF180',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '180',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF190',
+        	'nama' => 'MF190',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '190',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF200',
+        	'nama' => 'MF200',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '200',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML100',
+        	'nama' => 'ML100',
         	'jenisKertas' => 'ML',
-        	'gramKertas' => '127',
+        	'gramKertas' => '100',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML110',
+        	'nama' => 'ML110',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '110',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML112',
+        	'nama' => 'ML112',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '112',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML115',
+        	'nama' => 'ML115',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '115',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
@@ -75,80 +224,10 @@ class InitSeeder extends Seeder
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'MF127',
-        	'nama' => 'MF127',
-        	'jenisKertas' => 'MF',
+        	'kode' => 'ML127',
+        	'nama' => 'ML127',
+        	'jenisKertas' => 'ML',
         	'gramKertas' => '127',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'ML110',
-        	'nama' => 'ML110',
-        	'jenisKertas' => 'ML',
-        	'gramKertas' => '110',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'MF150',
-        	'nama' => 'MF150',
-        	'jenisKertas' => 'MF',
-        	'gramKertas' => '150',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'TL150',
-        	'nama' => 'TL150',
-        	'jenisKertas' => 'TL',
-        	'gramKertas' => '150',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'TL200',
-        	'nama' => 'TL200',
-        	'jenisKertas' => 'TL',
-        	'gramKertas' => '200',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'BK100',
-        	'nama' => 'BK100',
-        	'jenisKertas' => 'BK',
-        	'gramKertas' => '100',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'MF140',
-        	'nama' => 'MF140',
-        	'jenisKertas' => 'MF',
-        	'gramKertas' => '140',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'ML100',
-        	'nama' => 'ML100',
-        	'jenisKertas' => 'ML',
-        	'gramKertas' => '100',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'BK140',
-        	'nama' => 'BK140',
-        	'jenisKertas' => 'BK',
-        	'gramKertas' => '140',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'MF110',
-        	'nama' => 'MF110',
-        	'jenisKertas' => 'MF',
-        	'gramKertas' => '110',
-        	'createdBy' => 'SEEDER'
-        ]);
-        DB::table('jenis_gram')->insert([
-        	'kode' => 'BK150',
-        	'nama' => 'BK150',
-        	'jenisKertas' => 'BK',
-        	'gramKertas' => '150',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
@@ -159,10 +238,59 @@ class InitSeeder extends Seeder
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'MF145',
-        	'nama' => 'MF145',
-        	'jenisKertas' => 'MF',
+        	'kode' => 'ML145',
+        	'nama' => 'ML145',
+        	'jenisKertas' => 'ML',
         	'gramKertas' => '145',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML150',
+        	'nama' => 'ML150',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL100',
+        	'nama' => 'TL100',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '100',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL110',
+        	'nama' => 'TL110',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '110',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL115',
+        	'nama' => 'TL115',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '115',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL120',
+        	'nama' => 'TL120',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '120',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL125',
+        	'nama' => 'TL125',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '125',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL135',
+        	'nama' => 'TL135',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '135',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
@@ -173,48 +301,89 @@ class InitSeeder extends Seeder
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'BK135',
-        	'nama' => 'BK135',
-        	'jenisKertas' => 'BK',
-        	'gramKertas' => '135',
+        	'kode' => 'TL145',
+        	'nama' => 'TL145',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '145',
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('jenis_gram')->insert([
-        	'kode' => 'BK160',
-        	'nama' => 'BK160',
-        	'jenisKertas' => 'BK',
+        	'kode' => 'TL150',
+        	'nama' => 'TL150',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL160',
+        	'nama' => 'TL160',
+        	'jenisKertas' => 'TL',
         	'gramKertas' => '160',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL170',
+        	'nama' => 'TL170',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '170',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL175',
+        	'nama' => 'TL175',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '175',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL190',
+        	'nama' => 'TL190',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '190',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL200',
+        	'nama' => 'TL200',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '200',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL230',
+        	'nama' => 'TL230',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '230',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL275',
+        	'nama' => 'TL275',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '275',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'WK140',
+        	'nama' => 'WK140',
+        	'jenisKertas' => 'WK',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'WK150',
+        	'nama' => 'WK150',
+        	'jenisKertas' => 'WK',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'WK200',
+        	'nama' => 'WK200',
+        	'jenisKertas' => 'WK',
+        	'gramKertas' => '200',
         	'createdBy' => 'SEEDER'
         ]);
     }
 }
 
-ML130
-ML135
-BK200
-TL145
-ML160
-WK140
-WK200
-WK150
-MF135
-MF122
-TL190
-TL185
-WTL180
-TL170
-TL180
-TL175
-MF200
-TL275
-MF105
-MF180
-TL160
-TL115
-TLA150
-TL230
-ML145
-MF190
-BK145
-MF160
-TL135
