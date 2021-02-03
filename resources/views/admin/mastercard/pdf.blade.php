@@ -1,4 +1,4 @@
-@extends('admin.templates.partials.default')
+{{-- @extends('admin.templates.partials.default') --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
@@ -32,7 +32,7 @@
                 <h4 class="modal-title">Print Master Card</h4>
                 <hr>
                 
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>Error!</strong> 
                     <ul>
@@ -41,7 +41,7 @@
                         @endforeach
                     </ul>
                 </div>
-                @endif
+                @endif --}}
                 
                 <form action="#" method="POST">
                     @csrf
@@ -55,7 +55,7 @@
                                             <label class="control-label">Tanggal MC</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="tglmc" id="tglmc" placeholder="No. Item" readonly>
+                                            <input type="text" class="form-control txt_line" name="tglmc" id="tglmc"  value="{{ $mc->id }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
