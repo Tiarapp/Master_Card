@@ -164,10 +164,11 @@ Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('suppl
 //Barang
 Route::get('/admin/barang', 'BarangController@index')->name('barang');
 
+//Mastercard
 Route::get('/admin/mastercard', 'MastercardController@index')->name('mastercard');
 Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
 Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
 Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
-Route::get('/admin/mastercard/pdf', 'MastercardController@pdfprint');
+Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint');
 
 require __DIR__ . '/auth.php';
