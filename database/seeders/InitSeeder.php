@@ -95,36 +95,100 @@ class InitSeeder extends Seeder
         	'gramKertas' => '150',
         	'createdBy' => 'SEEDER'
         ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL150',
+        	'nama' => 'TL150',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL200',
+        	'nama' => 'TL200',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '200',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'BK100',
+        	'nama' => 'BK100',
+        	'jenisKertas' => 'BK',
+        	'gramKertas' => '100',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF140',
+        	'nama' => 'MF140',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML100',
+        	'nama' => 'ML100',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '100',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'BK140',
+        	'nama' => 'BK140',
+        	'jenisKertas' => 'BK',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF110',
+        	'nama' => 'MF110',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '110',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'BK150',
+        	'nama' => 'BK150',
+        	'jenisKertas' => 'BK',
+        	'gramKertas' => '150',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'ML140',
+        	'nama' => 'ML140',
+        	'jenisKertas' => 'ML',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'MF145',
+        	'nama' => 'MF145',
+        	'jenisKertas' => 'MF',
+        	'gramKertas' => '145',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'TL140',
+        	'nama' => 'TL140',
+        	'jenisKertas' => 'TL',
+        	'gramKertas' => '140',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'BK135',
+        	'nama' => 'BK135',
+        	'jenisKertas' => 'BK',
+        	'gramKertas' => '135',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('jenis_gram')->insert([
+        	'kode' => 'BK160',
+        	'nama' => 'BK160',
+        	'jenisKertas' => 'BK',
+        	'gramKertas' => '160',
+        	'createdBy' => 'SEEDER'
+        ]);
     }
 }
-MF150
-TL150
-TL200
-BK100
-BK90
-MF140
-ML90
-ML100
-BK140
-MF110
-MF112
-BK150
-MF90
-ML112
-ML140
-BK130
-BK120
-MF115
-MF100
-BK110
-ML115
-MF130
-MF120
-MF145
-TL140
-BK115
-BK135
-BK160
+
 ML130
 ML135
 BK200
