@@ -208,17 +208,17 @@ class MastercardController extends Controller
         //
     }
 
-    public function pdfprint()
+    public function pdfprint($id)
     {   
-        $item = DB::table('item_bj')->get();
-        $box = DB::table('box')->get();
+        $mc = Mastercard::find($id, )
+            ->leftJoin('item_bj','bj_id','=','item_bj.id')
+            ->leftJoin('substance as SubsProduksi','substanceProduksi_id', '=', 'SubsProduksi.id')
+            ->leftJoin('substance as SubsKontrak', 'substanceKontrak_id', '=', 'SubsKontrak.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->select('mc.*', 'item_bj.kode AS kodeBrg', 'item_bj.nama AS namaBrg', 'SubsProduksi.nama AS SubsProduksiNama', 'SubsKontrak.nama AS SubsKontrakNama', 'color_combine.nama AS colComNama');
 
-        return view('admin.mastercard.pdf', compact(
-            'item',
-            'box'
-        ));
-
-        
+        // var_dump($mc);
+        return view('admin.mastercard.pdf', ['mc' => $mc]);
     }
 
 }

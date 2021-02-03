@@ -15,18 +15,22 @@ class CreateSheetTable extends Migration
     {
         Schema::create('sheet', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
-            $table->string('nama')->index();                     //AUTO lebarSheet x panjang sheet
-            $table->integer('lebarSheet');              //Input MARKETING
-            $table->integer('panjangSheet');            //Input MARKETING
-            $table->foreignId('satuanSizeSheet');    //Input MARKETING
-            $table->integer('luasSheet');               //Auto lebarSheet * panjangSheet
-            $table->foreignId('satuanLuasSheet');    //Input MARKETING
+            $table->string('kode')->unique()->index();  //AUTO NUMBER SEQUENCE
+            $table->string('nama')->index();            //AUTO SHEET flute lebarSheet x panjang substance produksi
+            $table->integer('lebarSheet');              //AUTO DARI MC
+            $table->integer('panjangSheet');            //AUTO DARI MC
+            $table->foreignId('satuanSizeSheet');       //AUTO DARI MC
+            $table->integer('luasSheet');               //AUTO DARI MC
+            $table->string('flute');                    //AUTO DARI MC
+            $table->foreignId('substanceId');           //AUTO DARI MC
+            $table->string('namaSubstance');            //AUTO DARI MC
+            $table->integer('beratSheet');              //AUTO DARI MC
+            $table->foreignId('satuanLuasSheet');       //AUTO DARI MC
             //RELATION
             $table->foreign('satuanSizeSheet')->references('id')->on('satuan')->cascadeOnDelete();
             $table->foreign('satuanLuasSheet')->references('id')->on('satuan')->cascadeOnDelete();
             // TRACKING
-            $table->string('createdBy');        //Auto ambil dari login
+            $table->string('createdBy');                //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
