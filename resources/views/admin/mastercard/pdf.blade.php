@@ -1,11 +1,5 @@
 {{-- @extends('admin.templates.partials.default') --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 <style>
     .row {
@@ -23,25 +17,13 @@
 </style>
 
 
-@section('content')
-<div class="content-wrapper" style="height: auto !important">
+<div class="content-wrapper" style="margin: 50px; height: auto !important; width: 100% px !important">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
                 <h4 class="modal-title">Print Master Card</h4>
                 <hr>
-                
-                {{-- @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Error!</strong> 
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li></li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif --}}
                 
                 <form action="#" method="POST">
                     @csrf
@@ -55,7 +37,7 @@
                                             <label class="control-label">Tanggal MC</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="tglmc" id="tglmc"  value="{{ $mc->id }}" readonly>
+                                            <input type="text" class="form-control txt_line" name="tglmc" id="tglmc"  value="{{ $mc->created_at }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -65,59 +47,8 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->kodeBrg }}">
                                                 </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="Item">
-                                            <div class="modal-dialog modal-xl">
-                                                
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Barang PHP</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body Item">
-                                                        <div class="card-body">
-                                                            <table class="table table-bordered" id="data_barang">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">ID.</th>
-                                                                        <th scope="col">Kode</th>
-                                                                        <th scope="col">Nama</th>
-                                                                        <th scope="col">MC ID</th>
-                                                                        <th scope="col">Pcs</th>
-                                                                        <th scope="col">Gram</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php
-                                                                    $no = 1;
-                                                                    foreach ($item as $data) { ?>
-                                                                        <tr>
-                                                                            <td scope="row">{{ $data->id }}</td>
-                                                                            <td>{{ $data->kode }}</td>
-                                                                            <td>{{ $data->nama }}</td>
-                                                                            <td>{{ $data->mc_id }}</td>
-                                                                            <td>{{ $data->pcs }}</td>
-                                                                            <td>{{ $data->gram }}</td>
-                                                                        </tr>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +57,7 @@
                                             <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->namaBrg }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -139,87 +70,7 @@
                                             <label class="control-label">Tipe Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Box</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="row">
-                                                <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
-                                                </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                            <div class="modal fade" id="Box">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Box</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body Box">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_box">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID.</th>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
-                                                                            <th scope="col">Tipe Box</th>
-                                                                            <th scope="col">flute</th>
-                                                                            <th scope="col">Panjang Box</th>
-                                                                            <th scope="col">Lebar Box</th>
-                                                                            <th scope="col">Tinggi Box</th>
-                                                                            <th scope="col">Luas Box</th>
-                                                                            <th scope="col">Panjang Dalam Box</th>
-                                                                            <th scope="col">Lebar Dalam Box</th>
-                                                                            <th scope="col">Tinggi Dalam Box</th>
-                                                                            <th scope="col">Ukuran Creas Corr</th>
-                                                                            <th scope="col">Ukuran Creas Conv</th>
-                                                                            <th scope="col">Branch</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($box as $data) { ?>
-                                                                            <tr>
-                                                                                <td>{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
-                                                                                <td>{{ $data->tipebox }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->lebarSheetBox }}</td>
-                                                                                <td>{{ $data->panjangSheetBox }}</td>
-                                                                                <td>{{ $data->tinggiSheetBox }}</td>
-                                                                                <td>{{ $data->luasSheetBox }}</td>
-                                                                                <td>{{ $data->lebarDalamBox }}</td>
-                                                                                <td>{{ $data->panjangDalamBox }}</td>
-                                                                                <td>{{ $data->tinggiDalamBox }}</td>
-                                                                                <td>{{ $data->sizeCreasCorr }}</td>
-                                                                                <td>{{ $data->sizeCreasConv }}</td>
-                                                                                <td>{{ $data->branch }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->tipebox }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -227,13 +78,16 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->outConv }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -244,7 +98,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="panjangbox" id="panjangbox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangbox }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,7 +106,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarbox }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -260,7 +114,7 @@
                                             <span class="x">T</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="tinggibox" id="tinggibox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggibox }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,7 +124,7 @@
                                             <label class="control-label">Luas Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -278,7 +132,7 @@
                                             <label class="control-label">Berat Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetBox }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -286,7 +140,7 @@
                                             <label class="control-label">Creas Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrP }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -294,7 +148,7 @@
                                             <label class="control-label">Creas Conv</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrL }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -307,7 +161,7 @@
                                             <label class="control-label">Flute</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->flute }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -318,7 +172,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="panjangbox" id="panjangbox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangDalamBox }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -326,10 +180,18 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarDalamBox }}" readonly>
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <span class="x">T</span>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggiDalamBox }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -339,7 +201,7 @@
                                             <label class="control-label">Luas Sheet Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheet }}" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             M<sup>2</sup>
@@ -350,7 +212,7 @@
                                             <label class="control-label">Berat Sheet Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             Gram
@@ -361,7 +223,7 @@
                                             <label class="control-label">Substance Kontrak</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -369,7 +231,7 @@
                                             <label class="control-label">Substance Produksi</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -382,7 +244,7 @@
                                             <label class="control-label">Warna</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -390,7 +252,7 @@
                                             <label class="control-label">Wax</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -398,7 +260,7 @@
                                             <label class="control-label">Packing</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -406,7 +268,7 @@
                                             <label class="control-label">Bungkus</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -414,7 +276,7 @@
                                             <label class="control-label">Keterangan</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc-> }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -429,16 +291,13 @@
                             </div>
                         </div>
                     </div>
-                </div> 
-            </form>
+                </form>
+                
+            </div>
         </div>
     </div>
-</div>
-
+    
 </div>    
-
-
-@endsection
 
 <script type="text/javascript">
     $(document).ready(function() {
