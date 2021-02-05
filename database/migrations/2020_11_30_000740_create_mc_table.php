@@ -29,8 +29,8 @@ class CreateMcTable extends Migration
             $table->integer('panjangSheet');            //Input MARKETING
             $table->integer('lebarSheetBox');              //Input MARKETING
             $table->integer('panjangSheetBox');            //Input MARKETING
-            $table->integer('luasSheet');               //Auto lebarSheet * panjangSheet
-            $table->integer('luasSheetBox');               //Auto lebarSheet * panjangSheet
+            $table->float('luasSheet');               //Auto lebarSheet * panjangSheet
+            $table->float('luasSheetBox');               //Auto lebarSheet * panjangSheet
             $table->string('mesin')->index();                       //AUTO RUMUS MASIH DIPIKIR
             $table->integer('outConv')->index();                    //AUTO RUMUS MASIH DIPIKIR
             $table->string('koli')->index();                  //INPUT MARKETING
