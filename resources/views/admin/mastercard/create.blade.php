@@ -7,6 +7,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
+{{-- <style>
+    #data_barang_filter.dataTables_filter label, #data_box_filter.dataTables_filter label, #data_substanceKontrak_filter.dataTables_filter label, #data_substanceProduksi_filter.dataTables_filter label {
+        float: right;
+    }
+</style> --}}
 
 @section('content')
 <div class="content-wrapper" style="height: auto !important">
@@ -499,7 +504,11 @@
                                             <label class="control-label">Wax</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="wax" id="wax">
+                                            <select class="js-example-basic-single col-md-12" name="wax" id="wax">
+                                                <option value='INSIDE'>INSIDE</option>
+                                                <option value='OUTSIDE'>OUTSIDE</option>
+                                                <option value='IN & OUT'>IN & OUT</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
