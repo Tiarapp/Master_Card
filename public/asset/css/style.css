@@ -119,7 +119,16 @@ th {
 }
 
 
-td:nth-child(even) {
-  background-color:#f4f6f9 !important;
+tr:nth-child(even) {
+  background-color:#bab9b9 !important;
 
+}
+
+.dataTables_filter label {
+  float: right;
+  display: inline;
+}
+
+.pagination {
+  float: right;
 }

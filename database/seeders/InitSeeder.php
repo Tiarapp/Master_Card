@@ -56,7 +56,7 @@ class InitSeeder extends Seeder
         	'createdBy' => 'SEEDER'
         ]);
         DB::table('divisi')->insert([
-        	'kode' => 'HRDGA',
+        	'kode' => 'HRD',
         	'nama' => 'HUMAN RESOURCE DEVELOPMENT & GENERAL AFFAIR',
         	'createdBy' => 'SEEDER'
         ]);
@@ -384,6 +384,52 @@ class InitSeeder extends Seeder
         	'gramKertas' => '200',
         	'createdBy' => 'SEEDER'
         ]);
+        DB::table('mata_uang')->insert([
+        	'kode' => 'IDR',
+        	'nama' => 'Rupiah'
+        ]);
+        DB::table('mata_uang')->insert([
+        	'kode' => 'USD',
+        	'nama' => 'US Dollar'
+        ]);
+        DB::table('mata_uang')->insert([
+        	'kode' => 'EUR',
+        	'nama' => 'Euro Dollar'
+        ]);
+        DB::table('tipe_box')->insert([
+        	'kode' => 'B1',
+			'nama' => 'BOX B1',
+			'createdBy' => 'SEEDER'
+        ]);
+        DB::table('tipe_box')->insert([
+        	'kode' => 'DC',
+        	'nama' => 'Die Cut',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('top')->insert([
+			'nama' => '30 Hari',
+			'hari' => '30'
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('top')->insert([
+			'nama' => 'Cash',
+			'hari' => '0'
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('top')->insert([
+			'nama' => '30 Hari',
+			'hari' => '30'
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('top')->insert([
+			'nama' => '60 Hari',
+			'hari' => '60'
+        	'createdBy' => 'SEEDER'
+		]);
     }
 }
 
+$table->string('nama')->index();     //AUTO top.hari + " hari"
+$table->integer('hari')->index();    //INPUT IT
+// TRACKING
+$table->string('createdBy');        //Auto ambil dari login
