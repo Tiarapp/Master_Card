@@ -37,12 +37,14 @@ class CreatePlanHasilCorrMTable extends Migration
             $table->foreign('dt_id')->references('id')->on('dt')->cascadeOnDelete();
             $table->foreign('mesin_id')->references('id')->on('mesin')->cascadeOnDelete();
             // TRACKING
-            $table->string('createdBy');        //Auto ambil dari login
+            $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
+            $table->integer('printedKe')->nullable();       //Auto ambil dari login
+            $table->timestamps('printedAt')->default('current_timestamp')->nullable();        //Auto ambil dari login
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }

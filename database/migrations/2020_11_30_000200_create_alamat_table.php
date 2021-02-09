@@ -35,12 +35,14 @@ class CreateAlamatTable extends Migration
             $table->string('alamatLengkap')->index();            //AUTO alamat+perumahanNamaTempat+rt+rw+kelurahanDesa+Kecamatan+kotaKabupaten+provinsi+negara+kodePos
             $table->boolean('aktif')->default(1)->comment('1:Aktif, 0:Non Aktif')->index();  //INPUT
             // TRACKING
-            $table->string('createdBy');        //Auto ambil dari login
+            $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
+            $table->integer('printedKe')->nullable();       //Auto ambil dari login
+            $table->timestamps('printedAt')->default('current_timestamp')->nullable();        //Auto ambil dari login
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }
