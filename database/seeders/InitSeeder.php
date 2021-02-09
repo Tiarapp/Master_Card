@@ -408,22 +408,22 @@ class InitSeeder extends Seeder
 		]);
         DB::table('top')->insert([
 			'nama' => '30 Hari',
-			'hari' => '30'
+			'hari' => '30',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => 'Cash',
-			'hari' => '0'
+			'hari' => '0',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => '30 Hari',
-			'hari' => '30'
+			'hari' => '30',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => '60 Hari',
-			'hari' => '60'
+			'hari' => '60',
         	'createdBy' => 'SEEDER'
 		]);
     }
