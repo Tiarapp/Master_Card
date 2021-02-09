@@ -28,7 +28,7 @@ class CreateSjPaletMTable extends Migration
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
             $table->integer('printedKe')->nullable();       //Auto ambil dari login
-            $table->dateTime('printedAt')->nullable();//Auto ambil dari login
+            $table->dateTime('printedAt')->nullable();      //Auto ambil dari login
             $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });

@@ -466,15 +466,15 @@ class InitSeeder extends Seeder
 			'nama' => 'CENTIMETER',
         	'createdBy' => 'SEEDER'
 		]);
-        DB::table('mesin')->insert([
-			'kode' => 'CM',
-			'nama' => 'CENTIMETER',
-			'ip' => 'CENTIMETER',
-			'kapasitas' => 'CENTIMETER',
-			'satuanKapasitas' => 'CENTIMETER',
-			'keterangan' => 'CENTIMETER',
-			'hint' => 'CENTIMETER',
-     	'createdBy' => 'SEEDER'
-		]);
+        // DB::table('mesin')->insert([
+		// 	'kode' => 'CM',
+		// 	'nama' => 'CENTIMETER',
+		// 	'ip' => 'CENTIMETER',
+		// 	'kapasitas' => 'CENTIMETER',
+		// 	'satuanKapasitas' => 'CENTIMETER',
+		// 	'keterangan' => 'CENTIMETER',
+		// 	'hint' => 'CENTIMETER',
+     	// 'createdBy' => 'SEEDER'
+		// ]);
     }
 }
