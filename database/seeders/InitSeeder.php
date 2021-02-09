@@ -424,7 +424,7 @@ class InitSeeder extends Seeder
         DB::table('top')->insert([
 			'nama' => '60 Hari',
 			'hari' => '60',
-        	'createdBy' => 'SEEDER'
+      'createdBy' => 'SEEDER'
 		]);
         DB::table('satuan')->insert([
 			'kode' => 'KG',
@@ -474,7 +474,7 @@ class InitSeeder extends Seeder
 			'satuanKapasitas' => 'CENTIMETER',
 			'keterangan' => 'CENTIMETER',
 			'hint' => 'CENTIMETER',
-        	'createdBy' => 'SEEDER'
+     	'createdBy' => 'SEEDER'
 		]);
     }
 }
