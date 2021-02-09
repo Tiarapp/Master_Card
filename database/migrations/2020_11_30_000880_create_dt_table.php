@@ -49,11 +49,10 @@ class CreateDtTable extends Migration
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
-            $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
             $table->integer('printedKe')->nullable();       //Auto ambil dari login
-            $table->timestamps('printedAt')->default('current_timestamp')->nullable();        //Auto ambil dari login
+            $table->dateTime('printedAt')->nullable();      //Auto ambil dari login
             $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
