@@ -105,12 +105,15 @@ class CreatePlanHasilCorrDTable extends Migration
             $table->foreign('customer_id')->references('id')->on('customer')->cascadeOnDelete();
             $table->foreign('flute_id')->references('id')->on('flute')->cascadeOnDelete();
             // TRACKING
-            $table->string('createdBy');        //Auto ambil dari login
+            $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->boolean('deleted')->default(0);         //Update ketika di hapus (default false)
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
             $table->string('deletedBy')->nullable();        //Auto ambil dari login
-            $table->string('branch')->default('Lamongan')->index();           //Auto ambil dari login awal
+            $table->integer('printedKe')->nullable();       //Auto ambil dari login
+            $table->string('ip')->nullable();               //Auto ambil dari login
+            $table->timestamps('printedAt')->default('current_timestamp')->nullable();        //Auto ambil dari login
+            $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
             $table->timestamps();
         });
     }
