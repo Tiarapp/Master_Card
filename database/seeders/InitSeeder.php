@@ -408,28 +408,73 @@ class InitSeeder extends Seeder
 		]);
         DB::table('top')->insert([
 			'nama' => '30 Hari',
-			'hari' => '30'
+			'hari' => '30',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => 'Cash',
-			'hari' => '0'
+			'hari' => '0',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => '30 Hari',
-			'hari' => '30'
+			'hari' => '30',
         	'createdBy' => 'SEEDER'
 		]);
         DB::table('top')->insert([
 			'nama' => '60 Hari',
-			'hari' => '60'
+			'hari' => '60',
+      'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'KG',
+			'nama' => 'KILOGRAM',
         	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'GR',
+			'nama' => 'GRAM',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'PCS',
+			'nama' => 'PIECES',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'L',
+			'nama' => 'LITER',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'RIM',
+			'nama' => 'RIM',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'M',
+			'nama' => 'METER',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'MM',
+			'nama' => 'MILIMETER',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('satuan')->insert([
+			'kode' => 'CM',
+			'nama' => 'CENTIMETER',
+        	'createdBy' => 'SEEDER'
+		]);
+        DB::table('mesin')->insert([
+			'kode' => 'CM',
+			'nama' => 'CENTIMETER',
+			'ip' => 'CENTIMETER',
+			'kapasitas' => 'CENTIMETER',
+			'satuanKapasitas' => 'CENTIMETER',
+			'keterangan' => 'CENTIMETER',
+			'hint' => 'CENTIMETER',
+     	'createdBy' => 'SEEDER'
 		]);
     }
 }
-
-$table->string('nama')->index();     //AUTO top.hari + " hari"
-$table->integer('hari')->index();    //INPUT IT
-// TRACKING
-$table->string('createdBy');        //Auto ambil dari login
