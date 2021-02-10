@@ -16,8 +16,10 @@ class CreateJenisGramTable extends Migration
         Schema::create('jenis_gram', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
-            $table->string('nama')->nullable()->index();     //INPUT MARKETING
-            $table->string('jenisKertas')->index();          //INPUT MARKETING
+            $table->string('namaLog')->index();     //INPUT MARKETING
+            $table->string('namaMc')->index();     //AUTO
+            $table->string('jenisKertasLog')->index();          //INPUT MARKETING
+            $table->string('jenisKertasMc')->index();          //AUTO KETIKA INPUT JENISKERTASLOG
             $table->float('gramKertas',8,2)->index();           //INPUT MARKETING
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
