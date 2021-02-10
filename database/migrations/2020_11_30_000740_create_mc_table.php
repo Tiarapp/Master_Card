@@ -16,7 +16,7 @@ class CreateMcTable extends Migration
         Schema::create('mc', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();              //AUTO NUMBER SEQUENCE
-            $table->integer('revisi');                              //AUTO REVISI KE
+            $table->integer('revisi')->default(0);                  //AUTO REVISI KE
             $table->foreignId('bj_id')->index();                    //INPUT MARKETING
             $table->string('tipebox')->index();               //INPUT MARKETING
             $table->string('CreasCorrP');                           
