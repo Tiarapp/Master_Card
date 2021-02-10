@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Flute</h4>
+                <h4 class="modal-title">Tambah Palet</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -16,46 +16,41 @@
                         <strong>Error!</strong> 
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li></li>
+                                <li>{{ $errors }}</li>
                             @endforeach
                         </ul>
                     </div>
                 @endif
 
-                <form action="/admin/flute/store" method="POST">
+                <form action="/admin/palet/store" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Kode</label>
+                                <label>Nama</label>
                                 {{-- <div class="row"> --}}
                                     {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                <input type="text" class="form-control txt_line" name="kode" id="kode" autocomplete="off">
+                                <input type="text" class="form-control txt_line" name="nama" id="nama" autocomplete="off">
                                 {{-- </div> --}}
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Nama</label>
-                                <input type="text" class="form-control txt_line" name="nama" id="nama">
+                                <label>Ukuran</label>
+                                <input type="text" class="form-control txt_line" name="ukuran" id="ukuran">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Tur 1</label>
-                                <input type="text" class="form-control txt_line" name="tur1" id="tur1">
+                                <label>No Kontrak</label>
+                                <input type="text" class="form-control txt_line" name="nokontrak" id="nokontrak">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Tur 2</label>
-                                <input type="text" class="form-control txt_line" name="tur2" id="tur2">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch">
+                                <label>Keterangan</label>
+                                {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
+                                <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
                             </div>
                         </div>
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">

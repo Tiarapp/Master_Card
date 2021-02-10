@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Flute;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -50,8 +51,9 @@ class FluteController extends Controller
             'createdBy' => 'required'
         ]);
 
-        Flute::create($request->all());
+        $data = Flute::create($request->all());
 
+        // return response()->json(['success' => true, 'last_insert_id' => $data->id], 200);
         return redirect('admin/flute');
     }
 
