@@ -62,7 +62,7 @@
                                 <input type="hidden" id="jenisGramLinerAtas_id" name="jenisGramLinerAtas_id">
                                 <select class="js-example-basic-single col-md-12" name="linerAtas" id="linerAtas" onchange="getNamaSubstance()" disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram as $data)
+                                    @foreach ($jenisgram1 as $data)
                                     <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
@@ -74,7 +74,7 @@
                                 <input type="hidden" id="jenisGramBf_id" name="jenisGramBf_id">
                                 <select class="js-example-basic-single col-md-12" name="bf" id="bf" onchange=getNamaSubstance() disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram as $data)
+                                    @foreach ($jenisgram2 as $data)
                                     <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
@@ -86,7 +86,7 @@
                                 <input type="hidden" id="jenisGramLinerTengah_id" name="jenisGramLinerTengah_id">
                                 <select class="js-example-basic-single col-md-12" name="linerTengah" id="linerTengah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram as $data)
+                                    @foreach ($jenisgram1 as $data)
                                     <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
@@ -98,7 +98,7 @@
                                 <input type="hidden" id="jenisGramCf_id" name="jenisGramCf_id">
                                 <select class="js-example-basic-single col-md-12" name="cf" id="cf" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram as $data)
+                                    @foreach ($jenisgram2 as $data)
                                     <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>
@@ -110,7 +110,7 @@
                                 <input type="hidden" id="jenisGramLinerBawah_id" name="jenisGramLinerBawah_id">
                                 <select class="js-example-basic-single col-md-12" name="linerBawah" id="linerBawah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram as $data)
+                                    @foreach ($jenisgram1 as $data)
                                     <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                     @endforeach
                                 </select>

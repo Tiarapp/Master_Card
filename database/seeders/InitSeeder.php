@@ -73,7 +73,17 @@ class InitSeeder extends Seeder
         ]);
         DB::table('mata_uang')->insert([
         	'kode' => 'IDR',
-        	'nama' => 'RUPIAH',
+        	'nama' => 'Rupiah',		
+        	'createdBy' => 'SEEDER'	
+        ]);
+        DB::table('mata_uang')->insert([
+        	'kode' => 'USD',
+        	'nama' => 'US Dollar',
+        	'createdBy' => 'SEEDER'
+        ]);
+        DB::table('mata_uang')->insert([
+        	'kode' => 'EUR',
+        	'nama' => 'Euro Dollar',
         	'createdBy' => 'SEEDER'
         ]);
 
