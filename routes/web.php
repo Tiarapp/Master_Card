@@ -157,6 +157,15 @@ Route::get('/admin/sales/edit/{id}', 'SalesController@edit');
 Route::put('/admin/sales/update/{id}', 'SalesController@update');
 Route::get('/admin/sales/delete/{id}', 'SalesController@updateDeleted');
 
+//Palet Item
+Route::get('/admin/palet', 'PaletController@index')->name('palet');
+Route::get('/admin/palet/create', 'PaletController@create');
+Route::post('/admin/palet/store', 'PaletController@store');
+Route::get('/admin/palet/show/{id}', 'PaletController@show');
+Route::get('/admin/palet/edit/{id}', 'PaletController@edit');
+Route::put('/admin/palet/update/{id}', 'PaletController@update');
+Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
+
 //Supplier
 Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
 Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('supplier.show');
