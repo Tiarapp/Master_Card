@@ -11,12 +11,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Palet</h1>
+          <h1 class="m-0">Surat Jalan Palet</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Palet</li>
+            <li class="breadcrumb-item active">Surat Jalan Palet</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -45,12 +45,14 @@
           <tbody>
             <?php
             $no = 1;
-            foreach ($palet as $data) { ?>
+            foreach ($sj as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->nama }}</td>
+                <td>{{ $data->sj_palet_m_id }}</td>
+                <td>{{ $data->item_palet_id }}</td>
+                <td>{{ $data->namaBarang }}</td>
                 <td>{{ $data->ukuran }}</td>
-                <td>{{ $data->nokontrak }}</td>
+                <td>{{ $data->noKontrak }}</td>
                 <td>{{ $data->keterangan }}</td>
                 <td>
                   <div class="input-group">
