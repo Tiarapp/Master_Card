@@ -15,7 +15,7 @@ class CreateAlamatTable extends Migration
     {
         Schema::create('alamat', function (Blueprint $table) {
             $table->id('id');
-            $table->enum('jenis',['Kantor','Kirim','Tagihan','Toko'])->index();  //INPUT
+            $table->enum('jenis',['KANTOR','KIRIM','TAGIHAN','TOKO'])->index();  //INPUT
             $table->integer('customer_id')->nullable()->index();     //AUTO
             $table->integer('supplier_id')->nullable()->index();     //AUTO
             $table->decimal('latitude',9,6)->nullable();    //INPUT
@@ -26,10 +26,12 @@ class CreateAlamatTable extends Migration
             $table->string('perumahanNamaTempat')->nullable();               //INPUT
             $table->string('rt')->nullable();           //INPUT
             $table->string('rw')->nullable();           //INPUT
-            $table->enum('kelurahanDesa',['Kelurahan','Desa'])->nullable(); //INPUT
+            $table->enum('kelurahanDesa',['KELURAHAN','DESA'])->nullable(); //INPUT
+            $table->string('namaKelurahanDesa')->nullable(); //INPUT
             $table->string('kecamatan')->nullable();            //INPUT
-            $table->enum('kotaKabupaten',['Kota','Kabupaten']); //INPUT
-            $table->string('provinsi');                         //INPUT
+            $table->enum('kotaKabupaten',['KOTA','KABUPATEN'])->nullable(); //INPUT
+            $table->string('namaKotaKabupaten')->nullable();    //INPUT
+            $table->string('provinsi')->nullable();             //INPUT
             $table->string('kodePos')->nullable();              //INPUT
             $table->string('negara');                           //INPUT
             $table->string('alamatLengkap')->index();            //AUTO alamat+perumahanNamaTempat+rt+rw+kelurahanDesa+Kecamatan+kotaKabupaten+provinsi+negara+kodePos

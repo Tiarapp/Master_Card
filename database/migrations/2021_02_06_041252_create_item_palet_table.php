@@ -17,7 +17,7 @@ class CreateItemPaletTable extends Migration
             $table->id('id');
             $table->string('nama');
             $table->string('ukuran');
-            $table->string('nokontrak');
+            $table->string('noKontrak');
             $table->text('keterangan')->nullable();
 
             $table->string('createdBy');                    //Auto ambil dari login
