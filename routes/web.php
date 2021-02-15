@@ -166,6 +166,15 @@ Route::get('/admin/palet/edit/{id}', 'PaletController@edit');
 Route::put('/admin/palet/update/{id}', 'PaletController@update');
 Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
 
+//Surat Jalan
+Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');
+Route::get('/admin/sj_palet/create', 'SJ_Palet_DController@create');
+Route::post('/admin/sj_palet/store', 'SJ_Palet_DController@store');
+Route::get('/admin/sj_palet/show/{id}', 'SJ_Palet_DController@show');
+Route::get('/admin/sj_palet/edit/{id}', 'SJ_Palet_DController@edit');
+Route::put('/admin/sj_palet/update/{id}', 'SJ_Palet_DController@update');
+Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
+
 //Supplier
 Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
 Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('supplier.show');
