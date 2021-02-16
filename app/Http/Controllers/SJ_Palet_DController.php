@@ -28,11 +28,9 @@ class SJ_Palet_DController extends Controller
     public function create()
     {
         $palet = DB::table('item_palet')->get();
-        $sj_m = DB::table('sj_palet_m')->get();
 
         return view('admin.sj_palet.create', compact(
             'palet',
-            'sj'
         ));
     }
 
