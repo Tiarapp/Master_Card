@@ -95,4 +95,11 @@ class PaletController extends Controller
     {
         //
     }
+
+    public function getPalet(Request $request)
+    {
+        $request = $request->request;
+
+        var_dump($request);
+    }
 }

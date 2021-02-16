@@ -165,6 +165,7 @@ Route::get('/admin/palet/show/{id}', 'PaletController@show');
 Route::get('/admin/palet/edit/{id}', 'PaletController@edit');
 Route::put('/admin/palet/update/{id}', 'PaletController@update');
 Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
+Route::post('/admin/palet/getPalet/{id}', 'PaletController@updateDeleted')->name('palet.getPalet');
 
 //Surat Jalan
 Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');
