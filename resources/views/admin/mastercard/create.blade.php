@@ -40,14 +40,14 @@
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section"> Data Master Item</h4>
-                                    {{-- <div class="row">
+                                    <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Kode</label>
                                         </div>
                                         <div class="col-md-2">
                                             <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode">
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">No Item</label>

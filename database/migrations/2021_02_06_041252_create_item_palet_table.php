@@ -15,10 +15,9 @@ class CreateItemPaletTable extends Migration
     {
         Schema::create('item_palet', function (Blueprint $table) {
             $table->id('id');
+            $table->string('kodePalet');
             $table->string('nama');
             $table->string('ukuran');
-            $table->string('noKontrak');
-            $table->text('keterangan')->nullable();
 
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
