@@ -22,18 +22,18 @@ class CreateAlamatTable extends Migration
             $table->decimal('longitude',9,6)->nullable();   //INPUT
             $table->string('pic');                      //INPUT
             $table->string('telpPic');                  //INPUT
-            $table->string('alamat');                   //INPUT
+            $table->string('negara');                           //INPUT
+            $table->string('provinsi')->nullable();             //INPUT
+            $table->enum('kotaKabupaten',['KOTA','KABUPATEN'])->nullable(); //INPUT
+            $table->string('namaKotaKabupaten')->nullable();    //INPUT
+            $table->string('kecamatan')->nullable();            //INPUT
+            $table->enum('kelurahanDesa',['KELURAHAN','DESA'])->nullable(); //INPUT
+            $table->string('namaKelurahanDesa')->nullable(); //INPUT
             $table->string('perumahanNamaTempat')->nullable();               //INPUT
             $table->string('rt')->nullable();           //INPUT
             $table->string('rw')->nullable();           //INPUT
-            $table->enum('kelurahanDesa',['KELURAHAN','DESA'])->nullable(); //INPUT
-            $table->string('namaKelurahanDesa')->nullable(); //INPUT
-            $table->string('kecamatan')->nullable();            //INPUT
-            $table->enum('kotaKabupaten',['KOTA','KABUPATEN'])->nullable(); //INPUT
-            $table->string('namaKotaKabupaten')->nullable();    //INPUT
-            $table->string('provinsi')->nullable();             //INPUT
             $table->string('kodePos')->nullable();              //INPUT
-            $table->string('negara');                           //INPUT
+            $table->string('alamat');                   //INPUT
             $table->string('alamatLengkap')->index();            //AUTO alamat+perumahanNamaTempat+rt+rw+kelurahanDesa+Kecamatan+kotaKabupaten+provinsi+negara+kodePos
             $table->boolean('aktif')->default(1)->comment('1:Aktif, 0:Non Aktif')->index();  //INPUT
             // TRACKING
