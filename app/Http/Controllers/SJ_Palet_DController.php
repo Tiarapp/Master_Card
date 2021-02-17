@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Palet;
+use App\Models\SJ_Palet_D;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PaletController extends Controller
+class SJ_Palet_DController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,9 @@ class PaletController extends Controller
      */
     public function index()
     {
-        //
-        $palet = DB::table('item_palet')->get();
+        $sj = DB::table('sj_palet_d')->get();
 
-        return view('admin.palet.index', compact('palet'));
+        return view('admin.sj_palet.index', compact('sj'));
     }
 
     /**
@@ -28,7 +27,13 @@ class PaletController extends Controller
      */
     public function create()
     {
-        return view('admin.palet.create');
+        $palet = DB::table('item_palet')->get();
+        $sj_m = DB::table('sj_palet_m')->get();
+
+        return view('admin.sj_palet.create', compact(
+            'palet',
+            'sj'
+        ));
     }
 
     /**
@@ -40,24 +45,17 @@ class PaletController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'ukuran' => 'required',
-            'nokontrak' => 'required',
-            'keterangan' => 'nullable'
+            
         ]);
-
-        Palet::create($request->all());
-
-        return redirect('admin/palet');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Palet  $palet
+     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
      * @return \Illuminate\Http\Response
      */
-    public function show(Palet $palet)
+    public function show(SJ_Palet_D $sJ_Palet_D)
     {
         //
     }
@@ -65,10 +63,10 @@ class PaletController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Palet  $palet
+     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
      * @return \Illuminate\Http\Response
      */
-    public function edit(Palet $palet)
+    public function edit(SJ_Palet_D $sJ_Palet_D)
     {
         //
     }
@@ -77,10 +75,10 @@ class PaletController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Palet  $palet
+     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Palet $palet)
+    public function update(Request $request, SJ_Palet_D $sJ_Palet_D)
     {
         //
     }
@@ -88,10 +86,10 @@ class PaletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Palet  $palet
+     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Palet $palet)
+    public function destroy(SJ_Palet_D $sJ_Palet_D)
     {
         //
     }
