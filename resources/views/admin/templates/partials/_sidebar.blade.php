@@ -63,13 +63,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/divisi" class="nav-link">
+                <a href="{{ route('divisi') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Divisi</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/flute" class="nav-link">
+                <a href={{ route('flute') }} class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Flute</p>
                 </a>
@@ -105,13 +105,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/sales" class="nav-link">
+                <a href="{{ route('sales') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sales</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('satuans') }}" class="nav-link">
+                <a href="{{ route('satuan') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Satuan</p>
                 </a>

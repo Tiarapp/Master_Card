@@ -26,7 +26,7 @@ Route::get('/admin', function () {
 })->middleware(['auth'])->name('admin');
 
 //Satuan
-Route::get('/admin/satuans', 'SatuansController@index')->name('satuans');
+Route::get('/admin/satuans', 'SatuansController@index')->name('satuan');
 Route::get('/admin/satuans/create', 'SatuansController@create');
 Route::post('/admin/satuans/store', 'SatuansController@store');
 Route::get('/admin/satuans/edit/{id}', 'SatuansController@edit');
@@ -35,7 +35,7 @@ Route::get('/admin/satuans/show/{id}', 'SatuansController@show');
 Route::get('/admin/satuans/delete/{id}', 'SatuansController@updateDeleted');
 
 //Divisi
-Route::get('/admin/divisi', 'DivisiController@index');
+Route::get('/admin/divisi', 'DivisiController@index')->name('divisi');
 Route::get('/admin/divisi/create', 'DivisiController@create');
 Route::post('/admin/divisi/store', 'DivisiController@store');
 Route::get('/admin/divisi/show/{id}', 'DivisiController@show');
@@ -44,7 +44,7 @@ Route::put('/admin/divisi/update/{id}', 'DivisiController@update');
 Route::get('/admin/divisi/delete/{id}', 'DivisiController@updateDeleted');
 
 //Flute
-Route::get('/admin/flute', 'FluteController@index');
+Route::get('/admin/flute', 'FluteController@index')->name('flute');
 Route::get('/admin/flute/create', 'FluteController@create');
 Route::post('/admin/flute/store', 'FluteController@store');
 Route::get('/admin/flute/show/{id}', 'FluteController@show');
@@ -149,7 +149,7 @@ Route::post('/admin/colorcombine/store', 'ColorCombineController@store');
 
 
 //Sales
-Route::get('/admin/sales', 'SalesController@index');
+Route::get('/admin/sales', 'SalesController@index')->name('sales');
 Route::get('/admin/sales/create', 'SalesController@create');
 Route::post('/admin/sales/store', 'SalesController@store');
 Route::get('/admin/sales/show/{id}', 'SalesController@show');
