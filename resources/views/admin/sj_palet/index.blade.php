@@ -35,10 +35,11 @@
           <thead>
             <tr>
               <th scope="col">No.</th>
-              <th scope="col">Nama</th>
-              <th scope="col">Ukuran</th>
-              <th scope="col">No Kontrak</th>
-              <th scope="col">Keterangan</th>
+              <th scope="col">No SJ</th>
+              <th scope="col">Tanggal</th>
+              <th scope="col">No Polisi</th>
+              <th scope="col">Customer</th>
+              <th scope="col">No PO Customer</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -48,18 +49,18 @@
             foreach ($sj as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->sj_palet_m_id }}</td>
-                <td>{{ $data->item_palet_id }}</td>
-                <td>{{ $data->namaBarang }}</td>
-                <td>{{ $data->ukuran }}</td>
-                <td>{{ $data->noKontrak }}</td>
-                <td>{{ $data->keterangan }}</td>
+                <td>{{ $data->noSuratJalan }}</td>
+                <td>{{ $data->tanggal }}</td>
+                <td>{{ $data->noPolisi }}</td>
+                <td>{{ $data->namaCustomer }}</td>
+                <td>{{ $data->noPoCustomer }}</td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="/admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="/admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="/admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="/admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>

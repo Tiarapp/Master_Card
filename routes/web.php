@@ -171,10 +171,11 @@ Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
 Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');
 Route::get('/admin/sj_palet/create', 'SJ_Palet_DController@create')->name('sj_palet.create');
 Route::post('/admin/sj_palet/store', 'SJ_Palet_DController@store');
-Route::get('/admin/sj_palet/show/{id}', 'SJ_Palet_DController@show');
+Route::get('/admin/sj_palet/show/{sj_palet_m_id}', 'SJ_Palet_DController@show');
 Route::get('/admin/sj_palet/edit/{id}', 'SJ_Palet_DController@edit');
 Route::put('/admin/sj_palet/update/{id}', 'SJ_Palet_DController@update');
 Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
+Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
 
 //Supplier
 Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
