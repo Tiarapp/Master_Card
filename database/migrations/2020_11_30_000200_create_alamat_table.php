@@ -15,7 +15,7 @@ class CreateAlamatTable extends Migration
     {
         Schema::create('alamat', function (Blueprint $table) {
             $table->id('id');
-            $table->enum('jenis',['KANTOR','KIRIM','TAGIHAN','TOKO'])->index();  //INPUT
+            $table->enum('jenis',['KANTOR','KIRIM','TAGIHAN','TOKO','GUDANG'])->index();  //INPUT
             $table->integer('customer_id')->nullable()->index();     //AUTO
             $table->integer('supplier_id')->nullable()->index();     //AUTO
             $table->decimal('latitude',9,6)->nullable();    //INPUT
