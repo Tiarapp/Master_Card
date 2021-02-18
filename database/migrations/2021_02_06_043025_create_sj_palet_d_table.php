@@ -21,7 +21,7 @@ class CreateSjPaletDTable extends Migration
             $table->string('namaBarang');       //INPUT EXP
             $table->string('ukuran');           //INPUT EXP
             $table->string('noKontrak');        //INPUT EXP
-            $table->string('keterangan');       //INPUT EXP
+            $table->string('keterangan')->nullable();       //INPUT EXP
             //RELATION
             $table->foreign('sj_palet_m_id')->references('id')->on('sj_palet_m')->cascadeOnDelete();
             $table->foreign('item_palet_id')->references('id')->on('item_palet')->cascadeOnDelete();
