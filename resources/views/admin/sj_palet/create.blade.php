@@ -31,7 +31,7 @@
                 </div>
                 @endif
                 
-                <form action="/admin/sj_palet/store"  method="POST">
+                <form action="{{ route('sj_palet.store') }}"  method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-5">
@@ -64,6 +64,23 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
+                                        <label>Nama Customer</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="hidden" name="namaCustomer" id="namaCustomer">
+                                        <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
+                                            @foreach ($customer as $data)
+                                                <option value="{{ $data->Nama }}|{{ $data->AlamatKantor }}">{{ $data->Nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <label>No. Polisi</label>
                                     </div>
                                     <div class="col-md-6">
@@ -72,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        {{-- <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -83,22 +100,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Nama Customer</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="namaCustomer" id="namaCustomer">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -111,12 +116,15 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Catatan</label>
-                            {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
-                            <input type="text" class="form-control txt_line" name="catatan" id="catatan">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Catatan</label>
+                                {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
+                                <div class="col-md-10">
+                                    {{-- <input type="textarea" class="form-control txt_line" name="alamatCustomer" id="alamatCustomer"> --}}
+                                    <textarea class="form-control txt_line" name="catatan" id="catatan" cols="40" rows="3"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -175,6 +183,17 @@
                 $(document).ready(function() {
                     $('.js-example-basic-single').select2();
                 });
+
+                function getCustomer() {
+                    var data = document.getElementById('listCust').value;
+
+                    var cust = data.split('|');
+                    var custNama = cust[0];
+                    var custAlamat = cust[1];
+
+                    document.getElementById('namaCustomer').value = custNama;
+                    document.getElementById('alamatCustomer').value = custAlamat;
+                }
                 
                 function getData() {
                     var data1 = document.getElementById("nama_1").value;

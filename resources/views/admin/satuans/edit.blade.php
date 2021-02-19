@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/satuans/update/{{ $satuan->id }}" method="POST">
+                <form action="../update/{{ $satuan->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">

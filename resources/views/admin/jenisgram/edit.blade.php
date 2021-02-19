@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/jenisgram/update/{{ $jenisgram->id }}" method="POST">
+                <form action="../update/{{ $jenisgram->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row was-validated">
@@ -62,7 +62,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                                <a href="/admin/sheet">
+                                <a href="{{ route('jenisgram') }}">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
                         </div>

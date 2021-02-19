@@ -31,7 +31,7 @@
                 </div>
                 @endif
                 
-                <form action="/admin/sj_palet/store"  method="POST">
+                <form>
                     @csrf
                     <div class="row">
                         <div class="col-md-5">

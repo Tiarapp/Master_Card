@@ -31,11 +31,13 @@ class SJ_Palet_DController extends Controller
     public function create()
     {
         $palet = DB::table('item_palet')->get();
+        $customer = DB::connection('firebird')->table('TCustomer')->get();
         $url = Route::currentRouteName();
 
         return view('admin.sj_palet.create', compact(
             'palet',
-            'url'
+            'url',
+            'customer'
         ));
     }
 

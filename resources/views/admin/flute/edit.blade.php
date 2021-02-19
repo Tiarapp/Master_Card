@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/flute/update/{{ $flute->id }}" method="POST">
+                <form action="../update/{{ $flute->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">

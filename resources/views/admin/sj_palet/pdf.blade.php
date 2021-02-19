@@ -57,21 +57,21 @@
             <td align="left" valign=middle><font color="#000000"><br></font></td>
         </tr>
         <tr style="height:30px;">
-            <td style="border-bottom: 1px solid #000000" colspan=3 align="left" valign=middle><b><font face="Arial" size=2>Kembangbahu, Moronyamplung, Lamongan 62282</font></b></td>
+            <td colspan=3 align="left" valign=middle><b><font face="Arial" size=2>Kembangbahu, Moronyamplung, Lamongan 62282</font></b></td>
             <td align="left" valign=middle><b><font face="Arial" size=2 style="padding-left: 5px;">Tanggal</font></b></td>
             <td align="left" valign=middle sdval="44245.3188248181" sdnum="1033;0;D-M-YY"><b><font face="Arial" size=2>{{ $sj_Palet_M->tanggal }}</font></b></td>
             <td align="left" valign=middle><b><font face="Arial" size=2><br></font></b></td>
         </tr>
         <tr style="height:30px;">
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 height="34" align="left" valign=middle><b><font face="Arial" size=2>{{ $sj_Palet_M->namaCustomer }}</font></b></td>
+            <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 height="34" align="left" valign=middle><b><font face="Arial" size=2>{{ $sj_Palet_M->namaCustomer }}</font></b></td>
             <td align="left" valign=middle><b><font face="Arial" size=2 style="padding-left: 5px;">No Polisi</font></b></td>
             <td align="left" valign=middle><b><font face="Arial" size=2>{{ $sj_Palet_M->noPolisi }}</font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 rowspan=2 height="45" align="left" valign=top sdnum="1033;0;@"><b><font face="Arial" size=2>{{ $sj_Palet_M->alamatCustomer }}</font></b></td>
-            <td align="left" valign=middle><b><font face="Arial" size=2 style="padding-left: 5px;">No PO Customer</font></b></td>
-            <td align="left" valign=middle><b><font face="Arial" size=2>{{ $sj_Palet_M->noPoCustomer }}</font></b></td>
+            <td align="left" valign=middle><b><font face="Arial" size=2 style="padding-left: 5px;"></font></b></td>
+            <td align="left" valign=middle><b><font face="Arial" size=2></font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         <tr>
@@ -91,11 +91,11 @@
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="21" align="center" valign=middle><b><font face="Arial" size=2>No</font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Jml KOLI</font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Nama Barang</font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>No Kontrak</font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>Keterangan</font></b></td>
+            <td style="border: 1px solid #000000" colspan=2 height="21" align="center" valign=middle><b><font face="Arial" size=2>No</font></b></td>
+            <td style="border: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Jml KOLI</font></b></td>
+            <td style="border: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Nama Barang</font></b></td>
+            <td style="border: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>No Kontrak</font></b></td>
+            <td style="border: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>Keterangan</font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         
@@ -105,11 +105,11 @@
         foreach ($sj_Palet_D as $data) {
             ?>
             <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="23" align="center" valign=middle sdval="1" sdnum="1033;"><b><font face="Arial" size=2>{{ $no++ }}</font></b></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="123" sdnum="1033;"><b><font face="Arial" size=2>{{ $data->qty }}</font></b></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle><b><font face="Arial" size=2>{{ $data->namaBarang }}</font></b></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->noKontrak }}</font></b></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->keterangan }}</font></b></td>
+                <td style="border-top: 1px solid #000000; " colspan=2 height="23" align="center" valign=middle sdval="1" sdnum="1033;"><b><font face="Arial" size=2>{{ $no++ }}</font></b></td>
+                <td style="border: 0.5px solid #000000" colspan=2 align="center" valign=middle sdval="123" sdnum="1033;"><b><font face="Arial" size=2>{{ $data->qty }}</font></b></td>
+                <td style="border: 0.5px solid #000000" colspan=2 align="left" valign=middle><b><font face="Arial" size=2>{{ $data->namaBarang }}</font></b></td>
+                <td style="border: 0.5px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->noKontrak }}</font></b></td>
+                <td style="border: 0.5px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->keterangan }}</font></b></td>
                 <td align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Arial" size=2><br></font></b></td>
             </tr>
             
@@ -125,16 +125,16 @@
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         <tr>
-            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" colspan=3 height="21" align="center" valign=middle><b><font face="Arial" size=2>Penerima</font></b></td>
-            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Pengemudi</font></b></td>
+            <td style="border-left: 1px solid #000000" colspan=3 height="21" align="center" valign=middle><b><font face="Arial" size=2>Penerima</font></b></td>
+            <td style="border-left: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Pengemudi</font></b></td>
             <td style="border-left: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>Mengetahui</font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Ekspedisi</font></b></td>
+            <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Ekspedisi</font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 rowspan=3 height="60" align="center" valign=middle><b><font face="Arial"><br></font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=3 align="center" valign=middle><b><font face="Arial"><br></font></b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=3 align="center" valign=middle><b><font face="Arial"><br></font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; " colspan=3 rowspan=3 height="60" align="center" valign=middle><b><font face="Arial"><br></font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; " colspan=2 rowspan=3 align="center" valign=middle><b><font face="Arial"><br></font></b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; " rowspan=3 align="center" valign=middle><b><font face="Arial"><br></font></b></td>
             <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=3 align="center" valign=middle><b><font face="Arial"><br></font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
@@ -152,7 +152,7 @@
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
-            <td align="right" valign=middle sdval="44245.3188248318" sdnum="1033;0;M/D/YYYY H:MM:SS"><font size=2 color="#000000">2/18/2021 7:39:06</font></td>
+            <td align="right" valign=middle sdval="44245.3188248318" sdnum="1033;0;M/D/YYYY H:MM:SS"><font size=2 color="#000000">{{ $sj_Palet_M->created_at }}</font></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
     </table>

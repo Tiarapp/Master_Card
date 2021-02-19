@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/boxtype/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('boxtype.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_boxtype">
           <thead>
@@ -53,9 +53,9 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/boxtype/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/boxtype/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/boxtype/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="../admin/boxtype/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="../admin/boxtype/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/boxtype/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>
