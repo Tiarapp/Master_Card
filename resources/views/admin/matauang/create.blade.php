@@ -20,7 +20,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/matauang/store" method="POST">
+                <form action="{{ route('matauang.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

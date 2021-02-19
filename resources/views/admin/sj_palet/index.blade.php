@@ -4,6 +4,12 @@
 @extends('admin.templates.partials.default')
 
 
+{{-- <style>
+  td, tr {
+    border:1px solid black !important;
+  }
+</style> --}}
+
 @section('content')
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -49,7 +55,7 @@
             foreach ($sj as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->noSuratJalan }}</td>
+                <td><b>{{ $data->noSuratJalan }}</b></td>
                 <td>{{ $data->tanggal }}</td>
                 <td>{{ $data->noPolisi }}</td>
                 <td>{{ $data->namaCustomer }}</td>
@@ -57,10 +63,10 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
-                      <a href="/admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="../admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="../admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>

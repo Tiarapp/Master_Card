@@ -28,7 +28,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/jenisgram/store" method="POST" class="inputJenisGram">
+                <form action="{{ route('jenisgram.store') }}" method="POST" class="inputJenisGram">
                     @csrf
                     <div class="row was-validated">
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode jenis gram">
@@ -67,7 +67,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                                <a href="/admin/substance">
+                                <a href="{{ route('jenisgram') }}">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
                         </div>

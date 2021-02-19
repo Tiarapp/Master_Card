@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/wax/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('wax.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_wax">
           <thead>
@@ -67,9 +67,9 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/wax/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/wax/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/wax/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="../admin/wax/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="../admin/wax/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/wax/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>

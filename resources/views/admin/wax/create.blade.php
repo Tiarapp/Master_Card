@@ -24,7 +24,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/wax/store" method="POST">
+                <form action="{{ route('wax.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

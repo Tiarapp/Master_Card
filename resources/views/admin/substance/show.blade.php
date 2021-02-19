@@ -85,7 +85,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                                <a href="/admin/sheet">
+                                <a href="{{ route('substance') }}">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
                         </div>

@@ -17,7 +17,6 @@ class DivisiController extends Controller
     public function index()
     {
         $divisi = DB::table('divisi')
-            ->where('deleted', '=', '0')
             ->simplePaginate(25);
         
         return view('admin.divisi.index', compact('divisi'));
@@ -49,7 +48,7 @@ class DivisiController extends Controller
 
         Divisi::create($request->all());
 
-        return redirect('/admin/divisi');
+        return redirect('../admin/divisi');
     }
 
     /**

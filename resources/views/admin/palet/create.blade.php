@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/palet/store" method="POST">
+                <form action="{{ route('palet.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

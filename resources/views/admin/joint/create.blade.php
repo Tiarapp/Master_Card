@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/joint/store" method="POST">
+                <form action="{{ route('joint.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

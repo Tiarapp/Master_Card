@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/joint/update/{{ $joint->id }}" method="POST">
+                <form action="../update/{{ $joint->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">

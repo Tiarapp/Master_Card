@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">
-                                <a href="/admin/boxtype" style="color : white;">Back</a>
+                                <a href="{{ route('warna') }}" style="color : white;">Back</a>
                             </button>
                         </div>
                     </div>
