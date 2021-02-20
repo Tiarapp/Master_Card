@@ -53,7 +53,6 @@ class SJ_Palet_DController extends Controller
             'noSuratJalan' => 'required',
             'tanggal' => 'required',
             'noPolisi' => 'required',
-            'noPoCustomer' => 'required',
             'namaCustomer' => 'required',
             'alamatCustomer' => 'required',
         ]);
