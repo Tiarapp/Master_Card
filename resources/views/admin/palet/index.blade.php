@@ -37,8 +37,6 @@
               <th scope="col">No.</th>
               <th scope="col">Nama</th>
               <th scope="col">Ukuran</th>
-              <th scope="col">No Kontrak</th>
-              <th scope="col">Keterangan</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -50,14 +48,12 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->ukuran }}</td>
-                <td>{{ $data->nokontrak }}</td>
-                <td>{{ $data->keterangan }}</td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="../admin/palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="../admin/palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>
