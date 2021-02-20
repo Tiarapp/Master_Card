@@ -12,9 +12,8 @@ class Palet extends Model
     protected $table = 'item_palet';
     protected $fillable = [
         'nama',
+        'kodePalet',
         'ukuran',
-        'nokontrak',
-        'keterangan',
         'createdBy',
         'lastUpdatedBy',
         'deletedAt',

@@ -93,8 +93,8 @@
         <tr>
             <td style="border-left: 1px solid #000000; border-top: 1px solid #000000; border-bot: 1px solid #000000" colspan=2 height="21" align="center" valign=middle><b><font face="Arial" size=2>No</font></b></td>
             <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>QTY</font></b></td>
-            <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=3 align="center" valign=middle><b><font face="Arial" size=2>Nama Barang</font></b></td>
-            {{-- <td style="border: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>No Kontrak</font></b></td> --}}
+            <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=2 align="center" valign=middle><b><font face="Arial" size=2>Nama Barang</font></b></td>
+            <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" align="center" valign=middle><b><font face="Arial" size=2>Ukuran</font></b></td>
             <td style="border-left: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial" size=2>Keterangan</font></b></td>
             <td align="left" valign=middle><b><font face="Arial"><br></font></b></td>
         </tr>
@@ -107,8 +107,8 @@
             <tr>
                 <td style="border-left: 1px solid #000000;" colspan=2 height="23" align="center" valign=middle sdval="1" sdnum="1033;"><b><font face="Arial" size=2>{{ $no++ }}</font></b></td>
                 <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="123" sdnum="1033;"><b><font face="Arial" size=2>{{ $data->qty }}</font></b></td>
-                <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=3 align="left" valign=middle><b><font face="Arial" size=2>{{ $data->namaBarang }}</font></b></td>
-                {{-- <td style="border: 0.5px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->noKontrak }}</font></b></td> --}}
+                <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" colspan=2 align="left" valign=middle><b><font face="Arial" size=2>{{ $data->namaBarang }}</font></b></td>
+                <td style="border-left: 1px solid #000000; border-top: 1px solid #000000;" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->ukuran }}</font></b></td>
                 <td style="border-left: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Arial" size=2>{{ $data->keterangan }}</font></b></td>
                 <td align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Arial" size=2><br></font></b></td>
             </tr>

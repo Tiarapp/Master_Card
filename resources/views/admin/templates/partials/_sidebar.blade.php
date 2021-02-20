@@ -35,7 +35,7 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -99,12 +99,6 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('palet') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Palet</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="{{ route('sales') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sales</p>
@@ -135,12 +129,6 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('sj_palet') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Surat Jalan Palet</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="{{ route('boxtype') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Tipe Box</p>
@@ -152,19 +140,43 @@
                   <p>Warna</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="{{ route('wax') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Wax</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
-          </li>
-          <li class="nav-item">
+          </li> --}}
+          {{-- <li class="nav-item">
             <a href="{{ route('mastercard') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>Master Card</p>
             </a>
+          </li> --}}
+
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Palet
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('sj_palet') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Surat Jalan Palet</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('palet') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Palet</p>
+                </a>
+              </li>
+            </ul>
           </li>
           {{-- <li class="nav-item">
             <a href="#" class="nav-link">
@@ -760,6 +772,7 @@
             </a>
           </li> --}}
         </ul>
+        
       </nav>
       <!-- /.sidebar-menu -->
     </div>
