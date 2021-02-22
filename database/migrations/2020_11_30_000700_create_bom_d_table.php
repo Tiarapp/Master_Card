@@ -17,7 +17,7 @@ class CreateBomDTable extends Migration
             $table->id('id');
             $table->foreignId('bom_m_id')->index();         //AUTO
             $table->foreignId('bomComponent_id')->index();  //INPUT PPIC
-            $table->integer('qty');                         //INPUT PPIC
+            $table->float('qty',20,8);                      //INPUT PPIC
             $table->foreignId('satuan');                    //INPUT PPIC
             $table->integer('avg_price');                   //INPUT ACC
             $table->foreignId('mataUang')->nullable();      //INPUT ACC

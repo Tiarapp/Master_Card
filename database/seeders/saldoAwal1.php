@@ -1265,9 +1265,26 @@ class saldoAwal extends Seeder
         DB::table('item_bj')->insert(['kode'=>'LBE.01.01.S20.09100.001','nama'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK STAWBERRY','alias'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK STAWBERRY','mc_id'=>'0910','gram'=>0.32,'pcs'=>0,'kg'=>0,'lokasi'=>0,'createdBy'=>'SEEDER']);
         DB::table('item_bj')->insert(['kode'=>'LBE.01.01.S20.09090.001','nama'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK CAPPUCINO','alias'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK CAPPUCINO','mc_id'=>'0909','gram'=>0.32,'pcs'=>0,'kg'=>0,'lokasi'=>0,'createdBy'=>'SEEDER']);
 		
-		//ALAMAT
-		DB::table('alamat')->insert(['kode'=>'LBE.01.01.S20.09090.001','nama'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK CAPPUCINO','alias'=>'BOX KUGI WAFER STICK 120 GR X 24 PACK CAPPUCINO','mc_id'=>'0909','gram'=>0.32,'pcs'=>0,'kg'=>0,'lokasi'=>0,'createdBy'=>'SEEDER']);
+		//BOM_M_TABLE
+        DB::table('bom_m_table')->insert(['kode'=>'','nama'=>'','flute_id'=>'','substance_id'=>'','luas'=>0.32,'satuanLuas'=>'','beratPerLuas'=>0,'satuanBeratPerLuas'=>'','avgPrice'=> 9,'mataUang'=> 9,'createdBy'=>'SEEDER']);
     }
 }
 
-
+//BOM_M_TABLE
+$table->id('id');
+$table->string('kode')->unique()->index();           //AUTO NUMBER SEQUENCE
+$table->string('nama')->nullable()->index();         //INPUT PPIC
+$table->foreignId('flute_id')->index();              //INPUT PPIC
+$table->foreignId('substance_id')->nullable();       //INPUT PPIC
+$table->float('luas',8,2)->nullable();                 //INPUT PPIC
+$table->foreignId('satuanLuas')->nullable();         //INPUT PPIC
+$table->integer('beratPerLuas')->nullable();         //INPUT PPIC
+$table->foreignId('satuanBeratPerLuas')->nullable(); //INPUT PPIC
+$table->integer('avgPrice')->nullable();             //INPUT ACC
+$table->foreignId('mataUang')->nullable();           //INPUT ACC
+//RELATION
+$table->foreign('flute_id')->references('id')->on('flute')->cascadeOnDelete();
+$table->foreign('substance_id')->references('id')->on('substance')->cascadeOnDelete();
+$table->foreign('satuanLuas')->references('id')->on('satuan')->cascadeOnDelete();
+$table->foreign('satuanBeratPerLuas')->references('id')->on('satuan')->cascadeOnDelete();
+$table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();

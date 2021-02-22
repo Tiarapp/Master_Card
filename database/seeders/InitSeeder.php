@@ -30,9 +30,9 @@ class InitSeeder extends Seeder
 		
 		//MATA UANG
         DB::table('mata_uang')->delete();
+        DB::table('mata_uang')->insert(['kode' => 'IDR','nama' => 'RUPIAH','createdBy' => 'SEEDER'	]);
 		DB::table('mata_uang')->insert(['kode' => 'USD','nama' => 'US DOLLAR','createdBy' => 'SEEDER']);
         DB::table('mata_uang')->insert(['kode' => 'EUR','nama' => 'EURO DOLLAR','createdBy' => 'SEEDER']);
-        DB::table('mata_uang')->insert(['kode' => 'IDR','nama' => 'Rupiah','createdBy' => 'SEEDER'	]);
 
 		//TIPE BOX
 		DB::table('tipe_box')->delete();
@@ -57,8 +57,10 @@ class InitSeeder extends Seeder
         DB::table('satuan')->insert(['kode' => 'CM','nama' => 'CENTIMETER','createdBy' => 'SEEDER']);
         DB::table('satuan')->insert(['kode' => 'TON','nama' => 'TON','createdBy' => 'SEEDER']);
         DB::table('satuan')->insert(['kode' => 'M2','nama' => 'METER PERSEGI','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['kode' => 'M3','nama' => 'METER KUBIK','createdBy' => 'SEEDER']);
 
 		//FLUTE
+        DB::table('flute')->delete();
         DB::table('flute')->insert(['kode' => 'BF','nama' => 'B FLUTE','tur1' => 1.36,'tur2' => 0,'createdBy' => 'SEEDER']);
         DB::table('flute')->insert(['kode' => 'CF','nama' => 'C FLUTE','tur1' => 1.46,'tur2' => 0,'createdBy' => 'SEEDER']);
         DB::table('flute')->insert(['kode' => 'BCF','nama' => 'BC FLUTE','tur1' => 1.36,'tur2' => 1.46,'createdBy' => 'SEEDER']);
