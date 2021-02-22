@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/flute/store" method="POST">
+                <form action="{{ route('flute.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">

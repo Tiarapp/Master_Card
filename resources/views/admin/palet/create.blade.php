@@ -22,9 +22,15 @@
                     </div>
                 @endif
 
-                <form action="/admin/palet/store" method="POST">
+                <form action="{{ route('palet.store') }}" method="POST">
                     @csrf
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Kode Palet</label>
+                                <input type="text" class="form-control txt_line" name="kodePalet" id="kodePalet">
+                            </div>
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama</label>
@@ -38,19 +44,6 @@
                             <div class="form-group">
                                 <label>Ukuran</label>
                                 <input type="text" class="form-control txt_line" name="ukuran" id="ukuran">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>No Kontrak</label>
-                                <input type="text" class="form-control txt_line" name="nokontrak" id="nokontrak">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Keterangan</label>
-                                {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
-                                <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
                             </div>
                         </div>
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">

@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/koli/update/{{ $koli->id }}" method="POST">
+                <form action="../update/{{ $koli->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">

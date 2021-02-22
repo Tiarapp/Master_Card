@@ -15,6 +15,7 @@ class SJ_Palet_M extends Model
         'tanggal',
         'noPolisi',
         'namaCustomer',
+        'noPoCustomer',
         'alamatCustomer',
         'catatan',
         'createdBy',

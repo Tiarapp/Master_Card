@@ -28,7 +28,7 @@
                     </div>
                 @endif
 
-                <form action="/admin/sheet/store" method="POST" class="inputSheet">
+                <form action="{{ route('sheet.store') }}" method="POST" class="inputSheet">
                     @csrf
                     <div class="row was-validated">
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode sheet">

@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/warna/update/{{ $warna->id }}" method="POST">
+                <form action="../update/{{ $warna->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">

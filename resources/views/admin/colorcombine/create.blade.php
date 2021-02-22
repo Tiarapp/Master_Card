@@ -22,7 +22,7 @@
                 </div>
                 @endif
                 
-                <form action="/admin/colorcombine/store" method="POST">
+                <form action="{{ route('colorcombine.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -109,7 +109,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="cancel">
-                                <a href="/admin/divisi">
+                                <a href="{{ route('colorcombine') }}">
                                     <i class='far fa-window-close' style='color:red'></i>
                                 </a></button>
                             </div>

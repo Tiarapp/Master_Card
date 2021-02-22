@@ -55,6 +55,18 @@ return [
             'role'     => null,
         ],
 
+        'firebird' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST2', '192.168.0.250'),
+            'port'     => env('DB_PORT2', '3050'),
+            'database' => env('DB_DATABASE2', 'D:\Database\FBDB\MASTER_SPA.FDB'),
+            'username' => env('DB_USERNAME2', 'sysdba'),
+            'password' => env('DB_PASSWORD2', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+        ],
+
 
         'mysql' => [
             'driver' => 'mysql',

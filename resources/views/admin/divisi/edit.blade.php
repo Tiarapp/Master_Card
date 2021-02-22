@@ -20,7 +20,8 @@
                 </div>
                 @endif
 
-                <form action="/admin/divisi/update/{{ $divisi->id }}" method="POST">
+                <form action="../update/{{ $divisi->id }}" method="POST">
+                {{-- <form action="{{ route() }}" method="POST"> --}}
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
@@ -51,7 +52,7 @@
                                 <i class='far fa-check-square'></i>
                             </button>
                             <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="cancel">
-                                <a href="/admin/divisi"> <i class='far fa-window-close' style='color:red'></i></a>
+                                <a href="{{ route('divisi') }}"> <i class='far fa-window-close' style='color:red'></i></a>
                             </button>
 
                         </div>

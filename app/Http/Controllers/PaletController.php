@@ -40,9 +40,10 @@ class PaletController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'kodePalet' => 'required',
             'nama' => 'required',
+            'kodePalet' => 'required',
             'ukuran' => 'required',
-            'nokontrak' => 'required',
             'keterangan' => 'nullable'
         ]);
 
@@ -96,10 +97,10 @@ class PaletController extends Controller
         //
     }
 
-    public function getPalet(Request $request)
-    {
-        $request = $request->request;
+    // public function getPalet(Request $request)
+    // {
+    //     $request = $request->request;
 
-        var_dump($request);
-    }
+    //     var_dump($request);
+    // }
 }

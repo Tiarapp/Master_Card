@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/divisi/create" style="margin-bottom: 20px;margin-left: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('divisi.create') }}" style="margin-bottom: 20px;margin-left: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_divisi">
           <thead>
@@ -53,13 +53,13 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/divisi/show/{{ $data->id }}" class="btn btn-outline-success" type="button">
+                      <a href="../admin/divisi/show/{{ $data->id }}" class="btn btn-outline-success" type="button">
                         <i class="fa fa-eye" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
                       </a>
-                      <a href="/admin/divisi/edit/{{ $data->id }}" class="btn btn-outline-warning" type="button">
+                      <a href="../admin/divisi/edit/{{ $data->id }}" class="btn btn-outline-warning" type="button">
                         <i class="fa fa-edit" data-toggle="tooltip" data-placement="bottom" title="edit" id="edit"></i>
                       </a>
-                      <a href="/admin/divisi/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">
+                      <a href="../admin/divisi/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">
                         <i class="far fa-window-close" data-toggle="tooltip" data-placement="bottom" title="delete" id="delete"></i>
                       </a>
                     </div>

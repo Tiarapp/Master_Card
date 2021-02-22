@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/sheet/update/{{ $sheet->id }}" method="POST">
+                <form action="../update/{{ $sheet->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row was-validated">

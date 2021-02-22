@@ -65,8 +65,8 @@
                             <td>{{ $data->panjangSheet }}</td>
                             <td>{{ $data->luasSheet }}</td>
                             <td>{{ $data->keterangan }}</td>
-                            <td><a href="/upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
-                            <td> <a href="/admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> </td>
+                            <td><a href="../upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
+                            <td> <a href="../admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> </td>
                         </tr>
                             <?php
                         }    

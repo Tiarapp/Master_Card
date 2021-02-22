@@ -20,7 +20,7 @@
                 </div>
                 @endif
 
-                <form action="/admin/palet/update/{{ $palet->id }}" method="POST">
+                <form action="../update/{{ $palet->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
