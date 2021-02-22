@@ -40,7 +40,7 @@
         <table class="table table-bordered" id="data_palet">
           <thead>
             <tr>
-              <th scope="col">No.</th>
+              {{-- <th scope="col">No.</th> --}}
               <th scope="col">No SJ</th>
               <th scope="col">Tanggal</th>
               <th scope="col">No Polisi</th>
@@ -54,7 +54,7 @@
             $no = 1;
             foreach ($sj as $data) { ?>
               <tr>
-                <td scope="row">{{ $no++ }}</td>
+                {{-- <td scope="row">{{ $no++ }}</td> --}}
                 <td><b>{{ $data->noSuratJalan }}</b></td>
                 <td>{{ $data->tanggal }}</td>
                 <td>{{ $data->noPolisi }}</td>
