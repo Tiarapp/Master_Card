@@ -26,7 +26,7 @@ class CreateBoxTable extends Migration
             // SHEET BOX
             $table->integer('lebarSheetBox')->nullable();           //INPUT MARKETING
             $table->integer('panjangSheetBox')->nullable();         //INPUT MARKETING
-            $table->integer('tinggiSheetBox')->nullable();          //INPUT MARKETING
+            // $table->integer('tinggiSheetBox')->nullable();          //INPUT MARKETING
             $table->foreignId('satuanSizeSheetBox')->nullable();    //INPUT MARKETING
             $table->integer('luasSheetBox')->nullable();            //INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox')->nullable();    //INPUT MARKETING
