@@ -88,6 +88,7 @@
   <script>
     $(document).ready(function() {
       $("#data_palet").DataTable({
+        "order": [0, 'desc'],
         dom: 'Bfrtip',
         buttons: [
           'copy',
