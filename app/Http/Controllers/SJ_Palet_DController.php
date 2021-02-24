@@ -33,11 +33,11 @@ class SJ_Palet_DController extends Controller
     {
         $palet = DB::table('item_palet')->get();
         $customer = DB::connection('firebird')->table('TCustomer')->get();
-        $url = Route::currentRouteName();
+        // $url = Route::currentRouteName();
         
         return view('admin.sj_palet.create', compact(
             'palet',
-            'url',
+            // 'url',
             'customer'
         ));
     }
@@ -58,6 +58,8 @@ class SJ_Palet_DController extends Controller
         
         $nobukti = $ns[0]->format;
         $tanggal = $request->tanggal;
+
+        // dd($url, $ns, $tanggal);
 
         $start = Carbon::createFromFormat('Y-m-d', $tanggal)
             ->firstOfMonth()
@@ -122,7 +124,7 @@ class SJ_Palet_DController extends Controller
                 }
             }
                 
-                return redirect('../admin/sj_palet');
+                return redirect('admin/sj_palet');
                 
             }
             
@@ -139,7 +141,7 @@ class SJ_Palet_DController extends Controller
         ->where('sj_palet_m_id', '=', $sj_palet_m_id)
         ->get();
         
-        return view('admin.sj_palet.show', compact(
+        return view('admin.sj_palet.edit', compact(
             'sj_Palet_M',
             'sj_Palet_D'
         ));
@@ -151,9 +153,24 @@ class SJ_Palet_DController extends Controller
     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
     * @return \Illuminate\Http\Response
     */
-    public function edit(SJ_Palet_D $sJ_Palet_D)
-    {
-        //
+    public function edit($sj_palet_m_id)
+    {        
+        $palet = DB::table('item_palet')->get();
+        $customer = DB::connection('firebird')->table('TCustomer')->get();
+        $sj_Palet_M = SJ_Palet_M::find($sj_palet_m_id);
+        $sj_Palet_D = DB::table('sj_Palet_D')
+        ->where('sj_palet_m_id', '=', $sj_palet_m_id)
+        ->get();
+        $count = count($sj_Palet_D);
+        
+        // dd($sj_Palet_M);
+
+        return view('admin.sj_palet.edit', compact(
+            'sj_Palet_D',
+            'palet',
+            'customer',
+            'count'
+        ), ['sj_Palet_M' => $sj_Palet_M]);
     }
     
     /**
@@ -189,6 +206,8 @@ class SJ_Palet_DController extends Controller
             'sj_Palet_M',
             'sj_Palet_D'
         ));
+
+        // dd($sj_Palet_D);
     }
 }
         
