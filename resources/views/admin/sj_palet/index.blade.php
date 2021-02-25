@@ -45,7 +45,7 @@
               <th scope="col">Tanggal</th>
               <th scope="col">No Polisi</th>
               <th scope="col">Customer</th>
-              <th scope="col">No PO Customer</th>
+              {{-- <th scope="col">No PO Customer</th> --}}
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -59,14 +59,14 @@
                 <td>{{ $data->tanggal }}</td>
                 <td>{{ $data->noPolisi }}</td>
                 <td>{{ $data->namaCustomer }}</td>
-                <td>{{ $data->noPoCustomer }}</td>
+                {{-- <td>{{ $data->noPoCustomer }}</td> --}}
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
                       <a href="../admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
                       <a href="../admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>
                 </td>
@@ -88,6 +88,7 @@
   <script>
     $(document).ready(function() {
       $("#data_palet").DataTable({
+        "order": [0, 'desc'],
         dom: 'Bfrtip',
         buttons: [
           'copy',

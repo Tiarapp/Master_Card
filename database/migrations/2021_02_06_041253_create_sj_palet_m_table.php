@@ -17,7 +17,7 @@ class CreateSjPaletMTable extends Migration
             $table->id('id');
             $table->string('noSuratJalan');               //INPUT EXP
             $table->date('tanggal');                      //INPUT EXP
-            $table->string('noPolisi');                   //INPUT EXP
+            $table->string('noPolisi')->nullable();                   //INPUT EXP
             $table->string('noPoCustomer')->nullable();   //INPUT EXP
             $table->string('namaCustomer')->nullable();   //INPUT EXP
             $table->string('alamatCustomer')->nullable(); //INPUT EXP

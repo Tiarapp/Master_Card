@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        {{-- <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <div class="col-md-5">
@@ -134,7 +134,6 @@
                                 <th scope="col">Nama</th>
                                 <th scope="col">Ukuran</th>
                                 <th scope="col">Qty</th>
-                                <th scope="col">No Kontrak</th>
                                 <th scope="col">Keterangan</th>
                             </tr>
                         </thead>
@@ -155,7 +154,6 @@
                                             echo "</td>";
                                             echo "<td><input type='text' name='ukuran[$i]' id='ukuran[$i]' readonly></td>";
                                             echo "<td><input type='text' name='qty[$i]' id='qty[$i]'></td>";
-                                            echo "<td><input type='text' name='noKontrak[$i]' id='noKontrak[$i]'></td>";
                                             echo "<td><input type='text' name='keterangan[$i]' id='keterangan[$i]'></td>";
                                             echo "</tr>";
                                             echo "<input type='hidden' name='idpalet[$i]' id='idpalet[$i]' readonly>";
@@ -209,7 +207,7 @@
                         var ukuran1 = arr1[2]; 
                         document.getElementById("idpalet[1]").value = idpalet1;
                         document.getElementById("nama[1]").value = nama1;
-                        document.getElementById("ukuran[1]").value = ukuran1;
+                        document.getElementById("ukuran[1]").value = "Samuel";
                     } 
                     if (data2 != '') {
                         var arr2 = data2.split('|');
@@ -218,7 +216,7 @@
                         var ukuran2 = arr2[2]; 
                         document.getElementById("idpalet[2]").value = idpalet2;
                         document.getElementById("nama[2]").value = nama2;
-                        document.getElementById("ukuran[2]").value = ukuran2;
+                        document.getElementById("ukuran[2]").value = "Peter";
                     } 
                     if (data3 != '') {
                         var arr3 = data3.split('|');
