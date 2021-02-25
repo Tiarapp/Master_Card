@@ -15,29 +15,19 @@ class CreateKontrakDTable extends Migration
     {
         Schema::create('kontrak_d', function (Blueprint $table) {
             $table->id('id');
-            $table->foreignId('kontrak_m_id')->index();  //Auto
+            $table->foreignId('kontrak_m_id')->index();    //Input Marketing pilih dari master item_bj_converting
             $table->foreignId('item_bj_id')->index();    //Input Marketing pilih dari master item_bj_converting
             $table->foreignId('mc_id')->index();         //Auto ambil mid(item_bj_id,15,4)
-            $table->integer('pcsKontrak');      //Input Marketing
-            $table->integer('kgKontrak')->nullable();       //AUTO pcsKontrak * gramKontrak
-            $table->float('pctToleransiKontrak',5,2)->nullable();   //Input Marketing
-            $table->integer('pcsToleransiKontrak')->nullable();     //Input Marketing AUTO JIKA PCT DI INPUT (PCS KONTRAK*PCT TOLERANSI)
-            $table->integer('kgToleransiKontrak')->nullable();      //AUTO (kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
-            $table->integer('harga');           //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)
-            $table->foreignId('mataUang');           //INPUT MARKETING
-            $table->foreignId('mesin_id')->nullable()->index();                  //INPUT MARKETING
-            $table->enum('inExTax',['Include','Exclude'])->index();  //Input Marketing
-            $table->float('rpKg',20,2)->nullable();                     //Auto (price Excl)/(gram_kontrak)
-            $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
+            $table->float('pctToleransiPelengkapKontrak',5,2)->nullable();  //Input Marketing
+            $table->integer('pcsToleransiPelengkapKontrak')->nullable();    //Input Marketing AUTO JIKA PCT DI INPUT (PCS KONTRAK*PCT TOLERANSI)
+            $table->integer('kgPelengkapKontrak')->nullable();              //AUTO pcsKontrak * gramKontrak
+            $table->integer('kgToleransiPelengkapKontrak')->nullable();     //AUTO (kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->boolean('mcPelengkap')->default(FALSE)->index()->comment('TRUE (ADA PELENGKAP), FALSE (TDK ADA PELENGKAP)');
 
             //RELATION
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
             $table->foreign('item_bj_id')->references('id')->on('item_bj')->cascadeOnDelete();
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
-            $table->foreign('mesin_id')->references('id')->on('mesin')->cascadeOnDelete();
-            $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
