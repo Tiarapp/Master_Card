@@ -8,6 +8,11 @@
     .select2 {
         width: 206px !important;
     }
+    
+    tr:nth-child(odd) {
+        background-color:#bab9b9 !important;
+        
+    }
 </style>
 
 
@@ -31,7 +36,7 @@
                 </div>
                 @endif
                 
-                <form action=""  >
+                <form action="../update/{{ $sj_Palet_M->id }}" method="POST"  >
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
@@ -42,7 +47,7 @@
                                         <label>Tanggal</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $sj_Palet_M->tanggal }}">
+                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $sj_Palet_M->tanggal }}" autofocus onfocusout="getDefaultData()">
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +73,7 @@
                                         <label>Nama Customer</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="hidden" name="namaCustomer" id="namaCustomer">
+                                        <input type="hidden" name="namaCustomer" id="namaCustomer" value="{{ $sj_Palet_M->namaCustomer }}">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
                                             <option value="{{ $sj_Palet_M->namaCustomer }}">{{ $sj_Palet_M->namaCustomer }}</option>
                                             @foreach ($customer as $data)
@@ -140,8 +145,11 @@
                         </div>
                     </div> --}}
                     <?php 
+                    // dd($sj_Palet_D);
                     for ($i=0; $i < $count; $i++) {
                         // var_dump($sj_Palet_D[$i]->item_palet_id); 
+                        // dd($sj_Palet_D);
+                        echo '<input type="hidden" name="iddetail['.$i.']" id="iddetail['.$i.']" value="'.$sj_Palet_D[$i]->id.'" readonly >' ;
                         echo '<input type="hidden" name="idpaletdata['.$i.']" id="idpaletdata['.$i.']" value="'.$sj_Palet_D[$i]->item_palet_id.'" readonly >' ;
                         echo '<input type="hidden" name="namaBarangdata['.$i.']" id="namaBarangdata['.$i.']" value="'.$sj_Palet_D[$i]->namaBarang.'" readonly >' ;
                         echo '<input type="hidden" name="qtydata['.$i.']" id="qtydata['.$i.']" value="'.$sj_Palet_D[$i]->qty.'" readonly >' ;
@@ -187,6 +195,7 @@
                                                 echo "</tr>";
                                                 echo "<input type='hidden' name='idpalet[$i]' id='idpalet[$i]' readonly>";
                                                 echo "<input type='hidden' name='nama[$i]' id='nama[$i]' readonly>";
+                                                echo "<input type='hidden' name='detail[$i]' id='detail[$i]' readonly>";
                                             } else 
                                             {
                                                 echo "<tr>";
@@ -246,24 +255,25 @@
                                     document.getElementById('namaCustomer').value = custNama;
                                     document.getElementById('alamatCustomer').value = custAlamat;
                                 }
-
+                                
                                 function getDefaultData() {
-                                    // var data0 = document.getElementById("idpaletdata[0]").value;
-                                    // var data1 = document.getElementById("idpaletdata[1]").value;
-                                    // var data2 = document.getElementById("idpaletdata[2]").value;
-                                    // var data3 = document.getElementById("idpaletdata[3]").value;
-                                    // var data4 = document.getElementById("idpaletdata[4]").value;
-
+                                    
                                     for (let index = 0; index < 5; index++) {
-
+                                        // var iddet = document.getElementById("idpaletdata["+index+"]").value;
+                                        
+                                        // console.log(iddet)
+                                        
                                         if (document.getElementById("idpaletdata["+index+"]") != null) {
                                             // console.log(document.getElementById("idpaletdata["+index+"]").value);
+                                            var iddet = document.getElementById("iddetail["+index+"]").value;
                                             var idpalet = document.getElementById("idpaletdata["+index+"]").value;
                                             var namaBarang = document.getElementById("namaBarangdata["+index+"]").value;
                                             var ukuran = document.getElementById("ukurandata["+index+"]").value;
                                             var qty = document.getElementById("qtydata["+index+"]").value;
                                             var keterangan = document.getElementById("ketdata["+index+"]").value;
-
+                                            
+                                            // console.log(iddet);
+                                            document.getElementById("detail["+ index +"]").value = iddet;
                                             document.getElementById("idpalet["+ index +"]").value = idpalet;
                                             document.getElementById("nama["+ index +"]").value = namaBarang;
                                             document.getElementById("ukuran["+ index +"]").value = ukuran;
