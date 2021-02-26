@@ -83,6 +83,7 @@ class saldoAwal extends Seeder
         DB::table('color')->insert(['kode'=>'ABU07','nama'=>'ABU07','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'ABU08','nama'=>'ABU08','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'ABU09','nama'=>'ABU09','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'ABU10','nama'=>'ABU10','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU01','nama'=>'BRU01','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU02','nama'=>'BRU02','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU03','nama'=>'BRU03','mudaTua'=>0,'createdBy'=>'SEEDER']);
@@ -139,6 +140,7 @@ class saldoAwal extends Seeder
         DB::table('color')->insert(['kode'=>'BRU149','nama'=>'BRU149','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU15','nama'=>'BRU15','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU150','nama'=>'BRU150','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'BRU151','nama'=>'BRU151','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU17','nama'=>'BRU17','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU18','nama'=>'BRU18','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU20','nama'=>'BRU20','mudaTua'=>0,'createdBy'=>'SEEDER']);
@@ -235,6 +237,7 @@ class saldoAwal extends Seeder
         DB::table('color')->insert(['kode'=>'CKT31','nama'=>'CKT31','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'CKT32','nama'=>'CKT32','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'CKT33','nama'=>'CKT33','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'CKT34','nama'=>'CKT34','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'GLD02','nama'=>'GLD02','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'GLD03','nama'=>'GLD03','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'GLD04','nama'=>'GLD04','mudaTua'=>0,'createdBy'=>'SEEDER']);
@@ -413,6 +416,7 @@ class saldoAwal extends Seeder
         DB::table('color')->insert(['kode'=>'MRH94','nama'=>'MRH94','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'MRH95','nama'=>'MRH95','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'MRH96','nama'=>'MRH96','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'MRH97','nama'=>'MRH97','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'ORG01','nama'=>'ORG01','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'ORG02','nama'=>'ORG02','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'ORG03','nama'=>'ORG03','mudaTua'=>0,'createdBy'=>'SEEDER']);
@@ -454,9 +458,10 @@ class saldoAwal extends Seeder
         DB::table('color')->insert(['kode'=>'VIO03','nama'=>'VIO03','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'VIO04','nama'=>'VIO04','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'VIO07','nama'=>'VIO07','mudaTua'=>0,'createdBy'=>'SEEDER']);
-                        
-
-				
+        DB::table('color')->insert(['kode'=>'HJU75','nama'=>'HJU75','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'BRU152','nama'=>'BRU152','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'HJU76','nama'=>'HJU76','mudaTua'=>0,'createdBy'=>'SEEDER']);
+                
         // ITEM BJ
         DB::table('item_bj')->insert(['kode'=>'LDE.01.01.S50.11650.002','nama'=>'BOX NWT 10 25X50 PN DC KW-B K','alias'=>'BOX NWT 10 25X50 PN DC KW-B K','mc_id'=>'1165','gram'=>0.15,'pcs'=>0,'kg'=>0,'lokasi'=>0,'createdBy'=>'SEEDER']);
         DB::table('item_bj')->insert(['kode'=>'LBE.03.01.S10.11680.999','nama'=>'BOX UNIRACE 4T MOTOR OIL API SG/CD','alias'=>'BOX UNIRACE 4T MOTOR OIL API SG/CD','mc_id'=>'1168','gram'=>0.99,'pcs'=>0,'kg'=>0,'lokasi'=>0,'createdBy'=>'SEEDER']);
