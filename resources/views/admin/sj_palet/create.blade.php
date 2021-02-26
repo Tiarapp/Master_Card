@@ -70,7 +70,7 @@
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
                                             @foreach ($customer as $data)
-                                                <option value="{{ $data->Nama }}|{{ $data->AlamatKantor }}">{{ $data->Nama }}</option>
+                                            <option value="{{ $data->Nama }}|{{ $data->AlamatKantor }}">{{ $data->Nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -120,9 +120,17 @@
                             <div class="form-group">
                                 <label>Catatan</label>
                                 {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
-                                <div class="col-md-10">
-                                    {{-- <input type="textarea" class="form-control txt_line" name="alamatCustomer" id="alamatCustomer"> --}}
-                                    <textarea class="form-control txt_line" name="catatan" id="catatan" cols="40" rows="3"></textarea>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control txt_line" name="catatan1" id="catatan1" value="PALET KAYU UNTUK MENGANGKUT BOX SJ NO : " readonly>
+                                        </div>
+                                        <div class="col-md 2">
+                                            <input type="text" class="form-control txt_line" name="nosj" id="nosj" onchange="getCatatan()">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="catatan" id="catatan">
+                                    {{-- <textarea class="form-control txt_line" name="catatan" id="catatan" cols="40" rows="3"></textarea> --}}
                                 </div>
                             </div>
                         </div>
@@ -181,16 +189,23 @@
                 $(document).ready(function() {
                     $('.js-example-basic-single').select2();
                 });
-
+                
                 function getCustomer() {
                     var data = document.getElementById('listCust').value;
-
+                    
                     var cust = data.split('|');
                     var custNama = cust[0];
                     var custAlamat = cust[1];
-
+                    
                     document.getElementById('namaCustomer').value = custNama;
                     document.getElementById('alamatCustomer').value = custAlamat;
+                }
+
+                function getCatatan() {
+                    var catatan1 = document.getElementById("catatan1").value;
+                    var nosj = document.getElementById("nosj").value;
+
+                    document.getElementById("catatan").value = catatan1 +nosj;
                 }
                 
                 function getData() {
@@ -207,7 +222,7 @@
                         var ukuran1 = arr1[2]; 
                         document.getElementById("idpalet[1]").value = idpalet1;
                         document.getElementById("nama[1]").value = nama1;
-                        document.getElementById("ukuran[1]").value = "Samuel";
+                        document.getElementById("ukuran[1]").value = ukuran1;
                     } 
                     if (data2 != '') {
                         var arr2 = data2.split('|');
@@ -216,7 +231,7 @@
                         var ukuran2 = arr2[2]; 
                         document.getElementById("idpalet[2]").value = idpalet2;
                         document.getElementById("nama[2]").value = nama2;
-                        document.getElementById("ukuran[2]").value = "Peter";
+                        document.getElementById("ukuran[2]").value = ukuran2;
                     } 
                     if (data3 != '') {
                         var arr3 = data3.split('|');

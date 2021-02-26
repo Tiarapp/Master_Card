@@ -88,6 +88,13 @@
         </div>
         <!-- ./col -->
       </div>
+      <div class="col-md-12">
+        <h2>UPDATE :</h2>
+        <ul>
+          <li> Penambahan Edit Surat Jalan </li>
+          <li> Catatan sekarang hanya memasukkan Nomer BOX SJ </li>
+        </ul>
+      </div>
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
