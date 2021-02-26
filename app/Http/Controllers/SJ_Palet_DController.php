@@ -102,7 +102,6 @@ class SJ_Palet_DController extends Controller
                 'noSuratJalan' => $nobukti,
                 'tanggal' => $request->tanggal,
                 'noPolisi' => $request->noPolisi,
-                'noPoCustomer' => $request->noPoCustomer,
                 'namaCustomer' => $request->namaCustomer,
                 'alamatCustomer' => $request->alamatCustomer,
                 'catatan' => $request->catatan,
@@ -117,7 +116,6 @@ class SJ_Palet_DController extends Controller
                     'qty' => $request->qty[$i],
                     'namaBarang' => $request->nama[$i],
                     'ukuran' => $request->ukuran[$i],
-                    'noKontrak' => $request->noKontrak[$i],
                     'keterangan' => $request->keterangan[$i],
                     'createdBy' => $request->createdBy,
                     ]);
@@ -180,9 +178,57 @@ class SJ_Palet_DController extends Controller
     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
     * @return \Illuminate\Http\Response
     */
-    public function update(Request $request, SJ_Palet_D $sJ_Palet_D)
+    public function update($id, Request $request)
     {
-        //
+        DB::enableQueryLog();
+
+        $sjpaletm = SJ_Palet_M::find($id);
+
+        $sjpaletm->noSuratJalan = $request->noSuratJalan;
+        $sjpaletm->tanggal = $request->tanggal;
+        $sjpaletm->noPolisi = $request->noPolisi;
+        $sjpaletm->namaCustomer = $request->namaCustomer;
+        $sjpaletm->alamatCustomer = $request->alamatCustomer;
+        $sjpaletm->catatan = $request->catatan;
+        $sjpaletm->lastUpdatedBy = Auth::user()->name;
+
+        $sjpaletm->save();
+
+        for ($i=0; $i<5 ; $i++) { 
+            if (isset($request->detail[$i]) !== false) {
+                $sjpaletd = SJ_Palet_D::find($request->detail[$i]);
+
+                $sjpaletd->sj_palet_m_id = $sjpaletm->id;
+                $sjpaletd->item_palet_id = $request->idpalet[$i];
+                $sjpaletd->namaBarang = $request->nama[$i];
+                $sjpaletd->ukuran = $request->ukuran[$i];
+                $sjpaletd->qty = $request->qty[$i];
+                $sjpaletd->keterangan = $request->keterangan[$i];
+
+                $sjpaletd->save();
+            //  var_dump($request->detail[$i]);
+            } else {
+                if ($request->nama[$i] !== null) {
+                    SJ_Palet_D::create([
+                        'sj_palet_m_id' => $sjpaletm->id,
+                        'item_palet_id' => $request->idpalet[$i],
+                        'qty' => $request->qty[$i],
+                        'namaBarang' => $request->nama[$i],
+                        'ukuran' => $request->ukuran[$i],
+                        'keterangan' => $request->keterangan[$i],
+                        'createdBy' => $request->createdBy,
+                        ]);
+                }
+            }
+        }
+
+        return redirect('admin/sj_palet');
+
+        // $sjpaletd = SJ_Palet_D::where('sj_palet_m_id', '=', $id)->get();
+        
+        // $query = DB::getQueryLog();
+
+        // dd($sjpaletd);
     }
     
     /**
