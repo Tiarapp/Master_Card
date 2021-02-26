@@ -35,7 +35,6 @@
                     </ul>
                 </div>
                 @endif
-                
                 <form action="../update/{{ $sj_Palet_M->id }}" method="POST"  >
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
@@ -145,10 +144,8 @@
                         </div>
                     </div> --}}
                     <?php 
-                    // dd($sj_Palet_D);
                     for ($i=0; $i < $count; $i++) {
                         // var_dump($sj_Palet_D[$i]->item_palet_id); 
-                        // dd($sj_Palet_D);
                         echo '<input type="hidden" name="iddetail['.$i.']" id="iddetail['.$i.']" value="'.$sj_Palet_D[$i]->id.'" readonly >' ;
                         echo '<input type="hidden" name="idpaletdata['.$i.']" id="idpaletdata['.$i.']" value="'.$sj_Palet_D[$i]->item_palet_id.'" readonly >' ;
                         echo '<input type="hidden" name="namaBarangdata['.$i.']" id="namaBarangdata['.$i.']" value="'.$sj_Palet_D[$i]->namaBarang.'" readonly >' ;
@@ -254,8 +251,7 @@
                                     
                                     document.getElementById('namaCustomer').value = custNama;
                                     document.getElementById('alamatCustomer').value = custAlamat;
-                                }
-                                
+                                }                                
                                 function getDefaultData() {
                                     
                                     for (let index = 0; index < 5; index++) {

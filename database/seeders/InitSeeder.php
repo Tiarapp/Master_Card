@@ -64,5 +64,33 @@ class InitSeeder extends Seeder
         DB::table('flute')->insert(['kode' => 'BF','nama' => 'B FLUTE','tur1' => 1.36,'tur2' => 0,'createdBy' => 'SEEDER']);
         DB::table('flute')->insert(['kode' => 'CF','nama' => 'C FLUTE','tur1' => 1.46,'tur2' => 0,'createdBy' => 'SEEDER']);
         DB::table('flute')->insert(['kode' => 'BCF','nama' => 'BC FLUTE','tur1' => 1.36,'tur2' => 1.46,'createdBy' => 'SEEDER']);
+        DB::table('flute')->insert(['kode' => 'EF','nama' => 'E FLUTE','tur1' => 0,'tur2' => 0,'createdBy' => 'SEEDER']);
+
+        //MESIN
+        DB::table('mesin')->delete();
+        DB::table('mesin')->insert(['kode' => 'CORR 1','nama' => 'CORR 1','ip' => '192.168.0.10','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'FLEXO A','nama' => 'FLEXO A','ip' => '192.168.0.5','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'FLEXO B','nama' => 'FLEXO B','ip' => '192.168.0.6','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'FLEXO C','nama' => 'FLEXO C','ip' => '192.168.0.7','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'GLUE TOKAI','nama' => 'GLUE TOKAI','ip' => '','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'SLITTER','nama' => 'SLITTER','ip' => '','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'STITCHING 1','nama' => 'STITCHING 1','ip' => '','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'STITCHING 2','nama' => 'STITCHING 2','ip' => '','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        DB::table('mesin')->insert(['kode' => 'STITCHING 3','nama' => 'STITCHING 3','ip' => '','kapasitas' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+
     }
 }
+
+Schema::create('mesin', function (Blueprint $table) {
+    $table->id('id');
+    $table->string('kode')->index();                 //INPUT PPIC
+    $table->string('nama')->index();                 //INPUT PPIC
+    $table->string('ip');                   //INPUT PPIC
+    $table->integer('kapasitas');           //INPUT PPIC
+    $table->foreignId('satuanKapasitas');   //INPUT PPIC
+    $table->string('keterangan');           //INPUT PPIC
+    $table->string('hint');                 //INPUT PPIC
+    //RELATION
+    $table->foreign('satuanKapasitas')->references('id')->on('satuan')->cascadeOnDelete();
+    // TRACKING
+    $table->string('createdBy');                    //Auto ambil dari login
