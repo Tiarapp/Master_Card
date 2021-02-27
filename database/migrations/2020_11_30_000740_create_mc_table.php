@@ -41,10 +41,12 @@ class CreateMcTable extends Migration
             $table->enum('tipeMc',['BOX', 'BOX TUMBU', 'BOX TUTUP', 'PARTISI', 'LAYER']);
             $table->foreignId('substanceKontrak_id')->index();  //SUBSTANCE KONTRAK INPUT MARKETING
             $table->foreignId('substanceProduksi_id')->index(); //SUBSTANCE PRODUKSI INPUT MARKETING
-            $table->float('gramSheetBox2',8,2);                 //INPUT MARKETING
+            $table->float('gramSheetBoxKontrak2',8,2);                 //INPUT MARKETING
+            $table->float('gramSheetBoxProduksi2',8,2);                 //INPUT MARKETING
             $table->float('gramSheetCorrKontrak2',8,2);         //AUTO RUMUS MASIH DIPIKIR
             $table->float('gramSheetCorrProduksi2',8,2);        //AUTO RUMUS MASIH DIPIKIR
-            $table->float('gramSheetBox',8,3);                  //INPUT MARKETING
+            $table->float('gramSheetBoxKontrak',8,3);                  //INPUT MARKETING
+            $table->float('gramSheetBoxProduksi',8,3);                  //INPUT MARKETING
             $table->float('gramSheetCorrKontrak',8,3);          //AUTO RUMUS MASIH DIPIKIR
             $table->float('gramSheetCorrProduksi',8,3);         //AUTO RUMUS MASIH DIPIKIR
             $table->foreignId('bom_m_id')->nullable()->index(); //BOM INPUT MARKETING
