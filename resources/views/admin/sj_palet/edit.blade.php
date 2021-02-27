@@ -76,7 +76,7 @@
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
                                             <option value="{{ $sj_Palet_M->namaCustomer }}">{{ $sj_Palet_M->namaCustomer }}</option>
                                             @foreach ($customer as $data)
-                                            <option value="{{ $data->Nama }}|{{ $data->AlamatKantor }}">{{ $data->Nama }}</option>
+                                            <option value="{{ $data->Nama }}|{{ $data->AlamatKirim }}">{{ $data->Nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -294,8 +294,6 @@
                                         document.getElementById("idpalet[0]").value = idpalet1;
                                         document.getElementById("nama[0]").value = nama1;
                                         document.getElementById("ukuran[0]").value = ukuran1;
-                                        document.getElementById("qty[0]").value = '';
-                                        document.getElementById("keterangan[0]").value = '';
                                     } 
                                     if (data2 != '') {
                                         var arr2 = data2.split('|');
@@ -305,8 +303,6 @@
                                         document.getElementById("idpalet[1]").value = idpalet2;
                                         document.getElementById("nama[1]").value = nama2;
                                         document.getElementById("ukuran[1]").value = ukuran2;
-                                        document.getElementById("qty[1]").value = '';
-                                        document.getElementById("keterangan[1]").value = '';
                                     } 
                                     if (data3 != '') {
                                         var arr3 = data3.split('|');
@@ -316,8 +312,6 @@
                                         document.getElementById("idpalet[2]").value = idpalet3;
                                         document.getElementById("nama[2]").value = nama3;
                                         document.getElementById("ukuran[2]").value = ukuran3;
-                                        document.getElementById("qty[2]").value = '';
-                                        document.getElementById("keterangan[2]").value = '';
                                     }
                                     if (data4 != '') {
                                         var arr4 = data4.split('|');
@@ -326,9 +320,7 @@
                                         var ukuran4 = arr4[2]; 
                                         document.getElementById("idpalet[3]").value = idpalet4;
                                         document.getElementById("nama[3]").value = nama4;
-                                        document.getElementById("ukuran[3]").value = ukuran4;  
-                                        document.getElementById("qty[3]").value = '';
-                                        document.getElementById("keterangan[3]").value = '';                      
+                                        document.getElementById("ukuran[3]").value = ukuran4;                   
                                     }
                                     if (data5 != '') {
                                         var arr5 = data5.split('|');
@@ -338,8 +330,6 @@
                                         document.getElementById("idpalet[4]").value = idpalet5;
                                         document.getElementById("nama[4]").value = nama5;
                                         document.getElementById("ukuran[4]").value = ukuran5;
-                                        document.getElementById("qty[4]").value = '';
-                                        document.getElementById("keterangan[4]").value = '';
                                     }
                                     
                                 }

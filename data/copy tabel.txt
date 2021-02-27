@@ -1,0 +1,2 @@
+INSERT INTO item_bj (kode,nama,alias,mc_id,pcs,gram,lokasi,createdBy,lastUpdatedBy,deletedAt,deletedBy,branch,created_at,updated_at)
+SELECT KodeBrg, NamaBrg,'',WeightValue,'',BeratStandart,'','','','','','','','' FROM f_tbarangconv

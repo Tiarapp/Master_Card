@@ -37,6 +37,12 @@ class CreateBoxTable extends Migration
             $table->foreignId('satuanSizeDalamBox')->nullable();    //INPUT MARKETING
             $table->string('sizeCreasCorr')->nullable();           //INPUT MARKETING
             $table->string('sizeCreasConv')->nullable();           //INPUT MARKETING
+            $table->float('kuping')->nullable();
+            $table->float('panjangCrease')->nullable();
+            $table->float('lebarCrease1')->nullable();
+            $table->float('lebarCrease2')->nullable();
+            $table->float('flapCrease')->nullable();
+            $table->float('tinggiCrease')->nullable();
             $table->foreignId('satuanCreas')->nullable();           //INPUT MARKETING
             //RELATION
             $table->foreign('satuanSizeSheetBox')->references('id')->on('satuan')->cascadeOnDelete();

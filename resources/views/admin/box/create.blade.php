@@ -52,7 +52,7 @@
                                 <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
                                     <option value="">Pilih Tipe ..</option>
                                     @foreach ($tipebox as $data)
-                                    <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
                                 <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_crease_corr()">
                                     <option value="">Pilih Flute ..</option>
                                     @foreach ($flute as $data)
-                                    <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -230,7 +230,7 @@
             var box_l = document.getElementById("lebarDalamBox").value;
             var box_t = document.getElementById("tinggiDalamBox").value;
             var flute = document.getElementById("flute").value;
-            var crease_p, crease_l, kuping, flap, p1, p2, l1, l2, tinggi, sheet_p, sheet_l;
+            var crease_p, crease_l, kuping, flap, p1, l1, l2, tinggi, sheet_p, sheet_l;
             var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
             
             if (tipe == "B1") {
