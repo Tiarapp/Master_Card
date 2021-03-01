@@ -136,6 +136,8 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
+                                <input type="hidden" name="flapCrease" id="flapCrease">
+                                <input type="hidden" name="tinggiCrease" id="tinggiCrease">
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -144,6 +146,10 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
+                                <input type="hidden" name="kuping" id="kuping">
+                                <input type="hidden" name="panjangCrease" id="panjangCrease">
+                                <input type="hidden" name="lebarCrease1" id="lebarCrease1">
+                                <input type="hidden" name="lebarCrease2" id="lebarCrease2">
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -269,8 +275,18 @@
                 sheet_p = (p1*2) + l1 + l2 + kuping;
                 crease_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
                 
+                //CreaseCorr
                 document.getElementById("sizeCreasCorr").value = crease_p;
+                document.getElementById("kuping").value = kuping;
+                document.getElementById("panjangCrease").value = p1;
+                document.getElementById("lebarCrease1").value = l1;
+                document.getElementById("lebarCrease2").value = l2;
+
+                //CreaseConv
                 document.getElementById("sizeCreasConv").value = crease_l;
+                document.getElementById("flapCrease").value = flap;
+                document.getElementById("tinggiCrease").value = tinggi;
+                
             } 
             
         }
