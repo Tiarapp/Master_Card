@@ -37,7 +37,7 @@
                                 <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute()">
                                     <option value=''>--</option>
                                     @foreach ($flute as $data)
-                                    <option value="{{ $data->id }}|{{ $data->kode }}">{{ $data->kode }}</option>
+                                    <option value="{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -157,9 +157,9 @@
         }
 
         function getFlute(){
-            var flute = document.getElementById('flute').value;
+            var namaflute = document.getElementById('flute').value;
 
-            var namaflute = getNama(flute);
+            // var namaflute = getNama(flute);
             
 
             if (namaflute == 'BF') {
@@ -182,13 +182,15 @@
                 document.getElementById('linerBawah').disabled = false;
             }
             
-            document.getElementById('namaflute').value = namaflute;
         }
         
         function getNamaSubstance(){
+            var namaflute = document.getElementById('flute').value;
             var atas = document.getElementById('linerAtas').value;
             var namaLinerAtas = getNama(atas);
             var idLinerAtas = getID(atas);
+            
+            // var namaflute = getNama(flute);
 
 
 
@@ -229,7 +231,7 @@
             document.getElementById("jenisGramLinerTengah_id").value = idLinerTengah;
             document.getElementById("jenisGramCf_id").value = idcf;
             document.getElementById("jenisGramLinerBawah_id").value = idLinerBawah;
-            document.getElementById("nama").value = namaLinerAtas + '/' + namabf + '/' + namaLinerTengah + '/' + namacf + '/' + namaLinerBawah;
+            document.getElementById("nama").value = namaflute + ' ' + namaLinerAtas + '/' + namabf + '/' + namaLinerTengah + '/' + namacf + '/' + namaLinerBawah;
         }
         // atas.onchange = function() {
             //     var lineratas = atas.options[atas.selectedIndex].getAttribute('name');
