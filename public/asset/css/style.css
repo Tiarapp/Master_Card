@@ -119,10 +119,10 @@ th {
 }
 
 
-tr:nth-child(even) {
+/* tr:nth-child(even) {
   background-color:#bab9b9 !important;
 
-}
+} */
 
 .dataTables_filter label {
   float: right;

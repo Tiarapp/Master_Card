@@ -70,7 +70,7 @@
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
                                             @foreach ($customer as $data)
-                                            <option value="{{ $data->Nama }}|{{ $data->AlamatKantor }}">{{ $data->Nama }}</option>
+                                            <option value="{{ $data->Nama }}|{{ $data->AlamatKirim }}">{{ $data->Nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>

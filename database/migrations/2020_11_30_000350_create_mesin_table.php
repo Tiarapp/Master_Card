@@ -18,7 +18,8 @@ class CreateMesinTable extends Migration
             $table->string('kode')->index();                 //INPUT PPIC
             $table->string('nama')->index();                 //INPUT PPIC
             $table->string('ip');                   //INPUT PPIC
-            $table->integer('kapasitas');           //INPUT PPIC
+            $table->integer('kapasitasPlan');           //INPUT PPIC
+            $table->integer('kapasitasProduksi');           //INPUT PPIC
             $table->foreignId('satuanKapasitas');   //INPUT PPIC
             $table->string('keterangan');           //INPUT PPIC
             $table->string('hint');                 //INPUT PPIC
