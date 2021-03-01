@@ -13,8 +13,10 @@ class JenisGram extends Model
 
     protected $fillable = [
         'kode',
-        'nama',
-        'jenisKertas',
+        'namaMc',
+        'namaLog',
+        'jenisKertasMc',
+        'jenisKertasLog',
         'gramKertas',
         'createdBy',
         'lastUpdatedBy',

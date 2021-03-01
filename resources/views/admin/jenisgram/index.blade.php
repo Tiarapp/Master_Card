@@ -36,8 +36,10 @@
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
-              <th scope="col">Nama</th>
-              <th scope="col">Jenis</th>
+              <th scope="col">Nama di MC</th>
+              <th scope="col">Nama di Logistik</th>
+              <th scope="col">Jenis Kertas di MC</th>
+              <th scope="col">Jenis Kertas di Logistik</th>
               <th scope="col">Gram</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
@@ -50,8 +52,10 @@
               <tr>
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
-                <td>{{ $data->nama }}</td>
-                <td>{{ $data->jenisKertas }}</td>
+                <td>{{ $data->namaMc }}</td>
+                <td>{{ $data->namaLog }}</td>
+                <td>{{ $data->jenisKertasMc }}</td>
+                <td>{{ $data->jenisKertasLog }}</td>
                 <td>{{ $data->gramKertas }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
