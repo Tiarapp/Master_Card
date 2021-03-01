@@ -37,7 +37,7 @@
                                 <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="getFlute()">
                                     <option value=''>--</option>
                                     @foreach ($flute as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
                                 <select class="js-example-basic-single col-md-12" name="linerAtas" id="linerAtas" onchange="getNamaSubstance()" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -75,7 +75,7 @@
                                 <select class="js-example-basic-single col-md-12" name="bf" id="bf" onchange=getNamaSubstance() disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram2 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -87,7 +87,7 @@
                                 <select class="js-example-basic-single col-md-12" name="linerTengah" id="linerTengah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -99,7 +99,7 @@
                                 <select class="js-example-basic-single col-md-12" name="cf" id="cf" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram2 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -111,7 +111,7 @@
                                 <select class="js-example-basic-single col-md-12" name="linerBawah" id="linerBawah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
                                     @endforeach
                                 </select>
                             </div>

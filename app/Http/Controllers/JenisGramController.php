@@ -41,8 +41,10 @@ class JenisGramController extends Controller
     {
         $request->validate([
             'kode' => 'required',
-            'nama' => 'required',
-            'jenisKertas' => 'required',
+            'namaMc' => 'required',
+            'namaLog' => 'required',
+            'jenisKertasMc' => 'required',
+            'jenisKertasLog' => 'required',
             'gramKertas' => 'required',
             'createdBy' => 'required',
         ]);
