@@ -57,6 +57,7 @@ class SubstanceController extends Controller
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
+            'flute' => 'required',
             'jenisGramLinerAtas_id' => 'required',
             'jenisGramBf_id' => 'nullable',
             'jenisGramLinerTengah_id' => 'nullable',
