@@ -37,18 +37,10 @@ class CreateKontrakmTable extends Migration
             $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
             $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang');                          //INPUT MARKETING
-            $table->foreignId('item_bj_id')->index();   //Input Marketing pilih dari master item_bj_converting
             $table->foreignId('mc_id')->index();        //Auto ambil mid(item_bj_id,15,4)
-            $table->integer('pcsKontrak');              //Input Marketing
-            $table->integer('kgKontrak')->nullable();   //AUTO pcsKontrak * gramKontrak
-            $table->float('pctToleransiKontrak',5,2)->nullable();   //Input Marketing
-            $table->integer('pcsToleransiKontrak')->nullable();     //Input Marketing AUTO JIKA PCT DI INPUT (PCS KONTRAK*PCT TOLERANSI)
-            $table->integer('kgToleransiKontrak')->nullable();      //AUTO (kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
             $table->integer('harga');           //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)
-            $table->foreignId('mataUang');      //INPUT MARKETING
             $table->enum('inExTax',['Include','Exclude'])->index();  //Input Marketing
-            $table->float('rpKg',20,2)->nullable();                  //Auto (price Excl)/(gram_kontrak)
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 
             //RELATION
@@ -59,6 +51,7 @@ class CreateKontrakmTable extends Migration
             $table->foreign('alamatTagihan_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('sales_m_id')->references('id')->on('sales_m')->cascadeOnDelete();
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
+            $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
 
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
