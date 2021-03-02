@@ -21,7 +21,7 @@ class SubstanceController extends Controller
             ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
             ->leftJoin('jenis_gram as cf', 'jenisGramCf_id', '=', 'cf.id')
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
-            ->select('substance.*', 'linerAtas.nama AS linerAtas', 'bf.nama AS bf', 'linerTengah.nama AS linerTengah', 'cf.nama AS cf', 'linerBawah.nama AS linerBawah')
+            ->select('substance.*', 'linerAtas.namaMc AS linerAtas', 'bf.namaMc AS bf', 'linerTengah.namaMc AS linerTengah', 'cf.namaMc AS cf', 'linerBawah.namaMc AS linerBawah')
             ->get();
 
         return view('admin.substance.index', ['substance' => $substance]);
@@ -34,8 +34,8 @@ class SubstanceController extends Controller
      */
     public function create()
     {
-        $jenisgram1 = DB::table('jenis_gram')->where('jenisKertas', '!=', 'MF')->get();
-        $jenisgram2 = DB::table('jenis_gram')->where('jenisKertas', '!=', 'ML')->get();
+        $jenisgram1 = DB::table('jenis_gram')->where('jenisKertasMc', '!=', 'MF')->get();
+        $jenisgram2 = DB::table('jenis_gram')->where('jenisKertasMc', '=', 'MF')->get();
         $flute = DB::table('flute')->get();
 
         return view('admin.substance.create', compact(
