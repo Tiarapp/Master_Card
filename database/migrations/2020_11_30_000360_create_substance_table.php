@@ -17,16 +17,17 @@ class CreateSubstanceTable extends Migration
             $table->id('id');
             $table->string('kode')->unique()->index();                          //AUTO NUMBER SEQUENCE
             $table->string('nama')->index();                                    //AUTO jenis+...
+            $table->string('flute')->index();                                   //Dropdown Marketing
             $table->foreignId('jenisGramLinerAtas_id')->index();                //Input Marketing
-            $table->foreignId('jenisGramBf_id')->nullable()->index();           //Input Marketing
+            $table->foreignId('jenisGramFlute1_id')->nullable()->index();           //Input Marketing
             $table->foreignId('jenisGramLinerTengah_id')->nullable()->index();  //Input Marketing
-            $table->foreignId('jenisGramCf_id')->nullable()->index();           //Input Marketing
+            $table->foreignId('jenisGramFlute2_id')->nullable()->index();           //Input Marketing
             $table->foreignId('jenisGramLinerBawah_id')->index();               //Input Marketing
             //RELATION
             $table->foreign('jenisGramLinerAtas_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
-            $table->foreign('jenisGramBf_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
+            $table->foreign('jenisGramFlute1_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramLinerTengah_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
-            $table->foreign('jenisGramCf_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
+            $table->foreign('jenisGramFlute2_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             $table->foreign('jenisGramLinerBawah_id')->references('id')->on('jenis_gram')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
