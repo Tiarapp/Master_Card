@@ -16,7 +16,8 @@ class CreateSubstanceTable extends Migration
         Schema::create('substance', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();                          //AUTO NUMBER SEQUENCE
-            $table->string('nama')->index();                                    //AUTO jenis+...
+            $table->string('namaMc')->index();                                    //AUTO jenis+...
+            $table->string('namaLog')->index();                                    //AUTO jenis+...
             $table->string('flute')->index();                                   //Dropdown Marketing
             $table->foreignId('jenisGramLinerAtas_id')->index();                //Input Marketing
             $table->foreignId('jenisGramFlute1_id')->nullable()->index();           //Input Marketing

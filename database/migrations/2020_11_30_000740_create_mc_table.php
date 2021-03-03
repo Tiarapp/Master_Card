@@ -16,6 +16,8 @@ class CreateMcTable extends Migration
         Schema::create('mc', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();    //AUTO NUMBER SEQUENCE
+            $table->string('namaBarang')->nullable();
+            $table->string('kodeBarang')->nullable();
             $table->integer('revisi')->default(0);        //AUTO REVISI KE
             $table->string('tipeBox')->index();           //INPUT MARKETING
             $table->string('CreasCorrP');                           
@@ -35,7 +37,7 @@ class CreateMcTable extends Migration
             $table->string('koli')->index();              //INPUT MARKETING
             $table->enum('bungkus',['Kertas'])->nullable(); //INPUT MARKETING
             $table->text('keterangan')->nullable();         //INPUT MARKETING
-            $table->boolean('lock')->default(TRUE);         //AUTO
+            $table->boolean('lock')->default(FALSE);         //AUTO
             $table->string('gambar');                       //AUTO
             $table->enum('wax',['INSIDE', 'OUTSIDE', 'IN & OUT']);
             $table->enum('tipeMc',['BOX', 'BOX TUMBU', 'BOX TUTUP', 'PARTISI', 'LAYER']);
@@ -57,6 +59,7 @@ class CreateMcTable extends Migration
             $table->foreignId('colorCombine_id')->nullable()->index();      //COLOR ID INPUT MARKETING
             $table->foreignId('satuanCreas')->nullable()->index();          //COLOR ID INPUT MARKETING
             //RELATION
+            $table->foreign('bj_id')->references('id')->on('item_bj')->cascadeOnDelete();
             $table->foreign('substanceKontrak_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('substanceProduksi_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();
