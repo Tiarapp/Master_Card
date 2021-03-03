@@ -16,6 +16,7 @@ class CreateKontrakmTable extends Migration
         Schema::create('kontrak_m', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->index();                     //AUTO NUMBER SEQUENCE
+            $table->foreignId('mc_id')->index();                 //Auto ambil mid(item_bj_id,15,4)
             $table->date('tglKontrak')->index();                 //AUTO NUMBER SEQUENCE
             $table->foreignId('customer_id')->index();           //Input Marketing
             $table->string('poCustomer')->index();               //Input Marketing
@@ -35,12 +36,12 @@ class CreateKontrakmTable extends Migration
             $table->float('rpKg',20,2)->nullable();                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
             $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
             $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
+            $table->boolean('lock')->default(FALSE);                //AUTO
             $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang');                          //INPUT MARKETING
-            $table->foreignId('mc_id')->index();        //Auto ambil mid(item_bj_id,15,4)
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
-            $table->integer('harga');           //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)
-            $table->enum('inExTax',['Include','Exclude'])->index();  //Input Marketing
+            $table->integer('harga');                               //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)
+            $table->enum('inExTax',['Include','Exclude'])->index(); //Input Marketing
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 
             //RELATION

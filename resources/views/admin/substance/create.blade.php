@@ -45,37 +45,39 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode substance">
                             <div class="form-group">
                                 <label>Kode</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input kode substance" name="kode" id="kode" required>
+                                <input type="text" class="form-control txt_line" placeholder="Input kode substance" name="kode" id="kode" required readonly>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input nama substance">
                             <div class="form-group">
-                                <label>Nama</label>
-                                <input type="text" class="form-control txt_line" placeholder="Input nama substance" name="nama" id="nama" required readonly>
+                                <label>NamaMc</label>
+                                <input type="text" class="form-control txt_line" placeholder="Input nama substance" name="namaMc" id="namaMc" required readonly>
+                                <label>NamaLog</label>
+                                <input type="text" class="form-control txt_line" placeholder="Input nama substance" name="namaLog" id="namaLog" required readonly>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
                             <div class="form-group">
                                 <label>Gram Liner Atas</label>
                                 <input type="hidden" id="jenisGramLinerAtas_id" name="jenisGramLinerAtas_id">
-                                <select class="js-example-basic-single col-md-12" name="linerAtas" id="linerAtas" onchange="getNamaSubstance()" disabled>
+                                <select class="js-example-basic-single col-md-12" name="atas" id="atas" onchange="getNamaSubstance()" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
                             <div class="form-group">
-                                <label>Gram BF</label>
-                                <input type="hidden" id="jenisGramBf_id" name="jenisGramBf_id">
-                                <select class="js-example-basic-single col-md-12" name="bf" id="bf" onchange=getNamaSubstance() disabled>
+                                <label>Flute 1</label>
+                                <input type="hidden" id="jenisGramFlute1_id" name="jenisGramFlute1_id">
+                                <select class="js-example-basic-single col-md-12" name="flute1" id="flute1" onchange=getNamaSubstance() disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram2 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -84,10 +86,10 @@
                             <div class="form-group">
                                 <label>Gram Liner Tengah</label>
                                 <input type="hidden" id="jenisGramLinerTengah_id" name="jenisGramLinerTengah_id">
-                                <select class="js-example-basic-single col-md-12" name="linerTengah" id="linerTengah" onchange="getNamaSubstance();" disabled>
+                                <select class="js-example-basic-single col-md-12" name="tengah" id="tengah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -95,11 +97,11 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Liner Atas">
                             <div class="form-group">
                                 <label>Gram CF</label>
-                                <input type="hidden" id="jenisGramCf_id" name="jenisGramCf_id">
-                                <select class="js-example-basic-single col-md-12" name="cf" id="cf" onchange="getNamaSubstance();" disabled>
+                                <input type="hidden" id="jenisGramFlute2_id" name="jenisGramFlute2_id">
+                                <select class="js-example-basic-single col-md-12" name="flute2" id="flute2" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram2 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -108,10 +110,10 @@
                             <div class="form-group">
                                 <label>Gram Liner Bawah</label>
                                 <input type="hidden" id="jenisGramLinerBawah_id" name="jenisGramLinerBawah_id">
-                                <select class="js-example-basic-single col-md-12" name="linerBawah" id="linerBawah" onchange="getNamaSubstance();" disabled>
+                                <select class="js-example-basic-single col-md-12" name="bawah" id="bawah" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
                                     @foreach ($jenisgram1 as $data)
-                                    <option value="{{ $data->id }}|{{ $data->namaMc }}">{{ $data->namaMc }}</option>
+                                    <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -140,21 +142,29 @@
             $('.js-example-basic-single').select2();
         });
         
-        function getNama(a){
-            var pos = a.indexOf('|');
-            var panjang = a.length;
-            var nama = a.substr(pos+1, panjang);
+        // function getNama(a){
+        //     var pos = a.indexOf('|');
+        //     var panjang = a.length;
+        //     var nama = a.substr(pos+1, panjang);
 
-            return nama;
-        }
+        //     return nama;
+        //     // console.log(nama);
+        // }
 
-        function getID(a){
-            var pos = a.indexOf('|');
-            var panjang = a.length;
-            var id = a.substr(0, pos);
+        // function getNama(a) {
+        //     var array = a.split('|');
+        //     var id = array[0];
+        //     var namaMc = array[1];
+        //     var namaLog = array[2];
+        // }
 
-            return id;
-        }
+        // function getID(a){
+        //     var pos = a.indexOf('|');
+        //     var panjang = a.length;
+        //     var id = a.substr(0, pos);
+
+        //     return id;
+        // }
 
         function getFlute(){
             var namaflute = document.getElementById('flute').value;
@@ -163,75 +173,83 @@
             
 
             if (namaflute == 'BF') {
-                document.getElementById('linerAtas').disabled = false;
-                document.getElementById('bf').disabled = false;
-                document.getElementById('linerTengah').disabled = true;
-                document.getElementById('cf').disabled = true;
-                document.getElementById('linerBawah').disabled = false;
+                document.getElementById('atas').disabled = false;
+                document.getElementById('flute1').disabled = false;
+                document.getElementById('tengah').disabled = true;
+                document.getElementById('flute2').disabled = true;
+                document.getElementById('bawah').disabled = false;
             } else if(namaflute == 'CF') {
-                document.getElementById('linerAtas').disabled = false;
-                document.getElementById('bf').disabled = true;
-                document.getElementById('linerTengah').disabled = true;
-                document.getElementById('cf').disabled = false;
-                document.getElementById('linerBawah').disabled = false;
+                document.getElementById('atas').disabled = false;
+                document.getElementById('flute1').disabled = true;
+                document.getElementById('tengah').disabled = true;
+                document.getElementById('flute2').disabled = false;
+                document.getElementById('bawah').disabled = false;
             } else if (namaflute == 'BCF') {
-                document.getElementById('linerAtas').disabled = false;
-                document.getElementById('bf').disabled = false;
-                document.getElementById('linerTengah').disabled = false;
-                document.getElementById('cf').disabled = false;
-                document.getElementById('linerBawah').disabled = false;
+                document.getElementById('atas').disabled = false;
+                document.getElementById('flute1').disabled = false;
+                document.getElementById('tengah').disabled = false;
+                document.getElementById('flute2').disabled = false;
+                document.getElementById('bawah').disabled = false;
             }
             
         }
         
         function getNamaSubstance(){
             var namaflute = document.getElementById('flute').value;
-            var atas = document.getElementById('linerAtas').value;
-            var namaLinerAtas = getNama(atas);
-            var idLinerAtas = getID(atas);
+
+            var atas = (document.getElementById('atas').value).split("|");
+            var idAtas = atas[0]
+            var namaMcAtas = atas[1];
+            var namaLogAtas = atas[2];
+
+            console.log(atas);
+
+            var flute1 = (document.getElementById('flute1').value).split("|");
+            var idflute1 = flute1[0]
+            var namaMcflute1 = flute1[1];
+            var namaLogflute1 = flute1[2];
+
+            var tengah = (document.getElementById('tengah').value).split("|");
+            var idTengah = tengah[0]
+            var namaMcTengah = tengah[1];
+            var namaLogTengah = tengah[2];
+
+            var flute2 = (document.getElementById('flute2').value).split("|");
+            var idflute2 = flute2[0]
+            var namaMcflute2 = flute2[1];
+            var namaLogflute2 = flute2[2];
+
+            var bawah = (document.getElementById('bawah').value).split("|");
+            var idbawah = bawah[0]
+            var namaMcbawah = bawah[1];
+            var namaLogbawah = bawah[2];
             
-            // var namaflute = getNama(flute);
-
-
-
-            var bf = document.getElementById('bf').value;
-            var namabf = getNama(bf);
-            var idbf = getID(bf);
-
-            var tengah = document.getElementById('linerTengah').value;
-            var namaLinerTengah = getNama(tengah);
-            var idLinerTengah = getID(tengah);
-
-            var cf = document.getElementById('cf').value;
-            var namacf = getNama(cf);
-            var idcf = getID(cf);
-
-            var bawah = document.getElementById('linerBawah').value;
-            var namaLinerBawah = getNama(bawah);
-            var idLinerBawah = getID(bawah);
             
             
-            
-            if (bf == '') {
-                namabf = '--';
-                idbf = '';
+            if (flute1 == '') {
+                namaMcflute1 = '--';
+                namaLogflute1 = '--';
+                idflute1 = '';
             }
             if (tengah == '') {
-                namaLinerTengah = '--';
-                idLinerTengah = '';
+                namaMcTengah = '--';
+                namaLogTengah = '--';
+                idTengah = '';
             }
-            if (cf == '') {
-                namacf = '--';
-                idcf = '';
+            if (flute2 == '') {
+                namaMcflute2 = '--';
+                namaLogflute2 = '--';
+                idflute2 = '';
             }
             
 
-            document.getElementById("jenisGramLinerAtas_id").value = idLinerAtas;
-            document.getElementById("jenisGramBf_id").value = idbf;
-            document.getElementById("jenisGramLinerTengah_id").value = idLinerTengah;
-            document.getElementById("jenisGramCf_id").value = idcf;
-            document.getElementById("jenisGramLinerBawah_id").value = idLinerBawah;
-            document.getElementById("nama").value = namaflute + ' ' + namaLinerAtas + '/' + namabf + '/' + namaLinerTengah + '/' + namacf + '/' + namaLinerBawah;
+            document.getElementById("jenisGramLinerAtas_id").value = idAtas;
+            document.getElementById("jenisGramFlute1_id").value = idflute1;
+            document.getElementById("jenisGramLinerTengah_id").value = idTengah;
+            document.getElementById("jenisGramFlute2_id").value = idflute2;
+            document.getElementById("jenisGramLinerBawah_id").value = idbawah;
+            document.getElementById("namaMc").value = namaflute + ' ' + namaMcAtas + '/' + namaMcflute1 + '/' + namaMcTengah + '/' + namaMcflute2 + '/' + namaMcbawah;
+            document.getElementById("kode").value = namaflute + ' ' + namaLogAtas + '/' + namaLogflute1 + '/' + namaLogTengah + '/' + namaLogflute2 + '/' + namaLogbawah;
         }
         // atas.onchange = function() {
             //     var lineratas = atas.options[atas.selectedIndex].getAttribute('name');

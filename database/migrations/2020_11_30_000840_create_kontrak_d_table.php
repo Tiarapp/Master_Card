@@ -16,13 +16,12 @@ class CreateKontrakDTable extends Migration
         Schema::create('kontrak_d', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('kontrak_m_id')->index();    //Input Marketing pilih dari master item_bj_converting
-            $table->foreignId('item_bj_id')->index();    //Input Marketing pilih dari master item_bj_converting
             $table->foreignId('mc_id')->index();         //Auto ambil mid(item_bj_id,15,4)
             $table->float('pctToleransiPelengkapKontrak',5,2)->nullable();  //Input Marketing
             $table->integer('pcsToleransiPelengkapKontrak')->nullable();    //Input Marketing AUTO JIKA PCT DI INPUT (PCS KONTRAK*PCT TOLERANSI)
             $table->integer('kgPelengkapKontrak')->nullable();              //AUTO pcsKontrak * gramKontrak
             $table->integer('kgToleransiPelengkapKontrak')->nullable();     //AUTO (kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->boolean('mcPelengkap')->default(FALSE)->index()->comment('TRUE (ADA PELENGKAP), FALSE (TDK ADA PELENGKAP)');
+            $table->boolean('mcPelengkap')->default(FALSE)->index()->comment('TRUE (ADA PELENGKAP), FALSE (TDK ADA PELENGKAP)')->nullable();
 
             //RELATION
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
