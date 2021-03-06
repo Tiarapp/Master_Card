@@ -36,7 +36,8 @@
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Kode</th>
-              <th scope="col">Nama</th>
+              <th scope="col">Nama MC</th>
+              <th scope="col">Nama Logistik</th>
               <th scope="col">Liner Atas</th>
               <th scope="col">BF</th>
               <th scope="col">Liner Tengah</th>
@@ -53,7 +54,8 @@
               <tr>
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->kode }}</td>
-                <td>{{ $data->nama }}</td>
+                <td>{{ $data->namaMc }}</td>
+                <td>{{ $data->namaLog }}</td>
                 <td>{{ $data->linerAtas }}</td>
                 <td>{{ $data->bf }}</td>
                 <td>{{ $data->linerTengah }}</td>

@@ -59,7 +59,6 @@ class CreateMcTable extends Migration
             $table->foreignId('colorCombine_id')->nullable()->index();      //COLOR ID INPUT MARKETING
             $table->foreignId('satuanCreas')->nullable()->index();          //COLOR ID INPUT MARKETING
             //RELATION
-            $table->foreign('bj_id')->references('id')->on('item_bj')->cascadeOnDelete();
             $table->foreign('substanceKontrak_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('substanceProduksi_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();

@@ -43,7 +43,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'firebird' => [
+        'firebird2' => [
             'driver'   => 'firebird',
             'host'     => env('DB_HOST2', 'localhost'),
             'port'     => env('DB_PORT2', '3050'),

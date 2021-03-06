@@ -25,7 +25,6 @@ class CreateKontrakDTable extends Migration
 
             //RELATION
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
-            $table->foreign('item_bj_id')->references('id')->on('item_bj')->cascadeOnDelete();
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login

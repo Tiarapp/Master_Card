@@ -13,7 +13,8 @@ class Substance extends Model
 
     protected $fillable = [
         'kode',
-        'nama',
+        'namaMc',
+        'namaLog',
         'flute',
         'jenisGramLinerAtas_id',
         'jenisGramFlute1_id',
