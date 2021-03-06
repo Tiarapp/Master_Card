@@ -17,7 +17,6 @@ class BoxTypeController extends Controller
     public function index()
     {
         $boxtype = DB::table('tipe_box')
-            ->where('deleted', '=', '0')
             ->get();
         return view('admin.boxtype.index', ['boxtype' => $boxtype]);
     }

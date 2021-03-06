@@ -77,11 +77,11 @@
                                                             <table class="table table-bordered" id="data_barang">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col">ID.</th>
-                                                                        <th scope="col">Kode</th>
+                                                                        <th scope="col">Kode Barang.</th>
                                                                         <th scope="col">Nama</th>
+                                                                        <th scope="col">Satuan</th>
                                                                         <th scope="col">MC ID</th>
-                                                                        <th scope="col">Pcs</th>
+                                                                        <th scope="col">Tgl Jadi</th>
                                                                         <th scope="col">Gram</th>
                                                                     </tr>
                                                                 </thead>
@@ -90,12 +90,12 @@
                                                                     $no = 1;
                                                                     foreach ($item as $data) { ?>
                                                                         <tr>
-                                                                            <td scope="row">{{ $data->id }}</td>
-                                                                            <td>{{ $data->kode }}</td>
-                                                                            <td>{{ $data->nama }}</td>
-                                                                            <td>{{ $data->mc_id }}</td>
-                                                                            <td>{{ $data->pcs }}</td>
-                                                                            <td>{{ $data->gram }}</td>
+                                                                            <td scope="row">{{ $data->KodeBrg }}</td>
+                                                                            <td>{{ $data->NamaBrg }}</td>
+                                                                            <td>{{ $data->Satuan }}</td>
+                                                                            <td>{{ $data->WeightValue }}</td>
+                                                                            <td>{{ $data->TglKeluar }}</td>
+                                                                            <td>{{ $data->BeratStandart }}</td>
                                                                         </tr>
                                                                         <?php
                                                                     }
@@ -365,7 +365,8 @@
                                                                         <tr>
                                                                             <th scope="col">ID</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Nama MC</th>
+                                                                            <th scope="col">Nama Logistik</th>
                                                                             <th scope="col">Liner Atas</th>
                                                                             <th scope="col">BF</th>
                                                                             <th scope="col">Liner Tengah</th>
@@ -380,7 +381,8 @@
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->namaMc }}</td>
+                                                                                <td>{{ $data->namaLog }}</td>
                                                                                 <td>{{ $data->linerAtas }}</td>
                                                                                 <td>{{ $data->bf }}</td>
                                                                                 <td>{{ $data->linerTengah }}</td>
@@ -437,7 +439,7 @@
                                                                         <tr>
                                                                             <th scope="col">ID</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Nama MC</th>
                                                                             <th scope="col">Liner Atas</th>
                                                                             <th scope="col">BF</th>
                                                                             <th scope="col">Liner Tengah</th>
@@ -453,7 +455,7 @@
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->namaMc }}</td>
                                                                                 <td>{{ $data->linerAtas }}</td>
                                                                                 <td>{{ $data->bf }}</td>
                                                                                 <td>{{ $data->linerTengah }}</td>
@@ -611,9 +613,9 @@
         $('#data_barang tbody').on( 'click', 'td', function () {
             var item = (table.row(this).data());
             
-            document.getElementById('bj_id').value = item[0];
-            document.getElementById('noitem').value = item[1];
-            document.getElementById('namaitem').value = item[2];
+            // document.getElementById('bj_id').value = item[0];
+            document.getElementById('noitem').value = item[0];
+            document.getElementById('namaitem').value = item[1];
         } );
         //  alert.row();
     } );
@@ -642,11 +644,11 @@
             if (Box[3] == 'B1') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
-                document.getElementById("panjangSheet").value = parseInt(resultP);
-                document.getElementById("lebarSheet").value = parseInt(resultL);
+                document.getElementById("lebarSheet").value = parseInt(resultP);
+                document.getElementById("panjangSheet").value = parseInt(resultL);
 
-                document.getElementById("panjangSheetBox").value = parseInt(resultP);
-                document.getElementById("lebarSheetBox").value = parseInt(resultL);
+                document.getElementById("lebarSheetBox").value = parseInt(resultP);
+                document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
                 var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
                 document.getElementById("luasSheet").value = luas.toFixed(3);

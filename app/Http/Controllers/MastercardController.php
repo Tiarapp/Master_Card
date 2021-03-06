@@ -57,7 +57,7 @@ class MastercardController extends Controller
         //     ->get();
         // dd($sssh[0]->lebarSheet);
 
-        $item = DB::table('item_bj')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
