@@ -35,12 +35,12 @@ class CreateMcTable extends Migration
             $table->enum('mesin',['CORR','CORR-IKAT','CORR-FLEXO-IKAT','CORR-FLEXO-GLUE-IKAT','CORR-FLEXO-GLUE-STITCH-IKAT','CORR-FLEXO-STITCH-IKAT','CORR-FLEXO-WAX-GLUE-IKAT','CORR-FLEXO-WAX-STITCH-IKAT','CORR-FLEXO-WAX-GLUE-STITCH-IKAT']);
             $table->integer('outConv')->index();          //AUTO RUMUS MASIH DIPIKIR
             $table->string('koli')->index();              //INPUT MARKETING
-            $table->enum('bungkus',['Kertas'])->nullable(); //INPUT MARKETING
+            $table->enum('bungkus',['Kertas','Plastik'])->nullable(); //INPUT MARKETING
             $table->text('keterangan')->nullable();         //INPUT MARKETING
             $table->boolean('lock')->default(FALSE);         //AUTO
             $table->string('gambar');                       //AUTO
             $table->enum('wax',['INSIDE', 'OUTSIDE', 'IN & OUT']);
-            $table->enum('tipeMc',['BOX', 'BOX TUMBU', 'BOX TUTUP', 'PARTISI', 'LAYER']);
+            $table->enum('tipeMc',['BOX', 'BOX TUMBU', 'BOX TUTUP', 'PARTISI', 'LAYER', 'SHEET']);
             $table->foreignId('substanceKontrak_id')->index();  //SUBSTANCE KONTRAK INPUT MARKETING
             $table->foreignId('substanceProduksi_id')->index(); //SUBSTANCE PRODUKSI INPUT MARKETING
             $table->float('gramSheetBoxKontrak2',8,2);                 //INPUT MARKETING

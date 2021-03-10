@@ -22,10 +22,13 @@ class CreateKontrakmTable extends Migration
             $table->string('poCustomer')->index();               //Input Marketing
             $table->foreignId('top_id')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
-            $table->foreignId('alamatKirim_id');        //Input Marketing
-            $table->foreignId('alamatKantor_id')->nullable();       //Input Marketing
-            $table->foreignId('alamatTagihan_id')->nullable();      //Input Marketing
-            $table->integer('pcsKontrak');              //AUTO SUM(kontrak_d.pcsKontrak)
+            $table->text('alamatKirim');                         //Input Marketing
+            $table->text('alamatKantor')->nullable();            //Input Marketing
+            $table->text('alamatTagihan')->nullable();           //Input Marketing
+            $table->foreignId('alamatKirim_id')->nullable();                 //Input Marketing
+            $table->foreignId('alamatKantor_id')->nullable();    //Input Marketing
+            $table->foreignId('alamatTagihan_id')->nullable();   //Input Marketing
+            $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
             $table->float('pctToleransiKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
             $table->integer('pcsToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('kgKontrak')->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
