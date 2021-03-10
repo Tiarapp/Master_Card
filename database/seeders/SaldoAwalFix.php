@@ -507,5 +507,18 @@ class SaldoAwalFix extends Seeder
         DB::table('color')->insert(['kode'=>'HJU75','nama'=>'HJU75','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU152','nama'=>'BRU152','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'HJU76','nama'=>'HJU76','mudaTua'=>0,'createdBy'=>'SEEDER']);
+
+        //TOP
+        DB::table('top')->insert(['id'=>'1','nama'=>'10 Hari','hari'=>'10','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'2','nama'=>'14 Hari','hari'=>'14','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'3','nama'=>'30 Hari','hari'=>'30','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'4','nama'=>'45 Hari','hari'=>'45','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'5','nama'=>'60 Hari','hari'=>'60','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'6','nama'=>'75 Hari','hari'=>'75','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'7','nama'=>'90 Hari','hari'=>'90','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'8','nama'=>'0 Hari','hari'=>'0','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'9','nama'=>'5 Hari','hari'=>'5','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'10','nama'=>'7 Hari','hari'=>'7','createdBy'=>'SEEDER']);
+
     }
 }

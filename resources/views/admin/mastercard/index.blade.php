@@ -56,8 +56,8 @@
                         <tr>
                             <td scope="row">{{ $no++ }}</td>
                             <td>{{ $data->kode }}</td>
-                            <td>{{ $data->bj_id }}</td>
-                            <td>{{ $data->tipebox }}</td>
+                            <td>{{ $data->namaBarang }}</td>
+                            <td>{{ $data->tipeBox }}</td>
                             <td>{{ $data->CreasCorrP }}</td>
                             <td>{{ $data->CreasCorrL }}</td>
                             <td>{{ $data->joint }}</td>

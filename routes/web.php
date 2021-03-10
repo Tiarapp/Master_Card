@@ -192,7 +192,14 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
     Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
     Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
-    Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint');
+    Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('mastercard.pdfb1');
+
+    //Kontrak
+    Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
+    Route::get('/admin/kontrak/create', 'KontrakController@create')->name('kontrak.create');
+    Route::post('/admin/kontrak/store', 'KontrakController@store')->name('kontrak.store');
+    Route::get('/admin/kontrak/edit/{id}', 'KontrakController@edit')->name('kontrak.edit');
+    Route::get('/admin/kontrak/pdf/{id}', 'KontrakController@pdfprint')->name('kontrak.pdfb1');
 });
 
 
