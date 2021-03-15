@@ -29,6 +29,8 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('alamatKantor_id')->nullable();    //Input Marketing
             $table->foreignId('alamatTagihan_id')->nullable();   //Input Marketing
             $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
+            $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
+            $table->integer('kgSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->float('pctToleransiKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
             $table->integer('pcsToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('kgKontrak')->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
@@ -43,7 +45,7 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang');                          //INPUT MARKETING
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
-            $table->integer('harga');                               //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)
+            $table->integer('harga');    
             $table->enum('inExTax',['Include','Exclude'])->index(); //Input Marketing
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 

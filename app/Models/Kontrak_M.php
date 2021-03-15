@@ -18,6 +18,26 @@ class Kontrak_M extends Model
         'poCustomer',
         'top_id',
         'caraKirim',
-        'alamat'
+        'alamatKirim',
+        'alamatKantor',
+        'alamatTagihan',
+        'alamatKirim_id',
+        'alamatKantor_id',
+        'alamatTagihan_id',
+        'pcsKontrak',
+        'pctToleransiKontrak',
+        'kgKontrak',
+        'kgKontrakToleransi',
+        'amountBeforeTax',
+        'tax',
+        'amountTotal',
+        'rpKg',
+        'sisaPlafon',
+        'sisaKontrak',
+        'status',
+        'lock',
+        'sales_m_id',
+        
+
     ];
 }

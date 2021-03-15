@@ -17,9 +17,12 @@ class CreateKontrakDTable extends Migration
             $table->id('id');
             $table->foreignId('kontrak_m_id')->index();    //Input Marketing pilih dari master item_bj_converting
             $table->foreignId('mc_id')->index();         //Auto ambil mid(item_bj_id,15,4)
+            $table->integer('pcsPelengkapKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
+            $table->integer('kgPelengkapKontrak')->nullable();              //AUTO pcsKontrak * gramKontrak
+            $table->integer('pcsPelengkapSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
+            $table->integer('kgPelengkapSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->float('pctToleransiPelengkapKontrak',5,2)->nullable();  //Input Marketing
             $table->integer('pcsToleransiPelengkapKontrak')->nullable();    //Input Marketing AUTO JIKA PCT DI INPUT (PCS KONTRAK*PCT TOLERANSI)
-            $table->integer('kgPelengkapKontrak')->nullable();              //AUTO pcsKontrak * gramKontrak
             $table->integer('kgToleransiPelengkapKontrak')->nullable();     //AUTO (kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->boolean('mcPelengkap')->default(FALSE)->index()->comment('TRUE (ADA PELENGKAP), FALSE (TDK ADA PELENGKAP)')->nullable();
 
