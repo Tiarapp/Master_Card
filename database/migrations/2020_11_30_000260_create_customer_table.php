@@ -39,7 +39,9 @@ class CreateCustomerTable extends Migration
             $table->date('lastPayment')->nullable()->comment('Pembayaran terakhir');   //AUTO
             $table->integer('avgRpKg')->nullable()->comment('Avg Rp/Kg')->index();               //INPUT MARKETING
             $table->integer('avgPaymentDay')->nullable()->comment('Avg Payment after Due Date(day)')->index();  //INPUT MARKETING
-            $table->string('status')->default('Aktif')->comment('Aktif/No/Blokir Plafon/Blokir BJ')->index();                     //INPUT MARKETING
+            $table->string('status')->default('Aktif')->comment('Aktif/No/Blokir Plafon/Blokir BJ')->index();
+            $table->integer('piutang')->nullable()->index();                 //AUTO UPDATE SETELAH INSERT FAKTUR
+            $table->integer('outstandingPiutang')->nullable()->comment('Piutang belum terbayar')->index();  //AUTO UPDATE SETELAH INSERT                           //pcsKontrak || kgKontrak * mc.substance_sheet_id.(substance_sheet.gramSheetCorr)                     //INPUT MARKETING
             $table->integer('top');                     //INPUT MARKETING
             //RELATION
             $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
