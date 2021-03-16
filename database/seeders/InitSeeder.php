@@ -41,9 +41,16 @@ class InitSeeder extends Seeder
 
 		//TOP
 		DB::table('top')->delete();
-        DB::table('top')->insert(['nama' => 'CASH','hari' => '0','createdBy' => 'SEEDER']);
-        DB::table('top')->insert(['nama' => '30 HARI','hari' => '30','createdBy' => 'SEEDER']);
-        DB::table('top')->insert(['nama' => '60 HARI','hari' => '60','createdBy' => 'SEEDER']);
+        DB::table('top')->insert(['id'=>'1','nama'=>'10 Hari','hari'=>'10','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'2','nama'=>'14 Hari','hari'=>'14','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'3','nama'=>'30 Hari','hari'=>'30','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'4','nama'=>'45 Hari','hari'=>'45','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'5','nama'=>'60 Hari','hari'=>'60','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'6','nama'=>'75 Hari','hari'=>'75','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'7','nama'=>'90 Hari','hari'=>'90','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'8','nama'=>'0 Hari','hari'=>'0','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'9','nama'=>'5 Hari','hari'=>'5','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'10','nama'=>'7 Hari','hari'=>'7','createdBy'=>'SEEDER']);
 
 		//SATUAN
 		DB::table('satuan')->delete();

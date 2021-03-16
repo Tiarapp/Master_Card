@@ -41,8 +41,8 @@
                     <th scope="col">Creas Corr P</th>
                     <th scope="col">Creas Corr L</th>
                     <th scope="col">Joint</th>
-                    <th scope="col">Lebar Sheet</th>
                     <th scope="col">Panjang Sheet</th>
+                    <th scope="col">Lebar Sheet</th>
                     <th scope="col">Luas Sheet</th>
                     <th scope="col">Keterangan</th>
                     <th scope="col">Gambar</th>
@@ -61,8 +61,8 @@
                             <td>{{ $data->CreasCorrP }}</td>
                             <td>{{ $data->CreasCorrL }}</td>
                             <td>{{ $data->joint }}</td>
-                            <td>{{ $data->lebarSheet }}</td>
                             <td>{{ $data->panjangSheet }}</td>
+                            <td>{{ $data->lebarSheet }}</td>
                             <td>{{ $data->luasSheet }}</td>
                             <td>{{ $data->keterangan }}</td>
                             <td><a href="../upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
