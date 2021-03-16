@@ -32,7 +32,7 @@ class CreateMcTable extends Migration
             $table->integer('panjangSheetBox');           //Input MARKETING
             $table->float('luasSheet',8,3);               //Auto lebarSheet * panjangSheet
             $table->float('luasSheetBox',8,3);            //Auto lebarSheet * panjangSheet
-            $table->enum('mesin',['CORR','CORR-IKAT','CORR-FLEXO-IKAT','CORR-FLEXO-GLUE-IKAT','CORR-FLEXO-GLUE-STITCH-IKAT','CORR-FLEXO-STITCH-IKAT','CORR-FLEXO-WAX-GLUE-IKAT','CORR-FLEXO-WAX-STITCH-IKAT','CORR-FLEXO-WAX-GLUE-STITCH-IKAT']);
+            $table->string('mesin')->nullable();
             $table->integer('outConv')->index();          //AUTO RUMUS MASIH DIPIKIR
             $table->string('koli')->index();              //INPUT MARKETING
             $table->enum('bungkus',['Kertas','Plastik'])->nullable(); //INPUT MARKETING

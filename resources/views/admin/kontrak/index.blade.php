@@ -22,7 +22,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Surat Jalan Palet</li>
+            <li class="breadcrumb-item active">Kontrak</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -35,16 +35,18 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('sj_palet.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_palet">
           <thead>
             <tr>
               {{-- <th scope="col">No.</th> --}}
-              <th scope="col">No SJ</th>
+              <th scope="col">No Kontrak</th>
+              <th scope="col">No MC</th>
               <th scope="col">Tanggal</th>
-              <th scope="col">No Polisi</th>
               <th scope="col">Customer</th>
+              <th scope="col">Sales</th>
+              <th scope="col">status</th>
               {{-- <th scope="col">No PO Customer</th> --}}
               <th scope="col">Action</th>
             </tr>
@@ -52,13 +54,15 @@
           <tbody>
             <?php
             $no = 1;
-            foreach ($sj as $data) { ?>
+            foreach ($kontrak_m as $data) { ?>
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
-                <td><b>{{ $data->noSuratJalan }}</b></td>
-                <td>{{ $data->tanggal }}</td>
-                <td>{{ $data->noPolisi }}</td>
-                <td>{{ $data->namaCustomer }}</td>
+                <td><b>{{ $data->kode }}</b></td>
+                <td>{{ $data->mc_id }}</td>
+                <td>{{ $data->tglKontrak }}</td>
+                <td>{{ $data->customer_id }}</td>
+                <td>{{ $data->sales_m_id }}</td>
+                <td>{{ $data->status }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}
                 <td>
                   <div class="input-group">

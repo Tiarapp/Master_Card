@@ -37,8 +37,8 @@
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
               <th scope="col">Gram</th>
-              <th scope="col">Pcs</th>
-              <th scope="col">lokasi</th>
+              <th scope="col">Satuan</th>
+              <th scope="col">Isi Per Karton</th>
               <th scope="col">Mastercard ID</th>
             </tr>
           </thead>
@@ -48,12 +48,12 @@
             foreach ($barang as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->kode }}</td>
-                <td>{{ $data->nama }}</td>
-                <td>{{ $data->gram }}</td>
-                <td>{{ $data->pcs }}</td>
-                <td>{{ $data->lokasi }}</td>
-                <td>{{ $data->mc_id }}</td>
+                <td>{{ $data->KodeBrg }}</td>
+                <td>{{ $data->NamaBrg }}</td>
+                <td>{{ round($data->BeratStandart, 2) }}</td>
+                <td>{{ $data->Satuan }}</td>
+                <td>{{ round($data->IsiPerKarton, 0) }}</td>
+                <td>{{ $data->WeightValue }}</td>
                 {{-- <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">

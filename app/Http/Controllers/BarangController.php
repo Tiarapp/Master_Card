@@ -15,7 +15,8 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = Barang::orderBy('kode', 'asc')->get();
+        // $barang = Barang::orderBy('kode', 'asc')->get();
+        $barang = DB::connection('firebird2')->table('TBarangConv')->orderBy('KodeBrg', 'asc')->get();
 
         return view('admin.barang.index', compact('barang'));
     }

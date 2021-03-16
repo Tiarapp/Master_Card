@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kontrak_D;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Kontrak_DController extends Controller
 {
@@ -14,7 +15,10 @@ class Kontrak_DController extends Controller
      */
     public function index()
     {
-        //
+        $kontrak_m = DB::table('kontrak_m')
+            ->get();
+
+        return view('admin.kontrak.index', compact('kontrak_m'));
     }
 
     /**
@@ -24,7 +28,12 @@ class Kontrak_DController extends Controller
      */
     public function create()
     {
-        //
+        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')->get();
+        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')->get();
+        
+        return view('admin.kontrak.create', compact(
+            'mc','mcpel'
+        ));
     }
 
     /**
