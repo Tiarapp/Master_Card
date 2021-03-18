@@ -65,11 +65,6 @@
                         </div>
                         <div class="col-md-3">
                             <input type="hidden" class="form-control txt_line col-md-11" value="" id="substanceKontrak_id" name="substanceKontrak_id">
-                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Katas" readonly>
-                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbf" readonly>
-                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ktengah" readonly>
-                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kcf" readonly>
-                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbawah" readonly>
                             <input type="text" class="form-control txt_line col-md-11" value="" id="subskontrak" onchange="getGramKontrak()" readonly>
                             <!-- Modal -->
                             <div class="modal fade" id="SubstanceKontrak">
@@ -78,7 +73,7 @@
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Substance</h4>
+                                            <h4 class="modal-title">Mastercard Box</h4>
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body SubstanceKontrak">
@@ -137,14 +132,14 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Pilih MC Box</label>
+                                        <label>Pilih MC Pelengkap</label>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
-                                            @foreach ($mc as $data)
+                                            @foreach ($top as $data)
                                             <option value="{{ $data->Nama }}|{{ $data->AlamatKirim }}">{{ $data->Nama }}</option>
-                                            @endforeach
+                                        @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -228,8 +223,8 @@
                                     echo    "<td>";
                                         echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData();'>";
                                             echo   "<option value=''>---</option>";
-                                            foreach ($palet as $data) {
-                                                echo "<option value='$data->id|$data->nama|$data->ukuran'>$data->nama|$data->ukuran</option>";
+                                            foreach ($mcpel as $data) {
+                                                echo "<option value='$data->id|$data->kode|$data->panjangSheetBox|$data->lebarSheetBox|$data->substanceKontrak_id'>$data->nama|$data->ukuran</option>";
                                             }
                                             echo "</select>";
                                         echo "</td>";
