@@ -18,7 +18,6 @@ class CreatePlanHasilCorrDTable extends Migration
             $table->foreignId('plan_hasil_corr_m_id')->index();     //AUTO
             $table->foreignId('opi_m_id')->index();     //AUTO
             $table->foreignId('opi_d_id')->index();     //AUTO
-            $table->foreignId('dt_id')->index();        //AUTO
             $table->foreignId('kontrak_m_id')->index();     //AUTO
             $table->foreignId('kontrak_d_id')->index();     //AUTO
             $table->foreignId('mc_id')->index();        //AUTO
@@ -97,7 +96,6 @@ class CreatePlanHasilCorrDTable extends Migration
             $table->foreign('plan_hasil_corr_m_id')->references('id')->on('plan_hasil_corr_m')->cascadeOnDelete();
             $table->foreign('opi_m_id')->references('id')->on('opi_m')->cascadeOnDelete();
             $table->foreign('opi_d_id')->references('id')->on('opi_d')->cascadeOnDelete();
-            $table->foreign('dt_id')->references('id')->on('dt')->cascadeOnDelete();
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
             $table->foreign('kontrak_d_id')->references('id')->on('kontrak_d')->cascadeOnDelete();
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();

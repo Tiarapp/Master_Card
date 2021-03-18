@@ -18,7 +18,6 @@ class CreatePlanHasilCorrMTable extends Migration
             $table->integer('shift')->index();      //INPUT PPIC
             $table->string('regu')->index();        //INPUT PPIC
             $table->foreignId('mesin_id')->index(); //INPUT PPIC
-            $table->foreignId('dt_id')->index();    //INPUT PPIC
             $table->string('kode')->index();        //AUTO NUMBER SEQ
             $table->dateTime('tglPlan')->index();   //AUTO EDITABLE
             $table->dateTime('tglHasil')->index();  //AUTO EDITABLE
@@ -34,7 +33,6 @@ class CreatePlanHasilCorrMTable extends Migration
             $table->integer('rmHasil')->nullable();  //INPUT PPIC
             $table->integer('kgWaste')->nullable();  //INPUT PPIC
             //RELATION
-            $table->foreign('dt_id')->references('id')->on('dt')->cascadeOnDelete();
             $table->foreign('mesin_id')->references('id')->on('mesin')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login

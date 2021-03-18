@@ -23,11 +23,6 @@ class CreateOpiMTable extends Migration
             $table->foreignId('kontrak_m_id')->nullable()->index(); //AUTO
             $table->foreignId('kontrak_d_id')->nullable()->index(); //AUTO
             $table->text('keterangan')->nullable(); //INPUT PPIC
-            //RELATION
-            $table->foreign('dt_id')->references('id')->on('dt')->cascadeOnDelete();
-            $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
-            $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
-            $table->foreign('kontrak_d_id')->references('id')->on('kontrak_d')->cascadeOnDelete();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
