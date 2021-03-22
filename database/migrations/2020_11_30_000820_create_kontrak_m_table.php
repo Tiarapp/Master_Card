@@ -32,9 +32,11 @@ class CreateKontrakmTable extends Migration
             $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->integer('kgSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->float('pctToleransiKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
-            $table->integer('pcsToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
+            $table->integer('pcsKurangToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
+            $table->integer('pcsLebihToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
+            $table->integer('kgKurangToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
+            $table->integer('kgLebihToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->integer('kgKontrak')->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
-            $table->integer('kgToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->integer('amountBeforeTax')->nullable();         //AUTO DPP Auto harga * pcsKontrak
             $table->integer('tax')->nullable();                     //AUTO amountBeforeTax / 10
             $table->integer('amountTotal')->nullable();             //Auto amountBeforeTax + Tax
