@@ -28,6 +28,7 @@ class Kontrak_DController extends Controller
      */
     public function create()
     {
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')->get();
         $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')->get();
         $top = DB::table('top')->get();
