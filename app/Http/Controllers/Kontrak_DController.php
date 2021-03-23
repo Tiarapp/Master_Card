@@ -29,12 +29,17 @@ class Kontrak_DController extends Controller
     public function create()
     {
         $cust = DB::connection('firebird')->table('TCustomer')->get();
-        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')->get();
+        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->get();
         $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')->get();
         $top = DB::table('top')->get();
         
         return view('admin.kontrak.create', compact(
-            'mc','mcpel', 'top'
+            'mc','mcpel', 'top', 'cust'
         ));
     }
 
