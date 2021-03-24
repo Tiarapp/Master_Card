@@ -373,6 +373,16 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
+                                        <label>Toleransi Lebih(kg)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="toleransiLebihKg" id="toleransiLebihKg">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <label>Toleransi Kurang(%)</label>
                                     </div>
                                     <div class="col-md-6">
@@ -393,10 +403,37 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
+                                        <label>Toleransi Kurang(kg)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="toleransiKurangKg" id="toleransiKurangKg">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <label>Term of Payment</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="top" id="top">
+                                        <select class='js-example-basic-single col-md-12' name="top_id" id="top_id">
+                                            @foreach ($top as $data)
+                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Cara Kirim</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
+                                            <option value="Kirim">Kirim</option>
+                                            <option value="Ambil Sendiri">Ambil Sendiri</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

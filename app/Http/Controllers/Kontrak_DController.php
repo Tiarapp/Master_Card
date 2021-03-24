@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kontrak_D;
+use App\Models\Kontrak_M;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -61,9 +63,53 @@ class Kontrak_DController extends Controller
         ->where('noBukti', '=', $url)->get();
         
         $nobukti = $ns[0]->format;
-        // $tanggal = $request->tanggal;
+        $tanggal = $request->tanggal;
 
-        dd($nobukti);
+        // dd($nobukti, $tanggal);
+
+        $start = Carbon::createFromFormat('Y-m-d', $tanggal)
+            ->firstOfMonth()
+            ->format('Y-m-d');
+
+        $end = Carbon::createFromFormat('Y-m-d', $tanggal)
+        ->endOfMonth()
+        ->format('Y-m-d');
+
+        $fromDate = Carbon::now()->startOfMonth();
+        $tillDate = Carbon::now()->endOfMonth();
+
+        if (strpos($fromDate, $start) !== false ) {
+            $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$fromDate, $tillDate])->get();
+            $count = count($result)+1;
+            if ($nobukti === $nobukti) {
+                $nobukti = str_replace('~YY~', date('y'), $nobukti);
+                $nobukti = str_replace('~MM~', date('m'), $nobukti);                
+                $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
+            }
+        } else {
+            $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$start, $end])->get();
+            $count = count($result)+1;
+            if ($nobukti === $nobukti) {
+                $nobukti = str_replace('~YY~', date('y', strtotime($start)), $nobukti);
+                $nobukti = str_replace('~MM~', date('m', strtotime($start)), $nobukti);                
+                $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
+            }
+        }
+
+        // dd($nobukti);
+
+        $kontrakm = Kontrak_M::create([
+            'kode' => $nobukti,
+            'mc_id' => $request->mcid,
+            'tglKontrak' => $request->tanggal,
+            'top_id' => $request->top_id,
+            'customer_id' => $request->customer_id,
+            'alamatKirim' => $request->alamatKirim,
+            'caraKirim' => $request->caraKirim,
+            'pcsKontrak' => $request->jmlOrder,
+            'pctToleransiLebihKontrak' => $request->ToleransiLebihPersen
+
+        ]);
     }
 
     /**

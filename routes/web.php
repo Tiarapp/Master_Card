@@ -197,7 +197,7 @@ Route::middleware(['auth'])->group(function (){
     //Kontrak
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
-    Route::get('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
+    Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::get('/admin/kontrak/edit/{id}', 'Kontrak_DController@edit')->name('kontrak.edit');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
 });
