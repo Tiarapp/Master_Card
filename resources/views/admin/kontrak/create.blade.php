@@ -31,7 +31,7 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('sj_palet.store') }}"  method="POST">
+                <form action="{{ route('kontrak.store') }}"  method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-5">
@@ -463,13 +463,13 @@
                                         echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData();'>";
                                             echo   "<option value=''>---</option>";
                                             foreach ($mcpel as $data) {
-                                                echo "<option value='$data->id|$data->kode|$data->panjangSheetBox|$data->lebarSheetBox|$data->substanceKontrak_id'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
+                                                echo "<option value='$data->id|$data->kode|$data->panjangSheetBox|$data->lebarSheetBox|$data->substancePel'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
                                             }
                                             echo "</select>";
                                             echo "</td>";
                                             echo "<td><input type='text' name='ukuran[$i]' id='ukuran[$i]' readonly></td>";
-                                            echo "<td><input type='text' name='kualitas[$i]' id='kualitas[$i]'></td>";
-                                            echo "<td><input type='text' name='flute[$i]' id='flute[$i]'></td>";
+                                            echo "<td><input type='text' name='kualitas[$i]' id='kualitas[$i]' readonly></td>";
+                                            echo "<td><input type='text' name='flute[$i]' id='flute[$i]' readonly></td>";
                                             echo "<td><input type='text' name='qty[$i]' id='qty[$i]'></td>";
                                             echo "</tr>";
                                             echo "<input type='hidden' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
@@ -524,8 +524,6 @@
                         document.getElementById('tipeCrease').value = mc[13];
                         document.getElementById('joint').value = mc[5];
                         document.getElementById('bungkus').value = mc[7];
-                        
-                        getGramKontrak();
                     } );
                 } );
 
@@ -542,7 +540,7 @@
                         document.getElementById('namaCust').value = cust[1];
                         document.getElementById('alamatKirim').value = cust[5];
                         document.getElementById('telp').value = cust[3];
-                        document.getElementById('fax').value = cust[4];
+                        // document.getElementById('fax').value = cust[4];
                         
                         // getGramKontrak();
                     } );
@@ -582,48 +580,69 @@
                     
                     if (data1 != '') {
                         var arr1 = data1.split('|');
-                        var idpalet1 = arr1[0];
-                        var nama1 = arr1[1];
-                        var ukuran1 = arr1[2]; 
-                        document.getElementById("idpalet[1]").value = idpalet1;
-                        document.getElementById("nama[1]").value = nama1;
-                        document.getElementById("ukuran[1]").value = ukuran1;
+                        var idmc = arr1[0];
+                        var kodemc = arr1[1];
+                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
+                        var substance = arr1[4].split(" ")
+                        var kualitas = substance[1];
+                        var flute = substance[0]
+                        document.getElementById("ukuran[1]").value = ukuran;
+                        document.getElementById("kualitas[1]").value = kualitas;
+                        document.getElementById("flute[1]").value = flute;
+                        document.getElementById("idmcpel[1]").value = idmc;
+
                     } 
                     if (data2 != '') {
                         var arr2 = data2.split('|');
-                        var idpalet2 = arr2[0];
-                        var nama2 = arr2[1];
-                        var ukuran2 = arr2[2]; 
-                        document.getElementById("idpalet[2]").value = idpalet2;
-                        document.getElementById("nama[2]").value = nama2;
-                        document.getElementById("ukuran[2]").value = ukuran2;
+                        var idmc = arr1[0];
+                        var kodemc = arr1[1];
+                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
+                        var substance = arr1[4].split(" ")
+                        var kualitas = substance[1];
+                        var flute = substance[0]
+                        document.getElementById("ukuran[2]").value = ukuran;
+                        document.getElementById("kualitas[2]").value = kualitas;
+                        document.getElementById("flute[2]").value = flute;
+                        document.getElementById("idmcpel[2]").value = idmc;
                     } 
                     if (data3 != '') {
                         var arr3 = data3.split('|');
-                        var idpalet3 = arr3[0];
-                        var nama3 = arr3[1];
-                        var ukuran3 = arr3[2]; 
-                        document.getElementById("idpalet[3]").value = idpalet3;
-                        document.getElementById("nama[3]").value = nama3;
-                        document.getElementById("ukuran[3]").value = ukuran3;
+                        var idmc = arr1[0];
+                        var kodemc = arr1[1];
+                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
+                        var substance = arr1[4].split(" ")
+                        var kualitas = substance[1];
+                        var flute = substance[0]
+                        document.getElementById("ukuran[3]").value = ukuran;
+                        document.getElementById("kualitas[3]").value = kualitas;
+                        document.getElementById("flute[3]").value = flute;
+                        document.getElementById("idmcpel[3]").value = idmc;
                     }
                     if (data4 != '') {
                         var arr4 = data4.split('|');
-                        var idpalet4 = arr4[0];
-                        var nama4 = arr4[1];
-                        var ukuran4 = arr4[2]; 
-                        document.getElementById("idpalet[4]").value = idpalet4;
-                        document.getElementById("nama[4]").value = nama4;
-                        document.getElementById("ukuran[4]").value = ukuran4;                        
+                        var idmc = arr1[0];
+                        var kodemc = arr1[1];
+                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
+                        var substance = arr1[4].split(" ")
+                        var kualitas = substance[1];
+                        var flute = substance[0]
+                        document.getElementById("ukuran[4]").value = ukuran;
+                        document.getElementById("kualitas[4]").value = kualitas;
+                        document.getElementById("flute[4]").value = flute;
+                        document.getElementById("idmcpel[4]").value = idmc;                       
                     }
                     if (data5 != '') {
                         var arr5 = data5.split('|');
-                        var idpalet5 = arr5[0];
-                        var nama5 = arr5[1];
-                        var ukuran5 = arr5[2]; 
-                        document.getElementById("idpalet[5]").value = idpalet5;
-                        document.getElementById("nama[5]").value = nama5;
-                        document.getElementById("ukuran[5]").value = ukuran5;
+                        var idmc = arr1[0];
+                        var kodemc = arr1[1];
+                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
+                        var substance = arr1[4].split(" ")
+                        var kualitas = substance[1];
+                        var flute = substance[0]
+                        document.getElementById("ukuran[5]").value = ukuran;
+                        document.getElementById("kualitas[5]").value = kualitas;
+                        document.getElementById("flute[5]").value = flute;
+                        document.getElementById("idmcpel[5]").value = idmc;
                     }
                     
                 }
