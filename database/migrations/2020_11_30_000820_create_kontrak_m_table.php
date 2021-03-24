@@ -19,7 +19,7 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('mc_id')->index();                 //Auto ambil mid(item_bj_id,15,4)
             $table->date('tglKontrak')->index();                 //AUTO NUMBER SEQUENCE
             $table->foreignId('customer_id')->index();           //Input Marketing
-            $table->string('poCustomer')->index();               //Input Marketing
+            $table->string('poCustomer')->index()->nullable();               //Input Marketing
             $table->foreignId('top_id')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
             $table->text('alamatKirim');                         //Input Marketing
@@ -31,7 +31,8 @@ class CreateKontrakmTable extends Migration
             $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
             $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->integer('kgSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
-            $table->float('pctToleransiKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
+            $table->float('pctToleransiLebihKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
+            $table->float('pctToleransiKurangKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
             $table->integer('pcsKurangToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('pcsLebihToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('kgKurangToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
@@ -45,10 +46,10 @@ class CreateKontrakmTable extends Migration
             $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
             $table->boolean('lock')->default(FALSE);                //AUTO
             $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
-            $table->foreignId('mataUang');                          //INPUT MARKETING
+            $table->foreignId('mataUang')->nullable();                          //INPUT MARKETING
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
             $table->integer('harga');    
-            $table->enum('inExTax',['Include','Exclude'])->index(); //Input Marketing
+            $table->enum('inExTax',['Include','Exclude'])->index()->nullable(); //Input Marketing
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 
             //RELATION
