@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kontrak_D;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 class Kontrak_DController extends Controller
 {
@@ -35,7 +36,10 @@ class Kontrak_DController extends Controller
             ->leftJoin('box', 'box_id', '=', 'box.id')
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
             ->get();
-        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')->get();
+        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')
+        ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+        ->select('mc.*', 'substance.kode as substancePel')
+        ->get();
         $top = DB::table('top')->get();
         
         return view('admin.kontrak.create', compact(
@@ -51,7 +55,15 @@ class Kontrak_DController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $url = Route::currentRouteName();
+        $ns = DB::table('number_sequence')
+        ->select('format')
+        ->where('noBukti', '=', $url)->get();
+        
+        $nobukti = $ns[0]->format;
+        // $tanggal = $request->tanggal;
+
+        dd($nobukti);
     }
 
     /**

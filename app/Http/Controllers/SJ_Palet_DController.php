@@ -59,7 +59,7 @@ class SJ_Palet_DController extends Controller
         $nobukti = $ns[0]->format;
         $tanggal = $request->tanggal;
 
-        // dd($url, $ns, $tanggal);
+        dd($url, $ns, $tanggal);
 
         $start = Carbon::createFromFormat('Y-m-d', $tanggal)
             ->firstOfMonth()
