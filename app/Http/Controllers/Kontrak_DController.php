@@ -107,7 +107,12 @@ class Kontrak_DController extends Controller
             'alamatKirim' => $request->alamatKirim,
             'caraKirim' => $request->caraKirim,
             'pcsKontrak' => $request->jmlOrder,
-            'pctToleransiLebihKontrak' => $request->ToleransiLebihPersen
+            'pctToleransiLebihKontrak' => $request->ToleransiLebihPersen,
+            'pctToleransiKurangKontrak' => $request->ToleransiKurangPersen,
+            'pcsKurangToleransiKontrak' => $request->ToleransiKurangPcs,
+            'pcsLebihToleransiKontrak' => $request->ToleransiLebihPcs,
+            'kgKurangToleransiKontrak' => $request->ToleransiKurangKg,
+            'kgLebihToleransiKontrak' => $request->ToleransiLebihKg,
 
         ]);
     }

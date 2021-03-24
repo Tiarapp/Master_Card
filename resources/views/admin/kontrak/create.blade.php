@@ -477,6 +477,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tipe Harga</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
+                                            <option value="PCS">PCS</option>
+                                            <option value="KG">KG</option>
+                                        </select>  
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Total Harga</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="totalHarga" name="totalHarga">  
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     
                     <table class="table table-bordered" id="">
