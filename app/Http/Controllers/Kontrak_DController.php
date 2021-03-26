@@ -113,7 +113,7 @@ class Kontrak_DController extends Controller
             'pcsLebihToleransiKontrak' => $request->ToleransiLebihPcs,
             'kgKurangToleransiKontrak' => $request->ToleransiKurangKg,
             'kgLebihToleransiKontrak' => $request->ToleransiLebihKg,
-
+            ''
         ]);
     }
 
