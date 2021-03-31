@@ -14,7 +14,7 @@ class Kontrak_M extends Model
         'kode',
         'mc_id',
         'tglKontrak',
-        'customer_id',
+        'customer_name',
         'poCustomer',
         'top_id',
         'caraKirim',
@@ -25,9 +25,13 @@ class Kontrak_M extends Model
         'alamatKantor_id',
         'alamatTagihan_id',
         'pcsKontrak',
-        'pctToleransiKontrak',
+        'pctLebihToleransiKontrak',
+        'pcsLebihToleransiKontrak',
+        'kgLebihToleransiKontrak',
+        'pctKurangToleransiKontrak',
+        'pcsKurangToleransiKontrak',
+        'kgKurangToleransiKontrak',
         'kgKontrak',
-        'kgKontrakToleransi',
         'amountBeforeTax',
         'tax',
         'amountTotal',
@@ -37,7 +41,8 @@ class Kontrak_M extends Model
         'status',
         'lock',
         'sales_m_id',
-        
+        'harga',
+        'createdBy'
 
     ];
 }

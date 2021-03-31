@@ -41,8 +41,7 @@
                                         <label>Pilih Customer</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="hidden" id="customer_id" name="customer_id">
-                                        <input type="text" class="form-control txt_line col-md-11" value="" id="namaCust" onchange="getGramKontrak()" readonly>
+                                        <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" onchange="getGramKontrak()" readonly>
                                     </div>
                                     
                                     <!-- Modal -->
@@ -212,6 +211,7 @@
                                                                     <th scope="col">Packing</th>
                                                                     <th scope="col">box</th>
                                                                     <th scope="col">Tipe Crease</th>
+                                                                    <th scope="col">Berat</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -232,6 +232,7 @@
                                                                         <td>{{ $data->koli }}</td>
                                                                         <td>{{ $data->box_id }}</td>
                                                                         <td>{{ $data->tipeCrease }}</td>
+                                                                        <td>{{ $data->gramSheetCorrKontrak }}</td>
                                                                     </tr>
                                                                     <?php
                                                                 }
@@ -264,6 +265,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="hidden" name="mcid" id="mcid">
+                                        <!-- <input type="hidden" name="beratBox" id="beratBox"> -->
                                         <input type="text" class="form-control txt_line" name="namaItem" id="namaItem">
                                     </div>
                                 </div>
@@ -301,10 +303,10 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Harga</label>
+                                        <label>Berat (gram)</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="harga" id="harga">
+                                        <input type="text" class="form-control txt_line" name="beratBox" id="beratBox">
                                     </div>
                                 </div>
                             </div>
@@ -345,6 +347,46 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control txt_line" name="jmlOrder" id="jmlOrder">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Harga (Pcs/Kg)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="hargaSatuan" id="hargaSatuan" onchange="getHarga();">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tax (%)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="tax" id="tax" onchange="getHarga();">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Harga Belum Tax</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="hargaBlmTax" id="hargaBlmTax">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Berat Total</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="beratTotal" id="beratTotal">
                                     </div>
                                 </div>
                             </div>
@@ -407,6 +449,20 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control txt_line" name="toleransiKurangKg" id="toleransiKurangKg">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Sales</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select class='js-example-basic-single col-md-12' name="sales" id="sales">
+                                            @foreach ($sales as $data)
+                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -483,7 +539,7 @@
                                         <label>Tipe Harga</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
+                                        <select class='js-example-basic-single col-md-12' name="tipe_harga" id="tipe_harga">
                                             <option value="PCS">PCS</option>
                                             <option value="KG">KG</option>
                                         </select>  
@@ -506,11 +562,12 @@
                     <table class="table table-bordered" id="">
                         <thead>
                             <tr>
-                                <th scope="col">Jenis</th>
-                                <th scope="col">Ukuran</th>
-                                <th scope="col">Kualitas</th>
-                                <th scope="col">Flute</th>
-                                <th scope="col">Qty</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Qty(Pcs)</th>
+                                <th scope="col">Toleransi(%)</th>
+                                <th scope="col">Qty(Kg)</th>
+                                <th scope="col">Toleransi Pcs</th>
+                                <th scope="col">Toleransi Kg</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -521,20 +578,20 @@
                                 
                                 echo "<tr>";
                                     echo    "<td>";
-                                        echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData();'>";
+                                        echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                             echo   "<option value=''>---</option>";
                                             foreach ($mcpel as $data) {
-                                                echo "<option value='$data->id|$data->kode|$data->panjangSheetBox|$data->lebarSheetBox|$data->substancePel'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
+                                                echo "<option value='$data->id|$data->gramSheetBoxKontrak'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
                                             }
                                             echo "</select>";
                                             echo "</td>";
-                                            echo "<td><input type='text' name='ukuran[$i]' id='ukuran[$i]' readonly></td>";
-                                            echo "<td><input type='text' name='kualitas[$i]' id='kualitas[$i]' readonly></td>";
-                                            echo "<td><input type='text' name='flute[$i]' id='flute[$i]' readonly></td>";
-                                            echo "<td><input type='text' name='qty[$i]' id='qty[$i]'></td>";
+                                            echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]'></td>";
+                                            echo "<td><input type='text' name='toleransi[$i]' id='toleransi[$i]' onchange='getData();'></td>";
+                                            echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]' readonly></td>";
+                                            echo "<td><input type='text' name='pcsToleransi[$i]' id='pcsToleransi[$i]' readonly></td>";
+                                            echo "<td><input type='text' name='kgToleransi[$i]' id='kgToleransi[$i]' readonly></td>";
                                             echo "</tr>";
                                             echo "<input type='hidden' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
-                                            echo "<input type='hidden' name='nama[$i]' id='nama[$i]' readonly>";
                                         }
                                         ?>
                                         
@@ -569,6 +626,8 @@
                     $('#data_mastercard tbody').on( 'click', 'td', function () {
                         var mc = (table.row(this).data());
                         
+                        
+                        document.getElementById('mcid').value = mc[0];
                         document.getElementById('namaItem').value = mc[2];
                         document.getElementById('nomc').value = mc[1];
 
@@ -585,6 +644,8 @@
                         document.getElementById('tipeCrease').value = mc[13];
                         document.getElementById('joint').value = mc[5];
                         document.getElementById('bungkus').value = mc[7];
+
+                        document.getElementById('beratBox').value = mc[14];
                     } );
                 } );
 
@@ -597,7 +658,7 @@
                     $('#data_customer tbody').on( 'click', 'td', function () {
                         var cust = (table.row(this).data());
                         
-                        document.getElementById('customer_id').value = cust[0]    ;
+                        // document.getElementById('customer_id').value = cust[0]    ;
                         document.getElementById('namaCust').value = cust[1];
                         document.getElementById('alamatKirim').value = cust[5];
                         document.getElementById('telp').value = cust[3];
@@ -610,27 +671,49 @@
                 function getToleransiLebih() {
                     var jumlahOrder = document.getElementById('jmlOrder').value;
                     var persen = document.getElementById('toleransiLebihPersen').value;
+                    var totalBerat = document.getElementById('beratTotal').value;
                     
-                    var hasil = jumlahOrder * (persen/100);
+                    var hasilpcs = jumlahOrder * (persen/100);
+                    var hasilkg = totalBerat * (persen/100);
 
-                    document.getElementById('toleransiLebihPcs').value = hasil;
+                    document.getElementById('toleransiLebihPcs').value = hasilpcs;
+                    document.getElementById('toleransiLebihKg').value = hasilkg;
                 }
 
                 function getToleransiKurang() {
                     var jumlahOrder = document.getElementById('jmlOrder').value;
                     var persen = document.getElementById('toleransiKurangPersen').value;
+                    var totalBerat = document.getElementById('beratTotal').value;
                     
-                    var hasil = jumlahOrder * (persen/100);
+                    var hasilpcs = jumlahOrder * (persen/100);
+                    var hasilkg = totalBerat *(persen/100);
 
-                    document.getElementById('toleransiKurangPcs').value = hasil;
+                    document.getElementById('toleransiKurangPcs').value = hasilpcs;
+                    document.getElementById('toleransiKurangKg').value = hasilkg;
+                }
+
+                function getHarga(){
+                    var jumlahOrder = document.getElementById('jmlOrder').value;
+                    var hargaSatuan = document.getElementById('hargaSatuan').value;
+                    var tax = document.getElementById('tax').value / 100;
+                    var gram = document.getElementById('beratBox').value;
+
+                    var totalSblTax = jumlahOrder * hargaSatuan;
+                    var totalSdhTax = totalSblTax - (totalSblTax * tax);
+                    var berattotal = jumlahOrder * gram;
+                    
+                    document.getElementById('hargaBlmTax').value = totalSblTax;
+                    document.getElementById('totalHarga').value = totalSdhTax;
+                    document.getElementById('beratTotal').value = berattotal;
+
                 }
                 
-                function getCatatan() {
-                    var catatan1 = document.getElementById("catatan1").value;
-                    var nosj = document.getElementById("nosj").value;
+                // function getCatatan() {
+                //     var catatan1 = document.getElementById("catatan1").value;
+                //     var nosj = document.getElementById("nosj").value;
                     
-                    document.getElementById("catatan").value = catatan1 +nosj;
-                }
+                //     document.getElementById("catatan").value = catatan1 +nosj;
+                // }
                 
                 function getData() {
                     var data1 = document.getElementById("nama_1").value;
@@ -642,67 +725,77 @@
                     if (data1 != '') {
                         var arr1 = data1.split('|');
                         var idmc = arr1[0];
-                        var kodemc = arr1[1];
-                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
-                        var substance = arr1[4].split(" ")
-                        var kualitas = substance[1];
-                        var flute = substance[0]
-                        document.getElementById("ukuran[1]").value = ukuran;
-                        document.getElementById("kualitas[1]").value = kualitas;
-                        document.getElementById("flute[1]").value = flute;
+                        var beratBox = arr1[1];
+                        var qty = document.getElementById('qtyPcs[1]').value;
+                        var toleransipct = document.getElementById('toleransi[1]').value;
+                        var totalKg = qty * beratBox;
+                        var toleransipcs =  qty * (toleransipct/100) ;
+                        var toleransikg = totalKg * (toleransipct/100);
+
+                        document.getElementById("qtyKg[1]").value = totalKg;
+                        document.getElementById("pcsToleransi[1]").value = toleransipcs;
+                        document.getElementById("kgToleransi[1]").value = toleransikg;
                         document.getElementById("idmcpel[1]").value = idmc;
 
                     } 
                     if (data2 != '') {
                         var arr2 = data2.split('|');
-                        var idmc = arr1[0];
-                        var kodemc = arr1[1];
-                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
-                        var substance = arr1[4].split(" ")
-                        var kualitas = substance[1];
-                        var flute = substance[0]
-                        document.getElementById("ukuran[2]").value = ukuran;
-                        document.getElementById("kualitas[2]").value = kualitas;
-                        document.getElementById("flute[2]").value = flute;
+                        var idmc = arr2[0];
+                        var beratBox = arr2[1];
+                        var qty = document.getElementById('qtyPcs[2]').value;
+                        var toleransipct = document.getElementById('toleransi[2]').value;
+                        var totalKg = qty * beratBox;
+                        var toleransipcs =  qty * (toleransipct/100) ;
+                        var toleransikg = totalKg * (toleransipct/100);
+
+                        document.getElementById("qtyKg[2]").value = totalKg;
+                        document.getElementById("pcsToleransi[2]").value = toleransipcs;
+                        document.getElementById("kgToleransi[2]").value = toleransikg;
                         document.getElementById("idmcpel[2]").value = idmc;
                     } 
                     if (data3 != '') {
                         var arr3 = data3.split('|');
-                        var idmc = arr1[0];
-                        var kodemc = arr1[1];
-                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
-                        var substance = arr1[4].split(" ")
-                        var kualitas = substance[1];
-                        var flute = substance[0]
-                        document.getElementById("ukuran[3]").value = ukuran;
-                        document.getElementById("kualitas[3]").value = kualitas;
-                        document.getElementById("flute[3]").value = flute;
+                        var idmc = arr3[0];
+                        var beratBox = arr3[1];
+                        var qty = document.getElementById('qtyPcs[3]').value;
+                        var toleransipct = document.getElementById('toleransi[3]').value;
+                        var totalKg = qty * beratBox;
+                        var toleransipcs =  qty * (toleransipct/100) ;
+                        var toleransikg = totalKg * (toleransipct/100);
+
+                        document.getElementById("qtyKg[3]").value = totalKg;
+                        document.getElementById("pcsToleransi[3]").value = toleransipcs;
+                        document.getElementById("kgToleransi[3]").value = toleransikg;
                         document.getElementById("idmcpel[3]").value = idmc;
                     }
                     if (data4 != '') {
                         var arr4 = data4.split('|');
-                        var idmc = arr1[0];
-                        var kodemc = arr1[1];
-                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
-                        var substance = arr1[4].split(" ")
-                        var kualitas = substance[1];
-                        var flute = substance[0]
-                        document.getElementById("ukuran[4]").value = ukuran;
-                        document.getElementById("kualitas[4]").value = kualitas;
-                        document.getElementById("flute[4]").value = flute;
-                        document.getElementById("idmcpel[4]").value = idmc;                       
+                        var idmc = arr4[0];
+                        var beratBox = arr4[1];
+                        var qty = document.getElementById('qtyPcs[4]').value;
+                        var toleransipct = document.getElementById('toleransi[4]').value;
+                        var totalKg = qty * beratBox;
+                        var toleransipcs =  qty * (toleransipct/100) ;
+                        var toleransikg = totalKg * (toleransipct/100);
+
+                        document.getElementById("qtyKg[4]").value = totalKg;
+                        document.getElementById("pcsToleransi[4]").value = toleransipcs;
+                        document.getElementById("kgToleransi[4]").value = toleransikg;
+                        document.getElementById("idmcpel[4]").value = idmc;                      
                     }
                     if (data5 != '') {
                         var arr5 = data5.split('|');
-                        var idmc = arr1[0];
-                        var kodemc = arr1[1];
-                        var ukuran = arr1[2] +' x '+ arr1[3] +' x 1'; 
-                        var substance = arr1[4].split(" ")
-                        var kualitas = substance[1];
-                        var flute = substance[0]
-                        document.getElementById("ukuran[5]").value = ukuran;
-                        document.getElementById("kualitas[5]").value = kualitas;
-                        document.getElementById("flute[5]").value = flute;
+                        var idmc = arr5[0];
+                        var beratBox = arr5[1];
+                        var qty = document.getElementById('qtyPcs[5]').value;
+                        var toleransipct = document.getElementById('toleransi[5]').value;
+                        var totalKg = qty * beratBox;
+                        var toleransipcs =  qty * (toleransipct/100);
+                        var toleransikg = totalKg * (toleransipct/100);
+
+                        document.getElementById("qtyKg[5]").value = totalKg;
+                        document.getElementById("pcsToleransi[5]").value = toleransipcs;
+                        document.getElementById("kgToleransi[5]").value = toleransikg;
                         document.getElementById("idmcpel[5]").value = idmc;
                     }
                     
