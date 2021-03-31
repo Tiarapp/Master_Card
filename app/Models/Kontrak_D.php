@@ -15,6 +15,7 @@ class Kontrak_D extends Model
         'mc_id',
         'pctToleransiPelengkapKontrak',
         'pcsToleransiPelengkapKontrak',
+        'pcsPelengkapKontrak',
         'kgPelengkapKontrak',
         'kgToleransiPelengkapKontrak',
         'mcPelengkap',

@@ -17,7 +17,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Surat Jalan Palet</h1>
+          <h1 class="m-0">Kontrak</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -60,7 +60,7 @@
                 <td><b>{{ $data->kode }}</b></td>
                 <td>{{ $data->mc_id }}</td>
                 <td>{{ $data->tglKontrak }}</td>
-                <td>{{ $data->customer_id }}</td>
+                <td>{{ $data->customer_name }}</td>
                 <td>{{ $data->sales_m_id }}</td>
                 <td>{{ $data->status }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}
@@ -68,8 +68,8 @@
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
                       {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
-                      <a href="../admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
-                      <a href="../admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/kontrak/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="../admin/kontrak/edit/{{ $data->id }}/{{ $data->mc_id }}/{{ $data->customer_name }}" class="btn btn-outline-secondary" type="button">Edit</a>
                       {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>

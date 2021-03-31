@@ -18,9 +18,10 @@ class CreateKontrakmTable extends Migration
             $table->string('kode')->index();                     //AUTO NUMBER SEQUENCE
             $table->foreignId('mc_id')->index();                 //Auto ambil mid(item_bj_id,15,4)
             $table->date('tglKontrak')->index();                 //AUTO NUMBER SEQUENCE
-            $table->foreignId('customer_id')->index();           //Input Marketing
+            $table->string('customer_name')->index();            //Ambil dari TBLCustomer
+            $table->string('custTelp')->index();           //Input Marketing
             $table->string('poCustomer')->index()->nullable();               //Input Marketing
-            $table->foreignId('top_id')->index();                //Input Marketing
+            $table->text('top')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
             $table->text('alamatKirim');                         //Input Marketing
             $table->text('alamatKantor')->nullable();            //Input Marketing
@@ -45,7 +46,7 @@ class CreateKontrakmTable extends Migration
             $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
             $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
             $table->boolean('lock')->default(FALSE);                //AUTO
-            $table->foreignId('sales_m_id')->nullable()->index();   //INPUT MARKETING
+            $table->text('sales')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang')->nullable();                          //INPUT MARKETING
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
             $table->integer('harga');    
@@ -53,7 +54,6 @@ class CreateKontrakmTable extends Migration
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 
             //RELATION
-            $table->foreign('customer_id')->references('id')->on('customer')->cascadeOnDelete();
             $table->foreign('top_id')->references('id')->on('top')->cascadeOnDelete();
             $table->foreign('alamatKirim_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
