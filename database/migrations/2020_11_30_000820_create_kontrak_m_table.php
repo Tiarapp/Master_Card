@@ -54,11 +54,9 @@ class CreateKontrakmTable extends Migration
             $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
 
             //RELATION
-            $table->foreign('top_id')->references('id')->on('top')->cascadeOnDelete();
             $table->foreign('alamatKirim_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('alamatTagihan_id')->references('id')->on('alamat')->cascadeOnDelete();
-            $table->foreign('sales_m_id')->references('id')->on('sales_m')->cascadeOnDelete();
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
 
