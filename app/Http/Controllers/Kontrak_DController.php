@@ -188,16 +188,16 @@ class Kontrak_DController extends Controller
         $count = count($kontrak_D);
 
 
-        // dd($customer);
-        return view('admin.kontrak.edit', compact(
-            'customer',
-            'customer1',
-            'mastercard1',
-            'mastercard',
-            'kontrak_D',
-            'count',
-            'sales'
-        ), ['kontrak_M' => $kontrak_M]);
+        dd($kontrak_M);
+        // return view('admin.kontrak.edit', compact(
+        //     'customer',
+        //     'customer1',
+        //     'mastercard1',
+        //     'mastercard',
+        //     'kontrak_D',
+        //     'count',
+        //     'sales'
+        // ), ['kontrak_M' => $kontrak_M]);
     }
 
     /**
