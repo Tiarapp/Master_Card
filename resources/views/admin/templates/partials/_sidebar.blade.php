@@ -110,12 +110,12 @@
                   <p>Supplier</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="{{ route('wax') }}" class="nav-link">
+              <li class="nav-item">
+                <a href="{{ route('op') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Wax</p>
+                  <p>Opname</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
           </li>
           <li class="nav-item">

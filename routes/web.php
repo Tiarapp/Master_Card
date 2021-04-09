@@ -200,6 +200,13 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::get('/admin/kontrak/edit/{idkontrak}/{idmc}/{namaCust}', 'Kontrak_DController@edit')->name('kontrak.edit');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
+
+    //OPNAME
+    Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');
+    Route::get('/admin/opname/sheet', 'OPController@indexopSheet')->name('opsheet.index');
+    Route::post('/admin/opname/sheet/store', 'OPController@storeOpSheet')->name('opsheet.store');
+    Route::get('/admin/opname/sheet/create', 'OPController@createOpSheet')->name('opsheet.create');
+    Route::get('/admin/opname/sheet/edit/{KodeBrg}', 'OPController@editOpSheet')->name('opsheet.edit');
 });
 
 
