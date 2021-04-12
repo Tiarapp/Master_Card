@@ -11,12 +11,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Palet</h1>
+          <h1 class="m-0">Opname Sheet</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Palet</li>
+            <li class="breadcrumb-item active">Opname Sheet</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -30,6 +30,8 @@
       <!-- Small boxes (Stat box) -->
 
       <a href="/admin/opname/sheet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      &nbsp&nbsp&nbsp
+      <a href="/admin/opname/sheet/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_sheet">
           <thead>
@@ -51,9 +53,9 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="../opname/sheet/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="../opname/sheet/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../opname/sheet/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      {{-- <a href="../opname/sheet/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a> --}}
+                      <a href="../opname/sheet/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Opname</a>
+                      {{-- <a href="../opname/sheet/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>
                 </td>
@@ -77,11 +79,7 @@
       $("#data_sheet").DataTable({
         dom: 'Bfrtip',
         buttons: [
-          'copy',
-          'csv',
           'excel',
-          'pdf',
-          'colvis',
           {
             extend: 'print',
             text: 'Print',

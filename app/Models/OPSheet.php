@@ -17,6 +17,7 @@ class OPSheet extends Model
         'nama',
         'gudang',
         'flute',
+        'out',
         'periode',
         'opname_dm',
         'opname_pcs',

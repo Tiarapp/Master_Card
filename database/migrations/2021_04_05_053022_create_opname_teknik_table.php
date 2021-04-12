@@ -18,6 +18,7 @@ class CreateOpnameTeknikTable extends Migration
             $table->string('kode');
             $table->string('nama');
             $table->string('periode');
+            $table->string('satuan');
             $table->double('opname',5,2);
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
