@@ -19,7 +19,9 @@ class CreateOpnameBjTable extends Migration
             $table->string('nama');
             $table->string('periode');
             $table->string('gudang');
-            $table->double('opname',5,2);
+            $table->double('opname_koli',5,2);
+            $table->double('per_koli',5,2);
+            $table->double('opname_pcs',5,2);
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()

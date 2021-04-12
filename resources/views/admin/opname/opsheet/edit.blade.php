@@ -86,6 +86,12 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label>Out</label>
+                                <input type="text" class="form-control txt_line" name="out" id="out" onchange="getPcs()">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label>Opname (Pcs)</label>
                                 <input type="text" class="form-control txt_line" name="opnamepcs" id="opnamepcs" >
                             </div>
@@ -126,19 +132,20 @@
     function getPcs(){
         var flute = document.getElementById('flute').value;
         var ukuran = document.getElementById('opnamedm').value;
+        var out = document.getElementById('out').value;
         var pcs;
 
         if (flute == 'BF') {
-            pcs = ukuran * 30.8;
+            pcs = ukuran * out * 30.8;
         }  
         if (flute == 'CF') {
-            pcs = ukuran * 25;
+            pcs = ukuran * out * 25;
         }
         if (flute == 'BCF') {
-            pcs = ukuran * 15;
+            pcs = ukuran * out * 15;
         }
         if (flute == 'EF') {
-            pcs = ukuran * 1;
+            pcs = ukuran * out * 1;
         }
 
         document.getElementById('opnamepcs').value = pcs;

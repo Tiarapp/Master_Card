@@ -206,7 +206,30 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opname/sheet', 'OPController@indexopSheet')->name('opsheet.index');
     Route::post('/admin/opname/sheet/store', 'OPController@storeOpSheet')->name('opsheet.store');
     Route::get('/admin/opname/sheet/create', 'OPController@createOpSheet')->name('opsheet.create');
+    Route::get('/admin/opname/sheet/result', 'OPController@resultOpSheet')->name('opsheet.result');
     Route::get('/admin/opname/sheet/edit/{KodeBrg}', 'OPController@editOpSheet')->name('opsheet.edit');
+    
+    Route::get('/admin/opname/roll', 'OPController@indexOpRoll')->name('oproll.index');
+    Route::post('/admin/opname/roll/store', 'OPController@storeOpRoll')->name('oproll.store');
+    Route::get('/admin/opname/roll/create', 'OPController@createOpRoll')->name('oproll.create');
+    Route::get('/admin/opname/roll/result', 'OPController@resultOpRoll')->name('oproll.result');
+    Route::get('/admin/opname/roll/edit/{KodeBrg}', 'OPController@editOpRoll')->name('oproll.edit');
+    
+    Route::get('/admin/opname/bj', 'OPController@indexOpBJ')->name('opbj.index');
+    Route::post('/admin/opname/bj/store', 'OPController@storeOpBJ')->name('opbj.store');
+    Route::get('/admin/opname/bj/create', 'OPController@createOpBJ')->name('opbj.create');
+    Route::get('/admin/opname/bj/result', 'OPController@resultOpBJ')->name('opbj.result');
+    Route::get('/admin/opname/bj/edit/{KodeBrg}', 'OPController@editOpBJ')->name('opbj.edit');
+    
+    Route::get('/admin/opname/teknik', 'OPController@indexOpTeknik')->name('opteknik.index');
+    Route::post('/admin/opname/teknik/store', 'OPController@storeOpTeknik')->name('opteknik.store');
+    Route::get('/admin/opname/teknik/create', 'OPController@createOpTeknik')->name('opteknik.create');
+    Route::get('/admin/opname/teknik/result', 'OPController@resultOpTeknik')->name('opteknik.result');
+    Route::get('/admin/opname/teknik/edit/{KodeBrg}', 'OPController@editOpTeknik')->name('opteknik.edit');
+
+
+    //
+    Route::get('/admin/address', 'ProvincesController@index')->middleware(['auth'])->name('address');
 });
 
 
