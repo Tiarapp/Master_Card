@@ -29,9 +29,9 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/opname/teknik/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="../opname/teknik/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       &nbsp&nbsp&nbsp
-      <a href="/admin/opname/teknik/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
+      <a href="../opname/teknik/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
      
       <div class="card-body">
         <table class="table table-bordered" id="data_teknik">

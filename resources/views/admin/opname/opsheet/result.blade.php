@@ -52,7 +52,7 @@
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->flute }}</td>
                 <td>{{ $data->periode }}</td>
-                <td>{{ $data->out }}</td>
+                <td>{{ $data->Out }}</td>
                 <td>{{ $data->opname_dm }}</td>
                 <td>{{ $data->opname_pcs }}</td>
               </tr>
