@@ -38,9 +38,10 @@
               <th scope="col">Nama Barang</th>
               <th scope="col">flute</th>
               <th scope="col">Periode</th>
-              <th scope="col">Out</th>
+              <th scope="col">Saldo Akhir</th>
               <th scope="col">Opname (dm)</th>
               <th scope="col">Opname (pcs)</th>
+              <th scope="col">Selisih</th>
             </tr>
           </thead>
           <tbody>
@@ -52,9 +53,10 @@
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->flute }}</td>
                 <td>{{ $data->periode }}</td>
-                <td>{{ $data->out }}</td>
-                <td>{{ $data->opname_dm }}</td>
-                <td>{{ $data->opname_pcs }}</td>
+                <td>{{ $data->saldo }}</td>
+                <td>{{ $data->opnamedm }}</td>
+                <td>{{ $data->opname }}</td>
+                <td>{{ $data->opname - $data->saldo }}</td>
               </tr>
             <?php
             }

@@ -85,7 +85,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Opname (Desi Meter)</label>
-                                <input type="text" class="form-control txt_line" name="opnamedm" id="opnamedm" onchange="getPcs()">
+                                <input type="hidden" name="opnamedm" id="opnamedm">
+                                <input type="text" class="form-control txt_line" name="satuandm" id="satuandm" onchange="getPcs();">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -131,23 +132,28 @@
 
     function getPcs(){
         var flute = document.getElementById('flute').value;
-        var ukuran = document.getElementById('opnamedm').value;
+        var ukuran = document.getElementById('satuandm').value;
         var out = document.getElementById('out').value;
-        var pcs;
+        var pcs, opnamedm;
 
         if (flute == 'BF') {
-            pcs = ukuran * out * 30.8;
+            opnamedm = ukuran * out;
+            pcs = opnamedm * 30.8;
         }  
         if (flute == 'CF') {
-            pcs = ukuran * out * 25;
+            opnamedm = ukuran * out;
+            pcs = opnamedm * out * 25;
         }
         if (flute == 'BCF') {
-            pcs = ukuran * out * 15;
+            opnamedm = ukuran * out;
+            pcs = opnamedm * 15;
         }
         if (flute == 'EF') {
-            pcs = ukuran * out * 1;
+            opnamedm = ukuran * out;
+            pcs = opnamedm * 1;
         }
 
+        document.getElementById('opnamedm').value = opnamedm;
         document.getElementById('opnamepcs').value = pcs;
 
     }
