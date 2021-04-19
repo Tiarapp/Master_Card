@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportOPSheet;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\OPBJ;
 use App\Models\OPRoll;
 use App\Models\OPSheet;
@@ -9,6 +11,7 @@ use App\Models\OPTeknik;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class OPController extends Controller
 {
@@ -70,9 +73,13 @@ class OPController extends Controller
         $sheet = DB::connection('firebird3')->table('TBarang')
             ->where('KodeBrg', '=', $KodeBrg)
             ->first();
-        $flute = DB::table('flute')->get();
 
-        // dd($sheet->KodeBrg);
+        $namesheet = $sheet->NamaBrg ;
+        $split = explode(" ", $namesheet);
+        $flute = $split[1];
+
+
+        // dd($split);
         return view('admin.opname.opsheet.edit', compact('sheet','flute'));
     }
 
@@ -89,12 +96,13 @@ class OPController extends Controller
             $kode = $request->kodebrg;
         }
 
+        // $opdm = $request->out + $request->opnamedm;
 
         $OPSheet = OPSheet::create([
             'kode_barang' => $kode,
             'nama' => $request->namabrg,
             'periode' => $periode,
-            'out' => $request->out,
+            'baris' => $request->out,
             'gudang' => $request->gudang,
             'flute' => $request->flute,
             'opname_dm' => $request->opnamedm,
@@ -114,9 +122,33 @@ class OPController extends Controller
 
     public function resultOpSheet()
     {
-        $opsheet = DB::table('opname_sheet')->get();
+        $opsheet = DB::table('opname_sheet')
+            ->select(DB::raw('sum(opname_pcs) as opname'), DB::raw('sum(saldo_akhir) as saldo'), DB::raw('sum(opname_dm) as opnamedm'), DB::raw('sum(baris) as baris'), 'nama', 'kode_barang', 'flute', 'periode' )
+            ->groupBy('kode_barang', 'nama', 'flute', 'periode')
+            ->orderBy('periode', 'DESC')
+            ->get();
+        // $selisih = $opsheet->saldo - $opsheet->opname;
 
+        // dd($opsheet);
         return view('admin.opname.opsheet.result', compact('opsheet'));
+
+        // dd($opsheet);
+    }
+
+    public function import_sheet(Request $request)
+    {
+        $this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+
+        $file =$request->file('file');
+        
+		$nama_file = rand().$file->getClientOriginalName();
+		$file->move('file_siswa',$nama_file);
+
+		Excel::import(new ImportOPSheet, public_path('/file_siswa/'.$nama_file));
+		Session::flash('sukses','Data Siswa Berhasil Diimport!');
+		return redirect('/admin/opname/sheet/result');
     }
 
     // Opname Roll

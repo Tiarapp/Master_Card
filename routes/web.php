@@ -208,6 +208,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opname/sheet/create', 'OPController@createOpSheet')->name('opsheet.create');
     Route::get('/admin/opname/sheet/result', 'OPController@resultOpSheet')->name('opsheet.result');
     Route::get('/admin/opname/sheet/edit/{KodeBrg}', 'OPController@editOpSheet')->name('opsheet.edit');
+    Route::post('/admin/opname/sheet/import', 'OPController@import_sheet')->name('opsheet.import');
     
     Route::get('/admin/opname/roll', 'OPController@indexOpRoll')->name('oproll.index');
     Route::post('/admin/opname/roll/store', 'OPController@storeOpRoll')->name('oproll.store');

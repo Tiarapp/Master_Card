@@ -19,7 +19,7 @@ class CreateOpnameSheetTable extends Migration
             $table->string('nama');
             $table->string('periode');
             $table->string('gudang');
-            $table->string('Out');
+            $table->string('baris');
             $table->string('flute');
             $table->double('opname_dm', 5,2);
             $table->double('opname_pcs', 5,2);
