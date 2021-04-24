@@ -31,14 +31,14 @@
 
       <a href="../opname/teknik/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       &nbsp&nbsp&nbsp
-      <a href="/admin/opname/teknik/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
+      <a href="../opname/teknik/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
       <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importExcel">
         IMPORT EXCEL
       </button>
 
       <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <form method="post" action="/admin/opname/teknik/import" enctype="multipart/form-data">
+          <form method="post" action="../opname/teknik/import" enctype="multipart/form-data">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
