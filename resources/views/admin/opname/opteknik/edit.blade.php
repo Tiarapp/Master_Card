@@ -50,7 +50,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Satuan</label>
-                                <input type="text" class="form-control txt_line" name="satuan" id="satuan" value="{{ $teknik->SatuanP }}">
+                                <input type="text" class="form-control txt_line" name="satuan" id="satuan" value="{{ $teknik->SatuanP }}" readonly>                 
                             </div>
                         </div>
                         <div class="col-md-12">

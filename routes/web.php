@@ -215,18 +215,21 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opname/roll/create', 'OPController@createOpRoll')->name('oproll.create');
     Route::get('/admin/opname/roll/result', 'OPController@resultOpRoll')->name('oproll.result');
     Route::get('/admin/opname/roll/edit/{KodeBrg}', 'OPController@editOpRoll')->name('oproll.edit');
+    Route::post('/admin/opname/roll/import', 'OPController@import_roll')->name('oproll.import');
     
     Route::get('/admin/opname/bj', 'OPController@indexOpBJ')->name('opbj.index');
     Route::post('/admin/opname/bj/store', 'OPController@storeOpBJ')->name('opbj.store');
     Route::get('/admin/opname/bj/create', 'OPController@createOpBJ')->name('opbj.create');
     Route::get('/admin/opname/bj/result', 'OPController@resultOpBJ')->name('opbj.result');
     Route::get('/admin/opname/bj/edit/{KodeBrg}', 'OPController@editOpBJ')->name('opbj.edit');
+    Route::post('/admin/opname/bj/import', 'OPController@import_bj')->name('opbj.import');
     
     Route::get('/admin/opname/teknik', 'OPController@indexOpTeknik')->name('opteknik.index');
     Route::post('/admin/opname/teknik/store', 'OPController@storeOpTeknik')->name('opteknik.store');
     Route::get('/admin/opname/teknik/create', 'OPController@createOpTeknik')->name('opteknik.create');
     Route::get('/admin/opname/teknik/result', 'OPController@resultOpTeknik')->name('opteknik.result');
     Route::get('/admin/opname/teknik/edit/{KodeBrg}', 'OPController@editOpTeknik')->name('opteknik.edit');
+    Route::post('/admin/opname/teknik/import', 'OPController@import_teknik')->name('opteknik.import');
 
 
     //

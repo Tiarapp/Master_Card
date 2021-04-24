@@ -14,9 +14,10 @@ class OPTeknik extends Model
     protected $fillable = [
         'kode',
         'nama',
-        'satuan',
         'periode',
-        'opname_pcs',
+        'satuan',
+        'saldo_akhir',
+        'opname',
         'createdBy',
         'lastUpdatedBy'
     ];

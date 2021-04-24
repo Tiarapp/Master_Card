@@ -36,9 +36,9 @@
             <tr>
               <th scope="col">Kode</th>
               <th scope="col">Nama Barang</th>
-              <th scope="col">Gudang</th>
+              <th scope="col">Saldo Akhir (kg)</th>
               <th scope="col">Periode</th>
-              <th scope="col">Berat (kg)</th>
+              <th scope="col">Saldo Opname (kg)</th>
               <th scope="col">Jumlah</th>
             </tr>
           </thead>
@@ -49,10 +49,10 @@
               <tr>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
-                <td>{{ $data->gudang }}</td>
+                <td>{{ $data->saldo }}</td>
                 <td>{{ $data->periode }}</td>
-                <td>{{ $data->opname_kg }}</td>
-                <td>{{ $data->opname_pcs }}</td>
+                <td>{{ $data->opname }}</td>
+                <td>{{ $data->opname - $data->saldo}}</td>
               </tr>
             <?php
             }

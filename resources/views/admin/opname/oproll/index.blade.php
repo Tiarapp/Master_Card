@@ -32,7 +32,35 @@
       <a href="/admin/opname/roll/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       &nbsp&nbsp&nbsp
       <a href="/admin/opname/roll/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
-     
+      <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importExcel">
+        IMPORT EXCEL
+      </button>
+      <div class="modal fade" id="importExcel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <form method="post" action="/admin/opname/roll/import" enctype="multipart/form-data">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import Excel</h5>
+              </div>
+              <div class="modal-body">
+   
+                {{ csrf_field() }}
+   
+                <label>Pilih file excel</label>
+                <div class="form-group">
+                  <input type="file" name="file" required="required">
+                </div>
+   
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Import</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="card-body">
         <table class="table table-bordered" id="data_roll">
           <thead>

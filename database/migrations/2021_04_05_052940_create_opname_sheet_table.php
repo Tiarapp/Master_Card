@@ -18,11 +18,12 @@ class CreateOpnameSheetTable extends Migration
             $table->string('kode_barang');
             $table->string('nama');
             $table->string('periode');
-            $table->string('gudang');
-            $table->string('baris');
+            $table->string('gudang')->nullable();
+            $table->double('saldo_akhir', 10,2)->default(0);
+            $table->string('baris')->nullable();
             $table->string('flute');
-            $table->double('opname_dm', 5,2);
-            $table->double('opname_pcs', 5,2);
+            $table->double('opname_dm', 5,2)->nullable();
+            $table->double('opname_pcs', 10,2)->nullable();
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()

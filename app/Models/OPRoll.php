@@ -16,6 +16,7 @@ class OPRoll extends Model
         'nama',
         'periode',
         'gudang',
+        'saldo_akhir',
         'opname_kg',
         'opname_pcs',
         'createdBy',

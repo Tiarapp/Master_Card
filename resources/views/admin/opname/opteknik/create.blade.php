@@ -56,7 +56,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Opname (Pcs)</label>
-                                <input type="text" class="form-control txt_line" name="opnamepcs" id="opnamepcs" value="1" readonly >
+                                <input type="text" class="form-control txt_line" name="opnamepcs" id="opnamepcs" >
                             </div>
                         </div>
                         <!-- radio button -->

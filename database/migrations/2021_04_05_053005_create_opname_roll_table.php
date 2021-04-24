@@ -18,9 +18,10 @@ class CreateOpnameRollTable extends Migration
             $table->string('kode');
             $table->string('nama');
             $table->string('periode');
-            $table->double('opname_kg',5,2);
-            $table->double('opname_pcs',5,2);
-            $table->string('gudang');
+            $table->double('saldo_akhir', 10,2)->default(0);
+            $table->double('opname_kg',5,2)->nullable();
+            $table->double('opname_pcs',10,2)->nullable();
+            $table->string('gudang')->nullable();
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
