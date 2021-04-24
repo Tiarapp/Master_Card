@@ -110,7 +110,7 @@ class SJ_Palet_DController extends Controller
             
         for ($i=1; $i < 6; $i++) { 
             if ($request->nama[$i] !== null) {
-                SJ_Palet_D::create([
+                $sjpaletd = SJ_Palet_D::create([
                     'sj_palet_m_id' => $sjpaletm->id,
                     'item_palet_id' => $request->idpalet[$i],
                     'qty' => $request->qty[$i],
@@ -120,6 +120,8 @@ class SJ_Palet_DController extends Controller
                     'createdBy' => $request->createdBy,
                     ]);
                 }
+
+                // dd($sjpaletd);
             }
                 
                 return redirect('admin/sj_palet');

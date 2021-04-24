@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportOPBJ;
+use App\Imports\ImportOPRoll;
 use App\Imports\ImportOPSheet;
+use App\Imports\ImportOPTeknik;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\OPBJ;
 use App\Models\OPRoll;
@@ -144,10 +147,9 @@ class OPController extends Controller
         $file =$request->file('file');
         
 		$nama_file = rand().$file->getClientOriginalName();
-		$file->move('file_siswa',$nama_file);
+		$file->move('opname',$nama_file);
 
-		Excel::import(new ImportOPSheet, public_path('/file_siswa/'.$nama_file));
-		Session::flash('sukses','Data Siswa Berhasil Diimport!');
+		Excel::import(new ImportOPSheet, public_path('/opname/'.$nama_file));
 		return redirect('/admin/opname/sheet/result');
     }
 
@@ -230,10 +232,27 @@ class OPController extends Controller
     public function resultOpRoll()
     {
         $oproll = DB::table('opname_roll')
-            ->orderBy('kode', 'asc')
-            ->get();
+        ->select(DB::raw('sum(opname_kg) as opname'), DB::raw('sum(saldo_akhir) as saldo'), 'nama', 'kode', 'periode' )
+        ->groupBy('kode', 'nama', 'periode')
+        ->orderBy('periode', 'DESC')
+        ->get();
 
         return view('admin.opname.oproll.result', compact('oproll'));
+    }
+
+    public function import_roll(Request $request)
+    {
+        $this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+
+        $file =$request->file('file');
+        
+		$nama_file = rand().$file->getClientOriginalName();
+		$file->move('opname',$nama_file);
+
+		Excel::import(new ImportOPRoll, public_path('/opname/'.$nama_file));
+		return redirect('/admin/opname/roll/result');
     }
 
     // Opname Barang Jadi
@@ -310,10 +329,27 @@ class OPController extends Controller
     public function resultOpBJ()
     {
         $opbj = DB::table('opname_bj')
-            ->orderBy('kode', 'asc')
-            ->get();
+        ->select(DB::raw('sum(opname_pcs) as opname'), DB::raw('sum(saldo_akhir) as saldo'), 'nama', 'kode', 'periode' )
+        ->groupBy('kode', 'nama', 'periode')
+        ->orderBy('periode', 'DESC')
+        ->get();
 
         return view('admin.opname.opbj.result', compact('opbj'));
+    }
+
+    public function import_bj(Request $request)
+    {
+        $this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+
+        $file =$request->file('file');
+        
+		$nama_file = rand().$file->getClientOriginalName();
+		$file->move('opname',$nama_file);
+
+		Excel::import(new ImportOPBJ, public_path('/opname/'.$nama_file));
+		return redirect('/admin/opname/bj/result');
     }
 
     // Opname Teknik
@@ -371,12 +407,12 @@ class OPController extends Controller
             'nama' => $request->namabrg,
             'periode' => $periode,
             'satuan' => $request->satuan,
-            'opname_pcs' => $request->opnamepcs,
+            'opname' => $request->opnamepcs,
             'createdBy' => $request->createdBy
         ]);
 
         // dd($OPTeknik);
-        // // dd($request->simpan);
+        // dd($request->simpan);
         if ($request->simpan == 'back') {
             return redirect('admin/opname/teknik');
         } else 
@@ -388,9 +424,26 @@ class OPController extends Controller
     public function resultOpTeknik()
     {
         $opteknik = DB::table('opname_teknik')
-            ->orderBy('kode', 'asc')
-            ->get();
+        ->select(DB::raw('sum(opname) as opname'), DB::raw('sum(saldo_akhir) as saldo'), 'nama', 'kode', 'periode', 'satuan' )
+        ->groupBy('kode', 'nama', 'periode', 'satuan')
+        ->orderBy('periode', 'DESC')
+        ->get();
 
         return view('admin.opname.opteknik.result', compact('opteknik'));
+    }
+
+    public function import_teknik(Request $request)
+    {
+        $this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+
+        $file =$request->file('file');
+        
+		$nama_file = rand().$file->getClientOriginalName();
+		$file->move('opname',$nama_file);
+
+		Excel::import(new ImportOPTeknik, public_path('/opname/'.$nama_file));
+		return redirect('/admin/opname/teknik/result');
     }
 }

@@ -18,10 +18,11 @@ class CreateOpnameBjTable extends Migration
             $table->string('kode');
             $table->string('nama');
             $table->string('periode');
-            $table->string('gudang');
-            $table->double('opname_koli',5,2);
-            $table->double('per_koli',5,2);
-            $table->double('opname_pcs',5,2);
+            $table->double('saldo_akhir', 10,2)->default(0);
+            $table->string('gudang')->nullable();
+            $table->double('opname_koli',5,2)->nullable();
+            $table->double('per_koli',5,2)->nullable();
+            $table->double('opname_pcs',10,2)->nullable();
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
             $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()

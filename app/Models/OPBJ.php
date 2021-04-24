@@ -15,6 +15,7 @@ class OPBJ extends Model
         'kode',
         'nama',
         'periode',
+        'saldo_akhir',
         'opname_koli',
         'opname_pcs',
         'per_koli',

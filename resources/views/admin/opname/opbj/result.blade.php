@@ -36,11 +36,10 @@
             <tr>
               <th scope="col">Kode</th>
               <th scope="col">Nama Barang</th>
+              <th scope="col">Saldo Akhir (pcs)</th>
               <th scope="col">Periode</th>
-              <th scope="col">Gudang</th>
-              <th scope="col">Koli</th>
-              <th scope="col">Per Koli</th>
               <th scope="col">Opname</th>
+              <th scope="col">Selisih</th>
             </tr>
           </thead>
           <tbody>
@@ -50,11 +49,10 @@
               <tr>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->nama }}</td>
+                <td>{{ $data->saldo }}</td>
                 <td>{{ $data->periode }}</td>
-                <td>{{ $data->gudang }}</td>
-                <td>{{ $data->opname_koli }}</td>
-                <td>{{ $data->per_koli }}</td>
-                <td>{{ $data->opname_pcs }}</td>
+                <td>{{ $data->opname }}</td>
+                <td>{{ $data->opname - $data->saldo }}</td>
               </tr>
             <?php
             }
