@@ -45,7 +45,7 @@ return [
 
         'firebird2' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.0.250'),
+            'host'     => env('DB_HOST2', 'localhost'),
             'port'     => env('DB_PORT2', '3050'),
             'database' => env('DB_DATABASE2', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
             'username' => env('DB_USERNAME2', 'sysdba'),
@@ -57,7 +57,7 @@ return [
 
         'firebird3' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.0.250'),
+            'host'     => env('DB_HOST2', 'localhost'),
             'port'     => env('DB_PORT2', '3050'),
             'database' => env('DB_DATABASE2', 'D:\Database\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
             'username' => env('DB_USERNAME2', 'sysdba'),
@@ -69,7 +69,7 @@ return [
 
         'fbteknik' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.0.250'),
+            'host'     => env('DB_HOST2', 'localhost'),
             'port'     => env('DB_PORT2', '3050'),
             'database' => env('DB_DATABASE2', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
             'username' => env('DB_USERNAME2', 'sysdba'),
@@ -81,7 +81,7 @@ return [
 
         'firebird' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.0.250'),
+            'host'     => env('DB_HOST2', 'localhost'),
             'port'     => env('DB_PORT2', '3050'),
             'database' => env('DB_DATABASE2', 'D:\Database\FBDB\MASTER_SPA.FDB'),
             'username' => env('DB_USERNAME2', 'sysdba'),
