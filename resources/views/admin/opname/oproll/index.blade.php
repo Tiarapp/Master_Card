@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/opname/roll/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="../opname/roll/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       &nbsp&nbsp&nbsp
       <a href="/admin/opname/roll/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
       <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importExcel">

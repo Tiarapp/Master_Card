@@ -29,7 +29,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="/admin/opname/teknik/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="../opname/teknik/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       &nbsp&nbsp&nbsp
       <a href="/admin/opname/teknik/result" style="margin-bottom: 20px;"> <i class="fas fa-poll">Laporan</i></a>
       <button type="button" class="btn btn-primary mr-5" data-toggle="modal" data-target="#importExcel">
