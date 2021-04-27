@@ -18,7 +18,9 @@ class Kontrak_DController extends Controller
      */
     public function index()
     {
-        $kontrak_m = DB::table('kontrak_m')
+        $kontrak_m = DB::table('kontrak_m') 
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->select('kontrak_m.*', 'mc.kode as nomc')
             ->get();
 
         return view('admin.kontrak.index', compact('kontrak_m'));
@@ -104,27 +106,30 @@ class Kontrak_DController extends Controller
             'kode' => $nobukti,
             'mc_id' => $request->mcid,
             'tglKontrak' => $request->tanggal,
-            'top_id' => $request->top_id,
+            'top' => $request->top,
             'customer_name' => $request->namaCust,
             'alamatKirim' => $request->alamatKirim,
             'caraKirim' => $request->caraKirim,
             'pcsKontrak' => $request->jmlOrder,
+            'pcsSisaKontrak' => $request->jmlOrder,
+            'kgKontrak' => $request->beratTotal,
+            'kgSisaKontrak' => $request->beratTotal,
             'harga' => $request->hargaSatuan,
-            'pctToleransiLebihKontrak' => $request->ToleransiLebihPersen,
-            'pctToleransiKurangKontrak' => $request->ToleransiKurangPersen,
-            'pcsKurangToleransiKontrak' => $request->ToleransiKurangPcs,
-            'pcsLebihToleransiKontrak' => $request->ToleransiLebihPcs,
-            'kgKurangToleransiKontrak' => $request->ToleransiKurangKg,
-            'kgLebihToleransiKontrak' => $request->ToleransiLebihKg,
+            'pctToleransiLebihKontrak' => $request->toleransiLebihPersen,
+            'pctToleransiKurangKontrak' => $request->toleransiKurangPersen,
+            'pcsKurangToleransiKontrak' => $request->toleransiKurangPcs,
+            'pcsLebihToleransiKontrak' => $request->toleransiLebihPcs,
+            'kgKurangToleransiKontrak' => $request->toleransiKurangKg,
+            'kgLebihToleransiKontrak' => $request->toleransiLebihKg,
             'amountBeforeTax' => $request->hargaBlmTax,
             'tax' => $request->tax,
             'amountTotal' => $request->totalHarga,
-            'sales_m_id' => $request->sales,
-            'status' => $request->jmlOrder,
+            'sales' => $request->sales,
+            'status' => 'Berjalan',
             'createdBy' => $request->createdBy
         ]);
 
-        // dd($request->idmcpel[1]);
+        // dd($kontrakm);
 
         for ($i=1; $i < 6; $i++) { 
             if ($request->idmcpel[$i] !== null) {
@@ -164,40 +169,40 @@ class Kontrak_DController extends Controller
      * @param  \App\Models\Kontrak_D  $kontrak_D
      * @return \Illuminate\Http\Response
      */
-    public function edit($idkontrak, $idmc)
+    public function edit($id)
     {
-        $customer1 = DB::connection('firebird')
-            ->table('TCustomer')
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
             ->get();
-        $kontrak_M = Kontrak_M::find($idkontrak);
-        $mastercard1 = DB::table('mc')
+        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')
         ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-        ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-        ->leftJoin('box', 'box_id', '=', 'box.id')
-        ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+        ->select('mc.*', 'substance.kode as substancePel')
         ->get();
-        $mastercard = DB::table('mc')->where('id', '=', $idmc)
-        ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-        ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-        ->leftJoin('box', 'box_id', '=', 'box.id')
-        ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
-        ->first();
+        $top = DB::table('top')->get();
+        $sales = DB::table('sales_m')->get();
+
         $kontrak_D = DB::table('kontrak_d')
-            ->where('kontrak_m_id', '=', $idkontrak)
+            ->where('kontrak_m_id', '=', $id)
             ->get();
+
+        $kontrak_M = Kontrak_M::find($id);
+
         $count = count($kontrak_D);
 
 
-        dd($kontrak_M);
-        // return view('admin.kontrak.edit', compact(
-        //     'customer',
-        //     'customer1',
-        //     'mastercard1',
-        //     'mastercard',
-        //     'kontrak_D',
-        //     'count',
-        //     'sales'
-        // ), ['kontrak_M' => $kontrak_M]);
+        // dd($kontrak_M);
+        return view('admin.kontrak.edit', compact(
+            'cust',
+            'mc',
+            'mcpel',
+            'top',
+            'sales',
+            'count'
+        ), ['kontrak_M' => $kontrak_M]);
     }
 
     /**

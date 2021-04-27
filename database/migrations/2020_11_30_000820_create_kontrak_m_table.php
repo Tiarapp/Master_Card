@@ -19,7 +19,7 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('mc_id')->index();                 //Auto ambil mid(item_bj_id,15,4)
             $table->date('tglKontrak')->index();                 //AUTO NUMBER SEQUENCE
             $table->string('customer_name')->index();            //Ambil dari TBLCustomer
-            $table->string('custTelp')->index();           //Input Marketing
+            $table->string('custTelp')->index()->nullable();     //Input Marketing
             $table->string('poCustomer')->index()->nullable();               //Input Marketing
             $table->text('top')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
@@ -31,14 +31,14 @@ class CreateKontrakmTable extends Migration
             $table->foreignId('alamatTagihan_id')->nullable();   //Input Marketing
             $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
             $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
-            $table->integer('kgSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
+            $table->float('kgSisaKontrak', 10,2)->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
             $table->float('pctToleransiLebihKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
             $table->float('pctToleransiKurangKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
             $table->integer('pcsKurangToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('pcsLebihToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->integer('kgKurangToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->integer('kgLebihToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->integer('kgKontrak')->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
+            $table->float('kgKontrak',10,2)->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
             $table->integer('amountBeforeTax')->nullable();         //AUTO DPP Auto harga * pcsKontrak
             $table->integer('tax')->nullable();                     //AUTO amountBeforeTax / 10
             $table->integer('amountTotal')->nullable();             //Auto amountBeforeTax + Tax

@@ -108,7 +108,8 @@
                                         <label>Alamat Kirim</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim">
+                                        {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
+                                        <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -460,7 +461,7 @@
                                     <div class="col-md-6">
                                         <select class='js-example-basic-single col-md-12' name="sales" id="sales">
                                             @foreach ($sales as $data)
-                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -472,9 +473,9 @@
                                         <label>Term of Payment</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="top_id" id="top_id">
+                                        <select class='js-example-basic-single col-md-12' name="top" id="top">
                                             @foreach ($top as $data)
-                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>

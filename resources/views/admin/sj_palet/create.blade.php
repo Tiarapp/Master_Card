@@ -19,7 +19,7 @@
             <div class="col-md-12">
                 <h4 class="modal-title">Surat Jalan Palet</h4>
                 <hr>
-                
+                {{-- menampilkan error ketika ada field yang kosong, bersangkutan dengan controller --}}
                 @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>Error!</strong> 
@@ -30,7 +30,7 @@
                     </ul>
                 </div>
                 @endif
-                
+                {{-- form untuk create --}}
                 <form action="{{ route('sj_palet.store') }}"  method="POST">
                     @csrf
                     <div class="row">
@@ -66,6 +66,7 @@
                                     <div class="col-md-4">
                                         <label>Nama Customer</label>
                                     </div>
+                                    {{-- dropdown customer, ambil dari controller untuk query selectnya --}}
                                     <div class="col-md-6">
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
@@ -148,13 +149,14 @@
                         <tbody>
                             <?php
                             $counts = 5;
-                            
+                            // perulangan untuk membuat input detail
                             for ($i=1; $i<=$counts; $i++) { 
                                 
                                 echo "<tr>";
                                     echo    "<td>";
                                         echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData();'>";
                                             echo   "<option value=''>---</option>";
+                                            // ambil data palet dari controller
                                             foreach ($palet as $data) {
                                                 echo "<option value='$data->id|$data->nama|$data->ukuran'>$data->nama|$data->ukuran</option>";
                                             }
@@ -190,6 +192,7 @@
                     $('.js-example-basic-single').select2();
                 });
                 
+                // Split data Customer
                 function getCustomer() {
                     var data = document.getElementById('listCust').value;
                     
@@ -208,6 +211,7 @@
                     document.getElementById("catatan").value = catatan1 +nosj;
                 }
                 
+                // fungsi untuk mengisi otomatis ke input
                 function getData() {
                     var data1 = document.getElementById("nama_1").value;
                     var data2 = document.getElementById("nama_2").value;

@@ -58,10 +58,10 @@
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
                 <td><b>{{ $data->kode }}</b></td>
-                <td>{{ $data->mc_id }}</td>
+                <td>{{ $data->nomc }}</td>
                 <td>{{ $data->tglKontrak }}</td>
                 <td>{{ $data->customer_name }}</td>
-                <td>{{ $data->sales_m_id }}</td>
+                <td>{{ $data->sales }}</td>
                 <td>{{ $data->status }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}
                 <td>
@@ -69,7 +69,7 @@
                     <div class="input-group-append" id="button-addon4">
                       {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
                       <a href="../admin/kontrak/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
-                      <a href="../admin/kontrak/edit/{{ $data->id }}/{{ $data->mc_id }}/{{ $data->customer_name }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/kontrak/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
                       {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>

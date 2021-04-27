@@ -76,7 +76,7 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php 
-                                                                foreach ($customer1 as $data) { ?>
+                                                                foreach ($cust as $data) { ?>
                                                                     <tr>
                                                                         <td scope="row">{{ $data->Kode }}</td>
                                                                         <td>{{ $data->Nama }}</td>
@@ -129,7 +129,7 @@
                                         <label>Telp</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" value="{{ $customer->Nama }}" name="telp" id="telp">
+                                        <input type="text" class="form-control txt_line" value="{{ $kontrak_M->customer_nama }}" name="telp" id="telp">
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +223,7 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php 
-                                                                foreach ($mastercard1 as $data) { ?>
+                                                                foreach ($mc as $data) { ?>
                                                                     <tr>
                                                                         <td scope="row">{{ $data->id }}</td>
                                                                         <td>{{ $data->kode }}</td>
@@ -640,14 +640,14 @@
                             $j=0;                        
                             for ($i=0; $i<$counts; $i++) { 
                                 
-                                // dd(isset($sj_Palet_D[$i]));
+                                // dd(isset($kontrak_D[$i]));
                                 
-                                if (isset($sj_Palet_D[$i]) !== false) {
+                                if (isset($kontrak_D[$i]) !== false) {
                                     # code...
                                     echo "<tr>";
                                         echo    "<td>";
                                             echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData();'>";
-                                                echo   "<option value= >". $sj_Palet_D[$i]->namaBarang ."|". $sj_Palet_D[$i]->ukuran ."</option>";
+                                                echo   "<option value= >". $kontrak_D[$i]->namaBarang ."|". $kontrak_D[$i]->ukuran ."</option>";
                                                 
                                                 foreach ($palet as $data) {
                                                     echo "<option value='$data->id|$data->nama|$data->ukuran'>$data->nama|$data->ukuran</option>";
@@ -683,7 +683,7 @@
                                                     }
                                                     ?>
                                                     
-                                                    {{-- @foreach ($sj_Palet_D as $data)
+                                                    {{-- @foreach ($kontrak_D as $data)
                                                         <td> <input type="text" name="nama[]" id="nama" value="{{ $data[0] }}"> </td>
                                                         <td> <input type="text" name="nama" id="nama" value="{{ $data->ukuran }}"> </td>
                                                         <td> <input type="text" name="nama" id="nama" value="{{ $data->qty }}"> </td>
