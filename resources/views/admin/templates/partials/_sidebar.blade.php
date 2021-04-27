@@ -35,7 +35,7 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
-          {{-- <li class="nav-item">
+          <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -49,14 +49,14 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Barang</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('divisi') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Divisi</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href={{ route('flute') }} class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Flute</p>
@@ -79,26 +79,26 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Koli</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('matauang') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Mata Uang</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('sales') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sales</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('satuan') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Satuan</p>
                 </a>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('sheet') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sheet</p>
@@ -111,8 +111,8 @@
                 </a>
               </li>
               
-            </ul> --}}
-          {{-- </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -165,7 +165,7 @@
                 </a>
               </li>
             </ul>
-          </li> --}}
+          </li>
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>

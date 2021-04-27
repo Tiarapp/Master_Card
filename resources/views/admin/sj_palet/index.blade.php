@@ -36,6 +36,8 @@
       <!-- Small boxes (Stat box) -->
 
       <a href="../admin/sj_palet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+
+      {{-- Datatable SJ Palet --}}
       <div class="card-body">
         <table class="table table-bordered" id="data_palet">
           <thead>
@@ -52,6 +54,7 @@
           <tbody>
             <?php
             $no = 1;
+            // Perulangan untuk mengambil data SJ
             foreach ($sj as $data) { ?>
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
@@ -85,6 +88,7 @@
 
   @section('javascripts')
   <!-- DataTables -->
+  {{-- Script untuk Datatable --}}
   <script>
     $(document).ready(function() {
       $("#data_palet").DataTable({

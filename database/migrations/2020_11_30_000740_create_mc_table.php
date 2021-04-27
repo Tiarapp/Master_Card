@@ -20,8 +20,8 @@ class CreateMcTable extends Migration
             $table->string('kodeBarang')->nullable();
             $table->integer('revisi')->default(0);        //AUTO REVISI KE
             $table->string('tipeBox')->index();           //INPUT MARKETING
-            $table->string('CreasCorrP');                           
-            $table->string('CreasCorrL');
+            $table->string('CreasCorrP')->nullable();                           
+            $table->string('CreasCorrL')->nullable();
             $table->foreignId('satuanSizeSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('satuanLuasSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->string('joint')->index();             //INPUT MARKETING
