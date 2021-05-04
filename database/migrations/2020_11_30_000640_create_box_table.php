@@ -16,7 +16,8 @@ class CreateBoxTable extends Migration
         Schema::create('box', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();      //AUTO NUMBER SEQUENCE
-            $table->string('nama')->nullable()->index();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
+            $table->string('kodeBarang')->nullable();
+            $table->string('namaBarang')->nullable()->index();      //AUTO SHEET : lebarSheetBox x panjangSheetBox x tinggiSheetBox satuanSizeSheetBox | luasSheetBox satuanLuasSheetBox
             //     BOX   : panjangDalamBox x lebarDalamBox x tinggiDalamBox satuanSizeDalamBox
             //     CREASING CORR : sizeCreasCorr satuanCreas
             //     CREASING CONV : sizeCreasConv satuanCreas
@@ -26,7 +27,7 @@ class CreateBoxTable extends Migration
             // SHEET BOX
             $table->integer('lebarSheetBox')->nullable();           //INPUT MARKETING
             $table->integer('panjangSheetBox')->nullable();         //INPUT MARKETING
-            // $table->integer('tinggiSheetBox')->nullable();          //INPUT MARKETING
+            // $table->integer('tinggiSheetBox')->nullable();       //INPUT MARKETING
             $table->foreignId('satuanSizeSheetBox')->nullable();    //INPUT MARKETING
             $table->integer('luasSheetBox')->nullable();            //INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox')->nullable();    //INPUT MARKETING
@@ -35,8 +36,8 @@ class CreateBoxTable extends Migration
             $table->integer('lebarDalamBox')->nullable();           //INPUT MARKETING
             $table->integer('tinggiDalamBox')->nullable();          //INPUT MARKETING
             $table->foreignId('satuanSizeDalamBox')->nullable();    //INPUT MARKETING
-            $table->string('sizeCreasCorr')->nullable();           //INPUT MARKETING
-            $table->string('sizeCreasConv')->nullable();           //INPUT MARKETING
+            $table->string('sizeCreasCorr')->nullable();            //INPUT MARKETING
+            $table->string('sizeCreasConv')->nullable();            //INPUT MARKETING
             $table->float('kuping')->nullable();
             $table->float('panjangCrease')->nullable();
             $table->float('lebarCrease1')->nullable();

@@ -1,5 +1,4 @@
 <!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 
 @extends('admin.templates.partials.default')
 
@@ -76,10 +75,12 @@
               </tr>
             <?php
             }
+            // End Perulangan
             ?>
           </tbody>
         </table>
       </div>
+      {{-- End Datatable SJ --}}
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
@@ -90,6 +91,7 @@
   <!-- DataTables -->
   {{-- Script untuk Datatable --}}
   <script>
+    // Javascript untuk Datatable
     $(document).ready(function() {
       $("#data_palet").DataTable({
         "order": [0, 'desc'],

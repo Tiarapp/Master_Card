@@ -51,7 +51,7 @@ class CreateMcTable extends Migration
             $table->float('gramSheetBoxProduksi',8,3);                  //INPUT MARKETING
             $table->float('gramSheetCorrKontrak',8,3);          //AUTO RUMUS MASIH DIPIKIR
             $table->float('gramSheetCorrProduksi',8,3);         //AUTO RUMUS MASIH DIPIKIR
-            $table->foreignId('bom_m_id')->nullable()->index(); //BOM INPUT MARKETING
+            // $table->foreignId('bom_m_id')->nullable()->index(); //BOM INPUT MARKETING
             $table->foreignId('box_id')->index();               //SHEET BOX INPUT MARKETING
             $table->foreignId('satuanSizeSheetBox')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox')->nullable()->index();   //COLOR ID INPUT MARKETING
@@ -61,7 +61,7 @@ class CreateMcTable extends Migration
             //RELATION
             $table->foreign('substanceKontrak_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('substanceProduksi_id')->references('id')->on('substance')->cascadeOnDelete();
-            $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();
+            // $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();
             $table->foreign('box_id')->references('id')->on('box')->cascadeOnDelete();
             $table->foreign('colorCombine_id')->references('id')->on('color_combine')->cascadeOnDelete();
             $table->foreign('satuanSizeSheet')->references('id')->on('satuan')->cascadeOnDelete();

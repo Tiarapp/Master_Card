@@ -44,6 +44,7 @@ class Kontrak_M extends Model
         'lock',
         'sales',
         'harga',
+        'keterangan',
         'createdBy'
 
     ];

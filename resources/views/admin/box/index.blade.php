@@ -35,8 +35,8 @@
           <thead>
             <tr>
               <th scope="col">No.</th>
-              <th scope="col">Kode</th>
-              <th scope="col">Nama</th>
+              <th scope="col">Kode Barang</th>
+              <th scope="col">Nama Barang</th>
               <th scope="col">Tipe Box</th>
               <th scope="col">flute</th>
               <th scope="col">Panjang Dalam Box</th>
@@ -53,9 +53,9 @@
             $no = 1;
             foreach ($box as $data) { ?>
               <tr>
-                <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->kode }}</td>
-                <td>{{ $data->nama }}</td>
+                <td scope="row">{{ $data->kode }}</td>
+                <td>{{ $data->kodeBarang }}</td>
+                <td>{{ $data->namaBarang }}</td>
                 <td>{{ $data->tipebox }}</td>
                 <td>{{ $data->flute }}</td>
                 <td>{{ $data->lebarDalamBox }}</td>
