@@ -26,37 +26,24 @@ class CreateKontrakmTable extends Migration
             $table->text('alamatKirim');                         //Input Marketing
             $table->text('alamatKantor')->nullable();            //Input Marketing
             $table->text('alamatTagihan')->nullable();           //Input Marketing
-            $table->foreignId('alamatKirim_id')->nullable();                 //Input Marketing
-            $table->foreignId('alamatKantor_id')->nullable();    //Input Marketing
-            $table->foreignId('alamatTagihan_id')->nullable();   //Input Marketing
-            $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
-            $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
-            $table->float('kgSisaKontrak', 10,2)->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
-            $table->float('pctToleransiLebihKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
-            $table->float('pctToleransiKurangKontrak',5,2)->nullable();   //AUTO AVERAGE(kontrak_d.pctToleransiKontrak)
-            $table->integer('pcsKurangToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
-            $table->integer('pcsLebihToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
-            $table->integer('kgKurangToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->integer('kgLebihToleransiKontrak')->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->float('kgKontrak',10,2)->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
+            // $table->integer('pcsKontrak');                       //AUTO SUM(kontrak_d.pcsKontrak)
+            // $table->integer('pcsSisaKontrak')->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
+            // $table->float('kgSisaKontrak', 10,2)->nullable();             //Next Auto Sisa Kontrak yg belum di OPI/DT
+            // $table->float('kgKontrak',10,2)->nullable();               //AUTO SUM(kontrak_d.kgKontrak)
             $table->integer('amountBeforeTax')->nullable();         //AUTO DPP Auto harga * pcsKontrak
             $table->integer('tax')->nullable();                     //AUTO amountBeforeTax / 10
             $table->integer('amountTotal')->nullable();             //Auto amountBeforeTax + Tax
-            $table->float('rpKg',20,2)->nullable();                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
-            $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
-            $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
+            // $table->float('rpKg',20,2)->nullable();                 //Auto sum(kontrak_d.amountBeforeTax) / sum(kontrak_d.kgKontrak)
+            // $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
+            // $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
             $table->boolean('lock')->default(FALSE);                //AUTO
             $table->text('sales')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang')->nullable();                          //INPUT MARKETING
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
-            $table->integer('harga');    
             $table->enum('inExTax',['Include','Exclude'])->index()->nullable(); //Input Marketing
-            $table->enum('tipeOrder',['OB','OU','OUP'])->index()->comment('OB=Order Baru, OU=Order Ulang, OUP=Order Ulang Perubahan ');
+            $table->enum('tipeOrder',['Order Baru','Order Ulang','Order Ulang Perubahan'])->index();
 
             //RELATION
-            $table->foreign('alamatKirim_id')->references('id')->on('alamat')->cascadeOnDelete();
-            $table->foreign('alamatKantor_id')->references('id')->on('alamat')->cascadeOnDelete();
-            $table->foreign('alamatTagihan_id')->references('id')->on('alamat')->cascadeOnDelete();
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();
             $table->foreign('mc_id')->references('id')->on('mc')->cascadeOnDelete();
 

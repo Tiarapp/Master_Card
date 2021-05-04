@@ -13,7 +13,8 @@ class Box extends Model
 
     protected $fillable =[
         'kode',
-        'nama',
+        'kodeBarang',
+        'namaBarang',
         'tipebox',
         'flute',
         'tipeCreasCorr',

@@ -42,10 +42,11 @@
             <tr>
               {{-- <th scope="col">No.</th> --}}
               <th scope="col">No Kontrak</th>
-              {{-- <th scope="col">No MC</th> --}}
+              <th scope="col">No MC</th>
               <th scope="col">Tanggal</th>
               <th scope="col">Customer</th>
               <th scope="col">Sales</th>
+              <th scope="col">status</th>
               {{-- <th scope="col">No PO Customer</th> --}}
               <th scope="col">Action</th>
             </tr>
@@ -57,10 +58,11 @@
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
                 <td><b>{{ $data->kode }}</b></td>
-                {{-- <td>{{ $data->nomc }}</td> --}}
+                <td>{{ $data->nomc }}</td>
                 <td>{{ $data->tglKontrak }}</td>
                 <td>{{ $data->customer_name }}</td>
                 <td>{{ $data->sales }}</td>
+                <td>{{ $data->status }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}
                 <td>
                   <div class="input-group">

@@ -6,6 +6,7 @@ use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,8 @@ class Kontrak_DController extends Controller
     public function index()
     {
         $kontrak_m = DB::table('kontrak_m') 
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->select('kontrak_m.*', 'mc.kode as nomc')
+            // ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            // ->select('kontrak_m.*', 'mc.kode as nomc')
             ->get();
 
         return view('admin.kontrak.index', compact('kontrak_m'));
@@ -34,21 +35,19 @@ class Kontrak_DController extends Controller
     public function create()
     {
         $cust = DB::connection('firebird')->table('TCustomer')->get();
-        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
+        $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            // ->where('id', '=', $variable)->orderBy('id', '=', 'ASC')
             ->get();
-        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')
-        ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-        ->select('mc.*', 'substance.kode as substancePel')
-        ->get();
         $top = DB::table('top')->get();
         $sales = DB::table('sales_m')->get();
         
+        // menampilkan halaman form input dengan passing data dari query diatas
         return view('admin.kontrak.create', compact(
-            'mc','mcpel', 'top', 'cust', 'sales'
+            'mc', 'top', 'cust', 'sales'
         ));
     }
 
@@ -60,10 +59,13 @@ class Kontrak_DController extends Controller
      */
     public function store(Request $request)
     {
-        $url = Route::currentRouteName();
+        //ambil url/ No Bukti halaman
+        $url = Route::currentRouteName(); //output kontrak.store
+
+        //ambil noBukti dari number_sequence table
         $ns = DB::table('number_sequence')
         ->select('format')
-        ->where('noBukti', '=', $url)->get();
+        ->where('noBukti', '=', $url)->get(); //ambil format yg sesuai url/nobukti
         
         $nobukti = $ns[0]->format;
         $tanggal = $request->tanggal;
@@ -102,52 +104,64 @@ class Kontrak_DController extends Controller
 
         // // dd($nobukti);
 
-        $kontrakm = Kontrak_M::create([
+        // Insert Into ke table
+        $kontrakm = Kontrak_M::create([   
             'kode' => $nobukti,
-            'mc_id' => $request->mcid,
             'tglKontrak' => $request->tanggal,
             'top' => $request->top,
             'customer_name' => $request->namaCust,
             'alamatKirim' => $request->alamatKirim,
             'caraKirim' => $request->caraKirim,
-            'pcsKontrak' => $request->jmlOrder,
-            'pcsSisaKontrak' => $request->jmlOrder,
-            'kgKontrak' => $request->beratTotal,
-            'kgSisaKontrak' => $request->beratTotal,
-            'harga' => $request->hargaSatuan,
-            'pctToleransiLebihKontrak' => $request->toleransiLebihPersen,
-            'pctToleransiKurangKontrak' => $request->toleransiKurangPersen,
-            'pcsKurangToleransiKontrak' => $request->toleransiKurangPcs,
-            'pcsLebihToleransiKontrak' => $request->toleransiLebihPcs,
-            'kgKurangToleransiKontrak' => $request->toleransiKurangKg,
-            'kgLebihToleransiKontrak' => $request->toleransiLebihKg,
-            'amountBeforeTax' => $request->hargaBlmTax,
-            'tax' => $request->tax,
-            'amountTotal' => $request->totalHarga,
             'sales' => $request->sales,
-            'status' => 'Berjalan',
-            'createdBy' => $request->createdBy
+            'tipeOrder' => $request->tipeOrder,
+            'createdBy' => $request->createdBy,
+            'keterangan' => $request->keterangan
         ]);
+        // End Insert Into
 
         // dd($kontrakm);
 
+        $tax = 0 ;
+        $sblTax = 0 ;
+        $total = 0 ;
         for ($i=1; $i < 6; $i++) { 
             if ($request->idmcpel[$i] !== null) {
                 $kontrakd = Kontrak_D::create([
                     'kontrak_m_id' => $kontrakm->id,
                     'mc_id' => $request->idmcpel[$i],
-                    'pcsPelengkapKontrak' => $request->qtyPcs[$i],
-                    'pcsPelengkapSisaKontrak' => $request->qtyPcs[$i],
-                    'kgPelengkapKontrak' => $request->qtyKg[$i],
-                    'pctToleransiPelengkapKontrak' => $request->toleransi[$i],
-                    'pcsToleransiPelengkapKontrak' => $request->pcsToleransi[$i],
-                    'kgToleransiPelengkapKontrak' => $request->kgToleransi[$i],
+                    'pcsKontrak' => $request->qtyPcs[$i],
+                    'pcsSisaKontrak' => $request->qtyPcs[$i],
+                    'kgKontrak' => $request->qtyKg[$i],
+                    'kgSisaKontrak' => $request->qtyPcs[$i],
+                    'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
+                    'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
+                    'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
+                    'kgLebihToleransiKontrak' => $request->kgToleransiLebih[$i],
+                    'pcsKurangToleransiKontrak' => $request->pcsToleransiKurang[$i],
+                    'kgKurangToleransiKontrak' => $request->kgToleransiKurang[$i],
+                    'harga' => $request->harga[$i],
+                    'tax' => $request->tax[$i],
+                    'amountBeforeTax' => $request->totalSblTax[$i],
+                    'ppn' => $request->hargaTax[$i],
+                    'amountTotal' => $request->Total[$i],
                     'createdBy' => $request->createdBy,
                     ]);
 
-                // dd($kontrakd);
+                    $tax = $tax + $request->hargaTax[$i];
+                    $sblTax = $sblTax + $request->totalSblTax[$i];
+                    $total = $total + $request->Total[$i];
+                    // dd($tax);
                 }
             }
+
+            $upMaster = Kontrak_M::find($kontrakm->id); // finding row sesuai id untuk update ke table
+
+            $upMaster->amountBeforeTax = $sblTax; // update database field amountBefireTax dengan value sblTax
+            $upMaster->tax = $tax;
+            $upMaster->amountTotal = $total;
+
+            $upMaster->save(); // simpan ke table
+
 
         return redirect('admin/kontrak');
     }
@@ -171,6 +185,137 @@ class Kontrak_DController extends Controller
      */
     public function edit($id)
     {
+        // menampilkan untuk dropdown
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        
+        $mc = DB::table('mc')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->get();
+        $top = DB::table('top')->get();
+        $sales = DB::table('sales_m')->get();
+        // End Dropdown
+
+
+        // tampilkan data yang akan di edit
+        $kontrak_D = DB::table('kontrak_d')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance')
+            ->get();
+
+        $kontrak_M = DB::table('kontrak_m')
+            ->where('kontrak_m.id', '=', $id)
+            ->first();
+        // End tampilkan untuk edit
+
+
+        // dd($kontrak_M);
+        $count = count($kontrak_D);
+
+
+        // dd($kontrak_M);
+        return view('admin.kontrak.edit', compact(
+            'cust',
+            'mc',
+            'top',
+            'sales',
+            'count',
+            'kontrak_D'
+        ), ['kontrak_M' => $kontrak_M]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Kontrak_D  $kontrak_D
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $kontrakm =Kontrak_M::find($id);
+
+        // untuk set value yang di update
+        $kontrakm->customer_name = $request->namaCust;
+        $kontrakm->alamatKirim = $request->alamatKirim;
+        $kontrakm->custTelp = $request->telp;
+        $kontrakm->poCustomer = $request->poCustomer;
+        $kontrakm->tipeOrder = $request->tipeOrder;
+        $kontrakm->tglKontrak = $request->tanggal;
+        $kontrakm->sales = $request->sales;
+        $kontrakm->top = $request->top_id;
+        $kontrakm->caraKirim = $request->caraKirim;
+        $kontrakm->keterangan = $request->keterangan;
+        // End untuk set value yang di update
+
+        $kontrakm->save();
+
+        // dd($kontrakm);
+
+        for ($i=0; $i<5 ; $i++) {
+            if (isset($request->detail[$i]) != false) {
+                $kontrakd =Kontrak_D::find($request->detail[$i]);
+
+                $kontrakd->kontrak_m_id = $kontrakm->id;
+                $kontrakd->mc_id = $request->idmcpel[$i];
+                $kontrakd->pcsKontrak = $request->qtyPcs[$i];
+                $kontrakd->kgKontrak = $request->qtyKg[$i];
+                $kontrakd->pctToleransiLebihKontrak = $request->toleransiLebih[$i];
+                $kontrakd->pctToleransiKurangKontrak = $request->toleransiKurang[$i];
+                $kontrakd->pcsLebihToleransiKontrak = $request->pcsToleransiLebih[$i];
+                $kontrakd->kgLebihToleransiKontrak = $request->kgToleransiLebih[$i];
+                $kontrakd->pcsKurangToleransiKontrak = $request->pcsToleransiKurang[$i];
+                $kontrakd->kgKurangToleransiKontrak = $request->kgToleransiKurang[$i];
+                $kontrakd->harga = $request->harga[$i];
+                $kontrakd->amountBeforeTax = $request->totalSblTax[$i];
+                $kontrakd->ppn = $request->ppn;
+                $kontrakd->tax = $request->
+
+                $kontrakd->save();
+                // dd(isset($request->iddetail[$i]));
+            } 
+            else 
+            {
+                if ($request->idmcpel[$i] !== null) {
+                    // untuk Insert Into dihalaman edit detail kontrak
+                    Kontrak_D::create([
+                        'kontrak_m_id' => $kontrakm->id,
+                        'mc_id' => $request->idmcpel[$i],
+                        'kgPelengkapKontrak' => $request->qtyKg[$i],
+                        'pcsPelengkapKontrak' => $request->qtyPcs[$i],
+                        'pctToleransiPelengkapKontrak' => $request->toleransi[$i],
+                        'pcsToleransiPelengkapKontrak' => $request->pcsToleransi[$i],
+                        'kgToleransiPelengkapKontrak' => $request->kgToleransi[$i],
+                        'createdBy' => Auth::user()->name
+                    ]);
+                    
+                    // End untuk Insert Into dihalaman edit detail kontrak
+                    
+                    // dd($request->idmcpel[$i]);
+                }
+            }
+
+            return redirect('admin/kontrak');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Kontrak_D  $kontrak_D
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Kontrak_D $kontrak_D)
+    {
+        //
+    }
+
+    public function pdfprint($id){
+
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -186,45 +331,34 @@ class Kontrak_DController extends Controller
         $sales = DB::table('sales_m')->get();
 
         $kontrak_D = DB::table('kontrak_d')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.gramSheetBoxKontrak as gram', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox','substance.kode as substance', 'mc.flute as flute')
             ->get();
 
-        $kontrak_M = Kontrak_M::find($id);
+        $kontrak_M = DB::table('kontrak_m')
+            ->where('kontrak_m.id', '=', $id)
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->select('kontrak_m.*', 'mc.id as mcid', 'mc.kode as mckode', 'mc.namaBarang as namaBarang', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox', 'mc.gramSheetCorrKontrak as gramSheetCorrKontrak', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.wax as wax', 'mc.joint as joint', 'mc.bungkus as bungkus', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->first();
 
+        // dd($kontrak_M);
         $count = count($kontrak_D);
 
 
         // dd($kontrak_M);
-        return view('admin.kontrak.edit', compact(
+        return view('admin.kontrak.pdf', compact(
             'cust',
             'mc',
             'mcpel',
             'top',
             'sales',
-            'count'
+            'count',
+            'kontrak_D'
         ), ['kontrak_M' => $kontrak_M]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Kontrak_D  $kontrak_D
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Kontrak_D $kontrak_D)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Kontrak_D  $kontrak_D
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Kontrak_D $kontrak_D)
-    {
-        //
     }
 }
