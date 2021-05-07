@@ -13,7 +13,8 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // Tampilkan awal
+     public function index()
     {
         // $barang = Barang::orderBy('kode', 'asc')->get();
         $barang = DB::connection('firebird2')->table('TBarangConv')->orderBy('KodeBrg', 'asc')->get();
@@ -26,7 +27,8 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    // Tampilkan Halaman Input
+     public function create()
     {
         //
     }
@@ -59,6 +61,7 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
+    // Tampilkan halaman Edit
     public function edit(Barang $barang)
     {
         //
@@ -71,6 +74,7 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
+    // Untuk Simpan yg sudah diedit    
     public function update(Request $request, Barang $barang)
     {
         //
@@ -82,6 +86,7 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
+    // Untuk Delete
     public function destroy(Barang $barang)
     {
         //
