@@ -35,6 +35,17 @@ return [
 
     'connections' => [
 
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'host' => env('DB_HOST2', 'SPASVR'),
+        //     'port'     => env('DB_PORT2', '1433'),
+        //     'database' => env('DB_DATABASE2', 'blog'),
+        //     'username' => env('DB_USERNAME2', 'itspa18'),
+        //     'password' => env('DB_PASSWORD2', 'spaAdmin'),
+        //     'charset'  => env('DB_CHARSET', 'UTF8'),
+        //     'prefix' => '',
+        // ],
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
