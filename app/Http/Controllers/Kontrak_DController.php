@@ -46,6 +46,14 @@ class Kontrak_DController extends Controller
         $sales = DB::table('sales_m')->get();
         
         // menampilkan halaman form input dengan passing data dari query diatas
+
+        // $tgl1 = '17-02-2021 12:00:00';
+        // $tgl2 = '20-02-2021 12:30:00';
+
+        // $selisih = (strtotime($tgl2) -  strtotime($tgl1))/60;
+        // // $hari = $selisih/(60*60*24);
+        // var_dump($selisih);
+
         return view('admin.kontrak.create', compact(
             'mc', 'top', 'cust', 'sales'
         ));
@@ -247,7 +255,7 @@ class Kontrak_DController extends Controller
         $kontrakm->tipeOrder = $request->tipeOrder;
         $kontrakm->tglKontrak = $request->tanggal;
         $kontrakm->sales = $request->sales;
-        $kontrakm->top = $request->top_id;
+        $kontrakm->top = $request->top;
         $kontrakm->caraKirim = $request->caraKirim;
         $kontrakm->keterangan = $request->keterangan;
         // End untuk set value yang di update
@@ -255,6 +263,10 @@ class Kontrak_DController extends Controller
         $kontrakm->save();
 
         // dd($kontrakm);
+
+        $tax = 0 ;
+        $sblTax = 0 ;
+        $total = 0 ;
 
         for ($i=0; $i<5 ; $i++) {
             if (isset($request->detail[$i]) != false) {
@@ -272,26 +284,39 @@ class Kontrak_DController extends Controller
                 $kontrakd->kgKurangToleransiKontrak = $request->kgToleransiKurang[$i];
                 $kontrakd->harga = $request->harga[$i];
                 $kontrakd->amountBeforeTax = $request->totalSblTax[$i];
-                $kontrakd->ppn = $request->ppn;
-                $kontrakd->tax = $request->
+                $kontrakd->ppn = $request->hargaTax[$i];
+                $kontrakd->tax = $request->tax[$i];
+                $kontrakd->amountTotal = $request->Total[$i];
 
                 $kontrakd->save();
-                // dd(isset($request->iddetail[$i]));
+                
             } 
             else 
             {
-                if ($request->idmcpel[$i] !== null) {
+                if (isset($request->idmcpel[$i]) !== false) {
                     // untuk Insert Into dihalaman edit detail kontrak
                     Kontrak_D::create([
                         'kontrak_m_id' => $kontrakm->id,
                         'mc_id' => $request->idmcpel[$i],
-                        'kgPelengkapKontrak' => $request->qtyKg[$i],
-                        'pcsPelengkapKontrak' => $request->qtyPcs[$i],
-                        'pctToleransiPelengkapKontrak' => $request->toleransi[$i],
-                        'pcsToleransiPelengkapKontrak' => $request->pcsToleransi[$i],
-                        'kgToleransiPelengkapKontrak' => $request->kgToleransi[$i],
-                        'createdBy' => Auth::user()->name
+                        'pcsKontrak' => $request->qtyPcs[$i],
+                        'pcsSisaKontrak' => $request->qtyPcs[$i],
+                        'kgKontrak' => $request->qtyKg[$i],
+                        'kgSisaKontrak' => $request->qtyPcs[$i],
+                        'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
+                        'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
+                        'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
+                        'kgLebihToleransiKontrak' => $request->kgToleransiLebih[$i],
+                        'pcsKurangToleransiKontrak' => $request->pcsToleransiKurang[$i],
+                        'kgKurangToleransiKontrak' => $request->kgToleransiKurang[$i],
+                        'harga' => $request->harga[$i],
+                        'tax' => $request->tax[$i],
+                        'amountBeforeTax' => $request->totalSblTax[$i],
+                        'ppn' => $request->hargaTax[$i],
+                        'amountTotal' => $request->Total[$i],
+                        'createdBy' => $request->createdBy,
                     ]);
+
+                    // var_dump(isset($request->idmcpel[$i]));
                     
                     // End untuk Insert Into dihalaman edit detail kontrak
                     
@@ -299,8 +324,14 @@ class Kontrak_DController extends Controller
                 }
             }
 
-            return redirect('admin/kontrak');
+            $tax = $tax + $request->hargaTax[$i];
+            $sblTax = $sblTax + $request->totalSblTax[$i];
+            $total = $total + $request->Total[$i];
+
         }
+        
+        // var_dump($tax);
+        return redirect('admin/kontrak');
     }
 
     /**

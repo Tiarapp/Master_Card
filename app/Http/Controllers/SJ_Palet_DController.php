@@ -219,7 +219,7 @@ class SJ_Palet_DController extends Controller
                         'ukuran' => $request->ukuran[$i],
                         'keterangan' => $request->keterangan[$i],
                         'createdBy' => $request->createdBy,
-                        ]);
+                    ]);
                 }
             }
         }
