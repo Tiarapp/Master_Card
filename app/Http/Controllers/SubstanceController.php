@@ -17,9 +17,9 @@ class SubstanceController extends Controller
     {
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
-            ->leftJoin('jenis_gram as bf', 'jenisGramBf_id', '=', 'bf.id')
+            ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
             ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
-            ->leftJoin('jenis_gram as cf', 'jenisGramCf_id', '=', 'cf.id')
+            ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
             ->select('substance.*', 'linerAtas.namaMc AS linerAtas', 'bf.namaMc AS bf', 'linerTengah.namaMc AS linerTengah', 'cf.namaMc AS cf', 'linerBawah.namaMc AS linerBawah')
             ->get();
@@ -56,11 +56,13 @@ class SubstanceController extends Controller
 
         $request->validate([
             'kode' => 'required',
-            'nama' => 'required',
+            'namaMc' => 'required',
+            'namaLog' => 'required',
+            'flute' => 'required',
             'jenisGramLinerAtas_id' => 'required',
-            'jenisGramBf_id' => 'nullable',
+            'jenisGramFlute1_id' => 'nullable',
             'jenisGramLinerTengah_id' => 'nullable',
-            'jenisGramCf_id' => 'nullable',
+            'jenisGramFlute2_id' => 'nullable',
             'jenisGramLinerBawah_id' => 'required',
             'createdBy' => 'required'
         ]);

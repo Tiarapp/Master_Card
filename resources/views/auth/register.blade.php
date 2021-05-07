@@ -19,6 +19,19 @@
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
             </div>
 
+            
+            <div class="mt-4">
+                <x-label for="divisi" :value="__('Divisi')" />
+
+                {{-- <x-input id="divisi" class="block mt-1 w-full" type="text" name="divisi" :value="old('divisi')" required autofocus /> --}}
+                <select name="divisi" id="divisi" style="width: 400px">
+                    <option value="" disabled selected>Pilih Divisi</option>
+                    @foreach ($divisi as $data)
+                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <!-- Email Address -->
             <div class="mt-4">
                 <x-label for="email" :value="__('Email')" />

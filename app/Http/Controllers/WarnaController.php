@@ -17,7 +17,6 @@ class WarnaController extends Controller
     public function index()
     {
         $warna = DB::table('color')
-            ->where('deleted', '=', '0')
             ->orderBy('nama', 'asc')
             ->orderBy('mudaTua', 'asc')
             ->get();

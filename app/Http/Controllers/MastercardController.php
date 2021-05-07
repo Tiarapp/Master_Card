@@ -57,12 +57,12 @@ class MastercardController extends Controller
         //     ->get();
         // dd($sssh[0]->lebarSheet);
 
-        $item = DB::table('item_bj')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
-            ->leftJoin('jenis_gram as bf', 'jenisGramBf_id', '=', 'bf.id')
+            ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
             ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
-            ->leftJoin('jenis_gram as cf', 'jenisGramCf_id', '=', 'cf.id')
+            ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
             ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
             ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
             ->get();
@@ -97,7 +97,8 @@ class MastercardController extends Controller
         $this->validate($request, [
             'kode' => 'required',
             'revisi' => 'nullable',
-            'bj_id' => 'required',
+            'namaBarang' => 'required',
+            'kodeBarang' => 'required',
             'tipebox' => 'required',
             'CreasCorrP' => 'nullable',
             'CreasCorrL' => 'nullable',
@@ -116,8 +117,16 @@ class MastercardController extends Controller
             'koli' => 'required',
             'bungkus' => 'required',
             'wax' => 'nullable',
+            'tipeMc' => 'required',
             'box_id' => 'required',
-            'gramSheetBox' => 'nullable',
+            'gramSheetBoxKontrak' => 'nullable',
+            'gramSheetBoxKontrak2' => 'nullable',
+            'gramSheetBoxProduksi' => 'nullable',
+            'gramSheetBoxProduksi2' => 'nullable',
+            'gramSheetCorrKontrak' => 'nullable',
+            'gramSheetCorrKontrak2' => 'nullable',
+            'gramSheetCorrProduksi' => 'nullable',
+            'gramSheetCorrProduksi2' => 'nullable',
             'colorCombine_id' => 'required',
             'keterangan' => 'nullable',
             'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
@@ -132,10 +141,11 @@ class MastercardController extends Controller
 
         Mastercard::create([
             'kode' => $request->kode,
-            'bj_id' => $request->bj_id,
+            'namaBarang' => $request->namaBarang,
+            'kodeBarang' => $request->kodeBarang,
             'tipebox' => $request->tipebox,
-            'CreasCorrP' => $request->creasCorr,
-            'CreasCorrL' => $request->creasConv,
+            'CreasCorrP' => $request->creasConv,
+            'CreasCorrL' => $request->creasCorr,
             'joint' => $request->joint,
             'flute' => $request->flute,
             'lebarSheet' => $request->lebarSheet,
@@ -147,14 +157,21 @@ class MastercardController extends Controller
             'luasSheetBox' => $request->luasSheetBox,
             'substanceKontrak_id' => $request->substanceKontrak_id,
             'substanceProduksi_id' => $request->substanceProduksi_id,
+            'tipeMc' => $request->tipeMc,
             'mesin' => $request->mesin,
             'outConv' => $request->outConv,
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
             'wax' => $request->wax,
             'box_id' => $request->box_id,
-            'gramSheetBox' => $request->beratSheetBox,
-            'gramSheetCorrKontrak' => $request->beratSheet,
+            'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
+            'gramSheetBoxKontrak2' => $request->gramSheetBoxKontrak2,
+            'gramSheetCorrKontrak' => $request->gramSheetCorrKontrak,
+            'gramSheetCorrKontrak2' => $request->gramSheetCorrKontrak2,
+            'gramSheetBoxProduksi' => $request->gramSheetBoxProduksi,
+            'gramSheetBoxProduksi2' => $request->gramSheetBoxProduksi2,
+            'gramSheetCorrProduksi' => $request->gramSheetCorrProduksi,
+            'gramSheetCorrProduksi2' => $request->gramSheetCorrProduksi2,
             'colorCombine_id' => $request->colorCombine_id,
             'keterangan' => $request->keterangan,
             'gambar' => $nama_file,
@@ -212,17 +229,20 @@ class MastercardController extends Controller
     public function pdfprint($id)
     {   
         $mc = DB::table('mc')
-            ->leftJoin('item_bj','bj_id','=','item_bj.id')
             ->leftJoin('substance as SubsProduksi','substanceProduksi_id', '=', 'SubsProduksi.id')
             ->leftJoin('substance as SubsKontrak', 'substanceKontrak_id', '=', 'SubsKontrak.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', 'box.id')
-            ->select('mc.*', 'item_bj.kode AS kodeBrg', 'item_bj.nama AS namaBrg', 'SubsProduksi.nama AS SubsProduksiNama', 'SubsKontrak.nama AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox')
+            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease')
             ->where('mc.id', $id)
             ->first();
 
         // var_dump($mc->tipebox);
-        return view('admin.mastercard.pdf', compact('mc'));
+        $substancKontrak = explode(" ", $mc->SubsKontrakNama);
+        $substancProduksi = explode(" ", $mc->SubsProduksiNama);
+        $namaSubsK = $substancKontrak[1];
+        $namaSubsP = $substancKontrak[1];
+        return view('admin.mastercard.pdfb1', compact('mc','namaSubsK','namaSubsP'));
     }
 
 }

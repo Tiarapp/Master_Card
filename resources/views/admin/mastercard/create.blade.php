@@ -55,69 +55,21 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="hidden" name="bj_id" id="bj_id">
-                                                    <input type="text" class="form-control txt_line" name="noitem" id="noitem" readonly>
+                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" readonly>
                                                 </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="modal fade" id="Item">
-                                            <div class="modal-dialog modal-xl">
-                                                
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Barang PHP</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body Item">
-                                                        <div class="card-body">
-                                                            <table class="table table-bordered" id="data_barang">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">ID.</th>
-                                                                        <th scope="col">Kode</th>
-                                                                        <th scope="col">Nama</th>
-                                                                        <th scope="col">MC ID</th>
-                                                                        <th scope="col">Pcs</th>
-                                                                        <th scope="col">Gram</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php
-                                                                    $no = 1;
-                                                                    foreach ($item as $data) { ?>
-                                                                        <tr>
-                                                                            <td scope="row">{{ $data->id }}</td>
-                                                                            <td>{{ $data->kode }}</td>
-                                                                            <td>{{ $data->nama }}</td>
-                                                                            <td>{{ $data->mc_id }}</td>
-                                                                            <td>{{ $data->pcs }}</td>
-                                                                            <td>{{ $data->gram }}</td>
-                                                                        </tr>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
+                                        {{--  --}}
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaitem" id="namaitem" readonly>
+                                            <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -135,9 +87,6 @@
                                                     <input type="hidden" name="box_id" id="box_id">
                                                     <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" readonly>
                                                 </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
-                                                    <i class="fas fa-search"></i>
-                                                </button>
                                             </div>
                                             <div class="modal fade" id="Box">
                                                 <div class="modal-dialog modal-xl">
@@ -155,6 +104,7 @@
                                                                         <tr>
                                                                             <th scope="col">ID.</th>
                                                                             <th scope="col">Kode</th>
+                                                                            <th scope="col">Kode Barang</th>
                                                                             <th scope="col">Nama</th>
                                                                             <th scope="col">Tipe Box</th>
                                                                             <th scope="col">flute</th>
@@ -163,7 +113,6 @@
                                                                             <th scope="col">Tinggi Dalam Box</th>
                                                                             <th scope="col">Ukuran Creas Corr</th>
                                                                             <th scope="col">Ukuran Creas Conv</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -173,7 +122,8 @@
                                                                             <tr>
                                                                                 <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->kodeBarang }}</td>
+                                                                                <td>{{ $data->namaBarang }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
                                                                                 <td>{{ $data->lebarDalamBox }}</td>
@@ -181,7 +131,6 @@
                                                                                 <td>{{ $data->tinggiDalamBox }}</td>
                                                                                 <td>{{ $data->sizeCreasCorr }}</td>
                                                                                 <td>{{ $data->sizeCreasConv }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -254,10 +203,20 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Berat Sheet Box</label>
+                                            <label class="control-label">Berat Sheet Box Kontrak</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="beratSheetBox" id="beratSheetBox" readonly>
+                                            <input type="hidden" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Sheet Box Produksi</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="hidden" name="gramSheetBoxProduksi2" id="gramSheetBoxProduksi2">
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -327,10 +286,23 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Berat Sheet Corr</label>
+                                            <label class="control-label">Berat Sheet Corr Kontrak</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="beratSheet" id="beratSheet" readonly>
+                                            <input type="hidden" name="gramSheetCorrKontrak2" id="gramSheetCorrKontrak2">
+                                            <input type="text" class="form-control txt_line" name="gramSheetCorrKontrak" id="gramSheetCorrKontrak" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            Gram
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Sheet Corr Produksi</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="hidden" name="gramSheetCorrProduksi2" id="gramSheetCorrProduksi2">
+                                            <input type="text" class="form-control txt_line" name="gramSheetCorrProduksi" id="gramSheetCorrProduksi" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             Gram
@@ -365,13 +337,13 @@
                                                                         <tr>
                                                                             <th scope="col">ID</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Nama MC</th>
+                                                                            <th scope="col">Nama Logistik</th>
                                                                             <th scope="col">Liner Atas</th>
                                                                             <th scope="col">BF</th>
                                                                             <th scope="col">Liner Tengah</th>
                                                                             <th scope="col">CF</th>
                                                                             <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -380,13 +352,13 @@
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->namaMc }}</td>
+                                                                                <td>{{ $data->namaLog }}</td>
                                                                                 <td>{{ $data->linerAtas }}</td>
                                                                                 <td>{{ $data->bf }}</td>
                                                                                 <td>{{ $data->linerTengah }}</td>
                                                                                 <td>{{ $data->cf }}</td>
                                                                                 <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -437,13 +409,13 @@
                                                                         <tr>
                                                                             <th scope="col">ID</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama</th>
+                                                                            <th scope="col">Nama MC</th>
+                                                                            <th scope="col">Nama Logistik</th>
                                                                             <th scope="col">Liner Atas</th>
                                                                             <th scope="col">BF</th>
                                                                             <th scope="col">Liner Tengah</th>
                                                                             <th scope="col">CF</th>
                                                                             <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -453,13 +425,13 @@
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->namaMc }}</td>
+                                                                                <td>{{ $data->namaLog }}</td>
                                                                                 <td>{{ $data->linerAtas }}</td>
                                                                                 <td>{{ $data->bf }}</td>
                                                                                 <td>{{ $data->linerTengah }}</td>
                                                                                 <td>{{ $data->cf }}</td>
                                                                                 <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -485,6 +457,21 @@
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section">Deskripsi Detail</h4>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Tipe MC</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
+                                                <option value='BOX'>BOX</option>
+                                                <option value='BOX TUMBU'>BOX TUMBU</option>
+                                                <option value='BOX TUTUP'>BOX TUTUP</option>
+                                                <option value='LAYER'>LAYER</option>
+                                                <option value='PARTISI'>PARTISI</option>
+                                                <option value='SHEET'>SHEET</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Warna</label>
@@ -611,9 +598,9 @@
         $('#data_barang tbody').on( 'click', 'td', function () {
             var item = (table.row(this).data());
             
-            document.getElementById('bj_id').value = item[0];
-            document.getElementById('noitem').value = item[1];
-            document.getElementById('namaitem').value = item[2];
+            // document.getElementById('bj_id').value = item[0];
+            document.getElementById('kodeBarang').value = item[0];
+            document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();
     } );
@@ -622,7 +609,11 @@
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": "100%",
+            // "scrollX": true,
+            // "autoWidth": true, 
+            "initComplete": function (settings, json) {  
+                $("#data_box").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+            },
             // "scrollY": "400px",
             select: true,
         });
@@ -630,23 +621,25 @@
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
-            document.getElementById('tipebox').value = Box[3];
+            document.getElementById('kodeBarang').value = Box[2];
+            document.getElementById('namaBarang').value = Box[3];
+            document.getElementById('tipebox').value = Box[4];
             document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[5];
-            document.getElementById('lebarbox').value = Box[6];
-            document.getElementById('tinggibox').value = Box[7];
-            document.getElementById('creasCorr').value = Box[8];
-            document.getElementById('creasConv').value = Box[9];
-            document.getElementById('flute').value = Box[4];
+            document.getElementById('panjangbox').value = Box[6];
+            document.getElementById('lebarbox').value = Box[7];
+            document.getElementById('tinggibox').value = Box[8];
+            document.getElementById('creasCorr').value = Box[9];
+            document.getElementById('creasConv').value = Box[10];
+            document.getElementById('flute').value = Box[5];
             
-            if (Box[3] == 'B1') {
-                var resultP = getID(Box[8]);
-                var resultL = getID(Box[9]);
-                document.getElementById("panjangSheet").value = parseInt(resultP);
-                document.getElementById("lebarSheet").value = parseInt(resultL);
+            if (Box[4] == 'B1') {
+                var resultP = getID(Box[9]);
+                var resultL = getID(Box[10]);
+                document.getElementById("lebarSheet").value = parseInt(resultP);
+                document.getElementById("panjangSheet").value = parseInt(resultL);
 
-                document.getElementById("panjangSheetBox").value = parseInt(resultP);
-                document.getElementById("lebarSheetBox").value = parseInt(resultL);
+                document.getElementById("lebarSheetBox").value = parseInt(resultP);
+                document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
                 var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
                 document.getElementById("luasSheet").value = luas.toFixed(3);
@@ -703,11 +696,11 @@
         $('#data_substanceKontrak tbody').on( 'click', 'td', function () {
             var SubstanceKontrak = (table.row(this).data());
             
-            document.getElementById('Katas').value = SubstanceKontrak[3]    ;
-            document.getElementById('Kbf').value = SubstanceKontrak[4];
-            document.getElementById('Ktengah').value = SubstanceKontrak[5];
-            document.getElementById('Kcf').value = SubstanceKontrak[6];
-            document.getElementById('Kbawah').value = SubstanceKontrak[7];
+            document.getElementById('Katas').value = SubstanceKontrak[4]    ;
+            document.getElementById('Kbf').value = SubstanceKontrak[5];
+            document.getElementById('Ktengah').value = SubstanceKontrak[6];
+            document.getElementById('Kcf').value = SubstanceKontrak[7];
+            document.getElementById('Kbawah').value = SubstanceKontrak[8];
             
             document.getElementById('substanceKontrak_id').value = SubstanceKontrak[0];
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
@@ -725,11 +718,11 @@
         $('#data_substanceProduksi tbody').on( 'click', 'td', function () {
             var SubstanceProduksi = (table.row(this).data());
             
-            document.getElementById('Patas').value = SubstanceProduksi[3]    ;
-            document.getElementById('Pbf').value = SubstanceProduksi[4];
-            document.getElementById('Ptengah').value = SubstanceProduksi[5];
-            document.getElementById('Pcf').value = SubstanceProduksi[6];
-            document.getElementById('Pbawah').value = SubstanceProduksi[7];
+            document.getElementById('Patas').value = SubstanceProduksi[4];
+            document.getElementById('Pbf').value = SubstanceProduksi[5];
+            document.getElementById('Ptengah').value = SubstanceProduksi[6];
+            document.getElementById('Pcf').value = SubstanceProduksi[7];
+            document.getElementById('Pbawah').value = SubstanceProduksi[8];
             
             document.getElementById('substanceProduksi_id').value = SubstanceProduksi[0];
             document.getElementById('subsProduksi').value = SubstanceProduksi[2];
@@ -773,8 +766,10 @@
             result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
             result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
             
-            document.getElementById('beratSheet').value = result.toFixed(2);
-            document.getElementById('beratSheetBox').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -796,15 +791,19 @@
             result = (luasSheet * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
             result2 = (luasSheetBox * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
 
-            document.getElementById('beratSheet').value = result.toFixed(2);
-            document.getElementById('beratSheetBox').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             
         } else {
             result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
             result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
 
-            document.getElementById('beratSheet').value = result.toFixed(2);
-            document.getElementById('beratSheetBox').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
         }
         
         return result;
@@ -832,8 +831,9 @@
         var Pcf = parseFloat(document.getElementById('Pcf').value);
         var Pbawah = parseFloat(document.getElementById('Pbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
+        var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
         
-        var result;
+        var result, result2;
         
         if (flutenama == 'BF') {
             if (isNaN(Patas)) {
@@ -851,13 +851,14 @@
             if (isNaN(Pbawah)) {
                 Pbawah = 0 ;
             }
-            if (isNaN(tur2)) {
-                tur2 = 0;
-            }
             
-            result = (luasSheet * (Patas + (Pbf*tur1) + Ptengah + (Pcf*tur2) + Pbawah))/1000000;
+            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
             
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -875,16 +876,23 @@
             if (isNaN(Pbawah)) {
                 Pbawah = 0 ;
             }
-            if (isNaN(tur2)) {
-                tur2 = 0;
-            }
             
-            result = (luasSheet * (Patas + (Pcf*tur1) + Ptengah + (Pbf*tur2) + Pbawah))/1000000;
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            result = (luasSheet * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
+            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             
         } else {
-            result = (luasSheet * (Patas + (Pbf*tur1) + Ptengah + (Pcf*tur2) + Pbawah))/1000000;
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
+            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
         }
     }
     

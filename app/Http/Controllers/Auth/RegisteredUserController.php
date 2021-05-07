@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class RegisteredUserController extends Controller
@@ -19,7 +20,9 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        $divisi = DB::table('divisi')->get();
+
+        return view('auth.register', compact('divisi'));
     }
 
     /**
@@ -34,12 +37,14 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'divisi' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:1',
         ]);
 
         Auth::login($user = User::create([
             'name' => $request->name,
+            'divisi_id' => $request->divisi,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]));

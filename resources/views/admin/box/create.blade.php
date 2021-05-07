@@ -31,19 +31,77 @@
                 <form action="{{ route('box.store') }}" method="POST" class="inputSheet">
                     @csrf
                     <div class="row was-validated">
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
                             <div class="form-group">
-                                <label>Kode</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="kode" id="kode" required>
-                                <div class="valid-feedback">Terima kasih</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
+                                
+                                <label>Nama Item</label>
+                                {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="modal fade" id="Item">
+                            <div class="modal-dialog modal-xl">
+                                
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Barang PHP</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body Item">
+                                        <div class="card-body">
+                                            <table class="table table-bordered" id="data_barang">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Kode Barang.</th>
+                                                        <th scope="col">Nama</th>
+                                                        <th scope="col">Satuan</th>
+                                                        <th scope="col">MC ID</th>
+                                                        <th scope="col">Tgl Jadi</th>
+                                                        <th scope="col">Gram</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $no = 1;
+                                                    foreach ($item as $data) { ?>
+                                                        <tr>
+                                                            <td scope="row">{{ $data->KodeBrg }}</td>
+                                                            <td>{{ $data->NamaBrg }}</td>
+                                                            <td>{{ $data->Satuan }}</td>
+                                                            <td>{{ $data->WeightValue }}</td>
+                                                            <td>{{ $data->TglKeluar }}</td>
+                                                            <td>{{ $data->BeratStandart }}</td>
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
                             <div class="form-group">
-                                <label>Nama</label>
+                                <label>Kode Item</label>
                                 {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
-                                <input type="text" class="form-control txt_line" name="nama" id="nama" readonly>
+                                <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang">
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
@@ -179,11 +237,27 @@
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
         });
+
+        $(".Item").ready(function(){
+        
+        var table = $("#data_barang").DataTable({
+            select: true,
+        });
+        
+        $('#data_barang tbody').on( 'click', 'td', function () {
+            var item = (table.row(this).data());
+            
+            // document.getElementById('bj_id').value = item[0];
+            document.getElementById('kodeBarang').value = item[0];
+            document.getElementById('namaBarang').value = item[1];
+        } );
+        //  alert.row();
+    } );
         
         function luas(){
             var panjang = document.getElementById("panjangSheetBox").value;
             var lebar = document.getElementById("lebarSheetBox").value;
-            var tinggi = document.getElementById("tinggiSheetBox").value;
+            // var kode = document.getElementById('kode').value;
             var luas;
             luas = panjang * lebar * tinggi;
             
@@ -191,6 +265,7 @@
         }
         
         function getNama(){
+            var kode = document.getElementById('namaBarang').value;
             tipe = getTipe();
             
             // var panjangbox = document.getElementById("panjangSheetBox").value;
@@ -205,12 +280,14 @@
             var CreaseCorr = document.getElementById("sizeCreasCorr").value;
             var CreaseConv = document.getElementById("sizeCreasConv").value;
             
-            if (tipe == 'B1') {
-                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+CreaseCorr+"\n"+CreaseConv;
-            }
-            if (tipe == 'DC') {
-                document.getElementById("nama").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM';  
-            }
+            // if (tipe == 'B1') {
+            //     // document.getElementById("kode").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+CreaseCorr+"\n"+CreaseConv;
+            //     document.getElementById("kode").value = kode;
+            // }
+            // if (tipe == 'DC') {
+            //     // document.getElementById("kode").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM';  
+            //     document.getElementById("kode").value = kode;
+            // }
             
         }
         

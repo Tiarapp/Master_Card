@@ -16,9 +16,9 @@ class IndonesiaDistrictsTableSeeder extends Seeder
     {
         
 
-        \DB::table('indonesia_districts')->delete();
+        \DB::table('districts')->delete();
         
-        \DB::table('indonesia_districts')->insert(array (
+        \DB::table('districts')->insert(array (
             0 => 
             array (
                 'id' => '1101010',

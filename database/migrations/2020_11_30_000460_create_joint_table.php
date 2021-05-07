@@ -16,7 +16,7 @@ class CreateJointTable extends Migration
         Schema::create('joint', function (Blueprint $table) {
             $table->id('id');
             $table->string('kode')->unique()->index();       //AUTO NUMBER SEQUENCE
-            $table->string('nama')->index();                 //Input Mark
+            $table->string('nama')->index()->default('No Joint');                 //Input Mark
             //RELATION
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login

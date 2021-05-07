@@ -18,7 +18,6 @@ class FluteController extends Controller
     public function index()
     {
         $flute = DB::table('flute')
-            ->where('deleted', '=', '0')
             ->get();
 
         return view('admin.flute.index', compact('flute'));

@@ -178,5 +178,6 @@
             var wrn4 = document.getElementById("warna4").value;
             
             document.getElementById("nama").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4;
+            document.getElementById("kode").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4;
         }
     </script>

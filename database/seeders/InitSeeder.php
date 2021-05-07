@@ -28,24 +28,31 @@ class InitSeeder extends Seeder
         DB::table('divisi')->insert(['kode' => 'EXP','nama' => 'EKSPEDISI','createdBy' => 'SEEDER']);
         DB::table('divisi')->insert(['kode' => 'DSN','nama' => 'DESAIN','createdBy' => 'SEEDER']);
 		
-		//MATA UANG
-        DB::table('mata_uang')->delete();
-        DB::table('mata_uang')->insert(['kode' => 'IDR','nama' => 'RUPIAH','createdBy' => 'SEEDER'	]);
-		DB::table('mata_uang')->insert(['kode' => 'USD','nama' => 'US DOLLAR','createdBy' => 'SEEDER']);
-        DB::table('mata_uang')->insert(['kode' => 'EUR','nama' => 'EURO DOLLAR','createdBy' => 'SEEDER']);
+		// //MATA UANG
+        // DB::table('mata_uang')->delete();
+        // DB::table('mata_uang')->insert(['kode' => 'IDR','nama' => 'RUPIAH','createdBy' => 'SEEDER'	]);
+		// DB::table('mata_uang')->insert(['kode' => 'USD','nama' => 'US DOLLAR','createdBy' => 'SEEDER']);
+        // DB::table('mata_uang')->insert(['kode' => 'EUR','nama' => 'EURO DOLLAR','createdBy' => 'SEEDER']);
 
 		//TIPE BOX
 		DB::table('tipe_box')->delete();
         DB::table('tipe_box')->insert(['kode' => 'B1','nama' => 'BOX B1','createdBy' => 'SEEDER']);
         DB::table('tipe_box')->insert(['kode' => 'DC','nama' => 'DIE CUT','createdBy' => 'SEEDER']);
 
-		//TOP
+		// TOP
 		DB::table('top')->delete();
-        DB::table('top')->insert(['nama' => 'CASH','hari' => '0','createdBy' => 'SEEDER']);
-        DB::table('top')->insert(['nama' => '30 HARI','hari' => '30','createdBy' => 'SEEDER']);
-        DB::table('top')->insert(['nama' => '60 HARI','hari' => '60','createdBy' => 'SEEDER']);
+        DB::table('top')->insert(['id'=>'1','nama'=>'10 Hari','hari'=>'10','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'2','nama'=>'14 Hari','hari'=>'14','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'3','nama'=>'30 Hari','hari'=>'30','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'4','nama'=>'45 Hari','hari'=>'45','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'5','nama'=>'60 Hari','hari'=>'60','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'6','nama'=>'75 Hari','hari'=>'75','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'7','nama'=>'90 Hari','hari'=>'90','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'8','nama'=>'0 Hari','hari'=>'0','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'9','nama'=>'5 Hari','hari'=>'5','createdBy'=>'SEEDER']);
+        DB::table('top')->insert(['id'=>'10','nama'=>'7 Hari','hari'=>'7','createdBy'=>'SEEDER']);
 
-		//SATUAN
+		// //SATUAN
 		DB::table('satuan')->delete();
 		DB::table('satuan')->insert(['kode' => 'KG','nama' => 'KILOGRAM','createdBy' => 'SEEDER']);
         DB::table('satuan')->insert(['kode' => 'GR','nama' => 'GRAM','createdBy' => 'SEEDER']);
@@ -77,6 +84,15 @@ class InitSeeder extends Seeder
         DB::table('mesin')->insert(['kode' => 'STITCHING 1','nama' => 'STITCHING 1','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
         DB::table('mesin')->insert(['kode' => 'STITCHING 2','nama' => 'STITCHING 2','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
         DB::table('mesin')->insert(['kode' => 'STITCHING 3','nama' => 'STITCHING 3','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+
+        //NUMBER SEQUENCE
+        DB::table('number_sequence')->delete();
+        DB::table('number_sequence')->insert(['noBukti' => 'sj_palet.store', 'divisi_id' => 10, 'format' => 'P.~YY~~MM~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+        DB::table('number_sequence')->insert(['noBukti' => 'kontrak.store', 'divisi_id' => 3, 'format' => 'SPA/~999~/~MM~/~YYYY~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+        DB::table('number_sequence')->insert(['noBukti' => 'box_store', 'divisi_id' => 3, 'format' => 'Box.~MM~~YY~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+        DB::table('number_sequence')->insert(['noBukti' => 'mastercard_store', 'divisi_id' => 3, 'format' => 'MC~9999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+
+        
 
     }
 }

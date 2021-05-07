@@ -25,6 +25,7 @@
                 <h4 class="modal-title">Surat Jalan Palet</h4>
                 <hr>
                 
+                {{-- menampilkan error ketika ada field yang kosong, bersangkutan dengan controller --}}
                 @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>Error!</strong> 
@@ -35,6 +36,8 @@
                     </ul>
                 </div>
                 @endif
+                
+                {{-- form untuk Edit --}}
                 <form action="../update/{{ $sj_Palet_M->id }}" method="POST"  >
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
@@ -174,6 +177,7 @@
                                 
                                 // dd(isset($sj_Palet_D[$i]));
                                 
+                                // Menampilkan Data SJ_Palet dari DB
                                 if (isset($sj_Palet_D[$i]) !== false) {
                                     # code...
                                     echo "<tr>";
@@ -251,7 +255,10 @@
                                     
                                     document.getElementById('namaCustomer').value = custNama;
                                     document.getElementById('alamatCustomer').value = custAlamat;
-                                }                                
+                                }                     
+
+                                // Mengisi input yang ada di detail 
+
                                 function getDefaultData() {
                                     
                                     for (let index = 0; index < 5; index++) {

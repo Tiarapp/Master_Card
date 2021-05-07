@@ -17,9 +17,9 @@ class IndonesiaCitiesTableSeeder extends Seeder
     {
         
 
-        DB::table('indonesia_cities')->delete();
+        DB::table('cities')->delete();
         
-        DB::table('indonesia_cities')->insert(array (
+        DB::table('cities')->insert(array (
             0 => 
             array (
                 'id' => '1101',

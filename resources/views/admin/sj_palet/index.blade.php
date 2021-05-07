@@ -1,5 +1,4 @@
 <!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 
 @extends('admin.templates.partials.default')
 
@@ -35,7 +34,9 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('sj_palet.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="../admin/sj_palet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+
+      {{-- Datatable SJ Palet --}}
       <div class="card-body">
         <table class="table table-bordered" id="data_palet">
           <thead>
@@ -52,6 +53,7 @@
           <tbody>
             <?php
             $no = 1;
+            // Perulangan untuk mengambil data SJ
             foreach ($sj as $data) { ?>
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
@@ -73,10 +75,12 @@
               </tr>
             <?php
             }
+            // End Perulangan
             ?>
           </tbody>
         </table>
       </div>
+      {{-- End Datatable SJ --}}
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
@@ -85,7 +89,9 @@
 
   @section('javascripts')
   <!-- DataTables -->
+  {{-- Script untuk Datatable --}}
   <script>
+    // Javascript untuk Datatable
     $(document).ready(function() {
       $("#data_palet").DataTable({
         "order": [0, 'desc'],
