@@ -16,24 +16,30 @@ class BoxController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // Tampilkan Halaman Awal
     public function index()
     {
-        $box = DB::table('box')
-            ->get();
+        // Ambil data dari table box
+        $box = DB::table('box')->get();
 
+        // Tampilkan semua isi variable $box
         return view('admin.box.index', ['box' => $box]);
     }
+    // End tampilkan Halaman Awal
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+    // Tampilkan Halaman Input
     public function create()
     {
+        // Ambil data dari table (flute,tipe_box,firebird(TBarangConv))
         $flute = DB::table('flute')->get();
         $tipebox = DB::table('tipe_box')->get();
         $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // End ambil data dari table (flute,tipe_box,firebird(TBarangConv))
 
         return view('admin.box.create', compact([
             'tipebox',
@@ -41,6 +47,7 @@ class BoxController extends Controller
             'item'
             ]));
     }
+    // End tampilkan Halaman Input
 
     /**
      * Store a newly created resource in storage.
@@ -51,11 +58,14 @@ class BoxController extends Controller
     public function store(Request $request)
     {
         $url = Route::currentRouteName();
+        // Calculating Number Sequence
+        // Ambil format Number Sequence
         $ns = DB::table('number_sequence')
         ->select('format')
         ->where('noBukti', '=', $url)->get();
         
         $nobukti = $ns[0]->format;
+        // End ambil format Number Sequence
         $tanggal = date(now());
 
         // dd($nobukti, $tanggal);
@@ -65,8 +75,8 @@ class BoxController extends Controller
             ->format('Y-m-d');
 
         $end = Carbon::createFromFormat('Y-m-d H:i:s', $tanggal)
-        ->endOfMonth()
-        ->format('Y-m-d');
+            ->endOfMonth()
+            ->format('Y-m-d');
 
         $fromDate = Carbon::now()->startOfMonth();
         $tillDate = Carbon::now()->endOfMonth();
@@ -88,6 +98,7 @@ class BoxController extends Controller
                 $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
             }
         }
+        // End calculating Number Sequence
 
         // dd($nobukti);
 
@@ -176,6 +187,7 @@ class BoxController extends Controller
      */
     public function update($id, Request $request)
     {
+        // Check input
         $request->validate([
             'kode' => 'required',
             'nama' => 'required',
@@ -196,6 +208,7 @@ class BoxController extends Controller
             'satuanCreas' => 'required',
             'lastUpdatedBy' => 'required'
         ]);
+        // End check input
 
         $box = Box::find($id);
 
@@ -224,18 +237,20 @@ class BoxController extends Controller
         return redirect('admin/box');
     }
 
+    // Update field Deleted
     public function updateDeleted($id)
     {
-        $box = Box::find($id);
+        $box = Box::find($id);                  //cari id yang akan dihapus
 
-        $box->deleted = 1;
-        $box->deletedAt = date('Y-m-d h:i:s');
-        $box->deletedBy = Auth::user()->name;
+        $box->deleted = 1;                      //isi field deleted dengan 1
+        $box->deletedAt = date('Y-m-d h:i:s');  //update tanggal dan jam hapus
+        $box->deletedBy = Auth::user()->name;   //update user yang hapus
 
-        $box->save();
+        $box->save();                           //simpan
 
         return redirect('/admin/box');
     }
+    // End update field deleted
 
     /**
      * Remove the specified resource from storage.
