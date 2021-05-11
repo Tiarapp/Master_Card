@@ -89,8 +89,8 @@ class InitSeeder extends Seeder
         DB::table('number_sequence')->delete();
         DB::table('number_sequence')->insert(['noBukti' => 'sj_palet.store', 'divisi_id' => 10, 'format' => 'P.~YY~~MM~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
         DB::table('number_sequence')->insert(['noBukti' => 'kontrak.store', 'divisi_id' => 3, 'format' => 'SPA/~999~/~MM~/~YYYY~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
-        DB::table('number_sequence')->insert(['noBukti' => 'box_store', 'divisi_id' => 3, 'format' => 'Box.~MM~~YY~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
-        DB::table('number_sequence')->insert(['noBukti' => 'mastercard_store', 'divisi_id' => 3, 'format' => 'MC~9999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+        DB::table('number_sequence')->insert(['noBukti' => 'box.store', 'divisi_id' => 3, 'format' => 'Box.~MM~~YY~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
+        DB::table('number_sequence')->insert(['noBukti' => 'mastercard.store', 'divisi_id' => 3, 'format' => 'MC~9999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
 
         
 

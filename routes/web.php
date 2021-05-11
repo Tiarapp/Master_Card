@@ -202,6 +202,14 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
 
+    //OPI
+    Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
+    Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
+    Route::post('/admin/opi/store', 'OpiController@store')->name('opi.store');
+    Route::get('/admin/opi/edit/{id}', 'OpiController@edit')->name('opi.edit');
+    Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
+    Route::get('/admin/opi/pdf/{id}', 'OpiController@pdfprint')->name('opi.pdfb1');
+
     //OPNAME
     Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');
     Route::get('/admin/opname/sheet', 'OPController@indexopSheet')->name('opsheet.index');

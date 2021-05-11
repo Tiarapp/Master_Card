@@ -33,82 +33,15 @@
                 
                 <form action="{{ route('opi.store') }}"  method="POST">
                     @csrf
-                    {{-- <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Pilih Customer</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" onchange="getGramKontrak()" readonly>
-                                    </div>
-                                    
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="Customer">
-                                        <div class="modal-dialog modal-xl">
-                                            
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">List Customer</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body customer">
-                                                    <div class="card-body">
-                                                        <table class="table table-bordered" id="data_customer">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Kode</th>
-                                                                    <th scope="col">Nama Customer</th>
-                                                                    <th scope="col">Alamat Kantor</th>
-                                                                    <th scope="col">Telp</th>
-                                                                    <th scope="col">Fax</th>
-                                                                    <th scope="col">Alamat Kirim</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php 
-                                                                foreach ($cust as $data) { ?>
-                                                                    <tr>
-                                                                        <td scope="row">{{ $data->Kode }}</td>
-                                                                        <td>{{ $data->Nama }}</td>
-                                                                        <td>{{ $data->AlamatKantor }}</td>
-                                                                        <td>{{ $data->TelpKantor }}</td>
-                                                                        <td>{{ $data->FaxKantor }}</td>
-                                                                        <td>{{ $data->AlamatKirim }}</td>
-                                                                    </tr>
-                                                                    <?php
-                                                                }
-                                                                ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <button type="button" data-toggle="modal" data-target="#Customer">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div> --}}
                     <div class="row" style="margin-top: 20px">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Tanggal</label>
+                                        <label>No. Kontrak</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
+                                        <input type="date" class="form-control txt_line" name="noKontrak" id="noKontrak">
                                     </div>
                                 </div>
                             </div>

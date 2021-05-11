@@ -46,6 +46,17 @@ class Kontrak_M extends Model
         'harga',
         'keterangan',
         'createdBy'
-
     ];
+
+    // Relasi one to Many
+
+    public function kontrak_d()
+    {
+        return $this->hasMany(Kontrak_D::class, 'kontrak_m_id', 'id');
+    }
+
+    public function DeliveryTime()
+    {
+        return $this->hasMany(DeliveryTime::class, 'kontrak_m_id', 'id');
+    }
 }

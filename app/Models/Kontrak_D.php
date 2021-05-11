@@ -36,4 +36,10 @@ class Kontrak_D extends Model
         'printedKe',
         'printedAt'
     ];
+
+    
+    public function mc()
+    {
+        return $this->belongsTo(Mastercard::class, 'mc_id', 'id');
+    }
 }
