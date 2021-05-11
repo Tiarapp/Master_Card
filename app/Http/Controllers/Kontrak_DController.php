@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use Carbon\Carbon;
@@ -19,10 +20,7 @@ class Kontrak_DController extends Controller
      */
     public function index()
     {
-        $kontrak_m = DB::table('kontrak_m') 
-            // ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            // ->select('kontrak_m.*', 'mc.kode as nomc')
-            ->get();
+        $kontrak_m = Kontrak_M::get();
 
         return view('admin.kontrak.index', compact('kontrak_m'));
     }
@@ -117,6 +115,7 @@ class Kontrak_DController extends Controller
             'kode' => $nobukti,
             'tglKontrak' => $request->tanggal,
             'top' => $request->top,
+            'poCustomer' => $request->poCustomer,
             'customer_name' => $request->namaCust,
             'alamatKirim' => $request->alamatKirim,
             'caraKirim' => $request->caraKirim,
@@ -169,6 +168,19 @@ class Kontrak_DController extends Controller
             $upMaster->amountTotal = $total;
 
             $upMaster->save(); // simpan ke table
+
+            for ($i=1; $i < 6; $i++) { 
+                if ($request->tglKirim[$i] !== null) {
+                    $dt = DeliveryTime::create([
+                        'kontrak_m_id' => $kontrakm->id,
+                        'kodeKontrak' => $kontrakm->kode,
+                        'tglKirimDt' => $request->tglKirim[$i],
+                        'pcsDt' => $request->dtPcs[$i],
+                        'kgDt' => $request->dtKg[$i],
+                        'createdBy' => $request->createdBy,
+                    ]);
+                }
+            }
 
 
         return redirect('admin/kontrak');

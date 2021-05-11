@@ -44,6 +44,8 @@
               <th scope="col">No Kontrak</th>
               {{-- <th scope="col">No MC</th> --}}
               <th scope="col">Tanggal</th>
+              <th scope="col">MC</th>
+              <th scope="col">Delivery Time</th>
               <th scope="col">Customer</th>
               <th scope="col">Sales</th>
               {{-- <th scope="col">No PO Customer</th> --}}
@@ -57,8 +59,19 @@
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
                 <td><b>{{ $data->kode }}</b></td>
-                {{-- <td>{{ $data->nomc }}</td> --}}
                 <td>{{ $data->tglKontrak }}</td>
+                <td>
+                  {{-- {{ dd($data->kontrak_d) }} --}}
+
+                  @foreach ($data->kontrak_d as $kontrakd)
+                    <li>{{ $kontrakd->mc->kode }}|{{ $kontrakd->tipe }}</li>
+                  @endforeach
+                </td>
+                <td>
+                  @foreach ($data->DeliveryTime as $dt)
+                    <li>{{ $dt->tglKirimDt }}</li>
+                  @endforeach
+                </td>
                 <td>{{ $data->customer_name }}</td>
                 <td>{{ $data->sales }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}
