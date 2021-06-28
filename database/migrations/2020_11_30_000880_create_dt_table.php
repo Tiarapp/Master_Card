@@ -24,7 +24,7 @@ class CreateDtTable extends Migration
             $table->date('tglKirimDt')->index();            //INPUT MARKETING
             // $table->string('hariKirimDt');                  //AUTO
             $table->integer('pcsDt')->nullable();           //INPUT MARKETING
-            $table->integer('kgDt');                        //AUTO
+            // $table->integer('kgDt');                        //AUTO
             // $table->string('noPhp')->nullable()->index();   //INPUT MARKETING NEXT AUTO
             // $table->date('tglPhp')->index();                //AUTO MARKETING DARI SJ
             // $table->string('hariPhp')->nullable();      //AUTO

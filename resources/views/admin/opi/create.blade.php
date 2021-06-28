@@ -17,7 +17,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Kontrak</h4>
+                <h4 class="modal-title">OPI</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -31,99 +31,17 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('kontrak.store') }}"  method="POST">
+                <form action="{{ route('opi.store') }}"  method="POST">
                     @csrf
-                    <div class="row">
+                    <div class="row" style="margin-top: 20px">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Pilih Customer</label>
+                                        <label>No. Kontrak</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" onchange="getGramKontrak()" readonly>
-                                    </div>
-                                    
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="Customer">
-                                        <div class="modal-dialog modal-xl">
-                                            
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">List Customer</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body customer">
-                                                    <div class="card-body">
-                                                        <table class="table table-bordered" id="data_customer">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Kode</th>
-                                                                    <th scope="col">Nama Customer</th>
-                                                                    <th scope="col">Alamat Kantor</th>
-                                                                    <th scope="col">Telp</th>
-                                                                    <th scope="col">Fax</th>
-                                                                    <th scope="col">Alamat Kirim</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php 
-                                                                foreach ($cust as $data) { ?>
-                                                                    <tr>
-                                                                        <td scope="row">{{ $data->Kode }}</td>
-                                                                        <td>{{ $data->Nama }}</td>
-                                                                        <td>{{ $data->AlamatKantor }}</td>
-                                                                        <td>{{ $data->TelpKantor }}</td>
-                                                                        <td>{{ $data->FaxKantor }}</td>
-                                                                        <td>{{ $data->AlamatKirim }}</td>
-                                                                    </tr>
-                                                                    <?php
-                                                                }
-                                                                ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <button type="button" data-toggle="modal" data-target="#Customer">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Alamat Kirim</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                        <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Telp</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="telp" id="telp">
+                                        <input type="date" class="form-control txt_line" name="noKontrak" id="noKontrak">
                                     </div>
                                 </div>
                             </div>
@@ -137,126 +55,10 @@
                                         <label>Tipe Order</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
-                                            <option value="OB">Order Baru</option>
-                                            <option value="OU">Order Ulang</option>
-                                            <option value="OUP">Order Ulang Perubahan</option>
-                                        </select>
+                                        <input type="date" class="form-control txt_line" name="tipeOrder" id="tipeOrder">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 20px">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tanggal</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>No. Surat Jalan</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan">
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Pilih MC Box</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line col-md-11" name="nomc" id="nomc" onchange readonly>
-                                    </div>
-                                    
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="Mastercard">
-                                        <div class="modal-dialog modal-xl">
-                                            
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Mastercard Box</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body Mastercard">
-                                                    <div class="card-body">
-                                                        <table class="table table-bordered" id="data_mastercard">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">id</th>
-                                                                    <th scope="col">Kode MC</th>
-                                                                    <th scope="col">Nama Box</th>
-                                                                    <th scope="col">Tipe Box</th>
-                                                                    <th scope="col">Flute</th>
-                                                                    <th scope="col">Joint</th>
-                                                                    <th scope="col">Wax</th>
-                                                                    <th scope="col">Substance</th>
-                                                                    <th scope="col">Panjang Box</th>
-                                                                    <th scope="col">Lebar Box</th>
-                                                                    <th scope="col">Warna</th>
-                                                                    <th scope="col">Packing</th>
-                                                                    <th scope="col">box</th>
-                                                                    <th scope="col">Tipe Crease</th>
-                                                                    <th scope="col">Berat</th>
-                                                                    <th scope="col">Bungkus</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php 
-                                                                foreach ($mc as $data) { ?>
-                                                                    <tr>
-                                                                        <td scope="row">{{ $data->id }}</td>
-                                                                        <td>{{ $data->kode }}</td>
-                                                                        <td>{{ $data->namaBarang }}</td>
-                                                                        <td>{{ $data->tipeBox }}</td>
-                                                                        <td>{{ $data->flute }}</td>
-                                                                        <td>{{ $data->joint }}</td>
-                                                                        <td>{{ $data->wax }}</td>
-                                                                        <td>{{ $data->substance }}</td>
-                                                                        <td>{{ $data->panjangSheetBox }}</td>
-                                                                        <td>{{ $data->lebarSheetBox }}</td>
-                                                                        <td>{{ $data->warna }}</td>
-                                                                        <td>{{ $data->koli }}</td>
-                                                                        <td>{{ $data->box_id }}</td>
-                                                                        <td>{{ $data->tipeCrease }}</td>
-                                                                        <td>{{ $data->gramSheetCorrKontrak }}</td>
-                                                                        <td>{{ $data->bungkus }}</td>
-                                                                    </tr>
-                                                                    <?php
-                                                                }
-                                                                ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <button type="button" data-toggle="modal" data-target="#Mastercard">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
                         </div>
                     </div>
                     <div class="row">
@@ -264,32 +66,116 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Nama Item</label>
+                                        <label>No. OPI</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="noOpi" id="noOpi">
+                                        {{-- <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No Sales Order</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="noKontrak" id="noKontrak">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No. MC</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Nama Customer</label>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="hidden" name="mcid" id="mcid">
                                         <!-- <input type="hidden" name="beratBox" id="beratBox"> -->
-                                        <input type="text" class="form-control txt_line" name="namaItem" id="namaItem">
+                                        <input type="text" class="form-control txt_line" name="namaCust" id="namaCust">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Kualitas</label>
+                                        <label>Alamat Kirim</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="kualitas" id="kualitas">
+                                        {{-- <input type="text" class="form-control txt_line" name="kualitas" id="kualitas"> --}}
+                                        <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Warna</label>
+                                        <label>Delivery Time</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="warna" id="warna">
+                                        <input type="text" class="form-control txt_line" name="dt" id="dt">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Jumlah Order</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="jmlOrder" id="jmlOrder">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Toleransi</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="toleransi" id="toleransi">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Product Item</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="item" id="item">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Kode Barang</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang">
                                     </div>
                                 </div>
                             </div>
@@ -300,46 +186,6 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control txt_line" name="ukuran" id="ukuran">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Berat (gram)</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="beratBox" id="beratBox">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Flute</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="flute" id="flute">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Type Box</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="bentuk" id="bentuk">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Packing</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="packing" id="packing">
                                     </div>
                                 </div>
                             </div>

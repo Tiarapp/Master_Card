@@ -17,7 +17,7 @@ class CreateJenisDowntimeTable extends Migration
             $table->id('id');
             $table->foreignId('mesin_id')->index();
             $table->string('downtime')->index();
-            $table->integer('allowed_minute')->index();
+            $table->integer('allowedMinute')->index();
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

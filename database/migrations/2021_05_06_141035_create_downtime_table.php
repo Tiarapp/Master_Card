@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDowntimeMTable extends Migration
+class CreateDowntimeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateDowntimeMTable extends Migration
      */
     public function up()
     {
-        Schema::create('downtime_m', function (Blueprint $table) {
+        Schema::create('downtime', function (Blueprint $table) {
             $table->id('id');
-            $table->string('regu')->index();   //Input IT
-            $table->string('shift')->index();            //Input IT
-            $table->string('mesin')->index();            //Input IT
-            $table->string('nama_operator')->index();            //Input IT
+            $table->foreignId('hasil_produksi_id')->index();
+            $table->dateTime('jamStart');
+            $table->dateTime('jamFinish');
+            $table->dateTime('durasi');
+            $table->string('kategori');
+            $table->string('keterangan');
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
@@ -38,6 +40,6 @@ class CreateDowntimeMTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('downtime_m');
+        Schema::dropIfExists('downtime');
     }
 }

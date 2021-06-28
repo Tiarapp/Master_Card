@@ -262,7 +262,7 @@
                     </div>
                     <?php
                         for ($i=0; $i <5 ; $i++) { 
-                            echo "<input type='hidden' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
+                            echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
                         }
                     ?>
                     <table class="table table-bordered" id="detail_kontrak">
@@ -275,6 +275,7 @@
                                 <th scope="col">Toleransi Kurang(%)</th>
                                 <th scope="col">Harga</th>
                                 <th scope="col">PPN (%)</th>
+                                <th scope="col">Tipe MC</th>
                                 <th scope="col">Toleransi Lebih Pcs</th>
                                 <th scope="col">Toleransi Lebih Kg</th>
                                 <th scope="col">Toleransi Kurang Pcs</th>
@@ -302,13 +303,13 @@
                                     # code...
 
                                     // dd($kontrak_D[$i]->mc)
-                                    echo "<input type='text' name='detail[$i]' id='detail[$i]' style='color: rgb(255, 255, 255)' value='".$kontrak_D[$i]->id."'readonly>";
+                                    echo "<input type='text' name='detail[$i]' id='detail[$i]' style='color: rgb(0, 0, 0)' value='".$kontrak_D[$i]->id."'readonly>";
                                     echo "<tr>";
                                     echo    "<td>";
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
-                                        echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipeMc."</option>";
+                                        echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."|".$kontrak_D[$i]->tipe."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipe."</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance'>$data->kode|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
@@ -318,6 +319,7 @@
                                     echo "<td><input type='text' name='toleransiKurang[$i]' id='toleransiKurang[$i]' value='".$kontrak_D[$i]->pctToleransiKurangKontrak."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='harga[$i]' id='harga[$i]' value='".$kontrak_D[$i]->harga."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='tax[$i]' id='tax[$i]' value='".$kontrak_D[$i]->tax."' onchange='getData();'></td>";
+                                    echo "<td><input type='text' name='tipeBox[$i]' id='tipeBox[$i]' ></td>";
                                     echo "<td><input type='text' name='pcsToleransiLebih[$i]' id='pcsToleransiLebih[$i]' readonly ></td>";
                                     echo "<td><input type='text' name='kgToleransiLebih[$i]' id='kgToleransiLebih[$i]' readonly></td>";
                                     echo "<td><input type='text' name='pcsToleransiKurang[$i]' id='pcsToleransiKurang[$i]' readonly></td>";
@@ -337,7 +339,7 @@
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                         echo   "<option value=''>---</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance'>$data->kode|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
@@ -347,6 +349,7 @@
                                     echo "<td><input type='text' name='toleransiKurang[$i]' id='toleransiKurang[$i]' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='harga[$i]' id='harga[$i]' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='tax[$i]' id='tax[$i]' onchange='getData();'></td>";
+                                    echo "<td><input type='text' name='tipeBox[$i]' id='tipeBox[$i]' ></td>";
                                     echo "<td><input type='text' name='pcsToleransiLebih[$i]' id='pcsToleransiLebih[$i]'></td>";
                                     echo "<td><input type='text' name='kgToleransiLebih[$i]' id='kgToleransiLebih[$i]'></td>";
                                     echo "<td><input type='text' name='pcsToleransiKurang[$i]' id='pcsToleransiKurang[$i]'></td>";
@@ -426,6 +429,7 @@
             var idmc = arr1[0];
             var beratBox = arr1[1];
             var substance = arr1[2];
+            var tipeBox = arr1[3];
             var harga = document.getElementById('harga[0]').value;
             var taxpct = document.getElementById('tax[0]').value;
             var qty = document.getElementById('qtyPcs[0]').value;
@@ -450,6 +454,7 @@
             document.getElementById("Total[0]").value = total.toFixed(2);
             document.getElementById("substance[0]").value = substance;
             document.getElementById("idmcpel[0]").value = idmc;
+            document.getElementById("tipeBox[0]").value = tipeBox;
 
         } 
         if (data2 != '') {
@@ -457,6 +462,7 @@
             var idmc = arr1[0];
             var beratBox = arr1[1];
             var substance = arr1[2];
+            var tipeBox = arr1[3];
             var harga = document.getElementById('harga[1]').value;
             var taxpct = document.getElementById('tax[1]').value;
             var qty = document.getElementById('qtyPcs[1]').value;
@@ -481,12 +487,14 @@
             document.getElementById("Total[1]").value = total.toFixed(2);
             document.getElementById("substance[1]").value = substance;
             document.getElementById("idmcpel[1]").value = idmc;
+            document.getElementById("tipeBox[1]").value = tipeBox;
         } 
         if (data3 != '') {
             var arr1 = data1.split('|');
             var idmc = arr1[0];
             var beratBox = arr1[1];
             var substance = arr1[2];
+            var tipeBox = arr1[3];
             var harga = document.getElementById('harga[2]').value;
             var taxpct = document.getElementById('tax[2]').value;
             var qty = document.getElementById('qtyPcs[2]').value;
@@ -511,12 +519,14 @@
             document.getElementById("Total[2]").value = total.toFixed(2);
             document.getElementById("substance[2]").value = substance;
             document.getElementById("idmcpel[2]").value = idmc;
+            document.getElementById("tipeBox[2]").value = tipeBox;
         }
         if (data4 != '') {
             var arr1 = data1.split('|');
             var idmc = arr1[0];
             var beratBox = arr1[1];
             var substance = arr1[2];
+            var tipeBox = arr1[3];
             var harga = document.getElementById('harga[3]').value;
             var taxpct = document.getElementById('tax[3]').value;
             var qty = document.getElementById('qtyPcs[3]').value;
@@ -540,13 +550,15 @@
             document.getElementById("hargaTax[3]").value = taxrp.toFixed(2);
             document.getElementById("Total[3]").value = total.toFixed(2);
             document.getElementById("substance[3]").value = substance;
-            document.getElementById("idmcpel[3]").value = idmc;                   
+            document.getElementById("idmcpel[3]").value = idmc;   
+            document.getElementById("tipeBox[3]").value = tipeBox;                
         }
         if (data5 != '') {
             var arr1 = data1.split('|');
             var idmc = arr1[0];
             var beratBox = arr1[1];
             var substance = arr1[2];
+            var tipeBox = arr1[3];
             var harga = document.getElementById('harga[4]').value;
             var taxpct = document.getElementById('tax[4]').value;
             var qty = document.getElementById('qtyPcs[4]').value;
@@ -571,6 +583,7 @@
             document.getElementById("Total[4]").value = total.toFixed(2);
             document.getElementById("substance[4]").value = substance;
             document.getElementById("idmcpel[4]").value = idmc;
+            document.getElementById("tipeBox[4]").value = tipeBox;
         }
         
     }
