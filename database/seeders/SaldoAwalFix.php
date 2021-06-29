@@ -284,9 +284,9 @@ class SaldoAwalFix extends Seeder
         DB::table('color')->insert(['kode'=>'CKT32','nama'=>'CKT32','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'CKT33','nama'=>'CKT33','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'CKT34','nama'=>'CKT34','mudaTua'=>0,'createdBy'=>'SEEDER']);
-        DB::table('color')->insert(['kode'=>'GLD02','nama'=>'GLD02','mudaTua'=>0,'createdBy'=>'SEEDER']);
-        DB::table('color')->insert(['kode'=>'GLD03','nama'=>'GLD03','mudaTua'=>0,'createdBy'=>'SEEDER']);
-        DB::table('color')->insert(['kode'=>'GLD04','nama'=>'GLD04','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'GOLD02','nama'=>'GOLD02','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'GOLD03','nama'=>'GOLD03','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'GOLD04','nama'=>'GOLD04','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'HJU01','nama'=>'HJU01','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'HJU03','nama'=>'HJU03','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'HJU06','nama'=>'HJU06','mudaTua'=>0,'createdBy'=>'SEEDER']);
@@ -507,6 +507,8 @@ class SaldoAwalFix extends Seeder
         DB::table('color')->insert(['kode'=>'HJU75','nama'=>'HJU75','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'BRU152','nama'=>'BRU152','mudaTua'=>0,'createdBy'=>'SEEDER']);
         DB::table('color')->insert(['kode'=>'HJU76','nama'=>'HJU76','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'MRH37','nama'=>'MRH37','mudaTua'=>0,'createdBy'=>'SEEDER']);
+        DB::table('color')->insert(['kode'=>'HJU10','nama'=>'HJU10','mudaTua'=>0,'createdBy'=>'SEEDER']);
 
 
     }

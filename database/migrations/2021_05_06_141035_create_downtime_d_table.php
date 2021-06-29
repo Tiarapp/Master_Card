@@ -18,7 +18,6 @@ class CreateDowntimeDTable extends Migration
             $table->foreignId('downtime_m_id')->index();
             $table->dateTime('jam_start');
             $table->dateTime('jam_finish');
-            $table->dateTime('jam_finish');
             $table->string('kategori');
             $table->string('keterangan');
             // TRACKING

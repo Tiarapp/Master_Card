@@ -15,10 +15,10 @@ class CreateMcTable extends Migration
     {
         Schema::create('mc', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique()->index();    //AUTO NUMBER SEQUENCE
+            $table->string('kode')->index();    //AUTO NUMBER SEQUENCE
             $table->string('namaBarang')->nullable();
             $table->string('kodeBarang')->nullable();
-            $table->integer('revisi')->default(0);        //AUTO REVISI KE
+            $table->string('revisi')->default(null);        //AUTO REVISI KE
             $table->string('tipeBox')->index();           //INPUT MARKETING
             $table->string('CreasCorrP')->nullable();                           
             $table->string('CreasCorrL')->nullable();

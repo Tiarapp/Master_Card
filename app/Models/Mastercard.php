@@ -14,6 +14,7 @@ class Mastercard extends Model
 
     protected $fillable = [
         'kode',
+        'revisi',
         'namaBarang',
         'kodeBarang',
         'tipebox',
