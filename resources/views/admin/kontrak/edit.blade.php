@@ -365,6 +365,35 @@
                             
                             </tbody>
                         </table>
+                        {{-- <div class="card-body" style="border-right: -20px"> 
+                        
+                            <table class="table table-bordered" id="detail_kontrak">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tanggal Kirim</th>
+                                        <th scope="col">Qty(Pcs)</th>
+                                        <th scope="col">Qty(Kg)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $counts = 5;
+                                    
+                                    for ($i=1; $i<=$counts; $i++) { 
+                                        
+                                        echo "<tr>";
+                                        echo "<td><input type='date' name='tglKirim[$i]' id='tglKirim[$i]'></td>";
+                                        echo "<td><input type='text' name='dtPcs[$i]' id='dtPcs[$i]' onchange='getData();'></td>";
+                                        echo "<td><input type='text' name='dtKg[$i]' id='dtKg[$i]' onchange='getData();'></td>";
+                                        echo "</tr>";
+    
+                                        
+                                    }
+                                    ?>
+                                                
+                                </tbody>
+                            </table>
+                        </div> --}}
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>

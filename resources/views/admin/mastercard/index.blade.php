@@ -34,7 +34,7 @@
         <table class="table table-bordered" id="data_mc">
             <thead>
                 <tr>
-                    <th scope="col">No.</th>
+                    {{-- <th scope="col">No.</th> --}}
                     <th scope="col">Kode</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
@@ -52,10 +52,16 @@
             <tbody>
                     <?php 
                         $no = 1;
-                        foreach ($mc as $data) { ?>
+                        foreach ($mc as $data) { 
+                          if ($data->revisi == null) {
+                            $revisi = "";
+                          } else {
+                            $revisi = "-".$data->revisi;
+                          }
+                          ?>
                         <tr>
-                            <td scope="row">{{ $no++ }}</td>
-                            <td>{{ $data->kode }}</td>
+                            {{-- <td scope="row">{{ $no++ }}</td> --}}
+                            <td>{{ $data->kode }}{{ $revisi }}</td>
                             <td>{{ $data->namaBarang }}</td>
                             <td>{{ $data->tipeBox }}</td>
                             <td>{{ $data->CreasCorrP }}</td>
@@ -66,7 +72,10 @@
                             <td>{{ $data->luasSheet }}</td>
                             <td>{{ $data->keterangan }}</td>
                             <td><a href="../upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
-                            <td> <a href="../admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> </td>
+                            <td> 
+                                <a href="../admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                                <a href="../admin/mastercard/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a> 
+                            </td>
                         </tr>
                             <?php
                         }    
