@@ -39,7 +39,19 @@ class jenisDowntimeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'mesin' => 'required',
+            'downtime' => 'required',
+            'category' => 'required',
+            'allowedMinute' => 'nullable',
+            'branch' => 'required',
+            'createdBy' => 'required'
+        ]);
+
+        $data = jenisDowntime::create($request->all());
+
+        // return response()->json(['success' => true, 'last_insert_id' => $data->id], 200);
+        return redirect('admin/JenisDowntime');
     }
 
     /**
@@ -48,9 +60,11 @@ class jenisDowntimeController extends Controller
      * @param  \App\Models\jenisDowntime  $jenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function show(jenisDowntime $jenisDowntime)
+    public function show(JenisDowntime $jenisDowntime)
     {
-        //
+        $jenisDowntime = jenisDowntime::find($id);
+
+        return view('admin.jenisDowntime.show', ['jenisDowntime' => $jenisDowntime]);
     }
 
     /**
@@ -61,7 +75,9 @@ class jenisDowntimeController extends Controller
      */
     public function edit(jenisDowntime $jenisDowntime)
     {
-        //
+        $jenisDowntime = jenisDowntime::find($id);
+
+        return view('admin.jenisDowntime.edit', ['jenisDowntime' => $jenisDowntime]);
     }
 
     /**
@@ -73,7 +89,27 @@ class jenisDowntimeController extends Controller
      */
     public function update(Request $request, jenisDowntime $jenisDowntime)
     {
-        //
+        $request->validate([
+            'mesin' => 'required',
+            'downtime' => 'required',
+            'category' => 'required',
+            'allowedMinute' => 'nullable',
+            'branch' => 'required',
+            'lastUpdatedBy' => 'required',
+        ]);
+
+        $jenisDowntime = jenisDowntime::find($id);
+
+        $jenisDowntime->mesin = $request->mesin;
+        $jenisDowntime->downtime = $request->downtime;
+        $jenisDowntime->category = $request->category;
+        $jenisDowntime->allowedMinute = $request->allowedMinute;
+        $jenisDowntime->branch = $request->branch;
+        $jenisDowntime->lastUpdatedBy = Auth::user()->name;
+
+        $jenisDowntime->save();
+
+        return redirect('admin/jenisDowntime');
     }
 
     /**
