@@ -83,3 +83,18 @@ class jenisDowntimeController extends Controller
         //
     }
 }
+
+
+$table->id('id');
+$table->foreignId('mesin_id')->index();
+$table->string('downtime')->index();
+$table->integer('allowedMinute')->index();
+// TRACKING
+$table->string('createdBy');                    //Auto ambil dari login
+$table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
+$table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
+$table->string('deletedBy')->nullable();        //Auto ambil dari login
+$table->integer('printedKe')->nullable();       //Auto ambil dari login
+$table->dateTime('printedAt')->nullable();      //Auto ambil dari login
+$table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
+$table->timestamps();
