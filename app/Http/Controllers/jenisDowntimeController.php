@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\jenisDowntime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class jenisDowntimeController extends Controller
@@ -60,7 +61,7 @@ class jenisDowntimeController extends Controller
      * @param  \App\Models\jenisDowntime  $jenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function show(JenisDowntime $jenisDowntime)
+    public function show($id)
     {
         $jenisDowntime = jenisDowntime::find($id);
 
@@ -73,7 +74,7 @@ class jenisDowntimeController extends Controller
      * @param  \App\Models\jenisDowntime  $jenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function edit(jenisDowntime $jenisDowntime)
+    public function edit($id)
     {
         $jenisDowntime = jenisDowntime::find($id);
 
@@ -87,7 +88,7 @@ class jenisDowntimeController extends Controller
      * @param  \App\Models\jenisDowntime  $jenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, jenisDowntime $jenisDowntime)
+    public function update($id, Request $request)
     {
         $request->validate([
             'mesin' => 'required',
