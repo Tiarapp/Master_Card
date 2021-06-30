@@ -1,6 +1,9 @@
 @extends('admin.templates.partials.default')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
@@ -33,87 +36,184 @@
                 
                 <form action="{{ route('opi.store') }}"  method="POST">
                     @csrf
-                    <div class="row" style="margin-top: 20px">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>No. Kontrak</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="noKontrak" id="noKontrak">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="border-bottom: 2px solid black">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tipe Order</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="tipeOrder" id="tipeOrder">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <label>No. OPI</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noOpi" id="noOpi">
-                                        {{-- <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea> --}}
+                                    <div class="col-md-3">
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="Opi">
+                                            <div class="modal-dialog modal-xl">
+                                                
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">OPI</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body opi">
+                                                        <div class="card-body">
+                                                            <table class="table table-bordered" id="data_opi">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">No. Kontrak</th>
+                                                                        <th scope="col">Tanggal Order</th>
+                                                                        <th scope="col">No. MC</th>
+                                                                        <th scope="col">Kode Barang</th>
+                                                                        <th scope="col">Product Item</th>
+                                                                        <th scope="col">Tipe Order</th>
+                                                                        <th scope="col">PO Customer</th>
+                                                                        <th scope="col">Nama Customer</th>
+                                                                        <th scope="col">Alamat Kirim</th>
+                                                                        <th scope="col">Keterangan</th>
+                                                                        <th scope="col">Toleransi</th>
+                                                                        <th scope="col">Ukuran</th>
+                                                                        <th scope="col">Substance</th>
+                                                                        <th scope="col">Flute</th>
+                                                                        <th scope="col">Warna</th>
+                                                                        <th scope="col">Out</th>
+                                                                        <th scope="col">Berat</th>
+                                                                        <th scope="col">Koli</th>
+                                                                        <th scope="col">Finishing</th>
+                                                                        <th scope="col">Bentuk</th>
+                                                                        <th scope="col">MC ID</th>
+                                                                        <th scope="col">KontrakM ID</th>
+                                                                        <th scope="col">KotrakD ID</th>
+                                                                        {{-- <th scope="col">Jadwal Kirim</th> --}}
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php
+                                                                    $no = 1;
+                                                                    foreach ($kontrak_d as $data) { ?>
+                                                                        <tr>
+                                                                            <td scope="row">{{ $data->noKontrak }}</td>
+                                                                            <td>{{ $data->tglOrder }}</td>
+                                                                            <td>{{ $data->nomc }}</td>
+                                                                            <td>{{ $data->kodeBarang }}</td>
+                                                                            <td>{{ $data->namaBarang }}</td>
+                                                                            <td>{{ $data->tipeOrder }}</td>
+                                                                            <td>{{ $data->poCust }}</td>
+                                                                            <td>{{ $data->namaCust }}</td>
+                                                                            <td>{{ $data->alamatKirim }}</td>
+                                                                            <td>{{ $data->keterangan }}</td>
+                                                                            <td>{{ $data->pctToleransiLebihKontrak }}</td>
+                                                                            <td>{{ $data->panjang }} x {{ $data->lebar }} x {{ $data->tinggi }}</td>
+                                                                            <td>{{ $data->substance }}</td>
+                                                                            <td>{{ $data->flute }}</td>
+                                                                            <td>{{ $data->warna }}</td>
+                                                                            <td>{{ $data->outConv }}</td>
+                                                                            <td>{{ $data->berat }}</td>
+                                                                            <td>{{ $data->koli }}</td>
+                                                                            <td>{{ $data->joint }}</td>
+                                                                            <td>{{ $data->bentuk }}</td>
+                                                                            <td>{{ $data->mcid }}</td>
+                                                                            <td>{{ $data->kontrakmid }}</td>
+                                                                            <td>{{ $data->id }}</td>
+                                                                            {{-- <td>{{ $data->tglKirim }}</td> --}}
+                                                                        </tr>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No Sales Order</label>
+                                        <label>No OPI</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <input type="text" class="form-control txt_line" value="{{ $numb_opi }}" name="noOpi" id="noOpi">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" data-toggle="modal" data-target="#Opi">
+                                                    <i class="fas fa-search" style="
+                                                    height: 20px;
+                                                    margin-top: 15px;
+                                                    width: 20px;
+                                                "></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No Kontrak</label>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control txt_line" name="noKontrak" id="noKontrak">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No. MC</label>
+                                        <label>Tipe Order</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan">
+                                        {{-- <input type="hidden" name="mcid" id="mcid"> --}}
+                                        <!-- <input type="hidden" name="beratBox" id="beratBox"> -->
+                                        <input type="text" class="form-control txt_line" name="tipeOrder" id="tipeOrder">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tanggal Order</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="date" class="form-control txt_line" name="tanggalOrder" id="tanggalOrder">
+                                        {{-- <textarea name="tanggalOrder" id="tanggalOrder" cols="30" rows="4"></textarea> --}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No MC</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="hidden" class="form-control txt_line" name="mcid" id="mcid">
+                                        <input type="hidden" class="form-control txt_line" name="kontrakmid" id="kontrakmid">
+                                        <input type="hidden" class="form-control txt_line" name="kontrakdid" id="kontrakdid">
+                                        <input type="text" class="form-control txt_line" name="nomc" id="nomc">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>PO Customer</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="poCust" id="poCust">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Nama Customer</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="hidden" name="mcid" id="mcid">
-                                        <!-- <input type="hidden" name="beratBox" id="beratBox"> -->
                                         <input type="text" class="form-control txt_line" name="namaCust" id="namaCust">
                                     </div>
                                 </div>
@@ -124,7 +224,7 @@
                                         <label>Alamat Kirim</label>
                                     </div>
                                     <div class="col-md-6">
-                                        {{-- <input type="text" class="form-control txt_line" name="kualitas" id="kualitas"> --}}
+                                        {{-- <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang"> --}}
                                         <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
                                     </div>
                                 </div>
@@ -132,30 +232,51 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Delivery Time</label>
+                                        <label>Jadwal Kirim</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="dt" id="dt">
+                                        <input type="text" class="form-control txt_line" name="tglKirim" id="tglKirim">
+                                        <input type="text" class="form-control txt_line" name="kgKirim" id="kgKirim">
+                                        <input type="text" class="form-control txt_line" name="dtid" id="dtid">
+                                        <select class="js-example-basic-single col-md-12" name="dt" id="dt" onchange="getDataDt()">
+                                            <option value=''>--</option>
+                                            @foreach ($dt as $data)
+                                            <option value="{{ $data->id }}|{{ $data->tglKirimDt }}|{{ $data->pcsDt }}|{{ $data->kgDt }}">{{ $data->kodeKontrak }} || {{ $data->tglKirimDt }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Jumlah Order</label>
+                                        <label>Keterangan OPI</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="jmlOrder" id="jmlOrder">
+                                        {{-- <input type="text" class="form-control txt_line" name="keterangan" id="keterangan"> --}}
+                                        <textarea name="keterangan" id="keterangan" cols="30" rows="4"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Toleransi</label>
+                                        <label>Jumlah Order (Pcs)</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransi" id="toleransi">
+                                        <input type="text" class="form-control txt_line" name="jumlahOrder" id="jumlahOrder" onchange="getHarga();">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Toleransi (%)</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="toleransi" id="toleransi" onchange="getHarga();">
                                     </div>
                                 </div>
                             </div>
@@ -192,223 +313,86 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Jumlah Order</label>
+                                        <label>Subs Produksi</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="jmlOrder" id="jmlOrder">
+                                        <input type="text" class="form-control txt_line" name="substance" id="substance" onchange="getToleransiKurang()">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Harga (Pcs/Kg)</label>
+                                        <label>Flute</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="hargaSatuan" id="hargaSatuan" onchange="getHarga();">
+                                        <input type="text" class="form-control txt_line" name="flute" id="flute">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Tax (%)</label>
+                                        <label>Warna</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="tax" id="tax" onchange="getHarga();">
+                                        <input type="text" class="form-control txt_line" name="warna" id="warna">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Harga Belum Tax</label>
+                                        <label>Out</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="hargaBlmTax" id="hargaBlmTax">
+                                        <input type="text" class="form-control txt_line" name="outConv" id="outConv">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Berat Total</label>
+                                        <label>Berat Box (kg)</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="beratTotal" id="beratTotal">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Toleransi Lebih(%)</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiLebihPersen" id="toleransiLebihPersen" onchange="getToleransiLebih()">
+                                        <input type="text" class="form-control txt_line" name="berat" id="berat">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Toleransi Lebih(pcs)</label>
+                                        <label>Isi Colly</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiLebihPcs" id="toleransiLebihPcs">
+                                        <input type="text" class="form-control txt_line" name="koli" id="koli">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Toleransi Lebih(kg)</label>
+                                        <label>Finishing</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiLebihKg" id="toleransiLebihKg">
+                                        <input type="text" class="form-control txt_line" name="finishing" id="finishing">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Toleransi Kurang(%)</label>
+                                        <label>Bentuk</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiKurangPersen" id="toleransiKurangPersen" onchange="getToleransiKurang()">
+                                        <input type="text" class="form-control txt_line" name="bentuk" id="bentuk">
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Toleransi Kurang(pcs)</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiKurangPcs" id="toleransiKurangPcs">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Toleransi Kurang(kg)</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="toleransiKurangKg" id="toleransiKurangKg">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Sales</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="sales" id="sales">
-                                            @foreach ($sales as $data)
-                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Term of Payment</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="top" id="top">
-                                            @foreach ($top as $data)
-                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Cara Kirim</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
-                                            <option value="Kirim">Kirim</option>
-                                            <option value="Ambil Sendiri">Ambil Sendiri</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Wax</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="wax" id="wax">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tipe Crease</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="tipeCrease" id="tipeCrease">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Join</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="joint" id="joint">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Bungkus</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="bungkus" id="bungkus">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tipe Harga</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select class='js-example-basic-single col-md-12' name="tipe_harga" id="tipe_harga">
-                                            <option value="PCS">PCS</option>
-                                            <option value="KG">KG</option>
-                                        </select>  
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Total Harga</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" id="totalHarga" name="totalHarga">  
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     
-                    <table class="table table-bordered" id="">
+                    {{-- <table class="table table-bordered" id="">
                         <thead>
                             <tr>
                                 <th scope="col">Nama</th>
@@ -425,14 +409,14 @@
                             
                             for ($i=1; $i<=$counts; $i++) { 
                                 
-                                echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
+                                echo "<input type='hidden' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
                                 echo "<tr>";
                                     echo    "<td>";
                                         echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                             echo   "<option value=''>---</option>";
-                                            foreach ($mcpel as $data) {
-                                                echo "<option value='$data->id|$data->gramSheetBoxKontrak'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
-                                            }
+                                            // foreach ($mcpel as $data) {
+                                            //     echo "<option value='$data->id|$data->gramSheetBoxKontrak'>$data->kode|$data->panjangSheetBox x $data->lebarSheetBox x 1</option>";
+                                            // }
                                             echo "</select>";
                                             echo "</td>";
                                             echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]'></td>";
@@ -445,7 +429,7 @@
                                         ?>
                                         
                                     </tbody>
-                                </table>
+                                </table> --}}
                                 <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -465,192 +449,58 @@
                     $('.js-example-basic-single').select2();
                 });
                 
-                $(".Mastercard").ready(function(){
+                $(".opi").ready(function(){
                     
-                    var table = $("#data_mastercard").DataTable({
+                    var table = $("#data_opi").DataTable({
                         select: true,
-                        scrollX: "200px",
+                        "initComplete": function (settings, json) {  
+                            $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+                        },
                     });
                     
-                    $('#data_mastercard tbody').on( 'click', 'td', function () {
-                        var mc = (table.row(this).data());
+                    $('#Opi tbody').on( 'click', 'td', function () {
+                        var opi = (table.row(this).data());
                         
                         
-                        document.getElementById('mcid').value = mc[0];
-                        document.getElementById('namaItem').value = mc[2];
-                        document.getElementById('nomc').value = mc[1];
-
-                        substance = mc[7].split(" ");
-                        document.getElementById('kualitas').value = substance[1];
-
-                        document.getElementById('warna').value = mc[10];
-                        document.getElementById('ukuran').value = mc[8] +' x '+ mc[9] +' x 1';
-                        document.getElementById('flute').value = mc[4];
+                        document.getElementById('noKontrak').value = opi[0];
+                        document.getElementById('tipeOrder').value = opi[5];
+                        document.getElementById('tanggalOrder').value = opi[1];
+                        document.getElementById('nomc').value = opi[2];
+                        document.getElementById('poCust').value = opi[6];
+                        document.getElementById('namaCust').value = opi[7];
+                        document.getElementById('alamatKirim').value = opi[8];
+                        document.getElementById('keterangan').value = opi[9];
+                        // document.getElementById('jumlahOrder').value = opi[ ];
+                        document.getElementById('toleransi').value = opi[10];
+                        document.getElementById('item').value = opi[4];
+                        document.getElementById('kodeBarang').value = opi[3];
+                        document.getElementById('ukuran').value = opi[11];
+                        document.getElementById('substance').value = opi[12];
+                        document.getElementById('flute').value = opi[13];
+                        document.getElementById('warna').value = opi[14];
+                        document.getElementById('outConv').value = opi[15];
+                        document.getElementById('berat').value = opi[16];
+                        document.getElementById('koli').value = opi[17];
+                        document.getElementById('finishing').value = opi[18];
+                        document.getElementById('bentuk').value = opi[19];
+                        document.getElementById('mcid').value = opi[20];
+                        document.getElementById('kontrakmid').value = opi[21];
+                        document.getElementById('kontrakdid').value = opi[22];
                         
-                        document.getElementById('bentuk').value = mc[3];
-                        document.getElementById('packing').value = mc[11];
-                        document.getElementById('wax').value = mc[6];
-                        document.getElementById('tipeCrease').value = mc[13];
-                        document.getElementById('joint').value = mc[5];
-                        document.getElementById('bungkus').value = mc[15];
-
-                        document.getElementById('beratBox').value = mc[14];
-                    } );
-                } );
-
-                $(".Customer").ready(function(){
-                    
-                    var table = $("#data_customer").DataTable({
-                        select: true,
-                    });
-                    
-                    $('#data_customer tbody').on( 'click', 'td', function () {
-                        var cust = (table.row(this).data());
-                        
-                        // document.getElementById('customer_id').value = cust[0]    ;
-                        document.getElementById('namaCust').value = cust[1];
-                        document.getElementById('alamatKirim').value = cust[5];
-                        document.getElementById('telp').value = cust[3];
-                        // document.getElementById('fax').value = cust[4];
-                        
-                        // getGramKontrak();
                     } );
                 } );
                 
-                function getToleransiLebih() {
-                    var jumlahOrder = document.getElementById('jmlOrder').value;
-                    var persen = document.getElementById('toleransiLebihPersen').value;
-                    var totalBerat = document.getElementById('beratTotal').value;
-                    
-                    var hasilpcs = jumlahOrder * (persen/100);
-                    var hasilkg = totalBerat * (persen/100);
+                function getDataDt() {
+                    var dt = document.getElementById('dt').value;
 
-                    document.getElementById('toleransiLebihPcs').value = hasilpcs;
-                    document.getElementById('toleransiLebihKg').value = hasilkg;
-                }
+                    var dt = dt.split("|");
 
-                function getToleransiKurang() {
-                    var jumlahOrder = document.getElementById('jmlOrder').value;
-                    var persen = document.getElementById('toleransiKurangPersen').value;
-                    var totalBerat = document.getElementById('beratTotal').value;
-                    
-                    var hasilpcs = jumlahOrder * (persen/100);
-                    var hasilkg = totalBerat *(persen/100);
-
-                    document.getElementById('toleransiKurangPcs').value = hasilpcs;
-                    document.getElementById('toleransiKurangKg').value = hasilkg;
-                }
-
-                function getHarga(){
-                    var jumlahOrder = document.getElementById('jmlOrder').value;
-                    var hargaSatuan = document.getElementById('hargaSatuan').value;
-                    var tax = document.getElementById('tax').value / 100;
-                    var gram = document.getElementById('beratBox').value;
-
-                    var totalSblTax = jumlahOrder * hargaSatuan;
-                    var totalSdhTax = totalSblTax - (totalSblTax * tax);
-                    var berattotal = jumlahOrder * gram;
-                    
-                    document.getElementById('hargaBlmTax').value = totalSblTax;
-                    document.getElementById('totalHarga').value = totalSdhTax;
-                    document.getElementById('beratTotal').value = berattotal;
-
-                }
+                    document.getElementById('dtid').value = dt[0];
+                    document.getElementById('tglKirim').value = dt[1];
+                    document.getElementById('jumlahOrder').value = dt[2];
+                    document.getElementById('kgKirim').value = dt[3];
                 
-                // function getCatatan() {
-                //     var catatan1 = document.getElementById("catatan1").value;
-                //     var nosj = document.getElementById("nosj").value;
-                    
-                //     document.getElementById("catatan").value = catatan1 +nosj;
-                // }
-                
-                function getData() {
-                    var data1 = document.getElementById("nama_1").value;
-                    var data2 = document.getElementById("nama_2").value;
-                    var data3 = document.getElementById("nama_3").value;
-                    var data4 = document.getElementById("nama_4").value;
-                    var data5 = document.getElementById("nama_5").value;
-                    
-                    if (data1 != '') {
-                        var arr1 = data1.split('|');
-                        var idmc = arr1[0];
-                        var beratBox = arr1[1];
-                        var qty = document.getElementById('qtyPcs[1]').value;
-                        var toleransipct = document.getElementById('toleransi[1]').value;
-                        var totalKg = qty * beratBox;
-                        var toleransipcs =  qty * (toleransipct/100) ;
-                        var toleransikg = totalKg * (toleransipct/100);
-
-                        document.getElementById("qtyKg[1]").value = totalKg;
-                        document.getElementById("pcsToleransi[1]").value = toleransipcs;
-                        document.getElementById("kgToleransi[1]").value = toleransikg;
-                        document.getElementById("idmcpel[1]").value = idmc;
-
-                    } 
-                    if (data2 != '') {
-                        var arr2 = data2.split('|');
-                        var idmc = arr2[0];
-                        var beratBox = arr2[1];
-                        var qty = document.getElementById('qtyPcs[2]').value;
-                        var toleransipct = document.getElementById('toleransi[2]').value;
-                        var totalKg = qty * beratBox;
-                        var toleransipcs =  qty * (toleransipct/100) ;
-                        var toleransikg = totalKg * (toleransipct/100);
-
-                        document.getElementById("qtyKg[2]").value = totalKg;
-                        document.getElementById("pcsToleransi[2]").value = toleransipcs;
-                        document.getElementById("kgToleransi[2]").value = toleransikg;
-                        document.getElementById("idmcpel[2]").value = idmc;
-                    } 
-                    if (data3 != '') {
-                        var arr3 = data3.split('|');
-                        var idmc = arr3[0];
-                        var beratBox = arr3[1];
-                        var qty = document.getElementById('qtyPcs[3]').value;
-                        var toleransipct = document.getElementById('toleransi[3]').value;
-                        var totalKg = qty * beratBox;
-                        var toleransipcs =  qty * (toleransipct/100) ;
-                        var toleransikg = totalKg * (toleransipct/100);
-
-                        document.getElementById("qtyKg[3]").value = totalKg;
-                        document.getElementById("pcsToleransi[3]").value = toleransipcs;
-                        document.getElementById("kgToleransi[3]").value = toleransikg;
-                        document.getElementById("idmcpel[3]").value = idmc;
-                    }
-                    if (data4 != '') {
-                        var arr4 = data4.split('|');
-                        var idmc = arr4[0];
-                        var beratBox = arr4[1];
-                        var qty = document.getElementById('qtyPcs[4]').value;
-                        var toleransipct = document.getElementById('toleransi[4]').value;
-                        var totalKg = qty * beratBox;
-                        var toleransipcs =  qty * (toleransipct/100) ;
-                        var toleransikg = totalKg * (toleransipct/100);
-
-                        document.getElementById("qtyKg[4]").value = totalKg;
-                        document.getElementById("pcsToleransi[4]").value = toleransipcs;
-                        document.getElementById("kgToleransi[4]").value = toleransikg;
-                        document.getElementById("idmcpel[4]").value = idmc;                      
-                    }
-                    if (data5 != '') {
-                        var arr5 = data5.split('|');
-                        var idmc = arr5[0];
-                        var beratBox = arr5[1];
-                        var qty = document.getElementById('qtyPcs[5]').value;
-                        var toleransipct = document.getElementById('toleransi[5]').value;
-                        var totalKg = qty * beratBox;
-                        var toleransipcs =  qty * (toleransipct/100);
-                        var toleransikg = totalKg * (toleransipct/100);
-
-                        document.getElementById("qtyKg[5]").value = totalKg;
-                        document.getElementById("pcsToleransi[5]").value = toleransipcs;
-                        document.getElementById("kgToleransi[5]").value = toleransikg;
-                        document.getElementById("idmcpel[5]").value = idmc;
-                    }
-                    
-                }
-                
-                
+                }                
             </script>
             
             @endsection

@@ -201,6 +201,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
     Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
     Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
+    Route::post('/admin/mastercard/update', 'MastercardController@update')->name('mastercard.update');
     Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('mastercard.pdfb1');
 
     //Kontrak

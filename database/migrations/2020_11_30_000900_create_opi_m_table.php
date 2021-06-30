@@ -18,10 +18,11 @@ class CreateOpiMTable extends Migration
             $table->string('NoOPI')->index();     //AUTO OPI
             $table->string('nama')->index();     //AUTO
             $table->foreignId('dt_id')->nullable()->index();        //INPUT PPIC
-            $table->string('noMod')->nullable()->index();   //INPUT MARKETING NEXT AUTO
+            // $table->string('noMod')->nullable()->index();   //INPUT MARKETING NEXT AUTO
             $table->foreignId('mc_id')->nullable()->index();        //AUTO
             $table->foreignId('kontrak_m_id')->nullable()->index(); //AUTO
             $table->foreignId('kontrak_d_id')->nullable()->index(); //AUTO
+            $table->integer('jumlahOrder');
             $table->text('keterangan')->nullable(); //INPUT PPIC
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login

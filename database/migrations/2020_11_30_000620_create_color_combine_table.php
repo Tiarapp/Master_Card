@@ -21,6 +21,7 @@ class CreateColorCombineTable extends Migration
             $table->foreignId('idColor2')->nullable()->index();  //INPUT DESAIN
             $table->foreignId('idColor3')->nullable()->index();  //INPUT DESAIN
             $table->foreignId('idColor4')->nullable()->index();  //INPUT DESAIN
+            $table->integer('mudaTua')->nullable();
             //RELATION
             $table->foreign('idColor1')->references('id')->on('color')->cascadeOnDelete();
             $table->foreign('idColor2')->references('id')->on('color')->cascadeOnDelete();
