@@ -16,7 +16,7 @@
                         <strong>Error!</strong> 
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li></li>
+                                <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -24,7 +24,7 @@
 
                 
                 
-                <form action="{{ route('downtime.store') }}" method="POST">
+                <form action="{{ route('jenisdowntime.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -32,7 +32,7 @@
                                 <label>Mesin</label>
                                 {{-- <div class="row"> --}}
                                     {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                    <input type="text" class="form-control txt_line" name="mesin_id" id="mesin_id" autocomplete="off">
+                                    <input type="text" class="form-control txt_line" name="mesin" id="mesin" autocomplete="off">
                                     {{-- </div> --}}
                                 </div>
                             </div>
