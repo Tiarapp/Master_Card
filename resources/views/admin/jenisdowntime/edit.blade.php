@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Menit yang diperbolehkan</label>
+                                <label>Downtime yang diperbolehkan (menit)</label>
                                 <input type="text" class="form-control txt_line" name="allowedMinute" id="allowedMinute" value="{{ $downtime->allowedMinute }}">
                             </div>
                         </div>

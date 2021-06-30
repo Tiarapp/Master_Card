@@ -55,14 +55,14 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/flute/update/{id}', 'FluteController@update');
     Route::get('/admin/flute/delete/{id}', 'FluteController@updateDeleted');
 
-    //Downtime
-    Route::get('/admin/downtime', 'DowntimeController@index')->name('downtime');
-    Route::get('/admin/downtime/create', 'DowntimeController@create')->name('downtime.create');
-    Route::post('/admin/downtime/store', 'DowntimeController@store')->name('downtime.store');
-    Route::get('/admin/downtime/show/{id}', 'DowntimeController@show');
-    Route::get('/admin/downtime/edit/{id}', 'DowntimeController@edit');
-    Route::put('/admin/downtime/update/{id}', 'DowntimeController@update');
-    Route::get('/admin/downtime/delete/{id}', 'DowntimeController@updateDeleted');
+    //Jenis Downtime
+    Route::get('/admin/jenisdowntime', 'JenisDowntimeController@index')->name('downtime');
+    Route::get('/admin/jenisdowntime/create', 'JenisDowntimeController@create')->name('jenisdowntime.create');
+    Route::post('/admin/jenisdowntime/store', 'JenisDowntimeController@store')->name('downtime.store');
+    Route::get('/admin/jenisdowntime/show/{id}', 'JenisDowntimeController@show');
+    Route::get('/admin/jenisdowntime/edit/{id}', 'JenisDowntimeController@edit');
+    Route::put('/admin/jenisdowntime/update/{id}', 'JenisDowntimeController@update');
+    Route::get('/admin/jenisdowntime/delete/{id}', 'JenisDowntimeController@updateDeleted');
     
     //Mata Uang
     Route::get('/admin/matauang', 'MataUangController@index')->name('matauang');
