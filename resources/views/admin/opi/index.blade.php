@@ -17,12 +17,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Kontrak</h1>
+          <h1 class="m-0">OPI</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Kontrak</li>
+            <li class="breadcrumb-item active">OPI</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -35,16 +35,16 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('opi.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_palet">
           <thead>
             <tr>
               {{-- <th scope="col">No.</th> --}}
-              <th scope="col">No Kontrak</th>
-              <th scope="col">No MC</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Customer</th>
+              <th scope="col">No OPI</th>
+              <th scope="col">Kontrak</th>
+              <th scope="col">DT</th>
+              <th scope="col">Item</th>
               <th scope="col">Sales</th>
               <th scope="col">status</th>
               {{-- <th scope="col">No PO Customer</th> --}}
@@ -54,13 +54,14 @@
           <tbody>
             <?php
             $no = 1;
-            foreach ($kontrak_m as $data) { ?>
+            foreach ($opi_m as $data) { 
+              ?>
               <tr>
                 {{-- <td scope="row">{{ $no++ }}</td> --}}
-                <td><b>{{ $data->kode }}</b></td>
-                <td>{{ $data->nomc }}</td>
-                <td>{{ $data->tglKontrak }}</td>
-                <td>{{ $data->customer_name }}</td>
+                <td><b>{{ $data->NoOPI }}</b></td>
+                <td>{{ $data->namaKontrak }}</td>
+                <td>{{ $data->dt }}</td>
+                <td>{{ $data->Item }}</td>
                 <td>{{ $data->sales }}</td>
                 <td>{{ $data->status }}</td>
                 {{-- <td>{{ $data->noPoCustomer }}</td> --}}

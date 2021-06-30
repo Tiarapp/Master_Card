@@ -359,35 +359,95 @@ class Kontrak_DController extends Controller
 
     public function pdfprint($id){
 
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
+        //     ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+        //     ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+        //     ->leftJoin('box', 'box_id', '=', 'box.id')
+        //     ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+        //     ->get();
+        // $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')
+        // ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+        // ->select('mc.*', 'substance.kode as substancePel')
+        // ->get();
+        // $top = DB::table('top')->get();
+        // $sales = DB::table('sales_m')->get();
+
+        // $kontrak_D = DB::table('kontrak_d')
+        //     ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+        //     ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+        //     ->where('kontrak_m_id', '=', $id)
+        //     ->select('kontrak_d.*', 'mc.kode as mc', 'mc.gramSheetBoxKontrak as gram', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox','substance.kode as substance', 'mc.flute as flute', 'mc.namaBarang as Barang')
+        //     ->get();
+
+        // $kontrak_M = DB::table('kontrak_m')
+        //     ->where('kontrak_m.id', '=', $id)
+        //     // ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+        //     // ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+        //     // ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+        //     // ->leftJoin('box', 'box_id', '=', 'box.id')
+        //     // ->select('kontrak_m.*', 'mc.id as mcid', 'mc.kode as mckode', 'mc.namaBarang as namaBarang', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox', 'mc.gramSheetCorrKontrak as gramSheetCorrKontrak', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.wax as wax', 'mc.joint as joint', 'mc.bungkus as bungkus', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+        //     ->first();
+
+        // // dd($kontrak_M);
+        // $count = count($kontrak_D);
+
+
+        // // dd($kontrak_M);
+        // return view('admin.kontrak.pdf', compact(
+        //     'cust',
+        //     'mc',
+        //     'mcpel',
+        //     'top',
+        //     'sales',
+        //     'count',
+        //     'kontrak_D'
+        // ), ['kontrak_M' => $kontrak_M]);
+
         $cust = DB::connection('firebird')->table('TCustomer')->get();
-        $mc = DB::table('mc')->where('tipeMC', '=', 'BOX')
+        
+        $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
             ->get();
-        $mcpel = DB::table('mc')->where('tipeMC', '!=', 'BOX')
-        ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-        ->select('mc.*', 'substance.kode as substancePel')
-        ->get();
         $top = DB::table('top')->get();
         $sales = DB::table('sales_m')->get();
+        // End Dropdown
 
-        $kontrak_D = DB::table('kontrak_d')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.gramSheetBoxKontrak as gram', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox','substance.kode as substance', 'mc.flute as flute')
-            ->get();
 
-        $kontrak_M = DB::table('kontrak_m')
-            ->where('kontrak_m.id', '=', $id)
+        // tampilkan data yang akan di edit
+        $kontrakBox = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('kontrak_m.*', 'mc.id as mcid', 'mc.kode as mckode', 'mc.namaBarang as namaBarang', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox', 'mc.gramSheetCorrKontrak as gramSheetCorrKontrak', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.wax as wax', 'mc.joint as joint', 'mc.bungkus as bungkus', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->where('tipe', '=', 'BOX')
+            ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus')
             ->first();
+        // dd($kontrakBox);
+
+
+        $kontrak_D = DB::table('kontrak_d')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->where('tipe', '!=', 'BOX')
+            ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus')
+            ->get();
+
+        $kontrak_M = DB::table('kontrak_m')
+            ->where('kontrak_m.id', '=', $id)
+            ->first();
+        // End tampilkan untuk edit
+        $dt = DB::table('dt')
+            ->where('kontrak_m_id', '=', $id)
+            ->get();
+
+        // dd($dt);
+
 
         // dd($kontrak_M);
         $count = count($kontrak_D);
@@ -397,11 +457,12 @@ class Kontrak_DController extends Controller
         return view('admin.kontrak.pdf', compact(
             'cust',
             'mc',
-            'mcpel',
             'top',
             'sales',
             'count',
-            'kontrak_D'
+            'kontrak_D',
+            'kontrakBox',
+            'dt',
         ), ['kontrak_M' => $kontrak_M]);
     }
 }

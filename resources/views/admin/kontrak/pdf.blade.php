@@ -46,12 +46,12 @@
       th.style10 { vertical-align:middle; text-align:center; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:22pt; background-color:white }
       td.style11 { vertical-align:middle; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
       th.style11 { vertical-align:middle; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
-      td.style12 { vertical-align:middle; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
-      th.style12 { vertical-align:middle; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
+      td.style12 { vertical-align:middle; text-align:center; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
+      th.style12 { vertical-align:middle; text-align:center; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
       td.style13 { vertical-align:bottom; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
       th.style13 { vertical-align:bottom; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
-      td.style14 { vertical-align:bottom; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
-      th.style14 { vertical-align:bottom; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
+      td.style14 { vertical-align:bottom; text-align:center; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
+      th.style14 { vertical-align:bottom; text-align:center; padding-left:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; font-weight:bold; color:#000000; font-family:'Calibri'; font-size:12pt; background-color:white }
       td.style15 { vertical-align:bottom; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Calibri'; font-size:11pt; background-color:white }
       th.style15 { vertical-align:bottom; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:2px solid #000000 !important; color:#000000; font-family:'Calibri'; font-size:11pt; background-color:white }
       td.style16 { vertical-align:bottom; text-align:right; padding-right:0px; border-bottom:none #000000; border-top:none #000000; border-left:none #000000; border-right:none #000000; text-decoration:underline; color:#000000; font-family:'Calibri'; font-size:11pt; background-color:white }
@@ -373,7 +373,6 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
         <col class="col14">
         <tbody>
           <tr class="row0">
-            <td class="column0">&nbsp;</td>
             <td class="column1">&nbsp;</td>
             <td class="column2">&nbsp;</td>
             <td class="column3">&nbsp;</td>
@@ -384,13 +383,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8">&nbsp;</td>
             <td class="column9">&nbsp;</td>
             <td class="column10">&nbsp;</td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row1">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style2 null">
                 <div style="position: relative;">
                 <img style="position: absolute; z-index: 1; left: 20px; top: 5px; width: 70px; height: 80px;" src="{{ url('/upload/spa.png') }}" border="0" />
@@ -405,42 +399,27 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style6 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row2">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
-            <td class="column4 style10 s style10" colspan="6    " rowspan="2">KONTRAK</td>
-            <td class="column6 style137 s">NO  </td>
+            <td class="column4 style10 s style10" colspan="6" rowspan="2">KONTRAK</td>
+            <td class="column6 style137 s" style="width: 69px">No Kontrak</td>
             <td class="column7 style11 s style12" colspan="2">{{ $kontrak_M->kode }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row3">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
-            <td class="column6 style137 s">PO CUSTOMER</td>
+            <td class="column6 style137 s">PO</td>
             <td class="column7 style13 s style14" colspan="2">{{ $kontrak_M->poCustomer }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row4">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -451,13 +430,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row5">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -468,13 +442,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row6">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -483,37 +452,22 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column6 style16 null style18" colspan="7"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row7">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style19 s">CUSTOMER</td>
             <td class="column2 style20 null"></td>
             <td class="column3 style21 s style22" colspan="10">{{ $kontrak_M->customer_name }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row8">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style8 s">ALAMAT KIRIM</td>
+            <td class="column1 style8 s" style="width: 100px">ALAMAT KIRIM</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style23 s style24" colspan="10">{{ $kontrak_M->alamatKirim }}</td>
+            <td class="column3 style23 s style24"  colspan="10">{{ $kontrak_M->alamatKirim }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row9">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style19 s">TELP / FAX</td>
             <td class="column2 style20 null"></td>
             <td class="column3 style23 s style23" colspan="2">{{ $kontrak_M->custTelp }}</td>
@@ -525,174 +479,112 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style135 s style136" colspan="2">{{ $kontrak_M->tipeOrder }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row10">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style26 s">KETERANGAN</td>
             <td class="column2 style27 null"></td>
             <td class="column9 style28 s " colspan="5">UKURAN HARUS PAS</td>
             <td class="column3 style28 s style29" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row11">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style30 s style32" colspan="12">BOX</td>
-            <td class="column9">&nbsp;</td>
-            <td class="column10">&nbsp;</td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
             <td class="column13 style33 null"></td>
             <td class="column14 style33 null"></td>
           </tr>
           <tr class="row12">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Item</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style35 s style35" colspan="3">{{ $kontrak_M->namaBarang }}</td>
+            <td class="column3 style35 s style35" colspan="3">{{ $kontrakBox->Barang }}</td>
             <td class="column2 style20 null"></td>
             <td class="column2 style20 null"></td>
             <td class="column6 style36 s" colspan="3">Jumlah Order</td>
-            <td class="column7 style132 n style133" colspan="2">{{ $kontrak_M->pcsKontrak }} </td>
+            <td class="column7 style132 n style133" colspan="2">{{ $kontrakBox->pcsKontrak }} </td>
             <td class="column9 style7 null"></td>
-            <td class="column10">&nbsp;</td>
             <td class="column11 style20 null"></td>
-            <td class="column12">&nbsp;</td>
             <td class="column13 style37 null"></td>
             <td class="column14 style37 null"></td>
           </tr>
           <tr class="row13">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Kualitas</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style23 s style23" colspan="3">{{ $kontrak_M->substance }}</td>
+            <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->substance }}</td>
             <td class="column2 style20 null"></td>
             <td class="column2 style20 null"></td>
             <td class="column6 style36 s" colspan="3">Toleransi</td>
-            <td class="column7 style128 n style129" colspan="2">{{ $kontrak_M->pctToleransiLebihKontrak }}%</td>
-            <td class="column9">&nbsp;</td>
-            <td class="column10">&nbsp;</td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
+            <td class="column7 style128 n style129" colspan="2">{{ $kontrakBox->pctToleransiLebihKontrak }}%</td>
           </tr>
           <tr class="row14">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Warna</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style23 s style23" colspan="3">{{ $kontrak_M->warna }}</td>
+            <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->warna }}</td>
             <td class="column2 style20 null"></td>
             <td class="column2 style20 null"></td>
             <td class="column6 style36 s" colspan="3">TOP</td>
             <td class="column7 style130 s style131" colspan="2">{{ $kontrak_M->top }}</td>
-            <td class="column9">&nbsp;</td>
-            <td class="column10">&nbsp;</td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row15">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Ukuran</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style23 s style23" colspan="3">{{ $kontrak_M->panjangSheetBox }} x {{ $kontrak_M->lebarSheetBox }} x 1</td>
+            <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->panjangSheetBox }} x {{ $kontrakBox->lebarSheetBox }} x 1</td>
             <td class="column2 style20 null"></td>
             <td class="column2 style20 null"></td>
             <td class="column6 style36 s" colspan="3">Wax</td>
-            <td class="column7 style23 s style24" colspan="2">{{ $kontrak_M->wax }}</td>
+            <td class="column7 style23 s style24" colspan="2">{{ $kontrakBox->wax }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row16">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Harga</td>
             <td class="column2 style20 null"></td>
-            <td class="column3 style134 n">{{ $kontrak_M->harga }} </td>
+            <td class="column3 style134 n">{{ $kontrakBox->harga }} </td>
             <td class="column4 style21 s style21" colspan="2">Exclude PPN</td>
             <td class="column2 style20 null"></td>
             <td class="column2 style20 null"></td>
             <td class="column6 style38 s" colspan="3">TIPE CREASE</td>
-            <td class="column7 style23 s style24" colspan="2">{{ $kontrak_M->tipeCrease }}</td>
+            <td class="column7 style23 s style24" colspan="2">{{ $kontrakBox->tipeCrease }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row17">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style34 s">Flute</td>
             <td class="column2 style39 null"></td>
-            <td class="column3 style23 s style23" colspan="3">{{ $kontrak_M->flute }}</td>
+            <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->flute }}</td>
             <td class="column2 style39 null"></td>
             <td class="column2 style39 null"></td>
             <td class="column6 style38 s" colspan="3">JOIN</td>
-            <td class="column7 style23 s style24" colspan="2">{{ $kontrak_M->joint }}</td>
+            <td class="column7 style23 s style24" colspan="2">{{ $kontrakBox->joint }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row18">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style19 s">Bentuk</td>
             <td class="column2 style39 null"></td>
-            <td class="column3 style23 s style23" colspan="3">{{ $kontrak_M->tipeBox }}</td>
+            <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->tipeBox }}</td>
             <td class="column2 style39 null"></td>
             <td class="column2 style39 null"></td>
             <td class="column6 style9 s" colspan="3">Bungkus</td>
-            <td class="column7 style23 s style24" colspan="2">{{ $kontrak_M->bungkus }}</td>
+            <td class="column7 style23 s style24" colspan="2">{{ $kontrakBox->bungkus }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row19">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style40 s">Packing</td>
             <td class="column2 style41 null"></td>
-            <td class="column3 style42 s style42" colspan="3">{{ $kontrak_M->koli }} BOX / COLLY</td>
+            <td class="column3 style42 s style42" colspan="3">{{ $kontrakBox->koli }} BOX / COLLY</td>
             <td class="column6 style43 null"></td>
             <td class="column7 style43 null"></td>
             <td class="column8 style44 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row20">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style45 s style47" colspan="12">PELENGKAP</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row21">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style48 s style49" colspan="2">JENIS</td>
             <td class="column3 style50 s" colspan="2">UKURAN</td>
             <td class="column4 style49 s style49" colspan="4">KUALITAS</td>
@@ -700,32 +592,22 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column7 style49 s style51" colspan="2">QTY</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
 
           @foreach ($kontrak_D as $data)
 
           <tr class="row22">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style52 s style53" colspan="2">LAYER {{ $data->mc }}</td>
+            <td class="column1 style52 s style53" colspan="2">{{ $data->tipe }}</td>
             <td class="column3 style54 s" colspan="2">{{ $data->panjangSheetBox }} x {{ $data->lebarSheetBox }}</td>
             <td class="column4 style55 s style55" colspan="4">{{ $data->substance }}</td>
             <td class="column6 style56 s" colspan="2">{{ $data->flute }}</td>
-            <td class="column7 style57 n style58" colspan="2">1200</td>
+            <td class="column7 style57 n style58" colspan="2">{{ $data->pcsKontrak }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           
           @endforeach
           <tr class="row27">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style73 null"></td>
             <td class="column2 style74 null"></td>
             <td class="column3 style75 null"></td>
@@ -736,88 +618,30 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style77 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
-          {{-- <tr class="row28">
-            <td class="column0">&nbsp;</td>
+          <tr class="row28">
             <td class="column1 style78 s style79" colspan="2">Tanggal Kirim</td>
-            <td class="column3 style80 s">Qty</td>
-            <td class="column4 style81 s">Tanggal Kirim</td>
-            <td class="column5 style80 s">Qty</td>
-            <td class="column6 style81 s">Tanggal Kirim</td>
+            <td class="column3 style80 s"  colspan="2">Qty</td>
+            <td class="column4 style81 s"  colspan="2">Tanggal Kirim</td>
+            <td class="column5 style80 s"  colspan="2">Qty</td>
+            <td class="column6 style81 s"  colspan="2">Tanggal Kirim</td>
             <td class="column7 style82 s style83" colspan="2">Qty</td>
             <td class="column9 style7 null"></td>
             <td class="column10">&nbsp;</td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
-          <tr class="row29">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style84 s style85" colspan="2">02 Maret 2021</td>
-            <td class="column3 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column4 style87 s">06 Maret 2021</td>
-            <td class="column5 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column6 style88 s">10 Maret 2021</td>
-            <td class="column7 style89 n style90" colspan="2">&nbsp;&nbsp;5,000 </td>
-            <td class="column9 style7 null"></td>
-            <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
-          </tr>
-          <tr class="row30">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style84 s style85" colspan="2">03 Maret 2021</td>
-            <td class="column3 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column4 style87 s">07 Maret 2021</td>
-            <td class="column5 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column6 style88 s">11 Maret 2021</td>
-            <td class="column7 style89 n style90" colspan="2">&nbsp;&nbsp;5,000 </td>
-            <td class="column9 style7 null"></td>
-            <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
-          </tr>
-          <tr class="row31">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style84 s style85" colspan="2">04 Maret 2021</td>
-            <td class="column3 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column4 style87 s">08 Maret 2021</td>
-            <td class="column5 style86 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column6 style88 s">12 Maret 2021</td>
-            <td class="column7 style89 n style90" colspan="2">&nbsp;&nbsp;5,000 </td>
-            <td class="column9 style7 null"></td>
-            <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
-          </tr>
-          <tr class="row32">
-            <td class="column0">&nbsp;</td>
-            <td class="column1 style91 s style92" colspan="2">05 Maret 2021</td>
-            <td class="column3 style93 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column4 style94 s">09 Maret 2021</td>
-            <td class="column5 style93 n">&nbsp;&nbsp;5,000 </td>
-            <td class="column6 style95 s">13 Maret 2021</td>
-            <td class="column7 style96 n style97" colspan="2">&nbsp;&nbsp;5,000 </td>
-            <td class="column9 style7 null"></td>
-            <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
-          </tr> --}}
+          @foreach ($dt as $data)
+            <tr class="row29">
+              <td class="column1 style84 s style85" colspan="2">{{ $data->tglKirimDt }}</td>
+              {{-- <td class="column3 style86 n" colspan="2">{{ $data->pcsDt }}</td>
+              <td class="column4 style87 s" colspan="2">{{ $data->tglKirimDt }}</td>
+              <td class="column5 style86 n" colspan="2">{{ $data->pcsDt }}</td>
+              <td class="column6 style88 s" colspan="2">{{ $data->tglKirimDt }}</td> --}}
+              <td class="column7 style89 n style90" colspan="2">{{ $data->pcsDt }}</td>
+              <td class="column9 style7 null"></td>
+              <td class="column10 style7 null"></td>
+            </tr>
+          @endforeach
           <tr class="row33">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style98 s style99" colspan="3">Hormat Kami,</td>
             <td class="column4 style4 null"></td>
             <td class="column5 style4 null"></td>
@@ -828,13 +652,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style6 null"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row34">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -847,13 +666,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null" colspan="3"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row35">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style8 null"></td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -865,13 +679,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null" colspan="4"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row36">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style101 s style102" colspan="3">{{ $kontrak_M->sales }}</td>
             <td class="column4 style39 null"></td>
             <td class="column5 style39 null"></td>
@@ -883,13 +692,8 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row37">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style105 s">Keterangan :</td>
             <td class="column2 style9 null"></td>
             <td class="column3 style9 null"></td>
@@ -900,81 +704,42 @@ body { margin-left: 0in; margin-right: 0in; margin-top: 0in; margin-bottom: 0.75
             <td class="column8 style15 null" colspan="5"></td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row38">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style125 s style127" colspan="12">- Pembayaran dapat ditransfer ke</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null" ></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row39">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style122 s style124" colspan="12">&nbsp;&nbsp;Maybank 250 808 9999 atas nama PT Sarana Packaging Agrapana</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row40">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style119 s style121" colspan="12">- Kontrak ini bersifat mengikat dan merupakan tanda bukti yang sah</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row41">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style108 s style110" colspan="12">PT. Sarana Packaging Agrapana</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row42">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style111 s style113" colspan="12">Office: JL. Imam Bonjol 101, RT 004 RW 001, Surabaya 62064</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row43">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style114 s style116" colspan="12">Factory: JL Raya Lamongan-Mantup Km. 16,4, Kedungsari,  Kembangbahu, Ds Moronyamplung, Kab. Lamongan 62282</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
           <tr class="row44">
-            <td class="column0">&nbsp;</td>
             <td class="column1 style117 s style118" colspan="6">Email : marketing@saranapackaging.com</td>
             <td class="column7 style106 f style107" colspan="6">{{ date("d-m-Y h:i:s") }}</td>
             <td class="column9 style7 null"></td>
             <td class="column10 style7 null"></td>
-            <td class="column11">&nbsp;</td>
-            <td class="column12">&nbsp;</td>
-            <td class="column13">&nbsp;</td>
-            <td class="column14">&nbsp;</td>
           </tr>
         </tbody>
     </table>

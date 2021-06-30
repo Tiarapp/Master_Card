@@ -200,9 +200,42 @@ class MastercardController extends Controller
      * @param  \App\Models\Mastercard  $mastercard
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mastercard $mastercard)
+    public function edit($id)
     {
-        //
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $substance = DB::table('substance')
+            ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
+            ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
+            ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
+            ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
+            ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
+            ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
+            ->get();
+        $box = DB::table('box')->get();
+        $colorcombine = DB::table('color_combine')->get();
+        $joint = DB::table('joint')->get();
+        $koli = DB::table('koli')->get();
+
+        $mc = DB::table('mc')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->leftJoin('substance as subskontrak', 'substanceKontrak_id', '=', 'subskontrak.id')
+            ->leftJoin('substance as subsproduksi', 'substanceProduksi_id', '=', 'subsproduksi.id')
+            ->leftJoin('color_combine', 'colorcombine_id', '=', 'color_combine.id')
+            ->where('mc.id', '=', $id)
+            ->select('mc.*','color_combine.id as ccid','color_combine.nama as ccnama','subskontrak.namaMc as subsKontrak','subsproduksi.namaMc as subsProduksi', 'box.panjangDalamBox as panjangDalam','box.lebarDalamBox as lebarDalam','box.tinggiDalamBox as tinggiDalam', 'box.id as box_id' )
+            ->first();
+
+        // dd($mc);
+        
+        return view('admin.mastercard.edit', compact([
+            'item',
+            'substance',
+            'box',
+            'colorcombine',
+            'joint',
+            'koli',
+            'mc'
+        ]));
     }
 
     /**
@@ -212,9 +245,109 @@ class MastercardController extends Controller
      * @param  \App\Models\Mastercard  $mastercard
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mastercard $mastercard)
+    public function update(Request $request)
     {
-        //
+
+        $kode = DB::table('mc')
+            ->where('kode', '=', $request->kode)
+            ->get();
+        
+        $rev = "R".count($kode);
+
+        // dd($rev);
+
+        $messages = [
+            'koli.required' => 'Mohon isi Kolom Koli'
+        ];
+
+        $this->validate($request, [
+            'kode' => 'required',
+            'revisi' => 'nullable',
+            'namaBarang' => 'required',
+            'kodeBarang' => 'nullable',
+            'poCsustomer' => 'nullable',
+            'tipebox' => 'required',
+            'CreasCorrP' => 'nullable',
+            'CreasCorrL' => 'nullable',
+            'joint' => 'nullable',
+            'flute' => 'required',
+            'lebarSheet' => 'required',
+            'panjangSheet' => 'required',
+            'luasSheet' => 'required',
+            'lebarSheetBox' => 'required',
+            'panjangSheetBox' => 'required',
+            'luasSheetBox' => 'required',
+            'mesin' => 'nullable',
+            'outConv' => 'required',
+            'substanceKontrak_id' => 'required',
+            'substanceProduksi_id' => 'required',
+            'koli' => 'required',
+            'bungkus' => 'required',
+            'wax' => 'nullable',
+            'tipeMc' => 'required',
+            'box_id' => 'required',
+            'gramSheetBoxKontrak' => 'nullable',
+            'gramSheetBoxKontrak2' => 'nullable',
+            'gramSheetBoxProduksi' => 'nullable',
+            'gramSheetBoxProduksi2' => 'nullable',
+            'gramSheetCorrKontrak' => 'nullable',
+            'gramSheetCorrKontrak2' => 'nullable',
+            'gramSheetCorrProduksi' => 'nullable',
+            'gramSheetCorrProduksi2' => 'nullable',
+            'colorCombine_id' => 'required',
+            'keterangan' => 'nullable',
+            'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
+            'createdBy' => 'required',
+        ], $messages);
+
+        $file = $request->file('gambar');
+        $nama_file = time()."_".$file->getClientOriginalName();
+
+        $tujuan_upload = 'upload';
+        $file->move($tujuan_upload, $nama_file);
+
+        Mastercard::create([
+            'kode' => $request->kode,
+            'revisi' => $rev,
+            'namaBarang' => $request->namaBarang,
+            'kodeBarang' => $request->kodeBarang,
+            'poCustomer' => $request->poCustomer,
+            'tipebox' => $request->tipebox,
+            'CreasCorrP' => $request->creasConv,
+            'CreasCorrL' => $request->creasCorr,
+            'joint' => $request->joint,
+            'flute' => $request->flute,
+            'lebarSheet' => $request->lebarSheet,
+            'panjangSheet' => $request->panjangSheet,
+            'tinggiSheet' => $request->tinggiSheet,
+            'luasSheet' => $request->luasSheet,
+            'panjangSheetBox' => $request->panjangSheetBox,
+            'lebarSheetBox' => $request->lebarSheetBox,
+            'luasSheetBox' => $request->luasSheetBox,
+            'substanceKontrak_id' => $request->substanceKontrak_id,
+            'substanceProduksi_id' => $request->substanceProduksi_id,
+            'tipeMc' => $request->tipeMc,
+            'mesin' => $request->mesin,
+            'outConv' => $request->outConv,
+            'koli' => $request->koli,
+            'bungkus' => $request->bungkus,
+            'wax' => $request->wax,
+            'box_id' => $request->box_id,
+            'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
+            'gramSheetBoxKontrak2' => $request->gramSheetBoxKontrak2,
+            'gramSheetCorrKontrak' => $request->gramSheetCorrKontrak,
+            'gramSheetCorrKontrak2' => $request->gramSheetCorrKontrak2,
+            'gramSheetBoxProduksi' => $request->gramSheetBoxProduksi,
+            'gramSheetBoxProduksi2' => $request->gramSheetBoxProduksi2,
+            'gramSheetCorrProduksi' => $request->gramSheetCorrProduksi,
+            'gramSheetCorrProduksi2' => $request->gramSheetCorrProduksi2,
+            'colorCombine_id' => $request->colorCombine_id,
+            'keterangan' => $request->keterangan,
+            'gambar' => $nama_file,
+            'createdBy' => $request->createdBy
+        ]);
+
+        return redirect('admin/mastercard');
     }
 
     /**
@@ -240,10 +373,10 @@ class MastercardController extends Controller
             ->first();
 
         // var_dump($mc->tipebox);
-        $substancKontrak = explode(" ", $mc->SubsKontrakNama);
-        $substancProduksi = explode(" ", $mc->SubsProduksiNama);
-        $namaSubsK = $substancKontrak[1];
-        $namaSubsP = $substancKontrak[1];
+        // $substancKontrak = explode(" ", $mc->SubsKontrakNama);
+        // $substancProduksi = explode(" ", $mc->SubsProduksiNama);
+        $namaSubsK = $mc->SubsKontrakNama;
+        $namaSubsP = $mc->SubsProduksiNama;
         return view('admin.mastercard.pdfb1', compact('mc','namaSubsK','namaSubsP'));
     }
 

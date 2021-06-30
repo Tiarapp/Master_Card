@@ -57,12 +57,9 @@
             $no = 1;
             foreach ($kontrak_m as $data) { ?>
               <tr>
-                {{-- <td scope="row">{{ $no++ }}</td> --}}
                 <td><b>{{ $data->kode }}</b></td>
                 <td>{{ $data->tglKontrak }}</td>
                 <td>
-                  {{-- {{ dd($data->kontrak_d) }} --}}
-
                   @foreach ($data->kontrak_d as $kontrakd)
                     <li>{{ $kontrakd->mc->kode }}|{{ $kontrakd->tipe }}</li>
                   @endforeach
@@ -74,7 +71,6 @@
                 </td>
                 <td>{{ $data->customer_name }}</td>
                 <td>{{ $data->sales }}</td>
-                {{-- <td>{{ $data->noPoCustomer }}</td> --}}
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
