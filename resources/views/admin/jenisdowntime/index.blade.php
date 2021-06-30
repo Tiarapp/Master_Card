@@ -2,25 +2,6 @@
 <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 
 @extends('admin.templates.partials.default')
-
-                                
-$table->id('id');
-$table->foreignId('mesin_id')->index();
-$table->string('downtime')->index();
-$table->enum('category',['CORR','PRINTING','FINISHING','MEKANIK'])->index();  //INPUT IT
-
-$table->integer('allowedMinute')->index();
-// TRACKING
-$table->string('createdBy');                    //Auto ambil dari login
-$table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
-$table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
-$table->string('deletedBy')->nullable();        //Auto ambil dari login
-$table->integer('printedKe')->nullable();       //Auto ambil dari login
-$table->dateTime('printedAt')->nullable();      //Auto ambil dari login
-$table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
-$table->timestamps();
-
-
 @section('content')
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -28,27 +9,46 @@ $table->timestamps();
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Flute</h1>
+          <h1 class="m-0">Jenis Downtime</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Flute</li>
+            <li class="breadcrumb-item active">Jenis Downtime</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
-
+  
+  
+  
+  $table->id('id');
+  $table->foreignId('mesin_id')->index();
+  $table->string('downtime')->index();
+  $table->enum('category',['CORR','PRINTING','FINISHING','MEKANIK'])->index();  //INPUT IT
+  
+  $table->integer('allowedMinute')->index();
+  // TRACKING
+  $table->string('createdBy');                    //Auto ambil dari login
+  $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
+  $table->dateTime('deletedAt')->nullable();      //Auto ambil dari today()
+  $table->string('deletedBy')->nullable();        //Auto ambil dari login
+  $table->integer('printedKe')->nullable();       //Auto ambil dari login
+  $table->dateTime('printedAt')->nullable();      //Auto ambil dari login
+  $table->string('branch')->default('Lamongan')->index();              //Auto ambil dari login awal
+  $table->timestamps();
+  
+  
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('flute.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('jenisdowntime.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
-        <table class="table table-bordered" id="data_flute">
+        <table class="table table-bordered" id="data_jenisdowntime">
           <thead>
             <tr>
               <th scope="col">No.</th>
