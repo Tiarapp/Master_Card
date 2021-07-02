@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/flute/delete/{id}', 'FluteController@updateDeleted');
 
     //Jenis Downtime
-    Route::get('/admin/jenisdowntime', 'JenisDowntimeController@index')->name('downtime');
+    Route::get('/admin/jenisdowntime', 'JenisDowntimeController@index')->name('jenisdowntime');
     Route::get('/admin/jenisdowntime/create', 'JenisDowntimeController@create')->name('jenisdowntime.create');
     Route::post('/admin/jenisdowntime/store', 'JenisDowntimeController@store')->name('jenisdowntime.store');
     Route::get('/admin/jenisdowntime/show/{id}', 'JenisDowntimeController@show');

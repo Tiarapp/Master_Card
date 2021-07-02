@@ -22,30 +22,39 @@
                     </div>
                 @endif
 
-                
-                
-                <form action="{{ route('jenisdowntime.store') }}" method="POST">
+                <form action="{{ route('JenisDowntime.store') }}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Flute">
                             <div class="form-group">
                                 <label>Mesin</label>
                                 {{-- <div class="row"> --}}
                                     {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                    <input type="text" class="form-control txt_line" name="mesin" id="mesin" autocomplete="off">
+                                    <select class="js-example-basic-single col-md-12" name="mesin" id="mesin" onchange="update_crease_corr()">
+                                        <option value="">Pilih Mesin ..</option>
+                                        @foreach ($mesin as $data)
+                                        <option value="{{ $data->kode }}">{{ $data->kode }}</option>
+                                        @endforeach
+                                    </select>
                                     {{-- </div> --}}
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input Downtime">
                                 <div class="form-group">
                                     <label>Downtime</label>
                                     <input type="text" class="form-control txt_line" name="downtime" id="downtime">
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Kategori Downtime">
                                 <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" class="form-control txt_line" name="category" id="category">
+                                    <label>PIC</label>
+                                    <select class="js-example-basic-single col-md-12" name="pic" id="pic">
+                                        <option value="CORR">CORR</option>
+                                        <option value="PRINTING">PRINTING</option>
+                                        <option value="FINISHING">FINISHING</option>
+                                        <option value="MEKANIK">MEKANIK</option>
+                                        <option value="ELEKTRIK">ELEKTRIK</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12">
