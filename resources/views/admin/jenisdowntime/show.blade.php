@@ -38,8 +38,8 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Category</label>
-                                <input type="text" class="form-control txt_line" name="category" id="category" value="{{ $jenisdowntime->category }}"readonly>
+                                <label>PIC</label>
+                                <input type="text" class="form-control txt_line" name="pic" id="pic" value="{{ $jenisdowntime->pic }}"readonly>
                             </div>
                         </div>
                         <div class="col-md-12">

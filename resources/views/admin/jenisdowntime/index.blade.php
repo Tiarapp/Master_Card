@@ -27,15 +27,15 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       
-      <a href="{{ route('jenisdowntime.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('JenisDowntime.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
-        <table class="table table-bordered" id="data_jenisdowntime">
+        <table class="table table-bordered" id="data_JenisDowntime">
           <thead>
             <tr>
               <th scope="col">Mesin</th>
               <th scope="col">Downtime</th>
-              <th scope="col">Category</th>
-              <th scope="col">Yang diperbolehkan</th>
+              <th scope="col">PIC</th>
+              <th scope="col">Downtime yang diperbolehkan (menit)</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -43,20 +43,20 @@
           <tbody>
             <?php
             $no = 1;
-            foreach ($jenisdowntime as $data) { ?>
+            foreach ($JenisDowntime as $data) { ?>
               <tr>
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->mesin }}</td>
                 <td>{{ $data->downtime }}</td>
-                <td>{{ $data->category }}</td>
+                <td>{{ $data->pic }}</td>
                 <td>{{ $data->allowedMinute }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="../admin/jenisdowntime/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="../admin/jenisdowntime/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../admin/jenisdowntime/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      <a href="../admin/JenisDowntime/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                      <a href="../admin/JenisDowntime/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      <a href="../admin/JenisDowntime/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                     </div>
                   </div>
                 </td>
@@ -72,8 +72,7 @@
   </section>
   <!-- /.content -->
   @endsection
-  
-  
+ 
   @section('javascripts')
   <!-- DataTables -->
   <script>

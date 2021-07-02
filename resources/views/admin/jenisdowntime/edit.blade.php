@@ -19,7 +19,7 @@
                 </div>
                 @endif
                 
-                <form action="../update/{{ $downtime->id }}" method="POST">
+                <form action="../update/{{ $JenisDowntime->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
                     <div class="row">
@@ -28,32 +28,37 @@
                                 <label>Mesin</label>
                                 {{-- <div class="row"> --}}
                                     {{-- <input type="text" class="form-control txt_line col-md-2" name="kode" id="kode" value="STN" readonly> --}}
-                                    <input type="text" class="form-control txt_line" name="mesinId" id="mesinId" value="{{ $downtime->kode }}" readonly>
+                                    <select class="js-example-basic-single col-md-12" name="mesinId" id="mesinId" onchange="update_crease_corr()">
+                                        <option value="">Pilih Mesin ..</option>
+                                        @foreach ($mesin as $data)
+                                        <option value="{{ $data->kode }}">{{ $data->kode }}</option>
+                                        @endforeach
+                                    </select>
                                     {{-- </div> --}}
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                 <label>Downtime</label>
-                                <input type="text" class="form-control txt_line" name="downtime" id="downtime" value="{{ $downtime->nama }}">
+                                <input type="text" class="form-control txt_line" name="downtime" id="downtime" value="{{ $JenisDowntime->nama }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Category</label>
-                                <input type="text" class="form-control txt_line" name="category" id="category" value="{{ $downtime->category }}">
+                                <label>PIC</label>
+                                <input type="text" class="form-control txt_line" name="pic" id="pic" value="{{ $JenisDowntime->category }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Downtime yang diperbolehkan (menit)</label>
-                                <input type="text" class="form-control txt_line" name="allowedMinute" id="allowedMinute" value="{{ $downtime->allowedMinute }}">
+                                <input type="text" class="form-control txt_line" name="allowedMinute" id="allowedMinute" value="{{ $JenisDowntime->allowedMinute }}">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Branch</label>
-                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $downtime->branch }}">
+                                <input type="text" class="form-control txt_line" name="branch" id="branch" value="{{ $JenisDowntime->branch }}">
                             </div>
                         </div>
                         <input type="hidden" class="form-control txt_line" name="lastUpdatedBy" id="lastUpdatedBy" value="{{ Auth::user()->name }}">

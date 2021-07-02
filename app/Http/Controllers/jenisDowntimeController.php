@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\jenisDowntime;
+use App\Models\JenisDowntime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class jenisDowntimeController extends Controller
+class JenisDowntimeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +19,7 @@ class jenisDowntimeController extends Controller
         $jenisdowntime = DB::table('jenis_downtime')
             ->get();
 
-        return view('admin.jenisdowntime.index', compact('jenisdowntime'));
+        return view('admin.JenisDowntime.index', compact('jenisdowntime'));
     }
 
     /**
@@ -28,7 +29,7 @@ class jenisDowntimeController extends Controller
      */
     public function create()
     {
-        return view('admin.jenisdowntime.create');
+        return view('admin.JenisDowntime.create');
     }
 
     /**
@@ -42,13 +43,13 @@ class jenisDowntimeController extends Controller
         $request->validate([
             'mesin' => 'required',
             'downtime' => 'required',
-            'category' => 'required',
+            'pic' => 'required',
             'allowedMinute' => 'nullable',
             'branch' => 'required',
             'createdBy' => 'required'
         ]);
 
-        $data = jenisDowntime::create($request->all());
+        $data = JenisDowntime::create($request->all());
 
         // return response()->json(['success' => true, 'last_insert_id' => $data->id], 200);
         return redirect('admin/JenisDowntime');
@@ -57,68 +58,68 @@ class jenisDowntimeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\jenisDowntime  $jenisDowntime
+     * @param  \App\Models\JenisDowntime  $JenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function show(JenisDowntime $jenisDowntime)
+    public function show($id)
     {
-        $jenisDowntime = jenisDowntime::find($id);
+        $JenisDowntime = JenisDowntime::find($id);
 
-        return view('admin.jenisDowntime.show', ['jenisDowntime' => $jenisDowntime]);
+        return view('admin.JenisDowntime.show', ['JenisDowntime' => $JenisDowntime]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\jenisDowntime  $jenisDowntime
+     * @param  \App\Models\JenisDowntime  $JenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function edit(jenisDowntime $jenisDowntime)
+    public function edit($id)
     {
-        $jenisDowntime = jenisDowntime::find($id);
+        $JenisDowntime = JenisDowntime::find($id);
 
-        return view('admin.jenisDowntime.edit', ['jenisDowntime' => $jenisDowntime]);
+        return view('admin.JenisDowntime.edit', ['JenisDowntime' => $JenisDowntime]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\jenisDowntime  $jenisDowntime
+     * @param  \App\Models\JenisDowntime  $JenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, jenisDowntime $jenisDowntime)
+    public function update($id, Request $request)
     {
         $request->validate([
             'mesin' => 'required',
             'downtime' => 'required',
-            'category' => 'required',
+            'pic' => 'required',
             'allowedMinute' => 'nullable',
             'branch' => 'required',
             'lastUpdatedBy' => 'required',
         ]);
 
-        $jenisDowntime = jenisDowntime::find($id);
+        $JenisDowntime = JenisDowntime::find($id);
 
-        $jenisDowntime->mesin = $request->mesin;
-        $jenisDowntime->downtime = $request->downtime;
-        $jenisDowntime->category = $request->category;
-        $jenisDowntime->allowedMinute = $request->allowedMinute;
-        $jenisDowntime->branch = $request->branch;
-        $jenisDowntime->lastUpdatedBy = Auth::user()->name;
+        $JenisDowntime->mesin = $request->mesin;
+        $JenisDowntime->downtime = $request->downtime;
+        $JenisDowntime->pic = $request->pic;
+        $JenisDowntime->allowedMinute = $request->allowedMinute;
+        $JenisDowntime->branch = $request->branch;
+        $JenisDowntime->lastUpdatedBy = Auth::user()->name;
 
-        $jenisDowntime->save();
+        $JenisDowntime->save();
 
-        return redirect('admin/jenisDowntime');
+        return redirect('admin/JenisDowntime');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\jenisDowntime  $jenisDowntime
+     * @param  \App\Models\JenisDowntime  $JenisDowntime
      * @return \Illuminate\Http\Response
      */
-    public function destroy(jenisDowntime $jenisDowntime)
+    public function destroy(JenisDowntime $JenisDowntime)
     {
         //
     }
