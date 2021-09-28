@@ -1,0 +1,34 @@
+<tbody>
+            <?php
+            $no = 1;
+            foreach ($kontrak_m as $data) { ?>
+              <tr>
+                <td><b>{{ $data->kode }}</b></td>
+                <td>{{ $data->tglKontrak }}</td>
+                <td>
+                  @foreach ($data->kontrak_d as $kontrakd)
+                    <li>{{ $kontrakd->mc->kode }}|{{ $kontrakd->tipe }}</li>
+                  @endforeach
+                </td>
+                <td>
+                  @foreach ($data->DeliveryTime as $dt)
+                    <li>{{ $dt->tglKirimDt }}</li>
+                  @endforeach
+                </td>
+                <td>{{ $data->customer_name }}</td>
+                <td>{{ $data->sales }}</td>
+                <td>
+                  <div class="input-group">
+                    <div class="input-group-append" id="button-addon4">
+                      {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
+                      <a href="../admin/kontrak/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="../admin/kontrak/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <?php
+            }
+            ?>
+          </tbody>

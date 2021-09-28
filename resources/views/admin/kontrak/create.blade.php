@@ -157,9 +157,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
-                                                    <option value="OB">Order Baru</option>
-                                                    <option value="OU">Order Ulang</option>
-                                                    <option value="OUP">Order Ulang Perubahan</option>
+                                                    <option value="Order Baru">Order Baru</option>
+                                                    <option value="Order Ulang">Order Ulang</option>
+                                                    <option value="Order Ulang Perubahan">Order Ulang Perubahan</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -229,7 +229,7 @@
                                                 <label>PO Customer</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" value="tes" name="poCustomer" id="poCustomer">
+                                                <input type="text" class="form-control txt_line" name="poCustomer" id="poCustomer">
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +263,7 @@
                                     <th scope="col">Qty(Pcs)</th>
                                     <th scope="col">Toleransi Lebih(%)</th>
                                     <th scope="col">Toleransi Kurang(%)</th>
-                                    <th scope="col">Harga</th>
+                                    <th scope="col">Harga/Pcs</th>
                                     <th scope="col">PPN (%)</th>
                                     <th scope="col">Tipe Box</th>
                                     <th scope="col">Toleransi Lebih Pcs</th>
@@ -272,6 +272,7 @@
                                     <th scope="col">Toleransi Kurang Kg</th>
                                     <th scope="col">Harga Belum PPN</th>
                                     <th scope="col">PPN (Rp)</th>
+                                    <th scope="col">Harga/Kg</th>
                                     <th scope="col">Qty(Kg)</th>
                                     <th scope="col">Total</th>
                                 </tr>
@@ -285,7 +286,7 @@
                                     echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly style='color:#FFF'>";
                                     echo "<tr>";
                                     echo    "<td>";
-                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
+                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData()'>";
                                         echo   "<option value=''>---</option>";
                                         foreach ($mc as $data) {
                                             echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode|$data->tipeMc</option>";
@@ -305,6 +306,7 @@
                                     echo "<td><input type='text' name='kgToleransiKurang[$i]' id='kgToleransiKurang[$i]'></td>";
                                     echo "<td><input type='text' name='totalSblTax[$i]' id='totalSblTax[$i]' ></td>";
                                     echo "<td><input type='text' name='hargaTax[$i]' id='hargaTax[$i]' ></td>";
+                                    echo "<td><input type='text' name='hargaKg[$i]' id='hargaKg[$i]' ></td>";
                                     echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]'></td>";
                                     echo "<td><input type='text' name='Total[$i]' id='Total[$i]' ></td>";
                                     echo "</tr>";
@@ -336,7 +338,6 @@
                                     echo "<tr>";
                                     echo "<td><input type='date' name='tglKirim[$i]' id='tglKirim[$i]'></td>";
                                     echo "<td><input type='text' name='dtPcs[$i]' id='dtPcs[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='dtKg[$i]' id='dtKg[$i]' onchange='getData();'></td>";
                                     echo "</tr>";
 
                                     
@@ -428,7 +429,7 @@
             document.getElementById('telp').value = cust[3];
             // document.getElementById('fax').value = cust[4];
             
-            // getGramKontrak();
+            console.log(cust);
         } );
     } );
     
@@ -500,11 +501,14 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+            // var dtPcs = document.getElementById('dtPcs[1]').value;
+            // var dtkg = (dtPcs/qty) * totalKg;
 
             document.getElementById("qtyKg[1]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[1]").value = lebihpcs.toFixed(2);
@@ -513,10 +517,12 @@
             document.getElementById("kgToleransiKurang[1]").value = kurangkg.toFixed(2);
             document.getElementById("totalSblTax[1]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[1]").value = taxrp.toFixed(2);
+            document.getElementById("hargaKg[1]").value = hargaKg.toFixed(2);
             document.getElementById("Total[1]").value = total.toFixed(2);
             document.getElementById("substance[1]").value = substance;
             document.getElementById("idmcpel[1]").value = idmc;
             document.getElementById("tipeBox[1]").value = tipeBox;
+            // document.getElementById("dtKg[1]").value = dtkg;
 
         } 
         if (data2 != '') {
@@ -535,9 +541,12 @@
             var hargablmtax = qty * harga;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
+            var hargaKg = hargablmtax/totalKg;
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+            // var dtPcs = document.getElementById('dtPcs[2]').value;
+            // var dtkg = (dtPcs/qty) * totalKg;
 
             document.getElementById("qtyKg[2]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[2]").value = lebihpcs.toFixed(2);
@@ -546,10 +555,12 @@
             document.getElementById("kgToleransiKurang[2]").value = kurangkg.toFixed(2);
             document.getElementById("totalSblTax[2]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[2]").value = taxrp.toFixed(2);
+            document.getElementById("hargaKg[2]").value = hargaKg.toFixed(2);
             document.getElementById("Total[2]").value = total.toFixed(2);
             document.getElementById("substance[2]").value = substance;
             document.getElementById("idmcpel[2]").value = idmc;
-            document.getElementById("tipeBox[1]").value = tipeBox;
+            document.getElementById("tipeBox[2]").value = tipeBox;
+            // document.getElementById("dtKg[2]").value = dtkg;
         } 
         if (data3 != '') {
             var arr1 = data1.split('|');
@@ -567,9 +578,12 @@
             var hargablmtax = qty * harga;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
+            var hargaKg = hargablmtax/totalKg;
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+            // var dtPcs = document.getElementById('dtPcs[3]').value;
+            // var dtkg = (dtPcs/qty) * totalKg;
 
             document.getElementById("qtyKg[3]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[3]").value = lebihpcs.toFixed(2);
@@ -578,10 +592,12 @@
             document.getElementById("kgToleransiKurang[3]").value = kurangkg.toFixed(2);
             document.getElementById("totalSblTax[3]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[3]").value = taxrp.toFixed(2);
+            document.getElementById("hargaKg[3]").value = hargaKg.toFixed(2);
             document.getElementById("Total[3]").value = total.toFixed(2);
             document.getElementById("substance[3]").value = substance;
             document.getElementById("idmcpel[3]").value = idmc;
-            document.getElementById("tipeBox[1]").value = tipeBox;
+            document.getElementById("tipeBox[3]").value = tipeBox;
+            // document.getElementById("dtKg[3]").value = dtkg;
         }
         if (data4 != '') {
             var arr1 = data1.split('|');
@@ -599,9 +615,12 @@
             var hargablmtax = qty * harga;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
+            var hargaKg = hargablmtax/totalKg;
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+            // var dtPcs = document.getElementById('dtPcs[4]').value;
+            // var dtkg = (dtPcs/qty) * totalKg;
 
             document.getElementById("qtyKg[4]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[4]").value = lebihpcs.toFixed(2);
@@ -610,10 +629,12 @@
             document.getElementById("kgToleransiKurang[4]").value = kurangkg.toFixed(2);
             document.getElementById("totalSblTax[4]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[4]").value = taxrp.toFixed(2);
+            document.getElementById("hargaKg[4]").value = hargaKg.toFixed(2);
             document.getElementById("Total[4]").value = total.toFixed(2);
             document.getElementById("substance[4]").value = substance;
             document.getElementById("idmcpel[4]").value = idmc;           
-            document.getElementById("tipeBox[1]").value = tipeBox;        
+            document.getElementById("tipeBox[4]").value = tipeBox;  
+            // document.getElementById("dtKg[4]").value = dtkg;      
         }
         if (data5 != '') {
             var arr1 = data1.split('|');
@@ -631,9 +652,12 @@
             var hargablmtax = qty * harga;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
+            var hargaKg = hargablmtax/totalKg;
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+            // var dtPcs = document.getElementById('dtPcs[5]').value;
+            // var dtkg = (dtPcs/qty) * totalKg;
 
             document.getElementById("qtyKg[5]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[5]").value = lebihpcs.toFixed(2);
@@ -642,10 +666,12 @@
             document.getElementById("kgToleransiKurang[5]").value = kurangkg.toFixed(2);
             document.getElementById("totalSblTax[5]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[5]").value = taxrp.toFixed(2);
+            document.getElementById("hargaKg[5]").value = hargaKg.toFixed(2);
             document.getElementById("Total[5]").value = total.toFixed(2);
             document.getElementById("substance[5]").value = substance;
             document.getElementById("idmcpel[5]").value = idmc;
-            document.getElementById("tipeBox[1]").value = tipeBox;
+            document.getElementById("tipeBox[5]").value = tipeBox;
+            // document.getElementById("dtKg[5]").value = dtkg;
         }
         
     }

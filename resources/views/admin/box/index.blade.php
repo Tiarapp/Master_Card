@@ -34,8 +34,8 @@
         <table class="table table-bordered" id="data_box">
           <thead>
             <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Kode Barang</th>
+              <th scope="col">Kode</th>
+              {{-- <th scope="col">Kode Barang</th> --}}
               <th scope="col">Nama Barang</th>
               <th scope="col">Tipe Box</th>
               <th scope="col">flute</th>
@@ -54,7 +54,7 @@
             foreach ($box as $data) { ?>
               <tr>
                 <td scope="row">{{ $data->kode }}</td>
-                <td>{{ $data->kodeBarang }}</td>
+                {{-- <td>{{ $data->kodeBarang }}</td> --}}
                 <td>{{ $data->namaBarang }}</td>
                 <td>{{ $data->tipebox }}</td>
                 <td>{{ $data->flute }}</td>

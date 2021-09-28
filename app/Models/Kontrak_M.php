@@ -40,6 +40,7 @@ class Kontrak_M extends Model
         'sisaPlafon',
         'pcsSisaKontrak',
         'kgSisaKontrak',
+        'tipeOrder',
         'status',
         'lock',
         'sales',
@@ -58,5 +59,10 @@ class Kontrak_M extends Model
     public function DeliveryTime()
     {
         return $this->hasMany(DeliveryTime::class, 'kontrak_m_id', 'id');
+    }
+
+    public function opi()
+    {
+        return $this->belongsToMany(Opi_M::class, 'kontrak_m_id', 'id');
     }
 }

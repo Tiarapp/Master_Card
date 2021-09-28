@@ -129,8 +129,8 @@ class BoxController extends Controller
 
         Box::create([
             'kode' => $nobukti,
-            'kodeBarang' => $request->kodeBarang,
-            'namaBarang' => $request->namaBarang,
+            // 'kodeBarang' => $request->kodeBarang,
+            'namaBarang' =>strtoupper($request->namaBarang),
             'tipebox' => $request->tipebox,
             'flute' => $request->flute,
             'tipeCreasCorr' => $request->tipeCreasCorr,

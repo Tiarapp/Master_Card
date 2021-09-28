@@ -206,6 +206,7 @@ Route::middleware(['auth'])->group(function (){
 
     //Kontrak
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
+    Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::get('/admin/kontrak/edit/{id}', 'Kontrak_DController@edit')->name('kontrak.edit');
@@ -215,40 +216,51 @@ Route::middleware(['auth'])->group(function (){
     //OPI
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
     Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
+    Route::get('/admin/opi/json', 'OpiController@json')->name('opi.json');
     Route::post('/admin/opi/store', 'OpiController@store')->name('opi.store');
     Route::get('/admin/opi/edit/{id}', 'OpiController@edit')->name('opi.edit');
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
-    Route::get('/admin/opi/pdf/{id}', 'OpiController@pdfprint')->name('opi.pdfb1');
+    Route::get('/admin/opi/print/{id}', 'OpiController@print')->name('opi.print');
+
+    //PLAN
+    Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
+    Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
+    Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
+    Route::get('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
+    Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
+    Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
+    Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
+    Route::get('/admin/plan/corr/print/{id}', 'CorrController@print')->name('corr.print');
 
     //OPNAME
-    Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');
-    Route::get('/admin/opname/sheet', 'OPController@indexopSheet')->name('opsheet.index');
-    Route::post('/admin/opname/sheet/store', 'OPController@storeOpSheet')->name('opsheet.store');
-    Route::get('/admin/opname/sheet/create', 'OPController@createOpSheet')->name('opsheet.create');
-    Route::get('/admin/opname/sheet/result', 'OPController@resultOpSheet')->name('opsheet.result');
-    Route::get('/admin/opname/sheet/edit/{KodeBrg}', 'OPController@editOpSheet')->name('opsheet.edit');
-    Route::post('/admin/opname/sheet/import', 'OPController@import_sheet')->name('opsheet.import');
+    // Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');
+    // Route::get('/admin/opname/sheet', 'OPController@indexopSheet')->name('opsheet.index');
+    // Route::post('/admin/opname/sheet/store', 'OPController@storeOpSheet')->name('opsheet.store');
+    // Route::get('/admin/opname/sheet/create', 'OPController@createOpSheet')->name('opsheet.create');
+    // Route::get('/admin/opname/sheet/result', 'OPController@resultOpSheet')->name('opsheet.result');
+    // Route::get('/admin/opname/sheet/edit/{KodeBrg}', 'OPController@editOpSheet')->name('opsheet.edit');
+    // Route::post('/admin/opname/sheet/import', 'OPController@import_sheet')->name('opsheet.import');
     
-    Route::get('/admin/opname/roll', 'OPController@indexOpRoll')->name('oproll.index');
-    Route::post('/admin/opname/roll/store', 'OPController@storeOpRoll')->name('oproll.store');
-    Route::get('/admin/opname/roll/create', 'OPController@createOpRoll')->name('oproll.create');
-    Route::get('/admin/opname/roll/result', 'OPController@resultOpRoll')->name('oproll.result');
-    Route::get('/admin/opname/roll/edit/{KodeBrg}', 'OPController@editOpRoll')->name('oproll.edit');
-    Route::post('/admin/opname/roll/import', 'OPController@import_roll')->name('oproll.import');
+    // Route::get('/admin/opname/roll', 'OPController@indexOpRoll')->name('oproll.index');
+    // Route::post('/admin/opname/roll/store', 'OPController@storeOpRoll')->name('oproll.store');
+    // Route::get('/admin/opname/roll/create', 'OPController@createOpRoll')->name('oproll.create');
+    // Route::get('/admin/opname/roll/result', 'OPController@resultOpRoll')->name('oproll.result');
+    // Route::get('/admin/opname/roll/edit/{KodeBrg}', 'OPController@editOpRoll')->name('oproll.edit');
+    // Route::post('/admin/opname/roll/import', 'OPController@import_roll')->name('oproll.import');
     
-    Route::get('/admin/opname/bj', 'OPController@indexOpBJ')->name('opbj.index');
-    Route::post('/admin/opname/bj/store', 'OPController@storeOpBJ')->name('opbj.store');
-    Route::get('/admin/opname/bj/create', 'OPController@createOpBJ')->name('opbj.create');
-    Route::get('/admin/opname/bj/result', 'OPController@resultOpBJ')->name('opbj.result');
-    Route::get('/admin/opname/bj/edit/{KodeBrg}', 'OPController@editOpBJ')->name('opbj.edit');
-    Route::post('/admin/opname/bj/import', 'OPController@import_bj')->name('opbj.import');
+    // Route::get('/admin/opname/bj', 'OPController@indexOpBJ')->name('opbj.index');
+    // Route::post('/admin/opname/bj/store', 'OPController@storeOpBJ')->name('opbj.store');
+    // Route::get('/admin/opname/bj/create', 'OPController@createOpBJ')->name('opbj.create');
+    // Route::get('/admin/opname/bj/result', 'OPController@resultOpBJ')->name('opbj.result');
+    // Route::get('/admin/opname/bj/edit/{KodeBrg}', 'OPController@editOpBJ')->name('opbj.edit');
+    // Route::post('/admin/opname/bj/import', 'OPController@import_bj')->name('opbj.import');
     
-    Route::get('/admin/opname/teknik', 'OPController@indexOpTeknik')->name('opteknik.index');
-    Route::post('/admin/opname/teknik/store', 'OPController@storeOpTeknik')->name('opteknik.store');
-    Route::get('/admin/opname/teknik/create', 'OPController@createOpTeknik')->name('opteknik.create');
-    Route::get('/admin/opname/teknik/result', 'OPController@resultOpTeknik')->name('opteknik.result');
-    Route::get('/admin/opname/teknik/edit/{KodeBrg}', 'OPController@editOpTeknik')->name('opteknik.edit');
-    Route::post('/admin/opname/teknik/import', 'OPController@import_teknik')->name('opteknik.import');
+    // Route::get('/admin/opname/teknik', 'OPController@indexOpTeknik')->name('opteknik.index');
+    // Route::post('/admin/opname/teknik/store', 'OPController@storeOpTeknik')->name('opteknik.store');
+    // Route::get('/admin/opname/teknik/create', 'OPController@createOpTeknik')->name('opteknik.create');
+    // Route::get('/admin/opname/teknik/result', 'OPController@resultOpTeknik')->name('opteknik.result');
+    // Route::get('/admin/opname/teknik/edit/{KodeBrg}', 'OPController@editOpTeknik')->name('opteknik.edit');
+    // Route::post('/admin/opname/teknik/import', 'OPController@import_teknik')->name('opteknik.import');
 
 
     //

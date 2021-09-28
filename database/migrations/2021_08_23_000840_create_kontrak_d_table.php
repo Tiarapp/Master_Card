@@ -28,11 +28,12 @@ class CreateKontrakDTable extends Migration
             $table->integer('pcsLebihToleransiKontrak')->nullable();     //AUTO SUM(kontrak_d.pcsToleransiKontrak)
             $table->float('kgKurangToleransiKontrak', 10,2)->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
             $table->float('kgLebihToleransiKontrak', 10,2)->nullable();      //AUTO SUM(kontrak_d.pcsToleransiKontrak * kontrak_d.gramKontrak)
-            $table->float('harga', 10,2);    
-            $table->float('amountBeforeTax', 10,2)->nullable();         //AUTO DPP Auto harga * pcsKontrak
-            $table->float('ppn', 10,2)->nullable();         //AUTO DPP Auto harga * pcsKontrak
-            $table->integer('tax')->nullable();                     //AUTO amountBeforeTax / 10
-            $table->float('amountTotal', 10,2)->nullable();             //Auto amountBeforeTax + Tax
+            $table->float('harga_pcs', 20,2);    
+            $table->float('amountBeforeTax', 20,2)->nullable();         //AUTO DPP Auto harga * pcsKontrak
+            $table->float('ppn', 20,2)->nullable();         //AUTO DPP Auto harga * pcsKontrak
+            $table->float('tax', 20,2)->nullable();                     //AUTO amountBeforeTax / 10
+            $table->float('amountTotal', 20,2)->nullable();             //Auto amountBeforeTax + Tax
+            $table->float('harga_kg',20,2)->nullable();
 
             //RELATION
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();
