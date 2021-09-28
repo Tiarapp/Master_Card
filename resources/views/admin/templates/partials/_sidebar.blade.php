@@ -176,6 +176,47 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
+                PPIC
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="{{ route('indexcorr') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Plan Corr</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Plan Printing</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Hasil Plan Corr</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Hasil Plan Print</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
                 Palet
                 <i class="right fas fa-angle-left"></i>
               </p>
@@ -194,12 +235,12 @@
                 </a>
               </li>
             </ul>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a href="{{ route('op') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Opname</p>
               </a>
-            </li>
+            </li> --}}
           </li>
           {{-- <li class="nav-item">
             <a href="#" class="nav-link">

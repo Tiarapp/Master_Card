@@ -2356,7 +2356,7 @@
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
                 border-left: 1px dotted #ffffff !important;
-                border-right: none #000000;
+                border-right: 2px solid #000000 !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;

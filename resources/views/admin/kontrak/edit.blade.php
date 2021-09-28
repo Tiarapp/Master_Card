@@ -317,7 +317,7 @@
                                     echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]' value='".$kontrak_D[$i]->pcsKontrak."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='toleransiLebih[$i]' id='toleransiLebih[$i]' value='".$kontrak_D[$i]->pctToleransiLebihKontrak."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='toleransiKurang[$i]' id='toleransiKurang[$i]' value='".$kontrak_D[$i]->pctToleransiKurangKontrak."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='harga[$i]' id='harga[$i]' value='".$kontrak_D[$i]->harga."' onchange='getData();'></td>";
+                                    echo "<td><input type='text' name='harga[$i]' id='harga[$i]' value='".$kontrak_D[$i]->harga_pcs."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='tax[$i]' id='tax[$i]' value='".$kontrak_D[$i]->tax."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='tipeBox[$i]' id='tipeBox[$i]' ></td>";
                                     echo "<td><input type='text' name='pcsToleransiLebih[$i]' id='pcsToleransiLebih[$i]' readonly ></td>";
@@ -327,6 +327,7 @@
                                     echo "<td><input type='text' name='totalSblTax[$i]' id='totalSblTax[$i]' readonly></td>";
                                     echo "<td><input type='text' name='hargaTax[$i]' id='hargaTax[$i]' readonly></td>";
                                     echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]' readonly></td>";
+                                    echo "<td><input type='text' name='hargaKg[$i]' id='hargaKg[$i]' readonly></td>";
                                     echo "<td><input type='text' name='Total[$i]' id='Total[$i]' readonly></td>";
                                     echo "</tr>";
                                     
@@ -357,6 +358,7 @@
                                     echo "<td><input type='text' name='totalSblTax[$i]' id='totalSblTax[$i]' ></td>";
                                     echo "<td><input type='text' name='hargaTax[$i]' id='hargaTax[$i]' ></td>";
                                     echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]'></td>";
+                                    echo "<td><input type='text' name='hargaKg[$i]' id='hargaKg[$i]' readonly></td>";
                                     echo "<td><input type='text' name='Total[$i]' id='Total[$i]' ></td>";
                                     echo "</tr>";
                                 }   
@@ -467,6 +469,7 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
@@ -481,6 +484,7 @@
             document.getElementById("totalSblTax[0]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[0]").value = taxrp.toFixed(2);
             document.getElementById("Total[0]").value = total.toFixed(2);
+            document.getElementById("hargaKg[0]").value = hargaKg.toFixed(2);
             document.getElementById("substance[0]").value = substance;
             document.getElementById("idmcpel[0]").value = idmc;
             document.getElementById("tipeBox[0]").value = tipeBox;
@@ -500,6 +504,7 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
@@ -514,6 +519,7 @@
             document.getElementById("totalSblTax[1]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[1]").value = taxrp.toFixed(2);
             document.getElementById("Total[1]").value = total.toFixed(2);
+            document.getElementById("hargaKg[1]").value = hargaKg.toFixed(2);
             document.getElementById("substance[1]").value = substance;
             document.getElementById("idmcpel[1]").value = idmc;
             document.getElementById("tipeBox[1]").value = tipeBox;
@@ -532,6 +538,7 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
@@ -546,6 +553,7 @@
             document.getElementById("totalSblTax[2]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[2]").value = taxrp.toFixed(2);
             document.getElementById("Total[2]").value = total.toFixed(2);
+            document.getElementById("hargaKg[2]").value = hargaKg.toFixed(2);
             document.getElementById("substance[2]").value = substance;
             document.getElementById("idmcpel[2]").value = idmc;
             document.getElementById("tipeBox[2]").value = tipeBox;
@@ -564,6 +572,7 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
@@ -578,6 +587,7 @@
             document.getElementById("totalSblTax[3]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[3]").value = taxrp.toFixed(2);
             document.getElementById("Total[3]").value = total.toFixed(2);
+            document.getElementById("hargaKg[3]").value = hargaKg.toFixed(2);
             document.getElementById("substance[3]").value = substance;
             document.getElementById("idmcpel[3]").value = idmc;   
             document.getElementById("tipeBox[3]").value = tipeBox;                
@@ -596,6 +606,7 @@
             var totalKg = qty * beratBox;
             var lebihpcs =  qty * (lebihpct/100) ;
             var hargablmtax = qty * harga;
+            var hargaKg = hargablmtax/totalKg;
             var taxrp = (hargablmtax*taxpct)/100;
             var total = taxrp + hargablmtax ;
             var lebihkg = totalKg * (lebihpct/100);
@@ -610,6 +621,7 @@
             document.getElementById("totalSblTax[4]").value = hargablmtax.toFixed(2);
             document.getElementById("hargaTax[4]").value = taxrp.toFixed(2);
             document.getElementById("Total[4]").value = total.toFixed(2);
+            document.getElementById("hargaKg[4]").value = hargaKg.toFixed(2);
             document.getElementById("substance[4]").value = substance;
             document.getElementById("idmcpel[4]").value = idmc;
             document.getElementById("tipeBox[4]").value = tipeBox;

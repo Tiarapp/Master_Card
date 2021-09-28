@@ -97,13 +97,13 @@
                                 
                             </div>
                         </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
+                        {{-- <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
                             <div class="form-group">
                                 <label>Kode Item</label>
-                                {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
+                                <textarea name="nama" id="nama" cols="30" rows="10"></textarea>
                                 <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
                             <div class="form-group">
                                 <label>Tipe Box</label>
@@ -248,7 +248,7 @@
             var item = (table.row(this).data());
             
             // document.getElementById('bj_id').value = item[0];
-            document.getElementById('kodeBarang').value = item[0];
+            // document.getElementById('kodeBarang').value = item[0];
             document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();

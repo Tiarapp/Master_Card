@@ -6,10 +6,12 @@ use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use Carbon\Carbon;
+use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\Facades\DataTables;
 
 class Kontrak_DController extends Controller
 {
@@ -18,11 +20,35 @@ class Kontrak_DController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $kontrak_m = Kontrak_M::get();
 
-        return view('admin.kontrak.index', compact('kontrak_m'));
+    // public function json()
+    // {
+    //     return Datatables::of(Kontrak_M::all())->make(true);
+    // }
+
+
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Kontrak_M::select('*');
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+
+                $btn = "<a href='../admin/kontrak/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                <a href='../admin/kontrak/pdf/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);                    
+        }
+
+        
+        return view('admin.kontrak.index');
+        // $kontrak_m = Kontrak_M::get();
+
+        // return view('admin.kontrak.index',compact('kontrak_m'));
     }
 
     /**
@@ -32,6 +58,7 @@ class Kontrak_DController extends Controller
      */
     public function create()
     {
+
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -146,11 +173,12 @@ class Kontrak_DController extends Controller
                     'kgLebihToleransiKontrak' => $request->kgToleransiLebih[$i],
                     'pcsKurangToleransiKontrak' => $request->pcsToleransiKurang[$i],
                     'kgKurangToleransiKontrak' => $request->kgToleransiKurang[$i],
-                    'harga' => $request->harga[$i],
+                    'harga_pcs' => $request->harga[$i],
                     'tax' => $request->tax[$i],
                     'amountBeforeTax' => $request->totalSblTax[$i],
                     'ppn' => $request->hargaTax[$i],
                     'amountTotal' => $request->Total[$i],
+                    'harga_kg' => $request->hargaKg[$i],
                     'createdBy' => $request->createdBy,
                     ]);
 
@@ -176,7 +204,7 @@ class Kontrak_DController extends Controller
                         'kodeKontrak' => $kontrakm->kode,
                         'tglKirimDt' => $request->tglKirim[$i],
                         'pcsDt' => $request->dtPcs[$i],
-                        'kgDt' => $request->dtKg[$i],
+                        // 'kgDt' => $request->dtKg[$i],
                         'createdBy' => $request->createdBy,
                     ]);
                 }
@@ -224,7 +252,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance')
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
             ->get();
 
         $kontrak_M = DB::table('kontrak_m')
@@ -299,6 +327,7 @@ class Kontrak_DController extends Controller
                 $kontrakd->ppn = $request->hargaTax[$i];
                 $kontrakd->tax = $request->tax[$i];
                 $kontrakd->amountTotal = $request->Total[$i];
+                $kontrakd->harga_kg = $request->hargaKg[$i];
 
                 $kontrakd->save();
                 
@@ -326,6 +355,7 @@ class Kontrak_DController extends Controller
                         'ppn' => $request->hargaTax[$i],
                         'amountTotal' => $request->Total[$i],
                         'createdBy' => $request->createdBy,
+                        'harga_kg' => $request->hargaKg[$i],
                     ]);
 
                     // var_dump(isset($request->idmcpel[$i]));
@@ -425,7 +455,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('box', 'box_id', '=', 'box.id')
             ->where('tipe', '=', 'BOX')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus')
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus', 'mc.keterangan as keterangan')
             ->first();
         // dd($kontrakBox);
 
@@ -446,7 +476,7 @@ class Kontrak_DController extends Controller
             ->where('kontrak_m_id', '=', $id)
             ->get();
 
-        // dd($dt);
+        // dd($kontrakBox);
 
 
         // dd($kontrak_M);

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
-use App\Models\Opi;
 use App\Models\Opi_M;
 use Carbon\Carbon;
+use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,12 +18,49 @@ class OpiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function json()
     {
-        $opi_m = DB::table('opi_m')
-            ->get();
+        $data = Opi_M::opi2()->get();
+        return Datatables::of($data)->make(true);
+    }
+    
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Opi_M::opi2()->get();
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                        $btn = "<a href='../admin/opi/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../admin/opi/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-        return view('admin.opi.index', compact('opi_m'));
+                        return $btn;
+                    })
+                    ->addColumn('hari', function($row){
+                        $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
+                        $hari = $day[date('w', strtotime($row->tglKirimDt))];
+
+                        return $hari;
+                    })
+                    ->addColumn('toleransi', function($row){
+                        $lebih = $row->toleransiLebih;
+                        $kurang = $row->toleransiKurang;
+
+                        $toleransi = $lebih.'/'.$kurang;
+
+                        return $toleransi;
+                    })
+                    ->rawColumns(['action','hari','toleransi'])
+                    ->make(true);
+            // dd($data);                    
+        }
+        // $data = Opi_M::opi2();
+        // dd($data);
+        return view('admin.opi.index');
+        // $kontrak_m = Kontrak_M::get();
+
+        // return view('admin.kontrak.index',compact('kontrak_m'));
     }
 
     /**
@@ -75,8 +112,7 @@ class OpiController extends Controller
             'kontrak_d_id' => $request->kontrakdid,
             'keterangan' => $request->keterangan,
             'tglKirimDt' => $request->tglKirim,
-            'pcsDt' => $request->jumlahOrder,
-            'kgDt' => $request->kgKirim,
+            'jumlahOrder' => $request->jumlahOrder,
             'hariKirimDt' => $day,
             'createdBy' => Auth::user()->name,
         ]);
@@ -90,7 +126,7 @@ class OpiController extends Controller
      * @param  \App\Models\Opi  $opi
      * @return \Illuminate\Http\Response
      */
-    public function show(Opi $opi)
+    public function show(Opi_M $opi)
     {
         //
     }
@@ -101,7 +137,7 @@ class OpiController extends Controller
      * @param  \App\Models\Opi  $opi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Opi $opi)
+    public function edit(Opi_M $opi)
     {
         //
     }
@@ -113,7 +149,7 @@ class OpiController extends Controller
      * @param  \App\Models\Opi  $opi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Opi $opi)
+    public function update(Request $request, Opi_M $opi)
     {
         //
     }
@@ -124,8 +160,28 @@ class OpiController extends Controller
      * @param  \App\Models\Opi  $opi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Opi $opi)
+    public function print($id)
     {
-        //
+        $opi = DB::table('opi_m')
+            ->leftJoin('dt', 'dt_id', 'dt.id')
+            ->leftJoin('mc', 'mc_id', 'mc.id')
+            ->leftJoin('box', 'mc.box_id', 'box.id')
+            ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
+            ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
+            ->where('opi_m.id', '=', $id)
+            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv' )
+            ->first();
+
+        $opi2 = DB::table('opi_m')
+        ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
+        ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
+        ->where('opi_m.id', '=', $id)
+        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder' )
+        ->first();
+
+
+            // var_dump();
+
+        return view('admin.opi.pdf', compact('opi','opi2'));
     }
 }

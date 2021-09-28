@@ -125,7 +125,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -138,7 +138,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -152,7 +152,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -166,7 +166,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -203,7 +203,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -216,7 +216,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -228,7 +228,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -240,7 +240,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -252,7 +252,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -264,7 +264,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -279,7 +279,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -294,7 +294,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -308,7 +308,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -322,7 +322,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -382,7 +382,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -394,7 +394,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 22pt;
         background-color: white
       }
 
@@ -454,7 +454,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -466,7 +466,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -526,7 +526,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -538,7 +538,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -551,7 +551,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -564,7 +564,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -576,7 +576,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -588,7 +588,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -648,7 +648,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -660,7 +660,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -672,7 +672,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -684,7 +684,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -696,7 +696,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -708,7 +708,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: '"Times New Roman"';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -745,7 +745,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -758,7 +758,7 @@
         border-right: 1px solid #000000 !important;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -770,7 +770,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -782,7 +782,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -820,7 +820,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -834,7 +834,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -848,7 +848,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -862,7 +862,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -874,7 +874,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -886,7 +886,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -900,7 +900,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -914,7 +914,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -926,7 +926,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -938,7 +938,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -950,7 +950,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -962,7 +962,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -974,7 +974,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -986,7 +986,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1000,7 +1000,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: #FFFFFF
       }
 
@@ -1014,7 +1014,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: #FFFFFF
       }
 
@@ -1028,7 +1028,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1042,7 +1042,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1056,7 +1056,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1070,7 +1070,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1084,7 +1084,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1098,7 +1098,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1110,7 +1110,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1122,7 +1122,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1136,7 +1136,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1150,7 +1150,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1164,7 +1164,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1178,7 +1178,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1190,7 +1190,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1202,7 +1202,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1216,7 +1216,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1230,7 +1230,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1245,7 +1245,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1260,7 +1260,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1274,7 +1274,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1288,7 +1288,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1300,7 +1300,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1312,19 +1312,19 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
       td.style49 {
-        vertical-align: middle;
+        vertical-align: bottom;
         border-bottom: none #000000;
         border-top: none #000000;
         border-left: none #000000;
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1336,7 +1336,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1348,7 +1348,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1360,7 +1360,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1372,7 +1372,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1384,7 +1384,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 18pt;
         background-color: white
       }
 
@@ -1398,7 +1398,7 @@
         border-right: none #000000;
         color: #FFFFFF;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: #FFFFFF
       }
 
@@ -1412,7 +1412,7 @@
         border-right: none #000000;
         color: #FFFFFF;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: #FFFFFF
       }
 
@@ -1426,7 +1426,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1440,7 +1440,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1454,12 +1454,12 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
       th.style54 {
-        vertical-align: middle;
+        vertical-align: bottom;
         text-align: left;
         padding-left: 0px;
         border-bottom: none #000000;
@@ -1468,7 +1468,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1482,7 +1482,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1496,7 +1496,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1510,7 +1510,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1524,7 +1524,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1538,7 +1538,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1552,7 +1552,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1564,7 +1564,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1576,7 +1576,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1590,7 +1590,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1604,19 +1604,19 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
       td.style60 {
-        vertical-align: middle;
+        vertical-align: bottom;
         border-bottom: none #000000;
         border-top: none #000000;
         border-left: none #000000;
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: #FFFFFF
       }
 
@@ -1628,7 +1628,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: #FFFFFF
       }
 
@@ -1640,7 +1640,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1652,7 +1652,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1666,7 +1666,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1680,7 +1680,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1841,7 +1841,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1854,7 +1854,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1868,7 +1868,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -1882,7 +1882,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -1896,7 +1896,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -1910,7 +1910,7 @@
         font-weight: bold;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 26pt;
+        font-size: 20pt;
         background-color: white
       }
 
@@ -1922,7 +1922,7 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
@@ -1934,13 +1934,12 @@
         border-right: none #000000;
         color: #000000;
         font-family: 'Times New Roman';
-        font-size: 21pt;
+        font-size: 16pt;
         background-color: white
       }
 
       table.sheet0 col.col0 {
-        /* width: 18.97777756pt */
-        width: 100pt;
+        width: 18.97777756pt
       }
 
       table.sheet0 col.col1 {
@@ -1948,46 +1947,39 @@
       }
 
       table.sheet0 col.col2 {
-        /* width: 92.17777672pt */
-        width: 100pt;
+        width: 92.17777672pt
       }
 
       table.sheet0 col.col3 {
-        /* width: 79.29999909pt */
-        width: 100pt;
+        width: 79.29999909pt
       }
 
       table.sheet0 col.col4 {
-        /* width: 71.16666585pt */
-        width: 100pt;
+        width: 71.16666585pt
       }
 
       table.sheet0 col.col5 {
-        /* width: 81.3333321pt */
-        width: 100pt;
+        width: 81.3333324pt
       }
 
       table.sheet0 col.col6 {
-        /* width: 86.07777679pt */
-        width: 130pt;
+        width: 86.07777679pt
       }
 
       table.sheet0 col.col7 {
-        width: 170pt
+        width: 127.42222076pt
       }
 
       table.sheet0 col.col8 {
-        width: 110.41110989pt
+        width: 106.41110989pt
       }
 
       table.sheet0 col.col9 {
-        /* width: 75.91111021pt */
-        width: 100pt;
+        width: 75.91111024pt
       }
 
       table.sheet0 col.col10 {
-        /* width: 86.07777679pt */
-        width: 100pt;
+        width: 86.07777679pt
       }
 
       table.sheet0 col.col11 {
@@ -2041,11 +2033,11 @@
       }
 
       table.sheet0 tr.row10 {
-        height: 23.25pt
+        height: 51pt
       }
 
       table.sheet0 tr.row11 {
-        height: 60pt
+        height: 84pt
       }
 
       table.sheet0 tr.row12 {
@@ -2197,7 +2189,7 @@
       }
 
       table.sheet0 tr.row49 {
-        height: 23.25pt
+        height: 13.5pt
       }
 
       table.sheet0 tr.row50 {
@@ -2312,12 +2304,12 @@
         <tr class="row3">
           <td class="column0">&nbsp;</td>
           <td class="column1 style43 s style44" colspan="2">Tipe Order</td>
-          <td class="column3 style30 s" colspan="3" >{{ $opi2->tipeOrder }}</td>
-          {{-- <td class="column4 style30 null"></td> --}}
+          <td class="column3 style30 s" colspan="2" >{{ $opi2->tipeOrder }}</td>
+          <td class="column4 style30 null"></td>
           <td class="column5 style30 null"></td>
-          <td class="column6 style30 s">Jumlah Order</td>
-          <td class="column7 style49 ">{{ $opi->pcsDt }}</td>
-          <td class="column8 style30 "></td>
+          <td class="column6 style30 null"></td>
+          <td class="column7 style49 s">Jumlah Order</td>
+          <td class="column8 style30 n">{{ $opi->pcsDt }}</td>
           <td class="column9 style52 null"></td>
           <td class="column10 style52 null"></td>
           <td class="column11 style53 null"></td>
@@ -2413,9 +2405,9 @@
         <tr class="row12">
           <td class="column0">&nbsp;</td>
           <td class="column1 style43 s style44" colspan="2">Jadwal Kirim</td>
-          <td class="column3 style33 n style34" colspan="4">{{ date('d F Y', strtotime($opi->tglKirimDt)) }}</td>
+          <td class="column3 style33 n style34" colspan="4">{{ $opi->tglKirimDt }}</td>
           <td class="column7 style49 s">Out</td>
-          <td class="column8 style54 null">{{ $opi->outConv }}</td>
+          <td class="column8 style54 null"></td>
           <td class="column9 style59 null"></td>
           <td class="column10 style59 null"></td>
           <td class="column11 style35 null"></td>
@@ -2435,7 +2427,7 @@
         </tr>
         <tr class="row14">
           <td class="column0">&nbsp;</td>
-          <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi->keterangan }}</td>
+          <td class="column1 style9 s style18" colspan="5" rowspan="3">{{ $opi->keterangan }}</td>
           <td class="column6 style12 null"></td>
           <td class="column7 style49 s">Isi Colly</td>
           <td class="column8 style30 s">{{ $opi->koli }} pcs</td>
@@ -2485,417 +2477,267 @@
           <td class="column10 style27 s">Keterangan</td>
           <td class="column11 style28 null"></td>
         </tr>
-        <tr class="row52">
+        <tr class="row19">
           <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row20">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row21">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row22">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row23">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row24">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row25">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row26">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row27">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row28">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row29">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row30">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row31">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row32">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row33">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row34">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row35">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row36">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row37">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row38">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row39">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row40">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row41">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row42">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row43">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row44">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row45">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row46">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row47">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row48">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row49">
+          <td class="column0">&nbsp;</td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
           <td class="column11 style20 null"></td>
         </tr>
         <tr class="row50">
           <td class="column0">&nbsp;</td>
           <td class="column11 style20 null"></td>
         </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
+        <tr class="row51">
           <td class="column0">&nbsp;</td>
           <td class="column11 style20 null"></td>
         </tr>
         <tr class="row52">
           <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row50">
-          <td class="column0">&nbsp;</td>
-          <td class="column11 style20 null"></td>
-        </tr>
-        <tr class="row52">
-          <td class="column0">&nbsp;</td>
-          <td class="column1 style19 null style22" rowspan="2"></td>
-          <td class="column2 style19 null style22" rowspan="2"></td>
-          <td class="column3 style19 null style22" rowspan="2"></td>
-          <td class="column4 style19 null style22" rowspan="2"></td>
-          <td class="column5 style19 null style22" rowspan="2"></td>
-          <td class="column6 style19 null style22" rowspan="2"></td>
-          <td class="column7 style19 null style22" rowspan="2"></td>
-          <td class="column8 style19 null style22" rowspan="2"></td>
-          <td class="column9 style19 null style22" rowspan="2"></td>
-          <td class="column10 style19 null style22" rowspan="2"></td>
+          <td class="column1 style19 null style22" rowspan="3"></td>
+          <td class="column2 style19 null style22" rowspan="3"></td>
+          <td class="column3 style19 null style22" rowspan="3"></td>
+          <td class="column4 style19 null style22" rowspan="3"></td>
+          <td class="column5 style19 null style22" rowspan="3"></td>
+          <td class="column6 style19 null style22" rowspan="3"></td>
+          <td class="column7 style19 null style22" rowspan="3"></td>
+          <td class="column8 style19 null style22" rowspan="3"></td>
+          <td class="column9 style19 null style22" rowspan="3"></td>
+          <td class="column10 style19 null style22" rowspan="3"></td>
           <td class="column11 style20 null"></td>
         </tr>
         <tr class="row53">
+          <td class="column0">&nbsp;</td>
+          <td class="column11 style20 null"></td>
+        </tr>
+        <tr class="row54">
           <td class="column0">&nbsp;</td>
           <td class="column11 style20 null"></td>
         </tr>
@@ -3002,10 +2844,40 @@
           <td class="column7 style20 null"></td>
           <td class="column8 style20 null"></td>
           <td class="column9 style20 null"></td>
-          <td class="column10 style26 f">{{ date("d/m/Y H:i:s") }}</td>
+          <td class="column10 style26 f">8/23/2021 9:40:22</td>
           <td class="column11 style20 null"></td>
         </tr>
       </tbody>
     </table>
   </body>
 </html>
+
+<tbody>
+            <?php
+            $no = 1;
+            foreach ($opi_m as $data) { 
+              ?>
+              <tr>
+                {{-- <td scope="row">{{ $no++ }}</td> --}}
+                <td><b>{{ $data->NoOPI }}</b></td>
+                <td>{{ $data->kontrakName }}</td>
+                <td>{{ $data->tglKirimDt }}</td>
+                <td>{{ $data->barang }}</td>
+                <td>{{ $data->sales }}</td>
+                {{-- <td>{{ $data->status }}</td> --}}
+                {{-- <td>{{ $data->noPoCustomer }}</td> --}}
+                <td>
+                  <div class="input-group">
+                    <div class="input-group-append" id="button-addon4">
+                      {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
+                      <a href="../admin/opi/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="../admin/kontrak/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <?php
+            }
+            ?>
+          </tbody>

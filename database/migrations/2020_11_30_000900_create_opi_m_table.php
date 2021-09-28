@@ -23,7 +23,9 @@ class CreateOpiMTable extends Migration
             $table->foreignId('kontrak_m_id')->nullable()->index(); //AUTO
             $table->foreignId('kontrak_d_id')->nullable()->index(); //AUTO
             $table->integer('jumlahOrder');
+            $table->integer('sisa_order');
             $table->text('keterangan')->nullable(); //INPUT PPIC
+            $table->enum('status',['Proses','Belum Selesai', 'Selesai'])->default('Proses');
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login

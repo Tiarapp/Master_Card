@@ -42,7 +42,15 @@
                                     <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Kode</label>
+                                            <label class="control-label">Kode Box</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" placeholder="Kode Barang">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Kode MC</label>
                                         </div>
                                         <div class="col-md-2">
                                             <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode">
@@ -50,12 +58,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">No Item</label>
+                                            <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" readonly>
+                                                    <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
                                                     <i class="fas fa-search"></i>
@@ -66,12 +74,23 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">Tujuan</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan">
+                                                <option value='LOKAL'>LOKAL</option>
+                                                <option value='EXPORT'>EXPORT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
@@ -104,7 +123,6 @@
                                                                         <tr>
                                                                             <th scope="col">ID.</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Kode Barang</th>
                                                                             <th scope="col">Nama</th>
                                                                             <th scope="col">Tipe Box</th>
                                                                             <th scope="col">flute</th>
@@ -122,7 +140,6 @@
                                                                             <tr>
                                                                                 <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->kodeBarang }}</td>
                                                                                 <td>{{ $data->namaBarang }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
@@ -463,12 +480,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
-                                                <option value='BOX'>BOX</option>
-                                                <option value='BOX TUMBU'>BOX TUMBU</option>
-                                                <option value='BOX TUTUP'>BOX TUTUP</option>
-                                                <option value='LAYER'>LAYER</option>
-                                                <option value='PARTISI'>PARTISI</option>
-                                                <option value='SHEET'>SHEET</option>
+                                                <option value='B'>B1</option>
+                                                <option value='D'>DC</option>
+                                                <option value='L'>LAYER</option>
+                                                <option value='S'>SHEET</option>
+                                                <option value='R'>ROLL</option>
                                             </select>
                                         </div>
                                     </div>
@@ -500,6 +516,24 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">Golongan Customer</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
+                                                <option value='Food and Baverage'>Food and Baverage</option>
+                                                <option value='Keramik'>Keramik</option>
+                                                <option value='Frozen Fish'>Frozen Fish</option>
+                                                <option value='Oil'>Oil</option>
+                                                <option value='Plastik'>Plastik</option>
+                                                <option value='DOC'>DOC</option>
+                                                <option value='Tissue'>Tissue</option>
+                                                <option value='Others'>Others</option>
+                                                <option value='Sheet'>Sheet</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Joint</label>
                                         </div>
                                         <div class="col-md-4">
@@ -517,10 +551,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" >
-                                                <option value=''>--</option>
-                                                @foreach ($koli as $data)
-                                                <option value="{{ $data->qtyBox }}">{{ $data->qtyBox }}</option>
-                                                @endforeach
+                                                <option value='05'>5 Koli</option>
+                                                <option value='10'>10 Koli</option>
+                                                <option value='20'>20 Koli</option>
+                                                <option value='25'>25 Koli</option>
+                                                <option value='50'>50 Koli</option>
                                             </select>
                                         </div>
                                         /Koli
@@ -589,6 +624,16 @@
         $('.js-example-basic-single').select2();
     });
     // Datatable Barang(Item)
+
+    function getKodeBarang() {
+        var ukuran = document.getElementById("tujuan").value;
+        var tipebox = document.getElementById("tipebox").value;
+        var flute = document.getElementById("flute").value;
+        var tipemc = document.getElementById("tipemc").value;
+        var golongan = document.getElementById("golongan").value;
+        var koli = document.getElementById("koli").value;
+    }
+
     $(".Item").ready(function(){
         
         var table = $("#data_barang").DataTable({
@@ -599,7 +644,7 @@
             var item = (table.row(this).data());
             
             // document.getElementById('bj_id').value = item[0];
-            document.getElementById('kodeBarang').value = item[0];
+            // document.getElementById('kodeBarang').value = item[0];
             document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();
@@ -621,16 +666,16 @@
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
-            document.getElementById('kodeBarang').value = Box[2];
-            document.getElementById('namaBarang').value = Box[3];
-            document.getElementById('tipebox').value = Box[4];
+            // document.getElementById('kodeBarang').value = Box[2];
+            document.getElementById('namaBarang').value = Box[2];
+            document.getElementById('tipebox').value = Box[3];
             document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[6];
-            document.getElementById('lebarbox').value = Box[7];
-            document.getElementById('tinggibox').value = Box[8];
-            document.getElementById('creasCorr').value = Box[9];
-            document.getElementById('creasConv').value = Box[10];
-            document.getElementById('flute').value = Box[5];
+            document.getElementById('panjangbox').value = Box[5];
+            document.getElementById('lebarbox').value = Box[6];
+            document.getElementById('tinggibox').value = Box[7];
+            document.getElementById('creasCorr').value = Box[8];
+            document.getElementById('creasConv').value = Box[9];
+            document.getElementById('flute').value = Box[4];
             
             if (Box[4] == 'B1') {
                 var resultP = getID(Box[9]);
