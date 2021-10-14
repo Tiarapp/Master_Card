@@ -32,8 +32,8 @@ class OpiController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                        $btn = "<a href='../admin/opi/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../admin/opi/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+                        $btn = "<a href='../admin/opi/edit/".$row->opiid."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../admin/opi/print/".$row->opiid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                         return $btn;
                     })

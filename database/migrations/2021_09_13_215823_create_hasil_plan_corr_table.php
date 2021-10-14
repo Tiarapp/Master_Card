@@ -19,11 +19,13 @@ class CreateHasilPlanCorrTable extends Migration
             $table->foreignId('plan_corr_d_id')->unsigned();
             $table->string('hasil_baik');
             $table->string('hasil_jelek');
-            $table->string('prod_time');
+            $table->dateTime('start_prod');
+            $table->dateTime('end_prod');
+            $table->dateTime('prod_time');
             $table->string('prod_meter');
             $table->string('m2');
             $table->string('jml_palet');
-            $table->enum('status', ['Proses', ['Belum Selesai'], 'Selesai']);
+            $table->enum('status', ['Proses', 'Belum Selesai', 'Selesai']);
             $table->enum('next_mesin',['FLEXO A', 'FLEXO B', 'FLEXO C', 'TOKAI', 'STITCH', 'GLUE MANUAL', 'WAX', 'STB']);
 
             $table->foreign('plan_corr_m_id')->references('id')->on('plan_corr_m')->cascadeOnDelete();

@@ -230,7 +230,27 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
     Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
     Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
-    Route::get('/admin/plan/corr/print/{id}', 'CorrController@print')->name('corr.print');
+    Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
+
+    
+    Route::get('/admin/plan/conv', 'ConvController@index_flexoA')->middleware(['auth'])->name('flexoa');
+    Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
+    Route::get('/admin/plan/conv/create', 'ConvController@create')->name('conv.create');
+    Route::get('/admin/plan/conv/json', 'ConvController@json')->name('conv.json');
+    Route::post('/admin/plan/conv/store', 'ConvController@store')->name('conv.store');
+    Route::get('/admin/plan/conv/edit/{id}', 'ConvController@edit')->name('conv.edit');
+    Route::put('/admin/plan/conv/update/{id}', 'ConvController@update')->name('conv.update');
+    Route::get('/admin/plan/conv/print/{id}', 'ConvController@flexoa_pdf')->name('conv.print');
+
+    //Hasil
+    Route::get('/admin/plan/hasilcorr', 'CorrController@index_hasil_corr')->middleware(['auth'])->name('hasilcorr');
+    Route::get('/admin/plan/corrd', 'CorrController@corrd')->middleware(['auth'])->name('corrd');
+    Route::get('/admin/plan/hasilcorr/create', 'CorrController@create')->name('corr.create');
+    Route::get('/admin/plan/hasilcorr/json', 'CorrController@json')->name('corr.json');
+    Route::post('/admin/plan/hasilcorr/store', 'CorrController@store')->name('corr.store');
+    Route::get('/admin/plan/hasilcorr/edit/{id}', 'CorrController@edit_hasil_corr')->name('hasilcorr.edit');
+    Route::put('/admin/plan/hasilcorr/update/{id}', 'CorrController@update_hasil_corr')->name('hasilcorr.update');
+    Route::get('/admin/plan/hasilcorr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
 
     //OPNAME
     // Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Corr_D;
 use App\Models\Corr_M;
+use App\Models\HasilCorr;
 use App\Models\Opi_M;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,20 +21,20 @@ class CorrController extends Controller
     
     public function json()
     {
-        $data = Corr_D::get();
+        $data = Corr_D::corr()->get();
         return Datatables::of($data)->make(true);
     }
 
     public function corrd(Request $request)
     {
         if ($request->ajax()) {
-            $data = Corr_D::corr()->unique('id')->get();
+            $data = Corr_D::corr()->get();
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                        $btn = "<a href='../admin/plan/corr/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../admin/plan/corr/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+                        $btn = "<a href='../plan/hasilcorr/edit/".$row->corrdid."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../plan/hasilcorr/print/".$row->corrdid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                         return $btn;
                     })
@@ -52,14 +53,14 @@ class CorrController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                        $btn = "<a href='../admin/plan/corr/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../admin/plan/corr/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+                        $btn = "<a href='../plan/corr/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../plan/corr/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
-            // dd($data);                    
+            // dd($data);
         }
         // return view('admin.plan.corr.index');
     }
@@ -119,6 +120,7 @@ class CorrController extends Controller
                 'out_corr' => $request->outCorr[$i],
                 'out_flexo' => $request->outFlexo[$i],
                 'qtyOrder' => $request->plan[$i],
+                'sisa' => $request->plan[$i],
                 'ukuran_roll' => $request->roll[$i],
                 'cop' => $request->cop[$i],
                 'trim_waste' => $request->trim[$i],
@@ -169,7 +171,14 @@ class CorrController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        $opi = Opi_M::opi2()->get();
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->get();
+
+        $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
+
+        // dd($data2);
+        return view('admin.plan.corr.edit', compact('data1','data2','opi'));
     }
 
     /**
@@ -181,7 +190,83 @@ class CorrController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data1 = $request->noOpi;
+        
+        $rmjumlah = 0;
+        $berattotal = 0;
+
+        for ($i=1; $i <= count($data1); $i++) { 
+            if ($request->detail[$i] != '') {
+                $corrd = Corr_D::find($request->detail[$i]);
+
+                $corrd->plan_corr_m_id = $id;
+                $corrd->opi_id = $request->opi_id[$i];
+                $corrd->urutan = $request->urutan[$i];
+                $corrd->sheet_p = $request->sheetp[$i];
+                $corrd->sheet_l = $request->sheetl[$i];
+                $corrd->bentuk = $request->tipebox[$i];
+                $corrd->flute = $request->flute[$i];
+                $corrd->out_corr = $request->outCorr[$i];
+                $corrd->out_flexo = $request->outFlexo[$i];
+                $corrd->qtyOrder = $request->plan[$i];
+                $corrd->sisa = $request->plan[$i];
+                $corrd->ukuran_roll = $request->roll[$i];
+                $corrd->cop = $request->cop[$i];
+                $corrd->trim_waste = $request->trim[$i];
+                $corrd->kebutuhan_kertasAtas = $request->kebutuhanAtas[$i];
+                $corrd->kebutuhan_kertasFlute1 = $request->kebutuhanFlute1[$i];
+                $corrd->kebutuhan_kertasTengah = $request->kebutuhanTengah[$i];
+                $corrd->kebutuhan_kertasFlute2 = $request->kebutuhanFlute2[$i];
+                $corrd->kebutuhan_kertasBawah = $request->kebutuhanBawah[$i];
+                $corrd->tonase = $request->beratOrder[$i];
+                $corrd->rm_order = $request->rmorder[$i];
+                $corrd->keterangan = $request->keterangan[$i];
+
+                $corrd->save();
+            } else {
+                if ($request->detail[$i] == '') {
+                    Corr_D::create([
+                        'plan_corr_m_id' => $id,
+                        'opi_id' => $request->opi_id[$i],
+                        'kode_plan_d' => $request->kodeplan[$i],
+                        'urutan' => $request->urutan[$i],
+                        'sheet_p' => $request->sheetp[$i],
+                        'sheet_l' => $request->sheetl[$i],
+                        'flute' => $request->flute[$i],
+                        'bentuk' => $request->tipebox[$i],
+                        'out_corr' => $request->outCorr[$i],
+                        'out_flexo' => $request->outFlexo[$i],
+                        'qtyOrder' => $request->plan[$i],
+                        'sisa' => $request->plan[$i],
+                        'ukuran_roll' => $request->roll[$i],
+                        'cop' => $request->cop[$i],
+                        'trim_waste' => $request->trim[$i],
+                        'rm_order' => $request->rmorder[$i],
+                        'tonase' => $request->beratOrder[$i],
+                        'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
+                        'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
+                        'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
+                        'kebutuhan_kertasFlute2' => $request->kebutuhanFlute2[$i],
+                        'kebutuhan_kertasBawah' => $request->kebutuhanBawah[$i],
+                        'keterangan' => $request->keterangan[$i],
+                        'status' => "Proses",
+                        'lock' => 1
+                    ]);
+                }
+            }
+            
+            $rmjumlah = $rmjumlah + $request->rmorder[$i];
+            $berattotal = $berattotal + $request->beratOrder[$i];
+        }
+
+        $upCorrm = Corr_M::find($id);
+
+        $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->total_Berat = $berattotal;
+
+        $upCorrm->save();
+        
+        return redirect('admin/plan/corr');
     }
 
     /**
@@ -190,8 +275,60 @@ class CorrController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function corr_pdf($id)
     {
-        //
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->orderBy('urutan','asc')->get();
+
+        // $data1= $data->sortBy('urutan','asc');
+        $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
+
+        // dd($data2);
+        return view('admin.plan.corr.pdfcorr', compact('data1','data2'));
+    }
+
+    // Hasil Corr
+    public function index_hasil_corr()
+    {
+        return view('admin.plan.hasilcorr.index');
+    }
+
+    public function edit_hasil_corr($id)
+    {
+        $corrd = Corr_D::corr()->where('plan_corr_d.id','=',$id)->first();
+        // dd($corrd);
+        return view('admin.plan.hasilcorr.edit', compact('corrd'));
+    }
+
+    public function update_hasil_corr(Request $request,$id)
+    {
+       $hasilcorr = HasilCorr::create([
+        'plan_corr_m_id' => $request->planmid,
+        'plan_corr_d_id' => $request->plandid,
+        'hasil_baik' => $request->baik,
+        'hasil_jelek' => $request->jelek,
+        'sisa' => $request->sisa,
+        'start_prod' => $request->start,
+        'end_prod' => $request->end,
+        'prod_time' => $request->durasi,
+        'prod_meter' => $request->prod_meter,
+        'm2' => $request->meter_persegi,
+        'jml_palet' => $request->jml_palet,
+        'status' => $request->status,
+        'next_mesin' => $request->mesin,
+       ]);
+
+       $upcorr = Corr_D::find($request->plandid);
+       $upcorr->sisa = $request->sisa;
+       if ($upcorr->sisa <= 0) {
+           $upcorr->status = 'Selesai';
+       }
+       else {
+           $upcorr->status = 'Belum Selesai';
+       }
+
+       $upcorr->save();
+
+    //    dd($upcorr);
+         return redirect('admin/plan/hasilcorr');
     }
 }
