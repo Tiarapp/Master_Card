@@ -17,7 +17,7 @@ class CreateJenisDowntimeTable extends Migration
             $table->id('id');
             $table->foreignId('mesin_id')->index();
             $table->string('downtime')->index();
-            $table->enum('category',['CORR','PRINTING','FINISHING','MEKANIK'])->index();  //INPUT IT
+            $table->enum('pic',['CORR','PRINTING','FINISHING','MEKANIK','ELEKTRIK'])->index();  //INPUT IT
             
             $table->integer('allowedMinute')->index();
             // TRACKING

@@ -92,7 +92,35 @@ class InitSeeder extends Seeder
         DB::table('number_sequence')->insert(['noBukti' => 'box.store', 'divisi_id' => 3, 'format' => 'Box.~MM~~YY~.~999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
         DB::table('number_sequence')->insert(['noBukti' => 'mastercard.store', 'divisi_id' => 3, 'format' => 'MC~9999~', 'reset' => 'Month', 'createdBy' => 'Seeder']);
 
-        
+        //JENIS DOWNTIME
+        //CORR
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'PUTUS','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'GAGAL SAMBUNG','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'SETTING OUT 5','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'CLEANING HOT PLATE','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        //PRINTING
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        //FINISHING
+        DB::table('mesin')->insert(['mesin_id' => '5','downtime' => 'SETTING','pic' => 'FINISHING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
 
     }
 }

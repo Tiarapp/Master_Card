@@ -16,7 +16,6 @@
             <div class="col-md-5">
                 <h4 class="modal-title">Tambah Box</h4>
                 <hr>
-                
                 @if ($errors->any())
                 <div class="alert alert-danger">
                     <strong>Error!</strong> 
@@ -51,7 +50,6 @@
                         </div>
                         <div class="modal fade" id="Item">
                             <div class="modal-dialog modal-xl">
-                                
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
