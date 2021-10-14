@@ -25,6 +25,7 @@ class CreatePlanCorrDTable extends Migration
             $table->integer('out_corr');
             $table->integer('out_flexo');
             $table->integer('qtyOrder');
+            $table->integer('sisa');
             $table->integer('ukuran_roll');
             $table->integer('cop');
             $table->double('trim_waste',25);

@@ -127,7 +127,7 @@
         serverSide:true,
         ajax:"{{ route('opi') }}",
         columns: [
-          { data: 'id', name: 'id' },
+          { data: 'opiid', name: 'opiid' },
           { data: 'noOPI', name: 'noOPI' },
           {
             data: 'action',
