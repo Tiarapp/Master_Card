@@ -23,4 +23,10 @@ class Conv_M extends Model
     {
         return $this->hasMany(Conv_D::class, 'plan_conv_m_id', 'id');
     }
+
+    
+    // public function scopeConvm($query)
+    // {
+        
+    // }
 }

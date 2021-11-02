@@ -166,65 +166,6 @@
                                     
                                 </div>
                             </div>
-
-                                {{-- <div class="card-body" style="border-right: -20px"> 
-                                    
-                                    <table class="table table-bordered" id="plancorr">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No. Opi</th>
-                                                <th scope="col">DT</th>
-                                                <th scope="col">Customer</th>
-                                                <th scope="col">Urutan</th>
-                                                <th scope="col">Sheet P</th>
-                                                <th scope="col">Sheet L</th>
-                                                <th scope="col">Flute</th>
-                                                <th scope="col">Tipe Box</th>
-                                                <th scope="col">Out Corr</th>
-                                                <th scope="col">Out Flexo</th>
-                                                <th scope="col">QTY Order</th>
-                                                <th scope="col">Ukuran Roll</th>
-                                                <th scope="col">Cop</th>
-                                                <th scope="col">Trim</th>
-                                                <th scope="col">RM Order</th>
-                                                <th scope="col">Qty(Kg)</th>
-                                                <th scope="col">Kebutuhan Kertas Atas</th>
-                                                <th scope="col">Kebutuhan Kertas Flute1</th>
-                                                <th scope="col">Kebutuhan Kertas Tengah</th>
-                                                <th scope="col">Kebutuhan Kertas Flute2</th>
-                                                <th scope="col">Kebutuhan Kertas Bawah</th>
-                                                <th scope="col">Keterangan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                <select class='js-example-basic-single col-md-12' name='nama[0]' id='nama[0]' '>
-                                                <option value=''>---</option>
-                                                </select>
-                                                </td>
-                                                <td><input type='text' name='substance[0]' id='substance[0]'></td>
-                                                <td><input type='text' name='qtyPcs[0]' id='qtyPcs[0]' onchange='getData()></td>
-                                                <td><input type='text' name='toleransiLebih[0]' id='toleransiLebih[0]' onchange='getData();'></td>
-                                                <td><input type='text' name='toleransiKurang[0]' id='toleransiKurang[0]' onchange='getData();'></td>
-                                                <td><input type='text' name='harga[0]' id='harga[0]' onchange='getData();'></td>
-                                                <td><input type='text' name='tax[0]' id='tax[0]' onchange='getData();'></td>
-                                                <td><input type='text' name='tipeBox[0]' id='tipeBox[0]' onchange='getData();'></td>
-                                                <td><input type='text' name='pcsToleransiLebih[0]' id='pcsToleransiLebih[0]'></td>
-                                                <td><input type='text' name='kgToleransiLebih[0]' id='kgToleransiLebih[0]'></td>
-                                                <td><input type='text' name='pcsToleransiKurang[0]' id='pcsToleransiKurang[0]'></td>
-                                                <td><input type='text' name='kgToleransiKurang[0]' id='kgToleransiKurang[0]'></td>
-                                                <td><input type='text' name='totalSblTax[0]' id='totalSblTax[0]' ></td>
-                                                <td><input type='text' name='hargaTax[0]' id='hargaTax[0]' ></td>
-                                                <td><input type='text' name='hargaKg[0]' id='hargaKg[0]' ></td>
-                                                <td><input type='text' name='qtyKg[0]' id='qtyKg[0]'></td>
-                                                <td><input type='text' name='Total[0]' id='Total[0]' ></td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div> --}}
-
                         </div>
                     </div>
                     <div class="col-md-12" id="plancorr" style="margin-bottom: 10px;">

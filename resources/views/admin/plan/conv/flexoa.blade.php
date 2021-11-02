@@ -36,16 +36,16 @@
       <!-- Small boxes (Stat box) -->
       
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('flexoa.create') }}" style="margin-bottom: 20px; color:white;" >Flexo A</a>
+        <a href="{{ route('flexoa.create') }}" style="margin-bottom: 20px; color:white;" >Plan Converting</a>
       </button>
-      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+      {{-- <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
         <a href="{{ route('corr.create') }}" style="margin-bottom: 20px; color:white;" >Flexo B</a>
       </button>
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
         <a href="{{ route('corr.create') }}" style="margin-bottom: 20px; color:white;" >Flexo C</a>
-      </button>
+      </button> --}}
       <div class="card-body">
-        <table class="table table-bordered" id="data_opi">
+        <table class="table table-bordered" id="data_planconv">
           <thead>
             <tr>
               <th scope="col">No.</th>
@@ -75,19 +75,19 @@
       return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
     };
     $(function(){
-      $('#data_opi').DataTable({
+      $('#data_planconv').DataTable({
         // "scrollY": "auto",
         processing:true,
         serverSide:true,
-        ajax:"{{ route('corrm') }}",
+        ajax:"{{ route('convm') }}",
         columns: [
           { data: 'id', name: 'id' },
-          { data: 'kode_plan', name: 'kode_plan' },
+          { data: 'kode', name: 'kode' },
           { data: 'tanggal', name: 'tanggal' },
           { data: 'shift', name: 'shift' },
           { data: 'revisi', name: 'revisi' },
-          { data: 'total_RM', name: 'total_RM' },
-          { data: 'total_Berat', name: 'total_Berat' },
+          { data: 'total_pcs', name: 'total_pcs' },
+          { data: 'total_kg', name: 'total_kg' },
           {
             data: 'action',
             name: 'action',
@@ -111,17 +111,17 @@
         "pageLength": 1000,
         // dom: 'Bftrip',
         // buttons: [
-          // 'copy',
-          // 'excel',
-          // 'pdf',
-          // {
-            // extend: 'print',
-            // text: 'Print',
-            // exportOption: {
-            //   modifier: {
-            //     selected: null
-            //   }
-            // }
+        //   'copy',
+        //   'excel',
+        //   'pdf',
+        //   {
+        //     extend: 'print',
+        //     text: 'Print',
+        //     exportOption: {
+        //       modifier: {
+        //         selected: null
+        //       }
+        //     }
         //   }
         // ],
         // "scrollX": true,

@@ -12,15 +12,15 @@ class ConvController extends Controller
 {
     public function json()
     {
-        // $data = Conv_D::conv()->get();
-        $data = HasilCorr::hasilcorr()->get();
+        $data = Conv_M::get();
+        // $data = HasilCorr::hasilcorr()->get();
         return DataTables::of($data)->make(true);
     }
 
-    public function corrd(Request $request)
+    public function convd(Request $request)
     {
         if ($request->ajax()) {
-            $data = Conv_D::corr()->get();
+            $data = Conv_D::convd()->get();
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -36,14 +36,34 @@ class ConvController extends Controller
         }
         // return view('admin.plan.corr.index');
     }
-    public function index_flexoA()
+
+    public function convm(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Conv_M::get();
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                        $btn = "<a href='../plan/conv/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../plan/conv/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            // dd($data);                    
+        }
+        // return view('admin.plan.corr.index');
+    }
+    public function index_conv()
     {
         return view('admin.plan.conv.flexoa');
     }
 
     public function createFlexoA()
     {
-        $corr = HasilCorr::hasilcorr()->get();
+        $corr = HasilCorr::hasilcorr()->orderBy('next_mesin', 'asc')->get();
 
         // dd($corr);
         return view('admin.plan.conv.flexocreate', compact('corr'));
@@ -54,7 +74,8 @@ class ConvController extends Controller
     {
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
-            'tanggal' => $request->tgl
+            'tanggal' => $request->tgl,
+            'shift' => $request->shift
         ]);
 
         $data = count($request->noOpi);
@@ -63,60 +84,76 @@ class ConvController extends Controller
         $berattotal = 0;
 
         for ($i=1; $i <= $data ; $i++) { 
-            // $kodeplan = $request->kodeplan;
-            // $urutan = $request->urutan;
             $status = 'Proses';
             $lock = 1;
 
-            // dd($kodeplan,$urutan);
-            $corrd = Corr_D::create([
+            $convd = Conv_D::create([
                 'opi_id'=> $request->opi_id[$i],
-                'plan_corr_m_id' => $corrm->id,
-                'kode_plan_d' => $request->kodeplan[$i],
-                'urutan' => $request->urutan[$i],
+                'plan_conv_m_id' => $convm->id,
+                'plan_corr_id' => $request->hasilcorrid[$i],
+                'tgl_kirim' => $request->dt[$i],
+                'nomc' => $request->mc[$i],
+                'nama_item' => $request->item[$i],
+                'customer' => $request->customer[$i],
+                'tipe_order' => $request->tipeOrder[$i],
+                'joint' => $request->finishing[$i],
+                'wax' => $request->wax[$i],
+                'mesin' => $request->mesin[$i],
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
                 'flute' => $request->flute[$i],
                 'bentuk' => $request->tipebox[$i],
-                'out_corr' => $request->outCorr[$i],
-                'out_flexo' => $request->outFlexo[$i],
-                'qtyOrder' => $request->plan[$i],
-                'sisa' => $request->plan[$i],
+                'warna' => $request->warna[$i],
+                'qtyOrder' => $request->order[$i],
+                'out_flexo' => $request->outconv[$i],
+                'jml_plan' => $request->plan[$i],
                 'ukuran_roll' => $request->roll[$i],
-                'cop' => $request->cop[$i],
-                'trim_waste' => $request->trim[$i],
-                'rm_order' => $request->rmorder[$i],
-                'tonase' => $request->beratOrder[$i],
-                'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
-                'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
-                'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
-                'kebutuhan_kertasFlute2' => $request->kebutuhanFlute2[$i],
-                'kebutuhan_kertasBawah' => $request->kebutuhanBawah[$i],
+                'bungkus' => $request->bungkus[$i],
+                'urutan'=> $request->urutan[$i],
+                // 'lain_lain' => $request->kebutuhanFlute2[$i],
+                // 'rm_order' => $request->kebutuhanBawah[$i],
+                // 'tonase' => $request->kebutuhanBawah[$i],
                 'keterangan' => $request->keterangan[$i],
                 'status' => $status,
                 'lock' => $lock
             ]);
 
-            $rmjumlah = $rmjumlah + $request->rmorder[$i];
-            $berattotal = $berattotal + $request->beratOrder[$i];
+            $uphasilcorr = HasilCorr::find($request->hasilcorrid[$i])->first();
+            $uphasilcorr->sisa = $request->order[$i] - $request->plan[$i];
+
+            $uphasilcorr->save();
         }
             
-        $upCorrm = Corr_M::find($corrm->id);
+        // $upCorrm = Conv_M::find($convm->id);
 
-        $upCorrm->total_RM = $rmjumlah;
-        $upCorrm->total_Berat = $berattotal;
+        // $upCorrm->total_RM = $rmjumlah;
+        // $upCorrm->total_Berat = $berattotal;
 
-        $upCorrm->save();
+        // $upCorrm->save();
 
         
         
-        return redirect('admin/plan/corr');
+        return redirect('admin/plan/conv');
     }
 
-    public function flexoa_pdf()
+    public function conv_pdf($id)
     {
-        $corr = HasilCorr::get();
+        $convm = Conv_M::find($id)->first();
+        $convd = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->orderBy('urutan','asc')->get();
+        
+        // dd($convd);
+        return view('admin.plan.conv.pdf', compact('convm','convd'));
+    }
 
-        return view('admin.plan.conv.pdf', compact('corr'));
+    public function edit($id)
+    {
+        
+        $hasilcorr = HasilCorr::hasilcorr()->get();
+        $data1 = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->get();
+
+        $data2 = Conv_M::where('plan_conv_m.id', '=', $id)->first();
+
+        dd($data1);
+        return view('admin.plan.conv.edit', compact('data1','data2','hasilcorr'));
     }
 }

@@ -197,7 +197,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
     
     //Mastercard
-    Route::get('/admin/mastercard', 'MastercardController@index')->middleware(['auth'])->name('mastercard');
+    Route::get('/admin/mastercard/b1', 'MastercardController@indexb1')->middleware(['auth'])->name('mastercardb1');
+    Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('mastercarddc');
     Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
     Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
     Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
@@ -233,14 +234,16 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
 
     
-    Route::get('/admin/plan/conv', 'ConvController@index_flexoA')->middleware(['auth'])->name('flexoa');
+    Route::get('/admin/plan/conv', 'ConvController@index_conv')->middleware(['auth'])->name('conv');
     Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
     Route::get('/admin/plan/conv/create', 'ConvController@create')->name('conv.create');
+    Route::get('/admin/plan/conv/convd', 'ConvController@convd')->name('convd');
+    Route::get('/admin/plan/conv/convm', 'ConvController@convm')->name('convm');
     Route::get('/admin/plan/conv/json', 'ConvController@json')->name('conv.json');
-    Route::post('/admin/plan/conv/store', 'ConvController@store')->name('conv.store');
+    Route::post('/admin/plan/conv/flexoastore', 'ConvController@storeFlexoA')->name('conv.storeflexoa');
     Route::get('/admin/plan/conv/edit/{id}', 'ConvController@edit')->name('conv.edit');
     Route::put('/admin/plan/conv/update/{id}', 'ConvController@update')->name('conv.update');
-    Route::get('/admin/plan/conv/print/{id}', 'ConvController@flexoa_pdf')->name('conv.print');
+    Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
 
     //Hasil
     Route::get('/admin/plan/hasilcorr', 'CorrController@index_hasil_corr')->middleware(['auth'])->name('hasilcorr');

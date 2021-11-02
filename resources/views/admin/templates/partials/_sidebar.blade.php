@@ -153,7 +153,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('mastercard') }}" class="nav-link">
+                <a href="{{ route('mastercardb1') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Master Card</p>
                 </a>
@@ -190,7 +190,7 @@
             </ul>
             <ul class="nav nav-treeview"> 
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('conv') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Plan Printing</p>
                 </a>
@@ -204,14 +204,14 @@
                 </a>
               </li>
             </ul>
-            <ul class="nav nav-treeview"> 
+            {{-- <ul class="nav nav-treeview"> 
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Hasil Plan Print</p>
                 </a>
               </li>
-            </ul>
+            </ul> --}}
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link active">
