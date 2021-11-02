@@ -119,10 +119,30 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Durasi</label>
+                                        <label>Out</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
+                                        <input type="text" class="form-control txt_line" name="out_corr" id="out_corr" value="{{ $corrd->out_corr }}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class='col-md-4'>
+                                        <label>P x L</label>
+                                    </div>
+                                    <div class='col-md-8'>
+                                        <div class='row'>
+                                            <div class='col-md-5'>
+                                                <input type='text' class='form-control txt_line' name='sheetp' id='sheetp' value="{{ $corrd->sheet_p }}" readonly>
+                                            </div>
+                                            <div class='col-md-2'>
+                                                <label for=''>X</label>
+                                            </div>
+                                            <div class='col-md-5'>
+                                                <input type='text' class='form-control txt_line' name='sheetl' id='sheetl' value="{{ $corrd->sheet_l }}" readonly>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +232,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Durasi</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-12">
@@ -283,11 +313,17 @@
     function getSisa() {
         plan = document.getElementById("plan").value;
         hasilbaik = document.getElementById("baik").value;
-        // hasiljelek = document.getElementById("jelek").value;
+        panjang = document.getElementById("sheetp").value;
+        lebar = document.getElementById("sheetl").value;
+        out = document.getElementById("out_corr").value;
 
         sisa = plan - hasilbaik ;
+        rm = ((hasilbaik/out)*(panjang/1000));
+        m2 = (panjang*lebar*hasilbaik)/1000000;
 
         document.getElementById("sisa").value = sisa;
+        document.getElementById("prod_meter").value = rm.toFixed(2);
+        document.getElementById("meter_persegi").value = m2.toFixed(2);
     }
 </script>
 @endsection

@@ -53,7 +53,7 @@
                                             <label class="control-label">Kode MC</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode">
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -78,8 +78,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan">
-                                                <option value='LOKAL'>LOKAL</option>
-                                                <option value='EXPORT'>EXPORT</option>
+                                                <option value='L'>LOKAL</option>
+                                                <option value='E'>EXPORT</option>
                                             </select>
                                         </div>
                                     </div>
@@ -480,11 +480,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
-                                                <option value='B'>B1</option>
-                                                <option value='D'>DC</option>
-                                                <option value='L'>LAYER</option>
-                                                <option value='S'>SHEET</option>
-                                                <option value='R'>ROLL</option>
+                                                <option value='B1'>B1</option>
+                                                <option value='DC'>DC</option>
+                                                <option value='LAYER'>LAYER</option>
+                                                <option value='SHEET'>SHEET</option>
+                                                <option value='ROLL'>ROLL</option>
                                             </select>
                                         </div>
                                     </div>
@@ -520,15 +520,15 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
-                                                <option value='Food and Baverage'>Food and Baverage</option>
-                                                <option value='Keramik'>Keramik</option>
-                                                <option value='Frozen Fish'>Frozen Fish</option>
-                                                <option value='Oil'>Oil</option>
-                                                <option value='Plastik'>Plastik</option>
-                                                <option value='DOC'>DOC</option>
-                                                <option value='Tissue'>Tissue</option>
-                                                <option value='Others'>Others</option>
-                                                <option value='Sheet'>Sheet</option>
+                                                <option value='001'>Food and Baverage</option>
+                                                <option value='002'>Keramik</option>
+                                                <option value='003'>Frozen Fish</option>
+                                                <option value='004'>Oil</option>
+                                                <option value='005'>Plastik</option>
+                                                <option value='006'>DOC</option>
+                                                <option value='007'>Tissue</option>
+                                                <option value='999'>Others</option>
+                                                <option value='OOO'>Sheet</option>
                                             </select>
                                         </div>
                                     </div>
@@ -604,7 +604,7 @@
                     <i class='far fa-check-square'></i>
                 </button>
                 <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                    <a href="{{ route('mastercard') }}">
+                    <a href="{{ route('mastercardb1') }}">
                         <i class='far fa-window-close' style='color:red'></i>
                     </a></button>
                 </div>
@@ -626,12 +626,53 @@
     // Datatable Barang(Item)
 
     function getKodeBarang() {
-        var ukuran = document.getElementById("tujuan").value;
+        var tujuan = document.getElementById("tujuan").value;
         var tipebox = document.getElementById("tipebox").value;
         var flute = document.getElementById("flute").value;
-        var tipemc = document.getElementById("tipemc").value;
+        var tipemc = document.getElementById("tipeMc").value;
         var golongan = document.getElementById("golongan").value;
         var koli = document.getElementById("koli").value;
+        var kode = document.getElementById("kode").value;
+
+        nomc = kode.substring(2,6);
+
+        if (tipemc == 'B1') {
+            tipemc = 'B';
+        } else if (tipemc == 'DC') {
+            tipemc = 'D';
+        } else if (tipemc == 'LAYER') {
+            tipemc = 'L';
+        } else if(tipemc == 'SINGLEFACE') {
+            tipemc = 'F';
+        } else if (tipemc == 'ROLL') {
+            tipemc = 'R';
+        } else if (tipemc == 'SHEET') {
+            tipemc = 'S';
+        } else if (tipemc == 'REJECT') {
+            tipemc = 'X';
+        } else if (tipemc == 'RMG') {
+            tipemc = 'Z';
+        }
+        
+
+        if (flute == 'BF') {
+            flute = '01';
+        } else if (flute == 'CF') {
+            flute = '02';
+        } else if (flute == 'BCF') {
+            flute = '03';
+        } else if (flute == 'EF') {
+            flute = '04';
+        } else if (flute == 'Roll') {
+            flute = '50';
+        }
+
+
+        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+koli+"."+nomc+"0."+golongan;
+
+        // console.log(kodebarang);
+
+        document.getElementById("kodeBarang").value = kodebarang;
     }
 
     $(".Item").ready(function(){
@@ -677,9 +718,9 @@
             document.getElementById('creasConv').value = Box[9];
             document.getElementById('flute').value = Box[4];
             
-            if (Box[4] == 'B1') {
-                var resultP = getID(Box[9]);
-                var resultL = getID(Box[10]);
+            if (Box[3] == 'B1') {
+                var resultP = getID(Box[8]);
+                var resultL = getID(Box[9]);
                 document.getElementById("lebarSheet").value = parseInt(resultP);
                 document.getElementById("panjangSheet").value = parseInt(resultL);
 
@@ -697,8 +738,8 @@
                 document.getElementById("panjangSheetBox").value = null;
                 document.getElementById("lebarSheetBox").value = null;
                 document.getElementById("luasSheetBox").value = null;
-                document.getElementById("substanceKontrak").value = null;
-                document.getElementById("substanceProduksi").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
             }
         } );
         

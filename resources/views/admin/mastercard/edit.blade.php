@@ -45,7 +45,13 @@
                                             <label class="control-label">Kode</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode" readonly>
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Revisi</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control txt_line" name="revisi" id="revisi" value="{{ $revisi }}" placeholder="Kode">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -55,7 +61,7 @@
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" readonly>
+                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}">
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
                                                     <i class="fas fa-search"></i>
@@ -69,7 +75,18 @@
                                             <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->namaBarang }}" name="namaBarang" id="namaBarang" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->namaBarang }}" name="namaBarang" id="namaBarang" onchange="getKodeBarang();">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Tujuan</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan" onchange="getKodeBarang();">
+                                                <option value='L'>LOKAL</option>
+                                                <option value='E'>EXPORT</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -85,7 +102,7 @@
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <input type="hidden" name="box_id" id="box_id" value="{{ $mc->box_id }}">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tipeBox }}" name="tipebox" id="tipebox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tipeBox }}" name="tipebox" id="tipebox" onchange="getKodeBarang();">
                                                 </div>
                                             </div>
                                             <div class="modal fade" id="Box">
@@ -152,16 +169,16 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC()">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC();getKodeBarang();">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC()">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC();getKodeBarang();">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv">
+                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -172,7 +189,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangDalam }}" name="panjangbox" id="panjangbox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangDalam }}" name="panjangbox" id="panjangbox" onchange="getKodeBarang();">
                                                 </div>
                                             </div>
                                         </div>
@@ -180,7 +197,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox"  value="{{ $mc->lebarDalam }}" readonly>
+                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox"  value="{{ $mc->lebarDalam }}" onchange="getKodeBarang();">
                                                 </div>
                                             </div>
                                         </div>
@@ -188,7 +205,7 @@
                                             <span class="x">T</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggiDalam }}" name="tinggibox" id="tinggibox" readonly>
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggiDalam }}" name="tinggibox" id="tinggibox" onchange="getKodeBarang();">
                                                 </div>
                                             </div>
                                         </div>
@@ -198,7 +215,7 @@
                                             <label class="control-label">Luas Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -207,7 +224,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" value="{{ $mc->gramSheetBoxKontrak2 }}" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetBoxKontrak2 }}"  name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetBoxKontrak2 }}"  name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -216,7 +233,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" value="{{ $mc->gramSheetBoxProduksi2 }}"  name="gramSheetBoxProduksi2" id="gramSheetBoxProduksi2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetBoxProduksi }}"  name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetBoxProduksi }}"  name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -224,7 +241,7 @@
                                             <label class="control-label">Creas Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrP }}"  name="creasCorr" id="creasCorr" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrP }}"  name="creasCorr" id="creasCorr" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -232,7 +249,7 @@
                                             <label class="control-label">Creas Conv</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrL }}"  name="creasConv" id="creasConv" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->CreasCorrL }}"  name="creasConv" id="creasConv" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                 </div>
@@ -246,7 +263,7 @@
                                             <label class="control-label">Flute</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getSheet()"  readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getSheet();getKodeBarang();" >
                                         </div>
                                     </div>
                                     <div class="row">
@@ -257,7 +274,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC()">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC(); getKodeBarang();">
                                                 </div>
                                             </div>
                                         </div>
@@ -265,7 +282,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC()">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC(); getKodeBarang();">
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -278,7 +295,7 @@
                                             <label class="control-label">Luas Sheet Corr</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line"  value="{{ $mc->luasSheet }}" name="luasSheet" id="luasSheet" readonly>
+                                            <input type="text" class="form-control txt_line"  value="{{ $mc->luasSheet }}" name="luasSheet" id="luasSheet" onchange="getKodeBarang();">
                                         </div>
                                         <div class="col-md-2">
                                             M<sup>2</sup>
@@ -290,7 +307,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" value="{{ $mc->gramSheetCorrKontrak2 }}"  name="gramSheetCorrKontrak2" id="gramSheetCorrKontrak2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetCorrKontrak2 }}"  name="gramSheetCorrKontrak" id="gramSheetCorrKontrak" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetCorrKontrak2 }}"  name="gramSheetCorrKontrak" id="gramSheetCorrKontrak" onchange="getKodeBarang();">
                                         </div>
                                         <div class="col-md-2">
                                             Gram
@@ -302,7 +319,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" value="{{ $mc->gramSheetCorrProduksi2 }}"  name="gramSheetCorrProduksi2" id="gramSheetCorrProduksi2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetCorrProduksi }}"  name="gramSheetCorrProduksi" id="gramSheetCorrProduksi" readonly>
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetCorrProduksi }}"  name="gramSheetCorrProduksi" id="gramSheetCorrProduksi" onchange="getKodeBarang();">
                                         </div>
                                         <div class="col-md-2">
                                             Gram
@@ -314,12 +331,12 @@
                                         </div>
                                         <div class="col-md-3">
                                             <input type="hidden" class="form-control txt_line col-md-11" value="{{ $mc->substanceKontrak_id }}" id="substanceKontrak_id" name="substanceKontrak_id">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Katas" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ktengah" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kcf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbawah" readonly>
-                                            <input type="text" class="form-control txt_line col-md-11" value="{{ $mc->subsKontrak }}" id="subskontrak" onchange="getGramKontrak()" readonly>
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Katas">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbf">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ktengah">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kcf">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Kbawah">
+                                            <input type="text" class="form-control txt_line col-md-11" value="{{ $mc->subsKontrak }}" id="subskontrak" onchange="getGramKontrak(); getKodeBarang();">
                                             <!-- Modal -->
                                             <div class="modal fade" id="SubstanceKontrak">
                                                 <div class="modal-dialog modal-xl">
@@ -386,12 +403,12 @@
                                         </div>
                                         <div class="col-md-3">
                                             <input type="hidden" class="form-control txt_line col-md-11" value="{{ $mc->substanceProduksi_id }}" id="substanceProduksi_id" name="substanceProduksi_id">
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Patas" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ptengah" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pcf" readonly>
-                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbawah" readonly>
-                                            <input type="text" class="form-control txt_line col-md-11" value="{{ $mc->subsProduksi }}" id="subsProduksi" readonly>
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Patas">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbf">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Ptengah">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pcf">
+                                            <input type="hidden" class="form-control txt_line col-md-11" value="" id="Pbawah">
+                                            <input type="text" class="form-control txt_line col-md-11" value="{{ $mc->subsProduksi }}" id="subsProduksi">
                                             <!-- Modal -->
                                             <div class="modal fade" id="SubstanceProduksi">
                                                 <div class="modal-dialog modal-xl">
@@ -462,14 +479,13 @@
                                             <label class="control-label">Tipe MC</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
+                                            <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc" onchange="getKodeBarang();">
                                                 <option value='{{ $mc->tipeMc }}'>{{ $mc->tipeMc }}</option>
-                                                <option value='BOX'>BOX</option>
-                                                <option value='BOX TUMBU'>BOX TUMBU</option>
-                                                <option value='BOX TUTUP'>BOX TUTUP</option>
+                                                <option value='B1'>B1</option>
+                                                <option value='DC'>DC</option>
                                                 <option value='LAYER'>LAYER</option>
-                                                <option value='PARTISI'>PARTISI</option>
                                                 <option value='SHEET'>SHEET</option>
+                                                <option value='ROLL'>ROLL</option>
                                             </select>
                                         </div>
                                     </div>
@@ -479,7 +495,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" value="{{ $mc->ccid }}" name="colorCombine_id" id="colorCombine_id">
-                                            <select class="js-example-basic-single col-md-12" name="warna" id="warna" onchange="getColor()">
+                                            <select class="js-example-basic-single col-md-12" name="warna" id="warna" onchange="getColor(); getKodeBarang();">
                                                 <option value='{{ $mc->ccid }}|{{ $mc->ccnama }}'>{{ $mc->ccnama }}</option>
                                                 @foreach ($colorcombine as $data)
                                                 <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
@@ -497,6 +513,24 @@
                                                 <option value='INSIDE'>INSIDE</option>
                                                 <option value='OUTSIDE'>OUTSIDE</option>
                                                 <option value='IN & OUT'>IN & OUT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Golongan Customer</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
+                                                <option value='001'>Food and Baverage</option>
+                                                <option value='002'>Keramik</option>
+                                                <option value='003'>Frozen Fish</option>
+                                                <option value='004'>Oil</option>
+                                                <option value='005'>Plastik</option>
+                                                <option value='006'>DOC</option>
+                                                <option value='007'>Tissue</option>
+                                                <option value='999'>Others</option>
+                                                <option value='OOO'>Sheet</option>
                                             </select>
                                         </div>
                                     </div>
@@ -571,7 +605,7 @@
                     <i class='far fa-check-square'></i>
                 </button>
                 <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                    <a href="{{ route('mastercard') }}">
+                    <a href="{{ route('mastercarddc') }}">
                         <i class='far fa-window-close' style='color:red'></i>
                     </a></button>
                 </div>
@@ -591,6 +625,59 @@
         $('.js-example-basic-single').select2();
     });
     // Datatable Barang(Item)
+
+    function getKodeBarang() {
+        var tujuan = document.getElementById("tujuan").value;
+        var tipebox = document.getElementById("tipebox").value;
+        var flute = document.getElementById("flute").value;
+        var tipemc = document.getElementById("tipeMc").value;
+        var golongan = document.getElementById("golongan").value;
+        var koli = document.getElementById("koli").value;
+        var kode = document.getElementById("kode").value;
+        var revisi = document.getElementById("revisi").value;
+
+        nomc = kode.substring(2,6);
+
+        if (tipemc == 'B1') {
+            tipemc = 'B';
+        } else if (tipemc == 'DC') {
+            tipemc = 'D';
+        } else if (tipemc == 'Layer') {
+            tipemc = 'L';
+        } else if(tipemc == 'SINGLEFACE') {
+            tipemc = 'F';
+        } else if (tipemc == 'ROLL') {
+            tipemc = 'R';
+        } else if (tipemc == 'SHEET') {
+            tipemc = 'S';
+        } else if (tipemc == 'REJECT') {
+            tipemc = 'X';
+        } else if (tipemc == 'RMG') {
+            tipemc = 'Z';
+        }
+        
+
+        if (flute == 'BF') {
+            flute = '01';
+        } else if (flute == 'CF') {
+            flute = '02';
+        } else if (flute == 'BCF') {
+            flute = '03';
+        } else if (flute == 'EF') {
+            flute = '04';
+        } else if (flute == 'Roll') {
+            flute = '50';
+        }
+
+
+        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+koli+"."+nomc+revisi+"."+golongan;
+
+        // console.log(kodebarang);
+
+        document.getElementById("kodeBarang").value = kodebarang;
+    }
+
+
     $(".Item").ready(function(){
         
         var table = $("#data_barang").DataTable({

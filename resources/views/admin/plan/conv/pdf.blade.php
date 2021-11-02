@@ -596,10 +596,6 @@ td
  font-weight:400;
  font-style:normal;
  font-family:"Times New Roman","sans-serif";
- border-top:1px solid #000000;
- border-right:1px solid #000000;
- border-bottom:1px solid #000000;
- border-left:1px solid #000000;
  mso-diagonal-down:none;
  mso-diagonal-up:none;
  mso-protection:locked visible;
@@ -719,10 +715,6 @@ td
  font-weight:400;
  font-style:normal;
  font-family:"Times New Roman","sans-serif";
- border-top:1px solid #000000;
- border-right:1px solid #000000;
- border-bottom:1px solid #000000;
- border-left:1px solid #000000;
  mso-diagonal-down:none;
  mso-diagonal-up:none;
  mso-protection:locked visible;
@@ -1250,9 +1242,9 @@ td
  </tr>
  <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r3'>
 <td height='31' class='x16' style='height:23.25pt;'></td>
-<td colspan='2' class='x23' style='mso-ignore:colspan;'>No Planning :</td>
-<td class='x24'>COVPA121021</td>
-<td class='x25'>REVISI 0</td>
+<td colspan='2' class='x23' >No Planning :</td>
+<td class='x24'>{{ $convm->kode }}</td>
+<td class='x25'>{{ $convm->revisi != 'NULL' ? $convm->revisi : '' }}</td>
 <td class='x26'></td>
 <td class='x19'></td>
 <td class='x26'></td>
@@ -1271,9 +1263,9 @@ td
  </tr>
  <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r4'>
 <td height='31' class='x16' style='height:23.25pt;'></td>
-<td colspan='2' class='x23' style='mso-ignore:colspan;'>Tanggal Planning :</td>
-<td class='x31' x:num="44481">10/12/2021</td>
-<td class='x25'>SHIFT 2-3</td>
+<td colspan='2' class='x23' >Tanggal Planning :</td>
+<td class='x31' x:num="44481">{{ $convm->tanggal }}</td>
+<td class='x25'>SHIFT {{ $convm->shift }}</td>
 <td class='x25'></td>
 <td class='x19'></td>
 <td class='x26'></td>
@@ -1334,28 +1326,30 @@ td
 <td class='x44'></td>
 <td class='x44'></td>
  </tr>
+ @foreach ($convd as $data)
  <tr height='93' style='mso-height-source:userset;height:69.75pt' id='r7'>
-<td height='91' class='x45' style='height:68.25pt;'>1</td>
-<td class='x45'>7723A</td>
-<td class='x46' x:num="44480">11 Oct&nbsp;</td>
-<td class='x45'>MC1895</td>
-<td class='x47'>PT. Avia Avian</td>
-<td class='x48'>Box DS No Drop 1 KG AW-07</td>
-<td class='x45'>OU</td>
-<td class='x49'>BCF</td>
-<td class='x50'>MRH126-BRU181-HTM01-</td>
-<td class='x51'>B1</td>
-<td class='x52' x:num="649">649</td>
-<td class='x52' x:num="1579">1,579</td>
-<td class='x52' x:num="1000">1,000</td>
-<td class='x52' x:num="1">1</td>
-<td class='x52' x:num="1142">1,142</td>
-<td class='x51'>Stitch06</td>
+<td height='91' class='x45' style='height:68.25pt;'>{{ $data->urutan }}</td>
+<td class='x45'>{{ $data->noopi }}</td>
+<td class='x46' x:num="44480">{{ $data->tgl_kirim }}</td>
+<td class='x45'>{{ $data->nomc }}</td>
+<td class='x47'>{{ $data->customer }}</td>
+<td class='x48'>{{ $data->nama_item }}</td>
+<td class='x45'>{{ $data->tipe_order }}</td>
+<td class='x49'>{{ $data->flute }}</td>
+<td class='x50'>{{ $data->warna }}</td>
+<td class='x51'>{{ $data->bentuk }}</td>
+<td class='x52' x:num="649">{{ $data->sheet_l }}</td>
+<td class='x52' x:num="1579">{{ $data->sheet_p }}</td>
+<td class='x52' x:num="1000">{{ $data->pcsKontrak }}</td>
+<td class='x52' x:num="1">{{ $data->out_flexo }}</td>
+<td class='x52' x:num="1142">{{ $data->jml_plan }}</td>
+<td class='x51'>{{ $data->joint }}</td>
 <td class='x53'></td>
-<td class='x54'></td>
+<td class='x54'>{{ $data->keterangan }}</td>
 <td class='x55'></td>
 <td class='x55'></td>
  </tr>
+ @endforeach
 </table>
 
 </body>

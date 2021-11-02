@@ -6,6 +6,7 @@ use App\Models\Corr_D;
 use App\Models\Corr_M;
 use App\Models\HasilCorr;
 use App\Models\Opi_M;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\Input;
@@ -33,8 +34,8 @@ class CorrController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                        $btn = "<a href='../plan/hasilcorr/edit/".$row->corrdid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilcorr/print/".$row->corrdid."' class='btn btn-outline-secondary' type='button'>Print</a>";
+                        $btn = "<a href='../plan/hasilcorr/edit/".$row->corrdid."' class='edit btn btn-primary btn-sm'>Edit Hasil</a>
+                        ";
 
                         return $btn;
                     })
@@ -299,24 +300,8 @@ class CorrController extends Controller
         return view('admin.plan.hasilcorr.edit', compact('corrd'));
     }
 
-    public function update_hasil_corr(Request $request,$id)
+    public function update_hasil_corr(Request $request)
     {
-       $hasilcorr = HasilCorr::create([
-        'plan_corr_m_id' => $request->planmid,
-        'plan_corr_d_id' => $request->plandid,
-        'hasil_baik' => $request->baik,
-        'hasil_jelek' => $request->jelek,
-        'sisa' => $request->sisa,
-        'start_prod' => $request->start,
-        'end_prod' => $request->end,
-        'prod_time' => $request->durasi,
-        'prod_meter' => $request->prod_meter,
-        'm2' => $request->meter_persegi,
-        'jml_palet' => $request->jml_palet,
-        'status' => $request->status,
-        'next_mesin' => $request->mesin,
-       ]);
-
        $upcorr = Corr_D::find($request->plandid);
        $upcorr->sisa = $request->sisa;
        if ($upcorr->sisa <= 0) {
@@ -327,8 +312,26 @@ class CorrController extends Controller
        }
 
        $upcorr->save();
+       
+        $startdate = date('Y-m-d H:i:s', strtotime($request->start));
+        $enddate = date('Y-m-d H:i:s', strtotime($request->end));
+        
+       HasilCorr::create([
+        'plan_corr_m_id' => $request->planmid,
+        'plan_corr_d_id' => $request->plandid,
+        'hasil_baik' => $request->baik,
+        'hasil_jelek' => $request->jelek,
+        'sisa' => $request->baik,
+        'start_prod' => $startdate,
+        'end_prod' => $enddate,
+        'prod_time' => $request->durasi,
+        'prod_meter' => $request->prod_meter,
+        'm2' => $request->meter_persegi,
+        'jml_palet' => $request->jml_palet,
+        'status' => $request->status,
+        'next_mesin' => $request->mesin,
+       ]);
 
-    //    dd($upcorr);
          return redirect('admin/plan/hasilcorr');
     }
 }

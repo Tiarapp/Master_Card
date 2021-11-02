@@ -19,6 +19,9 @@ class HasilCorr extends Model
         'prod_time',
         'prod_meter',
         'm2',
+        'start_prod',
+        'end_prod',
+        'sisa',
         'jml_palet',
         'status',
         'next_mesin',
@@ -42,8 +45,8 @@ class HasilCorr extends Model
         ->leftJoin('jenis_gram as Jbawah', 'subsP.jenisGramLinerBawah_id', 'Jbawah.id')
         ->leftJoin('substance as subsK', 'mc.substanceKontrak_id', 'subsK.id')
         ->leftJoin('dt', 'opi_m.dt_id', 'dt.id')
-        ->select('plan_corr_d.*','plan_corr_d.id as idcorr','opi_m.id as opi_id', 'plan_corr_m.id', 'plan_corr_m.kode_plan as kodeplanM', 'plan_corr_m.tanggal as tglcorr', 'plan_corr_m.shift', 'plan_corr_m.revisi', 'plan_corr_m.total_RM', 'plan_corr_m.total_Berat', 'opi_m.NoOpi as noopi', 'kontrak_m.customer_name as customer', 'mc.lebarSheet as lebar', 'mc.panjangSheet as panjang','Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'mc.gramSheetBoxKontrak as gramSheet', 'mc.kode as mckode', 'mc.namaBarang as barang', 'mc.tipeBox as tipebox', 'mc.lebarSheet', 'mc.panjangSheet', 'dt.pcsDt as order', 'dt.tglKirimDt as tglDt', 'plan_corr_m.tanggal as tglplan', 'plan_corr_m.total_RM as totalrm', 'plan_corr_m.total_Berat as totalberat', 'kontrak_m.tipeOrder as tipeorder','color_combine.nama as warna', 'mc.joint as joint',DB::raw('SUM(hasil_baik) as totalhasil'))
-        ->groupBy('plan_corr_d.id')
+        ->select('plan_corr_d.*','hasil_plan_corr.id as hasilcorrid','hasil_plan_corr.next_mesin as mesin','plan_corr_d.id as idcorr','mc.bungkus as bungkus','mc.wax as wax','opi_m.id as opi_id', 'plan_corr_m.id', 'plan_corr_m.kode_plan as kodeplanM', 'plan_corr_m.tanggal as tglcorr', 'plan_corr_m.shift', 'plan_corr_m.revisi', 'plan_corr_m.total_RM', 'plan_corr_m.total_Berat', 'opi_m.NoOpi as noopi', 'kontrak_m.customer_name as customer', 'mc.lebarSheet as lebar', 'mc.panjangSheet as panjang','Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'mc.gramSheetBoxKontrak as gramSheet', 'mc.kode as mckode', 'mc.namaBarang as barang', 'mc.tipeBox as tipebox', 'mc.lebarSheet', 'mc.panjangSheet', 'dt.pcsDt as order', 'dt.tglKirimDt as tglDt', 'plan_corr_m.tanggal as tglplan', 'plan_corr_m.total_RM as totalrm', 'plan_corr_m.total_Berat as totalberat', 'kontrak_m.tipeOrder as tipeorder','dt.pcsDt','color_combine.nama as warna', 'mc.joint as joint', 'hasil_plan_corr.hasil_baik', 'hasil_plan_corr.sisa as hasilsisacorr')
+        // ->groupBy('opi_m.id')
         ->get();
     }
 
