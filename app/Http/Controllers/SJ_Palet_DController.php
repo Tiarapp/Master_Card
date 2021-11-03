@@ -17,6 +17,7 @@ class SJ_Palet_DController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
+    // Tampilan Awal
     public function index()
     {
         $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->get();
@@ -29,6 +30,7 @@ class SJ_Palet_DController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
+    // Tampilan Input
     public function create()
     {
         $palet = DB::table('item_palet')->get();
@@ -219,7 +221,7 @@ class SJ_Palet_DController extends Controller
                         'ukuran' => $request->ukuran[$i],
                         'keterangan' => $request->keterangan[$i],
                         'createdBy' => $request->createdBy,
-                        ]);
+                    ]);
                 }
             }
         }

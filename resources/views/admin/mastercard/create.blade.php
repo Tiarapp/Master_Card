@@ -42,83 +42,55 @@
                                     <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Kode</label>
+                                            <label class="control-label">Kode Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode">
+                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" placeholder="Kode Barang">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">No Item</label>
+                                            <label class="control-label">Kode MC</label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <div class="row">
-                                                <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" readonly>
-                                                </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="Item">
-                                            <div class="modal-dialog modal-xl">
-                                                
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Barang PHP</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body Item">
-                                                        <div class="card-body">
-                                                            <table class="table table-bordered" id="data_barang">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th scope="col">Kode Barang.</th>
-                                                                        <th scope="col">Nama</th>
-                                                                        <th scope="col">Satuan</th>
-                                                                        <th scope="col">MC ID</th>
-                                                                        <th scope="col">Tgl Jadi</th>
-                                                                        <th scope="col">Gram</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php
-                                                                    $no = 1;
-                                                                    foreach ($item as $data) { ?>
-                                                                        <tr>
-                                                                            <td scope="row">{{ $data->KodeBrg }}</td>
-                                                                            <td>{{ $data->NamaBrg }}</td>
-                                                                            <td>{{ $data->Satuan }}</td>
-                                                                            <td>{{ $data->WeightValue }}</td>
-                                                                            <td>{{ $data->TglKeluar }}</td>
-                                                                            <td>{{ $data->BeratStandart }}</td>
-                                                                        </tr>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Nama Item</label>
                                         </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
+                                                </div>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {{--  --}}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Tujuan</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan">
+                                                <option value='L'>LOKAL</option>
+                                                <option value='E'>EXPORT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Nama Item</label>
+                                        </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
@@ -134,9 +106,6 @@
                                                     <input type="hidden" name="box_id" id="box_id">
                                                     <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" readonly>
                                                 </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
-                                                    <i class="fas fa-search"></i>
-                                                </button>
                                             </div>
                                             <div class="modal fade" id="Box">
                                                 <div class="modal-dialog modal-xl">
@@ -162,7 +131,6 @@
                                                                             <th scope="col">Tinggi Dalam Box</th>
                                                                             <th scope="col">Ukuran Creas Corr</th>
                                                                             <th scope="col">Ukuran Creas Conv</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -172,7 +140,7 @@
                                                                             <tr>
                                                                                 <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->nama }}</td>
+                                                                                <td>{{ $data->namaBarang }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
                                                                                 <td>{{ $data->lebarDalamBox }}</td>
@@ -180,7 +148,6 @@
                                                                                 <td>{{ $data->tinggiDalamBox }}</td>
                                                                                 <td>{{ $data->sizeCreasCorr }}</td>
                                                                                 <td>{{ $data->sizeCreasConv }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -394,7 +361,6 @@
                                                                             <th scope="col">Liner Tengah</th>
                                                                             <th scope="col">CF</th>
                                                                             <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -410,7 +376,6 @@
                                                                                 <td>{{ $data->linerTengah }}</td>
                                                                                 <td>{{ $data->cf }}</td>
                                                                                 <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -468,7 +433,6 @@
                                                                             <th scope="col">Liner Tengah</th>
                                                                             <th scope="col">CF</th>
                                                                             <th scope="col">Liner Bawah</th>
-                                                                            <th scope="col">Branch</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -485,7 +449,6 @@
                                                                                 <td>{{ $data->linerTengah }}</td>
                                                                                 <td>{{ $data->cf }}</td>
                                                                                 <td>{{ $data->linerBawah }}</td>
-                                                                                <td>{{ $data->branch }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -517,12 +480,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
-                                                <option value='BOX'>BOX</option>
-                                                <option value='BOX TUMBU'>BOX TUMBU</option>
-                                                <option value='BOX TUTUP'>BOX TUTUP</option>
+                                                <option value='B1'>B1</option>
+                                                <option value='DC'>DC</option>
                                                 <option value='LAYER'>LAYER</option>
-                                                <option value='PARTISI'>PARTISI</option>
                                                 <option value='SHEET'>SHEET</option>
+                                                <option value='ROLL'>ROLL</option>
                                             </select>
                                         </div>
                                     </div>
@@ -554,6 +516,24 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">Golongan Customer</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
+                                                <option value='001'>Food and Baverage</option>
+                                                <option value='002'>Keramik</option>
+                                                <option value='003'>Frozen Fish</option>
+                                                <option value='004'>Oil</option>
+                                                <option value='005'>Plastik</option>
+                                                <option value='006'>DOC</option>
+                                                <option value='007'>Tissue</option>
+                                                <option value='999'>Others</option>
+                                                <option value='OOO'>Sheet</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Joint</label>
                                         </div>
                                         <div class="col-md-4">
@@ -571,10 +551,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" >
-                                                <option value=''>--</option>
-                                                @foreach ($koli as $data)
-                                                <option value="{{ $data->qtyBox }}">{{ $data->qtyBox }}</option>
-                                                @endforeach
+                                                <option value='05'>5 Koli</option>
+                                                <option value='10'>10 Koli</option>
+                                                <option value='20'>20 Koli</option>
+                                                <option value='25'>25 Koli</option>
+                                                <option value='50'>50 Koli</option>
                                             </select>
                                         </div>
                                         /Koli
@@ -623,7 +604,7 @@
                     <i class='far fa-check-square'></i>
                 </button>
                 <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                    <a href="{{ route('mastercard') }}">
+                    <a href="{{ route('mastercardb1') }}">
                         <i class='far fa-window-close' style='color:red'></i>
                     </a></button>
                 </div>
@@ -643,6 +624,57 @@
         $('.js-example-basic-single').select2();
     });
     // Datatable Barang(Item)
+
+    function getKodeBarang() {
+        var tujuan = document.getElementById("tujuan").value;
+        var tipebox = document.getElementById("tipebox").value;
+        var flute = document.getElementById("flute").value;
+        var tipemc = document.getElementById("tipeMc").value;
+        var golongan = document.getElementById("golongan").value;
+        var koli = document.getElementById("koli").value;
+        var kode = document.getElementById("kode").value;
+
+        nomc = kode.substring(2,6);
+
+        if (tipemc == 'B1') {
+            tipemc = 'B';
+        } else if (tipemc == 'DC') {
+            tipemc = 'D';
+        } else if (tipemc == 'LAYER') {
+            tipemc = 'L';
+        } else if(tipemc == 'SINGLEFACE') {
+            tipemc = 'F';
+        } else if (tipemc == 'ROLL') {
+            tipemc = 'R';
+        } else if (tipemc == 'SHEET') {
+            tipemc = 'S';
+        } else if (tipemc == 'REJECT') {
+            tipemc = 'X';
+        } else if (tipemc == 'RMG') {
+            tipemc = 'Z';
+        }
+        
+
+        if (flute == 'BF') {
+            flute = '01';
+        } else if (flute == 'CF') {
+            flute = '02';
+        } else if (flute == 'BCF') {
+            flute = '03';
+        } else if (flute == 'EF') {
+            flute = '04';
+        } else if (flute == 'Roll') {
+            flute = '50';
+        }
+
+
+        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+koli+"."+nomc+"0."+golongan;
+
+        // console.log(kodebarang);
+
+        document.getElementById("kodeBarang").value = kodebarang;
+    }
+
     $(".Item").ready(function(){
         
         var table = $("#data_barang").DataTable({
@@ -653,7 +685,7 @@
             var item = (table.row(this).data());
             
             // document.getElementById('bj_id').value = item[0];
-            document.getElementById('kodeBarang').value = item[0];
+            // document.getElementById('kodeBarang').value = item[0];
             document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();
@@ -663,7 +695,11 @@
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": "100%",
+            // "scrollX": true,
+            // "autoWidth": true, 
+            "initComplete": function (settings, json) {  
+                $("#data_box").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+            },
             // "scrollY": "400px",
             select: true,
         });
@@ -671,6 +707,8 @@
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
+            // document.getElementById('kodeBarang').value = Box[2];
+            document.getElementById('namaBarang').value = Box[2];
             document.getElementById('tipebox').value = Box[3];
             document.getElementById('box_id').value = Box[0];
             document.getElementById('panjangbox').value = Box[5];
@@ -700,8 +738,8 @@
                 document.getElementById("panjangSheetBox").value = null;
                 document.getElementById("lebarSheetBox").value = null;
                 document.getElementById("luasSheetBox").value = null;
-                document.getElementById("substanceKontrak").value = null;
-                document.getElementById("substanceProduksi").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
             }
         } );
         
@@ -814,9 +852,9 @@
             result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
             result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
             
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {

@@ -16,7 +16,7 @@ class Kontrak_M extends Model
         'tglKontrak',
         'customer_name',
         'poCustomer',
-        'top_id',
+        'top',
         'caraKirim',
         'alamatKirim',
         'alamatKantor',
@@ -25,10 +25,11 @@ class Kontrak_M extends Model
         'alamatKantor_id',
         'alamatTagihan_id',
         'pcsKontrak',
-        'pctLebihToleransiKontrak',
-        'pcsLebihToleransiKontrak',
+        'pctToleransiLebihKontrak',
+        'pctToleransiKurangKontrak',
         'kgLebihToleransiKontrak',
         'pctKurangToleransiKontrak',
+        'pcsLebihToleransiKontrak',
         'pcsKurangToleransiKontrak',
         'kgKurangToleransiKontrak',
         'kgKontrak',
@@ -37,12 +38,31 @@ class Kontrak_M extends Model
         'amountTotal',
         'rpKg',
         'sisaPlafon',
-        'sisaKontrak',
+        'pcsSisaKontrak',
+        'kgSisaKontrak',
+        'tipeOrder',
         'status',
         'lock',
-        'sales_m_id',
+        'sales',
         'harga',
+        'keterangan',
         'createdBy'
-
     ];
+
+    // Relasi one to Many
+
+    public function kontrak_d()
+    {
+        return $this->hasMany(Kontrak_D::class, 'kontrak_m_id', 'id');
+    }
+
+    public function DeliveryTime()
+    {
+        return $this->hasMany(DeliveryTime::class, 'kontrak_m_id', 'id');
+    }
+
+    public function opi()
+    {
+        return $this->belongsToMany(Opi_M::class, 'kontrak_m_id', 'id');
+    }
 }

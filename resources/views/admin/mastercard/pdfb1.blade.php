@@ -1448,7 +1448,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
+                /* border-bottom: 2px solid #ffffff !important; */
                 border-top: 3px double #000000 !important;
                 border-left: 2px solid #000000 !important;
                 border-right: none #000000;
@@ -1462,7 +1462,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: 2px solid #000000 !important;
                 border-right: none #000000;
@@ -1475,7 +1475,7 @@
             td.style56 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: none #000000;
@@ -1487,7 +1487,7 @@
             th.style56 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: none #000000;
@@ -1499,7 +1499,7 @@
             td.style57 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: 1px dotted #ffffff !important;
@@ -1511,7 +1511,7 @@
             th.style57 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: 1px dotted #ffffff !important;
@@ -1524,9 +1524,9 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
-                border-left: 3px double #000000 !important;
+                /* border-left: 3px double #000000 !important; */
                 border-right: none #000000;
                 font-weight: bold;
                 color: #000000;
@@ -1538,7 +1538,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: 3px double #000000 !important;
                 border-right: none #000000;
@@ -1551,7 +1551,7 @@
             td.style59 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: 2px solid #000000 !important;
@@ -1563,7 +1563,7 @@
             th.style59 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
                 border-top: 3px double #000000 !important;
                 border-left: none #000000;
                 border-right: 2px solid #000000 !important;
@@ -1705,12 +1705,13 @@
                 padding-right: 0px;
                 border-bottom: 1px dotted #ffffff !important;
                 border-top: none #000000;
-                border-left: 3px double #000000 !important;
+                /* border-left: 3px double #000000 !important; */
                 border-right: none #000000;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
                 background-color: white;
+                text-align: left;
             }
             th.style65 {
                 padding: 5px;
@@ -1854,7 +1855,7 @@
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #000000 !important;
+                /* border-right: 2px solid #000000 !important; */
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -1879,7 +1880,7 @@
                 padding-right: 0px;
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
-                border-left: 3px double #000000 !important;
+                /* border-left: 3px double #000000 !important; */
                 border-right: none #000000;
                 color: #000000;
                 font-family: "Calibri";
@@ -1911,6 +1912,7 @@
                 font-family: "Calibri";
                 font-size: 11pt;
                 background-color: white;
+                text-align: left;
             }
             th.style73 {
                 padding: 5px;
@@ -2052,9 +2054,9 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
                 border-right: none #000000;
                 color: #000000;
                 font-family: "Calibri";
@@ -2065,9 +2067,9 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
                 border-right: none #000000;
                 color: #000000;
                 font-family: "Calibri";
@@ -2077,8 +2079,8 @@
             td.style80 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: none #000000;
                 color: #000000;
@@ -2089,8 +2091,8 @@
             th.style80 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: none #000000;
                 color: #000000;
@@ -2101,10 +2103,10 @@
             td.style81 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2113,10 +2115,10 @@
             th.style81 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2174,9 +2176,9 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
                 border-right: none #000000;
                 font-weight: bold;
                 text-decoration: underline;
@@ -2189,9 +2191,9 @@
                 padding: 5px;
                 vertical-align: bottom;
                 text-align: center;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
                 border-right: none #000000;
                 font-weight: bold;
                 text-decoration: underline;
@@ -2354,7 +2356,7 @@
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
                 border-left: 1px dotted #ffffff !important;
-                border-right: none #000000;
+                border-right: 2px solid #000000 !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
@@ -2378,7 +2380,7 @@
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2390,7 +2392,7 @@
                 border-bottom: 2px solid #000000 !important;
                 border-top: 1px dotted #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2500,7 +2502,7 @@
                 border-bottom: none #000000;
                 border-top: 2px solid #000000 !important;
                 border-left: 1px dotted #ffffff !important;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
@@ -2512,7 +2514,7 @@
                 border-bottom: none #000000;
                 border-top: 2px solid #000000 !important;
                 border-left: 1px dotted #ffffff !important;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
@@ -2649,10 +2651,10 @@
             td.style103 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
-                border-right: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
@@ -2661,10 +2663,10 @@
             th.style103 {
                 padding: 5px;
                 vertical-align: bottom;
-                border-bottom: 2px solid #f3f3f3 !important;
-                border-top: 2px solid #f3f3f3 !important;
-                border-left: 2px solid #f3f3f3 !important;
-                border-right: 2px solid #f3f3f3 !important;
+                border-bottom: 2px solid #ffffff !important;
+                border-top: 2px solid #ffffff !important;
+                border-left: 2px solid #ffffff !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 11pt;
@@ -2780,7 +2782,7 @@
                 border-bottom: 1px dotted #ffffff !important;
                 border-top: none #000000;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2792,7 +2794,7 @@
                 border-bottom: 1px dotted #ffffff !important;
                 border-top: none #000000;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2904,7 +2906,7 @@
                 border-bottom: none #000000;
                 border-top: 1px dotted #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2916,7 +2918,7 @@
                 border-bottom: none #000000;
                 border-top: 1px dotted #ffffff !important;
                 border-left: none #000000;
-                border-right: 2px solid #f3f3f3 !important;
+                border-right: 2px solid #ffffff !important;
                 color: #000000;
                 font-family: "Calibri";
                 font-size: 14pt;
@@ -2998,7 +3000,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: 1px solid #efefef !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 2px solid #000000 !important;
                 border-right: 1px solid #efefef !important;
                 color: #000000;
@@ -3010,7 +3012,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: 1px solid #efefef !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 2px solid #000000 !important;
                 border-right: 1px solid #efefef !important;
                 color: #000000;
@@ -3022,7 +3024,7 @@
                 padding: 5px;
                 vertical-align: top;
                 border-bottom: 1px solid #efefef !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 1px solid #efefef !important;
                 border-right: 1px solid #efefef !important;
                 color: #000000;
@@ -3034,7 +3036,7 @@
                 padding: 5px;
                 vertical-align: top;
                 border-bottom: 1px solid #efefef !important;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 1px solid #efefef !important;
                 border-right: 1px solid #efefef !important;
                 color: #000000;
@@ -3046,7 +3048,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 1px solid #efefef !important;
                 border-right: none #000000;
                 font-weight: bold;
@@ -3059,7 +3061,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: 1px solid #efefef !important;
                 border-right: none #000000;
                 font-weight: bold;
@@ -3072,7 +3074,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: none #000000;
                 color: #000000;
@@ -3084,7 +3086,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: none #000000;
                 color: #000000;
@@ -3096,7 +3098,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: 2px solid #000000 !important;
                 color: #000000;
@@ -3108,7 +3110,7 @@
                 padding: 5px;
                 vertical-align: bottom;
                 border-bottom: none #000000;
-                border-top: 2px solid #f3f3f3 !important;
+                border-top: 2px solid #ffffff !important;
                 border-left: none #000000;
                 border-right: 2px solid #000000 !important;
                 color: #000000;
@@ -4236,7 +4238,7 @@
                     <td class="column3 style69 s style71" colspan=4>{{ $namaSubsK }}</td>
                     <td class="column7 style72 s style73" colspan="1">Substance</td>
                     <td class="column9 style28 s">:</td>
-                    <td class="column10 style69 s style71" colspan="6">{{ $namaSubsK }}</td>
+                    <td class="column10 style69 s style71" colspan="6" style="border-right: 2px solid #000000 !important;">{{ $namaSubsK }}</td>
                 </tr>
                 <tr class="row13">
                     <td class="column0 style14 null"></td>
@@ -4281,7 +4283,7 @@
                     <td class="column6 style88 null"></td>
                     <td class="column7 style89 s style87" colspan="2">Berat Sheet Box :</td>
                     <td class="column9 style88 null"></td>
-                    <td class="column10 style90 null style87" colspan="2">{{ $mc->gramSheetBox }}</td>
+                    <td class="column10 style90 null style87" colspan="2">{{ $mc->gramSheetBoxProduksi }}</td>
                     <td class="column12 style91 s style92" colspan="2">gram</td>
                     <td class="column14 style93 null"></td>
                 </tr>
@@ -4294,7 +4296,7 @@
                     <td class="column6 style97 null"></td>
                     <td class="column7 style98 s" style="width: 100px;">Out Flexo</td>
                     <td class="column8 style99 s">:</td>
-                    <td class="column9 style100 null style21" colspan="6"></td>
+                    <td class="column9 style100 null style21" colspan="6">{{ $mc->outConv }}</td>
                 </tr>
                 <tr class="row19">
                     <td class="column0 style14 null"></td>

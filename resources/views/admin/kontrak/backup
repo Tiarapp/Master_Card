@@ -1,0 +1,110 @@
+<div class='row' style='margin-top:20px;'>
+  <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>
+    <div class='row'>
+      <div class='col-md-1'>
+        <label>No Opi</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'>
+        <input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'>
+      </div>
+      <div class='col-md-1'>
+        <label>DT</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'>
+      </div>
+      <div class='col-md-1'>
+        <label>Customer</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'>
+      </div>
+      <div class='col-md-1'>
+        <label>Item</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-1'>
+        <label>MC</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'>
+      </div>
+      <div class='col-md-1'>
+        <label>P x L</label>
+      </div>
+      <div class='col-md-2'>
+        <div class='row'>
+          <div class='col-md-5'>
+            <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>
+          </div>
+          <div class='col-md-2'>
+            <label for=''>X</label>
+          </div>
+          <div class='col-md-5'>
+            <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-1'>
+        <label>Tipe / Flute</label>
+      </div>
+      <div class='col-md-2'>
+        <div class='row'>
+          <div class='col-md-5'>
+            <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'>
+          </div>
+          <div class='col-md-2'>
+            <label for=''>/</label>
+          </div>
+          <div class='col-md-5'>
+            <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-1'>
+        <label>Order</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-1'>
+        <label>Out Flexo</label>
+      </div>
+      <div class='col-md-2'>
+        <div class='row'>
+          <div class='col-md-12'>
+            <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-1'>
+        <label> Warna </label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'>
+      </div>
+      <div class='col-md-1'>
+        <label>Finishing</label>
+      </div>
+      <div class='col-md-2'>
+        <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'>
+      </div>
+    </div>
+    <div class='row' style='margin-top:10px'>
+      <div class='col-md-1'>
+        <label>Keterangan</label>
+      </div>
+      <div class='col-md-10'>
+        <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

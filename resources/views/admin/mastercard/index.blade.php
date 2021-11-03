@@ -27,14 +27,21 @@
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
-      
-      <a href="{{ route('mastercard.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      <button >
+        <a href="{{ route('mastercard.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      </button>
+      <button class="btn btn-primary">
+        <a href="{{ route('mastercardb1') }}" style="margin-bottom: 20px; color:white" >Approved</a>
+      </button>
+      <button class="btn btn-primary">
+        <a href="{{ route('mastercarddc') }}" style="margin-bottom: 20px; color:white" >Process</a>
+      </button>
       <div class="card-body">
         
         <table class="table table-bordered" id="data_mc">
             <thead>
                 <tr>
-                    <th scope="col">No.</th>
+                    {{-- <th scope="col">No.</th> --}}
                     <th scope="col">Kode</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
@@ -52,10 +59,16 @@
             <tbody>
                     <?php 
                         $no = 1;
-                        foreach ($mc as $data) { ?>
+                        foreach ($mc as $data) { 
+                          if ($data->revisi == null) {
+                            $revisi = "";
+                          } else {
+                            $revisi = "-".$data->revisi;
+                          }
+                          ?>
                         <tr>
-                            <td scope="row">{{ $no++ }}</td>
-                            <td>{{ $data->kode }}</td>
+                            {{-- <td scope="row">{{ $no++ }}</td> --}}
+                            <td>{{ $data->kode }}{{ $revisi }}</td>
                             <td>{{ $data->namaBarang }}</td>
                             <td>{{ $data->tipeBox }}</td>
                             <td>{{ $data->CreasCorrP }}</td>
@@ -66,7 +79,10 @@
                             <td>{{ $data->luasSheet }}</td>
                             <td>{{ $data->keterangan }}</td>
                             <td><a href="../upload/{{ $data->gambar }}" target="_blank"><img width="150px" src="{{ url('/upload/'.$data->gambar) }}"></a></td>
-                            <td> <a href="../admin/mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> </td>
+                            <td> 
+                                <a href="../mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                                <a href="../mastercard/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a> 
+                            </td>
                         </tr>
                             <?php
                         }    

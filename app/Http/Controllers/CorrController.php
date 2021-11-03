@@ -1,0 +1,337 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Corr_D;
+use App\Models\Corr_M;
+use App\Models\HasilCorr;
+use App\Models\Opi_M;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Input\Input;
+use Yajra\DataTables\DataTables;
+
+class CorrController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function json()
+    {
+        $data = Corr_D::corr()->get();
+        return Datatables::of($data)->make(true);
+    }
+
+    public function corrd(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Corr_D::corr()->get();
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                        $btn = "<a href='../plan/hasilcorr/edit/".$row->corrdid."' class='edit btn btn-primary btn-sm'>Edit Hasil</a>
+                        ";
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            // dd($data);                    
+        }
+        // return view('admin.plan.corr.index');
+    }
+
+    public function corrm(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Corr_M::get();
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                        $btn = "<a href='../plan/corr/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                        <a href='../plan/corr/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            // dd($data);
+        }
+        // return view('admin.plan.corr.index');
+    }
+
+    public function index()
+    {
+        return view('admin.plan.corr.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $opi = Opi_M::opi2()->get();
+        
+
+        return view('admin.plan.corr.create', compact('opi'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $corrm = Corr_M::create([   
+            'kode_plan' => $request->kodeplan,
+            'tanggal' => $request->tgl
+        ]);
+
+        $data = count($request->noOpi);
+        
+        $rmjumlah = 0;
+        $berattotal = 0;
+
+        for ($i=1; $i <= $data ; $i++) { 
+            // $kodeplan = $request->kodeplan;
+            // $urutan = $request->urutan;
+            $status = 'Proses';
+            $lock = 1;
+
+            // dd($kodeplan,$urutan);
+            $corrd = Corr_D::create([
+                'opi_id'=> $request->opi_id[$i],
+                'plan_corr_m_id' => $corrm->id,
+                'kode_plan_d' => $request->kodeplan[$i],
+                'urutan' => $request->urutan[$i],
+                'sheet_p' => $request->sheetp[$i],
+                'sheet_l' => $request->sheetl[$i],
+                'flute' => $request->flute[$i],
+                'bentuk' => $request->tipebox[$i],
+                'out_corr' => $request->outCorr[$i],
+                'out_flexo' => $request->outFlexo[$i],
+                'qtyOrder' => $request->plan[$i],
+                'sisa' => $request->plan[$i],
+                'ukuran_roll' => $request->roll[$i],
+                'cop' => $request->cop[$i],
+                'trim_waste' => $request->trim[$i],
+                'rm_order' => $request->rmorder[$i],
+                'tonase' => $request->beratOrder[$i],
+                'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
+                'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
+                'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
+                'kebutuhan_kertasFlute2' => $request->kebutuhanFlute2[$i],
+                'kebutuhan_kertasBawah' => $request->kebutuhanBawah[$i],
+                'keterangan' => $request->keterangan[$i],
+                'status' => $status,
+                'lock' => $lock
+            ]);
+
+            $rmjumlah = $rmjumlah + $request->rmorder[$i];
+            $berattotal = $berattotal + $request->beratOrder[$i];
+        }
+            
+        $upCorrm = Corr_M::find($corrm->id);
+
+        $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->total_Berat = $berattotal;
+
+        $upCorrm->save();
+
+        
+        
+        return redirect('admin/plan/corr');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        
+        $opi = Opi_M::opi2()->get();
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->get();
+
+        $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
+
+        // dd($data2);
+        return view('admin.plan.corr.edit', compact('data1','data2','opi'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $data1 = $request->noOpi;
+        
+        $rmjumlah = 0;
+        $berattotal = 0;
+
+        for ($i=1; $i <= count($data1); $i++) { 
+            if ($request->detail[$i] != '') {
+                $corrd = Corr_D::find($request->detail[$i]);
+
+                $corrd->plan_corr_m_id = $id;
+                $corrd->opi_id = $request->opi_id[$i];
+                $corrd->urutan = $request->urutan[$i];
+                $corrd->sheet_p = $request->sheetp[$i];
+                $corrd->sheet_l = $request->sheetl[$i];
+                $corrd->bentuk = $request->tipebox[$i];
+                $corrd->flute = $request->flute[$i];
+                $corrd->out_corr = $request->outCorr[$i];
+                $corrd->out_flexo = $request->outFlexo[$i];
+                $corrd->qtyOrder = $request->plan[$i];
+                $corrd->sisa = $request->plan[$i];
+                $corrd->ukuran_roll = $request->roll[$i];
+                $corrd->cop = $request->cop[$i];
+                $corrd->trim_waste = $request->trim[$i];
+                $corrd->kebutuhan_kertasAtas = $request->kebutuhanAtas[$i];
+                $corrd->kebutuhan_kertasFlute1 = $request->kebutuhanFlute1[$i];
+                $corrd->kebutuhan_kertasTengah = $request->kebutuhanTengah[$i];
+                $corrd->kebutuhan_kertasFlute2 = $request->kebutuhanFlute2[$i];
+                $corrd->kebutuhan_kertasBawah = $request->kebutuhanBawah[$i];
+                $corrd->tonase = $request->beratOrder[$i];
+                $corrd->rm_order = $request->rmorder[$i];
+                $corrd->keterangan = $request->keterangan[$i];
+
+                $corrd->save();
+            } else {
+                if ($request->detail[$i] == '') {
+                    Corr_D::create([
+                        'plan_corr_m_id' => $id,
+                        'opi_id' => $request->opi_id[$i],
+                        'kode_plan_d' => $request->kodeplan[$i],
+                        'urutan' => $request->urutan[$i],
+                        'sheet_p' => $request->sheetp[$i],
+                        'sheet_l' => $request->sheetl[$i],
+                        'flute' => $request->flute[$i],
+                        'bentuk' => $request->tipebox[$i],
+                        'out_corr' => $request->outCorr[$i],
+                        'out_flexo' => $request->outFlexo[$i],
+                        'qtyOrder' => $request->plan[$i],
+                        'sisa' => $request->plan[$i],
+                        'ukuran_roll' => $request->roll[$i],
+                        'cop' => $request->cop[$i],
+                        'trim_waste' => $request->trim[$i],
+                        'rm_order' => $request->rmorder[$i],
+                        'tonase' => $request->beratOrder[$i],
+                        'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
+                        'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
+                        'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
+                        'kebutuhan_kertasFlute2' => $request->kebutuhanFlute2[$i],
+                        'kebutuhan_kertasBawah' => $request->kebutuhanBawah[$i],
+                        'keterangan' => $request->keterangan[$i],
+                        'status' => "Proses",
+                        'lock' => 1
+                    ]);
+                }
+            }
+            
+            $rmjumlah = $rmjumlah + $request->rmorder[$i];
+            $berattotal = $berattotal + $request->beratOrder[$i];
+        }
+
+        $upCorrm = Corr_M::find($id);
+
+        $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->total_Berat = $berattotal;
+
+        $upCorrm->save();
+        
+        return redirect('admin/plan/corr');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function corr_pdf($id)
+    {
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->orderBy('urutan','asc')->get();
+
+        // $data1= $data->sortBy('urutan','asc');
+        $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
+
+        // dd($data2);
+        return view('admin.plan.corr.pdfcorr', compact('data1','data2'));
+    }
+
+    // Hasil Corr
+    public function index_hasil_corr()
+    {
+        return view('admin.plan.hasilcorr.index');
+    }
+
+    public function edit_hasil_corr($id)
+    {
+        $corrd = Corr_D::corr()->where('plan_corr_d.id','=',$id)->first();
+        // dd($corrd);
+        return view('admin.plan.hasilcorr.edit', compact('corrd'));
+    }
+
+    public function update_hasil_corr(Request $request)
+    {
+       $upcorr = Corr_D::find($request->plandid);
+       $upcorr->sisa = $request->sisa;
+       if ($upcorr->sisa <= 0) {
+           $upcorr->status = 'Selesai';
+       }
+       else {
+           $upcorr->status = 'Belum Selesai';
+       }
+
+       $upcorr->save();
+       
+        $startdate = date('Y-m-d H:i:s', strtotime($request->start));
+        $enddate = date('Y-m-d H:i:s', strtotime($request->end));
+        
+       HasilCorr::create([
+        'plan_corr_m_id' => $request->planmid,
+        'plan_corr_d_id' => $request->plandid,
+        'hasil_baik' => $request->baik,
+        'hasil_jelek' => $request->jelek,
+        'sisa' => $request->baik,
+        'start_prod' => $startdate,
+        'end_prod' => $enddate,
+        'prod_time' => $request->durasi,
+        'prod_meter' => $request->prod_meter,
+        'm2' => $request->meter_persegi,
+        'jml_palet' => $request->jml_palet,
+        'status' => $request->status,
+        'next_mesin' => $request->mesin,
+       ]);
+
+         return redirect('admin/plan/hasilcorr');
+    }
+}

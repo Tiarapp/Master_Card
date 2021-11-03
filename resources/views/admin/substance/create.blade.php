@@ -248,9 +248,9 @@
             document.getElementById("jenisGramLinerTengah_id").value = idTengah;
             document.getElementById("jenisGramFlute2_id").value = idflute2;
             document.getElementById("jenisGramLinerBawah_id").value = idbawah;
-            document.getElementById("namaMc").value = namaflute + ' ' + namaMcAtas + '/' + namaMcflute1 + '/' + namaMcTengah + '/' + namaMcflute2 + '/' + namaMcbawah;
-            document.getElementById("kode").value = namaflute + ' ' + namaMcAtas + '/' + namaMcflute1 + '/' + namaMcTengah + '/' + namaMcflute2 + '/' + namaMcbawah;
-            document.getElementById("namaLog").value = namaflute + ' ' + namaLogAtas + '/' + namaLogflute1 + '/' + namaLogTengah + '/' + namaLogflute2 + '/' + namaLogbawah;
+            document.getElementById("namaMc").value = namaMcAtas + '/' + namaMcflute1 + '/' + namaMcTengah + '/' + namaMcflute2 + '/' + namaMcbawah;
+            document.getElementById("kode").value = namaMcAtas + '/' + namaMcflute1 + '/' + namaMcTengah + '/' + namaMcflute2 + '/' + namaMcbawah;
+            document.getElementById("namaLog").value = namaLogAtas + '/' + namaLogflute1 + '/' + namaLogTengah + '/' + namaLogflute2 + '/' + namaLogbawah;
         }
         // atas.onchange = function() {
             //     var lineratas = atas.options[atas.selectedIndex].getAttribute('name');

@@ -1,0 +1,471 @@
+@extends('admin.templates.partials.default')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+{{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> --}}
+
+<style>
+    .select2 {
+        width: 206px !important;
+    }
+</style>
+
+
+@section('content')
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="row" id="form_list_mc">
+            <div class="col-md-12">
+                <h4 class="modal-title">Planning Corrugating</h4>
+                <hr>
+                
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> 
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $errors }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                
+                <form action="{{ route('corr.store') }}"  method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Kode Planning</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Shift</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Tanggal</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" class="form-control txt_line" name="kodeplan" id="kodeplan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Pilih Customer</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" onchange="getGramKontrak()" readonly>
+                                                </div>
+                                                
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="Customer">
+                                                    <div class="modal-dialog modal-xl">
+                                                        
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">List Customer</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                            <div class="modal-body customer">
+                                                                <div class="card-body">
+                                                                    <table class="table table-bordered" id="data_customer">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Kode</th>
+                                                                                <th scope="col">Nama Customer</th>
+                                                                                <th scope="col">Alamat Kantor</th>
+                                                                                <th scope="col">Telp</th>
+                                                                                <th scope="col">Fax</th>
+                                                                                <th scope="col">Alamat Kirim</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php 
+                                                                            foreach ($opi as $data) { ?>
+                                                                                <tr>
+                                                                                    <td scope="row">{{ $data->nama }}</td>
+                                                                                    {{-- <td>{{ $data->Nama }}</td>
+                                                                                    <td>{{ $data->AlamatKantor }}</td>
+                                                                                    <td>{{ $data->TelpKantor }}</td>
+                                                                                    <td>{{ $data->FaxKantor }}</td>
+                                                                                    <td>{{ $data->AlamatKirim }}</td> --}}
+                                                                                </tr>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <button type="button" data-toggle="modal" data-target="#Customer">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="card-body" style="border-right: -20px"> 
+                                    
+                                    <table class="table table-bordered" id="plancorr">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No. Opi</th>
+                                                <th scope="col">DT</th>
+                                                {{-- <th scope="col">Customer</th>
+                                                <th scope="col">Urutan</th>
+                                                <th scope="col">Sheet P</th>
+                                                <th scope="col">Sheet L</th>
+                                                <th scope="col">Flute</th>
+                                                <th scope="col">Tipe Box</th>
+                                                <th scope="col">Out Corr</th>
+                                                <th scope="col">Out Flexo</th>
+                                                <th scope="col">QTY Order</th>
+                                                <th scope="col">Ukuran Roll</th>
+                                                <th scope="col">Cop</th>
+                                                <th scope="col">Trim</th>
+                                                <th scope="col">RM Order</th>
+                                                <th scope="col">Qty(Kg)</th>
+                                                <th scope="col">Kebutuhan Kertas Atas</th>
+                                                <th scope="col">Kebutuhan Kertas Flute1</th>
+                                                <th scope="col">Kebutuhan Kertas Tengah</th>
+                                                <th scope="col">Kebutuhan Kertas Flute2</th>
+                                                <th scope="col">Kebutuhan Kertas Bawah</th>
+                                                <th scope="col">Keterangan</th> --}}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                <select class='js-example-basic-single col-md-12' name='nama[0]' id='nama[0]' '>
+                                                <option value=''>---</option>
+                                                </select>
+                                                </td>
+                                                <td><input type='text' name='substance[0]' id='substance[0]'></td>
+                                                {{-- <td><input type='text' name='qtyPcs[0]' id='qtyPcs[0]' onchange='getData()></td>
+                                                <td><input type='text' name='toleransiLebih[0]' id='toleransiLebih[0]' onchange='getData();'></td>
+                                                <td><input type='text' name='toleransiKurang[0]' id='toleransiKurang[0]' onchange='getData();'></td>
+                                                <td><input type='text' name='harga[0]' id='harga[0]' onchange='getData();'></td>
+                                                <td><input type='text' name='tax[0]' id='tax[0]' onchange='getData();'></td>
+                                                <td><input type='text' name='tipeBox[0]' id='tipeBox[0]' onchange='getData();'></td>
+                                                <td><input type='text' name='pcsToleransiLebih[0]' id='pcsToleransiLebih[0]'></td>
+                                                <td><input type='text' name='kgToleransiLebih[0]' id='kgToleransiLebih[0]'></td>
+                                                <td><input type='text' name='pcsToleransiKurang[0]' id='pcsToleransiKurang[0]'></td>
+                                                <td><input type='text' name='kgToleransiKurang[0]' id='kgToleransiKurang[0]'></td>
+                                                <td><input type='text' name='totalSblTax[0]' id='totalSblTax[0]' ></td>
+                                                <td><input type='text' name='hargaTax[0]' id='hargaTax[0]' ></td>
+                                                <td><input type='text' name='hargaKg[0]' id='hargaKg[0]' ></td>
+                                                <td><input type='text' name='qtyKg[0]' id='qtyKg[0]'></td>
+                                                <td><input type='text' name='Total[0]' id='Total[0]' ></td> --}}
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                
+                                <div class="col-md-2">
+                                    <a class="btn btn-success" id="add_button" title="Add field">TAMBAH</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-primary" type="submit">SIMPAN</a>
+                </form>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;">
+        <div class="row">
+            <div class="col-md-1">
+                <label>No Opi</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control txt_line" name="noOpi[]" id="noOpi[]">
+            </div>
+            <div class="col-md-1">
+                <label>DT</label>
+            </div>
+            <div class="col-md-2">
+                <input type="date" class="form-control txt_line" name="dt[]" id="dt[]">
+            </div>
+            <div class="col-md-1">
+                <label>Customer</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control txt_line" name="customer[]" id="customer[]">
+            </div>
+            <div class="col-md-1">
+                <label>Item</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control txt_line" name="item[]" id="item[]">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label>MC</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control txt_line" name="mc[]" id="mc[]">
+            </div>
+            <div class="col-md-1">
+                <label>P x L</label>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="sheetp[]" id="sheetp[]">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="">X</label> 
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="sheetl[]" id="sheetl[]">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <label>Tipe / Flute</label>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control txt_line" name="tipebox[]" id="tipebox[]">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="">/</label> 
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control txt_line" name="flute[]" id="flute[]">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <label>Order</label>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control txt_line" name="order[]" id="order[]">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label>Out Corr / Out Flexo</label>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="outCorr[]" id="outCorr[]">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="">/</label> 
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="outFlexo[]" id="outFlexo[]">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <label>Lebar Roll</label>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control txt_line" name="roll[]" id="roll[]">
+            </div>
+            <div class="col-md-1">
+                <label>Plan</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control txt_line" name="plan[]" id="plan[]">
+            </div>
+            <div class="col-md-1">
+                <label>trim / cop</label>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="trim[]" id="trim[]">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="">/</label> 
+                    </div>
+                    <div class="col-md-5">
+                        <input type="number" class="form-control txt_line" name="cop[]" id="cop[]">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-botton:5px;">
+            <div class="col-md-1">
+                <label>K. Atas</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="kertasAtas[]" id="kertasAtas[]">
+            </div>
+            <div class="col-md-1">
+                <label>K. Flute1</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="kertasFlute1[]" id="kertasFlute1[]">
+            </div>
+            <div class="col-md-1">
+                <label>K. Tengah</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="kertasTengah[]" id="kertasTengah[]">
+            </div>
+            <div class="col-md-1">
+                <label>K. Flute2</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="kertasFlute2[]" id="kertasFlute2[]">
+            </div>
+            <div class="col-md-1">
+                <label>K. Bawah</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="kertasBawah[]" id="kertasBawah[]">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label>Kebutuhan Atas</label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control txt_line" name="kertasAtas[]" id="kertasAtas[]">
+            </div>
+            <div class="col-md-1">
+                <label>Kebutuhan Flute1</label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control txt_line" name="kertasFlute1[]" id="kertasFlute1[]">
+            </div>
+            <div class="col-md-1">
+                <label>Kebutuhan Tengah</label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control txt_line" name="kertasTengah[]" id="kertasTengah[]">
+            </div>
+            <div class="col-md-1">
+                <label>Kebutuhan Flute2</label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control txt_line" name="kertasFlute2[]" id="kertasFlute2[]">
+            </div>
+            <div class="col-md-1">
+                <label>Kebutuhan Bawah</label>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control txt_line" name="kertasBawah[]" id="kertasBawah[]">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label>Berat/Pcs</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="beratpcs[]" id="beratpcs[]">
+            </div>
+            <div class="col-md-1">
+                <label>RM Order</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="rmorder[]" id="rmorder[]">
+            </div>
+            <div class="col-md-1">
+                <label>Berat Order</label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control txt_line" name="beratOrder[]" id="beratOrder[]">
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+<tr style='overflow:auto; width:100%;position:relative;'> <td><input type='text' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'></td> <td><input type='text' name='dt["+countrow+"]' id='dt["+countrow+"]'></td> <td><input type='text' name='customer["+countrow+"]' id='customer["+countrow+"]' ></td> <td><input type='text' name='urutan["+countrow+"]' id='urutan["+countrow+"]' ></td> <td><input type='text' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]' ></td> <td><input type='text' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]' ></td> <td><input type='text' name='flute["+countrow+"]' id='flute["+countrow+"]' ></td> <td><input type='text' name='tipeBox["+countrow+"]' id='tipeBox["+countrow+"]' ></td> <td><input type='text' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]'></td> <td><input type='text' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'></td> <td><input type='text' name='QtyOrder["+countrow+"]' id='QtyOrder["+countrow+"]'></td> <td><input type='text' name='ukuranRoll["+countrow+"]' id='ukuranRoll["+countrow+"]'></td> <td><input type='text' name='cop["+countrow+"]' id='cop["+countrow+"]' ></td> <td><input type='text' name='trimwaste["+countrow+"]' id='trimwaste["+countrow+"]' ></td> <td><input type='text' name='rmOrder["+countrow+"]' id='rmOrder["+countrow+"]' ></td> <td><input type='text' name='qtyKg["+countrow+"]' id='qtyKg["+countrow+"]'></td> <td><input type='text' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]' ></td> <td><input type='text' name='kertasF1["+countrow+"]' id='kertasF1["+countrow+"]' ></td> <td><input type='text' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]' ></td> <td><input type='text' name='kertasF2["+countrow+"]' id='kertasF2["+countrow+"]' ></td> <td><input type='text' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]' ></td> <td><input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' ></td> </tr>
+@section('javascripts')
+<script type="text/javascript">
+    $(document).ready(function(){
+        // var countrow = 1; //Input fields increment limitation
+        // var countdata = 1; //Input fields increment limitation
+        // var addButton = $('#add_button'); //Add button selector
+        // var tab = $('.field_wrapper'); //Input field wrapper
+        // var markup = 
+
+        var plan = $('#plancorr').DataTable();
+            
+        //Once add button is clicked
+        $('#add_button').on('click', function() {
+            plan.row.add([
+                "name":       "Tiger Nixon",
+                "position":   "System Architect",
+            ]).draw( false );
+        });
+
+        $('#add_button').click();
+        });
+            //     $("#plancorr").append("<tr> <td><input type='text' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'></td> <td><input type='text' name='dt["+countrow+"]' id='dt["+countrow+"]'></td> <td><input type='text' name='customer["+countrow+"]' id='customer["+countrow+"]' ></td> <td><input type='text' name='urutan["+countrow+"]' id='urutan["+countrow+"]' ></td> <td><input type='text' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]' ></td> <td><input type='text' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]' ></td> <td><input type='text' name='flute["+countrow+"]' id='flute["+countrow+"]' ></td> <td><input type='text' name='tipeBox["+countrow+"]' id='tipeBox["+countrow+"]' ></td> <td><input type='text' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]'></td> <td><input type='text' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'></td> <td><input type='text' name='QtyOrder["+countrow+"]' id='QtyOrder["+countrow+"]'></td> <td><input type='text' name='ukuranRoll["+countrow+"]' id='ukuranRoll["+countrow+"]'></td> <td><input type='text' name='cop["+countrow+"]' id='cop["+countrow+"]' ></td> <td><input type='text' name='trimwaste["+countrow+"]' id='trimwaste["+countrow+"]' ></td> <td><input type='text' name='rmOrder["+countrow+"]' id='rmOrder["+countrow+"]' ></td> <td><input type='text' name='qtyKg["+countrow+"]' id='qtyKg["+countrow+"]'></td> <td><input type='text' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]' ></td> <td><input type='text' name='kertasF1["+countrow+"]' id='kertasF1["+countrow+"]' ></td> <td><input type='text' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]' ></td> <td><input type='text' name='kertasF2["+countrow+"]' id='kertasF2["+countrow+"]' ></td> <td><input type='text' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]' ></td> <td><input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' ></td> </tr>");
+
+            //     countrow++;
+
+            // });
+
+        // $('.js-example-basic-single').select2();
+
+        // $(".Customer").ready(function(){
+        //     var table = $("#data_customer").DataTable({
+        //         select: true,
+        //     });
+        
+        //     $('#data_customer tbody').on( 'click', 'td', function () {
+        //         var cust = (table.row(this).data());
+
+        //         if (countdata != 'null') {
+        //             document.getElementById('substance['+countdata+']').value = cust[1];
+
+        //         }
+                
+        //         countdata++;
+        //         });
+        // });
+    // });
+    </script>
+    @endsection

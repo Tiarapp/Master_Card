@@ -15,13 +15,13 @@ class CreateMcTable extends Migration
     {
         Schema::create('mc', function (Blueprint $table) {
             $table->id('id');
-            $table->string('kode')->unique()->index();    //AUTO NUMBER SEQUENCE
+            $table->string('kode')->index();    //AUTO NUMBER SEQUENCE
             $table->string('namaBarang')->nullable();
             $table->string('kodeBarang')->nullable();
-            $table->integer('revisi')->default(0);        //AUTO REVISI KE
+            $table->string('revisi')->default(null);        //AUTO REVISI KE
             $table->string('tipeBox')->index();           //INPUT MARKETING
-            $table->string('CreasCorrP');                           
-            $table->string('CreasCorrL');
+            $table->string('CreasCorrP')->nullable();                           
+            $table->string('CreasCorrL')->nullable();
             $table->foreignId('satuanSizeSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('satuanLuasSheet')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->string('joint')->index();             //INPUT MARKETING
@@ -51,7 +51,7 @@ class CreateMcTable extends Migration
             $table->float('gramSheetBoxProduksi',8,3);                  //INPUT MARKETING
             $table->float('gramSheetCorrKontrak',8,3);          //AUTO RUMUS MASIH DIPIKIR
             $table->float('gramSheetCorrProduksi',8,3);         //AUTO RUMUS MASIH DIPIKIR
-            $table->foreignId('bom_m_id')->nullable()->index(); //BOM INPUT MARKETING
+            // $table->foreignId('bom_m_id')->nullable()->index(); //BOM INPUT MARKETING
             $table->foreignId('box_id')->index();               //SHEET BOX INPUT MARKETING
             $table->foreignId('satuanSizeSheetBox')->nullable()->index();   //COLOR ID INPUT MARKETING
             $table->foreignId('satuanLuasSheetBox')->nullable()->index();   //COLOR ID INPUT MARKETING
@@ -61,7 +61,7 @@ class CreateMcTable extends Migration
             //RELATION
             $table->foreign('substanceKontrak_id')->references('id')->on('substance')->cascadeOnDelete();
             $table->foreign('substanceProduksi_id')->references('id')->on('substance')->cascadeOnDelete();
-            $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();
+            // $table->foreign('bom_m_id')->references('id')->on('bom_m')->cascadeOnDelete();
             $table->foreign('box_id')->references('id')->on('box')->cascadeOnDelete();
             $table->foreign('colorCombine_id')->references('id')->on('color_combine')->cascadeOnDelete();
             $table->foreign('satuanSizeSheet')->references('id')->on('satuan')->cascadeOnDelete();

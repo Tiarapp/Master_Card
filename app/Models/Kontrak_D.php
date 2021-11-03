@@ -13,12 +13,23 @@ class Kontrak_D extends Model
     protected $fillable = [
         'kontrak_m_id',
         'mc_id',
-        'pctToleransiPelengkapKontrak',
-        'pcsToleransiPelengkapKontrak',
-        'pcsPelengkapKontrak',
-        'kgPelengkapKontrak',
-        'kgToleransiPelengkapKontrak',
-        'mcPelengkap',
+        'tipe',
+        'pcsKontrak',
+        'kgKontrak',
+        'pcsSisaKontrak',
+        'kgSisaKontrak',
+        'pctToleransiLebihKontrak',
+        'pctToleransiKurangKontrak',
+        'pcsKurangToleransiKontrak',
+        'kgKurangToleransiKontrak',
+        'pcsLebihToleransiKontrak',
+        'kgLebihToleransiKontrak',
+        'harga_pcs',
+        'amountBeforeTax',
+        'ppn',
+        'tax',
+        'amountTotal',
+        'harga_kg',
         'createdBy',
         'lastUpdatedBy',
         'deletedBy',
@@ -26,4 +37,10 @@ class Kontrak_D extends Model
         'printedKe',
         'printedAt'
     ];
+
+    
+    public function mc()
+    {
+        return $this->belongsTo(Mastercard::class, 'mc_id', 'id');
+    }
 }
