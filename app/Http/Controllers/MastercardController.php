@@ -109,7 +109,7 @@ class MastercardController extends Controller
             'gramSheetCorrProduksi2' => 'nullable',
             'colorCombine_id' => 'required',
             'keterangan' => 'nullable',
-            'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
+            'gambar'    => 'nullable|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
         ], $messages);
 
@@ -168,7 +168,7 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
-        return redirect('admin/mastercard');
+        return redirect('admin/mastercard/b1');
     }
 
     /**

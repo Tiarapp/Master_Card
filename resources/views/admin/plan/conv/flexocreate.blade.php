@@ -154,8 +154,8 @@
                                                                                 <td>{{ $data->panjang }}</td>
                                                                                 <td>{{ $data->pcsDt }}</td>
                                                                                 <td>{{ $data->out_flexo }}</td>
-                                                                                <td>{{ $data->hasil_baik }}</td>
-                                                                                <td>{{ $data->hasilsisacorr }}</td>
+                                                                                <td>{{ $data->totalhasil }}</td>
+                                                                                <td>{{ $data->sisa }}</td>
                                                                                 <td>{{ $data->joint }}</td>
                                                                                 <td>{{ $data->wax }}</td>
                                                                                 <td>{{ $data->ukuran_roll }}</td>

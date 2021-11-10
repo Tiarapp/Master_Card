@@ -508,6 +508,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="wax" id="wax">
+                                                <option value='NO WAX'>NO WAX</option>
                                                 <option value='INSIDE'>INSIDE</option>
                                                 <option value='OUTSIDE'>OUTSIDE</option>
                                                 <option value='IN & OUT'>IN & OUT</option>
@@ -550,7 +551,7 @@
                                             <label class="control-label">Packing</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="koli" id="koli" >
+                                            <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
                                                 <option value='05'>5 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>

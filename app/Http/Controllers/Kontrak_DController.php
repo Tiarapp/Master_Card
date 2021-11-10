@@ -35,7 +35,8 @@ class Kontrak_DController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($row){
 
-                $btn = "<a href='../admin/kontrak/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                $btn = "<a href='../admin/kontrak/dt/".$row->id."' class='btn btn-primary btn-sm' type='button' style='margin:5px'>Tambah DT</a>
+                <a href='../admin/kontrak/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
                 <a href='../admin/kontrak/pdf/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                 return $btn;
@@ -275,6 +276,67 @@ class Kontrak_DController extends Controller
             'kontrak_D'
         ), ['kontrak_M' => $kontrak_M]);
     }
+
+    public function add_dt($id)
+    {
+        // menampilkan untuk dropdown
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        
+        $mc = DB::table('mc')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->get();
+        $top = DB::table('top')->get();
+        $sales = DB::table('sales_m')->get();
+        // End Dropdown
+
+
+        // tampilkan data yang akan di edit
+        $kontrak_D = DB::table('kontrak_d')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
+            ->first();
+
+        $kontrak_M = DB::table('kontrak_m')
+            ->where('kontrak_m.id', '=', $id)
+            ->first();
+        // End tampilkan untuk edit
+
+
+        // dd($kontrak_D);
+        // $count = count($kontrak_D);
+
+
+        // dd($kontrak_M);
+        return view('admin.kontrak.add_dt', compact(
+            'cust',
+            'mc',
+            'top',
+            'sales',
+            // 'count',
+            'kontrak_D'
+        ), ['kontrak_M' => $kontrak_M]);
+    }
+
+    public function store_dt(Request $request)
+    {
+        for ($i=1; $i < 6; $i++) { 
+            if ($request->tglKirim[$i] !== null) {
+                $dt = DeliveryTime::create([
+                    'kontrak_m_id' => $request->idkontrakm,
+                    'kodeKontrak' => $request->kode,
+                    'tglKirimDt' => $request->tglKirim[$i],
+                    'pcsDt' => $request->jumlahKirim[$i],
+                    // 'kgDt' => $request->dtKg[$i],
+                    'createdBy' => $request->createdBy,
+                ]);
+            }
+        }
+    } 
 
     /**
      * Update the specified resource in storage.

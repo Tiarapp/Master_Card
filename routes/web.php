@@ -211,6 +211,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::get('/admin/kontrak/edit/{id}', 'Kontrak_DController@edit')->name('kontrak.edit');
+    Route::get('/admin/kontrak/dt/{id}', 'Kontrak_DController@add_dt')->name('kontrak.dt');
+    Route::post('/admin/kontrak/store_dt', 'Kontrak_DController@store_dt')->name('kontrak.store_dt');
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
 
@@ -248,9 +250,9 @@ Route::middleware(['auth'])->group(function (){
     //Hasil
     Route::get('/admin/plan/hasilcorr', 'CorrController@index_hasil_corr')->middleware(['auth'])->name('hasilcorr');
     Route::get('/admin/plan/corrd', 'CorrController@corrd')->middleware(['auth'])->name('corrd');
-    Route::get('/admin/plan/hasilcorr/create', 'CorrController@create')->name('corr.create');
-    Route::get('/admin/plan/hasilcorr/json', 'CorrController@json')->name('corr.json');
-    Route::post('/admin/plan/hasilcorr/store', 'CorrController@store')->name('corr.store');
+    // Route::get('/admin/plan/hasilcorr/create', 'CorrController@create')->name('corr.create');
+    // Route::get('/admin/plan/hasilcorr/json', 'CorrController@json')->name('corr.json');
+    // Route::post('/admin/plan/hasilcorr/store', 'CorrController@store')->name('corr.store');
     Route::get('/admin/plan/hasilcorr/edit/{id}', 'CorrController@edit_hasil_corr')->name('hasilcorr.edit');
     Route::put('/admin/plan/hasilcorr/update/{id}', 'CorrController@update_hasil_corr')->name('hasilcorr.update');
     Route::get('/admin/plan/hasilcorr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
