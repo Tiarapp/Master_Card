@@ -18,9 +18,7 @@ class CreateKoliTable extends Migration
             $table->string('kode')->unique()->index();                       //AUTO = QTYBOX
             $table->string('nama')->index();                                 //AUTO = QTYBOX
             $table->integer('qtyBox')->index();                              //Input Mark
-            $table->foreignId('satuanBox')->nullable();                                 //Input Mark
-            //RELATION
-            $table->foreign('satuanBox')->references('id')->on('satuan')->cascadeOnDelete();
+            $table->string('satuanBox')->nullable();                                 //Input Mark
             // TRACKING
             $table->string('createdBy');                    //Auto ambil dari login
             $table->string('lastUpdatedBy')->nullable();    //Auto ambil dari login
@@ -32,7 +30,7 @@ class CreateKoliTable extends Migration
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
