@@ -22,7 +22,7 @@ class CorrController extends Controller
     
     public function json()
     {
-        $data = Corr_D::corr()->get();
+        $data = Opi_M::opi2()->get();
         return Datatables::of($data)->make(true);
     }
 
@@ -80,7 +80,7 @@ class CorrController extends Controller
     {
         $opi = Opi_M::opi2()->get();
         
-
+        // var_dump($opi);
         return view('admin.plan.corr.create', compact('opi'));
     }
 

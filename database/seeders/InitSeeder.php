@@ -16,17 +16,17 @@ class InitSeeder extends Seeder
 		//SEEDER DIVISI
         DB::table('divisi')->delete();
         
-		DB::table('divisi')->insert(['kode' => 'ACC','nama' => 'ACCOUNTING','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'IT','nama' => 'INFORMATION TECHNOLOGY','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'MARK','nama' => 'MARKETING','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'PURCH','nama' => 'PURCHASING','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'PPIC','nama' => 'PRODUCTION PLANNING AND INVENTORY CONTROL','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'LOG','nama' => 'LOGISTIK','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'PROD','nama' => 'PRODUKSI','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'MTC','nama' => 'MAINTENANCE','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'HRD','nama' => 'HUMAN RESOURCE DEVELOPMENT & GENERAL AFFAIR','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'EXP','nama' => 'EKSPEDISI','createdBy' => 'SEEDER']);
-        DB::table('divisi')->insert(['kode' => 'DSN','nama' => 'DESAIN','createdBy' => 'SEEDER']);
+		DB::table('divisi')->insert(['id' => 1,'kode' => 'ACC','nama' => 'ACCOUNTING','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 2, 'kode' => 'IT','nama' => 'INFORMATION TECHNOLOGY','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 3, 'kode' => 'MARK','nama' => 'MARKETING','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 4, 'kode' => 'PURCH','nama' => 'PURCHASING','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 5, 'kode' => 'PPIC','nama' => 'PRODUCTION PLANNING AND INVENTORY CONTROL','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 6, 'kode' => 'LOG','nama' => 'LOGISTIK','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 7, 'kode' => 'PROD','nama' => 'PRODUKSI','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 8, 'kode' => 'MTC','nama' => 'MAINTENANCE','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 9, 'kode' => 'HRD','nama' => 'HUMAN RESOURCE DEVELOPMENT & GENERAL AFFAIR','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 10, 'kode' => 'EXP','nama' => 'EKSPEDISI','createdBy' => 'SEEDER']);
+        DB::table('divisi')->insert(['id' => 11, 'kode' => 'DSN','nama' => 'DESAIN','createdBy' => 'SEEDER']);
 		
 		// //MATA UANG
         // DB::table('mata_uang')->delete();
@@ -36,8 +36,8 @@ class InitSeeder extends Seeder
 
 		//TIPE BOX
 		DB::table('tipe_box')->delete();
-        DB::table('tipe_box')->insert(['kode' => 'B1','nama' => 'BOX B1','createdBy' => 'SEEDER']);
-        DB::table('tipe_box')->insert(['kode' => 'DC','nama' => 'DIE CUT','createdBy' => 'SEEDER']);
+        DB::table('tipe_box')->insert(['id' => 1,'kode' => 'B1','nama' => 'BOX B1','createdBy' => 'SEEDER']);
+        DB::table('tipe_box')->insert(['id' => 2,'kode' => 'DC','nama' => 'DIE CUT','createdBy' => 'SEEDER']);
 
 		// TOP
 		DB::table('top')->delete();
@@ -54,36 +54,36 @@ class InitSeeder extends Seeder
 
 		// //SATUAN
 		DB::table('satuan')->delete();
-		DB::table('satuan')->insert(['kode' => 'KG','nama' => 'KILOGRAM','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'GR','nama' => 'GRAM','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'PCS','nama' => 'PIECES','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'L','nama' => 'LITER','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'RIM','nama' => 'RIM','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'M','nama' => 'METER','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'MM','nama' => 'MILIMETER','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'CM','nama' => 'CENTIMETER','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'TON','nama' => 'TON','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'M2','nama' => 'METER PERSEGI','createdBy' => 'SEEDER']);
-        DB::table('satuan')->insert(['kode' => 'M3','nama' => 'METER KUBIK','createdBy' => 'SEEDER']);
+		DB::table('satuan')->insert(['id' => 1,'kode' => 'KG','nama' => 'KILOGRAM','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 2,'kode' => 'GR','nama' => 'GRAM','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 3,'kode' => 'PCS','nama' => 'PIECES','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 4,'kode' => 'L','nama' => 'LITER','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 5,'kode' => 'RIM','nama' => 'RIM','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 6,'kode' => 'M','nama' => 'METER','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 7,'kode' => 'MM','nama' => 'MILIMETER','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 8,'kode' => 'CM','nama' => 'CENTIMETER','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 9,'kode' => 'TON','nama' => 'TON','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 10,'kode' => 'M2','nama' => 'METER PERSEGI','createdBy' => 'SEEDER']);
+        DB::table('satuan')->insert(['id' => 11,'kode' => 'M3','nama' => 'METER KUBIK','createdBy' => 'SEEDER']);
 
 		//FLUTE
         DB::table('flute')->delete();
-        DB::table('flute')->insert(['kode' => 'BF','nama' => 'B FLUTE','tur1' => 1.36,'tur2' => 0,'createdBy' => 'SEEDER']);
-        DB::table('flute')->insert(['kode' => 'CF','nama' => 'C FLUTE','tur1' => 1.46,'tur2' => 0,'createdBy' => 'SEEDER']);
-        DB::table('flute')->insert(['kode' => 'BCF','nama' => 'BC FLUTE','tur1' => 1.36,'tur2' => 1.46,'createdBy' => 'SEEDER']);
-        DB::table('flute')->insert(['kode' => 'EF','nama' => 'E FLUTE','tur1' => 0,'tur2' => 0,'createdBy' => 'SEEDER']);
+        DB::table('flute')->insert(['id' => 1,'kode' => 'BF','nama' => 'B FLUTE','tur1' => 1.36,'tur2' => 0,'createdBy' => 'SEEDER']);
+        DB::table('flute')->insert(['id' => 2,'kode' => 'CF','nama' => 'C FLUTE','tur1' => 1.46,'tur2' => 0,'createdBy' => 'SEEDER']);
+        DB::table('flute')->insert(['id' => 3,'kode' => 'BCF','nama' => 'BC FLUTE','tur1' => 1.36,'tur2' => 1.46,'createdBy' => 'SEEDER']);
+        DB::table('flute')->insert(['id' => 4,'kode' => 'EF','nama' => 'E FLUTE','tur1' => 0,'tur2' => 0,'createdBy' => 'SEEDER']);
 
         //MESIN
-        DB::table('mesin')->delete();
-        DB::table('mesin')->insert(['kode' => 'CORR 1','nama' => 'CORR 1','ip' => '192.168.0.10','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'FLEXO A','nama' => 'FLEXO A','ip' => '192.168.0.5','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'FLEXO B','nama' => 'FLEXO B','ip' => '192.168.0.6','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'FLEXO C','nama' => 'FLEXO C','ip' => '192.168.0.7','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'GLUE TOKAI','nama' => 'GLUE TOKAI','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'SLITTER','nama' => 'SLITTER','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'STITCHING 1','nama' => 'STITCHING 1','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'STITCHING 2','nama' => 'STITCHING 2','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
-        DB::table('mesin')->insert(['kode' => 'STITCHING 3','nama' => 'STITCHING 3','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->delete();
+        // DB::table('mesin')->insert(['kode' => 'CORR 1','nama' => 'CORR 1','ip' => '192.168.0.10','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'FLEXO A','nama' => 'FLEXO A','ip' => '192.168.0.5','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'FLEXO B','nama' => 'FLEXO B','ip' => '192.168.0.6','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'FLEXO C','nama' => 'FLEXO C','ip' => '192.168.0.7','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'GLUE TOKAI','nama' => 'GLUE TOKAI','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'SLITTER','nama' => 'SLITTER','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'STITCHING 1','nama' => 'STITCHING 1','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'STITCHING 2','nama' => 'STITCHING 2','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
+        // DB::table('mesin')->insert(['kode' => 'STITCHING 3','nama' => 'STITCHING 3','ip' => '','kapasitasPlan' => 0,'kapasitasProduksi' => 0,'satuanKapasitas' => 9,'keterangan' => '','hint' => '','createdBy' => 'SEEDER']);
 
         //NUMBER SEQUENCE
         DB::table('number_sequence')->delete();
@@ -94,33 +94,33 @@ class InitSeeder extends Seeder
 
         //JENIS DOWNTIME
         //CORR
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'PUTUS','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'GAGAL SAMBUNG','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'SETTING OUT 5','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'CLEANING HOT PLATE','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        //PRINTING
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
-        //FINISHING
-        DB::table('mesin')->insert(['mesin_id' => '5','downtime' => 'SETTING','pic' => 'FINISHING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'PUTUS','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'GAGAL SAMBUNG','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'SETTING OUT 5','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'CLEANING HOT PLATE','pic' => 'CORR','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '1','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // //PRINTING
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '2','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '3','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'SETTING','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'CUCI KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'ADJUST WARNA','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'BACKING KARET','pic' => 'PRINTING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'MEKANIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // DB::table('mesin')->insert(['mesin_id' => '4','downtime' => 'MESIN RUSAK','pic' => 'ELEKTRIK','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
+        // //FINISHING
+        // DB::table('mesin')->insert(['mesin_id' => '5','downtime' => 'SETTING','pic' => 'FINISHING','allowedMinute' => 0,'createdBy' => 'SEEDER','branch' => 'LAMONGAN']);
 
     }
 }

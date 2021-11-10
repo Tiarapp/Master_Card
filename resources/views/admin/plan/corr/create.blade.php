@@ -113,7 +113,7 @@
                                                                         <?php 
                                                                         foreach ($opi as $data) { ?>
                                                                             <tr>
-                                                                                <td scope="row">{{ $data->nama }}</td>
+                                                                                <td scope="row">{{ $data->noopi }}</td>
                                                                                 <td>{{ $data->tglKirimDt }}</td>
                                                                                 <td>{{ $data->Cust }}</td>
                                                                                 <td>{{ $data->namaBarang }}</td>

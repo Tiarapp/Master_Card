@@ -128,7 +128,7 @@
         ajax:"{{ route('opi') }}",
         columns: [
           { data: 'opiid', name: 'opiid' },
-          { data: 'noOPI', name: 'noOPI' },
+          { data: 'noopi', name: 'noopi' },
           {
             data: 'action',
             name: 'action',
@@ -145,7 +145,7 @@
           { data: 'namaBarang', name: 'namaBarang' },
           { data: 'pcsKontrak', name: 'pcsKontrak' },
           { data: 'keterangan', name: 'keterangan' },
-          { data: 'noOPI', name: 'noOPI' },
+          { data: 'noopi', name: 'noopi' },
           { data: 'poCustomer', name: 'poCustomer' },
           { data: 'mcKode', name: 'mcKode' },
           { 
@@ -186,8 +186,8 @@
           }
         }
         ],
-        "order": [2, 'desc'],
-        "pageLength": 1000,
+        "order": [0, 'desc'],
+        "pageLength": 100,
         dom: 'Bftrip',
         buttons: [
           'copy',

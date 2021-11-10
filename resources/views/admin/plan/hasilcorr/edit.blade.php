@@ -243,7 +243,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 10px;">
+                        {{-- <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <button class="btn btn-lg btn-primary" type="submit">SIMPAN

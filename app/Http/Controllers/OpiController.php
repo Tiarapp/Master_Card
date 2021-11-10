@@ -73,7 +73,7 @@ class OpiController extends Controller
 
         $opi_m = DB::table('opi_m')->get();
         $alphabet = "A";
-        $numb_opi = str_pad(count($opi_m)+1,4, '0', STR_PAD_LEFT).$alphabet;
+        $numb_opi = str_pad(count($opi_m)+3200+1,4, '0', STR_PAD_LEFT).$alphabet;
 
         // dd($numb_opi);
 
