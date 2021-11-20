@@ -1275,8 +1275,8 @@ td
 <td class='x26'></td>
 <td class='x32'></td>
 <td class='x28'></td>
-<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'>84,439</td>
-<td class='x34' align='right' x:num="21459" style='text-align:right;'>21,459</td>
+<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'></td>
+<td class='x34' align='right' x:num="21459" style='text-align:right;'></td>
 <td class='x19'>&nbsp;</td>
 <td class='x16'></td>
 <td class='x21'></td>

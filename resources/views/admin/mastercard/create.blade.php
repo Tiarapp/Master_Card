@@ -70,7 +70,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        {{--  --}}
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
@@ -83,14 +82,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Nama Item</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">

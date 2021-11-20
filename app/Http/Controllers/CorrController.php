@@ -80,7 +80,7 @@ class CorrController extends Controller
     {
         $opi = Opi_M::opi2()->get();
         
-        // var_dump($opi);
+        // dd($opi);
         return view('admin.plan.corr.create', compact('opi'));
     }
 
@@ -319,6 +319,7 @@ class CorrController extends Controller
        HasilCorr::create([
         'plan_corr_m_id' => $request->planmid,
         'plan_corr_d_id' => $request->plandid,
+        'no_opi' => $request->noopi,
         'hasil_baik' => $request->baik,
         'hasil_jelek' => $request->jelek,
         'sisa' => $request->baik,

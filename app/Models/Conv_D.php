@@ -13,7 +13,6 @@ class Conv_D extends Model
     protected $fillable = [
         'opi_id',
         'plan_conv_m_id',
-        'plan_corr_id',
         'tgl_kirim',
         'nomc',
         'nama_item',
@@ -50,10 +49,9 @@ class Conv_D extends Model
     public function scopeConvd($query)
     {
         $query->leftJoin('plan_conv_m', 'plan_conv_m_id', 'plan_conv_m.id')
-        ->leftJoin('hasil_plan_corr', 'plan_corr_id', 'hasil_plan_corr.id')
         ->leftJoin('opi_m', 'opi_id', 'opi_m.id')
         ->leftJoin('kontrak_d', 'opi_m.kontrak_d_id', 'kontrak_d.id')
-        ->select('plan_conv_d.*', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak')
+        ->select('plan_conv_d.*','plan_conv_d.id as plandid', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak', 'plan_conv_m.kode as kodeplanM', 'plan_conv_d.mesin', 'plan_conv_m.id as planmid', 'plan_conv_d.tgl_kirim', 'plan_conv_d.nomc', 'plan_conv_d.nama_item', 'plan_conv_d.customer')
         ->get();
     }
 }

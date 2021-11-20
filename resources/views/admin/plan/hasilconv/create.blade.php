@@ -1,4 +1,4 @@
-@extends('admin.templates.partials.default')
+    @extends('admin.templates.partials.default')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
@@ -52,6 +52,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Shift</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan">
+                                        </div>
+                                    </div>
+                                </div> --}}
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -113,7 +123,7 @@
                                                                         <?php 
                                                                         foreach ($opi as $data) { ?>
                                                                             <tr>
-                                                                                <td scope="row">{{ $data->noopi }}</td>
+                                                                                <td scope="row">{{ $data->nama }}</td>
                                                                                 <td>{{ $data->tglKirimDt }}</td>
                                                                                 <td>{{ $data->Cust }}</td>
                                                                                 <td>{{ $data->namaBarang }}</td>
@@ -153,6 +163,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -167,7 +178,6 @@
                                 Cari OPI  <i class="fas fa-search"></i>
                             </button>
                             <a class="btn btn-success" href="javascript:void(0);" id="add_button" title="Add field">TAMBAH</a>
-                            <a class="btn btn-success" href="javascript:void(0);" id="calc_button" title="Add field">HITUNG</a>
                             <button class="btn btn-lg btn-primary" type="submit">SIMPAN
                         </div>
                     </div> 
@@ -207,27 +217,24 @@ $(document).ready(function(){
 
     //Once add button is clicked
     $(addButton).click(function(){
-        $("#plancorr").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='toleransi["+countrow+"]' id='toleransi["+countrow+"]'> <input type='text' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div> </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>X</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Tipe / Flute</label> </div> <div class='col-md-2'> <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>/</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Out Corr / Out Flexo</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Lebar Roll</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'> </div> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'> </div> <div class='col-md-1'>  <label>trim / cop</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='trim["+countrow+"]' id='trim["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='cop["+countrow+"]' id='cop["+countrow+"]'>   </div>  </div> </div>  </div>  <div class='row' style='margin-botton:5px;'> <div class='col-md-1'>  <label style='margin-top:20px'>K. Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramAtas["+countrow+"]' id='gramAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute1["+countrow+"]' id='kertasFlute1["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute1["+countrow+"]' id='gramFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramTengah["+countrow+"]' id='gramTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute2["+countrow+"]' id='kertasFlute2["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute2["+countrow+"]' id='gramFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramBawah["+countrow+"]' id='gramBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Kebutuhan Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanAtas["+countrow+"]' id='kebutuhanAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute1["+countrow+"]' id='kebutuhanFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanTengah["+countrow+"]' id='kebutuhanTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute2["+countrow+"]' id='kebutuhanFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanBawah["+countrow+"]' id='kebutuhanBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Berat/Pcs</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratSheet["+countrow+"]' id='beratSheet["+countrow+"]'> </div> <div class='col-md-1'>  <label>RM Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rmorder["+countrow+"]' id='rmorder["+countrow+"]'> </div> <div class='col-md-1'>  <label>Berat Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratOrder["+countrow+"]' id='beratOrder["+countrow+"]'> </div> <div class='col-md-1'>  <label>urutan</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> <div class='col-md-1'>  <a href='javascript:void(0);' class='btn btn-success' name='btn"+countrow+"' id='btn"+countrow+"'>Calculate</a> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
+        $("#plancorr").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='toleransi["+countrow+"]' id='toleransi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Tipe / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Out Corr / Out Flexo</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Lebar Roll</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'> </div> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'> </div> <div class='col-md-1'>  <label>trim / cop</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='trim["+countrow+"]' id='trim["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='cop["+countrow+"]' id='cop["+countrow+"]'>   </div>  </div> </div>  </div>  <div class='row' style='margin-botton:5px;'> <div class='col-md-1'>  <label>K. Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='gramAtas["+countrow+"]' id='gramAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>K. Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute1["+countrow+"]' id='kertasFlute1["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='gramFlute1["+countrow+"]' id='gramFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>K. Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='gramTengah["+countrow+"]' id='gramTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>K. Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute2["+countrow+"]' id='kertasFlute2["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='gramFlute2["+countrow+"]' id='gramFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>K. Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='gramBawah["+countrow+"]' id='gramBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Kebutuhan Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanAtas["+countrow+"]' id='kebutuhanAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute1["+countrow+"]' id='kebutuhanFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanTengah["+countrow+"]' id='kebutuhanTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute2["+countrow+"]' id='kebutuhanFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanBawah["+countrow+"]' id='kebutuhanBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Berat/Pcs</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratSheet["+countrow+"]' id='beratSheet["+countrow+"]'> </div> <div class='col-md-1'>  <label>RM Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rmorder["+countrow+"]' id='rmorder["+countrow+"]'> </div> <div class='col-md-1'>  <label>Berat Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratOrder["+countrow+"]' id='beratOrder["+countrow+"]'> </div> <div class='col-md-1'>  <label>urutan</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> <div class='col-md-1'>  <a href='javascript:void(0);' class='btn btn-success' name='btn"+countrow+"' id='btn"+countrow+"'>Calculate</a> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
 
-        countrow++;
-        countdata++;
-    });
 
-    $("#calc_button").click(function() {
-        for (let i = 1; i < countdata; i++) {
-            var  outCorr = document.getElementById("outCorr["+i+"]").value;
-            var  sheetl = document.getElementById("sheetl["+i+"]").value;
-            var  sheetp = document.getElementById("sheetp["+i+"]").value;
-            var  outConv = document.getElementById("outFlexo["+i+"]").value;
-            var  order = document.getElementById("order["+i+"]").value;
-            var  toleransi = document.getElementById("toleransi["+i+"]").value;
-            var  gramSheet = document.getElementById("beratSheet["+i+"]").value;
-            var  tipebox = document.getElementById("tipebox["+i+"]").value;
-            var gAtas =document.getElementById("gramAtas["+i+"]").value
-            var gFlute1 =document.getElementById("gramFlute1["+i+"]").value
-            var gTengah =document.getElementById("gramTengah["+i+"]").value
-            var gFlute2 =document.getElementById("gramFlute2["+i+"]").value
-            var gBawah =document.getElementById("gramBawah["+i+"]").value
+        $("#btn"+countdata).click(function() {
+            // var data = countdata;
+            var  outCorr = document.getElementById("outCorr["+countdata+"]").value;
+            var  sheetl = document.getElementById("sheetl["+countdata+"]").value;
+            var  sheetp = document.getElementById("sheetp["+countdata+"]").value;
+            var  outConv = document.getElementById("outFlexo["+countdata+"]").value;
+            var  order = document.getElementById("order["+countdata+"]").value;
+            var  toleransi = document.getElementById("toleransi["+countdata+"]").value;
+            var  gramSheet = document.getElementById("beratSheet["+countdata+"]").value;
+            var  tipebox = document.getElementById("tipebox["+countdata+"]").value;
+            var gAtas =document.getElementById("gramAtas["+countdata+"]").value
+            var gFlute1 =document.getElementById("gramFlute1["+countdata+"]").value
+            var gTengah =document.getElementById("gramTengah["+countdata+"]").value
+            var gFlute2 =document.getElementById("gramFlute2["+countdata+"]").value
+            var gBawah =document.getElementById("gramBawah["+countdata+"]").value
 
 
             qtyPlan =  parseInt(order) + (order*(toleransi/100)/outConv);
@@ -248,32 +255,44 @@ $(document).ready(function(){
 
             if (gAtas != '') {
                 KAtas = rmorder*(UkRoll/1000)*gAtas/1000;
-                document.getElementById("kebutuhanAtas["+i+"]").value = Math.round(KAtas);
+                document.getElementById("kebutuhanAtas["+countdata+"]").value = Math.round(KAtas);
             } 
             if (gFlute1 != '') {
                 KFlute1 = rmorder*(UkRoll/1000)*(gFlute1/1000)*1.34;
-                document.getElementById("kebutuhanFlute1["+i+"]").value = Math.round(KFlute1);
+                document.getElementById("kebutuhanFlute1["+countdata+"]").value = Math.round(KFlute1);
             } 
             if (gTengah != '') {
                 KTengah = rmorder*(UkRoll/1000)*gTengah/1000;
-                document.getElementById("kebutuhanTengah["+i+"]").value = Math.round(KTengah);
+                document.getElementById("kebutuhanTengah["+countdata+"]").value = Math.round(KTengah);
             } 
             if (gFlute2 != '') {
                 KFlute2 = rmorder*(UkRoll/1000)*(gFlute2/1000)*1.42;
-                document.getElementById("kebutuhanFlute2["+i+"]").value = Math.round(KFlute2);
+                document.getElementById("kebutuhanFlute2["+countdata+"]").value = Math.round(KFlute2);
             } 
             if (gBawah != '') {
                 KBawah = rmorder*(UkRoll/1000)*gBawah/1000;
-                document.getElementById("kebutuhanBawah["+i+"]").value = Math.round(KBawah);
+                document.getElementById("kebutuhanBawah["+countdata+"]").value = Math.round(KBawah);
             } 
 
-            document.getElementById("plan["+i+"]").value = qtyPlan.toFixed(2);
-            document.getElementById("roll["+i+"]").value = UkRoll.toFixed(2);
-            document.getElementById("cop["+i+"]").value = cop.toFixed(2);
-            document.getElementById("trim["+i+"]").value = trim.toFixed(2);
-            document.getElementById("rmorder["+i+"]").value = rmorder.toFixed(0);
-            document.getElementById("beratOrder["+i+"]").value = tonase.toFixed(2);
-        }
+            document.getElementById("plan["+countdata+"]").value = qtyPlan.toFixed(2);
+            document.getElementById("roll["+countdata+"]").value = UkRoll.toFixed(2);
+            document.getElementById("cop["+countdata+"]").value = cop.toFixed(2);
+            document.getElementById("trim["+countdata+"]").value = trim.toFixed(2);
+            document.getElementById("rmorder["+countdata+"]").value = rmorder.toFixed(0);
+            document.getElementById("beratOrder["+countdata+"]").value = tonase.toFixed(2);
+
+            // console.log(row); 
+            // console.log(countrow);
+            // console.log(countdata);
+            // console.log(outCorr);
+            // console.log(outConv);
+            countrow++;
+            countdata++;
+            
+            // console.log(countrow);
+            // console.log(countdata);
+        });
+        // console.log(countrow);
     });
     
     // countrow++;
@@ -290,33 +309,31 @@ $(document).ready(function(){
         
         $('#data_opi tbody').on( 'click', 'td', function () {
             var cust = (table.row(this).data());
-            x = countdata -1;
-            console.log(x);
             
             if (countdata != 'null') {
-                document.getElementById("noOpi["+x+"]").value = cust[0];
-                document.getElementById("dt["+x+"]").value = cust[1];
-                document.getElementById("customer["+x+"]").value = cust[2];
-                document.getElementById("item["+x+"]").value = cust[3];
-                document.getElementById("mc["+x+"]").value = cust[4];
-                document.getElementById("sheetp["+x+"]").value = cust[5];
-                document.getElementById("sheetl["+x+"]").value = cust[6];
-                document.getElementById("tipebox["+x+"]").value = cust[7];
-                document.getElementById("flute["+x+"]").value = cust[8];
-                document.getElementById("order["+x+"]").value = cust[9];
-                document.getElementById("opi_id["+x+"]").value = cust[22];
-                document.getElementById("toleransi["+x+"]").value = cust[10];
-                document.getElementById("gramAtas["+x+"]").value = cust[12];
-                document.getElementById("gramFlute1["+x+"]").value = cust[14];
-                document.getElementById("gramTengah["+x+"]").value = cust[16];
-                document.getElementById("gramFlute2["+x+"]").value = cust[18];
-                document.getElementById("gramBawah["+x+"]").value = cust[20];
-                document.getElementById("beratSheet["+x+"]").value = cust[21];
-                document.getElementById("kertasAtas["+x+"]").value = cust[11];
-                document.getElementById("kertasFlute1["+x+"]").value = cust[13];
-                document.getElementById("kertasTengah["+x+"]").value = cust[15];
-                document.getElementById("kertasFlute2["+x+"]").value = cust[17];
-                document.getElementById("kertasBawah["+x+"]").value = cust[19];
+                document.getElementById("noOpi["+countdata+"]").value = cust[0];
+                document.getElementById("dt["+countdata+"]").value = cust[1];
+                document.getElementById("customer["+countdata+"]").value = cust[2];
+                document.getElementById("item["+countdata+"]").value = cust[3];
+                document.getElementById("mc["+countdata+"]").value = cust[4];
+                document.getElementById("sheetp["+countdata+"]").value = cust[5];
+                document.getElementById("sheetl["+countdata+"]").value = cust[6];
+                document.getElementById("tipebox["+countdata+"]").value = cust[7];
+                document.getElementById("flute["+countdata+"]").value = cust[8];
+                document.getElementById("order["+countdata+"]").value = cust[9];
+                document.getElementById("opi_id["+countdata+"]").value = cust[22];
+                document.getElementById("toleransi["+countdata+"]").value = cust[10];
+                document.getElementById("gramAtas["+countdata+"]").value = cust[12];
+                document.getElementById("gramFlute1["+countdata+"]").value = cust[14];
+                document.getElementById("gramTengah["+countdata+"]").value = cust[16];
+                document.getElementById("gramFlute2["+countdata+"]").value = cust[18];
+                document.getElementById("gramBawah["+countdata+"]").value = cust[20];
+                document.getElementById("beratSheet["+countdata+"]").value = cust[21];
+                document.getElementById("kertasAtas["+countdata+"]").value = cust[11]+cust[12];
+                document.getElementById("kertasFlute1["+countdata+"]").value = cust[13]+cust[14];
+                document.getElementById("kertasTengah["+countdata+"]").value = cust[15]+cust[16];
+                document.getElementById("kertasFlute2["+countdata+"]").value = cust[17]+cust[18];
+                document.getElementById("kertasBawah["+countdata+"]").value = cust[19]+cust[20];
 
                 // console.log(KAtas);
                 // countdata++;

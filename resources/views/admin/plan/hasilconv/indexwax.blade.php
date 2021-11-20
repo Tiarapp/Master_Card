@@ -17,12 +17,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Plan Corrugating</h1>
+          <h1 class="m-0">Hasil Plan Converting</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Plan Corrugating</li>
+            <li class="breadcrumb-item active">Hasil Plan Flexo</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -33,31 +33,38 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <!-- Small boxes (Stat box) -->
+      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+        <a href="{{ route('conv.hasilflexo') }}" style="margin-bottom: 20px; color:white;" >FLEXO</a>
+      </button>
       
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('flexoa.create') }}" style="margin-bottom: 20px; color:white;" >Plan Converting</a>
+        <a href="{{ route('conv.hasiltokai') }}" style="margin-bottom: 20px; color:white;" >TOKAI</a>
       </button>
-      {{-- <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('corr.create') }}" style="margin-bottom: 20px; color:white;" >Flexo B</a>
-      </button>
+  
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('corr.create') }}" style="margin-bottom: 20px; color:white;" >Flexo C</a>
-      </button> --}}
+        <a href="{{ route('conv.hasilstich') }}" style="margin-bottom: 20px; color:white;" >STICHING</a>
+      </button>
+      
+      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+        <a href="{{ route('conv.hasilwax') }}" style="margin-bottom: 20px; color:white;" >WAX</a>
+      </button>
+      
+      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+        <a href="{{ route('conv.hasilslitter') }}" style="margin-bottom: 20px; color:white;" >SLITTER</a>
+      </button>
       <div class="card-body">
-        <table class="table table-bordered" id="data_planconv">
+        <table class="table table-bordered" id="data_hasilconvflexo">
           <thead>
             <tr>
-              <th scope="col">No.</th>
               <th scope="col">Kode Plan</th>
-              <th scope="col">Tanggal Plan</th>
-              <th scope="col">Shift</th>
-              <th scope="col">Revisi</th>
-              <th scope="col">Total RM</th>
-              <th scope="col">Total Berat</th>
+              <th scope="col">MC</th>
+              <th scope="col">No OPI</th>
+              <th scope="col">Tanggal Kirim</th>
+              <th scope="col">Jumlah Plan</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
+          
         </table>
       </div>
       <!-- /.row -->
@@ -75,19 +82,17 @@
       return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
     };
     $(function(){
-      $('#data_planconv').DataTable({
+      $('#data_hasilconvflexo').DataTable({
         // "scrollY": "auto",
         processing:true,
         serverSide:true,
-        ajax:"{{ route('convm') }}",
+        ajax:"{{ route('convd.wax') }}",
         columns: [
-          { data: 'id', name: 'id' },
-          { data: 'kode', name: 'kode' },
-          { data: 'tanggal', name: 'tanggal' },
-          { data: 'shift', name: 'shift' },
-          { data: 'revisi', name: 'revisi' },
-          { data: 'total_pcs', name: 'total_pcs' },
-          { data: 'total_kg', name: 'total_kg' },
+          { data: 'kodeplanM', name: 'kodeplanM' },
+          { data: 'nomc', name: 'nomc' },
+          { data: 'noopi', name: 'noopi' },
+          { data: 'tgl_kirim', name: 'tgl_kirim' },
+          { data: 'pcsKontrak', name: 'pcsKontrak' },
           {
             data: 'action',
             name: 'action',
@@ -101,29 +106,29 @@
           ],
           'render': function(data, type, full, meta){
             if(type === 'display'){
-              data = strtrunc(data, 10);
+              data = strtrunc(data, 20);
             }
             return data;
           }
         }
         ],
-        "order": [2, 'desc'],
+        "order": [0, 'asc'],
         "pageLength": 1000,
-        // dom: 'Bftrip',
-        // buttons: [
-        //   'copy',
-        //   'excel',
-        //   'pdf',
-        //   {
-        //     extend: 'print',
-        //     text: 'Print',
-        //     exportOption: {
-        //       modifier: {
-        //         selected: null
-        //       }
-        //     }
-        //   }
-        // ],
+        dom: 'Bftrip',
+        buttons: [
+          'copy',
+          'excel',
+          'pdf',
+          {
+            extend: 'print',
+            text: 'Print',
+            exportOption: {
+              modifier: {
+                selected: null
+              }
+            }
+          }
+        ],
         // "scrollX": true,
         select: true,
       });

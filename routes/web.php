@@ -236,9 +236,11 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
 
     
-    Route::get('/admin/plan/conv', 'ConvController@index_conv')->middleware(['auth'])->name('conv');
+    Route::get('/admin/plan/conv', 'ConvController@index_printing_conv')->middleware(['auth'])->name('conv');
     Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
-    Route::get('/admin/plan/conv/create', 'ConvController@create')->name('conv.create');
+    Route::post('/admin/plan/conv/storenonprint', 'ConvController@storeNonPrinting')->middleware(['auth'])->name('conv.storenonprint');
+    Route::get('/admin/plan/conv/createprinting', 'ConvController@create_printing')->name('conv.create_printing');
+    Route::get('/admin/plan/conv/createnonprinting', 'ConvController@create_non_printing')->name('conv.create_non_printing');
     Route::get('/admin/plan/conv/convd', 'ConvController@convd')->name('convd');
     Route::get('/admin/plan/conv/convm', 'ConvController@convm')->name('convm');
     Route::get('/admin/plan/conv/json', 'ConvController@json')->name('conv.json');
@@ -247,15 +249,29 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/plan/conv/update/{id}', 'ConvController@update')->name('conv.update');
     Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
 
-    //Hasil
+    //Hasil Corr
     Route::get('/admin/plan/hasilcorr', 'CorrController@index_hasil_corr')->middleware(['auth'])->name('hasilcorr');
     Route::get('/admin/plan/corrd', 'CorrController@corrd')->middleware(['auth'])->name('corrd');
-    // Route::get('/admin/plan/hasilcorr/create', 'CorrController@create')->name('corr.create');
-    // Route::get('/admin/plan/hasilcorr/json', 'CorrController@json')->name('corr.json');
-    // Route::post('/admin/plan/hasilcorr/store', 'CorrController@store')->name('corr.store');
     Route::get('/admin/plan/hasilcorr/edit/{id}', 'CorrController@edit_hasil_corr')->name('hasilcorr.edit');
     Route::put('/admin/plan/hasilcorr/update/{id}', 'CorrController@update_hasil_corr')->name('hasilcorr.update');
     Route::get('/admin/plan/hasilcorr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
+
+
+    //Hasil Converting
+    Route::get('/admin/plan/hasilconvflexo', 'ConvController@index_hasil_flexo')->middleware(['auth'])->name('conv.hasilflexo');
+    Route::get('/admin/plan/hasilconvstich', 'ConvController@index_hasil_stich')->middleware(['auth'])->name('conv.hasilstich');
+    Route::get('/admin/plan/hasilconvtokai', 'ConvController@index_hasil_tokai')->middleware(['auth'])->name('conv.hasiltokai');
+    Route::get('/admin/plan/hasilconvwax', 'ConvController@index_hasil_wax')->middleware(['auth'])->name('conv.hasilwax');
+    Route::get('/admin/plan/hasilconvslitter', 'ConvController@index_hasil_slitter')->middleware(['auth'])->name('conv.hasilslitter');
+    Route::get('/admin/plan/convd_flexo', 'ConvController@convd_flexo')->middleware(['auth'])->name('convd.flexo');
+    Route::get('/admin/plan/convd_tokai', 'ConvController@convd_tokai')->middleware(['auth'])->name('convd.tokai');
+    Route::get('/admin/plan/convd_stich', 'ConvController@convd_stich')->middleware(['auth'])->name('convd.stich');
+    Route::get('/admin/plan/convd_wax', 'ConvController@convd_wax')->middleware(['auth'])->name('convd.wax');
+    Route::get('/admin/plan/convd_slitter', 'ConvController@convd_slitter')->middleware(['auth'])->name('convd.slitter');
+    Route::post('/admin/plan/conv/storehasilconv', 'ConvController@storeEdit')->name('conv.storehasilconv');
+    Route::get('/admin/plan/hasilconvflexo/edit/{id}', 'ConvController@edit_hasil_conv')->name('hasilconv.edit');
+    Route::put('/admin/plan/hasilconv/update/{id}', 'ConvController@update_hasil_conv')->name('hasilconv.update');
+    Route::get('/admin/plan/hasilconv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');    
 
     //OPNAME
     // Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');

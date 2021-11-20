@@ -27,7 +27,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Planning Corrugating</h4>
+                <h4 class="modal-title">Planning convugating</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -41,9 +41,8 @@
                 </div>
                 @endif
                 
-                <form action="../update/{{ $corrd->corrdid }}"  method="POST">
+                <form action={{ route('conv.storehasilconv') }}  method="POST">
                 {{ csrf_field() }}
-                {{ method_field('PUT') }}
                     @csrf
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
@@ -54,9 +53,9 @@
                                         <label>Kode Planning</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="hidden" class="form-control txt_line" name="planmid" id="planmid" value="{{ $corrd->corrmid }}" readonly>
-                                        <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $corrd->corrdid }}" readonly>
-                                        <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $corrd->kodeplanM }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="planmid" id="planmid" value="{{ $data1->planmid }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $data1->plandid }}" readonly>
+                                        <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $data1->kodeplanM }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +65,7 @@
                                         <label>Tanggal</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="date" class="form-control txt_line" value="{{ $corrd->tglcorr }}" name="tglcorr" id="tglcorr" readonly>
+                                        <input type="date" class="form-control txt_line" value="{{ $data1->tgl_kirim }}" name="tglconv" id="tglconv" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +75,7 @@
                                         <label>OPI</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $corrd->opikode }}" name="noopi" id="noopi" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $data1->noopi }}" name="noopi" id="noopi" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +85,7 @@
                                         <label>Qty Plan</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $corrd->qtyOrder }}" name="plan" id="plan" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $data1->pcsKontrak }}" name="plan" id="plan" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -99,48 +98,48 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Start</label>
+                                        <label>Item</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="datetime-local" class="form-control txt_line" name="start" id="start" >
+                                        <input type="text" class="form-control txt_line" name="start" id="start" value="{{ $data1->nama_item }}" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>End</label>
+                                        <label>Customer</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="datetime-local" class="form-control txt_line" name="end" id="end" onfocusout="diffTime();">
+                                        <input type="text" class="form-control txt_line" name="end" id="end" value="{{ $data1->customer }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Out</label>
+                                        <label>Mesin</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="out_corr" id="out_corr" value="{{ $corrd->out_corr }}" readonly>
+                                        <input type="text" class="form-control txt_line" name="mesin" id="mesin" value="{{ $data1->mesin }}" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class='col-md-4'>
-                                        <label>P x L</label>
+                                        <label>Baik / Jelek</label>
                                     </div>
                                     <div class='col-md-8'>
                                         <div class='row'>
                                             <div class='col-md-5'>
-                                                <input type='text' class='form-control txt_line' name='sheetp' id='sheetp' value="{{ $corrd->sheet_p }}" readonly>
+                                                <input type='text' class='form-control txt_line' name='hasil_baik' id='hasil_baik' required>
                                             </div>
                                             <div class='col-md-2'>
-                                                <label for=''>X</label>
+                                                <label for=''>/</label>
                                             </div>
                                             <div class='col-md-5'>
-                                                <input type='text' class='form-control txt_line' name='sheetl' id='sheetl' value="{{ $corrd->sheet_l }}" readonly>
+                                                <input type='text' class='form-control txt_line' name='hasil_jelek' id='hasil_jelek' required>
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +148,7 @@
                         </div>
                     </div>
                 </div> 
-                <div class="row" style="margin-bottom: 10px;">
+                {{-- <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-3">
@@ -194,8 +193,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="margin-bottom: 10px;">
+                </div> --}}
+                {{-- <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-3">
@@ -221,7 +220,7 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Status Corr</label>
+                                        <label>Status conv</label>
                                     </div>
                                     <div class="col-md-8">
                                         <select class="js-example-basic-single col-md-12" name="status" id="status">
@@ -243,7 +242,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="row" style="margin-bottom: 10px;">
+                        <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -263,9 +262,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
-                </div>
+                </div> --}}
                 <button class="btn btn-lg btn-primary" type="submit">SIMPAN
                 </form>
             </div>
@@ -315,7 +314,7 @@
         hasilbaik = document.getElementById("baik").value;
         panjang = document.getElementById("sheetp").value;
         lebar = document.getElementById("sheetl").value;
-        out = document.getElementById("out_corr").value;
+        out = document.getElementById("out_conv").value;
 
         sisa = plan - hasilbaik ;
         rm = ((hasilbaik/out)*(panjang/1000));
