@@ -184,7 +184,7 @@
               <li class="nav-item">
                 <a href="{{ route('indexcorr') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Plan Corr</p>
+                  <p>Plan Corrugating</p>
                 </a>
               </li>
             </ul>
@@ -192,7 +192,7 @@
               <li class="nav-item">
                 <a href="{{ route('conv') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Plan Printing</p>
+                  <p>Plan Converting</p>
                 </a>
               </li>
             </ul>
@@ -206,7 +206,7 @@
             </ul>
             <ul class="nav nav-treeview"> 
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('conv.hasilflexo') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Hasil Plan Print</p>
                 </a>

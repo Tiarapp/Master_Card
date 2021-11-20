@@ -37,18 +37,29 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('conv.storeflexoa') }}"  method="POST">
-                    @csrf
+                <form action="../update/{{ $data2->id }}"  method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
+                              <div class="col-md-4">
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <label>Mesin</label>
+                                      </div>
+                                      <div class="col-md-6">
+                                          <input type="text" class="form-control txt_line" name="mesin" id="mesin" value="{{ $mesin->mesin }}" onfocusout="getKode()" readonly>
+                                      </div>
+                                  </div>
+                              </div>
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Kode Planning</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" onfocusout="getKode()" readonly>
+                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $data2->kode }}" onfocusout="getKode()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +69,7 @@
                                             <label>Tanggal</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="date" class="form-control txt_line" name="tgl" id="tgl" autofocus onfocusout="getKode()">
+                                            <input type="date" class="form-control txt_line" name="tgl" id="tgl" value="{{ $data2->tanggal }}" autofocus onfocusout="getKode()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -68,7 +79,7 @@
                                             <label>Shift</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="shift" id="shift" onfocusout="getKode()">
+                                            <input type="text" class="form-control txt_line" name="shift" id="shift" value="{{ $data2->shift }}" onfocusout="getKode()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -92,67 +103,47 @@
                                                         <div class="modal-body corr">
                                                             <div class="card-body">
                                                                 <table class="table table-bordered" id="data_corr">
-                                                                    <thead>
+                                                                  <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Kode</th>
+                                                                        <th scope="col">Delivery Time</th>
+                                                                        <th scope="col">Customer</th>
+                                                                        <th scope="col">Barang</th>
+                                                                        <th scope="col">MC</th>
+                                                                        <th scope="col">Sheet P</th>
+                                                                        <th scope="col">Sheet L</th>
+                                                                        <th scope="col">tipe Box</th>
+                                                                        <th scope="col">Flute</th>
+                                                                        <th scope="col">jumlah Order</th>
+                                                                        <th scope="col">Warna</th>
+                                                                        <th scope="col">Tipe Order</th>
+                                                                        <th scope="col">Finishing</th>
+                                                                        <th scope="col">opi</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <?php 
+                                                                    foreach ($opi as $data) { ?>
                                                                         <tr>
-                                                                            <th scope="col">No Opi</th>
-                                                                            <th scope="col">Mesin</th>
-                                                                            <th scope="col">Delivery Time</th>
-                                                                            <th scope="col">MC</th>
-                                                                            <th scope="col">Customer</th>
-                                                                            <th scope="col">Barang</th>
-                                                                            <th scope="col">Tipe Order</th>
-                                                                            <th scope="col">Flute</th>
-                                                                            <th scope="col">Warna</th>
-                                                                            <th scope="col">Type</th>
-                                                                            <th scope="col">Lebar</th>
-                                                                            <th scope="col">Panjang</th>
-                                                                            <th scope="col">jumlah Order</th>
-                                                                            <th scope="col">Out</th>
-                                                                            <th scope="col">jumlah Plan</th>
-                                                                            <th scope="col">Finishing</th>
-                                                                            <th scope="col">Wax</th>
-                                                                            <th scope="col">Ukuran Roll</th>
-                                                                            <th scope="col">Bungkus</th>
-                                                                            <th scope="col">Lain-lain</th>
-                                                                            <th scope="col">RM Order</th>
-                                                                            <th scope="col">Tonase</th>
-                                                                            <th scope="col">opiid</th>
-                                                                            <th scope="col">hasilid</th>
+                                                                            <td scope="row">{{ $data->noopi }}</td>
+                                                                            <td>{{ $data->tglKirimDt }}</td>
+                                                                            <td>{{ $data->Cust }}</td>
+                                                                            <td>{{ $data->namaBarang }}</td>
+                                                                            <td>{{ $data->mcKode }}</td>
+                                                                            <td>{{ $data->panjangSheet }}</td>
+                                                                            <td>{{ $data->lebarSheet }}</td>
+                                                                            <td>{{ $data->tipeBox }}</td>
+                                                                            <td>{{ $data->flute }}</td>
+                                                                            <td>{{ $data->pcsDt }}</td>
+                                                                            <td>{{ $data->ccnama }}</td>
+                                                                            <td>{{ $data->tipeOrder }}</td>
+                                                                            <td>{{ $data->joint }}</td>
+                                                                            <td>{{ $data->opiid }}</td>
                                                                         </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php 
-                                                                        foreach ($hasilcorr as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->noopi }}</td>
-                                                                                <td>{{ $data->mesin }}</td>
-                                                                                <td>{{ $data->tglDt }}</td>
-                                                                                <td>{{ $data->mckode }}</td>
-                                                                                <td>{{ $data->customer }}</td>
-                                                                                <td>{{ $data->barang }}</td>
-                                                                                <td>{{ $data->tipeorder }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->warna }}</td>
-                                                                                <td>{{ $data->tipebox }}</td>
-                                                                                <td>{{ $data->lebar }}</td>
-                                                                                <td>{{ $data->panjang }}</td>
-                                                                                <td>{{ $data->order }}</td>
-                                                                                <td>{{ $data->out_flexo }}</td>
-                                                                                <td>{{ $data->totalhasil }}</td>
-                                                                                <td>{{ $data->joint }}</td>
-                                                                                <td>{{ $data->wax }}</td>
-                                                                                <td>{{ $data->ukuran_roll }}</td>
-                                                                                <td>{{ $data->bungkus }}</td>
-                                                                                <td>{{ $data->lain }}</td>
-                                                                                <td>{{ $data->rm_order }}</td>
-                                                                                <td>{{ $data->tonase }}</td>
-                                                                                <td>{{ $data->opi_id }}</td>
-                                                                                <td>{{ $data->hasilcorrid }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -178,31 +169,30 @@
                                   <label>No Opi</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='hidden' class='form-control txt_line' name='noOpi[{{ $count }}]' id='noOpi[{{ $count }}]' value="{{ $data->noopi }}">
+                                  <input type='text' class='form-control txt_line' name='noOpi[{{ $count }}]' id='noOpi[{{ $count }}]' value="{{ $data->noopi }}" readonly>
                                   <input type='hidden' class='form-control txt_line' name='wax[{{ $count }}]' id='wax[{{ $count }}]'>
                                   <input type='hidden' class='form-control txt_line' name='roll[{{ $count }}]' id='roll[{{ $count }}]'>
                                   <input type='hidden' class='form-control txt_line' name='bungkus[{{ $count }}]' id='bungkus[{{ $count }}]'>
-                                  <input type='hidden' class='form-control txt_line' name='mesin[{{ $count }}]' id='mesin[{{ $count }}]'>
                                   <input type='hidden' class='form-control txt_line' name='opi_id[{{ $count }}]' id='opi_id[{{ $count }}]'>
-                                  <input type='hidden' class='form-control txt_line' name='hasilcorrid[{{ $count }}]' id='hasilcorrid[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='detail[{{ $count }}]' id='detail[{{ $count }}]' value="{{ $data->id }}">
                                 </div>  
                                 <div class='col-md-1'>
                                   <label>DT</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='date' class='form-control txt_line' name='dt[{{ $count }}]' id='dt[{{ $count }}]'>
+                                  <input type='date' class='form-control txt_line' name='dt[{{ $count }}]' id='dt[{{ $count }}]' value="{{ $data->tgl_kirim }}" readonly>
                                 </div>
                                 <div class='col-md-1'>
                                   <label>Customer</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='customer[{{ $count }}]' id='customer[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='customer[{{ $count }}]' id='customer[{{ $count }}]' value="{{ $data->customer }}" readonly>
                                 </div>
                                 <div class='col-md-1'>
                                   <label>Item</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='item[{{ $count }}]' id='item[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='item[{{ $count }}]' id='item[{{ $count }}]' value="{{ $data->nama_item }}" readonly>
                                 </div>
                               </div>
                               <div class='row'>
@@ -210,7 +200,7 @@
                                   <label>MC</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='mc[{{ $count }}]' id='mc[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='mc[{{ $count }}]' id='mc[{{ $count }}]' value="{{ $data->nomc }}" readonly>
                                 </div>
                                 <div class='col-md-1'>
                                   <label>P x L</label>
@@ -218,13 +208,13 @@
                                 <div class='col-md-2'>
                                   <div class='row'>
                                     <div class='col-md-5'>
-                                      <input type='text' class='form-control txt_line' name='sheetp[{{ $count }}]' id='sheetp[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='sheetp[{{ $count }}]' id='sheetp[{{ $count }}]' value="{{ $data->sheet_p }}" readonly>
                                     </div>
                                     <div class='col-md-2'>
                                       <label for=''>X</label>
                                     </div>
                                     <div class='col-md-5'>
-                                      <input type='text' class='form-control txt_line' name='sheetl[{{ $count }}]' id='sheetl[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='sheetl[{{ $count }}]' id='sheetl[{{ $count }}]' value="{{ $data->sheet_l }}" readonly>
                                     </div>
                                   </div>
                                 </div>
@@ -234,13 +224,13 @@
                                 <div class='col-md-2'>
                                   <div class='row'>
                                     <div class='col-md-5'>
-                                      <input type='text' class='form-control txt_line' name='outconv[{{ $count }}]' id='outconv[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='outconv[{{ $count }}]' id='outconv[{{ $count }}]' value="{{ $data->out_flexo }}" >
                                     </div>
                                     <div class='col-md-2'>
                                       <label for=''>/</label>
                                     </div>
                                     <div class='col-md-5'>
-                                      <input type='text' class='form-control txt_line' name='flute[{{ $count }}]' id='flute[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='flute[{{ $count }}]' id='flute[{{ $count }}]' value="{{ $data->flute }}" readonly>
                                     </div>
                                   </div>
                                 </div>
@@ -248,7 +238,7 @@
                                   <label>Order</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='order[{{ $count }}]' id='order[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='order[{{ $count }}]' id='order[{{ $count }}]' value="{{ $data->qtyOrder }}" readonly>
                                 </div>
                               </div>
                               <div class='row'>
@@ -258,7 +248,7 @@
                                 <div class='col-md-2'>
                                   <div class='row'>
                                     <div class='col-md-12'>
-                                      <input type='text' class='form-control txt_line' name='plan[{{ $count }}]' id='plan[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='plan[{{ $count }}]' id='plan[{{ $count }}]' value="{{ $data->jml_plan }}">
                                     </div>
                                   </div>
                                 </div>
@@ -266,23 +256,13 @@
                                   <label> Warna </label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='warna[{{ $count }}]' id='warna[{{ $count }}]'>
+                                  <input type='text' class='form-control txt_line' name='warna[{{ $count }}]' id='warna[{{ $count }}]' value="{{ $data->warna }}" readonly>
                                 </div>
                                 <div class='col-md-1'>
                                   <label>Finishing</label>
                                 </div>
                                 <div class='col-md-2'>
-                                  <input type='text' class='form-control txt_line' name='finishing[{{ $count }}]' id='finishing[{{ $count }}]'>
-                                </div>
-                                <div class='col-md-1'>
-                                  <label>Status Corr</label>
-                                </div>
-                                <div class='col-md-2'>
-                                  <select class='js-example-basic-single col-md-12' name='status[{{ $count }}]' id='status[{{ $count }}]'>
-                                    <option value='Proses'>Proses</option>
-                                    <option value='Belum Selesai'>Belum Selesai</option>
-                                    <option value='Selesai'>Selesai</option>
-                                  </select>
+                                  <input type='text' class='form-control txt_line' name='finishing[{{ $count }}]' id='finishing[{{ $count }}]' value="{{ $data->joint }}" readonly>
                                 </div>
                               </div>
                               <div class='row'>
@@ -292,7 +272,27 @@
                                 <div class='col-md-2'>
                                   <div class='row'>
                                     <div class='col-md-12'>
-                                      <input type='text' class='form-control txt_line' name='tipeOrder[{{ $count }}]' id='tipeOrder[{{ $count }}]'>
+                                      <input type='text' class='form-control txt_line' name='tipeOrder[{{ $count }}]' id='tipeOrder[{{ $count }}]' value="{{ $data->tipe_order }}" readonly>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class='col-md-1'>
+                                  <label>Tipe Box</label>
+                                </div>
+                                <div class='col-md-2'>
+                                  <div class='row'>
+                                    <div class='col-md-12'>
+                                      <input type='text' class='form-control txt_line' name='tipebox[{{ $count }}]' id='tipebox[{{ $count }}]' value="{{ $data->bentuk }}" readonly>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class='col-md-1'>
+                                  <label>Urutan</label>
+                                </div>
+                                <div class='col-md-2'>
+                                  <div class='row'>
+                                    <div class='col-md-12'>
+                                      <input type='text' class='form-control txt_line' name='urutan[{{ $count }}]' id='urutan[{{ $count }}]' value="{{ $data->urutan }}" >
                                     </div>
                                   </div>
                                 </div>
@@ -301,7 +301,7 @@
                                     <label>Keterangan</label>
                                   </div>
                                   <div class='col-md-10'>
-                                    <input type='text' name='keterangan[{{ $count }}]' id='keterangan[{{ $count }}]' style='width:1000px'>
+                                    <input type='text' name='keterangan[{{ $count }}]' id='keterangan[{{ $count }}]' value="{{ $data->keterangan }}" style='width:1000px'>
                                   </div>
                                 </div>
                               </div>
@@ -357,13 +357,13 @@ function getKode() {
 
 $(document).ready(function(){
     $('.js-example-basic-single').select2();
-    var countrow = 1; //Input fields increment limitation
-    var countdata = 1; //Input fields increment limitation
+    var countrow = document.getElementById("countdata").value;; //Input fields increment limitation
+    var countdata = document.getElementById("countdata").value; //Input fields increment limitation
     var addButton = $('#add_button'); //Add button selector
 
     //Once add button is clicked
     $(addButton).click(function(){
-        $("#planconv").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi[{{ $count }}]' id='noOpi[{{ $count }}]'> <input type='text' class='form-control txt_line' name='wax[{{ $count }}]' id='wax[{{ $count }}]'><input type='text' class='form-control txt_line' name='roll[{{ $count }}]' id='roll[{{ $count }}]'><input type='text' class='form-control txt_line' name='bungkus[{{ $count }}]' id='bungkus[{{ $count }}]'><input type='text' class='form-control txt_line' name='mesin[{{ $count }}]' id='mesin[{{ $count }}]'><input type='text' class='form-control txt_line' name='opi_id[{{ $count }}]' id='opi_id[{{ $count }}]'><input type='text' class='form-control txt_line' name='hasilcorrid["+countrow+"]' id='hasilcorrid["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Out Conv / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='outconv["+countrow+"]' id='outconv["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label> Warna </label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'> </div> <div class='col-md-1'>  <label>Finishing</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'> </div><div class='col-md-1'><label>Status Corr</label></div><div class='col-md-2'><select class='js-example-basic-single col-md-12' name='status["+countrow+"]' id='status["+countrow+"]'><option value='Proses'>Proses</option><option value='Belum Selesai'>Belum Selesai</option><option value='Selesai'>Selesai</option></select></div> </div><div class='row'> <div class='col-md-1'>  <label>Tipe Order</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='tipeOrder["+countrow+"]' id='tipeOrder["+countrow+"]'>   </div>  </div>  </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
+        $("#planconv").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='wax["+countrow+"]' id='wax["+countrow+"]'><input type='hidden' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'><input type='hidden' class='form-control txt_line' name='bungkus["+countrow+"]' id='bungkus["+countrow+"]'><input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'><input type='hidden' class='form-control txt_line' name='detail["+countrow+"]' id='detail["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Out Conv / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='outconv["+countrow+"]' id='outconv["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Jumlah Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label> Warna </label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'> </div> <div class='col-md-1'>  <label>Finishing</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'> </div></div><div class='row'> <div class='col-md-1'>  <label>Tipe Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='tipeOrder["+countrow+"]' id='tipeOrder["+countrow+"]'>   </div> <div class='col-md-1'>  <label>Tipe Box</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-1'>  <label>Urutan</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
 
         countrow++;
                 countdata++;
@@ -386,25 +386,20 @@ $(document).ready(function(){
             var cust = (table.row(this).data());
             
             if (countdata-1 != 'null') {
-                document.getElementById("noOpi["+(countdata-1)+"]").value = cust[0];
+              document.getElementById("noOpi["+(countdata-1)+"]").value = cust[0];
                 document.getElementById("dt["+(countdata-1)+"]").value = cust[1];
-                document.getElementById("customer["+(countdata-1)+"]").value = cust[3];
-                document.getElementById("item["+(countdata-1)+"]").value = cust[4];
-                document.getElementById("mc["+(countdata-1)+"]").value = cust[2];
-                document.getElementById("sheetp["+(countdata-1)+"]").value = cust[10];
-                document.getElementById("sheetl["+(countdata-1)+"]").value = cust[9];
-                document.getElementById("warna["+(countdata-1)+"]").value = cust[7];
-                document.getElementById("flute["+(countdata-1)+"]").value = cust[6];
-                document.getElementById("order["+(countdata-1)+"]").value = cust[13];
-                document.getElementById("tipeOrder["+(countdata-1)+"]").value = cust[5];
-                document.getElementById("finishing["+(countdata-1)+"]").value = cust[14];
-                document.getElementById("outconv["+(countdata-1)+"]").value = cust[12];
-                document.getElementById("opi_id["+(countdata-1)+"]").value = cust[22];
-                document.getElementById("wax["+(countdata-1)+"]").value = cust[16];
-                document.getElementById("hasilcorrid["+(countdata-1)+"]").value = cust[23];
-                document.getElementById("bungkus["+(countdata-1)+"]").value = cust[19];
-                document.getElementById("roll["+(countdata-1)+"]").value = cust[17];
-                document.getElementById("mesin["+(countdata-1)+"]").value = cust[15];
+                document.getElementById("customer["+(countdata-1)+"]").value = cust[2];
+                document.getElementById("item["+(countdata-1)+"]").value = cust[3];
+                document.getElementById("mc["+(countdata-1)+"]").value = cust[4];
+                document.getElementById("sheetp["+(countdata-1)+"]").value = cust[5];
+                document.getElementById("sheetl["+(countdata-1)+"]").value = cust[6];
+                document.getElementById("warna["+(countdata-1)+"]").value = cust[10];
+                document.getElementById("tipebox["+(countdata-1)+"]").value = cust[7];
+                document.getElementById("flute["+(countdata-1)+"]").value = cust[8];
+                document.getElementById("order["+(countdata-1)+"]").value = cust[9];
+                document.getElementById("tipeOrder["+(countdata-1)+"]").value = cust[11];
+                document.getElementById("finishing["+(countdata-1)+"]").value = cust[12];
+                document.getElementById("opi_id["+(countdata-1)+"]").value = cust[13];
             }
 
             
