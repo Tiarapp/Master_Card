@@ -552,11 +552,13 @@
                                             <label class="control-label">Packing</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="koli" id="koli" >
+                                            <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
                                                 <option value='{{ $mc->koli }}'>{{ $mc->koli }}</option>
-                                                @foreach ($koli as $data)
-                                                <option value="{{ $data->qtyBox }}">{{ $data->qtyBox }}</option>
-                                                @endforeach
+                                                <option value='05'>5 Koli</option>
+                                                <option value='10'>10 Koli</option>
+                                                <option value='20'>20 Koli</option>
+                                                <option value='25'>25 Koli</option>
+                                                <option value='50'>50 Koli</option>
                                             </select>
                                         </div>
                                         /Koli

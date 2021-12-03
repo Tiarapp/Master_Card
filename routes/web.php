@@ -259,6 +259,7 @@ Route::middleware(['auth'])->group(function (){
 
     //Hasil Converting
     Route::get('/admin/plan/hasilconvflexo', 'ConvController@index_hasil_flexo')->middleware(['auth'])->name('conv.hasilflexo');
+    Route::get('/admin/plan/control', 'ConvController@control')->middleware(['auth'])->name('conv.control');
     Route::get('/admin/plan/hasilconvstich', 'ConvController@index_hasil_stich')->middleware(['auth'])->name('conv.hasilstich');
     Route::get('/admin/plan/hasilconvtokai', 'ConvController@index_hasil_tokai')->middleware(['auth'])->name('conv.hasiltokai');
     Route::get('/admin/plan/hasilconvwax', 'ConvController@index_hasil_wax')->middleware(['auth'])->name('conv.hasilwax');

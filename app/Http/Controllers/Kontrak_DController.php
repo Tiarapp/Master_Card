@@ -198,18 +198,18 @@ class Kontrak_DController extends Controller
 
             $upMaster->save(); // simpan ke table
 
-            for ($i=1; $i < 6; $i++) { 
-                if ($request->tglKirim[$i] !== null) {
-                    $dt = DeliveryTime::create([
-                        'kontrak_m_id' => $kontrakm->id,
-                        'kodeKontrak' => $kontrakm->kode,
-                        'tglKirimDt' => $request->tglKirim[$i],
-                        'pcsDt' => $request->dtPcs[$i],
-                        // 'kgDt' => $request->dtKg[$i],
-                        'createdBy' => $request->createdBy,
-                    ]);
-                }
-            }
+            // for ($i=1; $i < 6; $i++) { 
+            //     if ($request->tglKirim[$i] !== null) {
+            //         $dt = DeliveryTime::create([
+            //             'kontrak_m_id' => $kontrakm->id,
+            //             'kodeKontrak' => $kontrakm->kode,
+            //             'tglKirimDt' => $request->tglKirim[$i],
+            //             'pcsDt' => $request->dtPcs[$i],
+            //             // 'kgDt' => $request->dtKg[$i],
+            //             'createdBy' => $request->createdBy,
+            //         ]);
+            //     }
+            // }
 
 
         return redirect('admin/kontrak');

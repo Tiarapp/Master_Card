@@ -26,38 +26,38 @@ class OpiController extends Controller
     
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Opi_M::opi2()->get();
-            return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
+        // if ($request->ajax()) {
+        //     $data = Opi_M::opi2()->get();
+        //     return Datatables::of($data)
+        //             ->addIndexColumn()
+        //             ->addColumn('action', function($row){
      
-                        $btn = "<a href='../admin/opi/edit/".$row->opiid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../admin/opi/print/".$row->opiid."' class='btn btn-outline-secondary' type='button'>Print</a>";
+        //                 $btn = "<a href='../admin/opi/edit/".$row->opiid."' class='edit btn btn-primary btn-sm'>View</a>
+        //                 <a href='../admin/opi/print/".$row->opiid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-                        return $btn;
-                    })
-                    ->addColumn('hari', function($row){
-                        $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
-                        $hari = $day[date('w', strtotime($row->tglKirimDt))];
+        //                 return $btn;
+        //             })
+        //             ->addColumn('hari', function($row){
+        //                 $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
+        //                 $hari = $day[date('w', strtotime($row->tglKirimDt))];
 
-                        return $hari;
-                    })
-                    ->addColumn('toleransi', function($row){
-                        $lebih = $row->toleransiLebih;
-                        $kurang = $row->toleransiKurang;
+        //                 return $hari;
+        //             })
+        //             ->addColumn('toleransi', function($row){
+        //                 $lebih = $row->toleransiLebih;
+        //                 $kurang = $row->toleransiKurang;
 
-                        $toleransi = $lebih.'/'.$kurang;
+        //                 $toleransi = $lebih.'/'.$kurang;
 
-                        return $toleransi;
-                    })
-                    ->rawColumns(['action','hari','toleransi'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // $data = Opi_M::opi2();
+        //                 return $toleransi;
+        //             })
+        //             ->rawColumns(['action','hari','toleransi'])
+        //             ->make(true);
+        //     // dd($data);                    
+        // }
+        $data = Opi_M::opi()->take(1000)->get();
         // dd($data);
-        return view('admin.opi.index');
+        return view('admin.opi.index', compact('data'));
         // $kontrak_m = Kontrak_M::get();
 
         // return view('admin.kontrak.index',compact('kontrak_m'));

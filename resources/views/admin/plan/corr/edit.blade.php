@@ -58,16 +58,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <label>Shift</label>
+                                            <label>Revisi</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan">
+                                            <input type="text" class="form-control txt_line" name="revisi" id="revisi" value="{{ $data2->revisi + 1 }}" readonly>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -393,9 +393,6 @@
                                         </div> 
                                         <div class='col-md-1'>  
                                             <input type='text' class='form-control txt_line' value="{{ $detail->urutan }}" name='urutan[{{ $count }}]' id='urutan[{{ $count }}]'> 
-                                        </div> 
-                                        <div class='col-md-1'>  
-                                            <a href='javascript:void(0);' class='btn btn-success' name='btn{{ $count }}' id='btn{{ $count }}'>Calculate</a> 
                                         </div> 
                                     </div> 
                                     <div class='row' style='margin-top:10px'> 

@@ -43,7 +43,6 @@
               <th scope="col">No.</th>
               <th scope="col">Kode Plan</th>
               <th scope="col">Tanggal Plan</th>
-              <th scope="col">Shift</th>
               <th scope="col">Revisi</th>
               <th scope="col">Total RM</th>
               <th scope="col">Total Berat</th>
@@ -105,7 +104,6 @@
           { data: 'id', name: 'id' },
           { data: 'kode_plan', name: 'kode_plan' },
           { data: 'tanggal', name: 'tanggal' },
-          { data: 'shift', name: 'shift' },
           { data: 'revisi', name: 'revisi' },
           { data: 'total_RM', name: 'total_RM' },
           { data: 'total_Berat', name: 'total_Berat' },

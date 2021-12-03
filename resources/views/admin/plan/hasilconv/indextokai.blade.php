@@ -92,7 +92,7 @@
           { data: 'nomc', name: 'nomc' },
           { data: 'noopi', name: 'noopi' },
           { data: 'tgl_kirim', name: 'tgl_kirim' },
-          { data: 'pcsKontrak', name: 'pcsKontrak' },
+          { data: 'jml_plan', name: 'jml_plan' },
           {
             data: 'action',
             name: 'action',

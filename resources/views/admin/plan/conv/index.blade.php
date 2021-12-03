@@ -46,7 +46,7 @@
         <table class="table table-bordered" id="data_planconv">
           <thead>
             <tr>
-              <th scope="col">No.</th>
+              {{-- <th scope="col">No.</th> --}}
               <th scope="col">Kode Plan</th>
               <th scope="col">Tanggal Plan</th>
               <th scope="col">Shift</th>
@@ -79,7 +79,7 @@
         serverSide:true,
         ajax:"{{ route('convm') }}",
         columns: [
-          { data: 'id', name: 'id' },
+          // { data: 'id', name: 'id' },
           { data: 'kode', name: 'kode' },
           { data: 'tanggal', name: 'tanggal' },
           { data: 'shift', name: 'shift' },
@@ -95,7 +95,7 @@
         ],
         "columnDefs": [
         {
-          'targets': [0
+          'targets': [2
           ],
           'render': function(data, type, full, meta){
             if(type === 'display'){

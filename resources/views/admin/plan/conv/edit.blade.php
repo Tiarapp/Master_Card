@@ -129,7 +129,15 @@
                                                                             <td>{{ $data->tglKirimDt }}</td>
                                                                             <td>{{ $data->Cust }}</td>
                                                                             <td>{{ $data->namaBarang }}</td>
-                                                                            <td>{{ $data->mcKode }}</td>
+                                                                            <td>
+                                                                              <?php
+                                                                                if ($data->revisimc != '') {
+                                                                                  echo $data->mcKode."-".$data->revisimc;
+                                                                                } else {
+                                                                                  echo $data->mcKode;
+                                                                                }
+                                                                              ?>
+                                                                            </td>
                                                                             <td>{{ $data->panjangSheet }}</td>
                                                                             <td>{{ $data->lebarSheet }}</td>
                                                                             <td>{{ $data->tipeBox }}</td>
