@@ -263,6 +263,7 @@ class CorrController extends Controller
         $upCorrm = Corr_M::find($id);
 
         $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->revisi = $request->revisi;
         $upCorrm->total_Berat = $berattotal;
 
         $upCorrm->save();

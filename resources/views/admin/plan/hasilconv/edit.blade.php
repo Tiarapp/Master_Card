@@ -85,7 +85,7 @@
                                         <label>Qty Plan</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $data1->pcsKontrak }}" name="plan" id="plan" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $data1->jml_plan }}" name="plan" id="plan" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -148,123 +148,7 @@
                         </div>
                     </div>
                 </div> 
-                {{-- <div class="row" style="margin-bottom: 10px;">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Hasil Baik</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="baik" id="baik" onchange="getSisa()">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Hasil Jelek</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="number" class="form-control txt_line" name="jelek" id="jelek" >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Jumlah Palet</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="jml_palet" id="jml_palet" >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Sisa</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="sisa" id="sisa" >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-                {{-- <div class="row" style="margin-bottom: 10px;">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Produksi Meter</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="prod_meter" id="prod_meter">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>M2</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="meter_persegi" id="meter_persegi">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Status conv</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <select class="js-example-basic-single col-md-12" name="status" id="status">
-                                            <option value='Proses'>Proses</option>
-                                            <option value='Belum Selesai'>Belum Selesai</option>
-                                            <option value='Selesai'>Selesai</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Durasi</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Mesin Selanjutnya</label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <select class="js-example-basic-single col-md-12" name="mesin" id="mesin">
-                                                    <option value='Flexo A'>Flexo A</option>
-                                                    <option value='Flexo B'>Flexo B</option>
-                                                    <option value='Flexo C'>Flexo C</option>
-                                                    <option value='Stiching'>Stiching</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
+                
                 <button class="btn btn-lg btn-primary" type="submit">SIMPAN
                 </form>
             </div>

@@ -44,7 +44,7 @@
               <th scope="col">Lebar</th>
               <th scope="col">Plan</th>
               <th scope="col">Flute</th>
-              <th scope="col">Sisa</th>
+              {{-- <th scope="col">Sisa</th> --}}
               <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
@@ -80,7 +80,7 @@
           { data: 'lebarsheet', name: 'lebarsheet' },
           { data: 'plan', name: 'plan' },
           { data: 'flute', name: 'flute' },
-          { data: 'sisa', name: 'sisa' },
+          // { data: 'sisa', name: 'sisa' },
           { data: 'status', name: 'status' },
           {
             data: 'action',

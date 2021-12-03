@@ -212,7 +212,7 @@ class ConvController extends Controller
     {
         $convm = Conv_M::find($id)->first();
         $convd = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->orderBy('urutan','asc')->get();
-        
+        // dd($convm); 
         if ($convd[0]->mesin == 'FLEXO') {
             return view('admin.plan.conv.pdf', compact('convm','convd'));
         } else {
@@ -238,10 +238,11 @@ class ConvController extends Controller
     {
         $data1 = $request->noOpi;
         // $mesin = $request->mesin;
-        // dd($request->mesin);
+        // dd($data1);
 
         for ($i=1; $i <= count($data1); $i++) { 
-            if ($request->detail[$i] != '') {
+            // dd($request->detail[$i]);
+            if ($request->detail[$i] != NULL) {
                 $corrd = Conv_D::find($request->detail[$i]);
 
                 $corrd->urutan = $request->urutan[$i];
@@ -250,11 +251,13 @@ class ConvController extends Controller
 
                 $corrd->save();
             } else {
-                if ($request->detail[$i] == '') {
+                // dd($request->detail[$i]);
+                if ($request->detail[$i] == NULL) {
                     $add_detail = Conv_D::create([
                         'plan_conv_m_id' => $id,
                         'opi_id' => $request->opi_id[$i],
                         'tgl_kirim' => $request->dt[$i],
+                        'nomc' => $request->mc[$i],
                         'urutan' => $request->urutan[$i],
                         'sheet_p' => $request->sheetp[$i],
                         'sheet_l' => $request->sheetl[$i],
@@ -278,7 +281,10 @@ class ConvController extends Controller
             
             // $rmjumlah = $rmjumlah + $request->rmorder[$i];
             // $berattotal = $berattotal + $request->beratOrder[$i];
+            
         }
+
+        return redirect('admin/plan/conv');
     }
 
     public function convd_flexo(Request $request)
@@ -434,6 +440,8 @@ class ConvController extends Controller
                 $uphasilconv->hasil_jelek_mesin1 = $request->hasil_jelek;
 
                 $uphasilconv->save();
+
+                return redirect('admin/plan/hasilconvflexo');
             }
             if ($request->mesin == 'STICH') {
                 $uphasilconv->mesin3 = $request->mesin;
@@ -441,6 +449,8 @@ class ConvController extends Controller
                 $uphasilconv->hasil_jelek_mesin3 = $request->hasil_jelek;
 
                 $uphasilconv->save();
+                
+                return redirect('admin/plan/hasilconvstich');
             }  
             if ($request->mesin == 'TOKAI') {
                 $uphasilconv->mesin2 = $request->mesin;
@@ -448,6 +458,8 @@ class ConvController extends Controller
                 $uphasilconv->hasil_jelek_mesin2 = $request->hasil_jelek;
 
                 $uphasilconv->save();
+                
+                return redirect('admin/plan/hasilconvtokai');
             }  
             if ($request->mesin == 'SLITTER') {
                 $uphasilconv->mesin5 = $request->mesin;
@@ -455,6 +467,8 @@ class ConvController extends Controller
                 $uphasilconv->hasil_jelek_mesin5 = $request->hasil_jelek;
 
                 $uphasilconv->save();
+                
+                return redirect('admin/plan/hasilconvslitter');
             }  
             if ($request->mesin == 'WAX') {
                 $uphasilconv->mesin4 = $request->mesin;
@@ -462,6 +476,8 @@ class ConvController extends Controller
                 $uphasilconv->hasil_jelek_mesin4 = $request->hasil_jelek;
 
                 $uphasilconv->save();
+                
+                return redirect('admin/plan/hasilconvwax');
             }   
         } else {
             if ($request->mesin == 'FLEXO') {

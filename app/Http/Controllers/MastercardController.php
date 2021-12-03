@@ -113,11 +113,16 @@ class MastercardController extends Controller
             'createdBy' => 'required',
         ], $messages);
 
+        // dd($request->file('gambar'));
         $file = $request->file('gambar');
-        $nama_file = time()."_".$file->getClientOriginalName();
+        if ($file != null) {
+            $nama_file = time()."_".$file->getClientOriginalName();
 
-        $tujuan_upload = 'upload';
-        $file->move($tujuan_upload, $nama_file);
+            $tujuan_upload = 'upload';
+            $file->move($tujuan_upload, $nama_file);
+        } else {
+            $nama_file = '';
+        }
 
 
         
