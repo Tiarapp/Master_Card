@@ -34,6 +34,10 @@
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
         <a href="{{ route('conv.hasilslitter') }}" style="margin-bottom: 20px; color:white;" >SLITTER</a>
       </button>
+
+      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+        <a href="{{ route('conv.hasilglue') }}" style="margin-bottom: 20px; color:white;" >GLUE</a>
+      </button>
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Hasil Plan Converting</h1>

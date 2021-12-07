@@ -16,8 +16,9 @@ class CreatePlanConvDTable extends Migration
         Schema::create('plan_conv_d', function (Blueprint $table) {
             $table->id();
             $table->foreignId('opi_id')->unsigned();
-            $table->foreignId('plan_corr_id')->unsigned();
+            // $table->foreignId('plan_corr_id')->unsigned();
             $table->foreignId('plan_conv_m_id')->unsigned();
+            $table->string('urutan');
             $table->date('tgl_kirim');
             $table->string('nomc');
             $table->string('nama_item');
@@ -45,7 +46,7 @@ class CreatePlanConvDTable extends Migration
 
             $table->foreign('opi_id')->references('id')->on('opi_m')->cascadeOnDelete();
             $table->foreign('plan_conv_m_id')->references('id')->on('plan_conv_m')->cascadeOnDelete();
-            $table->foreign('plan_corr_id')->references('id')->on('plan_corr_d')->cascadeOnDelete();
+            // $table->foreign('plan_corr_id')->references('id')->on('plan_corr_d')->cascadeOnDelete();
             $table->timestamps();
         });
     }
