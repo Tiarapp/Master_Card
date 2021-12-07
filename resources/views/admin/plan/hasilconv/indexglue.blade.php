@@ -38,7 +38,6 @@
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
         <a href="{{ route('conv.hasilglue') }}" style="margin-bottom: 20px; color:white;" >GLUE</a>
       </button>
-      
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Hasil Plan Converting</h1>
@@ -58,7 +57,7 @@
   <section class="content">
     <div class="container-fluid">
       <div class="card-body">
-        <table class="table table-bordered" id="data_hasilconvflexo">
+        <table class="table table-bordered" id="data_hasilconvtokai">
           <thead>
             <tr>
               <th scope="col">Kode Plan</th>
@@ -87,17 +86,17 @@
       return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
     };
     $(function(){
-      $('#data_hasilconvflexo').DataTable({
+      $('#data_hasilconvtokai').DataTable({
         // "scrollY": "auto",
         processing:true,
         serverSide:true,
-        ajax:"{{ route('convd.stich') }}",
+        ajax:"{{ route('convd.glue') }}",
         columns: [
           { data: 'kodeplanM', name: 'kodeplanM' },
           { data: 'nomc', name: 'nomc' },
           { data: 'noopi', name: 'noopi' },
           { data: 'tgl_kirim', name: 'tgl_kirim' },
-          { data: 'pcsKontrak', name: 'pcsKontrak' },
+          { data: 'jml_plan', name: 'jml_plan' },
           {
             data: 'action',
             name: 'action',

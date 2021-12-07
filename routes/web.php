@@ -264,11 +264,13 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/hasilconvtokai', 'ConvController@index_hasil_tokai')->middleware(['auth'])->name('conv.hasiltokai');
     Route::get('/admin/plan/hasilconvwax', 'ConvController@index_hasil_wax')->middleware(['auth'])->name('conv.hasilwax');
     Route::get('/admin/plan/hasilconvslitter', 'ConvController@index_hasil_slitter')->middleware(['auth'])->name('conv.hasilslitter');
+    Route::get('/admin/plan/hasilconvglue', 'ConvController@index_hasil_glue')->middleware(['auth'])->name('conv.hasilglue');
     Route::get('/admin/plan/convd_flexo', 'ConvController@convd_flexo')->middleware(['auth'])->name('convd.flexo');
     Route::get('/admin/plan/convd_tokai', 'ConvController@convd_tokai')->middleware(['auth'])->name('convd.tokai');
     Route::get('/admin/plan/convd_stich', 'ConvController@convd_stich')->middleware(['auth'])->name('convd.stich');
     Route::get('/admin/plan/convd_wax', 'ConvController@convd_wax')->middleware(['auth'])->name('convd.wax');
     Route::get('/admin/plan/convd_slitter', 'ConvController@convd_slitter')->middleware(['auth'])->name('convd.slitter');
+    Route::get('/admin/plan/convd_glue', 'ConvController@convd_glue')->middleware(['auth'])->name('convd.glue');
     Route::post('/admin/plan/conv/storehasilconv', 'ConvController@storeEdit')->name('conv.storehasilconv');
     Route::get('/admin/plan/hasilconvflexo/edit/{id}', 'ConvController@edit_hasil_conv')->name('hasilconv.edit');
     Route::put('/admin/plan/hasilconv/update/{id}', 'ConvController@update_hasil_conv')->name('hasilconv.update');

@@ -53,6 +53,10 @@
       <a href="{{ route('conv.hasilslitter') }}" style="margin-bottom: 20px; color:white;" >SLITTER</a>
     </button>
 
+    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
+      <a href="{{ route('conv.hasilglue') }}" style="margin-bottom: 20px; color:white;" >GLUE</a>
+    </button>
+
       <div class="card-body">
         <table class="table table-bordered" id="data_hasilconvflexo">
           <thead>
