@@ -4219,7 +4219,7 @@
         <tr class="row15">
           <td class="column1 style34 s">Ukuran</td>
           <td class="column2 style20 null"></td>
-          <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->panjangSheetBox }} x {{ $kontrakBox->lebarSheetBox }} x 1</td>
+          <td class="column3 style23 s style23" colspan="3">{{ $kontrakBox->panjangBox }} x {{ $kontrakBox->lebarBox }} x {{ $kontrakBox->tinggiBox }}</td>
           <td class="column2 style20 null"></td>
           <td class="column2 style20 null"></td>
           <td class="column6 style36 s" colspan="3">Wax</td>
@@ -4271,11 +4271,11 @@
           <td class="column9 style7 null"></td>
           <td class="column10 style7 null"></td>
         </tr>
-        <tr class="row20">
+        {{-- <tr class="row20">
           <td class="column1 style45 s style47" colspan="12">PELENGKAP</td>
           <td class="column9 style7 null"></td>
           <td class="column10 style7 null"></td>
-        </tr>
+        </tr> --}}
         <tr class="row21">
           <td class="column1 style48 s style49" colspan="2">JENIS</td>
           <td class="column3 style50 s" colspan="2">UKURAN</td>
@@ -4285,8 +4285,8 @@
           <td class="column9 style7 null"></td>
           <td class="column10 style7 null"></td>
         </tr> @foreach ($kontrak_D as $data) <tr class="row22">
-          <td class="column1 style52 s style53" colspan="2">{{ $data->tipe }}</td>
-          <td class="column3 style54 s" colspan="2">{{ $data->panjangSheetBox }} x {{ $data->lebarSheetBox }}</td>
+          <td class="column1 style52 s style53" colspan="2">{{ $data->tipeBox }}</td>
+          <td class="column3 style54 s" colspan="2">{{ $kontrakBox->panjangBox }} x {{ $kontrakBox->lebarBox }} x {{ $kontrakBox->tinggiBox }}</td>
           <td class="column4 style55 s style55" colspan="4">{{ $data->substance }}</td>
           <td class="column6 style56 s" colspan="2">{{ $data->flute }}</td>
           <td class="column7 style57 n style58" colspan="2">{{ $data->pcsKontrak }}</td>

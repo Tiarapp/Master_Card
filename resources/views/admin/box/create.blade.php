@@ -189,6 +189,12 @@
                                 <div class="invalid-feedback">Masukkan tinggi dalam box (mm)</div>
                             </div>
                         </div>
+                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan tinggi dalam box (mm)">
+                            <div class="form-group">
+                                <label>Kondisi Tambahan</label>
+                                <input type="text" class="form-control txt_line" placeholder="" name="kuping2" id="kuping2" onchange="update_crease_corr(); getNama();">
+                            </div>
+                        </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
@@ -206,6 +212,7 @@
                                 <input type="hidden" name="panjangCrease" id="panjangCrease">
                                 <input type="hidden" name="lebarCrease1" id="lebarCrease1">
                                 <input type="hidden" name="lebarCrease2" id="lebarCrease2">
+                                <input type="hidden" name="kuping2" id="kuping2">
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -310,6 +317,7 @@
             var box_p = document.getElementById("panjangDalamBox").value;
             var box_l = document.getElementById("lebarDalamBox").value;
             var box_t = document.getElementById("tinggiDalamBox").value;
+            var add_condition = document.getElementById("kuping2").value;
             var flute = document.getElementById("flute").value;
             var crease_p, crease_l, kuping, flap, p1, l1, l2, tinggi, sheet_p, sheet_l;
             var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
@@ -341,14 +349,14 @@
                 }
                 flap =  ((box_l / 2) + flap_trim);
                 tinggi = ((box_t*1) + tinggi_trim);
-                sheet_l = (flap*2) + tinggi;
+                sheet_l = (flap*2) + tinggi ;
                 crease_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
                 
                 p1 = ((box_p*1) + p1_trim);
                 l1 = ((box_l*1) + l1_trim);
                 l2 = ((box_l*1) + l2_trim);
-                sheet_p = (p1*2) + l1 + l2 + kuping;
-                crease_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 + ' = ' + sheet_p + ' MM';
+                sheet_p = (p1*2) + l1 + l2 + kuping - add_condition;
+                crease_l = kuping +' - '+ p1 + ' - ' + l1 + ' - ' + p1 + ' - ' + l2 +' - '+ add_condition +' = ' + sheet_p + ' MM';
                 
                 //CreaseCorr
                 document.getElementById("sizeCreasCorr").value = crease_p;

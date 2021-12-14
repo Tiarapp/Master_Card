@@ -113,11 +113,16 @@ class MastercardController extends Controller
             'createdBy' => 'required',
         ], $messages);
 
+        // dd($request->file('gambar'));
         $file = $request->file('gambar');
-        $nama_file = time()."_".$file->getClientOriginalName();
+        if ($file != null) {
+            $nama_file = time()."_".$file->getClientOriginalName();
 
-        $tujuan_upload = 'upload';
-        $file->move($tujuan_upload, $nama_file);
+            $tujuan_upload = 'upload';
+            $file->move($tujuan_upload, $nama_file);
+        } else {
+            $nama_file = '';
+        }
 
 
         
@@ -361,13 +366,14 @@ class MastercardController extends Controller
             ->leftJoin('substance as SubsKontrak', 'substanceKontrak_id', '=', 'SubsKontrak.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', 'box.id')
-            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease')
+            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease')
             ->where('mc.id', $id)
             ->first();
 
         // var_dump($mc->tipebox);
         // $substancKontrak = explode(" ", $mc->SubsKontrakNama);
         // $substancProduksi = explode(" ", $mc->SubsProduksiNama);
+        // dd($mc);
         $namaSubsK = $mc->SubsKontrakNama;
         $namaSubsP = $mc->SubsProduksiNama;
         return view('admin.mastercard.pdfb1', compact('mc','namaSubsK','namaSubsP'));

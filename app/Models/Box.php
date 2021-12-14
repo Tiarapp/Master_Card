@@ -18,6 +18,8 @@ class Box extends Model
         'tipebox',
         'flute',
         'tipeCreasCorr',
+        'kuping2',
+        
         // 'lebarSheetBox',
         // 'panjangSheetBox',
         // 'tinggiSheetBox',

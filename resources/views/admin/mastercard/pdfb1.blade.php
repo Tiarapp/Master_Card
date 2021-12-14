@@ -4307,13 +4307,13 @@
                     <td class="column6 style103 null"></td>
                     <td class="column7 style104 s">Warna</td>
                     <td class="column8 style45 s">:</td>
-                    <td class="column9 style105 s style47" colspan="6">BRU10-MRH07--</td>
+                    <td class="column9 style105 s style47" colspan="6">{{ $mc->colComNama }}</td>
                 </tr>
                 <tr class="row20">
                     <td class="column0 style14 null"></td>
                     <td class="column1 style101 s">Packing</td>
                     <td class="column2 style1 s">:</td>
-                    <td class="column3 style106 n style5" colspan="2">20</td>
+                    <td class="column3 style106 n style5" colspan="2">{{ $mc->koli }}</td>
                     <td class="column5 style107 s style108" colspan="2">/ Koli</td>
                     <td class="column7 style104 s">Mesin</td>
                     <td class="column8 style45 s">:</td>
@@ -4323,7 +4323,7 @@
                     <td class="column0 style14 null"></td>
                     <td class="column1 style110 s">Bungkus</td>
                     <td class="column2 style111 s">:</td>
-                    <td class="column3 style112 null style113" colspan="4"></td>
+                    <td class="column3 style112 null style113" colspan="4">{{ $mc->bungkus }}</td>
                     <td class="column7 style114 null"></td>
                     <td class="column8 style111 null"></td>
                     <td class="column9 style115 null style24" colspan="6"></td>
@@ -4332,7 +4332,7 @@
                     <td class="column0 style116 null"></td>
                     <td class="column1 style117 s">Keterangan</td>
                     <td class="column2 style118 s">:</td>
-                    <td class="column3 style119 s style129" colspan="12" rowspan="3">TANPA PARTISI</td>
+                    <td class="column3 style119 s style129" colspan="12" rowspan="3">{{ $mc->keterangan }}</td>
                 </tr>
                 <tr class="row23">
                     <td class="column0 style14 null"></td>
@@ -4403,7 +4403,7 @@
                     <td class="column0 style116 null"></td>
                     <td class="column1 style101 null"></td>
                     <td class="column2 style148 null"></td>
-                    <td class="column3 style149 f">30</td>
+                    <td class="column3 style149 f">{{ $mc->kuping }}</td>
                     <td class="column4 style150 n">460</td>
                     <td class="column5 style151 f">308</td>
                     <td class="column6 style150 n">460</td>
