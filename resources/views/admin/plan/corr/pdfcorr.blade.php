@@ -2500,11 +2500,11 @@ td
  
  text-align:center;
  vertical-align:middle;
- white-space:normal;word-wrap:break-word;
+ white-space:normal;
  background:auto;
  
  color:#000000;
- font-size:24pt;
+ font-size:20pt;
  font-weight:700;
  font-style:normal;
  font-family:"Calibri","sans-serif";
@@ -4114,8 +4114,8 @@ td
 <td class='x57'></td>
 <td class='x63'></td>
 <td class='x64'></td>
-<td class='x65' >{{ $data2->totalrm }}</td>
-<td class='x65' >{{ $data2->totalberat }}</td>
+<td class='x65' >{{ number_format($data2->totalrm,0,',','.') }}</td>
+<td class='x65' >{{ number_format($data2->totalberat,0,',','.') }}</td>
 <td class='x54'></td>
 <td class='x54'></td>
 <td class='x54'></td>
@@ -4163,18 +4163,21 @@ td
     @foreach ($data1 as $data)
       <tr height='62' id='r5'>
         <td height='62' class='x162' style='height:46.5pt;'></td>
-        <td class='x82'>{{ $data->tglDt }}</td>
+        <td class='x82'><?php
+          $date=date_create($data->tglDt);
+          echo date_format($date,"d M");
+        ?></td>
         <td class='x181'>{{ $data->noopi }}</td>
         <td class='x22'>{{ $data->customer }}</td>
-        <td rowspan='2' height='137' class='x126' style='border-right:1px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->lebar }}</td>
-        <td rowspan='2' height='137' class='x86' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->panjang }}</td>
+        <td rowspan='2' height='137' class='x126' style='border-right:1px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->lebar,0,',','.') }}</td>
+        <td rowspan='2' height='137' class='x86' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->panjang,0,',','.') }}</td>
         <td class='x22'>{{ $data->flute }}</td>
         <td class='x84' >{{ $data->out_flexo }}</td>
-        <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->qtyOrder }}</td>
+        <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->qtyOrder,0,',','.') }}</td>
         <td rowspan='2' height='137' class='x86'  style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->out_corr }}</td>
-        <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->ukuran_roll }}</td>
+        <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->ukuran_roll,0,',','.') }}</td>
         <td rowspan='2' height='137' class='x130' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ round($data->ukuran_roll*$data->trim_waste),0 }}</td>
-        <td rowspan='2' height='137' class='x183' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->cop }}</td>
+        <td rowspan='2' height='137' class='x183' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->cop,0,',','.') }}</td>
         <td class='x85'>{{ $data->kertasMcAtas }}</td>
         <td class='x86'>{{ $data->gramKertasAtas }}</td>
         <td class='x85'>{{ $data->kertasMcflute1 }}</td>
@@ -4186,8 +4189,8 @@ td
         <td class='x85'>{{ $data->kertasMcbawah }}</td>
         <td class='x86'>{{ $data->gramKertasbawah }}</td>
         <td class='x87' >{{ $data->gramSheet }}</td>
-        <td class='x88' style="border-bottom:2px solid #000000">{{ $data->rm_order }}</td>
-        <td class='x88' >{{ $data->tonase }}</td>
+        <td class='x88' style="border-bottom:2px solid #000000">{{ number_format($data->rm_order,0,',','.') }}</td>
+        <td class='x88' >{{ number_format($data->tonase,0,',','.') }}</td>
         <td rowspan='2' height='137' class='x144' style='border-right:1px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'></td>
         <td rowspan='2' height='137' class='x145' style='border-right:1px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'></td>
         <td rowspan='2' height='137' class='x146' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'></td>
@@ -4199,12 +4202,12 @@ td
         <td class='x90'>{{ $data->mckode }}</td>
         <td class='x154'>{{ $data->barang }}</td>
         <td class='x91'>{{ $data->tipebox }}</td>
-        <td class='x88'>{{ $data->order }}</td>
-        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ $data->kebutuhan_kertasAtas }}</td>
-        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ $data->kebutuhan_kertasFlute1 }}</td>
-        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ $data->kebutuhan_kertasTengah }}</td>
-        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ $data->kebutuhan_kertasFlute2 }}</td>
-        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ $data->kebutuhan_kertasBawah }}</td>
+        <td class='x88'>{{ number_format($data->order,0,',','.') }}</td>
+        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasAtas,0,',','.') }}</td>
+        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasFlute1,0,',','.') }}</td>
+        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasTengah,0,',','.') }}</td>
+        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasFlute2,0,',','.') }}</td>
+        <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasBawah,0,',','.') }}</td>
         <td class='x166'></td>
         <td class='x92'></td>
         <td class='x92'></td>
