@@ -77,7 +77,7 @@
         // "scrollY": "auto",
         processing:true,
         serverSide:true,
-        ajax:"{{ route('convm') }}",
+        ajax:"{{ route('convd') }}",
         columns: [
           // { data: 'id', name: 'id' },
           { data: 'kode', name: 'kode' },

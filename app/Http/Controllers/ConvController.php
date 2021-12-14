@@ -597,8 +597,10 @@ class ConvController extends Controller
 
     public function control() 
     {
-        $control = Conv_D::get();
+        $control = HasilConv::get();
 
-        return view('admin.plan.conv.control', compact('control'));
+        dd($control);
+
+        return view('admin.plan.hasilconv.control', compact('control'));
     }
 }
