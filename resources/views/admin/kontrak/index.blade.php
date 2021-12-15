@@ -41,6 +41,7 @@
           <thead>
             <tr>
               <th scope="col">No.</th>
+              <th scope="col">Action</th>
               <th scope="col">No Kontrak</th>
               {{-- <th scope="col">No MC</th> --}}
               <th scope="col">Tanggal</th>
@@ -48,7 +49,6 @@
               <th scope="col">Alamat</th>
               <th scope="col">Sales</th>
               {{-- <th scope="col">No PO Customer</th> --}}
-              <th scope="col">Action</th>
             </tr>
           </thead>
           
@@ -70,17 +70,17 @@
         ajax:"{{ route('kontrak') }}",
         columns: [
           { data: 'id', name: 'id' },
-          { data: 'kode', name: 'kode' },
-          { data: 'tglKontrak', name: 'tglKontrak' },
-          { data: 'customer_name', name: 'customer_name' },
-          { data: 'alamatKirim', name: 'alamatKirim' },
-          { data: 'sales', name: 'sales' },
           {
             data: 'action',
             name: 'action',
             orderable: false,
             searchable: false
-          }
+          },
+          { data: 'kode', name: 'kode' },
+          { data: 'tglKontrak', name: 'tglKontrak' },
+          { data: 'customer_name', name: 'customer_name' },
+          { data: 'alamatKirim', name: 'alamatKirim' },
+          { data: 'sales', name: 'sales' },
         ],
         "order": [2, 'desc'],
         "pageLength": 1000,

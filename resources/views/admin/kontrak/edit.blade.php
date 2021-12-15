@@ -309,10 +309,11 @@
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                         echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."|".$kontrak_D[$i]->tipe."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipe."</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
+                                    echo "<td><input type='text' name='box[$i]' id='box[$i]' value='".$kontrak_D[$i]->box."'></td>";
                                     echo "<td><input type='text' name='substance[$i]' id='substance[$i]' value='".$kontrak_D[$i]->substance."'></td>";
                                     echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]' value='".$kontrak_D[$i]->pcsKontrak."' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='toleransiLebih[$i]' id='toleransiLebih[$i]' value='".$kontrak_D[$i]->pctToleransiLebihKontrak."' onchange='getData();'></td>";
@@ -461,6 +462,7 @@
             var beratBox = arr1[1];
             var substance = arr1[2];
             var tipeBox = arr1[3];
+            var box = arr1[4];
             var harga = document.getElementById('harga[0]').value;
             var taxpct = document.getElementById('tax[0]').value;
             var qty = document.getElementById('qtyPcs[0]').value;
@@ -488,6 +490,7 @@
             document.getElementById("substance[0]").value = substance;
             document.getElementById("idmcpel[0]").value = idmc;
             document.getElementById("tipeBox[0]").value = tipeBox;
+            document.getElementById("box[0]").value = box;
 
         } 
         if (data2 != '') {
