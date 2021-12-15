@@ -341,7 +341,7 @@
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                         echo   "<option value=''>---</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode-$data->revisi|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
