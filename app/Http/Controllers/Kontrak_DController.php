@@ -6,7 +6,7 @@ use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use Carbon\Carbon;
-use Yajra\DataTables\Contracts\DataTable;
+// use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -336,6 +336,8 @@ class Kontrak_DController extends Controller
                 ]);
             }
         }
+
+        redirect('admin.kontrak.index');
     } 
 
     /**
