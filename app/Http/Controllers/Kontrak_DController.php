@@ -65,7 +65,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
             // ->where('id', '=', $variable)->orderBy('id', '=', 'ASC')
             ->get();
         $top = DB::table('top')->get();
@@ -119,7 +119,7 @@ class Kontrak_DController extends Controller
 
         if (strpos($fromDate, $start) !== false ) {
             $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$fromDate, $tillDate])->get();
-            $count = count($result)+101;
+            $count = count($result)+99;
             if ($nobukti === $nobukti) {
                 $nobukti = str_replace('~YYYY~', date('Y'), $nobukti);
                 $nobukti = str_replace('~MM~', date('m'), $nobukti);                
@@ -241,7 +241,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
+            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease','box.namaBarang as box')
             ->get();
         $top = DB::table('top')->get();
         $sales = DB::table('sales_m')->get();
@@ -251,9 +251,10 @@ class Kontrak_DController extends Controller
         // tampilkan data yang akan di edit
         $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('box', 'mc.box_id', '=', 'box.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'box.namaBarang as box')
             ->get();
 
         $kontrak_M = DB::table('kontrak_m')

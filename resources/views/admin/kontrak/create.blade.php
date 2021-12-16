@@ -259,6 +259,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Nama</th>
+                                    <th scope="col">Nama Box</th>
                                     <th scope="col">Substance</th>
                                     <th scope="col">Qty(Pcs)</th>
                                     <th scope="col">Toleransi Lebih(%)</th>
@@ -289,10 +290,11 @@
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData()'>";
                                         echo   "<option value=''>---</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode-$data->revisi|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
+                                    echo "<td><input type='text' name='box[$i]' id='box[$i]'></td>";
                                     echo "<td><input type='text' name='substance[$i]' id='substance[$i]'></td>";
                                     echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]' onchange='getData();'></td>";
                                     echo "<td><input type='text' name='toleransiLebih[$i]' id='toleransiLebih[$i]' onchange='getData();'></td>";
@@ -464,6 +466,7 @@
             var beratBox = arr1[1];
             var substance = arr1[2];
             var tipeBox = arr1[3];
+            var box = arr1[4];
             var harga = document.getElementById('harga[1]').value;
             var taxpct = document.getElementById('tax[1]').value;
             var qty = document.getElementById('qtyPcs[1]').value;
@@ -493,6 +496,7 @@
             document.getElementById("substance[1]").value = substance;
             document.getElementById("idmcpel[1]").value = idmc;
             document.getElementById("tipeBox[1]").value = tipeBox;
+            document.getElementById("box[1]").value = box;
             // document.getElementById("dtKg[1]").value = dtkg;
 
         } 

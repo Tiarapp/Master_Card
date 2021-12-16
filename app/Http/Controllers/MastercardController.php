@@ -276,7 +276,7 @@ class MastercardController extends Controller
             'panjangSheetBox' => 'required',
             'luasSheetBox' => 'required',
             'mesin' => 'nullable',
-            'outConv' => 'required',
+            // 'outConv' => 'required',
             'substanceKontrak_id' => 'required',
             'substanceProduksi_id' => 'required',
             'koli' => 'required',
@@ -294,15 +294,24 @@ class MastercardController extends Controller
             'gramSheetCorrProduksi2' => 'nullable',
             'colorCombine_id' => 'required',
             'keterangan' => 'nullable',
-            'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
+            // 'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
         ], $messages);
 
         $file = $request->file('gambar');
-        $nama_file = time()."_".$file->getClientOriginalName();
+        if ($file != null) {
+            $nama_file = time()."_".$file->getClientOriginalName();
 
-        $tujuan_upload = 'upload';
-        $file->move($tujuan_upload, $nama_file);
+            $tujuan_upload = 'upload';
+            $file->move($tujuan_upload, $nama_file);
+        } else {
+            $nama_file = '';
+        }
+        // $file = $request->file('gambar');
+        // $nama_file = time()."_".$file->getClientOriginalName();
+
+        // $tujuan_upload = 'upload';
+        // $file->move($tujuan_upload, $nama_file);
 
         Mastercard::create([
             'kode' => $request->kode,
@@ -311,8 +320,8 @@ class MastercardController extends Controller
             'kodeBarang' => $request->kodeBarang,
             'poCustomer' => $request->poCustomer,
             'tipebox' => $request->tipebox,
-            'CreasCorrP' => $request->creasConv,
-            'CreasCorrL' => $request->creasCorr,
+            'CreasCorrP' => $request->creasCorr,
+            'CreasCorrL' => $request->creasConv,
             'joint' => $request->joint,
             'flute' => $request->flute,
             'lebarSheet' => $request->lebarSheet,
@@ -345,7 +354,7 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
-        return redirect('admin/mastercard');
+        return redirect('admin/mastercard/b1');
     }
 
     /**
