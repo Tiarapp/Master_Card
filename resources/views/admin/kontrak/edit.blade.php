@@ -268,7 +268,8 @@
                     <table class="table table-bordered" id="detail_kontrak">
                         <thead>
                             <tr>
-                                <th scope="col">Nama</th>
+                                <th scope="col">MC</th>
+                                <th scope="col">Nama Barang</th>
                                 <th scope="col">Substance</th>
                                 <th scope="col">Qty(Pcs)</th>
                                 <th scope="col">Toleransi Lebih(%)</th>
@@ -306,8 +307,8 @@
                                     echo "<input type='text' name='detail[$i]' id='detail[$i]' style='color: rgb(0, 0, 0)' value='".$kontrak_D[$i]->id."'readonly>";
                                     echo "<tr>";
                                     echo    "<td>";
-                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
-                                        echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."|".$kontrak_D[$i]->tipe."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipe."</option>";
+                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData()'>";
+                                        echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."|".$kontrak_D[$i]->tipe."|".$kontrak_D[$i]->box."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipe."|".$kontrak_D[$i]->box."</option>";
                                         foreach ($mc as $data) {
                                             echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
                                         }
@@ -341,7 +342,7 @@
                                     echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
                                         echo   "<option value=''>---</option>";
                                         foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc'>$data->kode-$data->revisi|$data->tipeMc</option>";
+                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
                                         }
                                     echo "</select>";
                                     echo "</td>";
@@ -477,6 +478,8 @@
             var lebihkg = totalKg * (lebihpct/100);
             var kurangpcs =  qty * (kurangpct/100) ;
             var kurangkg = totalKg * (kurangpct/100);
+
+            console.log(arr1);
 
             document.getElementById("qtyKg[0]").value = totalKg.toFixed(2);
             document.getElementById("pcsToleransiLebih[0]").value = lebihpcs.toFixed(2);
