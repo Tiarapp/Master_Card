@@ -54,7 +54,7 @@ class SubstanceController extends Controller
     public function store(Request $request)
     {
 
-        $duplicate = Substance::where($request->kode)->get();
+        // $duplicate = Substance::where($request->kode)->get();
 
         $request->validate([
             'kode' => 'required',

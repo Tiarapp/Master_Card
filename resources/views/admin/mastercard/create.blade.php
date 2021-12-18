@@ -473,6 +473,7 @@
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
                                                 <option value='B1'>B1</option>
                                                 <option value='DC'>DC</option>
+                                                <option value='SINGLEFACE'>SINGLEFACE</option>
                                                 <option value='LAYER'>LAYER</option>
                                                 <option value='SHEET'>SHEET</option>
                                                 <option value='ROLL'>ROLL</option>
@@ -543,6 +544,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
+                                                <option value='00'>Tidak Ada</option>
                                                 <option value='05'>5 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>

@@ -26,7 +26,10 @@ class MastercardController extends Controller
     {
         $mc = DB::table('mc')
         ->where('tipeBox', '=', 'DC')
+        ->orderBy('id','desc')
         ->get();
+
+        // dd($mc);
 
         return view('admin.mastercard.index', compact('mc'));
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
+use App\Models\RealisasiKirim;
 use Carbon\Carbon;
 // use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class Kontrak_DController extends Controller
 
                 $btn = "<a href='../admin/kontrak/dt/".$row->id."' class='btn btn-primary btn-sm' type='button' style='margin:5px'>Tambah DT</a>
                 <a href='../admin/kontrak/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                <a href='../admin/kontrak/realisasi/".$row->id."' class='btn btn-outline-secondary' type='button'>Realisasi</a>
                 <a href='../admin/kontrak/pdf/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                 return $btn;
@@ -517,5 +519,36 @@ class Kontrak_DController extends Controller
             'kontrakBox',
             'dt',
         ), ['kontrak_M' => $kontrak_M]);
+    }
+
+    public function add_realisasi($id)
+    {
+        
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+
+        $kontrak_D = DB::table('kontrak_d')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            ->where('kontrak_m_id', '=', $id)
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
+            ->first();
+
+        $kontrak_M = DB::table('kontrak_m')
+            ->where('kontrak_m.id', '=', $id)
+            ->first();
+
+        return view('admin.kontrak.createrealisasi', compact('kontrak_D', 'kontrak_M', 'cust'));
+    }
+
+    public function store_realisasi(Request $request)
+    {
+        RealisasiKirim::create([
+            'kontrak_m_id' => $request->idkontrak,
+            'tanggal_kirim' => $request->tanggal,
+            'qty_kirim' => $request->qtyKirim,
+            'createdBy' => $request->createdBy
+        ]);
+
+        return redirect('admin/kontrak');
     }
 }
