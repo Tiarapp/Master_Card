@@ -215,7 +215,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
-                                            <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" readonly>
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" >
                                         </div>
                                     </div>
                                     <div class="row">
@@ -224,7 +224,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" name="gramSheetBoxProduksi2" id="gramSheetBoxProduksi2">
-                                            <input type="text" class="form-control txt_line" name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" readonly>
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" >
                                         </div>
                                     </div>
                                     <div class="row">
