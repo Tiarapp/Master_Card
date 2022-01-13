@@ -81,6 +81,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>QTY Order</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line" name="qtyOrder" id="qtyOrder" value="{{ $kontrak_D->pcsKontrak }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             {{-- <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
