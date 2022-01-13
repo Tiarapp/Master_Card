@@ -143,8 +143,8 @@
                                                                                 <td>{{ $data->namaBarang }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->lebarDalamBox }}</td>
                                                                                 <td>{{ $data->panjangDalamBox }}</td>
+                                                                                <td>{{ $data->lebarDalamBox }}</td>
                                                                                 <td>{{ $data->tinggiDalamBox }}</td>
                                                                                 <td>{{ $data->sizeCreasCorr }}</td>
                                                                                 <td>{{ $data->sizeCreasConv }}</td>
