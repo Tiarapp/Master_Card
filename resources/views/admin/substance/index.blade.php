@@ -34,7 +34,7 @@
         <table class="table table-bordered" id="data_divisi">
           <thead>
             <tr>
-              <th scope="col">No.</th>
+              <th scope="col">ID.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama MC</th>
               <th scope="col">Nama Logistik</th>
@@ -52,7 +52,7 @@
             $no = 1;
             foreach ($substance as $data) { ?>
               <tr>
-                <td scope="row">{{ $no++ }}</td>
+                <td scope="row">{{ $data->id }}</td>
                 <td>{{ $data->kode }}</td>
                 <td>{{ $data->namaMc }}</td>
                 <td>{{ $data->namaLog }}</td>
