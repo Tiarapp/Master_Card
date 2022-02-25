@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conv_D;
 use App\Models\Conv_M;
+use App\Models\HasilControl;
 use App\Models\HasilConv;
 use App\Models\HasilCorr;
 use App\Models\Opi_M;
@@ -15,7 +16,9 @@ class ConvController extends Controller
     public function json()
     {
         // $data = Conv_M::get();
-        $data = Conv_D::convd()->get();
+        $data = Conv_D::convd()->where('mesin', 'LIKE', '%STICH%');
+
+        // dd($data != null);
         // $data = HasilCorr::hasilcorr()->get();
         return DataTables::of($data)->make(true);
     }
@@ -331,7 +334,7 @@ class ConvController extends Controller
     public function convd_stich(Request $request)
     {
         if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'STICHING')->get();
+            $data = Conv_D::convd()->where('mesin', 'LIKE', '%STICH%')->get();
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -452,154 +455,51 @@ class ConvController extends Controller
 
     public function storeEdit(Request $request)
     {
-        $hasilconv = HasilConv::where('noOpi', '=', $request->noopi )->first();
 
-        // dd($hasilconv);
+        $control = HasilControl::where('noOpi', '=', $request->noopi )->first();
+        $flexo = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_flexo', '=', $request->tglhasil)->first();
+        $tokai = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_tokai', '=', $request->tglhasil)->first();
+        $stitch = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_stitch', '=', $request->tglhasil)->first();
+        $wax = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_wax', '=', $request->tglhasil)->first();
+        $slitter = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_slitter', '=', $request->tglhasil)->first();
+        $glue = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_glue', '=', $request->tglhasil)->first();
 
-        if ($hasilconv != null) {
-            // $uphasilconv = HasilConv::find($request->noopi)->first();
-        $uphasilconv = HasilConv::where('noOpi', '=', $request->noopi )->first();
-            if ($request->mesin == 'FLEXO') {
-                $uphasilconv->mesin1 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin1 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin1 = $request->hasil_jelek;
+        dd($flexo);
 
-                $uphasilconv->save();
+        if($request->mesin == 'FLEXO')
+        {
+            if($flexo != null)
+            { 
+                $uphasilconv = HasilConv::where('noOpi', '=', $request->noopi)
+                ->where('tgl_mesin1', '=', $request->tglhasil)->first();
+                if ($uphasilconv != null) {
+                    // $uphasilconv->tgl_mesin1 = $request->tglhasil; 
+                    $uphasilconv->mesin1 = $request->mesin;
+                    $uphasilconv->hasil_baik_mesin1 = $request->hasil_baik;
+                    $uphasilconv->hasil_jelek_mesin1 = $request->hasil_jelek;
 
-                return redirect('admin/plan/hasilconvflexo');
+                    $uphasilconv->save();
+
+                    $flexo->tgl_flexo = $request->tglhasil; 
+                    $flexo->flexo = $request->mesin;
+                    $flexo->hasil_baik_flexo = $request->hasil_baik;
+                    $flexo->hasil_jelek_flexo = $request->hasil_jelek;
+
+                    $flexo->save();
+
+                } else {
+
+                }
             }
-            if ($request->mesin == 'STICH') {
-                $uphasilconv->mesin3 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin3 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin3 = $request->hasil_jelek;
-
-                $uphasilconv->save();
-                
-                return redirect('admin/plan/hasilconvstich');
-            }  
-            if ($request->mesin == 'TOKAI') {
-                $uphasilconv->mesin2 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin2 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin2 = $request->hasil_jelek;
-
-                $uphasilconv->save();
-                
-                return redirect('admin/plan/hasilconvtokai');
-            }  
-            if ($request->mesin == 'SLITTER') {
-                $uphasilconv->mesin5 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin5 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin5 = $request->hasil_jelek;
-
-                $uphasilconv->save();
-                
-                return redirect('admin/plan/hasilconvslitter');
-            }  
-            if ($request->mesin == 'WAX') {
-                $uphasilconv->mesin4 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin4 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin4 = $request->hasil_jelek;
-
-                $uphasilconv->save();
-                
-                return redirect('admin/plan/hasilconvwax');
-            }   
-            if ($request->mesin == 'GLUE MANUAL') {
-                $uphasilconv->mesin6 = $request->mesin;
-                $uphasilconv->hasil_baik_mesin6 = $request->hasil_baik;
-                $uphasilconv->hasil_jelek_mesin6 = $request->hasil_jelek;
-
-                $uphasilconv->save();
-                
-                return redirect('admin/plan/hasilconvglue');
-            }   
-        } else {
-            if ($request->mesin == 'FLEXO') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin1' => $request->mesin,
-                    'hasil_baik_mesin1' => $request->hasil_baik,
-                    'hasil_jelek_mesin1' => $request->hasil_jelek
-                ]);
-
-                return redirect('admin/plan/hasilconvflexo');
-            }
-            if ($request->mesin == 'WAX') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin4' => $request->mesin,
-                    'hasil_baik_mesin4' => $request->hasil_baik,
-                    'hasil_jelek_mesin4' => $request->hasil_jelek
-                ]);
-
-                
-                return redirect('admin/plan/hasilconvwax');
-            }
-            if ($request->mesin == 'TOKAI') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin2' => $request->mesin,
-                    'hasil_baik_mesin2' => $request->hasil_baik,
-                    'hasil_jelek_mesin2' => $request->hasil_jelek
-                ]);
-                return redirect('admin/plan/hasilconvtokai');
-            }
-            if ($request->mesin == 'STICHING') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin3' => $request->mesin,
-                    'hasil_baik_mesin3' => $request->hasil_baik,
-                    'hasil_jelek_mesin3' => $request->hasil_jelek
-                ]);
-                return redirect('admin/plan/hasilconvstich');
-            }
-            if ($request->mesin == 'SLITTER') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin5' => $request->mesin,
-                    'hasil_baik_mesin5' => $request->hasil_baik,
-                    'hasil_jelek_mesin5' => $request->hasil_jelek
-                ]);
-                
-                return redirect('admin/plan/hasilconvslitter');
-            }
-            if ($request->mesin == 'GLUE MANUAL') {
-                $createhasilconv = HasilConv::create([
-                    'plan_conv_m_id' => $request->planmid,
-                    'plan_conv_d_id' => $request->plandid,
-                    'noOpi' => $request->noopi,
-                    'jml_Order' => $request->plan,
-                    'mesin5' => $request->mesin,
-                    'hasil_baik_mesin6' => $request->hasil_baik,
-                    'hasil_jelek_mesin6' => $request->hasil_jelek
-                ]);
-                
-                return redirect('admin/plan/hasilconvglue');
-            }
-            
         }
+        
     }
 
     public function control() 
     {
-        $control = HasilConv::get();
+        $control = HasilControl::get();
 
-        dd($control);
+        // dd($control);
 
         return view('admin.plan.hasilconv.control', compact('control'));
     }

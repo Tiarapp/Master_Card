@@ -76,6 +76,7 @@
                                         <label>OPI</label>
                                     </div>
                                     <div class="col-md-8">
+                                        <input type="hidden" class="form-control txt_line" value="{{ $corrd->opi_id }}" name="opi_id" id="opi_id" readonly>
                                         <input type="text" class="form-control txt_line" value="{{ $corrd->opikode }}" name="noopi" id="noopi" readonly>
                                     </div>
                                 </div>

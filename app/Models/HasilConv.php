@@ -13,6 +13,7 @@ class HasilConv extends Model
     protected $fillable = [
         'plan_conv_m_id',
         'plan_conv_d_id',
+        'opi_id',
         'noOpi',
         'mesin1',
         'mesin2',
@@ -20,6 +21,12 @@ class HasilConv extends Model
         'mesin4',
         'mesin5',
         'mesin6',
+        'tgl_mesin1',
+        'tgl_mesin2',
+        'tgl_mesin3',
+        'tgl_mesin4',
+        'tgl_mesin5',
+        'tgl_mesin6',
         'jml_Order',
         'hasil_baik_mesin1',
         'hasil_jelek_mesin1',
@@ -36,16 +43,17 @@ class HasilConv extends Model
         'keterangan'
     ];
 
-    public function scopeHasilconv($query)
-    {
-        $query->leftJoin('plan_conv_d', 'plan_conv_d_id', 'plan_conv_d.id')
-        ->leftJoin('plan_conv_m', 'plan_conv_d.plan_conv_m_id', 'plan_conv_m.id')
-        ->leftJoin('opi_m', 'plan_conv_d.opi_id', 'opi_m.id')
-        ->leftJoin('kontrak_m', 'opi_m.kontrak_m_id', 'kontrak_m.id')
-        ->leftJoin('mc', 'opi_m.mc_id', 'mc.id')
-        ->leftJoin('dt', 'opi_m.dt_id', 'dt.id')
-        ->select('hasil_plan_conv.*')
-        ->groupBy('opi_m.id')
-        ->get();
-    }
+    // public function scopeControl($query)
+    // {
+    //     $query->leftJoin('plan_conv_d', 'plan_conv_d_id', 'plan_conv_d.id')
+    //     ->leftJoin('plan_conv_m', 'plan_conv_d.plan_conv_m_id', 'plan_conv_m.id')
+    //     ->leftJoin('opi_m', 'plan_conv_d.opi_id', 'opi_m.id')
+    //     ->leftJoin('plan_corr_d', 'plan_corr_d.opi_id', 'opi_m.id')
+    //     ->leftJoin('kontrak_m', 'opi_m.kontrak_m_id', 'kontrak_m.id')
+    //     ->leftJoin('mc', 'opi_m.mc_id', 'mc.id')
+    //     ->leftJoin('dt', 'opi_m.dt_id', 'dt.id')
+    //     ->select('hasil_plan_conv.*','hasil_plan_corr.*')
+    //     ->groupBy('opi_m.id')
+    //     ->get();
+    // }
 }
