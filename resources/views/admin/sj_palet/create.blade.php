@@ -41,23 +41,26 @@
                                         <label>Tanggal</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
+                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" autofocus onfocusout="getCatatan1()">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-md-5">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No. Surat Jalan</label>
+                                        <label>Jenis Palet</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan">
+                                        <select class='js-example-basic-single col-md-12' name="jenispalet" id="jenispalet" onchange="getCatatan1()">
+                                            <option value="Kayu">Kayu</option>
+                                            <option value="Plastik">Plastik</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-5">
@@ -124,7 +127,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control txt_line" name="catatan1" id="catatan1" value="PALET KAYU UNTUK MENGANGKUT BOX SJ NO : " readonly>
+                                            <input type="text" class="form-control txt_line" name="catatan1" id="catatan1" readonly>
                                         </div>
                                         <div class="col-md 2">
                                             <input type="text" class="form-control txt_line" name="nosj" id="nosj" onchange="getCatatan()">
@@ -193,6 +196,17 @@
                 });
                 
                 // Split data Customer
+                function getCatatan1() {
+                    var jenis = document.getElementById("jenispalet").value;
+
+                    if (jenis === "Kayu") {
+                        document.getElementById("catatan1").value = "PALET KAYU UNTUK MENGANGKUT BOX SJ NO : ";
+                    } else if (jenis == "Plastik") {
+                        document.getElementById("catatan1").value = "PALET PLASTIK UNTUK MENGANGKUT BOX SJ NO : ";
+                    }
+
+                }
+                
                 function getCustomer() {
                     var data = document.getElementById('listCust').value;
                     
