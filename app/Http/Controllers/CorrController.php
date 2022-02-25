@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Corr_D;
 use App\Models\Corr_M;
+use App\Models\HasilControl;
 use App\Models\HasilCorr;
 use App\Models\Opi_M;
 use Carbon\Carbon;
@@ -317,9 +318,10 @@ class CorrController extends Controller
         $startdate = date('Y-m-d H:i:s', strtotime($request->start));
         $enddate = date('Y-m-d H:i:s', strtotime($request->end));
         
-       HasilCorr::create([
+        $hasilcorr = HasilCorr::create([
         'plan_corr_m_id' => $request->planmid,
         'plan_corr_d_id' => $request->plandid,
+        'opi_id' => $request->opi_id,
         'no_opi' => $request->noopi,
         'hasil_baik' => $request->baik,
         'hasil_jelek' => $request->jelek,
@@ -333,6 +335,33 @@ class CorrController extends Controller
         'status' => $request->status,
         'next_mesin' => $request->mesin,
        ]);
+
+       $control = HasilControl::where('noOpi', '=', $request->noopi )->first();
+
+       if($control != null){
+            $mesin = "CORR";
+            $uphasilcontrol = HasilControl::where('noOpi', '=', $request->noopi )->first();
+
+            $uphasilcontrol->tgl_corr = date('Y-m-d', strtotime($request->end));
+            $uphasilcontrol->corr = $mesin;
+            $uphasilcontrol->hasil_baik_corr = $request->baik;
+            $uphasilcontrol->hasil_jelek_corr = $request->jelek;
+
+            $uphasilcontrol->save();
+       } else {
+           $mesin = "CORR";
+           HasilControl::create([
+            'corr' => $mesin,
+            'tgl_corr' => $request->tglhasil,
+            'opi_id' => $request->opi_id,
+            'noOpi' => $request->noopi,
+            'jml_Order' => $request->plan,
+            'hasil_baik_corr' => $request->hasil_baik,
+            'hasil_jelek_corr' => $request->hasil_jelek
+           ]);
+       }
+
+    //    dd($hasilcorr);
 
          return redirect('admin/plan/hasilcorr');
     }

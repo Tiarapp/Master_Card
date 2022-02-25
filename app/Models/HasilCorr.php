@@ -14,6 +14,7 @@ class HasilCorr extends Model
     protected $fillable = [
         'plan_corr_m_id',
         'plan_corr_d_id',
+        'opi_id',
         'no_opi',
         'hasil_baik',
         'hasil_jelek',
