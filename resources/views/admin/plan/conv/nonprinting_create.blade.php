@@ -51,11 +51,11 @@
                                             <input type="hidden" name="mesin" id="mesin">
                                             <select class="js-example-basic-single col-md-12" name="tipemesin" id="tipemesin" onchange="getKode()">
                                                 <option value='TOKAI'>TOKAI</option>
-                                                <option value='STICH A & B'>STICH A & B</option>
+                                                <option value='STITCH A & B'>STITCH A & B</option>
                                                 <option value='GLUE MANUAL'>GLUE MANUAL</option>
                                                 <option value='SLITTER'>SLITTER</option>
                                                 <option value='WAX A & B'>WAX A & B</option>
-                                                <option value='STICH C'>STICH C</option>
+                                                <option value='STITCH C'>STITCH C</option>
                                                 <option value='WAX'>WAX</option>
                                             </select>
                                         </div>

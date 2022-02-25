@@ -62,10 +62,10 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Tanggal</label>
+                                        <label>Tanggal Hasil</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="date" class="form-control txt_line" value="{{ $data1->tgl_kirim }}" name="tglconv" id="tglconv" readonly>
+                                        <input type="date" class="form-control txt_line" name="tglhasil" id="tglhasil">
                                     </div>
                                 </div>
                             </div>
@@ -75,6 +75,7 @@
                                         <label>OPI</label>
                                     </div>
                                     <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" value="{{ $data1->opi_id }}" name="opi_id" id="opi_id" readonly>
                                         <input type="text" class="form-control txt_line" value="{{ $data1->noopi }}" name="noopi" id="noopi" readonly>
                                     </div>
                                 </div>

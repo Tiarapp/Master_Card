@@ -61,11 +61,11 @@ class SubstanceController extends Controller
             'namaMc' => 'required',
             'namaLog' => 'required',
             'flute' => 'required',
-            'jenisGramLinerAtas_id' => 'required',
+            'jenisGramLinerAtas_id' => 'nullable',
             'jenisGramFlute1_id' => 'nullable',
             'jenisGramLinerTengah_id' => 'nullable',
             'jenisGramFlute2_id' => 'nullable',
-            'jenisGramLinerBawah_id' => 'required',
+            'jenisGramLinerBawah_id' => 'nullable',
             'createdBy' => 'required'
         ]);
 

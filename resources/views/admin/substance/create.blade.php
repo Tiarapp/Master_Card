@@ -202,6 +202,14 @@
             var namaMcAtas = atas[1];
             var namaLogAtas = atas[2];
 
+            if(idAtas == ""){
+                idAtas = "";
+                namaMcAtas = "--";
+                namaLogAtas = "--";
+                console.log(idAtas);
+            }
+
+
             console.log(atas);
 
             var flute1 = (document.getElementById('flute1').value).split("|");
