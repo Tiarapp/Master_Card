@@ -1,11 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Kontrak_D;
-use App\Models\Kontrak_M;
 use App\Models\Opi_M;
-use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,41 +22,8 @@ class OpiController extends Controller
     
     public function index(Request $request)
     {
-        // if ($request->ajax()) {
-        //     $data = Opi_M::opi2()->get();
-        //     return Datatables::of($data)
-        //             ->addIndexColumn()
-        //             ->addColumn('action', function($row){
-     
-        //                 $btn = "<a href='../admin/opi/edit/".$row->opiid."' class='edit btn btn-primary btn-sm'>View</a>
-        //                 <a href='../admin/opi/print/".$row->opiid."' class='btn btn-outline-secondary' type='button'>Print</a>";
-
-        //                 return $btn;
-        //             })
-        //             ->addColumn('hari', function($row){
-        //                 $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
-        //                 $hari = $day[date('w', strtotime($row->tglKirimDt))];
-
-        //                 return $hari;
-        //             })
-        //             ->addColumn('toleransi', function($row){
-        //                 $lebih = $row->toleransiLebih;
-        //                 $kurang = $row->toleransiKurang;
-
-        //                 $toleransi = $lebih.'/'.$kurang;
-
-        //                 return $toleransi;
-        //             })
-        //             ->rawColumns(['action','hari','toleransi'])
-        //             ->make(true);
-        //     // dd($data);                    
-        // }
         $data = Opi_M::opi()->take(1000)->get();
-        // dd($data);
         return view('admin.opi.index', compact('data'));
-        // $kontrak_m = Kontrak_M::get();
-
-        // return view('admin.kontrak.index',compact('kontrak_m'));
     }
 
     /**
@@ -75,11 +38,9 @@ class OpiController extends Controller
         $alphabet = "A";
         $numb_opi = str_pad(count($opi_m)+3200+1,4, '0', STR_PAD_LEFT).$alphabet;
 
-        // dd($numb_opi);
 
         $kontrak_d = DB::table('kontrak_d')
             ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
-            // ->leftJoin('dt', 'kontrak_m_id', '=', 'kontrak_m.id')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -89,7 +50,6 @@ class OpiController extends Controller
 
         $dt = DB::table('dt')->get();
 
-        // dd($kontrak_d);
         return view('admin.opi.create', compact('kontrak_d', 'dt', 'numb_opi'));
     }
 
