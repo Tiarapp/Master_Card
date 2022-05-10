@@ -113,7 +113,7 @@ class CorrController extends Controller
             $corrd = Corr_D::create([
                 'opi_id'=> $request->opi_id[$i],
                 'plan_corr_m_id' => $corrm->id,
-                'kode_plan_d' => $request->kodeplan[$i],
+                // 'kode_plan_d' => $request->kodeplan[$i],
                 'urutan' => $request->urutan[$i],
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
@@ -194,13 +194,14 @@ class CorrController extends Controller
     {
         $data1 = $request->noOpi;
         
+        // dd($data1);
         $rmjumlah = 0;
         $berattotal = 0;
 
         for ($i=1; $i <= count($data1); $i++) { 
             if ($request->detail[$i] != '') {
                 $corrd = Corr_D::find($request->detail[$i]);
-
+                // dd($corrd);
                 $corrd->plan_corr_m_id = $id;
                 $corrd->opi_id = $request->opi_id[$i];
                 $corrd->urutan = $request->urutan[$i];
@@ -230,7 +231,7 @@ class CorrController extends Controller
                     Corr_D::create([
                         'plan_corr_m_id' => $id,
                         'opi_id' => $request->opi_id[$i],
-                        'kode_plan_d' => $request->kodeplan[$i],
+                        'kode_plan_d' => $request->kodeplan,
                         'urutan' => $request->urutan[$i],
                         'sheet_p' => $request->sheetp[$i],
                         'sheet_l' => $request->sheetl[$i],

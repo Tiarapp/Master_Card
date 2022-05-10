@@ -1265,7 +1265,7 @@ td
 <td height='31' class='x16' style='height:23.25pt;'></td>
 <td colspan='2' class='x23' >Tanggal Planning :</td>
 <td class='x31' x:num="44481">{{ $convm->tanggal }}</td>
-<td class='x25'>SHIFT {{ $convm->shift }}</td>
+<td class='x25'>SHIFT 1</td>
 <td class='x25'></td>
 <td class='x19'></td>
 <td class='x26'></td>
@@ -1275,8 +1275,8 @@ td
 <td class='x26'></td>
 <td class='x32'></td>
 <td class='x28'></td>
-<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'></td>
-<td class='x34' align='right' x:num="21459" style='text-align:right;'></td>
+<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'>{{ $total1 }}</td>
+<td class='x34' align='right' x:num="21459" style='text-align:right;'>{{ $kg1 }}</td>
 <td class='x19'>&nbsp;</td>
 <td class='x16'></td>
 <td class='x21'></td>
@@ -1293,8 +1293,8 @@ td
 <td class='x26'></td>
 <td class='x26'></td>
 <td class='x26'></td>
-<td class='x36' align='center' x:err="#REF!" x:fmla="=VLOOKUP(#REF!,KONTRAK!A$5:$CJ$1150,40,FALSE)">#REF!</td>
-<td class='x36' align='center' x:err="#REF!" x:fmla="=VLOOKUP(#REF!,KONTRAK!A$5:$CJ$2007,39,FALSE)">#REF!</td>
+<td class='x36'></td>
+<td class='x36'></td>
 <td class='x37'></td>
 <td class='x28'></td>
 <td class='x38'></td>
@@ -1326,7 +1326,7 @@ td
 <td class='x44'></td>
 <td class='x44'></td>
  </tr>
- @foreach ($convd as $data)
+ @foreach ($shift1 as $data)
  <tr height='93' style='mso-height-source:userset;height:69.75pt' id='r7'>
 <td height='91' class='x45' style='height:68.25pt;'>{{ $data->urutan }}</td>
 <td class='x45'>{{ $data->noopi }}</td>
@@ -1350,6 +1350,242 @@ td
 <td class='x55'></td>
  </tr>
  @endforeach
+ 
+   {{-- Shift 2 --}}
+
+  @if (count($shift2) !== 0)
+ <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r3'>
+  <td height='31' class='x16' style='height:23.25pt;'></td>
+  <td colspan='2' class='x23' >No Planning :</td>
+  <td class='x24'>{{ $convm->kode }}</td>
+  <td class='x25'>{{ $convm->revisi != 'NULL' ? $convm->revisi : '' }}</td>
+  <td class='x26'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x27'></td>
+  <td class='x28'></td>
+  <td class='x29'>LBR</td>
+  <td class='x30'>KG</td>
+  <td class='x19'></td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+
+
+   <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r4'>
+  <td height='31' class='x16' style='height:23.25pt;'></td>
+  <td colspan='2' class='x23' >Tanggal Planning :</td>
+  <td class='x31' x:num="44481">{{ $convm->tanggal }}</td>
+  <td class='x25'>SHIFT 2</td>
+  <td class='x25'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x32'></td>
+  <td class='x28'></td>
+  <td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'>{{ $total2 }}</td>
+  <td class='x34' align='right' x:num="21459" style='text-align:right;'>{{ $kg2 }}</td>
+  <td class='x19'>&nbsp;</td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+   <tr height='25' style='mso-height-source:userset;height:18.75pt' id='r5'>
+  <td height='24' class='x16' style='height:18pt;'></td>
+  <td class='x16'></td>
+  <td class='x35'></td>
+  <td class='x19'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x36'></td>
+  <td class='x36'></td>
+  <td class='x37'></td>
+  <td class='x28'></td>
+  <td class='x38'></td>
+  <td class='x39'></td>
+  <td class='x19'></td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+   <tr height='50' style='mso-height-source:userset;height:37.5pt' id='r6'>
+  <td height='48' class='x40' style='height:36pt;'>No</td>
+  <td class='x40'>No OPI</td>
+  <td class='x41'>Tanggal Kirim</td>
+  <td class='x40'>No MC</td>
+  <td class='x42'>Nama Customer</td>
+  <td class='x40'>Nama Item</td>
+  <td class='x42'>Tipe<br>Order</td>
+  <td class='x40'>Flute</td>
+  <td class='x40'>Warna</td>
+  <td class='x40'>Type</td>
+  <td class='x40'>Lbr</td>
+  <td class='x40'>Pjg</td>
+  <td class='x42'>Jumlah Order</td>
+  <td class='x42'>Out</td>
+  <td class='x43'>Jumlah Plan</td>
+  <td class='x40'>Finishing</td>
+  <td class='x42'>Hasil Produksi</td>
+  <td class='x40'>Keterangan</td>
+  <td class='x44'></td>
+  <td class='x44'></td>
+   </tr>
+   @foreach ($shift2 as $data)
+   <tr height='93' style='mso-height-source:userset;height:69.75pt' id='r7'>
+  <td height='91' class='x45' style='height:68.25pt;'>{{ $data->urutan }}</td>
+  <td class='x45'>{{ $data->noopi }}</td>
+  <td class='x46' x:num="44480">{{ $data->tgl_kirim }}</td>
+  <td class='x45'>{{ $data->nomc }}</td>
+  <td class='x47'>{{ $data->customer }}</td>
+  <td class='x48'>{{ $data->nama_item }}</td>
+  <td class='x45'>{{ $data->tipe_order }}</td>
+  <td class='x49'>{{ $data->flute }}</td>
+  <td class='x50'>{{ $data->warna }}</td>
+  <td class='x51'>{{ $data->bentuk }}</td>
+  <td class='x52' x:num="649">{{ $data->sheet_l }}</td>
+  <td class='x52' x:num="1579">{{ $data->sheet_p }}</td>
+  <td class='x52' x:num="1000">{{ $data->pcsKontrak }}</td>
+  <td class='x52' x:num="1">{{ $data->out_flexo }}</td>
+  <td class='x52' x:num="1142">{{ $data->jml_plan }}</td>
+  <td class='x51'>{{ $data->joint }}</td>
+  <td class='x53'></td>
+  <td class='x54'>{{ $data->keterangan }}</td>
+  <td class='x55'></td>
+  <td class='x55'></td>
+   </tr>
+   @endforeach
+   
+  @endif
+
+
+  {{-- Shift 3 --}}
+  @if (count($shift3) !== 0)
+ <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r3'>
+  <td height='31' class='x16' style='height:23.25pt;'></td>
+  <td colspan='2' class='x23' >No Planning :</td>
+  <td class='x24'>{{ $convm->kode }}</td>
+  <td class='x25'>{{ $convm->revisi != 'NULL' ? $convm->revisi : '' }}</td>
+  <td class='x26'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x27'></td>
+  <td class='x28'></td>
+  <td class='x29'>LBR</td>
+  <td class='x30'>KG</td>
+  <td class='x19'></td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+
+
+   <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r4'>
+  <td height='31' class='x16' style='height:23.25pt;'></td>
+  <td colspan='2' class='x23' >Tanggal Planning :</td>
+  <td class='x31' x:num="44481">{{ $convm->tanggal }}</td>
+  <td class='x25'>SHIFT 3</td>
+  <td class='x25'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x32'></td>
+  <td class='x28'></td>
+  <td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'>{{ $total3 }}</td>
+  <td class='x34' align='right' x:num="21459" style='text-align:right;'>{{ $kg3 }}</td>
+  <td class='x19'>&nbsp;</td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+   <tr height='25' style='mso-height-source:userset;height:18.75pt' id='r5'>
+  <td height='24' class='x16' style='height:18pt;'></td>
+  <td class='x16'></td>
+  <td class='x35'></td>
+  <td class='x19'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x19'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x26'></td>
+  <td class='x36'></td>
+  <td class='x36'></td>
+  <td class='x37'></td>
+  <td class='x28'></td>
+  <td class='x38'></td>
+  <td class='x39'></td>
+  <td class='x19'></td>
+  <td class='x16'></td>
+  <td class='x21'></td>
+  <td class='x21'></td>
+   </tr>
+   <tr height='50' style='mso-height-source:userset;height:37.5pt' id='r6'>
+  <td height='48' class='x40' style='height:36pt;'>No</td>
+  <td class='x40'>No OPI</td>
+  <td class='x41'>Tanggal Kirim</td>
+  <td class='x40'>No MC</td>
+  <td class='x42'>Nama Customer</td>
+  <td class='x40'>Nama Item</td>
+  <td class='x42'>Tipe<br>Order</td>
+  <td class='x40'>Flute</td>
+  <td class='x40'>Warna</td>
+  <td class='x40'>Type</td>
+  <td class='x40'>Lbr</td>
+  <td class='x40'>Pjg</td>
+  <td class='x42'>Jumlah Order</td>
+  <td class='x42'>Out</td>
+  <td class='x43'>Jumlah Plan</td>
+  <td class='x40'>Finishing</td>
+  <td class='x42'>Hasil Produksi</td>
+  <td class='x40'>Keterangan</td>
+  <td class='x44'></td>
+  <td class='x44'></td>
+   </tr>
+   @foreach ($shift3 as $data)
+   <tr height='93' style='mso-height-source:userset;height:69.75pt' id='r7'>
+  <td height='91' class='x45' style='height:68.25pt;'>{{ $data->urutan }}</td>
+  <td class='x45'>{{ $data->noopi }}</td>
+  <td class='x46' x:num="44480">{{ $data->tgl_kirim }}</td>
+  <td class='x45'>{{ $data->nomc }}</td>
+  <td class='x47'>{{ $data->customer }}</td>
+  <td class='x48'>{{ $data->nama_item }}</td>
+  <td class='x45'>{{ $data->tipe_order }}</td>
+  <td class='x49'>{{ $data->flute }}</td>
+  <td class='x50'>{{ $data->warna }}</td>
+  <td class='x51'>{{ $data->bentuk }}</td>
+  <td class='x52' x:num="649">{{ $data->sheet_l }}</td>
+  <td class='x52' x:num="1579">{{ $data->sheet_p }}</td>
+  <td class='x52' x:num="1000">{{ $data->pcsKontrak }}</td>
+  <td class='x52' x:num="1">{{ $data->out_flexo }}</td>
+  <td class='x52' x:num="1142">{{ $data->jml_plan }}</td>
+  <td class='x51'>{{ $data->joint }}</td>
+  <td class='x53'></td>
+  <td class='x54'>{{ $data->keterangan }}</td>
+  <td class='x55'></td>
+  <td class='x55'></td>
+   </tr>
+   @endforeach
+   
+  @endif
 </table>
 
 </body>

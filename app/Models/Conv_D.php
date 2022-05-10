@@ -13,6 +13,8 @@ class Conv_D extends Model
     protected $fillable = [
         'opi_id',
         'plan_conv_m_id',
+        'kodeplanM',
+        'shift',
         'tgl_kirim',
         'nomc',
         'nama_item',
@@ -51,7 +53,9 @@ class Conv_D extends Model
         $query->leftJoin('plan_conv_m', 'plan_conv_m_id', 'plan_conv_m.id')
         ->leftJoin('opi_m', 'opi_id', 'opi_m.id')
         ->leftJoin('kontrak_d', 'opi_m.kontrak_d_id', 'kontrak_d.id')
-        ->select('plan_conv_d.*','plan_conv_d.id as plandid', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak', 'plan_conv_m.kode as kodeplanM', 'plan_conv_d.mesin', 'plan_conv_m.id as planmid', 'plan_conv_d.tgl_kirim', 'plan_conv_d.nomc', 'plan_conv_d.nama_item', 'plan_conv_d.customer')
+        ->leftJoin('mc', 'kontrak_d.mc_id', 'mc.id')
+        ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
+        ->select('plan_conv_d.*','plan_conv_d.id as plandid', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak', 'plan_conv_d.mesin', 'plan_conv_m.id as planmid', 'plan_conv_d.tgl_kirim', 'plan_conv_d.nomc', 'plan_conv_d.nama_item', 'plan_conv_d.customer', 'mc.gramSheetBoxKontrak as mc_kg', 'color_combine.nama as warna' )
         ->get();
     }
 }
