@@ -82,7 +82,7 @@
           // { data: 'id', name: 'id' },
           { data: 'kode', name: 'kode' },
           { data: 'tanggal', name: 'tanggal' },
-          { data: 'shift', name: 'shift' },
+          { data: 'shiftM', name: 'shiftM' },
           { data: 'revisi', name: 'revisi' },
           { data: 'total_pcs', name: 'total_pcs' },
           { data: 'total_kg', name: 'total_kg' },

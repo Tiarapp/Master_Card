@@ -4129,11 +4129,11 @@ td
 <td colspan='2' class='x135' style='border-right:2px solid #000000;border-bottom:1px solid #000000;'>UK. SHEET</td>
 <td class='x23'>FLUTE</td>
 <td class='x24'>OUT FLX</td>
-<td rowspan='2' height='112' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>PLAN</td>
+<td rowspan='1' height='112' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:41pt;'>PLAN +</td>
 <td rowspan='2' height='112' class='x136' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>OUT CORR</td>
 <td rowspan='2' height='112' class='x86' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>LEBAR ROLL</td>
 <td rowspan='2' height='112' class='x137' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>TRIM WASTE</td>
-<td rowspan='2' height='112' class='x116' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>COP</td>
+<td rowspan='1' height='112' class='x116' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:41pt;'>COP +</td>
 <td colspan='2' rowspan='2' height='112' class='x131' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>L 1</td>
 <td colspan='2' rowspan='2' height='112' class='x131' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>B F</td>
 <td colspan='2' rowspan='2' height='112' class='x131' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:84pt;'>L T</td>
@@ -4154,6 +4154,8 @@ td
 <td class='x29'>P</td>
 <td class='x30'>BENTUK</td>
 <td class='x31'>ORDER</td>
+<td class='x31'>PLAN -</td>
+<td class='x31'>COP -</td>
 <td class='x32'>RM HASIL</td>
 <td class='x32'>BERAT Hasil</td>
 <td class='x33'>Mulai</td>
@@ -4173,7 +4175,7 @@ td
         <td rowspan='2' height='137' class='x86' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->panjang,0,',','.') }}</td>
         <td class='x22'>{{ $data->flute }}</td>
         <td class='x84' >{{ $data->out_flexo }}</td>
-        <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->qtyOrder,0,',','.') }}</td>
+        <td rowspan='1' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->qtyOrder + ($data->qtyOrder * $data->toleransiLebih / 100),0,',','.') }}</td>
         <td rowspan='2' height='137' class='x86'  style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ $data->out_corr }}</td>
         <td rowspan='2' height='137' class='x114' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ number_format($data->ukuran_roll,0,',','.') }}</td>
         <td rowspan='2' height='137' class='x130' style='border-right:2px solid #000000;border-bottom:2px solid #000000;height:102.75pt;'>{{ round($data->ukuran_roll*$data->trim_waste),0 }}</td>
@@ -4203,6 +4205,7 @@ td
         <td class='x154'>{{ $data->barang }}</td>
         <td class='x91'>{{ $data->tipebox }}</td>
         <td class='x88'>{{ number_format($data->order,0,',','.') }}</td>
+        <td class='x88'>{{ number_format($data->qtyOrder - ($data->qtyOrder * $data->toleransiKurang/100),0,',','.') }}</td>
         <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasAtas,0,',','.') }}</td>
         <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasFlute1,0,',','.') }}</td>
         <td colspan='2' class='x120' style='border-right:2px solid #000000;border-bottom:2px solid #000000;'>{{ number_format($data->kebutuhan_kertasTengah,0,',','.') }}</td>

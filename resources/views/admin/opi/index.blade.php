@@ -40,7 +40,7 @@
         <table class="table table-bordered" id="data_opi">
           <thead>
             <tr>
-              <th scope="col">No.</th>
+              <th scope="col">ID</th>
               <th scope="col">No OPI</th>
               <th scope="col">Action</th>
               <th scope="col">Kontrak</th>
@@ -132,7 +132,13 @@
                 <td>{{ $data->ketkontrak }}</td>
                 <td>{{ $data->noopi }}</td>
                 <td>{{ $data->poCustomer }}</td>
-                <td>{{ $data->mcKode }}</td>
+                <td><?php
+                if ($data->revisimc != '') {
+                  echo $data->mcKode.'-'.$data->revisimc;
+                } else {
+                  echo $data->mcKode;
+                }
+                ?></td>
                 <td>
                     <?php 
                       $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
@@ -273,7 +279,7 @@
           }
         }
         ],
-        "order": [1, 'desc'],
+        "order":[1, 'desc'],
         "pageLength": 50,
         dom: 'Bftrip',
         buttons: [

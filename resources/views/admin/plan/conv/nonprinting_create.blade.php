@@ -191,7 +191,23 @@
 function getKode() {
     tgl = document.getElementById("tgl").value;
     mesin = document.getElementById("tipemesin").value;
-    kodemesin = "COVPN";
+
+    if (mesin == "TOKAI") {
+        kodemesin = "TOKAI";
+    } else if (mesin == "STITCH A & B"){
+        kodemesin = "STITCHAB"
+    } else if (mesin == "GLUE MANUAL" ) {
+        kodemesin = "GLUE"
+    } else if (mesin == "SLITTER") {
+        kodemesin = "SLITTER"
+    } else if (mesin == "WAX A & B") {
+        kodemesin = "WAXAAB"
+    } else if (mesin == "STITCH C") {
+        kodemesin = "STICTHC"
+    } else if (mesin == "WAX") {
+        kodemesin = "WAX"
+    }
+    // kodemesin = "COVPN";
     kode = new Date(tgl);
 
     year = kode.getFullYear();

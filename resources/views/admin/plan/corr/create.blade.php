@@ -305,7 +305,7 @@ $(document).ready(function(){
                 document.getElementById("flute["+x+"]").value = cust[8];
                 document.getElementById("order["+x+"]").value = cust[9];
                 document.getElementById("opi_id["+x+"]").value = cust[22];
-                // document.getElementById("toleransi["+x+"]").value = cust[10];
+                document.getElementById("toleransi["+x+"]").value = cust[10];
                 document.getElementById("gramAtas["+x+"]").value = cust[12];
                 document.getElementById("gramFlute1["+x+"]").value = cust[14];
                 document.getElementById("gramTengah["+x+"]").value = cust[16];
