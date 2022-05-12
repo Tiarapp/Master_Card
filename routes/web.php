@@ -202,6 +202,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
     Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
     Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
+    Route::get('/admin/mastercard/revisi/{id}', 'MastercardController@revisi')->name('mastercard.revisi');
+    Route::post('/admin/mastercard/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('mastercard.saveRevisi');
     Route::post('/admin/mastercard/update', 'MastercardController@update')->name('mastercard.update');
     Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('mastercard.pdfb1');
 

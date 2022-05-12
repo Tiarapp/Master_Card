@@ -360,15 +360,60 @@ class MastercardController extends Controller
         return redirect('admin/mastercard/b1');
     }
 
+    public function revisi($id)
+    {
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $substance = DB::table('substance')
+            ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
+            ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
+            ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
+            ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
+            ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
+            ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
+            ->get();
+        $box = DB::table('box')->get();
+        $colorcombine = DB::table('color_combine')->get();
+        $joint = DB::table('joint')->get();
+        $koli = DB::table('koli')->get();
+
+        $mc = DB::table('mc')
+            ->leftJoin('box', 'box_id', '=', 'box.id')
+            ->leftJoin('substance as subskontrak', 'substanceKontrak_id', '=', 'subskontrak.id')
+            ->leftJoin('substance as subsproduksi', 'substanceProduksi_id', '=', 'subsproduksi.id')
+            ->leftJoin('color_combine', 'colorcombine_id', '=', 'color_combine.id')
+            ->where('mc.id', '=', $id)
+            ->select('mc.*','color_combine.id as ccid','color_combine.nama as ccnama','subskontrak.namaMc as subsKontrak','subsproduksi.namaMc as subsProduksi', 'box.panjangDalamBox as panjangDalam','box.lebarDalamBox as lebarDalam','box.tinggiDalamBox as tinggiDalam', 'box.id as box_id' )
+            ->first();
+
+        $kodemc = DB::table('mc')
+            ->where('kode', '=', $mc->kode)
+            ->get();
+
+        $revisi = count($kodemc);
+        
+        return view('admin.mastercard.edit', compact([
+            'item',
+            'substance',
+            'box',
+            'colorcombine',
+            'joint',
+            'koli',
+            'mc',
+            'revisi'
+        ]));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Mastercard  $mastercard
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mastercard $mastercard)
+    public function saveRevisi($id, Request $request)
     {
-        //
+        $mc = Mastercard::find($id);
+        
+
     }
 
     public function pdfprint($id)

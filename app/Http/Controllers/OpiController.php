@@ -22,7 +22,7 @@ class OpiController extends Controller
     
     public function index(Request $request)
     {
-        $data = Opi_M::opi()->take(1000)->get();
+        $data = Opi_M::opi()->get();
         return view('admin.opi.index', compact('data'));
     }
 
@@ -129,7 +129,7 @@ class OpiController extends Controller
             ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
             ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
             ->where('opi_m.id', '=', $id)
-            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv' )
+            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv' )
             ->first();
 
         $opi2 = DB::table('opi_m')
