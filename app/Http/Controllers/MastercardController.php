@@ -412,6 +412,27 @@ class MastercardController extends Controller
     public function saveRevisi($id, Request $request)
     {
         $mc = Mastercard::find($id);
+
+        $mc->kode = $request->kode;
+        $mc->kodeBarang = $request->kodeBarang;
+        $mc->namaBarang = $request->namaBarang;
+        $mc->tipeBox = $request->tipebox;
+        $mc->CreasCorrP = $request->creasCorr;
+        $mc->CreasCorrL = $request->creasConv;
+        $mc->joint = $request->joint;
+        $mc->flute = $request->flute;
+        $mc->lebarSheet = $request->lebarSheet;
+        $mc->panjangSheet = $request->panjangSheet;
+        $mc->lebarSheetBox = $request->lebarSheetBox;
+        $mc->panjangSheetBox = $request->panjangSheetBox;
+        $mc->luasSheet = $request->luasSheet;
+        $mc->luasSheetBox = $request->luasSheetBox;
+        $mc->outConv = $request->outConv;
+        $mc->koli = $request->koli;
+        $mc->bungkus = $request->bungkus;
+        $mc->keterangan = $request->keterangan;
+        $mc->wax = $request->wax;
+        $mc->tipeMc = $request->tipeMc;
         
 
     }
