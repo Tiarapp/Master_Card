@@ -17,12 +17,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Roll</h1>
+          <h1 class="m-0">BBM Roll</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Roll</li>
+            <li class="breadcrumb-item active">BBM Roll</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -40,6 +40,9 @@
             <strong>{{ $message }}</strong>
         </div>
     @endif
+    @if ($message = Session::get('error'))
+        @include('sweetalert::alert')
+    @endif
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       
@@ -51,46 +54,36 @@
           <thead>
             <tr>
               {{-- <th scope="col">No.</th> --}}
-              <th scope="col">Kode Roll</th>
+              <th scope="col">Tanggal BBM</th>
               <th scope="col">Kode Internal</th>
               <th scope="col">Nama Roll</th>
               <th scope="col">Gram</th>
               <th scope="col">Lebar</th>
-              <th scope="col" style="width: 100px">BBM (Kg)</th>
-              <th scope="col" style="width: 100px">BBK (Kg)</th>
-              <th scope="col" style="width: 100px">Retur BBK (Kg)</th>
-              <th scope="col">Stok (Kg)</th>
+              <th scope="col" style="width: 100px">Berat SJ (kg)</th>
+              <th scope="col" style="width: 100px">Berat timbang (kg)</th>
+              <th scope="col" style="width: 100px">PO</th>
               <th scope="col">Supplier</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-              <?php foreach ($rolld as $data) { ?>
+              <?php foreach ($bbm as $data) { ?>
             <tr>
-                <td scope="col">{{ $data->kode_roll }}</td>
-                <td scope="col">{{ $data->kode_internal }}</td>
-                <td scope="col">{{ $data->rollMaster->nama }}</td>
-                <td scope="col">{{ $data->rollMaster->gram }}</td>
-                <td scope="col">{{ $data->rollMaster->lebar }}</td>
-                <td scope="col" style="width: 100px"><li>{{ $data->bbm->berat_timbang }} <br> ({{ $data->bbm->tgl_bbm }}) </li></td>
-                <td scope="col" style="width: 100px">
-                  <?php foreach ($data->bbk as $bbk) { ?>
-                    <li>{{ $bbk->bbk }} <br> ({{ $bbk->tgl_bbk }}) </li>
-                  <?php } ?>
-                </td>
-                <td scope="col" style="width: 100px">
-                  <?php foreach ($data->returbbk as $retur) { ?>
-                    <li>{{ $retur->qty_retur }} <br> ({{ $retur->tgl_retur }}) </li>
-                  <?php } ?>
-                </td>
-                <td scope="col">{{ $data->stok }}</td>
-                <td scope="col">{{ $data->supp->name }}</td>
+                <td scope="col">{{ $data->tgl_bbm }}</td>
+                <td scope="col">{{ $data->rolld->kode_internal }}</td>
+                <td scope="col">{{ $data->rolld->rollMaster->nama }}</td>
+                <td scope="col">{{ $data->rolld->rollMaster->gram }}</td>
+                <td scope="col">{{ $data->rolld->rollMaster->lebar }}</td>
+                <td scope="col" style="width: 100px">{{ $data->berat_sj }}</td>
+                <td scope="col" style="width: 100px">{{ $data->berat_timbang }}</td>
+                <td scope="col">{{ $data->no_po }}</td>
+                <td scope="col">{{ $data->rolld->supp->name }}</td>
                 <td scope="col">
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                        <a href="../admin/roll/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                        <a href="../admin/roll/bbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">BBK</a>
-                        <a href="../admin/roll/returbbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Retur</a>
+                        <a href="../roll/edit/{{ $data->rolld->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                        {{-- <a href="../admin/roll/bbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">BBK</a>
+                        <a href="../admin/roll/returbbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Retur</a> --}}
                       {{-- <a href="../opname/sheet/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>

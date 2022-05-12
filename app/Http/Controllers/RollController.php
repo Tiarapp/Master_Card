@@ -10,6 +10,7 @@ use App\Models\Roll_M;
 use App\Models\SuppRoll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RollController extends Controller
 {
@@ -27,11 +28,13 @@ class RollController extends Controller
         return view('admin.roll.index', compact('rolld'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function indexBbm()
+    {
+        $bbm = BBM_Roll::all();
+
+        return view('admin.roll.indexbbm', compact('bbm'));
+    }
+
     public function bbmRoll()
     {
         $rolld = Roll_D::all();
@@ -53,20 +56,6 @@ class RollController extends Controller
 
         $kode_internal = $supp->kode_supp."".str_pad($supp->numb_seq, 4, '0', STR_PAD_LEFT);   
 
-        // dd($kode_internal);
-
-        // $request->validate([
-        //     'tgl_bbm'           => 'required|date',
-        //     'berat_sj'          => 'required|numeric',
-        //     'berat_timbang'     => 'required|numeric',
-        //     'no_po'             => 'nullable',
-        //     'gsm_actual'        => 'required|numeric',
-        //     'cobsize_top'       => 'numeric|nullable',
-        //     'cobsize_back'      => 'numeric|nullable',
-        // ]);
-
-        // dd($request->tgl_bbm);
-
         $rolld = Roll_D::create([
             'kode_roll'         => $request->kode_roll,
             'supp_id'           => $request->supp,
@@ -75,7 +64,8 @@ class RollController extends Controller
             'cobsize_top'       => $request->cobsizetop,
             'cobsize_back'      => $request->cobsizeback,
             'stok'              => $request->berattimbang,
-            'roll_m_id'         => $request->rollm
+            'roll_m_id'         => $request->rollm,
+            'created_by'        => Auth::user()->name
         ]);
 
         $bbm = BBM_Roll::create([
@@ -100,14 +90,16 @@ class RollController extends Controller
 
     public function bbk($id)
     {
-        $rolld = Roll_D::find($id)->first();
+        $rolld = Roll_D::find($id);
+
+        // dd($rolld);
 
         return view('admin.roll.bbk', compact('rolld'));
     }
 
     public function prosesBbk($id, Request $request)
     {
-        $rolld = Roll_D::find($id)->first();
+        $rolld = Roll_D::find($id);
 
         if ($request->qty > $rolld->stok) {
             return redirect('admin/roll/bbk/'.$id)->with('succes', 'Qty BBK tidak boleh lebih besar dari QTY Real');
@@ -122,12 +114,10 @@ class RollController extends Controller
             ]);
             
             $rolld->stok = $rolld->stok - $request->qty;
-
-            // dd($rolld->stok);
+            $rolld->is_edit = 1;
 
             $rolld->save();
 
-            // dd($rolld);
             return redirect('admin/roll')->with("succes", 'Bon Barang Keluar Berhasil disimpan !');
         }
 
@@ -135,14 +125,14 @@ class RollController extends Controller
 
     public function returBbk($id)
     {
-        $rolld = Roll_D::find($id)->first();
+        $rolld = Roll_D::find($id);
 
         return view('admin.roll.returbbk', compact('rolld'));
     }
 
     public function prosesRetur($id, Request $request)
     {
-        $rolld = Roll_D::find($id)->first();
+        $rolld = Roll_D::find($id);
 
         $returbbk = Retur_BBK_Roll::create([
             'roll_d_id'     => $id,
@@ -157,38 +147,51 @@ class RollController extends Controller
 
         return redirect('admin/roll')->with('succes', 'Retur Berhasil disimpan!!');
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Roll_M  $roll_M
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Roll_M $roll_M)
+    
+    public function edit(Roll_M $roll_M, $id)
     {
-        //
+
+        $roll = Roll_D::find($id);
+        $suppliers = SuppRoll::all();
+        $rollm = Roll_M::all();
+        // dd($roll->is_edit === 1);
+       if ($roll->is_edit === 1) {
+            Alert::error('Error', 'BBM sudah ada transaksi, Mohon hubungi Admin');
+            return redirect('admin/roll/bbm')->with('error','A');
+       } else {
+            return view('admin.roll.edit', compact('roll', 'suppliers', 'rollm'));
+       }
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Roll_M  $roll_M
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Roll_M $roll_M)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $updateDetail = Roll_D::find($id);
+        
+        $updateDetail->kode_roll = $request->kode_roll;
+        $updateDetail->roll_m_id = $request->rollm;
+        $updateDetail->supp_id = $request->supp;
+        $updateDetail->gsm_actual = $request->gsm_actual;
+        $updateDetail->cobsize_top = $request->cobsizetop;
+        $updateDetail->cobsize_back = $request->cobsizeback;
+        $updateDetail->stok = $request->berattimbang;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Roll_M  $roll_M
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Roll_M $roll_M)
-    {
-        //
+        $updateDetail->save();
+
+        $updateBBM = BBM_Roll::where('roll_d_id', $updateDetail->id)->first();
+
+        // dd($updateDetail);
+
+        $updateBBM->tgl_bbm = $request->tglbbm;
+        $updateBBM->berat_sj = $request->beratsj;
+        $updateBBM->berat_timbang = $request->berattimbang;
+        $updateBBM->no_po = $request->nopo;
+
+        $updateBBM->save();
+
+
+        return redirect('admin/roll/bbm')->with('succes', 'Data Berhasil Di Update!!');
+
     }
 
     /**

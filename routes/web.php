@@ -279,12 +279,15 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/hasilconv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');    
 
     Route::get('/admin/roll',                       'RollController@index')->name('roll');
-    Route::get('/admin/roll/bbm',                   'RollController@bbmRoll')->name('roll.bbm');
+    Route::get('/admin/roll/bbm',                   'RollController@indexBbm')->name('roll.bbm');
+    Route::get('/admin/roll/bbm/create',            'RollController@bbmRoll')->name('roll.createbbm');
     Route::post('/admin/roll/bbm/store',            'RollController@store')->name('roll.store');
     Route::get('/admin/roll/bbk/{id}',              'RollController@bbk')->name('roll.bbk');
     Route::put('/admin/roll/prosesbbk/{id}',        'RollController@prosesBbk')->name('roll.prosesbbk');
     Route::get('/admin/roll/returbbk/{id}',         'RollController@returBbk')->name('roll.returbbk');
     Route::put('/admin/roll/preturbbk/{id}',        'RollController@prosesRetur')->name('roll.preturbbk');
+    Route::get('/admin/roll/edit/{id}',             'RollController@edit')->name('roll.edit');
+    Route::put('/admin/roll/update/{id}',           'RollController@update')->name('roll.update');
 
     //OPNAME
     // Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');
