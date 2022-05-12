@@ -459,7 +459,7 @@ class Kontrak_DController extends Controller
     public function pdfprint($id){
 
 
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -512,7 +512,7 @@ class Kontrak_DController extends Controller
 
         // dd($kontrak_M);
         return view('admin.kontrak.pdf', compact(
-            'cust',
+            // 'cust',
             'mc',
             'top',
             'sales',

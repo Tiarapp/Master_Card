@@ -1230,7 +1230,7 @@ td
 <td height='20' class='x22' style='height:15pt;'></td>
 <td class='x33'>Wax</td>
 <td class='x27'>:</td>
-<td class='x22' align='right'>{{ $kontrakBox->wax }}</td>
+<td class='x22' align='left'>{{ $kontrakBox->wax }}</td>
 <td class='x36'>JOIN</td>
 <td class='x27'></td>
 <td class='x27'>:</td>
@@ -1262,11 +1262,11 @@ td
 <td height='21' class='x22' style='height:15.75pt;'></td>
 <td class='x43'>JENIS</td>
 <td class='x44'>:</td>
-<td class='x22' align='right' x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,66,FALSE)">0</td>
+<td class='x22' align='left' x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,66,FALSE)">0</td>
 <td class='x22'>Jumlah /QTY</td>
 <td class='x27'></td>
 <td class='x27'>:</td>
-<td class='x22' align='right'>0</td>
+<td class='x22' align='left'>0</td>
 <td class='x35'></td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
@@ -1297,16 +1297,16 @@ td
 <td height='21' class='x22' style='height:15.75pt;'></td>
 <td class='x48'>Jumlah /Qty</td>
 <td class='x49'>:</td>
-<td class='x50' >{{ $detail->qtyKontrak }} &nbsp; </td>
-<td class='x51'>Exclude PPN</td>
+<td class='x50' >{{ number_format($detail->qtyKontrak,0,",",".") }} &nbsp; </td>
+<td class='x51'></td>
 <td colspan='4' class='x52' style='mso-ignore:colspan;border-right:1px solid #000000;'></td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='21' style='mso-height-source:userset;height:15.75pt'>
 <td height='21' class='x22' style='height:15.75pt;'></td>
-<td class='x33'>Harga</td>
+<td class='x33'>Harga (Exclude PPN)</td>
 <td class='x27'>:</td>
-<td class='x54' align='right'>Rp {{ $detail->harga }} &nbsp;</td>
+<td class='x54' align='right'>Rp {{ number_format($detail->harga,2,".",",") }} &nbsp;</td>
 <td class='x22'>Tanggal Kirim</td>
 <td class='x27'></td>
 <td class='x27'>:</td>
