@@ -41,7 +41,7 @@ class MastercardController extends Controller
      */
     public function create()
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -56,7 +56,7 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            'item',
+            // 'item',
             'substance',
             'box',
             'colorcombine',

@@ -715,15 +715,30 @@
             if (Box[3] == 'B1') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
+                if (Box[4] == "BF") {
+                    faktorp = 43;
+                    faktorl = 10;
+                } else if(Box[4] == "CF"){
+                    faktorp = 47;
+                    faktorl = 13;
+                } else if (Box[4] == "BCF") {
+                    faktorp = 63;
+                    faktorl = 27;
+                }
+                var panjang = Box[5];
+                var lebar = Box[6];
+                var tinggi = Box[7];
                 document.getElementById("lebarSheet").value = parseInt(resultP);
                 document.getElementById("panjangSheet").value = parseInt(resultL);
 
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
-                var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
-                document.getElementById("luasSheet").value = luas.toFixed(3);
-                document.getElementById("luasSheetBox").value = luas.toFixed(3);
+                var luas =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+
+                console.log(luas);
+                document.getElementById("luasSheet").value = luas.toFixed(2);
+                document.getElementById("luasSheetBox").value = luas.toFixed(2);
             } else {
 
                 document.getElementById("panjangSheet").value = null;
