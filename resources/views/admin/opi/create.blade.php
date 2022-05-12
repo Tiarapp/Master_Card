@@ -79,6 +79,7 @@
                                                                         <th scope="col">MC ID</th>
                                                                         <th scope="col">KontrakM ID</th>
                                                                         <th scope="col">KotrakD ID</th>
+                                                                        <th scope="col">Revisi MC</th>
                                                                         {{-- <th scope="col">Jadwal Kirim</th> --}}
                                                                     </tr>
                                                                 </thead>
@@ -110,6 +111,7 @@
                                                                             <td>{{ $data->mcid }}</td>
                                                                             <td>{{ $data->kontrakmid }}</td>
                                                                             <td>{{ $data->id }}</td>
+                                                                            <td>{{ $data->revisi }}</td>
                                                                             {{-- <td>{{ $data->tglKirim }}</td> --}}
                                                                         </tr>
                                                                         <?php
@@ -464,7 +466,12 @@
                         document.getElementById('noKontrak').value = opi[0];
                         document.getElementById('tipeOrder').value = opi[5];
                         document.getElementById('tanggalOrder').value = opi[1];
-                        document.getElementById('nomc').value = opi[2];
+                        if (opi[23] === '') {
+                            document.getElementById('nomc').value = opi[2];
+                        } else {
+                            document.getElementById('nomc').value = opi[2]+'-'+opi[23];
+                        }
+                        // 
                         document.getElementById('poCust').value = opi[6];
                         document.getElementById('namaCust').value = opi[7];
                         document.getElementById('alamatKirim').value = opi[8];
@@ -485,6 +492,7 @@
                         document.getElementById('mcid').value = opi[20];
                         document.getElementById('kontrakmid').value = opi[21];
                         document.getElementById('kontrakdid').value = opi[22];
+                        // document.getElementById('revisi').value = opi[23];
                         
                     } );
                 } );

@@ -148,7 +148,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-bottom: 2px solid black">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">
@@ -161,6 +161,20 @@
                                                     <option value="Order Ulang">Order Ulang</option>
                                                     <option value="Order Ulang Perubahan">Order Ulang Perubahan</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom: 2px solid black">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Komisi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="komisi" id="komisi">
                                             </div>
                                         </div>
                                     </div>
@@ -198,6 +212,20 @@
                                                     <option value="Kirim">Kirim</option>
                                                     <option value="Ambil Sendiri">Ambil Sendiri</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Tanggal Kirim</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim">
                                             </div>
                                         </div>
                                     </div>

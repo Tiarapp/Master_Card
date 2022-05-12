@@ -92,7 +92,7 @@ class ConvController extends Controller
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
             'tanggal' => $request->tgl,
-            'shift' => $request->shift
+            'shiftM' => $request->shift
         ]);
 
         $data = count($request->noOpi);
@@ -104,9 +104,13 @@ class ConvController extends Controller
             $status = 'Proses';
             $lock = 1;
 
+            if ($request->opi_id[$i] != null) {
+            
             $convd = Conv_D::create([
                 'opi_id'=> $request->opi_id[$i],
                 'plan_conv_m_id' => $convm->id,
+                'kodeplanM' => $convm->kode,
+                'shift' => $convm->shiftM,
                 'tgl_kirim' => $request->dt[$i],
                 'nomc' => $request->mc[$i],
                 'nama_item' => $request->item[$i],
@@ -134,6 +138,8 @@ class ConvController extends Controller
                 'lock' => $lock
             ]);
 
+            // dd($convd);
+        }
             // $uphasilcorr = HasilCorr::find($request->hasilcorrid[$i])->first();
             // $uphasilcorr->sisa = $request->order[$i] - $request->plan[$i];
 
@@ -157,7 +163,7 @@ class ConvController extends Controller
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
             'tanggal' => $request->tgl,
-            'shift' => $request->shift
+            'shiftM' => $request->shift
         ]);
 
         $data = count($request->noOpi);
@@ -172,6 +178,8 @@ class ConvController extends Controller
             $convd = Conv_D::create([
                 'opi_id'=> $request->opi_id[$i],
                 'plan_conv_m_id' => $convm->id,
+                'kodeplanM' => $convm->kode,
+                'shift' => $convm->shiftM,
                 'tgl_kirim' => $request->dt[$i],
                 'nomc' => $request->mc[$i],
                 'nama_item' => $request->item[$i],
@@ -213,13 +221,67 @@ class ConvController extends Controller
 
     public function conv_pdf($id)
     {
-        $convm = Conv_M::find($id)->first();
-        $convd = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->orderBy('urutan','asc')->get();
-        // dd($convm); 
-        if ($convd[0]->mesin == 'FLEXO') {
-            return view('admin.plan.conv.pdf', compact('convm','convd'));
+        $convm = Conv_M::find($id);
+        $shift1 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 1)->get();
+        $shift2 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 2)->get();
+        $shift3 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 3)->get();
+
+        // dd($shift1);
+
+        $total1 = 0;
+        $total2 = 0;
+        $total3 = 0;
+        $kg1 = 0;
+        $kg2 = 0;
+        $kg3 = 0;
+
+        if (count($shift1) != 0) {
+            for ($i=0; $i < count($shift1) ; $i++) { 
+                $total1 = $total1 + $shift1[$i]->jml_plan;
+                $kg1 = $kg1 + ($shift1[$i]->jml_plan * $shift1[$i]->mc_kg );
+            }
+        }
+        
+        if(count($shift2) != 0){
+            for ($i=0; $i < count($shift2) ; $i++) { 
+                $total2 = $total2 + $shift2[$i]->jml_plan;
+                $kg2 = $kg2 + ($shift2[$i]->jml_plan * $shift2[$i]->mc_kg );
+            }
+        }
+        
+        if (count($shift3) != 0) {
+            for ($i=0; $i < count($shift3) ; $i++) { 
+                $total3 = $total3 + $shift3[$i]->jml_plan;
+                $kg3 = $kg3 + ($shift3[$i]->jml_plan * $shift3[$i]->mc_kg );
+            }
+        }
+
+        if ($shift1[0]->mesin == 'FLEXO') {
+            return view('admin.plan.conv.pdf', compact(
+                'convm',
+                'shift1',
+                'shift2',
+                'shift3',
+                'total1',
+                'total2',
+                'total3', 
+                'kg1',  
+                'kg2',  
+                'kg3', 
+            ));
         } else {
-            return view('admin.plan.conv.nppdf', compact('convm','convd'));
+            return view('admin.plan.conv.nppdf', compact(
+                'convm',
+                'shift1',
+                'shift2',
+                'shift3',
+                'total1',
+                'total2',
+                'total3', 
+                'kg1',  
+                'kg2',  
+                'kg3', 
+            ));
         }
     }
 
@@ -232,6 +294,7 @@ class ConvController extends Controller
         $data1 = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->get();
         $mesin = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->first();
         $data2 = Conv_M::where('plan_conv_m.id', '=', $id)->first();
+
 
         // dd($mesin);
         return view('admin.plan.conv.edit', compact('data1','data2','opi','mesin'));

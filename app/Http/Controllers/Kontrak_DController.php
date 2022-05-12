@@ -152,7 +152,9 @@ class Kontrak_DController extends Controller
             'sales' => $request->sales,
             'tipeOrder' => $request->tipeOrder,
             'createdBy' => $request->createdBy,
-            'keterangan' => $request->keterangan
+            'keterangan' => $request->keterangan,
+            'komisi' => $request->komisi,
+            'min_tgl_kirim' => $request->tglkirim
         ]);
         // End Insert Into
 
@@ -214,7 +216,7 @@ class Kontrak_DController extends Controller
             // }
 
 
-        return redirect('admin/kontrak');
+        return redirect('admin/kontrak')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
     }
 
     /**
@@ -265,7 +267,7 @@ class Kontrak_DController extends Controller
         // End tampilkan untuk edit
 
 
-        // dd($kontrak_M);
+        // dd($kontrak_D);
         $count = count($kontrak_D);
 
 
@@ -340,7 +342,7 @@ class Kontrak_DController extends Controller
             }
         }
 
-        redirect('admin.kontrak.index');
+        return redirect('admin/kontrak');
     } 
 
     /**
@@ -489,7 +491,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('tipe', '!=', 'BOX')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus','box.panjangDalamBox as panjangBox', 'box.lebarDalamBox as lebarBox', 'box.tinggiDalamBox as tinggiBox', )
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus','box.panjangDalamBox as panjangBox', 'box.lebarDalamBox as lebarBox', 'box.tinggiDalamBox as tinggiBox', 'kontrak_d.pcsKontrak as qtyKontrak', 'kontrak_d.harga_pcs as harga', 'kontrak_d.pctToleransiLebihKontrak as lebih', 'kontrak_d.pctToleransiKurangKontrak as kurang' )
             ->get();
             // dd($kontrak_D);
 

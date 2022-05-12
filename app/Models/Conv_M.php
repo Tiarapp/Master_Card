@@ -12,7 +12,7 @@ class Conv_M extends Model
     protected $table = 'plan_conv_m';
     protected $fillable = [
         'kode',
-        'shift',
+        'shiftM',
         'tanggal',
         'revisi',
         'total_pcs',

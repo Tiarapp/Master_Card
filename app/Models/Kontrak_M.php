@@ -14,6 +14,7 @@ class Kontrak_M extends Model
         'kode',
         'mc_id',
         'tglKontrak',
+        'min_tgl_kirim',
         'customer_name',
         'poCustomer',
         'top',
@@ -44,6 +45,7 @@ class Kontrak_M extends Model
         'status',
         'lock',
         'sales',
+        'komisi',
         'harga',
         'keterangan',
         'createdBy'

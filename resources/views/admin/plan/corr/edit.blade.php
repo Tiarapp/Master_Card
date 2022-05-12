@@ -64,7 +64,7 @@
                                             <label>Revisi</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="revisi" id="revisi" value="{{ $data2->revisi + 1 }}" readonly>
+                                            <input type="text" class="form-control txt_line" name="revisi" id="revisi" value="{{ $data2->revisi + 1 }}">
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +188,6 @@
                                     <div class='col-md-2'> 
                                         <input type='hidden' class='form-control txt_line' value="{{ $detail->idcorr }}" name='detail[{{ $count }}]' id='detail[{{ $count }}]'>  
                                         <input type='text' class='form-control txt_line' value="{{ $detail->noopi }}" name="noOpi[{{ $count }}]" id='noOpi[{{ $count }}]'> 
-                                        <input type='hidden' class='form-control txt_line' value="{{ $detail->toleransiLebih }}" name='toleransi[{{ $count }}]' id='toleransi[{{ $count }}]'> 
                                         <input type='hidden' class='form-control txt_line' value="{{ $detail->opi_id }}" name='opi_id[{{ $count }}]' id='opi_id[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
@@ -337,6 +336,12 @@
                                         <input type='text' class='form-control txt_line' value="{{ $detail->kertasMcbawah}}" name='kertasBawah[{{ $count }}]' id='kertasBawah[{{ $count }}]'> 
                                         <input type='text' class='form-control txt_line' value="{{ $detail->gramKertasbawah }}" name='gramBawah[{{ $count }}]' id='gramBawah[{{ $count }}]'> 
                                     </div>  
+                                    <div class='col-md-1'>  
+                                        <label style='margin-top:20px'>Toleransi(%)</label> 
+                                    </div> 
+                                    <div class='col-md-1'>  
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->toleransiLebih }}" name='toleransi[{{ $count }}]' id='toleransi[{{ $count }}]'>  
+                                    </div> 
                                 </div>  
                                 <div class='row'> 
                                     <div class='col-md-1'>  
