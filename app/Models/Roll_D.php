@@ -19,6 +19,7 @@ class Roll_D extends Model
         'cobsize_top',
         'cobsize_back',
         'stok',
+        'is_edit',
         'created_by'
     ];
 

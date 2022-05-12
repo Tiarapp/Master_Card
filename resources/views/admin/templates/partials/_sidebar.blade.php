@@ -182,6 +182,39 @@
             </a>
             <ul class="nav nav-treeview"> 
               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>PPIC - ROLL</p>
+                </a><ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('roll') }}" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Persediaan Roll</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('roll.bbm') }}" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>BBM Roll</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>BBK Roll</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Retur Roll</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
                 <a href="{{ route('indexcorr') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Plan Corrugating</p>
