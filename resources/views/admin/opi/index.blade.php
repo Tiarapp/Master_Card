@@ -44,7 +44,7 @@
               <th scope="col">No OPI</th>
               <th scope="col">Action</th>
               <th scope="col">Kontrak</th>
-              <th scope="col">Opi Ke</th>
+              <th scope="col">OPI ke</th>
               <th scope="col">DT</th>
               <th scope="col">QTY Kirim</th>
               <th scope="col">Customer</th>
@@ -102,26 +102,26 @@
               <th scope="col">Lain-Lain</th>
             </tr>
           </thead>
-          <tbody>
+          {{-- <tbody> --}}
             <?php 
-            $no = 1;
-            foreach ($data as $data) { 
+            // $no = 1;
+            // foreach ($data as $data) { 
                ?> 
-              <tr>
+              {{-- <tr>
                 <td scope="row">{{ $data->opiid }}</td>
                 <td><b>{{ $data->noopi }}</b></td>
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
                       <a href="../admin/opi/edit/{{ $data->opiid }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../admin/opi/print/{{ $data->opiid }}" class="btn btn-outline-secondary" type="button">Print</a>
+                      <a href="../admin/opi/print/{{ $data->opiid }}" class="btn btn-outline-secondary" type="button">Print</a> --}}
                       {{-- <a href="../admin/kontrak/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
                       <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
-                    </div>
+                    {{-- </div>
                   </div>
-                </td>
+                </td> --}}
                 {{-- <td><b>{{ $data->noopi }}</b></td> --}}
-                <td>{{ $data->kode }}</td>
+                {{-- <td>{{ $data->kode }}</td>
                 <td><b>{{ $data->tglopi }}</b></td>
                 <td>{{ $data->tglKirimDt }}</td>
                 <td>{{ $data->pcsDt }}</td>
@@ -131,21 +131,23 @@
                 <td>-</td>
                 <td>{{ $data->ketkontrak }}</td>
                 <td>{{ $data->noopi }}</td>
-                <td>{{ $data->poCustomer }}</td>
-                <td><?php
-                if ($data->revisimc != '') {
-                  echo $data->mcKode.'-'.$data->revisimc;
-                } else {
-                  echo $data->mcKode;
-                }
-                ?></td>
-                <td>
+                <td>{{ $data->poCustomer }}</td> --}}
+                {{-- <td> --}}
+                  <?php
+                // if ($data->revisimc != '') {
+                //   echo $data->mcKode.'-'.$data->revisimc;
+                // } else {
+                //   echo $data->mcKode;
+                // }
+                ?>
+                {{-- </td> --}}
+                {{-- <td> --}}
                     <?php 
-                      $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
-                      $hari = $day[date('w', strtotime($data->tglKirimDt))];  
-                      echo $hari;
+                      // $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
+                      // $hari = $day[date('w', strtotime($data->tglKirimDt))];  
+                      // echo $hari;
                     ?>
-                </td>
+                {{-- </td>
                 <td>{{ $data->flute }}</td>
                 <td>{{ $data->tipeBox }}</td>
                 <td>{{ $data->panjangSheet }}</td>
@@ -190,9 +192,9 @@
                 <td>{{ $data->tipeCreasCorr }}</td>
                 <td>{{ $data->bungkus }}</td>
                 <td></td>
-              </tr>
+              </tr> --}}
              <?php 
-            }
+            // }
              ?> 
           </tbody>
         </table>
@@ -212,6 +214,77 @@
     };
     $(function(){
       $('#data_opi').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "{{ url('opijson') }}",
+            "dataType": "json",
+            "type": "POST",
+            "data":{ _token: "{{ csrf_token() }}"}
+        },
+        "columns": [
+            {"data": "id"},
+            {"data": "NoOPI" },
+            {"data": "action" },
+            {"data": "kode" },
+            {"data": "created_at" },
+            {"data": "tglKirimDt"},
+            {"data": "pcsDt" },
+            {"data": "Cust" },
+            {"data": "namaBarang" },
+            {"data": "jumlahOrder" },
+            {"data": "sisa_order" },
+            {"data": "keterangan" },
+            {"data": "NoOPI"},
+            {"data": "poCustomer" },
+            {"data": "nomc" },
+            {"data": "hari" },
+            {"data": "flute" },
+            {"data": "tipeBox"},
+            {"data": "panjangSheet" },
+            {"data": "lebarSheet" },
+            {"data": "outConv" },
+            {"data": "Ukroll" },
+            {"data": "tipeOrder" },
+            {"data": "namacc" },
+            {"data": "joint"},
+            {"data": "KertasAtas" },
+            {"data": "gramKertasAtas" },
+            {"data": "gramKertasflute1" },
+            {"data": "gramKertastengah" },
+            {"data": "gramKertasflute2"},
+            {"data": "gramKertasbawah" },
+            {"data": "kertasMcbawah" },
+            {"data": "wax" },
+            {"data": "gram" },
+            {"data": "tglKontrak" },
+            {"data": "alamatKirim" },
+            {"data": "toleransi" },
+            {"data": "panjang" },
+            {"data": "lebar" },
+            {"data": "tinggi" },
+            {"data": "koli"},
+            {"data": "tglKirimDt" },
+            {"data": "harga_kg" },
+            {"data": "Ukroll" },
+            {"data": "Ukroll" },
+            {"data": "status" },
+            {"data": "kode"},
+            {"data": "tglKontrak" },
+            {"data": "kertasMcAtasK" },
+            {"data": "gramKertasAtasK" },
+            {"data": "gramKertasflute1K" },
+            {"data": "gramKertastengahK"},
+            {"data": "gramKertasflute2K" },
+            {"data": "gramKertasbawahK" },
+            {"data": "kertasMcbawahK" },
+            {"data": "Ukroll" },
+            {"data": "kodeBarang" },
+            {"data": "tipeCreasCorr" },
+            {"data": "bungkus" },
+            {"data": "Ukroll" },
+            
+        ],
         // "initComplete": function (settings, json) {  
         //     $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
         // },

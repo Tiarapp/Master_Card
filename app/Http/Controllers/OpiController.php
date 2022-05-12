@@ -14,15 +14,141 @@ class OpiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function json()
+    public function json(Request $request)
     {
-        $data = Opi_M::opi2()->get();
-        return Datatables::of($data)->make(true);
+        $columns = array(
+            0=>'id', 1=>'NoOPI',2=>'action',3=>'kode', 4=>'created_at',5=>'tglKirimDt',6=>'pcsDt',7=>'Cust', 8=>'namaBarang',9=>'jumlahOrder',10=>'sisa_order', 11=>'keterangan', 12=>'NoOPI',
+            13=>'poCustomer', 14=>'mcKode',15=>'hariKirimDt',16=>'flute',17=>'tipeBox',18=>'panjangSheet',19=>'lebarSheet',20=>'outConv',21=>'Ukroll',22=>'tipeOrder',23=>'namacc',24=>'joint',25=>'KertasAtas',26=>'KAtas',27=>'Kbf',28=>'KTengah',29=>'Kcf',30=>'KBawah',31=>'KertasBawah',32=>'wax',33=>'gram',34=>'tglKontrak',35=>'alamatKirim',36=>'toleransi',37=>'panjang',38=>'lebar',39=>'tinggi',40=>'koli',41=>'tglKirimDt',42=>'harga_kg',43=>'realisasiKirim',44=>'sisaDt',45=>'status',46=>'noKontrak',47=>'tglKontrak',48=>'KertasKAtas', 49=>'KAtasP', 50=>'KbfP', 51=>'KTengahP', 52=>'KcfP',53=>'KBawahP', 54=>'KertasBawahP', 55=>'null',54=>'kodeBarang',56=>'tipeCreasCorr',57=>'bungkus',58=>'lain'
+        );
+
+        $totalData = Opi_M::opi()->count();
+        $limit = $request->input('length');
+        $start = $request->input('start');
+
+        // dd($start, $limit);
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(empty($request->input('search.value')))
+        {            
+            $opi = Opi_M::opi()->offset(50)
+                         ->limit(10)
+                         ->orderBy('NoOPI')
+                         ->get();
+                         
+            $totalFiltered = Opi_M::opi()->count();
+            // dd($opi);
+        }
+        else {
+            $search = $request->input('search.value'); 
+
+            $opi =  Opi_M::opi()->where('opi_m.id','LIKE',"%{$search}%")
+                            ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                            ->offset($start)
+                            ->limit($limit)
+                            ->orderBy('NoOPI')
+                            ->get();
+
+            $totalFiltered = Opi_M::opi()->where('opi_m.id','LIKE',"%{$search}%")
+                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                             ->count();
+            // dd($opi);
+        }
+
+
+        // dd($opi);
+        $data = array();
+        if(!empty($opi))
+        {
+            foreach ($opi as $opi)
+            {
+                $show =  route('opi.print',$opi->id);
+                $edit =  route('opi.edit',$opi->id);
+
+                $nestedData['id'] = $opi->id;
+                $nestedData['NoOPI'] = $opi->NoOPI;
+                $nestedData['action'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a>
+                &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
+                $nestedData['kode'] = $opi->kode;
+                $nestedData['created_at'] = date('j M Y h:i a',strtotime($opi->created_at));
+                $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+                $nestedData['pcsDt'] = $opi->pcsDt;
+                $nestedData['Cust'] = $opi->Cust;
+                $nestedData['namaBarang'] = $opi->namaBarang;
+                $nestedData['jumlahOrder'] = $opi->jumlahOrder;
+                $nestedData['sisa_order'] = $opi->sisa_order;
+                $nestedData['keterangan'] = $opi->keterangan;
+                $nestedData['NoOPI'] = $opi->NoOPI;
+                $nestedData['poCustomer'] = $opi->poCustomer;
+
+                $mc = ($opi->revisi != '' ? $opi->mcKode.'-'.$opi->revisi : $opi->mcKode );
+
+                $nestedData['nomc'] = $mc;
+
+                $day = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUM'AT", "SABTU"];
+                $hari = $day[date('w', strtotime($opi->tglKirimDt))];
+
+                $nestedData['hari'] = $hari;
+                $nestedData['flute'] = $opi->flute;
+                $nestedData['tipeBox'] = $opi->tipeBox;
+                $nestedData['panjangSheet'] = $opi->panjangSheet;
+                $nestedData['lebarSheet'] = $opi->lebarSheet;
+                $nestedData['outConv'] = $opi->outConv;
+                $nestedData['Ukroll'] = "-";
+                $nestedData['tipeOrder'] = $opi->tipeOrder;
+                $nestedData['namacc'] = $opi->namacc;
+                $nestedData['joint'] = $opi->joint;
+                $nestedData['KertasAtas'] = $opi->kertasMcAtas;
+                $nestedData['gramKertasAtas'] = $opi->gramKertasAtas;
+                $nestedData['gramKertasflute1'] = $opi->gramKertasflute1;
+                $nestedData['gramKertastengah'] = $opi->gramKertastengah;
+                $nestedData['gramKertasflute2'] = $opi->gramKertasflute2;
+                $nestedData['gramKertasbawah'] = $opi->gramKertasAtas;
+                $nestedData['kertasMcbawah'] = $opi->kertasMcbawah;
+                $nestedData['wax'] = $opi->wax;
+                $nestedData['gram'] = $opi->gram;
+                $nestedData['tglKontrak'] = $opi->tglKontrak;
+                $nestedData['alamatKirim'] = $opi->alamatKirim;
+                $nestedData['toleransi'] = $opi->toleransiKurang.'%/'.$opi->toleransiLebih.'%';
+                $nestedData['panjang'] = $opi->panjang;
+                $nestedData['lebar'] = $opi->lebar;
+                $nestedData['tinggi'] = $opi->tinggi;
+                $nestedData['koli'] = $opi->koli;
+                $nestedData['status'] = $opi->status;
+                $nestedData['harga_kg'] = $opi->harga_kg;
+                $nestedData['kertasMcAtasK'] = $opi->kertasMcAtasK;
+                $nestedData['gramKertasAtasK'] = $opi->gramKertasAtasK;
+                $nestedData['gramKertasflute1K'] = $opi->gramKertasflute1K;
+                $nestedData['gramKertastengahK'] = $opi->gramKertastengahK;
+                $nestedData['gramKertasflute2K'] = $opi->gramKertasflute2K;
+                $nestedData['gramKertasbawahK'] = $opi->gramKertasbawahK;
+                $nestedData['kertasMcbawahK'] = $opi->kertasMcbawahK;
+                $nestedData['kodeBarang'] = $opi->kodeBarang;
+                $nestedData['tipeCreasCorr'] = $opi->tipeCreasCorr;
+                $nestedData['bungkus'] = $opi->bungkus;
+                $data[] = $nestedData;
+
+            }
+        }
+          
+        $json_data = array(
+                    "draw"            => intval($request->input('draw')),  
+                    "recordsTotal"    => intval($totalData),  
+                    "recordsFiltered" => intval($totalFiltered), 
+                    "data"            => $data   
+                    );
+        
+
+        // dd($json_data);
+        echo json_encode($json_data); 
+     
+        // $data = Opi_M::opi()->get();
+        // return Datatables::of($data)->make(true);
     }
     
     public function index(Request $request)
     {
-        $data = Opi_M::opi()->get();
+        $data = Opi_M::opi()->limit(100)->get();
         return view('admin.opi.index', compact('data'));
     }
 

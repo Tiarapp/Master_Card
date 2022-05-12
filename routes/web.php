@@ -223,7 +223,7 @@ Route::middleware(['auth'])->group(function (){
     //OPI
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
     Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
-    Route::get('/admin/opi/json', 'OpiController@json')->name('opi.json');
+    Route::post('opijson', 'OpiController@json')->name('opi.json');
     Route::post('/admin/opi/store', 'OpiController@store')->name('opi.store');
     Route::get('/admin/opi/edit/{id}', 'OpiController@edit')->name('opi.edit');
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
