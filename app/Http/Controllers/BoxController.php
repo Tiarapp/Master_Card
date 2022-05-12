@@ -38,13 +38,13 @@ class BoxController extends Controller
         // Ambil data dari table (flute,tipe_box,firebird(TBarangConv))
         $flute = DB::table('flute')->get();
         $tipebox = DB::table('tipe_box')->get();
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         // End ambil data dari table (flute,tipe_box,firebird(TBarangConv))
 
         return view('admin.box.create', compact([
             'tipebox',
             'flute',
-            'item'
+            // 'item'
             ]));
     }
     // End tampilkan Halaman Input

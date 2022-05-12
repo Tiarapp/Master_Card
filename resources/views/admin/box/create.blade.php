@@ -69,7 +69,7 @@
                                                         <th scope="col">Gram</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                {{-- <tbody>
                                                     <?php
                                                     $no = 1;
                                                     foreach ($item as $data) { ?>
@@ -84,7 +84,7 @@
                                                         <?php
                                                     }
                                                     ?>
-                                                </tbody>
+                                                </tbody> --}}
                                             </table>
                                         </div>
                                     </div>
