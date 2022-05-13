@@ -1306,7 +1306,7 @@ td
 <td height='21' class='x22' style='height:15.75pt;'></td>
 <td class='x33'>Harga (Exclude PPN)</td>
 <td class='x27'>:</td>
-<td class='x54' align='right'>Rp {{ number_format($detail->harga,2,".",",") }} &nbsp;</td>
+<td class='x54' align='right'>Rp {{ number_format($detail->harga,2,",",".") }} &nbsp;</td>
 <td class='x22'>Tanggal Kirim</td>
 <td class='x27'></td>
 <td class='x27'>:</td>

@@ -67,4 +67,9 @@ class Kontrak_M extends Model
     {
         return $this->belongsToMany(Opi_M::class, 'kontrak_m_id', 'id');
     }
+
+    public function realisasi()
+    {
+        return $this->hasMany(RealisasiKirim::class, 'kontrak_m_id', 'id');
+    }
 }

@@ -27,7 +27,7 @@ class Mastercard extends Model
         'panjangSheetBox',
         'luasSheetBox',
         'subtanceSheet_id',
-        'wax_id',
+        'wax',
         'joint',
         'mesin',
         'outConv',
