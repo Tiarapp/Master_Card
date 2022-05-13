@@ -28,6 +28,33 @@ class Kontrak_DController extends Controller
     // }
 
 
+    public function json(Request $request)
+    {
+        $totalData = Kontrak_M::count();
+        $kontrak= Kontrak_M::take(5)->get();
+        // $kontrak = Kontrak_M::all();
+
+        // dd($kontrak);
+
+        $data = array();
+        if (!empty($kontrak)) {
+            foreach ($kontrak as $kontrak)
+            {
+            $nestedData['kontrak'] = $kontrak->kode;
+            $nestedData['realisasi'] = $kontrak->realisasi->qty_kirim;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),  
+            "recordsTotal"    => intval($totalData),  
+            // "recordsFiltered" => intval($totalFiltered), 
+            "data"            => $data  
+        );
+
+        dd($json_data);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {

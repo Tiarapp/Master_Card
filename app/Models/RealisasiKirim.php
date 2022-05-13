@@ -16,4 +16,9 @@ class RealisasiKirim extends Model
         'qty_kirim',
         'createdBy'
     ];
+
+    public function kontrakm()
+    {
+        return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id');
+    }
 }

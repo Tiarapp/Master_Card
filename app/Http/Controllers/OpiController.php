@@ -31,8 +31,8 @@ class OpiController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $opi = Opi_M::opi()->offset(50)
-                         ->limit(10)
+            $opi = Opi_M::opi()->offset($start)
+                         ->limit($limit)
                          ->orderBy('NoOPI')
                          ->get();
                          
@@ -42,11 +42,11 @@ class OpiController extends Controller
         else {
             $search = $request->input('search.value'); 
 
-            $opi =  Opi_M::opi()->where('opi_m.id','LIKE',"%{$search}%")
+            $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
-                            ->orderBy('NoOPI')
+                            ->orderBy($order, $dir)
                             ->get();
 
             $totalFiltered = Opi_M::opi()->where('opi_m.id','LIKE',"%{$search}%")
