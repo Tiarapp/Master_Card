@@ -208,7 +208,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('mastercard.pdfb1');
 
     //Kontrak
-    Route::get('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
+    Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
     Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');

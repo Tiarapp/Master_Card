@@ -55,7 +55,7 @@ class Kontrak_M extends Model
 
     public function kontrak_d()
     {
-        return $this->hasMany(Kontrak_D::class, 'kontrak_m_id', 'id');
+        return $this->hasOne(Kontrak_D::class, 'kontrak_m_id', 'id');
     }
 
     public function DeliveryTime()
