@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
+use App\Models\Mastercard;
 use App\Models\RealisasiKirim;
 use Carbon\Carbon;
 // use Yajra\DataTables\Contracts\DataTable;
@@ -30,29 +31,107 @@ class Kontrak_DController extends Controller
 
     public function json(Request $request)
     {
+        $columns = [
+            1=>'id',
+            2=>'action',
+            3=>'kode',
+            4=>'tglKontrak',
+            5=>'cust',
+            6=>'alamatKirim',
+        ];
+
         $totalData = Kontrak_M::count();
-        $kontrak= Kontrak_M::take(5)->get();
+        $kontrak= Kontrak_M::get();
         // $kontrak = Kontrak_M::all();
 
         // dd($kontrak);
+        
+        $totalData = Kontrak_M::count();
+        $limit = $request->input('length');
+        $start = $request->input('start');
+
+        if(empty($request->input('search.value')))
+        {            
+            $kontrak = Kontrak_M::offset($start)
+                         ->limit($limit)
+                         ->orderBy('id', 'desc')
+                         ->get();
+                         
+            $totalFiltered = Kontrak_M::count();
+            // dd($opi);
+        }
+        else {
+            $search = $request->input('search.value'); 
+
+            $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
+                            // ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                            ->offset($start)
+                            ->limit($limit)
+                            ->orderBy('id', 'desc')
+                            ->get();
+
+            $totalFiltered = Kontrak_M::where('id','LIKE',"%{$search}%")
+                             ->orWhere('customer_name', 'LIKE',"%{$search}%")
+                             ->count();
+            // dd($opi);
+        }
 
         $data = array();
         if (!empty($kontrak)) {
             foreach ($kontrak as $kontrak)
             {
-            $nestedData['kontrak'] = $kontrak->kode;
-            $nestedData['realisasi'] = $kontrak->realisasi->qty_kirim;
+                $show =  route('kontrak.pdfb1',$kontrak->id);
+                $edit =  route('kontrak.edit',$kontrak->id);
+
+                $nestedData['id'] = $kontrak->id;
+                $nestedData['kontrak'] = $kontrak->kode;
+                $nestedData['cust'] = $kontrak->customer_name;
+                $nestedData['tglKontrak'] = $kontrak->tglKontrak;
+                $nestedData['alamatKirim'] = $kontrak->alamatKirim;
+                $nestedData['custTelp'] = $kontrak->custTelp;
+                $nestedData['poCustomer'] = $kontrak->poCustomer;
+                $nestedData['top'] = $kontrak->top;
+                $nestedData['sales'] = $kontrak->sales;
+                $nestedData['tipeOrder'] = $kontrak->tipeOrder;
+                $nestedData['keterangan'] = $kontrak->keterangan;
+
+                // Realisasi Kirim
+                $terkirim = 0;
+                $dataRealisasi = [];
+                foreach ($kontrak->realisasi as $realisasi) {
+
+                    $dataRealisasi[] = 
+                    "&emsp;<li><span class='glyphicon glyphicon-list'>".$realisasi->qty_kirim." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
+
+                    $terkirim = $terkirim + $realisasi->qty_kirim;
+                }
+                $nestedData['realisasi'] = $dataRealisasi;
+                $nestedData['pcsKontrak'] = $kontrak->kontrak_d->pcsKontrak;
+
+                $nestedData['sisaKirim'] = $kontrak->kontrak_d->pcsKontrak - $terkirim;
+
+                $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
+                $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
+                $nestedData['nomc'] = $mcKode;
+                $nestedData['kodeBarang'] = $mc->kodeBarang;
+                $nestedData['action'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a>
+                &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
+                
+                
+                
+                $data[] = $nestedData;
             }
         }
 
         $json_data = array(
             "draw"            => intval($request->input('draw')),  
             "recordsTotal"    => intval($totalData),  
-            // "recordsFiltered" => intval($totalFiltered), 
+            "recordsFiltered" => intval($totalFiltered), 
             "data"            => $data  
         );
 
-        dd($json_data);
+        // dd($json_data);
+        echo json_encode($json_data); 
     }
 
     public function index(Request $request)

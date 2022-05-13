@@ -48,13 +48,17 @@
         <table class="table table-bordered" id="data_kontrak">
           <thead>
             <tr>
-              <th scope="col">No.</th>
+              <th scope="col">ID.</th>
               <th scope="col">Action</th>
               <th scope="col">No Kontrak</th>
-              {{-- <th scope="col">No MC</th> --}}
               <th scope="col">Tanggal</th>
+              <th scope="col">Kode Barang</th>
               <th scope="col">Customer</th>
               <th scope="col">Alamat</th>
+              <th scope="col">QTY Kontrak</th>
+              <th scope="col">No MC</th>
+              <th scope="col">Realisasi Kirim</th>
+              <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
               {{-- <th scope="col">No PO Customer</th> --}}
             </tr>
@@ -73,25 +77,31 @@
   <script>
     $(function(){
       $('#data_kontrak').DataTable({
-        processing:true,
-        serverSide:true,
-        ajax:"{{ route('kontrak') }}",
-        columns: [
-          { data: 'id', name: 'id' },
-          {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false
-          },
-          { data: 'kode', name: 'kode' },
-          { data: 'tglKontrak', name: 'tglKontrak' },
-          { data: 'customer_name', name: 'customer_name' },
-          { data: 'alamatKirim', name: 'alamatKirim' },
-          { data: 'sales', name: 'sales' },
+        "processing":true,
+        "serverSide":true,
+        "ajax":{
+          "url": "{{ url('kontrakjson') }}",
+          "dataType": "json",
+          "type": "POST",
+          "data":{_token: "{{ csrf_token() }}"}
+        },
+        "columns": [
+          {"data": "id"},
+          {"data": "action"},
+          {"data": "kontrak"},
+          {"data": "tglKontrak"},
+          {"data": "kodeBarang"},
+          {"data": "cust"},
+          {"data": "alamatKirim"},
+          {"data": "pcsKontrak"},
+          {"data": "nomc"},
+          {"data": "realisasi"},
+          {"data": "sisaKirim"},
+          {"data": "sales"},
+          
         ],
-        "order": [2, 'desc'],
-        "pageLength": 1000,
+        // "order": [2, 'desc'],
+        // "pageLength": 1000,
         dom: 'Bftrip',
         buttons: [
           'copy',
