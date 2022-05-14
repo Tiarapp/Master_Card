@@ -70,7 +70,7 @@ class OpiController extends Controller
                 $nestedData['action'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a>
                 &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
                 $nestedData['kode'] = $opi->kode;
-                $nestedData['created_at'] = date('j M Y h:i a',strtotime($opi->created_at));
+                $nestedData['created_at'] = date('j M Y',strtotime($opi->created_at));
                 $nestedData['tglKirimDt'] = $opi->tglKirimDt;
                 $nestedData['pcsDt'] = $opi->pcsDt;
                 $nestedData['Cust'] = $opi->Cust;
