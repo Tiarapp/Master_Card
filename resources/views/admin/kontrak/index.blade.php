@@ -54,6 +54,7 @@
               <th scope="col">Tanggal</th>
               <th scope="col">Kode Barang</th>
               <th scope="col">Customer</th>
+              <th scope="col">PO Customer</th>
               <th scope="col">Alamat</th>
               <th scope="col">QTY Kontrak</th>
               <th scope="col">No MC</th>
@@ -92,6 +93,7 @@
           {"data": "tglKontrak"},
           {"data": "kodeBarang"},
           {"data": "cust"},
+          {"data": "poCustomer"},
           {"data": "alamatKirim"},
           {"data": "pcsKontrak"},
           {"data": "nomc"},
