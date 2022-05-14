@@ -82,6 +82,8 @@ class Kontrak_DController extends Controller
             {
                 $show =  route('kontrak.pdfb1',$kontrak->id);
                 $edit =  route('kontrak.edit',$kontrak->id);
+                $dt =  route('kontrak.dt',$kontrak->id);
+                $kirim =  route('kontrak.realisasi',$kontrak->id);
 
                 $nestedData['id'] = $kontrak->id;
                 $nestedData['kontrak'] = $kontrak->kode;
@@ -114,8 +116,8 @@ class Kontrak_DController extends Controller
                 $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
                 $nestedData['nomc'] = $mcKode;
                 $nestedData['kodeBarang'] = $mc->kodeBarang;
-                $nestedData['action'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a>
-                &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
+                $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
+                &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>";
                 
                 
                 
