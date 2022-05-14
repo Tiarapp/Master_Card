@@ -110,7 +110,7 @@ class Kontrak_DController extends Controller
                     $terkirim = $terkirim + $realisasi->qty_kirim;
                 }
                 $nestedData['realisasi'] = $dataRealisasi;
-                $nestedData['pcsKontrak'] = $kontrak->kontrak_d->pcsKontrak;
+                $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
 
                 $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
 
