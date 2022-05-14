@@ -65,6 +65,7 @@ class Kontrak_DController extends Controller
 
             $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
                             ->orWhere('kode', 'LIKE',"%{$search}%")
+                            ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
                             ->orderBy('id', 'desc')
@@ -72,6 +73,7 @@ class Kontrak_DController extends Controller
 
             $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                              ->orWhere('customer_name', 'LIKE',"%{$search}%")
+                             ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                              ->count();
             // dd($opi);
         }
