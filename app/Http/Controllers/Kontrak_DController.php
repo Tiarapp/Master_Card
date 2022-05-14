@@ -64,13 +64,13 @@ class Kontrak_DController extends Controller
             $search = $request->input('search.value'); 
 
             $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
-                            // ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                            ->orWhere('kode', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
                             ->orderBy('id', 'desc')
                             ->get();
 
-            $totalFiltered = Kontrak_M::where('id','LIKE',"%{$search}%")
+            $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                              ->orWhere('customer_name', 'LIKE',"%{$search}%")
                              ->count();
             // dd($opi);
