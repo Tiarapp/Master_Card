@@ -65,6 +65,7 @@ class Kontrak_DController extends Controller
 
             $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
                             ->orWhere('kode', 'LIKE',"%{$search}%")
+                            ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
                             ->orderBy('id', 'desc')
@@ -72,6 +73,7 @@ class Kontrak_DController extends Controller
 
             $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                              ->orWhere('customer_name', 'LIKE',"%{$search}%")
+                             ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                              ->count();
             // dd($opi);
         }
@@ -110,7 +112,7 @@ class Kontrak_DController extends Controller
                 $nestedData['realisasi'] = $dataRealisasi;
                 $nestedData['pcsKontrak'] = $kontrak->kontrak_d->pcsKontrak;
 
-                $nestedData['sisaKirim'] = $kontrak->kontrak_d->pcsKontrak - $terkirim;
+                $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
 
                 $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                 $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
