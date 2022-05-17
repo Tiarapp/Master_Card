@@ -103,7 +103,7 @@ class OpiController extends Controller
                 $nestedData['gramKertasflute1'] = $opi->gramKertasflute1;
                 $nestedData['gramKertastengah'] = $opi->gramKertastengah;
                 $nestedData['gramKertasflute2'] = $opi->gramKertasflute2;
-                $nestedData['gramKertasbawah'] = $opi->gramKertasAtas;
+                $nestedData['gramKertasbawah'] = $opi->gramKertasbawah;
                 $nestedData['kertasMcbawah'] = $opi->kertasMcbawah;
                 $nestedData['wax'] = $opi->wax;
                 $nestedData['gram'] = $opi->gram;

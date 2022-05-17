@@ -82,6 +82,7 @@ class Opi_M extends Model
         ->orderBy('opi_m.noopi', 'desc')
         ->get();
 
+        // dd($query);
         return $query;
     }
 
