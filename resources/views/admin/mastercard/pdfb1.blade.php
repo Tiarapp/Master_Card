@@ -4283,7 +4283,7 @@
                     <td class="column6 style88 null"></td>
                     <td class="column7 style89 s style87" colspan="2">Berat Sheet Box :</td>
                     <td class="column9 style88 null"></td>
-                    <td class="column10 style90 null style87" colspan="2">{{ $mc->gramSheetBoxProduksi }}</td>
+                    <td class="column10 style90 null style87" colspan="2">{{ $mc->gramSheetCorrProduksi2 }}</td>
                     <td class="column12 style91 s style92" colspan="2">gram</td>
                     <td class="column14 style93 null"></td>
                 </tr>

@@ -50,6 +50,24 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">Golongan Customer</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan" onchange="getKodeBarang()">
+                                                <option value='001'>Food and Baverage</option>
+                                                <option value='002'>Keramik</option>
+                                                <option value='003'>Frozen Fish</option>
+                                                <option value='004'>Oil</option>
+                                                <option value='005'>Plastik</option>
+                                                <option value='006'>DOC</option>
+                                                <option value='007'>Tissue</option>
+                                                <option value='999'>Others</option>
+                                                <option value='OOO'>Sheet</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Kode MC</label>
                                         </div>
                                         <div class="col-md-2">
@@ -507,24 +525,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Golongan Customer</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
-                                                <option value='001'>Food and Baverage</option>
-                                                <option value='002'>Keramik</option>
-                                                <option value='003'>Frozen Fish</option>
-                                                <option value='004'>Oil</option>
-                                                <option value='005'>Plastik</option>
-                                                <option value='006'>DOC</option>
-                                                <option value='007'>Tissue</option>
-                                                <option value='999'>Others</option>
-                                                <option value='OOO'>Sheet</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Joint</label>
@@ -735,6 +736,7 @@
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
                 var luas =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+                // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
                 console.log(luas);
                 document.getElementById("luasSheet").value = luas.toFixed(2);
