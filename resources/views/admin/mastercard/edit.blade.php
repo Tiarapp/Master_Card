@@ -969,7 +969,7 @@
             }
             
             result = (luasSheet * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            result2 = (luasSheetBox * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
@@ -978,7 +978,7 @@
             
         } else {
             result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
