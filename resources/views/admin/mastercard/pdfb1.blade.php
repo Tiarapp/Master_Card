@@ -4133,7 +4133,7 @@
                     <td class="column1 style2 s style3" colspan="7" style="text-align: center; font-size: 18px;">PT. SARANA PACKAGING AGRAPANA</td>
                     <td class="column8 style4 s style5" colspan="3">No. MC</td>
                     <td class="column11 style1 s">:</td>
-                    <td class="column12 style6 s style5" colspan="3">{{ $mc->kode }}</td>
+                    <td class="column12 style6 s style5" colspan="3">{{ ($mc->revisi = '' ? $mc->kode : $mc->kode.'-'.$mc->revisi ) }}</td>
                 </tr>
                 <tr class="row1">
                     <td class="column0 style1 null"></td>
