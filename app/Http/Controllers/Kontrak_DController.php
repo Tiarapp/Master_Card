@@ -172,7 +172,7 @@ class Kontrak_DController extends Controller
     public function create()
     {
 
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -312,20 +312,6 @@ class Kontrak_DController extends Controller
 
             $upMaster->save(); // simpan ke table
 
-            // for ($i=1; $i < 6; $i++) { 
-            //     if ($request->tglKirim[$i] !== null) {
-            //         $dt = DeliveryTime::create([
-            //             'kontrak_m_id' => $kontrakm->id,
-            //             'kodeKontrak' => $kontrakm->kode,
-            //             'tglKirimDt' => $request->tglKirim[$i],
-            //             'pcsDt' => $request->dtPcs[$i],
-            //             // 'kgDt' => $request->dtKg[$i],
-            //             'createdBy' => $request->createdBy,
-            //         ]);
-            //     }
-            // }
-
-
         return redirect('admin/kontrak')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
     }
 
@@ -337,7 +323,7 @@ class Kontrak_DController extends Controller
      */
     public function show(Kontrak_D $kontrak_D)
     {
-        //
+        //  
     }
 
     /**
@@ -349,7 +335,7 @@ class Kontrak_DController extends Controller
     public function edit($id)
     {
         // menampilkan untuk dropdown
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -383,7 +369,7 @@ class Kontrak_DController extends Controller
 
         // dd($kontrak_M);
         return view('admin.kontrak.edit', compact(
-            'cust',
+            // 'cust',
             'mc',
             'top',
             'sales',

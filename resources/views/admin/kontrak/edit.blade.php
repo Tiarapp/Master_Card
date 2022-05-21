@@ -22,7 +22,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Surat Jalan Palet</h4>
+                <h4 class="modal-title">Edit Kontrak</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -92,17 +92,17 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php 
-                                                                        foreach ($cust as $data) { ?>
-                                                                            <tr>
+                                                                        // foreach ($cust as $data) { ?>
+                                                                            {{-- <tr>
                                                                                 <td scope="row">{{ $data->Kode }}</td>
                                                                                 <td>{{ $data->Nama }}</td>
                                                                                 <td>{{ $data->AlamatKantor }}</td>
                                                                                 <td>{{ $data->TelpKantor }}</td>
                                                                                 <td>{{ $data->FaxKantor }}</td>
                                                                                 <td>{{ $data->AlamatKirim }}</td>
-                                                                            </tr>
+                                                                            </tr> --}}
                                                                             <?php
-                                                                        }
+                                                                        // }
                                                                         ?>
                                                                     </tbody>
                                                                 </table>
@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-bottom: 2px solid black">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">
@@ -243,7 +243,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-bottom: 2px solid black">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">
@@ -260,144 +260,318 @@
                             </div>
                         </div>
                     </div>
-                    <?php
-                        for ($i=0; $i <5 ; $i++) { 
-                            echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
-                        }
-                    ?>
-                    <table class="table table-bordered" id="detail_kontrak">
-                        <thead>
-                            <tr>
-                                <th scope="col">MC</th>
-                                <th scope="col">Nama Barang</th>
-                                <th scope="col">Substance</th>
-                                <th scope="col">Qty(Pcs)</th>
-                                <th scope="col">Toleransi Lebih(%)</th>
-                                <th scope="col">Toleransi Kurang(%)</th>
-                                <th scope="col">Harga</th>
-                                <th scope="col">PPN (%)</th>
-                                <th scope="col">Tipe MC</th>
-                                <th scope="col">Toleransi Lebih Pcs</th>
-                                <th scope="col">Toleransi Lebih Kg</th>
-                                <th scope="col">Toleransi Kurang Pcs</th>
-                                <th scope="col">Toleransi Kurang Kg</th>
-                                <th scope="col">Harga Belum PPN</th>
-                                <th scope="col">PPN (Rp)</th>
-                                <th scope="col">Qty(Kg)</th>
-                                <th scope="col">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            
-                            <?php 
-                            $counts = 5;    
-                            
-                            $j=0;                        
-                            for ($i=0; $i<$counts; $i++) { 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Pilih Mastercard</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" value="" readonly>
+                                                <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" value="" readonly>
+                                            </div>
+                                            <div class="modal fade" id="Mastercard">
+                                                <div class="modal-dialog modal-xl">
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title mastercard">Mastercard</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body Mastercard">
+                                                            <div class="card-body">
+                                                                <table class="table table-bordered" id="data_mc">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">ID</th>
+                                                                            <th scope="col">No MC</th>
+                                                                            <th scope="col">Nama Barang</th>
+                                                                            <th scope="col">Tipe Box</th>
+                                                                            <th scope="col">Flute</th>
+                                                                            <th scope="col">Kualitas</th>
+                                                                            <th scope="col">Gram</th>
+                                                                            <th scope="col">Warna</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                        $no = 1;
+                                                                        foreach ($mc as $data) { ?>
+                                                                            <tr>
+                                                                                <td scope="row">{{ $data->id }}</td>
+                                                                                <td>{{ $data->kode }}</td>
+                                                                                <td>{{ $data->box }}</td>
+                                                                                <td>{{ $data->tipeBox }}</td>
+                                                                                <td>{{ $data->flute }}</td>
+                                                                                <td>{{ $data->substance }}</td>
+                                                                                <td>{{ $data->gramSheetBoxKontrak2 }}</td>
+                                                                                <td>{{ $data->warna }}</td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="button" data-toggle="modal" data-target="#Mastercard">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Nama Barang</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="namaBarang" id="namaBarang" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Tipe Box</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="tipeBox" id="tipeBox" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Flute</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="flute" id="flute" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Gramatur</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="gram" id="gram" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Kualitas</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="kualitas" id="kualitas" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Warna</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="warna" id="warna" value="" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 
-                                // dd(isset($kontrak_D[$i]));
-
-                                
-                                
-                                if (isset($kontrak_D[$i]) !== false) {
-                                    # code...
-
-                                    // dd($kontrak_D[$i]->mc)
-                                    echo "<input type='text' name='detail[$i]' id='detail[$i]' style='color: rgb(0, 0, 0)' value='".$kontrak_D[$i]->id."'readonly>";
-                                    echo "<tr>";
-                                    echo    "<td>";
-                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i' onchange='getData()'>";
-                                        echo "<option value='".$kontrak_D[$i]->mcid."|".$kontrak_D[$i]->gram."|".$kontrak_D[$i]->substance."|".$kontrak_D[$i]->tipe."|".$kontrak_D[$i]->box."' >".$kontrak_D[$i]->mc."|".$kontrak_D[$i]->tipe."|".$kontrak_D[$i]->box."</option>";
-                                        foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
-                                        }
-                                    echo "</select>";
-                                    echo "</td>";
-                                    echo "<td><input type='text' name='box[$i]' id='box[$i]' value='".$kontrak_D[$i]->box."'></td>";
-                                    echo "<td><input type='text' name='substance[$i]' id='substance[$i]' value='".$kontrak_D[$i]->substance."'></td>";
-                                    echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]' value='".$kontrak_D[$i]->pcsKontrak."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='toleransiLebih[$i]' id='toleransiLebih[$i]' value='".$kontrak_D[$i]->pctToleransiLebihKontrak."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='toleransiKurang[$i]' id='toleransiKurang[$i]' value='".$kontrak_D[$i]->pctToleransiKurangKontrak."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='harga[$i]' id='harga[$i]' value='".$kontrak_D[$i]->harga_pcs."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='tax[$i]' id='tax[$i]' value='".$kontrak_D[$i]->tax."' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='tipeBox[$i]' id='tipeBox[$i]' ></td>";
-                                    echo "<td><input type='text' name='pcsToleransiLebih[$i]' id='pcsToleransiLebih[$i]' readonly ></td>";
-                                    echo "<td><input type='text' name='kgToleransiLebih[$i]' id='kgToleransiLebih[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='pcsToleransiKurang[$i]' id='pcsToleransiKurang[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='kgToleransiKurang[$i]' id='kgToleransiKurang[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='totalSblTax[$i]' id='totalSblTax[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='hargaTax[$i]' id='hargaTax[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='hargaKg[$i]' id='hargaKg[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='Total[$i]' id='Total[$i]' readonly></td>";
-                                    echo "</tr>";
-                                    
-                                    
-                                } else 
-                                {
-                                    // echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly style='color:rgb(255, 255, 255)'>";
-                                    echo "<tr>";
-                                    echo    "<td>";
-                                    echo   "<select class='js-example-basic-single col-md-12' name='nama_$i' id='nama_$i'>";
-                                        echo   "<option value=''>---</option>";
-                                        foreach ($mc as $data) {
-                                            echo "<option value='$data->id|$data->gramSheetBoxKontrak|$data->substance|$data->tipeMc|$data->box'>$data->kode-$data->revisi|$data->tipeMc</option>";
-                                        }
-                                    echo "</select>";
-                                    echo "</td>";
-                                    echo "<td><input type='text' name='substance[$i]' id='substance[$i]'></td>";
-                                    echo "<td><input type='text' name='qtyPcs[$i]' id='qtyPcs[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='toleransiLebih[$i]' id='toleransiLebih[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='toleransiKurang[$i]' id='toleransiKurang[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='harga[$i]' id='harga[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='tax[$i]' id='tax[$i]' onchange='getData();'></td>";
-                                    echo "<td><input type='text' name='tipeBox[$i]' id='tipeBox[$i]' ></td>";
-                                    echo "<td><input type='text' name='pcsToleransiLebih[$i]' id='pcsToleransiLebih[$i]'></td>";
-                                    echo "<td><input type='text' name='kgToleransiLebih[$i]' id='kgToleransiLebih[$i]'></td>";
-                                    echo "<td><input type='text' name='pcsToleransiKurang[$i]' id='pcsToleransiKurang[$i]'></td>";
-                                    echo "<td><input type='text' name='kgToleransiKurang[$i]' id='kgToleransiKurang[$i]'></td>";
-                                    echo "<td><input type='text' name='totalSblTax[$i]' id='totalSblTax[$i]' ></td>";
-                                    echo "<td><input type='text' name='hargaTax[$i]' id='hargaTax[$i]' ></td>";
-                                    echo "<td><input type='text' name='qtyKg[$i]' id='qtyKg[$i]'></td>";
-                                    echo "<td><input type='text' name='hargaKg[$i]' id='hargaKg[$i]' readonly></td>";
-                                    echo "<td><input type='text' name='Total[$i]' id='Total[$i]' ></td>";
-                                    echo "</tr>";
-                                }   
-                            }
-                            ?>
-                            
-                            </tbody>
-                        </table>
-                        {{-- <div class="card-body" style="border-right: -20px"> 
-                        
-                            <table class="table table-bordered" id="detail_kontrak">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Tanggal Kirim</th>
-                                        <th scope="col">Qty(Pcs)</th>
-                                        <th scope="col">Qty(Kg)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $counts = 5;
-                                    
-                                    for ($i=1; $i<=$counts; $i++) { 
-                                        
-                                        echo "<tr>";
-                                        echo "<td><input type='date' name='tglKirim[$i]' id='tglKirim[$i]'></td>";
-                                        echo "<td><input type='text' name='dtPcs[$i]' id='dtPcs[$i]' onchange='getData();'></td>";
-                                        echo "<td><input type='text' name='dtKg[$i]' id='dtKg[$i]' onchange='getData();'></td>";
-                                        echo "</tr>";
-    
-                                        
-                                    }
-                                    ?>
-                                                
-                                </tbody>
-                            </table>
-                        </div> --}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Quantity</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="qtyPcs" id="qtyPcs" value="">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>Pcs</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="qtyKg" id="qtyKg" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>Kg</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Harga pcs</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line col-md-11" name="harga" id="harga" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Harga kg</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Toleransi</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebih" id="toleransiLebih" value="" readonly>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurang" id="toleransiKurang" value="" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Toleransi Lebih</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihPcs" id="toleransiLebihPcs" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>pcs</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihKg" id="toleransiLebihKg" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>Kg</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Toleransi Kurang</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangPcs" id="toleransiKurangPcs" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>pcs</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangKg" id="toleransiKurangKg" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>Kg</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>PPN</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11" name="ppn" id="ppn" value="">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>%</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Total</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line col-md-11" name="total" id="total" value="" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>
@@ -449,15 +623,31 @@
             // getGramKontrak();
         } );
     } );
+
+    $(".mastercard").ready(function(){
+                
+                var table = $("#data_mc").DataTable({
+                    select: true,
+                });
+                
+                $('#data_mc tbody').on( 'click', 'td', function () {
+                    var mc = (table.row(this).data());
+                    
+                    document.getElementById('mcid').value = mc[0];
+                    document.getElementById('namamc').value = mc[1];
+                    document.getElementById('namaBarang').value = mc[2];
+                    document.getElementById('tipeBox').value = mc[3];
+                    document.getElementById('flute').value = mc[4];
+                    document.getElementById('kualitas').value = mc[5];
+                    document.getElementById('gram').value = mc[6];
+                    document.getElementById('warna').value = mc[7];
+                    
+                    // getGramKontrak();
+                } );
+            } );
                             
     function getData() {
-        var data1 = document.getElementById("nama_0").value;
-        var data2 = document.getElementById("nama_1").value;
-        var data3 = document.getElementById("nama_2").value;
-        var data4 = document.getElementById("nama_3").value;
-        var data5 = document.getElementById("nama_4").value;
         
-        if (data1 != '') {
             var arr1 = data1.split('|');
             var idmc = arr1[0];
             var beratBox = arr1[1];
@@ -494,145 +684,6 @@
             document.getElementById("idmcpel[0]").value = idmc;
             document.getElementById("tipeBox[0]").value = tipeBox;
             document.getElementById("box[0]").value = box;
-
-        } 
-        if (data2 != '') {
-            var arr1 = data1.split('|');
-            var idmc = arr1[0];
-            var beratBox = arr1[1];
-            var substance = arr1[2];
-            var tipeBox = arr1[3];
-            var harga = document.getElementById('harga[1]').value;
-            var taxpct = document.getElementById('tax[1]').value;
-            var qty = document.getElementById('qtyPcs[1]').value;
-            var lebihpct = document.getElementById('toleransiLebih[1]').value;
-            var kurangpct = document.getElementById('toleransiKurang[1]').value;
-            var totalKg = qty * beratBox;
-            var lebihpcs =  qty * (lebihpct/100) ;
-            var hargablmtax = qty * harga;
-            var hargaKg = hargablmtax/totalKg;
-            var taxrp = (hargablmtax*taxpct)/100;
-            var total = taxrp + hargablmtax ;
-            var lebihkg = totalKg * (lebihpct/100);
-            var kurangpcs =  qty * (kurangpct/100) ;
-            var kurangkg = totalKg * (kurangpct/100);
-
-            document.getElementById("qtyKg[1]").value = totalKg.toFixed(2);
-            document.getElementById("pcsToleransiLebih[1]").value = lebihpcs.toFixed(2);
-            document.getElementById("kgToleransiLebih[1]").value = lebihkg.toFixed(2);
-            document.getElementById("pcsToleransiKurang[1]").value = kurangpcs.toFixed(2);
-            document.getElementById("kgToleransiKurang[1]").value = kurangkg.toFixed(2);
-            document.getElementById("totalSblTax[1]").value = hargablmtax.toFixed(2);
-            document.getElementById("hargaTax[1]").value = taxrp.toFixed(2);
-            document.getElementById("Total[1]").value = total.toFixed(2);
-            document.getElementById("hargaKg[1]").value = hargaKg.toFixed(2);
-            document.getElementById("substance[1]").value = substance;
-            document.getElementById("idmcpel[1]").value = idmc;
-            document.getElementById("tipeBox[1]").value = tipeBox;
-        } 
-        if (data3 != '') {
-            var arr1 = data1.split('|');
-            var idmc = arr1[0];
-            var beratBox = arr1[1];
-            var substance = arr1[2];
-            var tipeBox = arr1[3];
-            var harga = document.getElementById('harga[2]').value;
-            var taxpct = document.getElementById('tax[2]').value;
-            var qty = document.getElementById('qtyPcs[2]').value;
-            var lebihpct = document.getElementById('toleransiLebih[2]').value;
-            var kurangpct = document.getElementById('toleransiKurang[2]').value;
-            var totalKg = qty * beratBox;
-            var lebihpcs =  qty * (lebihpct/100) ;
-            var hargablmtax = qty * harga;
-            var hargaKg = hargablmtax/totalKg;
-            var taxrp = (hargablmtax*taxpct)/100;
-            var total = taxrp + hargablmtax ;
-            var lebihkg = totalKg * (lebihpct/100);
-            var kurangpcs =  qty * (kurangpct/100) ;
-            var kurangkg = totalKg * (kurangpct/100);
-
-            document.getElementById("qtyKg[2]").value = totalKg.toFixed(2);
-            document.getElementById("pcsToleransiLebih[2]").value = lebihpcs.toFixed(2);
-            document.getElementById("kgToleransiLebih[2]").value = lebihkg.toFixed(2);
-            document.getElementById("pcsToleransiKurang[2]").value = kurangpcs.toFixed(2);
-            document.getElementById("kgToleransiKurang[2]").value = kurangkg.toFixed(2);
-            document.getElementById("totalSblTax[2]").value = hargablmtax.toFixed(2);
-            document.getElementById("hargaTax[2]").value = taxrp.toFixed(2);
-            document.getElementById("Total[2]").value = total.toFixed(2);
-            document.getElementById("hargaKg[2]").value = hargaKg.toFixed(2);
-            document.getElementById("substance[2]").value = substance;
-            document.getElementById("idmcpel[2]").value = idmc;
-            document.getElementById("tipeBox[2]").value = tipeBox;
-        }
-        if (data4 != '') {
-            var arr1 = data1.split('|');
-            var idmc = arr1[0];
-            var beratBox = arr1[1];
-            var substance = arr1[2];
-            var tipeBox = arr1[3];
-            var harga = document.getElementById('harga[3]').value;
-            var taxpct = document.getElementById('tax[3]').value;
-            var qty = document.getElementById('qtyPcs[3]').value;
-            var lebihpct = document.getElementById('toleransiLebih[3]').value;
-            var kurangpct = document.getElementById('toleransiKurang[3]').value;
-            var totalKg = qty * beratBox;
-            var lebihpcs =  qty * (lebihpct/100) ;
-            var hargablmtax = qty * harga;
-            var hargaKg = hargablmtax/totalKg;
-            var taxrp = (hargablmtax*taxpct)/100;
-            var total = taxrp + hargablmtax ;
-            var lebihkg = totalKg * (lebihpct/100);
-            var kurangpcs =  qty * (kurangpct/100) ;
-            var kurangkg = totalKg * (kurangpct/100);
-
-            document.getElementById("qtyKg[3]").value = totalKg.toFixed(2);
-            document.getElementById("pcsToleransiLebih[3]").value = lebihpcs.toFixed(2);
-            document.getElementById("kgToleransiLebih[3]").value = lebihkg.toFixed(2);
-            document.getElementById("pcsToleransiKurang[3]").value = kurangpcs.toFixed(2);
-            document.getElementById("kgToleransiKurang[3]").value = kurangkg.toFixed(2);
-            document.getElementById("totalSblTax[3]").value = hargablmtax.toFixed(2);
-            document.getElementById("hargaTax[3]").value = taxrp.toFixed(2);
-            document.getElementById("Total[3]").value = total.toFixed(2);
-            document.getElementById("hargaKg[3]").value = hargaKg.toFixed(2);
-            document.getElementById("substance[3]").value = substance;
-            document.getElementById("idmcpel[3]").value = idmc;   
-            document.getElementById("tipeBox[3]").value = tipeBox;                
-        }
-        if (data5 != '') {
-            var arr1 = data1.split('|');
-            var idmc = arr1[0];
-            var beratBox = arr1[1];
-            var substance = arr1[2];
-            var tipeBox = arr1[3];
-            var harga = document.getElementById('harga[4]').value;
-            var taxpct = document.getElementById('tax[4]').value;
-            var qty = document.getElementById('qtyPcs[4]').value;
-            var lebihpct = document.getElementById('toleransiLebih[4]').value;
-            var kurangpct = document.getElementById('toleransiKurang[4]').value;
-            var totalKg = qty * beratBox;
-            var lebihpcs =  qty * (lebihpct/100) ;
-            var hargablmtax = qty * harga;
-            var hargaKg = hargablmtax/totalKg;
-            var taxrp = (hargablmtax*taxpct)/100;
-            var total = taxrp + hargablmtax ;
-            var lebihkg = totalKg * (lebihpct/100);
-            var kurangpcs =  qty * (kurangpct/100) ;
-            var kurangkg = totalKg * (kurangpct/100);
-
-            document.getElementById("qtyKg[4]").value = totalKg.toFixed(2);
-            document.getElementById("pcsToleransiLebih[4]").value = lebihpcs.toFixed(2);
-            document.getElementById("kgToleransiLebih[4]").value = lebihkg.toFixed(2);
-            document.getElementById("pcsToleransiKurang[4]").value = kurangpcs.toFixed(2);
-            document.getElementById("kgToleransiKurang[4]").value = kurangkg.toFixed(2);
-            document.getElementById("totalSblTax[4]").value = hargablmtax.toFixed(2);
-            document.getElementById("hargaTax[4]").value = taxrp.toFixed(2);
-            document.getElementById("Total[4]").value = total.toFixed(2);
-            document.getElementById("hargaKg[4]").value = hargaKg.toFixed(2);
-            document.getElementById("substance[4]").value = substance;
-            document.getElementById("idmcpel[4]").value = idmc;
-            document.getElementById("tipeBox[4]").value = tipeBox;
-        }
-        
     }
                     
                         
