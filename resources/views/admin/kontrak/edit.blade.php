@@ -270,7 +270,7 @@
                                                 <label>Pilih Mastercard</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" value="{{ $kontrak_D->mc }}" readonly>
                                                 <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" value="" readonly>
                                             </div>
                                             <div class="modal fade" id="Mastercard">
@@ -338,7 +338,7 @@
                                                         <label>Nama Barang</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="namaBarang" id="namaBarang" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="namaBarang" id="namaBarang" value="{{ $kontrak_D->box }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -352,7 +352,7 @@
                                                         <label>Tipe Box</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="tipeBox" id="tipeBox" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="tipeBox" id="tipeBox" value="{{ $kontrak_D->tipeBox }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -366,7 +366,7 @@
                                                         <label>Flute</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="flute" id="flute" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="flute" id="flute" value="{{ $kontrak_D->flute }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -380,7 +380,7 @@
                                                         <label>Gramatur</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="gram" id="gram" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="gram" id="gram" value="{{ $kontrak_D->gram }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -394,7 +394,7 @@
                                                         <label>Kualitas</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="kualitas" id="kualitas" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="kualitas" id="kualitas" value="{{ $kontrak_D->substance }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -408,7 +408,7 @@
                                                         <label>Warna</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="warna" id="warna" value="" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="warna" id="warna" value="{{ $kontrak_D->warna }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -427,13 +427,13 @@
                                                 <label>Quantity</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="qtyPcs" id="qtyPcs" value="">
+                                                <input type="text" class="form-control txt_line col-md-11" name="qtyPcs" id="qtyPcs" value="{{ $kontrak_D->pcsKontrak }}">
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Pcs</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="qtyKg" id="qtyKg" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="qtyKg" id="qtyKg" value="{{ $kontrak_D->kgKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -450,7 +450,7 @@
                                                 <label>Harga pcs</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="harga" id="harga" value="">
+                                                <input type="text" class="form-control txt_line col-md-11" name="harga" id="harga" value="{{ $kontrak_D->harga_pcs }}">
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +464,7 @@
                                                 <label>Harga kg</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="{{ $kontrak_D->harga_kg }}" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -478,10 +478,10 @@
                                                 <label>Toleransi</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebih" id="toleransiLebih" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebih" id="toleransiLebih" value="{{ $kontrak_D->pctToleransiLebihKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurang" id="toleransiKurang" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurang" id="toleransiKurang" value="{{ $kontrak_D->pctToleransiKurangKontrak }}" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -495,13 +495,13 @@
                                                 <label>Toleransi Lebih</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihPcs" id="toleransiLebihPcs" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihPcs" id="toleransiLebihPcs" value="{{ $kontrak_D->pcsLebihToleransiKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>pcs</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihKg" id="toleransiLebihKg" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihKg" id="toleransiLebihKg" value="{{ $kontrak_D->kgLebihToleransiKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -518,13 +518,13 @@
                                                 <label>Toleransi Kurang</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangPcs" id="toleransiKurangPcs" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangPcs" id="toleransiKurangPcs" value="{{ $kontrak_D->pcsKurangToleransiKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>pcs</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangKg" id="toleransiKurangKg" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangKg" id="toleransiKurangKg" value="{{ $kontrak_D->pcsKurangToleransiKontrak }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -541,13 +541,13 @@
                                                 <label>PPN</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="ppn" id="ppn" value="">
+                                                <input type="text" class="form-control txt_line col-md-11" name="ppn" id="ppn" value="{{ $kontrak_D->ppn }}">
                                             </div>
                                             <div class="col-md-1">
                                                 <label>%</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="{{ $kontrak_D->tax }}" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label></label>
@@ -564,7 +564,7 @@
                                                 <label>Total</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="total" id="total" value="" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="total" id="total" value="{{ $kontrak_D->amountTotal }}" readonly>
                                             </div>
                                         </div>
                                     </div>
