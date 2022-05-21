@@ -1,4 +1,3 @@
-
 <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 
 @extends('admin.templates.partials.default')
