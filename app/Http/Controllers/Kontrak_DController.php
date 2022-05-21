@@ -351,11 +351,12 @@ class Kontrak_DController extends Controller
         // tampilkan data yang akan di edit
         $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
             ->leftJoin('box', 'mc.box_id', '=', 'box.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'box.namaBarang as box')
-            ->get();
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'box.namaBarang as box', 'mc.tipeBox as tipeBox','mc.flute as flute', 'color_combine.nama as warna')
+            ->first();
 
         $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
@@ -364,7 +365,7 @@ class Kontrak_DController extends Controller
 
 
         // dd($kontrak_D);
-        $count = count($kontrak_D);
+        // $count = count($kontrak_D);
 
 
         // dd($kontrak_M);
@@ -373,7 +374,7 @@ class Kontrak_DController extends Controller
             'mc',
             'top',
             'sales',
-            'count',
+            // 'count',
             'kontrak_D'
         ), ['kontrak_M' => $kontrak_M]);
     }
