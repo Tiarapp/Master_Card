@@ -44,13 +44,15 @@ class OpiController extends Controller
 
             $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                            ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
                             ->orderBy($order, $dir)
                             ->get();
 
-            $totalFiltered = Opi_M::opi()->where('opi_m.id','LIKE',"%{$search}%")
+            $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                              ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                              ->count();
             // dd($opi);
         }
@@ -98,13 +100,15 @@ class OpiController extends Controller
                 $nestedData['tipeOrder'] = $opi->tipeOrder;
                 $nestedData['namacc'] = $opi->namacc;
                 $nestedData['joint'] = $opi->joint;
-                $nestedData['KertasAtas'] = ($opi->kertasMcAtas = "BK" ? "K" : $opi->kertasMcAtas);
+                $nestedData['KertasAtas'] = ($opi->kertasMcAtas == "BK" ? "K" : "M");
+                // $nestedData['KertasAtas'] = $opi->kertasMcAtas;
                 $nestedData['gramKertasAtas'] = $opi->gramKertasAtas;
                 $nestedData['gramKertasflute1'] = $opi->gramKertasflute1;
                 $nestedData['gramKertastengah'] = $opi->gramKertastengah;
                 $nestedData['gramKertasflute2'] = $opi->gramKertasflute2;
                 $nestedData['gramKertasbawah'] = $opi->gramKertasbawah;
-                $nestedData['kertasMcbawah'] = ($opi->kertasMcbawah = "BK" ? "K" : $opi->kertasMcbawah);
+                $nestedData['kertasMcbawah'] = ($opi->kertasMcbawah == "BK" ? "K" : "M");
+                // $nestedData['kertasMcbawah'] = $opi->kertasMcbawah;
                 $nestedData['wax'] = $opi->wax;
                 $nestedData['gram'] = $opi->gram;
                 $nestedData['tglKontrak'] = $opi->tglKontrak;
@@ -116,13 +120,15 @@ class OpiController extends Controller
                 $nestedData['koli'] = $opi->koli;
                 $nestedData['status'] = $opi->status;
                 $nestedData['harga_kg'] = $opi->harga_kg;
-                $nestedData['kertasMcAtasK'] = ($opi->kertasMcAtasK = "BK" ? "K" : $opi->kertasMcAtasK);
+                $nestedData['kertasMcAtasK'] = ($opi->kertasMcAtasK == "BK" ? "K" : "M");
+                // $nestedData['kertasMcAtasK'] = $opi->kertasMcAtasK;
                 $nestedData['gramKertasAtasK'] = $opi->gramKertasAtasK;
                 $nestedData['gramKertasflute1K'] = $opi->gramKertasflute1K;
                 $nestedData['gramKertastengahK'] = $opi->gramKertastengahK;
                 $nestedData['gramKertasflute2K'] = $opi->gramKertasflute2K;
                 $nestedData['gramKertasbawahK'] = $opi->gramKertasbawahK;
-                $nestedData['kertasMcbawahK'] = ($opi->kertasMcbawahK = "BK" ? "K" : $opi->kertasMcbawahK);
+                $nestedData['kertasMcbawahK'] = ($opi->kertasMcbawahK == "BK" ? "K" : "M");
+                // $nestedData['kertasMcbawahK'] = $opi->kertasMcbawahK;
                 $nestedData['kodeBarang'] = $opi->kodeBarang;
                 $nestedData['tipeCreasCorr'] = $opi->tipeCreasCorr;
                 $nestedData['bungkus'] = $opi->bungkus;
@@ -255,7 +261,7 @@ class OpiController extends Controller
             ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
             ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
             ->where('opi_m.id', '=', $id)
-            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv' )
+            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv' )
             ->first();
 
         $opi2 = DB::table('opi_m')
@@ -265,8 +271,7 @@ class OpiController extends Controller
         ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder' )
         ->first();
 
-
-            // var_dump();
+        // dd($opi);
 
         return view('admin.opi.pdf', compact('opi','opi2'));
     }

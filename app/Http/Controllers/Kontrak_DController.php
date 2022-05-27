@@ -172,7 +172,7 @@ class Kontrak_DController extends Controller
     public function create()
     {
 
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -335,7 +335,7 @@ class Kontrak_DController extends Controller
     public function edit($id)
     {
         // menampilkan untuk dropdown
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -370,7 +370,7 @@ class Kontrak_DController extends Controller
 
         // dd($kontrak_M);
         return view('admin.kontrak.edit', compact(
-            // 'cust',
+            'cust',
             'mc',
             'top',
             'sales',
@@ -556,7 +556,7 @@ class Kontrak_DController extends Controller
     public function pdfprint($id){
 
 
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -609,7 +609,7 @@ class Kontrak_DController extends Controller
 
         // dd($kontrak_M);
         return view('admin.kontrak.pdf', compact(
-            // 'cust',
+            'cust',
             'mc',
             'top',
             'sales',
