@@ -158,7 +158,11 @@
                                                 <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
                                                     <option value="Order Baru">Order Baru</option>
                                                     <option value="Order Ulang">Order Ulang</option>
-                                                    <option value="Order Ulang Perubahan">Order Ulang Perubahan</option>
+                                                    <option value="OUP Design">OUP Design</option>
+                                                    <option value="OUP Ukuran">OUP Ukuran</option>
+                                                    <option value="OUP Kualitas">OUP Kualitas</option>
+                                                    <option value="OUP Warna">OUP Warna</option>
+                                                    <option value="OUP Nama Item">OUP Nama Item</option>
                                                 </select>
                                             </div>
                                         </div>

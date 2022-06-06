@@ -67,6 +67,73 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label>Pilih Customer</label>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" onchange="getGramKontrak()" readonly>
+                                                    </div>
+                                                    
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="Customer">
+                                                        <div class="modal-dialog modal-xl">
+                                                            
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">List Customer</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body customer">
+                                                                    <div class="card-body">
+                                                                        <table class="table table-bordered" id="data_customer">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col">Kode</th>
+                                                                                    <th scope="col">Nama Customer</th>
+                                                                                    <th scope="col">Alamat Kantor</th>
+                                                                                    <th scope="col">Telp</th>
+                                                                                    <th scope="col">Fax</th>
+                                                                                    <th scope="col">Alamat Kirim</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php 
+                                                                                // foreach ($cust as $data) { ?>
+                                                                                    {{-- <tr>
+                                                                                        <td scope="row">{{ $data->Kode }}</td>
+                                                                                        <td>{{ $data->Nama }}</td>
+                                                                                        <td>{{ $data->AlamatKantor }}</td>
+                                                                                        <td>{{ $data->TelpKantor }}</td>
+                                                                                        <td>{{ $data->FaxKantor }}</td>
+                                                                                        <td>{{ $data->AlamatKirim }}</td>
+                                                                                    </tr> --}}
+                                                                                    <?php
+                                                                                // }
+                                                                                ?>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" data-toggle="modal" data-target="#Customer">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Kode MC</label>
                                         </div>
@@ -229,6 +296,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Box Prod</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="luasSheetBoxProd" id="luasSheetBoxProd" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Berat Sheet Box Kontrak</label>
                                         </div>
                                         <div class="col-md-4">
@@ -305,6 +380,17 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" name="luasSheet" id="luasSheet" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            M<sup>2</sup>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Corr Prod</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="luasSheetProd" id="luasSheetProd" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             M<sup>2</sup>
@@ -736,12 +822,15 @@
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
-                var luas =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
-                console.log(luas);
-                document.getElementById("luasSheet").value = luas.toFixed(2);
-                document.getElementById("luasSheetBox").value = luas.toFixed(2);
+                // console.log(luas);
+                document.getElementById("luasSheet").value = luasmkt.toFixed(2);
+                document.getElementById("luasSheetBox").value = luasmkt.toFixed(2);
+                document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
+                document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
             } else {
 
                 document.getElementById("panjangSheet").value = null;
@@ -860,9 +949,10 @@
                 Kbawah = 0 ;
             }
             
-            // result = Kbf*1.36;
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
-            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
+            gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
@@ -886,22 +976,26 @@
                 Kbawah = 0 ;
             }
             
-            result = (luasSheet * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
-            result2 = (luasSheetBox * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.36) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             
         } else {
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
-            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
+            
+            gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
-            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
-            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
         }
         
         return result;
@@ -928,8 +1022,8 @@
         var Ptengah = parseFloat(document.getElementById('Ptengah').value);
         var Pcf = parseFloat(document.getElementById('Pcf').value);
         var Pbawah = parseFloat(document.getElementById('Pbawah').value);
-        var luasSheet = parseFloat(document.getElementById('luasSheet').value);
-        var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
+        var luasSheet = parseFloat(document.getElementById('luasSheetProd').value);
+        var luasSheetBox = parseFloat(document.getElementById('luasSheetBoxProd').value);
         
         var result, result2;
         
@@ -950,13 +1044,15 @@
                 Pbawah = 0 ;
             }
             
-            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -975,17 +1071,21 @@
                 Pbawah = 0 ;
             }
             
-            result = (luasSheet * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             
         } else {
-            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
+
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);

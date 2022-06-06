@@ -52,7 +52,7 @@
 		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000"><br></font></b></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="31" align="left" valign=bottom><font size=4>MC1716-R2</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="31" align="left" valign=bottom><font size=4>{{ $mc->kode }}</font></td>
 		<td colspan=7 align="center" valign=bottom><b><font size=5 color="#000000">PT. SARANA PACKAGING AGRAPANA</font></b></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=bottom sdnum="1033;0;#,##0"><font face="Calibri" color="#000000"><br></font></td>
@@ -105,28 +105,28 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="49" align="left" valign=middle><b><font face="Calibri" color="#000000">CUSTOMER</font></b></td>
-		<td colspan=3 align="left" valign=middle><font face="Calibri" size=4 color="#000000">CV. Sumber Sari Pangan</font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000">Bentuk</font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000">B1</font></td>
-		<td colspan=2 align="left" valign=middle><font face="Calibri" color="#000000">Male-Flat</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="49" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3 >CUSTOMER</font></b></td>
+		<td colspan=3 align="left" valign=middle><font face="Calibri" size=4 color="#000000">#</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size=3>Bentuk</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->tipeBox }}</font></td>
+		<td colspan=2 align="left" valign=middle><font face="Calibri" size=3 color="#000000">{{ $mc->tipeCrease }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="25" align="left" valign=middle><b><font face="Calibri" color="#000000">ITEM</font></b></td>
-		<td colspan=6 align="left" valign=middle><font face="Calibri" size=4 color="#000000">Box Morris Twin 40</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="25" align="left" valign=middle><b><font face="Calibri" size=3 color="#000000">ITEM</font></b></td>
+		<td colspan=6 align="left" valign=middle><font face="Calibri" size=4 color="#000000">{{ $mc->namaBarang }}</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000">`</font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
 		<td height="20" align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Calibri" color="#000000">P</font></b></td>
+		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>P</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Calibri" color="#000000">L</font></b></td>
+		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>L</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -136,14 +136,14 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="24" align="left" valign=middle><b><font face="Calibri" color="#000000">UK. SHEET CORR</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="1589" sdnum="1033;"><font face="Calibri" color="#000000">1589</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="24" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>UK. SHEET CORR</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="1589" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->panjangSheetBox }}</font></td>
 		<td align="center" valign=middle><font face="Calibri" color="#000000">x</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="589" sdnum="1033;"><font face="Calibri" color="#000000">589</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="589" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->lebarSheetBox }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">mm</font></td>
 		<td align="right" valign=middle bgcolor="#FFFFFF" sdval="0" sdnum="1033;"><font face="Calibri" color="#FFFFFF">Err:504</font></td>
-		<td align="center" valign=middle><b><font face="Calibri" color="#000000">OUT</font></b></td>
-		<td align="right" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF">4.24</font></td>
+		<td align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>OUT</font></b></td>
+		<td align="right" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF">0</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -162,21 +162,21 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">LUAS SHEET CORR</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>LUAS SHEET CORR</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">                                                                       </font></td>
-		<td align="right" valign=middle sdval="0.935921" sdnum="1033;0;0.000"><font face="Calibri" color="#000000">0.936</font></td>
+		<td align="right" valign=middle sdval="0.935921" sdnum="1033;0;0.000"><font face="Calibri" color="#000000" size=3>{{ $mc->luasSheetBox }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">m</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td colspan=2 align="left" valign=middle><b><font face="Calibri" color="#000000">BERAT KUALITAS PRODUKSI</font></b></td>
-		<td align="right" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000">0.41</font></td>
+		<td colspan=2 align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>BERAT KUALITAS PRODUKSI</font></b></td>
+		<td align="right" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>{{ $mc->gramSheetCorrProduksi2 }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">BERAT SHEET CORR</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>BERAT SHEET CORR</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="right" valign=middle sdval="0.38372761" sdnum="1033;0;0.00"><font face="Calibri" color="#000000">0.38</font></td>
+		<td align="right" valign=middle sdval="0.38372761" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>{{ $mc->gramSheetCorrProduksi2 }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">Kg</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -192,47 +192,47 @@
 		<td align="left" valign=middle sdnum="1033;0;0.000"><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td colspan=2 align="left" valign=top><b><font face="Times New Roman" size=5 color="#000000"><br></font></b></td>
-		<td align="right" valign=middle><b><font face="Calibri" color="#000000">BERAT / BOX</font></b></td>
-		<td align="right" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000">0.38</font></td>
+		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>BERAT / BOX</font></b></td>
+		<td align="right" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>0.38</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle><b><font face="Calibri" color="#000000">KUALITAS</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>KUALITAS</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">L1</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">BF</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">LT</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">CF</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">L2</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>L1</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>BF</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>LT</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>CF</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>L2</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">FLUTE</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>FLUTE</font></b></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">PRODUKSI</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000">K</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000">125</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000">125</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000">110</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000">M</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdnum="1033;0;_(* #,##0_);_(* \(#,##0\);_(* &quot;-&quot;??_);_(@_)"><font face="Calibri" color="#000000"> BF </font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>PRODUKSI</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>K</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>125</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>125</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000" size=3>110</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>M</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdnum="1033;0;_(* #,##0_);_(* \(#,##0\);_(* &quot;-&quot;??_);_(@_)"><font face="Calibri" color="#000000" size=3> BF </font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">KONTRAK</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000">K</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000">125</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000">125</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000">110</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000">M</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>KONTRAK</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>K</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>125</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>125</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000" size=3>110</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>M</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -265,9 +265,9 @@
 	</tr>
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">P</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">L</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">T</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>P</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>L</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>T</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -277,10 +277,10 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">UK DALAM BOX</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="480" sdnum="1033;"><font face="Calibri" color="#000000">480</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="295" sdnum="1033;"><font face="Calibri" color="#000000">295</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="285" sdnum="1033;"><font face="Calibri" color="#000000">285</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>UK DALAM BOX</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="480" sdnum="1033;"><font face="Calibri" color="#000000" size=3>480</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="295" sdnum="1033;"><font face="Calibri" color="#000000" size=3>295</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="285" sdnum="1033;"><font face="Calibri" color="#000000" size=3>285</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">mm</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -290,7 +290,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">UK LUAR BOX</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>UK LUAR BOX</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -303,7 +303,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">CREASING CORR</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>CREASING CORR</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -316,7 +316,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000">CREASING CONV</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>CREASING CONV</font></b></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -347,7 +347,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">FINISHING BOX</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>FINISHING BOX</font></b></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -358,8 +358,8 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">JOIN</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle><font face="Calibri" color="#000000">Glue</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>JOIN</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle><font face="Calibri" color="#000000" size=3>Glue</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -370,57 +370,57 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">WAX</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>WAX</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">UK SHEET BOX/CONV</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>UK SHEET BOX/CONV</font></b></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="right" valign=middle sdval="1589" sdnum="1033;"><font face="Calibri" color="#000000">1589</font></td>
+		<td align="right" valign=middle sdval="1589" sdnum="1033;"><font face="Calibri" color="#000000" size=3>1589</font></td>
 		<td align="center" valign=middle><font face="Calibri" color="#000000">x</font></td>
-		<td align="left" valign=middle sdval="589" sdnum="1033;"><font face="Calibri" color="#000000">589</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">PLONG</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
+		<td align="left" valign=middle sdval="589" sdnum="1033;"><font face="Calibri" color="#000000" size=3>589</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>PLONG</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">LUAS SHEET BOX/CONV</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>LUAS SHEET BOX/CONV</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000">TAPE</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">BERAT SHEET BOX/CONV</font></b></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">PACKING</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="20" sdnum="1033;0;#,##0"><font face="Calibri" color="#000000">20</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">/koli</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000" size=3>TAPE</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">1 LEMBAR SHEET</font></b></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000">BOX</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>BERAT SHEET BOX/CONV</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">BUNGKUS</font></td>
-		<td align="right" valign=bottom sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>PACKING</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="20" sdnum="1033;0;#,##0"><font face="Calibri" color="#000000" size=3>20</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>/koli</font></td>
+		<td align="left" valign=bottom><font color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>1 LEMBAR SHEET</font></b></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size=3>BOX</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>BUNGKUS</font></td>
+		<td align="right" valign=bottom sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
 		<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -432,7 +432,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">LAIN-LAIN</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>LAIN-LAIN</font></td>
 		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -444,8 +444,8 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">                                                                                                                                                                                                                                     rc </font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Calibri" color="#000000">KETERANGAN</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle><b><font face="Calibri" color="#000000">OUP Desain flap tulisan menjadi merah, Perhatikan warna cetakan, Jumlah kirim sesuai order atau +10%</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>KETERANGAN</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle><b><font face="Calibri" color="#000000" size=2>OUP Desain flap tulisan menjadi merah, Perhatikan warna cetakan, Jumlah kirim sesuai order atau +10%</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -464,11 +464,11 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 height="42" align="center" valign=middle><b><font face="Calibri" color="#000000">WARNA</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">W1</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">W2</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">W3</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000">W4</font></b></td>
+		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 height="42" align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>WARNA</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>W1</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>W2</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000" size=3>W3</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#BFBFBF"><b><font face="Calibri" color="#000000"> size=3W4</font></b></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -477,10 +477,10 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">HTM01</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">PTH01</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">KNG09</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000">MRH01</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>HTM01</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>PTH01</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>KNG09</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=3>MRH01</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -489,30 +489,17 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">PROSES MESIN</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000">0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>PROSES MESIN</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>0</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-	</tr>
-	<tr>
-		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -536,18 +523,31 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000">Gambar</font></b></td>
+		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>Gambar</font></b></td>
 		<td align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000">149.5</font></td>
+		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000" size=3>149.5</font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="center" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
@@ -555,13 +555,13 @@
 	</tr>
 	<tr>
 		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="30" sdnum="1033;0;#,##0"><font face="Calibri" color="#000000">30</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000">483</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="298" sdnum="1033;"><font face="Calibri" color="#000000">298</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000">483</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="295" sdnum="1033;"><font face="Calibri" color="#000000">295</font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="290" sdnum="1033;"><font face="Calibri" color="#000000">290</font></td>
-		<td align="left" valign=bottom sdval="589" sdnum="1033;0;0.0"><b><font face="Calibri" color="#000000">589.0</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="30" sdnum="1033;0;#,##0"><font face="Calibri" color="#000000" size=3>30</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000" size=3>483</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="298" sdnum="1033;"><font face="Calibri" color="#000000" size=3>298</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000" size=3>483</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="295" sdnum="1033;"><font face="Calibri" color="#000000" size=3>295</font></td>
+		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="290" sdnum="1033;"><font face="Calibri" color="#000000" size=3>290</font></td>
+		<td align="left" valign=bottom sdval="589" sdnum="1033;0;0.0"><b><font face="Calibri" color="#000000" size=3>589.0</font></b></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
@@ -573,7 +573,7 @@
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000">149.5</font></td>
+		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000" size=3>149.5</font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
@@ -582,7 +582,7 @@
 	<tr>
 		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td colspan=4 align="center" valign=bottom sdval="1589" sdnum="1033;0;#,##0"><b><font face="Calibri" color="#000000">1,589</font></b></td>
+		<td colspan=4 align="center" valign=bottom sdval="1589" sdnum="1033;0;#,##0"><b><font face="Calibri" color="#000000" size=3>1,589</font></b></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

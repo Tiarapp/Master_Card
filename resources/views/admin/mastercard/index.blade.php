@@ -82,6 +82,7 @@
                             <td> 
                                 <a href="../mastercard/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
                                 <a href="../mastercard/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a> 
+                                <a href="../mastercard/revisi/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Revisi</a> 
                             </td>
                         </tr>
                             <?php

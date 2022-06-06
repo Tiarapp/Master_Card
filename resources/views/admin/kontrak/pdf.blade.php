@@ -1242,7 +1242,7 @@ td
 <td height='20' class='x22' style='height:15pt;'></td>
 <td class='x37'>Packing</td>
 <td class='x38'>:</td>
-<td class='x39'>{{ $kontrakBox->koli }} Box/Colly</td>
+<td class='x39'>{{ ($kontrakBox->koli == "00" ? "100" : $kontrakBox->koli) }} Box/Colly</td>
 <td class='x39'>Bungkus</td>
 <td class='x40'></td>
 <td class='x41'>:</td>
