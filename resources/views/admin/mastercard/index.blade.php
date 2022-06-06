@@ -30,12 +30,12 @@
       <button >
         <a href="{{ route('mastercard.create') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       </button>
-      <button class="btn btn-primary">
+      {{-- <button class="btn btn-primary">
         <a href="{{ route('mastercardb1') }}" style="margin-bottom: 20px; color:white" >B1</a>
-      </button>
-      <button class="btn btn-primary">
+      </button> --}}
+      {{-- <button class="btn btn-primary">
         <a href="{{ route('mastercarddc') }}" style="margin-bottom: 20px; color:white" >DC</a>
-      </button>
+      </button> --}}
       <div class="card-body">
         
         <table class="table table-bordered" id="data_mc">

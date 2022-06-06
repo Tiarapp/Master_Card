@@ -16,7 +16,7 @@ class MastercardController extends Controller
     public function indexb1()
     {
         $mc = DB::table('mc')
-        ->where('tipeBox', '!=', 'DC')
+        // ->where('tipeBox', '!=', 'DC')
         ->get();
 
         return view('admin.mastercard.index', compact('mc'));
