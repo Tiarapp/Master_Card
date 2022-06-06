@@ -50,7 +50,11 @@ class Mastercard extends Model
         'bom_m_id',
         'box_id',
         'colorCombine_id',
-        'createdBy'
+        'createdBy',
+        'customer',
+        'tipeCust',
+        'luasSheetProd',
+        'luasSheetBoxProd'
     ];
     
 }

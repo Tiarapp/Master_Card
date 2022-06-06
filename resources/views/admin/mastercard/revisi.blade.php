@@ -33,7 +33,7 @@
                 </div>
                 @endif
                 
-                <form action="../revisi/{{ $mc->id }}" method="POST" enctype="multipart/form-data">
+                <form action="../prosesRevisi/{{ $mc->id }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-body">
                         <div class="row">
@@ -42,20 +42,120 @@
                                     <h4 class="form-section"> Data Master Item</h4>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Kode</label>
+                                            <label class="control-label">Kode Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode">
+                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" placeholder="Kode Barang">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">No Item</label>
+                                            <label class="control-label">Golongan Customer</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan" onchange="getKodeBarang()">
+                                                <option value={{ $mc->tipeCust }}>{{ $tipe }}</option>
+                                                <option value='001'>Food and Baverage</option>
+                                                <option value='002'>Keramik</option>
+                                                <option value='003'>Frozen Fish</option>
+                                                <option value='004'>Oil</option>
+                                                <option value='005'>Plastik</option>
+                                                <option value='006'>DOC</option>
+                                                <option value='007'>Tissue</option>
+                                                <option value='999'>Others</option>
+                                                <option value='OOO'>Sheet</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <label>Pilih Customer</label>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" onchange="getGramKontrak()" readonly>
+                                                    </div>
+                                                    
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="Customer">
+                                                        <div class="modal-dialog modal-xl">
+                                                            
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">List Customer</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body customer">
+                                                                    <div class="card-body">
+                                                                        <table class="table table-bordered" id="data_customer">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col">Kode</th>
+                                                                                    <th scope="col">Nama Customer</th>
+                                                                                    <th scope="col">Alamat Kantor</th>
+                                                                                    <th scope="col">Telp</th>
+                                                                                    <th scope="col">Fax</th>
+                                                                                    <th scope="col">Alamat Kirim</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php 
+                                                                                // foreach ($cust as $data) { ?>
+                                                                                    {{-- <tr>
+                                                                                        <td scope="row">{{ $data->Kode }}</td>
+                                                                                        <td>{{ $data->Nama }}</td>
+                                                                                        <td>{{ $data->AlamatKantor }}</td>
+                                                                                        <td>{{ $data->TelpKantor }}</td>
+                                                                                        <td>{{ $data->FaxKantor }}</td>
+                                                                                        <td>{{ $data->AlamatKirim }}</td>
+                                                                                    </tr> --}}
+                                                                                    <?php
+                                                                                // }
+                                                                                ?>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" data-toggle="modal" data-target="#Customer">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Kode</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode" readonly>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Revisi</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="text" class="form-control txt_line" name="revisi" id="revisi" value="{{ $revisi }}" placeholder="Kode" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Nama Item</label>
                                         </div>
                                         <div class="col-md-8">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}">
+                                                    <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $mc->namaBarang }}">
                                                 </div>
                                                 <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
                                                     <i class="fas fa-search"></i>
@@ -63,14 +163,6 @@
                                             </div>
                                         </div>
                                         {{--  --}}
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <label class="control-label">Nama Item</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->namaBarang }}" name="namaBarang" id="namaBarang" onchange="getKodeBarang();">
-                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
@@ -115,7 +207,6 @@
                                                                         <tr>
                                                                             <th scope="col">ID.</th>
                                                                             <th scope="col">Kode</th>
-                                                                            <th scope="col">Kode Barang</th>
                                                                             <th scope="col">Nama</th>
                                                                             <th scope="col">Tipe Box</th>
                                                                             <th scope="col">flute</th>
@@ -133,7 +224,6 @@
                                                                             <tr>
                                                                                 <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->kodeBarang }}</td>
                                                                                 <td>{{ $data->namaBarang }}</td>
                                                                                 <td>{{ $data->tipebox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
@@ -210,6 +300,15 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" onchange="getKodeBarang();">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Box Prod</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="luasSheetBoxProd" id="luasSheetBoxProd" value="{{ $mc->luasSheetBoxProd }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -290,6 +389,17 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line"  value="{{ $mc->luasSheet }}" name="luasSheet" id="luasSheet" onchange="getKodeBarang();">
+                                        </div>
+                                        <div class="col-md-2">
+                                            M<sup>2</sup>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Luas Sheet Corr Prod</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="luasSheetProd" id="luasSheetProd" value="{{ $mc->luasSheetProd }}" readonly>
                                         </div>
                                         <div class="col-md-2">
                                             M<sup>2</sup>
@@ -512,24 +622,6 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Golongan Customer</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="golongan" id="golongan">
-                                                <option value='001'>Food and Baverage</option>
-                                                <option value='002'>Keramik</option>
-                                                <option value='003'>Frozen Fish</option>
-                                                <option value='004'>Oil</option>
-                                                <option value='005'>Plastik</option>
-                                                <option value='006'>DOC</option>
-                                                <option value='007'>Tissue</option>
-                                                <option value='999'>Others</option>
-                                                <option value='OOO'>Sheet</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
                                             <label class="control-label">Joint</label>
                                         </div>
                                         <div class="col-md-4">
@@ -547,7 +639,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
-                                                <option value='{{ $mc->koli }}'>{{ $mc->koli }}</option>
+                                                <option value='{{ $mc->koli }}'>{{ ($mc->koli == '00' ? "100" : $mc->koli) }}</option>
                                                 <option value='05'>5 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
@@ -706,29 +798,48 @@
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
-            document.getElementById('kodeBarang').value = Box[2];
-            document.getElementById('namaBarang').value = Box[3];
-            document.getElementById('tipebox').value = Box[4];
+            // document.getElementById('kodeBarang').value = Box[2];
+            document.getElementById('namaBarang').value = Box[2];
+            document.getElementById('tipebox').value = Box[3];
             document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[6];
-            document.getElementById('lebarbox').value = Box[7];
-            document.getElementById('tinggibox').value = Box[8];
-            document.getElementById('creasCorr').value = Box[9];
-            document.getElementById('creasConv').value = Box[10];
-            document.getElementById('flute').value = Box[5];
+            document.getElementById('panjangbox').value = Box[5];
+            document.getElementById('lebarbox').value = Box[6];
+            document.getElementById('tinggibox').value = Box[7];
+            document.getElementById('creasCorr').value = Box[8];
+            document.getElementById('creasConv').value = Box[9];
+            document.getElementById('flute').value = Box[4];
             
-            if (Box[4] == 'B1') {
-                var resultP = getID(Box[9]);
-                var resultL = getID(Box[10]);
+            if (Box[3] == 'B1') {
+                var resultP = getID(Box[8]);
+                var resultL = getID(Box[9]);
+                if (Box[4] == "BF") {
+                    faktorp = 43;
+                    faktorl = 10;
+                } else if(Box[4] == "CF"){
+                    faktorp = 47;
+                    faktorl = 13;
+                } else if (Box[4] == "BCF") {
+                    faktorp = 63;
+                    faktorl = 27;
+                }
+                var panjang = Box[5];
+                var lebar = Box[6];
+                var tinggi = Box[7];
                 document.getElementById("lebarSheet").value = parseInt(resultP);
                 document.getElementById("panjangSheet").value = parseInt(resultL);
 
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
-                var luas = (parseInt(resultP) * parseInt(resultL))/1000000;
-                document.getElementById("luasSheet").value = luas.toFixed(3);
-                document.getElementById("luasSheetBox").value = luas.toFixed(3);
+                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
+                // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
+
+                // console.log(luas);
+                document.getElementById("luasSheet").value = luasmkt.toFixed(2);
+                document.getElementById("luasSheetBox").value = luasmkt.toFixed(2);
+                document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
+                document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
             } else {
 
                 document.getElementById("panjangSheet").value = null;
@@ -737,8 +848,8 @@
                 document.getElementById("panjangSheetBox").value = null;
                 document.getElementById("lebarSheetBox").value = null;
                 document.getElementById("luasSheetBox").value = null;
-                document.getElementById("substanceKontrak").value = null;
-                document.getElementById("substanceProduksi").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
             }
         } );
         
@@ -847,9 +958,10 @@
                 Kbawah = 0 ;
             }
             
-            // result = Kbf*1.36;
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
-            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*0) + Kbawah)/1000);
+            gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
@@ -873,21 +985,25 @@
                 Kbawah = 0 ;
             }
             
-            result = (luasSheet * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
-            result2 = (luasSheetBox * (Katas + (Kcf*1.46) + Ktengah + (Kbf*0) + Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.36) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             
         } else {
-            result = (luasSheet * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
-            result2 = (luasSheetBox * (Katas + (Kbf*1.36) + Ktengah + (Kcf*1.46) + Kbawah))/1000;
+            
+            gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
-            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
         }
         
@@ -900,11 +1016,17 @@
         $panjangbox = document.getElementById("panjangSheetBox").value;
         $lebarbox = document.getElementById("lebarSheetBox").value;
 
+        
+        // var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
+        //         var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
+
         $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
 
-        document.getElementById('luasSheet').value = $result;
-        document.getElementById('luasSheetBox').value = $result2;
+        document.getElementById('luasSheet').value = $result.toFixed(3);
+        document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+        document.getElementById('luasSheetProd').value = $result.toFixed(3);
+        document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
     }
 
     function getGramProduksi(){
@@ -915,8 +1037,8 @@
         var Ptengah = parseFloat(document.getElementById('Ptengah').value);
         var Pcf = parseFloat(document.getElementById('Pcf').value);
         var Pbawah = parseFloat(document.getElementById('Pbawah').value);
-        var luasSheet = parseFloat(document.getElementById('luasSheet').value);
-        var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
+        var luasSheet = parseFloat(document.getElementById('luasSheetProd').value);
+        var luasSheetBox = parseFloat(document.getElementById('luasSheetBoxProd').value);
         
         var result, result2;
         
@@ -937,13 +1059,15 @@
                 Pbawah = 0 ;
             }
             
-            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -962,20 +1086,24 @@
                 Pbawah = 0 ;
             }
             
-            result = (luasSheet * (Patas + (Pbf*0) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             
         } else {
-            result = (luasSheet * (Patas + (Pbf*1.36) + Ptengah + (Pcf*1.46) + Pbawah))/1000;
-            result2 = (luasSheetBox * (Patas + (Pbf*1.36) + Ptengah + (Pcf*0) + Pbawah))/1000;
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
+
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
         }
