@@ -78,7 +78,7 @@
                                                     </div>
                                                     
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="Customer">
+                                                    <div class="modal fade" id="List-Customer">
                                                         <div class="modal-dialog modal-xl">
                                                             
                                                             <!-- Modal content-->
@@ -102,17 +102,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                // foreach ($cust as $data) { ?>
-                                                                                    {{-- <tr>
+                                                                                foreach ($cust as $data) { ?>
+                                                                                    <tr>
                                                                                         <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
                                                                                         <td>{{ $data->AlamatKirim }}</td>
-                                                                                    </tr> --}}
+                                                                                    </tr>
                                                                                     <?php
-                                                                                // }
+                                                                                }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -125,7 +125,7 @@
                                                             
                                                         </div>
                                                     </div>
-                                                    <button type="button" data-toggle="modal" data-target="#Customer">
+                                                    <button type="button" data-toggle="modal" data-target="#List-Customer">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
@@ -150,7 +150,7 @@
                                                 <div class="col-md-5">
                                                     <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" readonly>
                                                 </div>
-                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box" id>
+                                                <button type="button" class="col-md-1" data-toggle="modal" data-target="#Box">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
@@ -604,12 +604,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="wax" id="wax">
-                                                <option value='NO WAX'>NO WAX</option>
+                                                <option value=''>NO WAX</option>
                                                 <option value='INSIDE'>INSIDE</option>
                                                 <option value='OUTSIDE'>OUTSIDE</option>
                                                 <option value='IN & OUT'>IN & OUT</option>
                                             </select>
-                                        </div>
+                                        </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
                                     </div>
                                     
                                     <div class="row">
@@ -706,6 +706,25 @@
         $('.js-example-basic-single').select2();
     });
     // Datatable Barang(Item)
+
+    $(".customer").ready(function(){
+        
+        var table = $("#data_customer").DataTable({
+            select: true,
+        });
+        
+        $('#data_customer tbody').on( 'click', 'td', function () {
+            var cust = (table.row(this).data());
+            
+            // document.getElementById('customer_id').value = cust[0]    ;
+            document.getElementById('customer').value = cust[1];
+            // document.getElementById('alamatKirim').value = cust[5];
+            // document.getElementById('telp').value = cust[3];
+            // document.getElementById('fax').value = cust[4];
+            
+            console.log(cust);
+        } );
+    } );
 
     function getKodeBarang() {
         var tujuan = document.getElementById("tujuan").value;

@@ -113,11 +113,14 @@ class Kontrak_DController extends Controller
                 $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
 
                 $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+                $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
+                $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
 
                 $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                 $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
                 $nestedData['nomc'] = $mcKode;
                 $nestedData['kodeBarang'] = $mc->kodeBarang;
+                $nestedData['namaBarang'] = $mc->namaBarang;
                 $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
                 &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>";
                 
@@ -470,75 +473,28 @@ class Kontrak_DController extends Controller
 
         // dd($kontrakm);
 
-        $tax = 0 ;
-        $sblTax = 0 ;
-        $total = 0 ;
+        $kontrakd = Kontrak_D::find($request->kontrakd_id);
 
-        for ($i=0; $i<5 ; $i++) {
-            if (isset($request->detail[$i]) != false) {
-                $kontrakd =Kontrak_D::find($request->detail[$i]);
-
-                $kontrakd->kontrak_m_id = $kontrakm->id;
-                $kontrakd->mc_id = $request->idmcpel[$i];
-                $kontrakd->pcsKontrak = $request->qtyPcs[$i];
-                $kontrakd->kgKontrak = $request->qtyKg[$i];
-                $kontrakd->pctToleransiLebihKontrak = $request->toleransiLebih[$i];
-                $kontrakd->pctToleransiKurangKontrak = $request->toleransiKurang[$i];
-                $kontrakd->pcsLebihToleransiKontrak = $request->pcsToleransiLebih[$i];
-                $kontrakd->kgLebihToleransiKontrak = $request->kgToleransiLebih[$i];
-                $kontrakd->pcsKurangToleransiKontrak = $request->pcsToleransiKurang[$i];
-                $kontrakd->kgKurangToleransiKontrak = $request->kgToleransiKurang[$i];
-                $kontrakd->harga = $request->harga[$i];
-                $kontrakd->amountBeforeTax = $request->totalSblTax[$i];
-                $kontrakd->ppn = $request->hargaTax[$i];
-                $kontrakd->tax = $request->tax[$i];
-                $kontrakd->amountTotal = $request->Total[$i];
-                $kontrakd->harga_kg = $request->hargaKg[$i];
-
-                $kontrakd->save();
-                
-            } 
-            else 
-            {
-                if (isset($request->idmcpel[$i]) !== false) {
-                    // untuk Insert Into dihalaman edit detail kontrak
-                    Kontrak_D::create([
-                        'kontrak_m_id' => $kontrakm->id,
-                        'mc_id' => $request->idmcpel[$i],
-                        'pcsKontrak' => $request->qtyPcs[$i],
-                        'pcsSisaKontrak' => $request->qtyPcs[$i],
-                        'kgKontrak' => $request->qtyKg[$i],
-                        'kgSisaKontrak' => $request->qtyPcs[$i],
-                        'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
-                        'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
-                        'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
-                        'kgLebihToleransiKontrak' => $request->kgToleransiLebih[$i],
-                        'pcsKurangToleransiKontrak' => $request->pcsToleransiKurang[$i],
-                        'kgKurangToleransiKontrak' => $request->kgToleransiKurang[$i],
-                        'harga' => $request->harga[$i],
-                        'tax' => $request->tax[$i],
-                        'amountBeforeTax' => $request->totalSblTax[$i],
-                        'ppn' => $request->hargaTax[$i],
-                        'amountTotal' => $request->Total[$i],
-                        'createdBy' => $request->createdBy,
-                        'harga_kg' => $request->hargaKg[$i],
-                    ]);
-
-                    // var_dump(isset($request->idmcpel[$i]));
-                    
-                    // End untuk Insert Into dihalaman edit detail kontrak
-                    
-                    // dd($request->idmcpel[$i]);
-                }
-            }
-
-            $tax = $tax + $request->hargaTax[$i];
-            $sblTax = $sblTax + $request->totalSblTax[$i];
-            $total = $total + $request->Total[$i];
-
-        }
+        $kontrakd->mc_id = $request->mcid;
+        $kontrakd->pcsKontrak = $request->qtyPcs;
+        $kontrakd->kgKontrak = $request->qtyKg;
+        $kontrakd->harga_pcs = $request->harga;
+        $kontrakd->harga_kg = $request->hargakg;
+        $kontrakd->pcsSisaKontrak = $request->qtyPcs;
+        $kontrakd->kgSisaKontrak = $request->qtyKg;
+        $kontrakd->pctToleransiLebihKontrak = $request->toleransiLebih;
+        $kontrakd->pctToleransiKurangKontrak = $request->toleransiKurang;
+        $kontrakd->pcsKurangToleransiKontrak = $request->toleransiKurangPcs;
+        $kontrakd->pcsLebihToleransiKontrak = $request->toleransiLebihPcs;
+        $kontrakd->kgKurangToleransiKontrak = $request->toleransiKurangKg;
+        $kontrakd->kgLebihToleransiKontrak = $request->toleransiLebihKg;
+        $kontrakd->lastUpdatedBy = Auth::user()->name;
+        // dd($kontrakd);
         
         // var_dump($tax);
+
+        $kontrakd->save();
+        // dd($kontrakd);
         return redirect('admin/kontrak');
     }
 

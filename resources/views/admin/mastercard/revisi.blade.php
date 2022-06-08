@@ -75,11 +75,11 @@
                                                         <label>Pilih Customer</label>
                                                     </div>
                                                     <div class="col-md-5">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" onchange="getGramKontrak()" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" value="{{ $mc->customer }}" onchange="getGramKontrak()" readonly>
                                                     </div>
                                                     
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="Customer">
+                                                    <div class="modal fade" id="List-Customer">
                                                         <div class="modal-dialog modal-xl">
                                                             
                                                             <!-- Modal content-->
@@ -103,17 +103,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                // foreach ($cust as $data) { ?>
-                                                                                    {{-- <tr>
+                                                                                foreach ($cust as $data) { ?>
+                                                                                    <tr>
                                                                                         <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
                                                                                         <td>{{ $data->AlamatKirim }}</td>
-                                                                                    </tr> --}}
+                                                                                    </tr>
                                                                                     <?php
-                                                                                // }
+                                                                                }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -126,7 +126,7 @@
                                                             
                                                         </div>
                                                     </div>
-                                                    <button type="button" data-toggle="modal" data-target="#Customer">
+                                                    <button type="button" data-toggle="modal" data-target="#List-Customer">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
@@ -714,6 +714,25 @@
     });
     // Datatable Barang(Item)
 
+    $(".customer").ready(function(){
+        
+        var table = $("#data_customer").DataTable({
+            select: true,
+        });
+        
+        $('#data_customer tbody').on( 'click', 'td', function () {
+            var cust = (table.row(this).data());
+            
+            // document.getElementById('customer_id').value = cust[0]    ;
+            document.getElementById('customer').value = cust[1];
+            // document.getElementById('alamatKirim').value = cust[5];
+            // document.getElementById('telp').value = cust[3];
+            // document.getElementById('fax').value = cust[4];
+            
+            console.log(cust);
+        } );
+    } );
+
     function getKodeBarang() {
         var tujuan = document.getElementById("tujuan").value;
         var tipebox = document.getElementById("tipebox").value;
@@ -1064,10 +1083,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -1090,10 +1109,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             
         } else {
 
