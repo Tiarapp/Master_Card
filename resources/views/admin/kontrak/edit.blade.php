@@ -270,8 +270,9 @@
                                                 <label>Pilih Mastercard</label>
                                             </div>
                                             <div class="col-md-6">
+                                                <input type="hidden" name="kontrakd_id" id="kontrakd_id" value="{{ $kontrak_D->id }}">
                                                 <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" value="{{ $kontrak_D->mc }}" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" value="" readonly>
+                                                <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" value="{{ $kontrak_D->mc_id }}" readonly>
                                             </div>
                                             <div class="modal fade" id="Mastercard">
                                                 <div class="modal-dialog modal-xl">
@@ -450,7 +451,7 @@
                                                 <label>Harga pcs</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="harga" id="harga" value="{{ $kontrak_D->harga_pcs }}">
+                                                <input type="text" class="form-control txt_line col-md-11" name="harga" id="harga" value="{{ $kontrak_D->harga_pcs }}" onchange="getData();">
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +465,7 @@
                                                 <label>Harga kg</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="{{ $kontrak_D->harga_kg }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="{{ $kontrak_D->harga_kg }}" >
                                             </div>
                                         </div>
                                     </div>
@@ -648,42 +649,17 @@
                             
     function getData() {
         
-            var arr1 = data1.split('|');
-            var idmc = arr1[0];
-            var beratBox = arr1[1];
-            var substance = arr1[2];
-            var tipeBox = arr1[3];
-            var box = arr1[4];
-            var harga = document.getElementById('harga[0]').value;
-            var taxpct = document.getElementById('tax[0]').value;
-            var qty = document.getElementById('qtyPcs[0]').value;
-            var lebihpct = document.getElementById('toleransiLebih[0]').value;
-            var kurangpct = document.getElementById('toleransiKurang[0]').value;
-            var totalKg = qty * beratBox;
-            var lebihpcs =  qty * (lebihpct/100) ;
-            var hargablmtax = qty * harga;
-            var hargaKg = hargablmtax/totalKg;
-            var taxrp = (hargablmtax*taxpct)/100;
-            var total = taxrp + hargablmtax ;
-            var lebihkg = totalKg * (lebihpct/100);
-            var kurangpcs =  qty * (kurangpct/100) ;
-            var kurangkg = totalKg * (kurangpct/100);
+        harga_pcs = document.getElementById("harga").value;
+        // harga_kg = document.getElementById("hargakg").value;
+        qtyPcs = document.getElementById("qtyPcs").value;
+        qtyKg = document.getElementById("qtyKg").value;
 
-            console.log(arr1);
+        total = harga_pcs * qtyPcs;
 
-            document.getElementById("qtyKg[0]").value = totalKg.toFixed(2);
-            document.getElementById("pcsToleransiLebih[0]").value = lebihpcs.toFixed(2);
-            document.getElementById("kgToleransiLebih[0]").value = lebihkg.toFixed(2);
-            document.getElementById("pcsToleransiKurang[0]").value = kurangpcs.toFixed(2);
-            document.getElementById("kgToleransiKurang[0]").value = kurangkg.toFixed(2);
-            document.getElementById("totalSblTax[0]").value = hargablmtax.toFixed(2);
-            document.getElementById("hargaTax[0]").value = taxrp.toFixed(2);
-            document.getElementById("Total[0]").value = total.toFixed(2);
-            document.getElementById("hargaKg[0]").value = hargaKg.toFixed(2);
-            document.getElementById("substance[0]").value = substance;
-            document.getElementById("idmcpel[0]").value = idmc;
-            document.getElementById("tipeBox[0]").value = tipeBox;
-            document.getElementById("box[0]").value = box;
+        harga_kg = total/qtyKg;
+
+        document.getElementById("total").value = total;
+        document.getElementById("hargakg").value = harga_kg;
     }
                     
                         

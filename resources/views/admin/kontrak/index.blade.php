@@ -53,11 +53,14 @@
               <th scope="col">No Kontrak</th>
               <th scope="col">Tanggal</th>
               <th scope="col">Kode Barang</th>
+              <th scope="col">Nama Barang</th>
               <th scope="col">Customer</th>
               <th scope="col">PO Customer</th>
               <th scope="col">Alamat</th>
               <th scope="col">QTY Kontrak</th>
               <th scope="col">No MC</th>
+              <th scope="col">Harga / PCS</th>
+              <th scope="col">Harga / Kg</th>
               <th scope="col">Realisasi Kirim</th>
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
@@ -92,11 +95,14 @@
           {"data": "kontrak"},
           {"data": "tglKontrak"},
           {"data": "kodeBarang"},
+          {"data": "namaBarang"},
           {"data": "cust"},
           {"data": "poCustomer"},
           {"data": "alamatKirim"},
           {"data": "pcsKontrak"},
           {"data": "nomc"},
+          {"data": "rp_pcs"},
+          {"data": "rp_kg"},
           {"data": "realisasi"},
           {"data": "sisaKirim"},
           {"data": "sales"},

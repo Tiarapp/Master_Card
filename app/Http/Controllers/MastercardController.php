@@ -42,9 +42,9 @@ class MastercardController extends Controller
      */
     public function create()
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
         
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -59,8 +59,8 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            // 'item',
-            // 'cust',
+            'item',
+            'cust',
             'substance',
             'box',
             'colorcombine',
@@ -206,7 +206,7 @@ class MastercardController extends Controller
      */
     public function edit($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -261,7 +261,7 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
         
         return view('admin.mastercard.edit', compact([
-            // 'item',
+            'item',
             'tipe',
             'substance',
             'box',
@@ -400,7 +400,8 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -427,7 +428,12 @@ class MastercardController extends Controller
             ->where('kode', '=', $mc->kode)
             ->get();
 
-        $revisi = count($kodemc);
+
+        if ($mc->revisi === '') {
+            $revisi = '';
+        } else {
+            $revisi = preg_replace("/[^0-9]/","",$mc->revisi);
+        }
 
         if ($mc->tipeCust === "000") {
             $tipe = "Sheet";
@@ -452,7 +458,8 @@ class MastercardController extends Controller
         }
         
         return view('admin.mastercard.revisi', compact([
-            // 'item',
+            'cust',
+            'item',
             'tipe',
             'substance',
             'box',
@@ -473,9 +480,15 @@ class MastercardController extends Controller
     public function saveRevisi($id, Request $request)
     {
         $mc = Mastercard::find($id);
+        if($request->revisi == null){
+            $rev = null;
+        } else {
+            $rev = "R".$request->revisi;
+        }
 
+        // dd($rev);
         $mc->kode = $request->kode;
-        $mc->revisi = "R".$request->revisi;
+        $mc->revisi = $rev;
         $mc->kodeBarang = $request->kodeBarang;
         $mc->namaBarang = $request->namaBarang;
         $mc->customer = $request->customer;
@@ -515,7 +528,9 @@ class MastercardController extends Controller
 
        $mc->save();
 
-        dd($mc);
+        // dd($mc);
+
+        return redirect('admin/mastercard/b1');
         
 
     }
