@@ -62,6 +62,8 @@
                         foreach ($mc as $data) { 
                           if ($data->revisi == null) {
                             $revisi = "";
+                          } else if ($data->revisi == "R0"){
+                            $revisi = "";
                           } else {
                             $revisi = "-".$data->revisi;
                           }

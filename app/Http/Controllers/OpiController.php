@@ -83,7 +83,14 @@ class OpiController extends Controller
                 $nestedData['NoOPI'] = $opi->NoOPI;
                 $nestedData['poCustomer'] = $opi->poCustomer;
 
-                $mc = ($opi->revisimc != '' ? $opi->mcKode.'-'.$opi->revisimc : $opi->mcKode );
+                if ($opi->revisimc == '') {
+                    $mc = $opi->mcKode;
+                } else if ($opi->revisimc == "R0") {
+                    $mc = $opi->mcKode;
+                } else {
+                    $mc = $opi->mcKode.'-'.$opi->revisimc;
+                }
+                // $mc = ($opi->revisimc != '' ? $opi->mcKode.'-'.$opi->revisimc : $opi->mcKode );
 
                 $nestedData['nomc'] = $mc;
 

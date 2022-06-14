@@ -2372,10 +2372,12 @@
           <td class="column1 style43 s style44" colspan="2">No. MC</td>
           <td class="column3 style39 s style34" colspan="3">
             <?php
-              if ($opi->revisi != '') {
-                echo $opi->mcKode."-".$opi->revisi;
-              } else {
+              if ($opi->revisi == '') {
                 echo $opi->mcKode;
+              } else if ($opi->revisi == "R0") {
+                echo $opi->mcKode;
+              }else {
+                echo $opi->mcKode."-".$opi->revisi;
               }
             ?>
           </td>

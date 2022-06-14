@@ -1109,7 +1109,7 @@ td
  </tr>
  <tr height='16' style='mso-height-source:userset;height:12pt'>
 <td colspan='6' height='16' class='x22' style='mso-ignore:colspan;height:12pt;'></td>
-<td colspan='3' class='x70' x:num="44688" x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,2,FALSE)">7 May 2022</td>
+<td colspan='3' class='x70' x:num="44688" x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,2,FALSE)">{{ date_format($mytime, "d M Y") }}</td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='20' style='mso-height-source:userset;height:15pt'>
@@ -1242,7 +1242,7 @@ td
 <td height='20' class='x22' style='height:15pt;'></td>
 <td class='x37'>Packing</td>
 <td class='x38'>:</td>
-<td class='x39'>{{ ($kontrakBox->koli == "00" ? "100" : $kontrakBox->koli) }} Box/Colly</td>
+<td class='x39'>{{ $kontrakBox->koli }} Box/Colly</td>
 <td class='x39'>Bungkus</td>
 <td class='x40'></td>
 <td class='x41'>:</td>
@@ -1354,7 +1354,7 @@ td
  </tr>
  <tr height='11' style='mso-height-source:userset;height:8.25pt'>
 <td height='11' class='x22' style='height:8.25pt;'><div style='display:block;overflow:hidden'></div></td>
-<td class='x22' align='right' x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CY,100,FALSE)"><div style='display:block;overflow:hidden'>0</div></td>
+<td class='x22' align='right' x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CY,100,FALSE)"><div style='display:block;overflow:hidden'>{{ $kontrak_M->komisi }}</div></td>
 <td colspan='9' class='x22' style='mso-ignore:colspan;'><div style='display:block;overflow:hidden'></div></td>
  </tr>
  <tr height='21' style='mso-height-source:userset;height:15.75pt'>
