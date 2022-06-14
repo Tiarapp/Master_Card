@@ -42,9 +42,9 @@ class MastercardController extends Controller
      */
     public function create()
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -59,8 +59,8 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            'item',
-            'cust',
+            // 'item',
+            // 'cust',
             'substance',
             'box',
             'colorcombine',
@@ -141,6 +141,7 @@ class MastercardController extends Controller
 
         Mastercard::create([
             'kode' => $request->kode,
+            'revisi' => "R0",
             'customer' => $request->customer,
             'tipeCust' => $request->golongan,
             'namaBarang' => $request->namaBarang,
@@ -400,8 +401,8 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -430,7 +431,7 @@ class MastercardController extends Controller
 
 
         if ($mc->revisi === '') {
-            $revisi = '';
+            $revisi = 0;
         } else {
             $revisi = preg_replace("/[^0-9]/","",$mc->revisi);
         }
@@ -458,8 +459,8 @@ class MastercardController extends Controller
         }
         
         return view('admin.mastercard.revisi', compact([
-            'cust',
-            'item',
+            // 'cust',
+            // 'item',
             'tipe',
             'substance',
             'box',

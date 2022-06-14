@@ -102,17 +102,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                foreach ($cust as $data) { ?>
+                                                                                // foreach ($cust as $data) { ?>
                                                                                     <tr>
-                                                                                        <td scope="row">{{ $data->Kode }}</td>
+                                                                                        {{-- <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
-                                                                                        <td>{{ $data->AlamatKirim }}</td>
+                                                                                        <td>{{ $data->AlamatKirim }}</td> --}}
                                                                                     </tr>
                                                                                     <?php
-                                                                                }
+                                                                                // }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -1011,10 +1011,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
-            document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(3);
-            document.getElementById('gramSheetBoxKontrak').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
         }
         
         return result;
@@ -1029,8 +1029,10 @@
         $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
 
-        document.getElementById('luasSheet').value = $result;
-        document.getElementById('luasSheetBox').value = $result2;
+        document.getElementById('luasSheet').value = $result.toFixed(3);
+        document.getElementById('luasSheetProd').value = $result.toFixed(3);
+        document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+        document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
     }
 
     function getGramProduksi(){
@@ -1068,10 +1070,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
             
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -1094,10 +1096,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             
         } else {
 
