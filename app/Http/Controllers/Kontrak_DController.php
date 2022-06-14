@@ -537,6 +537,7 @@ class Kontrak_DController extends Controller
             ->first();
         // dd($kontrakBox);
 
+        $mytime = Carbon::now();
 
         $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -573,6 +574,7 @@ class Kontrak_DController extends Controller
             'kontrak_D',
             'kontrakBox',
             'dt',
+            'mytime',
         ), ['kontrak_M' => $kontrak_M]);
     }
 
