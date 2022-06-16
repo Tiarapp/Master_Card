@@ -639,12 +639,14 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
-                                                <option value='{{ $mc->koli }}'>{{ ($mc->koli == '00' ? "100" : $mc->koli) }}</option>
+                                                <option value='{{ $mc->koli }}'>{{ $mc->koli }}</option>
+                                                <option value='00'>Tidak Ada</option>
                                                 <option value='05'>5 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
                                                 <option value='25'>25 Koli</option>
                                                 <option value='50'>50 Koli</option>
+                                                <option value='100'>100 Koli</option>
                                             </select>
                                         </div>
                                         /Koli
@@ -745,6 +747,15 @@
 
         nomc = kode.substring(2,6);
 
+        if(koli == "100") {
+            kodeKoli = "00";
+        } else if (koli == "00"){
+            kodeKoli = "00";
+        } else {
+            kodeKoli = koli;
+        }
+
+
         if (tipemc == 'B1') {
             tipemc = 'B';
         } else if (tipemc == 'DC') {
@@ -777,7 +788,7 @@
         }
 
 
-        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+koli+"."+nomc+revisi+"."+golongan;
+        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+revisi+"."+golongan;
 
         // console.log(kodebarang);
 
