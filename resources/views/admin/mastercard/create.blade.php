@@ -161,7 +161,7 @@
                                             <label class="control-label">Tujuan</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan">
+                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan" onchange="getKodeBarang()">
                                                 <option value='L'>LOKAL</option>
                                                 <option value='E'>EXPORT</option>
                                             </select>
@@ -574,7 +574,7 @@
                                             <label class="control-label">Tipe MC</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc">
+                                            <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc" onchange="getKodeBarang()">
                                                 <option value='B1'>B1</option>
                                                 <option value='DC'>DC</option>
                                                 <option value='SINGLEFACE'>SINGLEFACE</option>
@@ -737,6 +737,14 @@
 
         nomc = kode.substring(2,6);
 
+        if(koli == "100") {
+            kodeKoli = "00";
+        } else if (koli == "00"){
+            kodeKoli = "00";
+        } else {
+            kodeKoli = koli;
+        }
+
         if (tipemc == 'B1') {
             tipemc = 'B';
         } else if (tipemc == 'DC') {
@@ -769,7 +777,7 @@
         }
 
 
-        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+koli+"."+nomc+"0."+golongan;
+        kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
 
         // console.log(kodebarang);
 

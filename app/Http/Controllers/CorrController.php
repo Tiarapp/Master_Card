@@ -287,7 +287,7 @@ class CorrController extends Controller
         $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
 
         // dd($data2);
-        return view('admin.plan.corr.print.print', compact('data1','data2'));
+        return view('admin.plan.corr.pdfcorr', compact('data1','data2'));
     }
 
     // Hasil Corr
