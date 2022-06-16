@@ -164,6 +164,7 @@
                                                     <option value="OUP Warna">OUP Warna</option>
                                                     <option value="OUP Nama Item">OUP Nama Item</option>
                                                     <option value="OUP Nama & Design">OUP Nama & Design</option>
+                                                    <option value="OUP Kupingan">OUP Kupingan</option>
                                                 </select>
                                             </div>
                                         </div>

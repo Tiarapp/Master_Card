@@ -102,17 +102,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                // foreach ($cust as $data) { ?>
+                                                                                foreach ($cust as $data) { ?>
                                                                                     <tr>
-                                                                                        {{-- <td scope="row">{{ $data->Kode }}</td>
+                                                                                        <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
-                                                                                        <td>{{ $data->AlamatKirim }}</td> --}}
+                                                                                        <td>{{ $data->AlamatKirim }}</td>
                                                                                     </tr>
                                                                                     <?php
-                                                                                // }
+                                                                                }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>

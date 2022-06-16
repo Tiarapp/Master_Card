@@ -103,17 +103,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                // foreach ($cust as $data) { ?>
-                                                                                    {{-- <tr>
+                                                                                foreach ($cust as $data) { ?>
+                                                                                    <tr>
                                                                                         <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
                                                                                         <td>{{ $data->AlamatKirim }}</td>
-                                                                                    </tr> --}}
+                                                                                    </tr>
                                                                                     <?php
-                                                                                // }
+                                                                                }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -715,6 +715,25 @@
         $('.js-example-basic-single').select2();
     });
     // Datatable Barang(Item)
+    
+    $(".customer").ready(function(){
+        
+        var table = $("#data_customer").DataTable({
+            select: true,
+        });
+        
+        $('#data_customer tbody').on( 'click', 'td', function () {
+            var cust = (table.row(this).data());
+            
+            // document.getElementById('customer_id').value = cust[0]    ;
+            document.getElementById('customer').value = cust[1];
+            // document.getElementById('alamatKirim').value = cust[5];
+            // document.getElementById('telp').value = cust[3];
+            // document.getElementById('fax').value = cust[4];
+            
+            console.log(cust);
+        } );
+    } );
 
     function getKodeBarang() {
         var tujuan = document.getElementById("tujuan").value;
