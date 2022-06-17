@@ -16,6 +16,14 @@
 
 @section('content')
 <div class="content-wrapper">
+    @if ($message = Session::get('error'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>{{ $message }}</strong>
+      </div>
+    @endif
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
@@ -131,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>No OPI</label>
@@ -153,7 +161,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -161,6 +169,15 @@
                                     </div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control txt_line" name="noKontrak" id="noKontrak">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" data-toggle="modal" data-target="#Opi">
+                                            <i class="fas fa-search" style="
+                                            height: 20px;
+                                            margin-top: 15px;
+                                            width: 20px;
+                                        "></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
