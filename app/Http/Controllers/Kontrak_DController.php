@@ -291,8 +291,8 @@ class Kontrak_DController extends Controller
                     'kontrak_m_id' => $kontrakm->id,
                     'mc_id' => $request->idmcpel[$i],
                     'pcsKontrak' => $request->qtyPcs[$i],
-                    'pcsSisaKontrak' => $request->qtyPcs[$i],
-                    'kgKontrak' => $request->qtyKg[$i],
+                    'pcsSisaKontrak' => $request->qtyPcs[$i] + $request->pcsToleransiLebih[$i],
+                    'kgKontrak' => $request->qtyKg[$i] + $request->kgToleransiLebih[$i],
                     'kgSisaKontrak' => $request->qtyPcs[$i],
                     'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
                     'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
@@ -438,7 +438,7 @@ class Kontrak_DController extends Controller
 
     public function store_dt(Request $request)
     {
-        for ($i=1; $i < 6; $i++) { 
+        for ($i=1; $i < 16; $i++) { 
             if ($request->tglKirim[$i] !== null) {
                 $dt = DeliveryTime::create([
                     'kontrak_m_id' => $request->idkontrakm,

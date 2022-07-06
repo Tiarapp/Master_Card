@@ -44,6 +44,7 @@
               <th scope="col">Tinggi Dalam Box</th>
               <th scope="col">Ukuran Creas Corr</th>
               <th scope="col">Ukuran Creas Conv</th>
+              <th scope="col">Tipe Crease</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -63,6 +64,7 @@
                 <td>{{ $data->tinggiDalamBox }}</td>
                 <td>{{ $data->sizeCreasCorr }}</td>
                 <td>{{ $data->sizeCreasConv }}</td>
+                <td>{{ $data->tipeCreasCorr }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">

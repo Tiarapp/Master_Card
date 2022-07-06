@@ -175,7 +175,7 @@ class OpiController extends Controller
 
         $opi_m = DB::table('opi_m')->get();
         $alphabet = "B";
-        $numb_opi = str_pad(count($opi_m)+3200+1,4, '0', STR_PAD_LEFT).$alphabet;
+        $numb_opi = str_pad(count($opi_m)+3202+1,4, '0', STR_PAD_LEFT).$alphabet;
 
 
         $kontrak_d = DB::table('kontrak_d')
@@ -205,10 +205,10 @@ class OpiController extends Controller
         $lastOpi = Opi_M::latest()->first();
         $check = Opi_M::whereBetween('nama', ['0001B', $lastOpi->nama ])->get();
         $alphabet = "B";
-        $numb_opi = str_pad(count($check)+250+1,4, '0', STR_PAD_LEFT).$alphabet;
+        $numb_opi = str_pad(count($check)+252+4,4, '0', STR_PAD_LEFT).$alphabet;
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
-        // dd($checkOpi);
+        // dd($numb_opi);
 
         if ($checkOpi == null) {
         
@@ -280,7 +280,7 @@ class OpiController extends Controller
             ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
             ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
             ->where('opi_m.id', '=', $id)
-            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak2 as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid' )
+            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid' )
             ->first();
 
         $opi2 = DB::table('opi_m')
