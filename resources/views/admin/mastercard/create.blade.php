@@ -207,6 +207,7 @@
                                                                             <th scope="col">Tinggi Dalam Box</th>
                                                                             <th scope="col">Ukuran Creas Corr</th>
                                                                             <th scope="col">Ukuran Creas Conv</th>
+                                                                            <th scope="col">Tipe Crease</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -224,6 +225,7 @@
                                                                                 <td>{{ $data->tinggiDalamBox }}</td>
                                                                                 <td>{{ $data->sizeCreasCorr }}</td>
                                                                                 <td>{{ $data->sizeCreasConv }}</td>
+                                                                                <td>{{ $data->tipeCreasCorr }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -1003,7 +1005,7 @@
                 Kbawah = 0 ;
             }
             
-            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.36) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 

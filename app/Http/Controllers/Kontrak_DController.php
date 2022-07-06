@@ -53,7 +53,7 @@ class Kontrak_DController extends Controller
         if(empty($request->input('search.value')))
         {            
             $kontrak = Kontrak_M::offset($start)
-                         ->limit($limit)
+                         ->limit(50)
                          ->orderBy('id', 'desc')
                          ->get();
                          
@@ -117,7 +117,16 @@ class Kontrak_DController extends Controller
                 $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
 
                 $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
-                $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
+                // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
+
+                if($mc->revisi == ''){
+                    $mcKode = $mc->kode;
+                } else if ($mc->revisi == "R0"){
+                    $mcKode = $mc->kode;
+                } else {
+                    $mcKode = $mc->kode.'-'.$mc->revisi;
+                }
+
                 $nestedData['nomc'] = $mcKode;
                 $nestedData['kodeBarang'] = $mc->kodeBarang;
                 $nestedData['namaBarang'] = $mc->namaBarang;
@@ -282,8 +291,8 @@ class Kontrak_DController extends Controller
                     'kontrak_m_id' => $kontrakm->id,
                     'mc_id' => $request->idmcpel[$i],
                     'pcsKontrak' => $request->qtyPcs[$i],
-                    'pcsSisaKontrak' => $request->qtyPcs[$i],
-                    'kgKontrak' => $request->qtyKg[$i],
+                    'pcsSisaKontrak' => $request->qtyPcs[$i] + $request->pcsToleransiLebih[$i],
+                    'kgKontrak' => $request->qtyKg[$i] + $request->kgToleransiLebih[$i],
                     'kgSisaKontrak' => $request->qtyPcs[$i],
                     'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
                     'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
@@ -429,7 +438,7 @@ class Kontrak_DController extends Controller
 
     public function store_dt(Request $request)
     {
-        for ($i=1; $i < 6; $i++) { 
+        for ($i=1; $i < 16; $i++) { 
             if ($request->tglKirim[$i] !== null) {
                 $dt = DeliveryTime::create([
                     'kontrak_m_id' => $request->idkontrakm,

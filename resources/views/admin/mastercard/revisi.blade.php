@@ -253,16 +253,16 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC();getKodeBarang();">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC();getKodeBarang();">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" onchange="getKodeBarang();">
+                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" >
                                         </div>
                                     </div>
                                     <div class="row">
@@ -273,7 +273,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangDalam }}" name="panjangbox" id="panjangbox" onchange="getKodeBarang();">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangDalam }}" name="panjangbox" id="panjangbox" >
                                                 </div>
                                             </div>
                                         </div>
@@ -281,7 +281,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox"  value="{{ $mc->lebarDalam }}" onchange="getKodeBarang();">
+                                                    <input type="text" class="form-control txt_line" name="lebarbox" id="lebarbox"  value="{{ $mc->lebarDalam }}" >
                                                 </div>
                                             </div>
                                         </div>
@@ -289,7 +289,7 @@
                                             <span class="x">T</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggiDalam }}" name="tinggibox" id="tinggibox" onchange="getKodeBarang();">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->tinggiDalam }}" name="tinggibox" id="tinggibox" >
                                                 </div>
                                             </div>
                                         </div>
@@ -299,7 +299,7 @@
                                             <label class="control-label">Luas Sheet Box</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" onchange="getKodeBarang();">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" >
                                         </div>
                                     </div>
                                     
@@ -367,7 +367,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC(); getKodeBarang();">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
                                                 </div>
                                             </div>
                                         </div>
@@ -375,7 +375,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC(); getKodeBarang();">
+                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -1014,7 +1014,7 @@
                 Kbawah = 0 ;
             }
             
-            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.36) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
