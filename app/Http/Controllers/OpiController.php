@@ -208,7 +208,7 @@ class OpiController extends Controller
         $numb_opi = str_pad(count($check)+252+4,4, '0', STR_PAD_LEFT).$alphabet;
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
-        // dd($numb_opi);
+        // dd($checkOpi);
 
         if ($checkOpi == null) {
         
@@ -225,6 +225,9 @@ class OpiController extends Controller
                 'hariKirimDt' => $day,
                 'createdBy' => Auth::user()->name,
             ]);
+
+            // $kontrakd
+
                 return redirect('admin/opi')->with('success', 'OPI Berhasi disimpan dengan Nomor OPI '.$numb_opi );
         } else {
                 return redirect('admin/opi/create')->with('error', 'No OPI Sudah Ada, Silahkan isi OPI Ulang');
