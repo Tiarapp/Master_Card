@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Kontrak_D;
 use App\Models\Opi_M;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
@@ -205,28 +207,43 @@ class OpiController extends Controller
         $lastOpi = Opi_M::latest()->first();
         $check = Opi_M::whereBetween('nama', ['0001B', $lastOpi->nama ])->get();
         $alphabet = "B";
-        $numb_opi = str_pad(count($check)+252+4,4, '0', STR_PAD_LEFT).$alphabet;
+        // $numb_opi = str_pad(count($check)+252+4,4, '0', STR_PAD_LEFT).$alphabet;
+        $numb_opi = str_pad(count($check)+1900+4,4, '0', STR_PAD_LEFT).$alphabet;
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
         // dd($checkOpi);
 
         if ($checkOpi == null) {
         
-            $opim = Opi_M::create([   
-                'nama' => $numb_opi,
-                'NoOPI' => $numb_opi,
-                'dt_id' => $request->dtid,
-                'mc_id' => $request->mcid,
-                'kontrak_m_id' => $request->kontrakmid,
-                'kontrak_d_id' => $request->kontrakdid,
-                'keterangan' => $request->keterangan,
-                'tglKirimDt' => $request->tglKirim,
-                'jumlahOrder' => $request->jumlahOrder,
-                'hariKirimDt' => $day,
-                'createdBy' => Auth::user()->name,
-            ]);
+            $kontrakd = Kontrak_D::where('id', '=', $request->kontrakdid)->first();
+            
+            if ($request->jumlahOrder > $kontrakd->pcsSisaKontrak ) {
 
-            // $kontrakd
+                return redirect('admin/opi/create')->with('error', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
+            } else {
+
+                $opim = Opi_M::create([   
+                    'nama' => $numb_opi,
+                    'NoOPI' => $numb_opi,
+                    'dt_id' => $request->dtid,
+                    'mc_id' => $request->mcid,
+                    'kontrak_m_id' => $request->kontrakmid,
+                    'kontrak_d_id' => $request->kontrakdid,
+                    'keterangan' => $request->keterangan,
+                    'tglKirimDt' => $request->tglKirim,
+                    'jumlahOrder' => $request->jumlahOrder,
+                    'sisa_order' => $request->jumlahOrder,
+                    'hariKirimDt' => $day,
+                    'createdBy' => Auth::user()->name,
+                ]);
+
+                $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahOrder;
+                $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
+            }
+
+            $kontrakd->save();
+        
+            // dd($kontrakd);
 
                 return redirect('admin/opi')->with('success', 'OPI Berhasi disimpan dengan Nomor OPI '.$numb_opi );
         } else {
