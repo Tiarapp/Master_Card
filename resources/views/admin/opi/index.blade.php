@@ -11,17 +11,17 @@
 </style> --}}
 
 @section('content')
-@if ($message = Session::get('success'))
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-    <strong>{{ $message }}</strong>
-  </div>
-@endif
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
+    @if ($message = Session::get('success'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>{{ $message }}</strong>
+      </div>
+    @endif
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
@@ -110,7 +110,7 @@
               <th scope="col">Lain-Lain</th>
             </tr>
           </thead>
-          <tfoot>
+          {{-- <tfoot>
             <tr>
               <th scope="col">ID</th>
               <th scope="col">No OPI</th>
@@ -173,7 +173,7 @@
               <th scope="col">Bungkus</th>
               <th scope="col">Lain-Lain</th>
             </tr>
-          </tfoot>
+          </tfoot> --}}
         </table>
       </div>
       <!-- /.row -->
