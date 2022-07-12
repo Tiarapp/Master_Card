@@ -474,6 +474,7 @@ class Kontrak_DController extends Controller
         $kontrakm->tglKontrak = $request->tanggal;
         $kontrakm->sales = $request->sales;
         $kontrakm->top = $request->top;
+        $kontrakm->komisi = $request->komisi;
         $kontrakm->caraKirim = $request->caraKirim;
         $kontrakm->keterangan = $request->keterangan;
         // End untuk set value yang di update

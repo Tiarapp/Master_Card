@@ -211,7 +211,7 @@ class OpiController extends Controller
         $numb_opi = str_pad(count($check)+1900+4,4, '0', STR_PAD_LEFT).$alphabet;
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
-        // dd($numb_opi);
+        // dd($checkOpi);
 
         if ($checkOpi == null) {
         
