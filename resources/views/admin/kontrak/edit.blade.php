@@ -162,10 +162,31 @@
                                             <div class="col-md-6">
                                                 <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
                                                     <option value="{{ $kontrak_M->tipeOrder }}">{{ $kontrak_M->tipeOrder }}</option>
-                                                    <option value="OB">Order Baru</option>
-                                                    <option value="OU">Order Ulang</option>
-                                                    <option value="OUP">Order Ulang Perubahan</option>
+                                                    <option value="Order Baru">Order Baru</option>
+                                                    <option value="Order Ulang">Order Ulang</option>
+                                                    <option value="OUP Design">OUP Design</option>
+                                                    <option value="OUP Ukuran">OUP Ukuran</option>
+                                                    <option value="OUP Kualitas">OUP Kualitas</option>
+                                                    <option value="OUP Warna">OUP Warna</option>
+                                                    <option value="OUP Nama Item">OUP Nama Item</option>
+                                                    <option value="OUP Nama & Design">OUP Nama & Design</option>
+                                                    <option value="OUP Kupingan">OUP Kupingan</option>
+                                                    <option value="OUP Joint">OUP Joint</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Komisi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
                                             </div>
                                         </div>
                                     </div>
