@@ -275,8 +275,11 @@
                                     <div class='col-md-1'>  
                                         <label>Lebar Roll</label> 
                                     </div> 
-                                    <div class='col-md-2'>  
+                                    <div class='col-md-1'>  
                                         <input type='text' class='form-control txt_line' value="{{ $detail->ukuran_roll }}" name='roll[{{ $count }}]' id='roll[{{ $count }}]'> 
+                                    </div> 
+                                    <div class='col-md-1'>  
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->custom_roll }}" name='rollcustom[{{ $count }}]' id='rollcustom[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label>Plan</label> 
@@ -306,41 +309,41 @@
                                         <label style="margin-top:20px">K. Atas</label> 
                                     </div> 
                                     <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->kertasMcAtas}}" name='kertasAtas[{{ $count }}]' id='kertasAtas[{{ $count }}]'> 
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->gramKertasAtas }}" name='gramAtas[{{ $count }}]' id='gramAtas[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jenis_atas}}" name='kertasAtas[{{ $count }}]' id='kertasAtas[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->gram_atas }}" name='gramAtas[{{ $count }}]' id='gramAtas[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label style="margin-top:20px">K. Flute1</label> 
                                     </div> 
                                     <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->kertasMcflute1}}" name='kertasFlute1[{{ $count }}]' id='kertasFlute1[{{ $count }}]'> 
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->gramKertasflute1  }}" name='gramFlute1[{{ $count }}]' id='gramFlute1[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jenis_bf}}" name='kertasFlute1[{{ $count }}]' id='kertasFlute1[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->gram_bf  }}" name='gramFlute1[{{ $count }}]' id='gramFlute1[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label style="margin-top:20px">K. Tengah</label> 
                                     </div> 
                                     <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->kertasMctengah}}" name='kertasTengah[{{ $count }}]' id='kertasTengah[{{ $count }}]'> 
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->gramKertastengah  }}" name='gramTengah[{{ $count }}]' id='gramTengah[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jenis_tengah}}" name='kertasTengah[{{ $count }}]' id='kertasTengah[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->gram_tengah  }}" name='gramTengah[{{ $count }}]' id='gramTengah[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label style="margin-top:20px">K. Flute2</label> 
                                     </div> <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->kertasMcflute2}}" name='kertasFlute2[{{ $count }}]' id='kertasFlute2[{{ $count }}]'> 
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->gramKertasflute2 }}" name='gramFlute2[{{ $count }}]' id='gramFlute2[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jenis_cf}}" name='kertasFlute2[{{ $count }}]' id='kertasFlute2[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->gram_cf }}" name='gramFlute2[{{ $count }}]' id='gramFlute2[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label style="margin-top:20px">K. Bawah</label> 
                                     </div> 
                                     <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->kertasMcbawah}}" name='kertasBawah[{{ $count }}]' id='kertasBawah[{{ $count }}]'> 
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->gramKertasbawah }}" name='gramBawah[{{ $count }}]' id='gramBawah[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jenis_bawah}}" name='kertasBawah[{{ $count }}]' id='kertasBawah[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->gram_bawah }}" name='gramBawah[{{ $count }}]' id='gramBawah[{{ $count }}]'> 
                                     </div>  
                                     <div class='col-md-1'>  
                                         <label style='margin-top:20px'>Toleransi(%)</label> 
                                     </div> 
                                     <div class='col-md-1'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->toleransiLebih }}" name='toleransi[{{ $count }}]' id='toleransi[{{ $count }}]'>  
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->toleransi }}" name='toleransi[{{ $count }}]' id='toleransi[{{ $count }}]'>  
                                     </div> 
                                 </div>  
                                 <div class='row'> 
@@ -464,8 +467,7 @@ $(document).ready(function(){
 
     //Once add button is clicked
     $(addButton).click(function(){
-        $("#plancorr").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'> <input type='hidden' class='form-control txt_line' value='' name='detail["+countrow+"]' id='detail["+countrow+"]'> <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='toleransi["+countrow+"]' id='toleransi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Tipe / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Out Corr / Out Flexo</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Lebar Roll</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'> </div> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'> </div> <div class='col-md-1'>  <label>trim / cop</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='trim["+countrow+"]' id='trim["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='cop["+countrow+"]' id='cop["+countrow+"]'>   </div>  </div> </div>  </div>  <div class='row' style='margin-botton:5px;'> <div class='col-md-1'>  <label style='margin-top:20px'>K. Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramAtas["+countrow+"]' id='gramAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute1["+countrow+"]' id='kertasFlute1["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute1["+countrow+"]' id='gramFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramTengah["+countrow+"]' id='gramTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute2["+countrow+"]' id='kertasFlute2["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute2["+countrow+"]' id='gramFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramBawah["+countrow+"]' id='gramBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Kebutuhan Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanAtas["+countrow+"]' id='kebutuhanAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute1["+countrow+"]' id='kebutuhanFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanTengah["+countrow+"]' id='kebutuhanTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute2["+countrow+"]' id='kebutuhanFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanBawah["+countrow+"]' id='kebutuhanBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Berat/Pcs</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratSheet["+countrow+"]' id='beratSheet["+countrow+"]'> </div> <div class='col-md-1'>  <label>RM Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rmorder["+countrow+"]' id='rmorder["+countrow+"]'> </div> <div class='col-md-1'>  <label>Berat Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratOrder["+countrow+"]' id='beratOrder["+countrow+"]'> </div> <div class='col-md-1'>  <label>urutan</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> <div class='col-md-1'> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
-          // console.log(countrow);
+        $("#plancorr").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'><input type='text' class='form-control txt_line' value='' name='detail["+countrow+"]' id='detail["+countrow+"]'>   <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div> </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>X</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Tipe / Flute</label> </div> <div class='col-md-2'> <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>/</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Out Corr / Out Flexo</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]' required>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]' required>   </div>  </div> </div> <div class='col-md-1'>  <label>Lebar Roll / Custom Lebar</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rollcustom["+countrow+"]' id='rollcustom["+countrow+"]'> </div>  <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'> </div> <div class='col-md-1'>  <label>trim / cop</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='trim["+countrow+"]' id='trim["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='cop["+countrow+"]' id='cop["+countrow+"]'>   </div>  </div> </div>  </div>  <div class='row' style='margin-botton:5px;'> <div class='col-md-1'>  <label style='margin-top:20px'>K. Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramAtas["+countrow+"]' id='gramAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute1["+countrow+"]' id='kertasFlute1["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute1["+countrow+"]' id='gramFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramTengah["+countrow+"]' id='gramTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute2["+countrow+"]' id='kertasFlute2["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute2["+countrow+"]' id='gramFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramBawah["+countrow+"]' id='gramBawah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>Toleransi(%)</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='toleransi["+countrow+"]' id='toleransi["+countrow+"]'>  </div>  <div class='row'> <div class='col-md-1'>  <label>Kebutuhan Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanAtas["+countrow+"]' id='kebutuhanAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute1["+countrow+"]' id='kebutuhanFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanTengah["+countrow+"]' id='kebutuhanTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute2["+countrow+"]' id='kebutuhanFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanBawah["+countrow+"]' id='kebutuhanBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Berat/Pcs</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratSheet["+countrow+"]' id='beratSheet["+countrow+"]'> </div> <div class='col-md-1'>  <label>RM Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rmorder["+countrow+"]' id='rmorder["+countrow+"]'> </div> <div class='col-md-1'>  <label>Berat Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratOrder["+countrow+"]' id='beratOrder["+countrow+"]'> </div> <div class='col-md-1'>  <label>urutan</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]' required> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
           
         countrow++;
         countdata++;
@@ -481,6 +483,7 @@ $(document).ready(function(){
             var  outConv = document.getElementById("outFlexo["+i+"]").value;
             var  order = document.getElementById("order["+i+"]").value;
             var  toleransi = document.getElementById("toleransi["+i+"]").value;
+            var  ukrollcustom = document.getElementById("rollcustom["+i+"]").value;
             var  gramSheet = document.getElementById("beratSheet["+i+"]").value;
             var  tipebox = document.getElementById("tipebox["+i+"]").value;
             var gAtas =document.getElementById("gramAtas["+i+"]").value
@@ -489,14 +492,23 @@ $(document).ready(function(){
             var gFlute2 =document.getElementById("gramFlute2["+i+"]").value
             var gBawah =document.getElementById("gramBawah["+i+"]").value
 
-
-            qtyPlan =  parseInt(order) + (order*(toleransi/100)/outConv);
+            console.log(toleransi);
             
             if (tipebox = 'DC') {
-                UkRoll = Math.ceil(((outCorr*sheetl)+20)/50)*50;
+                if (ukrollcustom != '') {
+                    UkRoll = ukrollcustom;
+                } else {
+                    UkRoll = Math.ceil(((outCorr*sheetl)+20)/50)*50;
+                }
             } else {
-                UkRoll =Math.ceil(((outCorr*sheetl)+30)/50)*50;
+                if (ukrollcustom != '') {
+                    UkRoll = ukrollcustom;
+                } else {
+                    UkRoll =Math.ceil(((outCorr*sheetl)+30)/50)*50;
+                }
             }
+            
+            qtyPlan =  parseInt(order) + (order*(toleransi/100)/outConv);
 
             cop = qtyPlan/outCorr;
 
@@ -565,18 +577,28 @@ $(document).ready(function(){
                 document.getElementById("flute["+x+"]").value = cust[8];
                 document.getElementById("order["+x+"]").value = cust[9];
                 document.getElementById("opi_id["+x+"]").value = cust[22];
-                document.getElementById("toleransi["+x+"]").value = cust[10];
                 document.getElementById("gramAtas["+x+"]").value = cust[12];
                 document.getElementById("gramFlute1["+x+"]").value = cust[14];
                 document.getElementById("gramTengah["+x+"]").value = cust[16];
                 document.getElementById("gramFlute2["+x+"]").value = cust[18];
                 document.getElementById("gramBawah["+x+"]").value = cust[20];
                 document.getElementById("beratSheet["+x+"]").value = cust[21];
-                document.getElementById("kertasAtas["+x+"]").value = cust[11]+cust[12];
-                document.getElementById("kertasFlute1["+x+"]").value = cust[13]+cust[14];
-                document.getElementById("kertasTengah["+x+"]").value = cust[15]+cust[16];
-                document.getElementById("kertasFlute2["+x+"]").value = cust[17]+cust[18];
-                document.getElementById("kertasBawah["+x+"]").value = cust[19]+cust[20];
+                document.getElementById("kertasAtas["+x+"]").value = cust[11];
+                document.getElementById("kertasFlute1["+x+"]").value = cust[13];
+                document.getElementById("kertasTengah["+x+"]").value = cust[15];
+                document.getElementById("kertasFlute2["+x+"]").value = cust[17];
+                document.getElementById("kertasBawah["+x+"]").value = cust[19];
+
+                if (cust[7] == 'DC') {
+                    toleransi = 2;
+                } else if(cust[7] == 'B1'){
+                    toleransi = 5;
+                } else {
+                    toleransi = 0;
+                }
+
+                
+                document.getElementById("toleransi["+x+"]").value = toleransi;
 
                 // console.log(KAtas);
                 // countdata++;
