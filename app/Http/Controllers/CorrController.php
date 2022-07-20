@@ -113,8 +113,9 @@ class CorrController extends Controller
             $corrd = Corr_D::create([
                 'opi_id'=> $request->opi_id[$i],
                 'plan_corr_m_id' => $corrm->id,
-                // 'kode_plan_d' => $request->kodeplan[$i],
+                'kode_plan_d' => $request->kodeplan,
                 'urutan' => $request->urutan[$i],
+                'dt_perubahan' => $request->dtperubahan[$i],
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
                 'flute' => $request->flute[$i],
@@ -170,9 +171,13 @@ class CorrController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function delete($id)
     {
-        //
+        $corr = Corr_D::find($id);
+        
+        $corr->delete();
+
+        return redirect()->to(url()->previous());
     }
 
     /**
@@ -216,6 +221,7 @@ class CorrController extends Controller
                 $corrd->plan_corr_m_id = $id;
                 $corrd->opi_id = $request->opi_id[$i];
                 $corrd->urutan = $request->urutan[$i];
+                $corrd->dt_perubahan = $request->dtperubahan[$i];
                 $corrd->sheet_p = $request->sheetp[$i];
                 $corrd->sheet_l = $request->sheetl[$i];
                 $corrd->bentuk = $request->tipebox[$i];
@@ -265,21 +271,21 @@ class CorrController extends Controller
                         'qtyOrder' => $request->plan[$i],
                         'sisa' => $request->plan[$i],
                         'ukuran_roll' => $request->roll[$i],
-                        'custom_roll' => $request->customroll[$i],
+                        'custom_roll' => $request->rollcustom[$i],
                         'cop' => $request->cop[$i],
                         'trim_waste' => $request->trim[$i],
                         'rm_order' => $request->rmorder[$i],
                         'tonase' => $request->beratOrder[$i],
-                        'jenis_atas' > $request->kertasAtas[$i],
-                        'gram_atas' > $request->gramAtas[$i],
-                        'jenis_bf' > $request->kertasFlute1[$i],
-                        'gram_bf' > $request->gramFlute1[$i],
-                        'jenis_tengah' > $request->kertasTengah[$i],
-                        'gram_tengah' > $request->gramTengah[$i],
-                        'jenis_cf' > $request->kertasFlute2[$i],
-                        'gram_cf' > $request->gramFlute2[$i],
-                        'jenis_bawah' > $request->kertasBawah[$i],
-                        'gram_bawah' > $request->gramBawah[$i],
+                        'jenis_atas' => $request->kertasAtas[$i],
+                        'gram_atas' => $request->gramAtas[$i],
+                        'jenis_bf' => $request->kertasFlute1[$i],
+                        'gram_bf' => $request->gramFlute1[$i],
+                        'jenis_tengah' => $request->kertasTengah[$i],
+                        'gram_tengah' => $request->gramTengah[$i],
+                        'jenis_cf' => $request->kertasFlute2[$i],
+                        'gram_cf' => $request->gramFlute2[$i],
+                        'jenis_bawah' => $request->kertasBawah[$i],
+                        'gram_bawah' => $request->gramBawah[$i],
                         'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
                         'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
                         'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],

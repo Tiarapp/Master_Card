@@ -194,7 +194,12 @@
                                         <label>DT</label> 
                                     </div> 
                                     <div class='col-md-2'>  
-                                        <input type='date' class='form-control txt_line' value="{{ $detail->tglDt }}" name='dt[{{ $count }}]' id='dt[{{ $count }}]'> 
+                                        <input type='date' class='form-control txt_line' value="{{ $detail->tglDt }}" name='dt[{{ $count }}]' id='dt[{{ $count }}]' readonly> 
+                                    </div> <div class='col-md-1'>  
+                                        <label>DT Perubahan</label> 
+                                    </div> 
+                                    <div class='col-md-2'>  
+                                        <input type='date' class='form-control txt_line' value="{{ $detail->tglDt }}" name='dtperubahan[{{ $count }}]' id='dtperubahan[{{ $count }}]'> 
                                     </div> 
                                     <div class='col-md-1'>  
                                         <label>Customer</label> 
@@ -402,6 +407,10 @@
                                         <div class='col-md-1'>  
                                             <input type='text' class='form-control txt_line' value="{{ $detail->urutan }}" name='urutan[{{ $count }}]' id='urutan[{{ $count }}]'> 
                                         </div> 
+                                        
+                                        <div class='col-md-1'>
+                                            <a class="btn btn-success" href="../hapus/{{ $detail->idcorr }}" id="add_button" title="Add field">CANCEL</a>
+                                        </div> 
                                     </div> 
                                     <div class='row' style='margin-top:10px'> 
                                         <div class='col-md-1'>  
@@ -415,6 +424,7 @@
                             </div> 
                         </div>
                         <input type="hidden" id="count" name="count" value="{{ $count++ }}">
+                        
                     @endforeach
                     <input type="hidden" id="countdata" name="countdata" value="{{ $count }}">
                     <div class="col-md-12" id="plancorr" style="margin-bottom: 10px;">
@@ -455,7 +465,7 @@ function getKode() {
     } 
 
 
-    console.log(month);
+    // console.log(month);
 
     document.getElementById("kodeplan").value = dd+""+month+""+year;
 }
@@ -492,52 +502,63 @@ $(document).ready(function(){
             var gFlute2 =document.getElementById("gramFlute2["+i+"]").value
             var gBawah =document.getElementById("gramBawah["+i+"]").value
 
-            console.log(toleransi);
+            // console.log(toleransi);
             
             if (tipebox = 'DC') {
                 if (ukrollcustom != '') {
-                    UkRoll = ukrollcustom;
+                    UkRoll = Math.ceil(((outCorr*sheetl)+20)/50)*50;
+                    hitungroll = parseInt(ukrollcustom);
                 } else {
                     UkRoll = Math.ceil(((outCorr*sheetl)+20)/50)*50;
+                    hitungroll = UkRoll;
                 }
             } else {
                 if (ukrollcustom != '') {
-                    UkRoll = ukrollcustom;
+                    UkRoll =Math.ceil(((outCorr*sheetl)+30)/50)*50;
+                    hitungroll = parseInt(ukrollcustom);
                 } else {
                     UkRoll =Math.ceil(((outCorr*sheetl)+30)/50)*50;
+                    hitungroll = UkRoll;
+
                 }
             }
+
+            // console.log(UkRoll);
             
             qtyPlan =  parseInt(order) + (order*(toleransi/100)/outConv);
 
             cop = qtyPlan/outCorr;
 
-            trim = (UkRoll-(sheetl*outCorr))/UkRoll;
+            trim = (hitungroll-(sheetl*outCorr))/hitungroll;
 
             rmorder = (sheetp*cop)/1000;
 
             tonase = qtyPlan*gramSheet;
 
             if (gAtas != '') {
-                KAtas = rmorder*(UkRoll/1000)*gAtas/1000;
+                KAtas = rmorder*(hitungroll/1000)*gAtas/1000;
                 document.getElementById("kebutuhanAtas["+i+"]").value = Math.round(KAtas);
             } 
             if (gFlute1 != '') {
-                KFlute1 = rmorder*(UkRoll/1000)*(gFlute1/1000)*1.34;
+                KFlute1 = rmorder*(hitungroll/1000)*(gFlute1/1000)*1.34;
                 document.getElementById("kebutuhanFlute1["+i+"]").value = Math.round(KFlute1);
             } 
             if (gTengah != '') {
-                KTengah = rmorder*(UkRoll/1000)*gTengah/1000;
+                KTengah = rmorder*(hitungroll/1000)*gTengah/1000;
                 document.getElementById("kebutuhanTengah["+i+"]").value = Math.round(KTengah);
             } 
             if (gFlute2 != '') {
-                KFlute2 = rmorder*(UkRoll/1000)*(gFlute2/1000)*1.42;
+                KFlute2 = rmorder*(hitungroll/1000)*(gFlute2/1000)*1.42;
                 document.getElementById("kebutuhanFlute2["+i+"]").value = Math.round(KFlute2);
             } 
             if (gBawah != '') {
-                KBawah = rmorder*(UkRoll/1000)*gBawah/1000;
+                KBawah = rmorder*(hitungroll/1000)*gBawah/1000;
                 document.getElementById("kebutuhanBawah["+i+"]").value = Math.round(KBawah);
             } 
+
+            
+
+            console.log(hitungroll, UkRoll);
 
             document.getElementById("plan["+i+"]").value = qtyPlan.toFixed(2);
             document.getElementById("roll["+i+"]").value = UkRoll.toFixed(2);

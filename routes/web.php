@@ -239,6 +239,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
     Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
+    Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
 
     
     Route::get('/admin/plan/conv', 'ConvController@index_printing_conv')->middleware(['auth'])->name('conv');
@@ -291,6 +292,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/roll/preturbbk/{id}',        'RollController@prosesRetur')->name('roll.preturbbk');
     Route::get('/admin/roll/edit/{id}',             'RollController@edit')->name('roll.edit');
     Route::put('/admin/roll/update/{id}',           'RollController@update')->name('roll.update');
+    Route::put('/admin/roll/hapus/{id}',            'RollController@delete')->name('roll.delete');
 
     //OPNAME
     // Route::get('/admin/opname', 'OPController@index')->middleware(['auth'])->name('op');

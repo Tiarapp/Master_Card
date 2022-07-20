@@ -47,7 +47,8 @@ class Corr_D extends Model
         'toleransi',
         'status',
         'lock',
-        'urutan'
+        'urutan',
+        'dt_perubahan'
     ];
 
     public function corrm()
