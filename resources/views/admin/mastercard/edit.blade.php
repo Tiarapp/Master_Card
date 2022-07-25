@@ -19,7 +19,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Print Master Card</h4>
+                <h4 class="modal-title">Edit Master Card</h4>
                 <hr>
                 
                 @if (count($errors) > 0)
@@ -103,17 +103,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                foreach ($cust as $data) { ?>
+                                                                                // foreach ($cust as $data) { ?>
                                                                                     <tr>
-                                                                                        <td scope="row">{{ $data->Kode }}</td>
+                                                                                        {{-- <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
-                                                                                        <td>{{ $data->AlamatKirim }}</td>
+                                                                                        <td>{{ $data->AlamatKirim }}</td> --}}
                                                                                     </tr>
                                                                                     <?php
-                                                                                }
+                                                                                // }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -259,10 +259,10 @@
                                             <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC();getKodeBarang();">
                                         </div>
                                         <div class="col-md-1">
-                                            <label class="control-label">Out Conv</label>
+                                            <label class="control-label">Gram Kualitas</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" onchange="getKodeBarang();">
+                                            <input type="number" class="form-control txt_line" value="{{ $mc->brt_kualitas }}" name="outConv" id="outConv" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -357,6 +357,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getSheet();getKodeBarang();" >
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Out Conv</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" onchange="getKodeBarang();">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -680,7 +686,8 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" value="{{ $mc->gambar }}" name="gambar" id="gambar">
+                                            <input type="file" name="gambar" id="gambar">
+                                            <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
                                         </div>
                                     </div>
                                 </div>

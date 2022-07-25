@@ -31,6 +31,7 @@ class Mastercard extends Model
         'joint',
         'mesin',
         'outConv',
+        'brt_kualitas',
         'flute',
         'koli',
         'tipeMc',

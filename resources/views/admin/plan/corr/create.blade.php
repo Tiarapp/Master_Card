@@ -62,6 +62,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Shift</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line" name="shift" id="shift">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">

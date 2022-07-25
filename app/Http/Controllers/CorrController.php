@@ -95,7 +95,8 @@ class CorrController extends Controller
     {
         $corrm = Corr_M::create([   
             'kode_plan' => $request->kodeplan,
-            'tanggal' => $request->tgl
+            'tanggal' => $request->tgl,
+            'shift' => $request->shift
         ]);
 
         $data = count($request->noOpi);
@@ -262,6 +263,7 @@ class CorrController extends Controller
                         'opi_id' => $request->opi_id[$i],
                         'kode_plan_d' => $request->kodeplan,
                         'urutan' => $request->urutan[$i],
+                        'dt_perubahan' => $request->dtperubahan[$i],
                         'sheet_p' => $request->sheetp[$i],
                         'sheet_l' => $request->sheetl[$i],
                         'flute' => $request->flute[$i],
@@ -307,6 +309,7 @@ class CorrController extends Controller
         $upCorrm->total_RM = $rmjumlah;
         $upCorrm->revisi = $request->revisi;
         $upCorrm->total_Berat = $berattotal;
+        $upCorrm->shift = $request->shift;
 
         $upCorrm->save();
         
