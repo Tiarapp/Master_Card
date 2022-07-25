@@ -165,7 +165,9 @@
                                                     <option value="OUP Nama Item">OUP Nama Item</option>
                                                     <option value="OUP Nama & Design">OUP Nama & Design</option>
                                                     <option value="OUP Kupingan">OUP Kupingan</option>
-                                                    <option value="OUP Kupingan">OUP Joint</option>
+                                                    <option value="OUP Joint">OUP Joint</option>
+                                                    <option value="OUP Ukuran & Kualitas">OUP Ukuran & Kualitas</option>
+                                                    <option value="OUP Ukuran & Kualitas">OUP Nama & Ukuran</option>
                                                 </select>
                                             </div>
                                         </div>
