@@ -95,7 +95,8 @@ class CorrController extends Controller
     {
         $corrm = Corr_M::create([   
             'kode_plan' => $request->kodeplan,
-            'tanggal' => $request->tgl
+            'tanggal' => $request->tgl,
+            'shift' => $request->shift
         ]);
 
         $data = count($request->noOpi);
@@ -113,8 +114,9 @@ class CorrController extends Controller
             $corrd = Corr_D::create([
                 'opi_id'=> $request->opi_id[$i],
                 'plan_corr_m_id' => $corrm->id,
-                // 'kode_plan_d' => $request->kodeplan[$i],
+                'kode_plan_d' => $request->kodeplan,
                 'urutan' => $request->urutan[$i],
+                'dt_perubahan' => $request->dtperubahan[$i],
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
                 'flute' => $request->flute[$i],
@@ -124,16 +126,28 @@ class CorrController extends Controller
                 'qtyOrder' => $request->plan[$i],
                 'sisa' => $request->plan[$i],
                 'ukuran_roll' => $request->roll[$i],
+                'custom_roll' => $request->rollcustom[$i],
                 'cop' => $request->cop[$i],
                 'trim_waste' => $request->trim[$i],
                 'rm_order' => $request->rmorder[$i],
                 'tonase' => $request->beratOrder[$i],
+                'jenis_atas' => $request->kertasAtas[$i],
+                'gram_atas' => $request->gramAtas[$i],
+                'jenis_bf' => $request->kertasFlute1[$i],
+                'gram_bf' => $request->gramFlute1[$i],
+                'jenis_tengah' => $request->kertasTengah[$i],
+                'gram_tengah' => $request->gramTengah[$i],
+                'jenis_cf' => $request->kertasFlute2[$i],
+                'gram_cf' => $request->gramFlute2[$i],
+                'jenis_bawah' => $request->kertasBawah[$i],
+                'gram_bawah' => $request->gramBawah[$i],
                 'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
                 'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
                 'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
                 'kebutuhan_kertasFlute2' => $request->kebutuhanFlute2[$i],
                 'kebutuhan_kertasBawah' => $request->kebutuhanBawah[$i],
                 'keterangan' => $request->keterangan[$i],
+                'toleransi' => $request->toleransi[$i],
                 'status' => $status,
                 'lock' => $lock
             ]);
@@ -148,8 +162,6 @@ class CorrController extends Controller
         $upCorrm->total_Berat = $berattotal;
 
         $upCorrm->save();
-
-        
         
         return redirect('admin/plan/corr');
     }
@@ -160,9 +172,13 @@ class CorrController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function delete($id)
     {
-        //
+        $corr = Corr_D::find($id);
+        
+        $corr->delete();
+
+        return redirect()->to(url()->previous());
     }
 
     /**
@@ -175,7 +191,7 @@ class CorrController extends Controller
     {
         
         $opi = Opi_M::opi2()->get();
-        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->get();
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->orderBy('urutan','asc')->get();
 
         $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
 
@@ -199,12 +215,14 @@ class CorrController extends Controller
         $berattotal = 0;
 
         for ($i=1; $i <= count($data1); $i++) { 
+            // dd($request->detail[$i]);
             if ($request->detail[$i] != '') {
                 $corrd = Corr_D::find($request->detail[$i]);
                 // dd($corrd);
                 $corrd->plan_corr_m_id = $id;
                 $corrd->opi_id = $request->opi_id[$i];
                 $corrd->urutan = $request->urutan[$i];
+                $corrd->dt_perubahan = $request->dtperubahan[$i];
                 $corrd->sheet_p = $request->sheetp[$i];
                 $corrd->sheet_l = $request->sheetl[$i];
                 $corrd->bentuk = $request->tipebox[$i];
@@ -214,14 +232,26 @@ class CorrController extends Controller
                 $corrd->qtyOrder = $request->plan[$i];
                 $corrd->sisa = $request->plan[$i];
                 $corrd->ukuran_roll = $request->roll[$i];
+                $corrd->custom_roll = $request->rollcustom[$i];
                 $corrd->cop = $request->cop[$i];
                 $corrd->trim_waste = $request->trim[$i];
+                $corrd->jenis_atas = $request->kertasAtas[$i];
+                $corrd->gram_atas = $request->gramAtas[$i];
+                $corrd->jenis_bf = $request->kertasFlute1[$i];
+                $corrd->gram_bf = $request->gramFlute1[$i];
+                $corrd->jenis_tengah = $request->kertasTengah[$i];
+                $corrd->gram_tengah = $request->gramTengah[$i];
+                $corrd->jenis_cf = $request->kertasFlute2[$i];
+                $corrd->gram_cf = $request->gramFlute2[$i];
+                $corrd->jenis_bawah = $request->kertasBawah[$i];
+                $corrd->gram_bawah = $request->gramBawah[$i];
                 $corrd->kebutuhan_kertasAtas = $request->kebutuhanAtas[$i];
                 $corrd->kebutuhan_kertasFlute1 = $request->kebutuhanFlute1[$i];
                 $corrd->kebutuhan_kertasTengah = $request->kebutuhanTengah[$i];
                 $corrd->kebutuhan_kertasFlute2 = $request->kebutuhanFlute2[$i];
                 $corrd->kebutuhan_kertasBawah = $request->kebutuhanBawah[$i];
                 $corrd->tonase = $request->beratOrder[$i];
+                $corrd->toleransi = $request->toleransi[$i];
                 $corrd->rm_order = $request->rmorder[$i];
                 $corrd->keterangan = $request->keterangan[$i];
 
@@ -233,6 +263,7 @@ class CorrController extends Controller
                         'opi_id' => $request->opi_id[$i],
                         'kode_plan_d' => $request->kodeplan,
                         'urutan' => $request->urutan[$i],
+                        'dt_perubahan' => $request->dtperubahan[$i],
                         'sheet_p' => $request->sheetp[$i],
                         'sheet_l' => $request->sheetl[$i],
                         'flute' => $request->flute[$i],
@@ -242,10 +273,21 @@ class CorrController extends Controller
                         'qtyOrder' => $request->plan[$i],
                         'sisa' => $request->plan[$i],
                         'ukuran_roll' => $request->roll[$i],
+                        'custom_roll' => $request->rollcustom[$i],
                         'cop' => $request->cop[$i],
                         'trim_waste' => $request->trim[$i],
                         'rm_order' => $request->rmorder[$i],
                         'tonase' => $request->beratOrder[$i],
+                        'jenis_atas' => $request->kertasAtas[$i],
+                        'gram_atas' => $request->gramAtas[$i],
+                        'jenis_bf' => $request->kertasFlute1[$i],
+                        'gram_bf' => $request->gramFlute1[$i],
+                        'jenis_tengah' => $request->kertasTengah[$i],
+                        'gram_tengah' => $request->gramTengah[$i],
+                        'jenis_cf' => $request->kertasFlute2[$i],
+                        'gram_cf' => $request->gramFlute2[$i],
+                        'jenis_bawah' => $request->kertasBawah[$i],
+                        'gram_bawah' => $request->gramBawah[$i],
                         'kebutuhan_kertasAtas' => $request->kebutuhanAtas[$i],
                         'kebutuhan_kertasFlute1' => $request->kebutuhanFlute1[$i],
                         'kebutuhan_kertasTengah' => $request->kebutuhanTengah[$i],
@@ -267,6 +309,7 @@ class CorrController extends Controller
         $upCorrm->total_RM = $rmjumlah;
         $upCorrm->revisi = $request->revisi;
         $upCorrm->total_Berat = $berattotal;
+        $upCorrm->shift = $request->shift;
 
         $upCorrm->save();
         

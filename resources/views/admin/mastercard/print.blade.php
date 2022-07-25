@@ -106,7 +106,7 @@
 	</tr>
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="49" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3 >CUSTOMER</font></b></td>
-		<td colspan=3 align="left" valign=middle><font face="Calibri" size=4 color="#000000">#</font></td>
+		<td colspan=3 align="left" valign=middle><font face="Calibri" size=4 color="#000000">{{ $mc->customer }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000" size=3>Bentuk</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->tipeBox }}</font></td>
 		<td colspan=2 align="left" valign=middle><font face="Calibri" size=3 color="#000000">{{ $mc->tipeCrease }}</font></td>
@@ -143,7 +143,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">mm</font></td>
 		<td align="right" valign=middle bgcolor="#FFFFFF" sdval="0" sdnum="1033;"><font face="Calibri" color="#FFFFFF">Err:504</font></td>
 		<td align="center" valign=middle><b><font face="Calibri" color="#000000" size=3>OUT</font></b></td>
-		<td align="right" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF">0</font></td>
+		<td align="right" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF">{{ $mc->outConv }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -168,7 +168,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">m</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td colspan=2 align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>BERAT KUALITAS PRODUKSI</font></b></td>
-		<td align="right" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>{{ $mc->gramSheetCorrProduksi2 }}</font></td>
+		<td align="right" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>{{ $mc->brt_kualitas }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -193,7 +193,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td colspan=2 align="left" valign=top><b><font face="Times New Roman" size=5 color="#000000"><br></font></b></td>
 		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>BERAT / BOX</font></b></td>
-		<td align="right" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>0.38</font></td>
+		<td align="right" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=3>{{ $mc->gramSheetCorrProduksi2 }}</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -540,121 +540,158 @@
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
+	
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000" size=3>Gambar</font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000" size=3>149.5</font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr>
-	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="30" sdnum="1033;0;#,##0"><font face="Calibri" color="#000000" size=3>30</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000" size=3>483</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="298" sdnum="1033;"><font face="Calibri" color="#000000" size=3>298</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="483" sdnum="1033;"><font face="Calibri" color="#000000" size=3>483</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF" sdval="295" sdnum="1033;"><font face="Calibri" color="#000000" size=3>295</font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="290" sdnum="1033;"><font face="Calibri" color="#000000" size=3>290</font></td>
-		<td align="left" valign=bottom sdval="589" sdnum="1033;0;0.0"><b><font face="Calibri" color="#000000" size=3>589.0</font></b></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
+	
 	<tr>
-		<td height="21" align="left" valign=middle sdval="44707.7871157286" sdnum="1033;0;DDDD&quot;, &quot;MMMM&quot; &quot;D&quot;, &quot;YYYY&quot;, &quot;H&quot;:&quot;MM&quot;:&quot;SS&quot; &quot;AM/PM"><font face="Calibri" color="#000000">Thursday, May 26, 2022, 6:53:27 PM</font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"> </font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 2px double #000000; border-right: 2px double #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle bgcolor="#FFFFFF"><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF" sdval="149.5" sdnum="1033;0;0.0"><font face="Calibri" color="#000000" size=3>149.5</font></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td colspan=4 align="center" valign=bottom sdval="1589" sdnum="1033;0;#,##0"><b><font face="Calibri" color="#000000" size=3>1,589</font></b></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr>
-	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-	</tr>
-	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#000000"><br></font></b></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="center" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="center" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF">KET</font></b></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td height="21" align="left" valign=middle><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td colspan=2 align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Calibri" color="#FFFFFF"><br></font></b></td>
-		<td align="center" valign=middle><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
-		<td align="left" valign=bottom><font face="Calibri" color="#FFFFFF"><br></font></td>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br>Gambar</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+	<tr>
+		<td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="900px" src="/upload/{{ $mc->gambar }}" alt=""></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
 </table>
-<!-- ************************************************************************** -->
 </body>
 
 </html>

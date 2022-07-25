@@ -11,35 +11,10 @@ class HasilConv extends Model
 
     protected $table = 'hasil_plan_conv';
     protected $fillable = [
-        'plan_conv_m_id',
-        'plan_conv_d_id',
-        'opi_id',
+        'tanggal',
+        'mesin',
         'noOpi',
-        'mesin1',
-        'mesin2',
-        'mesin3',
-        'mesin4',
-        'mesin5',
-        'mesin6',
-        'tgl_mesin1',
-        'tgl_mesin2',
-        'tgl_mesin3',
-        'tgl_mesin4',
-        'tgl_mesin5',
-        'tgl_mesin6',
-        'jml_Order',
-        'hasil_baik_mesin1',
-        'hasil_jelek_mesin1',
-        'hasil_baik_mesin2',
-        'hasil_jelek_mesin2',
-        'hasil_baik_mesin3',
-        'hasil_jelek_mesin3',
-        'hasil_baik_mesin4',
-        'hasil_jelek_mesin4',
-        'hasil_baik_mesin5',
-        'hasil_jelek_mesin5',
-        'hasil_baik_mesin6',
-        'hasil_jelek_mesin6',
+        'hasil',        
         'keterangan'
     ];
 

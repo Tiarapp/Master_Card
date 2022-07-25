@@ -103,17 +103,17 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <?php 
-                                                                                foreach ($cust as $data) { ?>
+                                                                                // foreach ($cust as $data) { ?>
                                                                                     <tr>
-                                                                                        <td scope="row">{{ $data->Kode }}</td>
+                                                                                        {{-- <td scope="row">{{ $data->Kode }}</td>
                                                                                         <td>{{ $data->Nama }}</td>
                                                                                         <td>{{ $data->AlamatKantor }}</td>
                                                                                         <td>{{ $data->TelpKantor }}</td>
                                                                                         <td>{{ $data->FaxKantor }}</td>
-                                                                                        <td>{{ $data->AlamatKirim }}</td>
+                                                                                        <td>{{ $data->AlamatKirim }}</td> --}}
                                                                                     </tr>
                                                                                     <?php
-                                                                                }
+                                                                                // }
                                                                                 ?>
                                                                             </tbody>
                                                                         </table>
@@ -259,10 +259,10 @@
                                             <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-1">
-                                            <label class="control-label">Out Conv</label>
+                                            <label class="control-label">Gram Kualitas</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" >
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->brt_kualitas }}" name="gram_kualitas" id="gram_kualitas" >
                                         </div>
                                     </div>
                                     <div class="row">
@@ -357,6 +357,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getSheet();getKodeBarang();" >
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="control-label">Out Conv</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control txt_line" value="{{ $mc->outConv }}" name="outConv" id="outConv" >
                                         </div>
                                     </div>
                                     <div class="row">
@@ -679,7 +685,8 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" value="{{ $mc->gambar }}" name="gambar" id="gambar">
+                                            <input type="file" name="gambar" id="gambar" />
+                                            <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
                                         </div>
                                     </div>
                                 </div>
@@ -996,6 +1003,7 @@
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -1022,6 +1030,7 @@
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
             
         } else {
             
@@ -1034,6 +1043,7 @@
             document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak').value = result.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
         }
         
         return result;
@@ -1097,6 +1107,7 @@
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -1123,6 +1134,7 @@
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
             
         } else {
 
@@ -1135,6 +1147,7 @@
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
         }
     }
     
