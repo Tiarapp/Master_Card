@@ -225,8 +225,14 @@
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $data->urutan }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
       <?php
-        $date=date_create($data->dt_perubahan);
-        echo date_format($date,"d M");
+        if ($data->dt_perubahan != '') {
+			$tgl = $data->dt_perubahan;
+			$date = date_format($date, "d M");
+		} else {
+			$date = '';
+		}
+		;
+        echo $date;
       ?></font></b></td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $data->mckode }}</font></b></td>
       <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=2 color="#000000">{{ $data->barang }}</font></b></td>

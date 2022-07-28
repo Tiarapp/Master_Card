@@ -1083,8 +1083,8 @@ td
  <tr height='20' style='mso-height-source:userset;height:15pt'>
 <td height='18' class='x21' width='25' style='height:13.5pt;width:18.75pt;'>&nbsp;</td>
 <td colspan='6' class='x22' width='543' style='mso-ignore:colspan;'></td>
-<td height='20' class='x22' width='71' style='text-align: left;height:15pt;width:53.25pt;' align='left' valign='top'><span style='mso-ignore:vglayout;position:absolute;z-index:4;margin-left:38px;margin-top:4px;width:53px;height:63px'><img width='53' height='63' src="#" name='image1.jpg'></span><span  style='mso-ignore:vglayout2'><table cellpadding='0' cellspacing='0'><tr><td height='20' class='x22' width='71' style='height:pt;width:53.25pt;'></td></tr></table></span></td>
-<td colspan='3' class='x22' width='136' style='mso-ignore:colspan;'></td>
+<td height='20' class='x22' width='71' style='text-align: left;height:15pt;width:53.25pt;' align='left' valign='top'><span style='mso-ignore:vglayout;position:absolute;z-index:4;margin-left:38px;margin-top:4px;width:53px;height:63px'><img width='53' height='63' style="margin-top: 20px" src="{{ asset('asset/image/logo.jpg') }}" name='image1.jpg'></span><span  style='mso-ignore:vglayout2'><table cellpadding='0' cellspacing='0'><tr><td height='20' class='x22' width='71' style='height:pt;width:53.25pt;'></td></tr></table></span></td>
+<td colspan='3' class='x22' width='136' style='mso-ignore:colspan; position:absolute;'>FR-MKT-05</td>
  </tr>
  <tr height='20' style='mso-height-source:userset;height:15pt'>
 <td height='20' class='x22' style='height:15pt;'>&nbsp;</td>
@@ -1095,7 +1095,7 @@ td
  </tr>
  <tr height='20' style='mso-height-source:userset;height:15pt'>
 <td colspan='7' height='20' class='x22' style='mso-ignore:colspan;height:15pt;'></td>
-<td height='20' class='x22' width='71' style='text-align: left;height:15pt;width:53.25pt;' align='left' valign='top'><span style='mso-ignore:vglayout;position:absolute;z-index:1;margin-left:7px;margin-top:8px;width:114px;height:50px'><img width='114' height='26' src="" name='Shape 2'></span><span  style='mso-ignore:vglayout2'><table cellpadding='0' cellspacing='0'><tr><td height='20' class='x22' width='71' style='height:15pt;width:53.25pt;'></td></tr></table></span></td>
+<td height='20' class='x22' width='71' style='text-align: left;height:15pt;width:53.25pt;' align='left' valign='top'><span style='mso-ignore:vglayout;position:absolute;z-index:1;margin-left:2px;margin-top:30px;width:114px;height:50px;text-'>Corrugated Carton Box</span><span  style='mso-ignore:vglayout2'><table cellpadding='0' cellspacing='0'><tr><td height='20' class='x22' width='71' style='height:15pt;width:53.25pt;'></td></tr></table></span></td>
 <td colspan='3' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='14' style='mso-height-source:userset;height:10.5pt'>
@@ -1383,7 +1383,7 @@ td
  <tr height='16' style='mso-height-source:userset;height:12pt'>
 <td colspan='4' height='15' class='x76' style='height:11.25pt;'>PT. Sarana Packaging Agrapana</td>
 <td colspan='3' class='x22' style='mso-ignore:colspan;'></td>
-<td colspan='2' class='x61' x:num="44690.43178425926" x:fmla="=NOW()">5/9/2022 10:21:46</td>
+<td colspan='2' class='x61' x:num="44690.43178425926" x:fmla="=NOW()"><?php echo date("d-m-Y h:i:s")?></td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='16' style='mso-height-source:userset;height:12pt'>
