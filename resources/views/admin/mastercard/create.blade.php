@@ -256,7 +256,7 @@
                                             <label class="control-label">Gram Kualitas</label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control txt_line" name="gram_kualitas" id="gram_kualitas">
+                                            <input type="text" class="form-control txt_line" name="gram_kualitas" id="gram_kualitas">
                                         </div>
                                     </div>
                                     <div class="row">

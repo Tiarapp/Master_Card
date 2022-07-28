@@ -42,9 +42,9 @@ class MastercardController extends Controller
      */
     public function create()
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
         
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -59,8 +59,8 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            // 'item',
-            // 'cust',
+            'item',
+            'cust',
             'substance',
             'box',
             'colorcombine',
@@ -201,8 +201,8 @@ class MastercardController extends Controller
      */
     public function edit($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -257,8 +257,8 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
         
         return view('admin.mastercard.edit', compact([
-            // 'item',
-            // 'cust',
+            'item',
+            'cust',
             'tipe',
             'substance',
             'box',
@@ -328,7 +328,7 @@ class MastercardController extends Controller
             'gramSheetCorrProduksi2' => 'nullable',
             'colorCombine_id' => 'required',
             'keterangan' => 'nullable',
-            'gambar'    => 'required|file|mimes:jpeg,png,jpg|max: 1048',
+            'gambar'    => 'nullable|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
         ], $messages);
 
@@ -400,8 +400,8 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -458,8 +458,8 @@ class MastercardController extends Controller
         }
         
         return view('admin.mastercard.revisi', compact([
-            // 'cust',
-            // 'item',
+            'cust',
+            'item',
             'tipe',
             'substance',
             'box',
@@ -564,7 +564,7 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as cfP', 'SubsProduksi.jenisGramFlute2_id', '=', 'cfP.id')
             ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
             ->leftJoin('box', 'box_id', 'box.id')
-            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as linerBawahP')
+            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as linerBawahP')
             ->where('mc.id', $id)
             ->first();
         // dd($mc);
