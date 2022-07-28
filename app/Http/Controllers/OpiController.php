@@ -34,7 +34,7 @@ class OpiController extends Controller
         if(empty($request->input('search.value')))
         {            
             $opi = Opi_M::opi()->offset($start)
-                         ->limit(50)
+                         ->limit(100)
                          ->orderBy('NoOPI')
                          ->get();
                          
@@ -45,10 +45,12 @@ class OpiController extends Controller
             $search = $request->input('search.value'); 
 
             $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                             ->offset($start)
-                            ->limit($limit)
+                            ->limit(100)
                             ->orderBy($order, $dir)
                             ->get();
 
@@ -205,13 +207,12 @@ class OpiController extends Controller
         $day = date("D", $request->tglKirimDt);
         
         $lastOpi = Opi_M::latest()->first();
-        $check = Opi_M::whereBetween('nama', ['0001B', $lastOpi->nama ])->get();
         $alphabet = "B";
-        // $numb_opi = str_pad(count($check)+252+4,4, '0', STR_PAD_LEFT).$alphabet;
-        $numb_opi = str_pad(count($check)+1900+4,4, '0', STR_PAD_LEFT).$alphabet;
+        $nomer = preg_replace('/[^0-9]/', '', $lastOpi->nama)+1;
+        $numb_opi = $nomer.$alphabet;
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
-        // dd($checkOpi);
+        // dd($numb_opi);
 
         if ($checkOpi == null) {
         
