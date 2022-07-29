@@ -558,13 +558,17 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as cfK', 'SubsKontrak.jenisGramFlute2_id', '=', 'cfK.id')
             ->leftJoin('jenis_gram as linerBawahK', 'SubsKontrak.jenisGramLinerBawah_id', '=', 'linerBawahK.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            ->leftJoin('color as color1', 'color_combine.idColor1', '=', 'color1.id')
+            ->leftJoin('color as color2', 'color_combine.idColor2', '=', 'color2.id')
+            ->leftJoin('color as color3', 'color_combine.idColor3', '=', 'color3.id')
+            ->leftJoin('color as color4', 'color_combine.idColor4', '=', 'color4.id')
             ->leftJoin('jenis_gram as linerAtasP', 'SubsProduksi.jenisGramLinerAtas_id', '=', 'linerAtasP.id')
             ->leftJoin('jenis_gram as bfP', 'SubsProduksi.jenisGramFlute1_id', '=', 'bfP.id')
             ->leftJoin('jenis_gram as linerTengahP', 'SubsProduksi.jenisGramLinerTengah_id', '=', 'linerTengahP.id')
             ->leftJoin('jenis_gram as cfP', 'SubsProduksi.jenisGramFlute2_id', '=', 'cfP.id')
             ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
             ->leftJoin('box', 'box_id', 'box.id')
-            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as linerBawahP')
+            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4')
             ->where('mc.id', $id)
             ->first();
         // dd($mc);
