@@ -342,13 +342,6 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
-        // dd($nama_file);
-        // $file = $request->file('gambar');
-        // $nama_file = time()."_".$file->getClientOriginalName();
-
-        // $tujuan_upload = 'upload';
-        // $file->move($tujuan_upload, $nama_file);
-
         Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,

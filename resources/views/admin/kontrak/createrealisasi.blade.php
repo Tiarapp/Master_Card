@@ -177,6 +177,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>OPI</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="js-example-basic-single" name="opi" id="opi">
+                                                    @foreach ($opi as $opi)
+                                                        <option value="{{ $opi->id }}">{{ $opi->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             {{-- <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">

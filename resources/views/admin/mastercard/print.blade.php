@@ -216,10 +216,12 @@
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->JAtasP }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->AtasP }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->bfP }}</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{$mc->TengahP}}</font></td>
+
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->TengahP }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->cfP }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->BawahP }}</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>M</font></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->JBawahP }}</font></td>
+
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdnum="1033;0;_(* #,##0_);_(* \(#,##0\);_(* &quot;-&quot;??_);_(@_)"><font face="Calibri" color="#000000" size=3> {{ $mc->flute }} </font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -229,10 +231,11 @@
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->JAtasK }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->AtasK }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="125" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->bfK }}</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->TengahK }}</font></td>
+
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->cfK }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="110" sdnum="1033;"><font face="Calibri" color="#000000" size=3>{{ $mc->BawahK }}</font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><font face="Calibri" color="#000000" size=3>{{ $mc->JBawahK }}</font></td>
+
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

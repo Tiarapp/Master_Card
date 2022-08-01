@@ -12,6 +12,7 @@ class RealisasiKirim extends Model
     protected $table = 'realisasi_kirim';
     protected $fillable =[
         'kontrak_m_id',
+        'opi_id',
         'tanggal_kirim',
         'qty_kirim',
         'createdBy'
