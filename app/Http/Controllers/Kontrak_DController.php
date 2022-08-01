@@ -600,17 +600,25 @@ class Kontrak_DController extends Controller
             ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
             ->first();
 
+        $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
+
         $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
 
-        return view('admin.kontrak.createrealisasi', compact('kontrak_D', 'kontrak_M', 'cust'));
+        return view('admin.kontrak.createrealisasi', compact(
+            'kontrak_D', 
+            'kontrak_M', 
+            'cust', 
+            'opi'
+        ));
     }
 
     public function store_realisasi(Request $request)
     {
         RealisasiKirim::create([
             'kontrak_m_id' => $request->idkontrak,
+            'opi_id' => $request->opi,
             'tanggal_kirim' => $request->tanggal,
             'qty_kirim' => $request->qtyKirim,
             'createdBy' => $request->createdBy
