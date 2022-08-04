@@ -169,7 +169,7 @@
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">DT Perubahan</font></b></td>
 		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdnum="1033;1057;DD MMMM YYYY"><b><font size=2 color="#000000">No. MC</font></b></td>
-		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=2 color="#000000">   </font></b></td>
+		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000"> Nama Item </font></b></td>
 		<td style="border-top: 1px solid #000000;" align="center" valign=middle "><b><font size=2 color="#000000">L</font></b></td>
 		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle "><b><font size=2 color="#000000">P</font></b></td>
 		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">BENTUK</font></b></td>
@@ -185,15 +185,15 @@
     
   @foreach ($data1 as $data)
     <tr>
-      <td style="border-left: 1px solid #000000" height="30" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM&quot; &quot;"><b><font size=2 color="#000000"><br></font></b></td>
+      <td style="border-left: 1px solid #000000; border-bottom: 1px solid #000000" height="30" align="center" valign=middle rowspan="2"><b><font size=2 color="#000000">{{ $data->urutan }}</font></b></td>
       <td style="border-left: 1px solid #000000" align="center" valign=middle sdval="44767" sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
       <?php
         $date=date_create($data->tglDt);
-        echo date_format($date,"d M");
+        echo date_format($date,"d M y");
       ?>
       </font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=3 color="#000000">{{ $data->noopi }}</font></b></td>
-      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=2 color="#000000">{{ $data->customer }}</font></b></td>
+      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=1 color="#000000">{{ $data->customer }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="979" "><b><font size=3 color="#000000">{{ number_format($data->lebar,0,',','.') }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="1589" "><b><font size=3 color="#000000">{{ number_format($data->panjang,0,',','.') }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $data->flute }}</font></b></td>
@@ -222,24 +222,24 @@
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle><font size=2 color="#000000">{{ $data->keterangan }}</font></td>
     </tr>
     <tr>
-      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $data->urutan }}</font></b></td>
+      {{-- <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $data->urutan }}</font></b></td> --}}
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
       <?php
         if ($data->dt_perubahan != '') {
-			$tgl = $data->dt_perubahan;
-			$date = date_format($date, "d M");
+			$tgl = date_create($data->dt_perubahan);
+			$date = date_format($tgl, "d M y");
+			echo $date;
 		} else {
 			$date = '';
+			echo $date;
 		}
-		;
-        echo $date;
       ?></font></b></td>
       <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $data->mckode }}</font></b></td>
       <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=2 color="#000000">{{ $data->barang }}</font></b></td>
       <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=3 color="#000000">{{ $data->tipebox }}</font></b></td>
-      <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($data->order,0,',','.') }}</font></b></td>
-      <td style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($data->order,0,',','.') }}</font></b></td>
-      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format($data->order/$data->out_corr,0,',','.') }}</font></b></td>
+      <td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($data->jml_order,0,',','.') }}</font></b></td>
+      <td style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($data->jml_order/$data->out_flexo,0,',','.') }}</font></b></td>
+      <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format(($data->jml_order/$data->out_flexo)/$data->out_corr,0,',','.') }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="1749.53667" "><b><font size=2 color="#000000">{{ number_format($data->kebutuhan_kertasAtas,0,',','.') }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($data->kebutuhan_kertasFlute1,0,',','.') }}</font></b></td>
       <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($data->kebutuhan_kertasTengah,0,',','.') }}</font></b></td>

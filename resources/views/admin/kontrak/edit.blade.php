@@ -92,17 +92,17 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php 
-                                                                        // foreach ($cust as $data) { ?>
-                                                                            {{-- <tr>
+                                                                        foreach ($cust as $data) { ?>
+                                                                            <tr>
                                                                                 <td scope="row">{{ $data->Kode }}</td>
                                                                                 <td>{{ $data->Nama }}</td>
                                                                                 <td>{{ $data->AlamatKantor }}</td>
                                                                                 <td>{{ $data->TelpKantor }}</td>
                                                                                 <td>{{ $data->FaxKantor }}</td>
                                                                                 <td>{{ $data->AlamatKirim }}</td>
-                                                                            </tr> --}}
+                                                                            </tr>
                                                                             <?php
-                                                                        // }
+                                                                        }
                                                                         ?>
                                                                     </tbody>
                                                                 </table>
@@ -175,6 +175,7 @@
                                                     <option value="OUP Ukuran & Kualitas">OUP Ukuran & Kualitas</option>
                                                     <option value="OUP Nama & Ukuran">OUP Nama & Ukuran</option>
                                                     <option value="OUP Nama & Warna">OUP Nama & Warna</option>  
+                                                    <option value="OUP Nama & Kualitas">OUP Nama & Kualitas</option>
                                                 </select>
                                             </div>
                                         </div>

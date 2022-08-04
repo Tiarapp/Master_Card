@@ -267,7 +267,7 @@
                                         <label>Order</label> 
                                     </div> 
                                     <div class='col-md-2'>  
-                                        <input type='text' class='form-control txt_line' value="{{ $detail->order }}" name='order[{{ $count }}]' id='order[{{ $count }}]'> 
+                                        <input type='text' class='form-control txt_line' value="{{ $detail->jml_order }}" name='order[{{ $count }}]' id='order[{{ $count }}]'> 
                                     </div>  
                                 </div>  
                                 <div class='row'> 
@@ -535,7 +535,7 @@ $(document).ready(function(){
 
             // console.log(UkRoll);
             
-            qtyPlan =  parseInt(order) + (order*(toleransi/100)/outConv);
+            qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outConv;
 
             cop = qtyPlan/outCorr;
 
@@ -543,7 +543,7 @@ $(document).ready(function(){
 
             rmorder = (sheetp*cop)/1000;
 
-            tonase = qtyPlan*gramSheet;
+            tonase = order*gramSheet;
 
             if (gAtas != '') {
                 KAtas = rmorder*(hitungroll/1000)*gAtas/1000;
