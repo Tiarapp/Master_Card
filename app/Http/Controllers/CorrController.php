@@ -124,6 +124,7 @@ class CorrController extends Controller
                 'out_corr' => $request->outCorr[$i],
                 'out_flexo' => $request->outFlexo[$i],
                 'qtyOrder' => $request->plan[$i],
+                'jml_order' => $request->order[$i],
                 'sisa' => $request->plan[$i],
                 'ukuran_roll' => $request->roll[$i],
                 'custom_roll' => $request->rollcustom[$i],
@@ -230,6 +231,7 @@ class CorrController extends Controller
                 $corrd->out_corr = $request->outCorr[$i];
                 $corrd->out_flexo = $request->outFlexo[$i];
                 $corrd->qtyOrder = $request->plan[$i];
+                $corrd->jml_order = $request->order[$i];
                 $corrd->sisa = $request->plan[$i];
                 $corrd->ukuran_roll = $request->roll[$i];
                 $corrd->custom_roll = $request->rollcustom[$i];
@@ -271,6 +273,7 @@ class CorrController extends Controller
                         'out_corr' => $request->outCorr[$i],
                         'out_flexo' => $request->outFlexo[$i],
                         'qtyOrder' => $request->plan[$i],
+                        'jml_order' => $request->order[$i],
                         'sisa' => $request->plan[$i],
                         'ukuran_roll' => $request->roll[$i],
                         'custom_roll' => $request->rollcustom[$i],

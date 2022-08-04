@@ -21,6 +21,7 @@ class Corr_D extends Model
         'out_corr',
         'out_flexo',
         'qtyOrder',
+        'jml_order',
         'ukuran_roll',
         'custom_roll',
         'cop',
