@@ -221,6 +221,20 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
 
+    //Delivery Time
+    // Route::post('kontrakjson', 'DTController@json')->name('kontrak.json');
+    Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
+    // Route::get('/admin/kontrak/json', 'DTController@json')->name('kontrak.json');
+    // Route::get('/admin/kontrak/create', 'DTController@create')->name('kontrak.create');
+    // Route::post('/admin/kontrak/store', 'DTController@store')->name('kontrak.store');
+    // Route::post('/admin/kontrak/store_realisasi', 'DTController@store_realisasi')->name('kontrak.store_realisasi');
+    Route::get('/admin/dt/edit/{id}', 'DTController@edit')->name('dt.edit');
+    // Route::get('/admin/kontrak/realisasi/{id}', 'DTController@add_realisasi')->name('kontrak.realisasi');
+    // Route::get('/admin/kontrak/dt/{id}', 'DTController@add_dt')->name('kontrak.dt');
+    // Route::post('/admin/kontrak/store_dt', 'DTController@store_dt')->name('kontrak.store_dt');
+    Route::put('/admin/dt/update/{id}', 'DTController@update')->name('dt.update');
+    // Route::get('/admin/kontrak/pdf/{id}', 'DTController@pdfprint')->name('kontrak.pdfb1');
+
     //OPI
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
     Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
