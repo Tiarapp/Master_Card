@@ -210,6 +210,25 @@ class OpiController extends Controller
         $alphabet = "B";
         $nomer = preg_replace('/[^0-9]/', '', $lastOpi->nama)+1;
         $numb_opi = $nomer.$alphabet;
+        
+        $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
+
+        $totalB1 = 0;
+        $totaldc = 0;
+        $lain = 0;
+
+        foreach ($checkMesin as $mesin) {
+            if ($request->bentuk == 'B1') {
+                $totalB1 = $totalB1 + $mesin->jumlahOrder;
+            } else if ($request->bentuk == 'DC') {
+                $totaldc = $totaldc + $mesin->jumlahOrder;
+            } else {
+                $lain = $mesin->jumlahOrder + $lain;
+            }
+        }
+
+        // dd($request->jumlahOrder + $totalB1);
+
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
         // dd($numb_opi);
@@ -219,9 +238,12 @@ class OpiController extends Controller
             $kontrakd = Kontrak_D::where('id', '=', $request->kontrakdid)->first();
             
             if ($request->jumlahOrder > $kontrakd->pcsSisaKontrak ) {
-
                 return redirect('admin/opi/create')->with('error', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
-            } else {
+            } else 
+            // if ($request->jumlahOrder + $totalB1 > 15000) {
+            //     return redirect('admin/opi/create')->with('error', 'Kapasitas OPI pada tanggal tersebut sudah maksimal');
+            // } else 
+            {
 
                 $opim = Opi_M::create([   
                     'nama' => $numb_opi,

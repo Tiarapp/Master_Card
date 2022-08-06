@@ -15,6 +15,7 @@ class DeliveryTime extends Model
         'kontrak_m_id',
         'kodeKontrak',
         'tglKirimDt',
+        'dt_perubahan',
         'pcsDt',
         'kgDt',
         'lock',

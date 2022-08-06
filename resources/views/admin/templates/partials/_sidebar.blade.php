@@ -165,6 +165,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('dt') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delivery Time</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('opi') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>OPI</p>
