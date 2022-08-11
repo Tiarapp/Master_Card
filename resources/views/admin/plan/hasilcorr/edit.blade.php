@@ -41,43 +41,47 @@
                 </div>
                 @endif
                 
-                <form action="../update/{{ $corrd->corrdid }}"  method="POST">
-                {{ csrf_field() }}
-                {{ method_field('PUT') }}
+                <form action="{{ route('hasil_produksi') }}"  method="POST">
                     @csrf
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Kode Planning</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="hidden" class="form-control txt_line" name="planmid" id="planmid" value="{{ $corrd->corrmid }}" readonly>
-                                        <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $corrd->corrdid }}" readonly>
-                                        <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $corrd->kodeplanM }}" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tanggal</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="date" class="form-control txt_line" value="{{ $corrd->tglcorr }}" name="tglcorr" id="tglcorr" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <label>OPI</label>
                                     </div>
+                                    <div class="col-md-10">
+                                        <input type="hidden" class="form-control txt_line" name="opi_id" id="opi_id" value="{{ $opi->id }}" readonly>
+                                        {{-- <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $corrd->corrdid }}" readonly> --}}
+                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $opi->namaBarang }}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Customer</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{-- <input type="hidden" class="form-control txt_line" value="{{ $corrd->opi_id }}" name="opi_id" id="opi_id" readonly> --}}
+                                        <input type="text" class="form-control txt_line" value="{{ $opi->Cust }}" name="Cust" id="Cust" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-12">
+                        <div class="row"> 
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tanggal Kirim</label>
+                                    </div>
                                     <div class="col-md-8">
-                                        <input type="hidden" class="form-control txt_line" value="{{ $corrd->opi_id }}" name="opi_id" id="opi_id" readonly>
-                                        <input type="text" class="form-control txt_line" value="{{ $corrd->opikode }}" name="noopi" id="noopi" readonly>
+                                        <input type="date" class="form-control txt_line" value="{{ $opi->tglKirimDt }}" name="tanggal" id="tanggal" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +91,27 @@
                                         <label>Qty Plan</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $corrd->qtyOrder }}" name="plan" id="plan" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $opi->jumlahOrder }}" name="plan" id="plan" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No OPI</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" value="{{ $opi->nama }}" name="nama_opi" id="nama_opi" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Berat</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" value="{{ $opi->gramSheet }}" name="berat" id="berat" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -97,6 +121,20 @@
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Mesin</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select name="mesin" id="mesin" class="js-example-basic-single">
+                                            @foreach ($mesin as $data)
+                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -117,7 +155,18 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Durasi</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Out</label>
@@ -146,7 +195,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div> 
@@ -159,7 +208,7 @@
                                         <label>Hasil Baik</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="baik" id="baik" onchange="getSisa()">
+                                        <input type="number" class="form-control txt_line" name="baik" id="baik" onchange="getSisa()">
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +218,7 @@
                                         <label>Hasil Jelek</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="number" class="form-control txt_line" name="jelek" id="jelek" >
+                                        <input type="number" class="form-control txt_line" name="jelek" id="jelek" onchange="getSisa()">
                                     </div>
                                 </div>
                             </div>
@@ -179,17 +228,20 @@
                                         <label>Jumlah Palet</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="jml_palet" id="jml_palet" >
+                                        <input type="number" class="form-control txt_line" name="palet" id="palet" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Sisa</label>
+                                        <label>Downtime</label>
                                     </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="sisa" id="sisa" >
+                                    <div class="col-md-6">
+                                        <input type="number" class="form-control txt_line" name="downtime" id="downtime" > 
+                                    </div>
+                                    <div class="col-md-2">
+                                        Menit
                                     </div>
                                 </div>
                             </div>
@@ -202,14 +254,34 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Produksi Meter</label>
+                                        <label>Tonase Hasil Baik</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="prod_meter" id="prod_meter">
+                                        <input type="text" name="tonase_baik" id="tonase_baik">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tonase Hasil Jelek</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" name="tonase_jelek" id="tonase_jelek">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Keterangan</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <textarea name="keterangan" id="keterangan" cols="50" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>M2</label>
@@ -232,39 +304,8 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Durasi</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        {{-- <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Mesin Selanjutnya</label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <select class="js-example-basic-single col-md-12" name="mesin" id="mesin">
-                                                    <option value='Flexo A'>Flexo A</option>
-                                                    <option value='Flexo B'>Flexo B</option>
-                                                    <option value='Flexo C'>Flexo C</option>
-                                                    <option value='Stiching'>Stiching</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
                 <button class="btn btn-lg btn-primary" type="submit">SIMPAN
@@ -312,19 +353,19 @@
     }
 
     function getSisa() {
-        plan = document.getElementById("plan").value;
-        hasilbaik = document.getElementById("baik").value;
-        panjang = document.getElementById("sheetp").value;
-        lebar = document.getElementById("sheetl").value;
-        out = document.getElementById("out_corr").value;
+        gram = document.getElementById('berat').value;
+        baik = document.getElementById('baik').value;
+        jelek = document.getElementById('jelek').value;
 
-        sisa = plan - hasilbaik ;
-        rm = ((hasilbaik/out)*(panjang/1000));
-        m2 = (panjang*lebar*hasilbaik)/1000000;
+        gramBaik = gram*baik;
+        gramJelek = gram*jelek;
 
-        document.getElementById("sisa").value = sisa;
-        document.getElementById("prod_meter").value = rm.toFixed(2);
-        document.getElementById("meter_persegi").value = m2.toFixed(2);
+
+        console.log(gramBaik);
+        console.log(gramJelek);
+        document.getElementById('tonase_baik').value = gramBaik;
+        document.getElementById('tonase_jelek').value = gramJelek;
+
     }
 </script>
 @endsection

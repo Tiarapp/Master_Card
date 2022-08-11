@@ -16,8 +16,8 @@ class SalesController extends Controller
      */
     public function index()
     {
-        $sales = DB::table('sales')
-            ->where('deleted', '=', '0')
+        $sales = DB::table('sales_m')
+            // ->where('deleted', '=', '0')
             ->get();
 
             return view('admin.sales.index', compact('sales'));
