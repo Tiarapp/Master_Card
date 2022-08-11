@@ -17,7 +17,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Surat Jalan Palet</h4>
+                <h4 class="modal-title">Detail OPI</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -38,10 +38,10 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Tanggal</label>
+                                        <label>No OPI</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $sj_Palet_M->tanggal }}">
+                                        <input type="text" class="form-control txt_line" name="noopi" id="noopi" value="{{ $opi->nama }}">
                                     </div>
                                 </div>
                             </div>
@@ -50,10 +50,10 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No. Surat Jalan</label>
+                                        <label>Nama Barang</label>
                                     </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan" value="{{ $sj_Palet_M->noSuratJalan }}">
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="" id="" value="{{ $opi->namaBarang }}">
                                     </div>
                                 </div>
                             </div>
@@ -64,10 +64,10 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No. Polisi</label>
+                                        <label>Customer</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noPolisi" id="noPolisi" value="{{ $sj_Palet_M->noPolisi }}">
+                                        <input type="text" class="form-control txt_line" name="noPolisi" id="noPolisi" value="{{ $opi->Cust }}">
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +79,17 @@
                                         <label>No. PO Customer</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noPoCustomer" id="noPoCustomer" value="{{ $sj_Palet_M->noPoCustomer }}">
+                                        <?php
+                                        if ($opi->revisimc == 'R0') {
+                                            $mckode = $opi->mcKode;
+                                        } else {
+                                            $mckode = $opi->mcKode.'-'.$opi->revisimc;
+                                            
+                                        } 
+
+                                        // dd($mckode);
+                                        ?>
+                                        <input type="text" class="form-control txt_line" name="noPoCustomer" id="noPoCustomer" value="{{ $mckode }}">
                                     </div>
                                 </div>
                             </div>
@@ -90,23 +100,23 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Nama Customer</label>
+                                        <label>Kontrak</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="namaCustomer" id="namaCustomer" value="{{ $sj_Palet_M->namaCustomer }}">
+                                        <input type="text" class="form-control txt_line" name="" id="" value="{{ $opi->kode }}">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Alamat Customer</label>
+                                        <label>Ukuran</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        {{-- <input type="textarea" class="form-control txt_line" name="alamatCustomer" id="alamatCustomer"> --}}
-                                        <textarea class="form-control txt_line" name="alamatCustomer" id="alamatCustomer" cols="40" rows="3">{{ $sj_Palet_M->alamatCustomer }}</textarea>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control txt_line" name="alamatCustomer" id="alamatCustomer" value="{{ $opi->panjang.'x'.$opi->lebar.'x'.$opi->tinggi }}">
+                                        {{-- <textarea class="form-control txt_line" name="alamatCustomer" id="alamatCustomer" cols="40" rows="3"></textarea> --}}
                                     </div>
                                 </div>
                             </div>
@@ -115,33 +125,34 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Catatan</label>
-                            {{-- <textarea name="keterangan" id="keterangan" cols="30" rows="10"></textarea> --}}
-                            <input type="text" class="form-control txt_line" name="catatan" id="catatan" value="{{ $sj_Palet_M->catatan }}">
+                            <input type="text" class="form-control txt_line" name="catatan" id="catatan" value="{{ $opi->keterangan }}">
                         </div>
                     </div>
                     
                     <table class="table table-bordered" id="">
                         <thead>
                             <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Ukuran</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">No Kontrak</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Mesin</th>
+                                <th scope="col">Waktu Produksi</th>
+                                <th scope="col">Hasil Baik</th>
+                                <th scope="col">Hasil Jelek</th>
+                                <th scope="col">Downtime</th>
                                 <th scope="col">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             $no =1;
-                            foreach ($sj_Palet_D as $data) {
+                            foreach ($detail as $data) {
                                 ?>
                                 <tr>
-                                    <td scope="row">{{ $no++ }}</td>
-                                    <td>{{ $data->item_palet_id }}</td>
-                                    <td>{{ $data->ukuran }}</td>
-                                    <td>{{ $data->qty }}</td>
-                                    <td>{{ $data->noKontrak }}</td>
+                                    <td scope="row">{{ date('d-m-Y H:i:s', strtotime($data->start_date, )) }}</td>
+                                    <td>{{ $data->mesin }}</td>
+                                    <td>{{ $data->durasi }}</td>
+                                    <td>{{ $data->hasil_baik }}</td>
+                                    <td>{{ $data->hasil_jelek }}</td>
+                                    <td>{{ $data->downtime }} menit</td>
                                     <td>{{ $data->keterangan }}</td>
                                     
                                     <?php
@@ -150,10 +161,6 @@
                                 
                             </tbody>
                         </table>
-                        <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
                     </form>
                 </div>
             </div>

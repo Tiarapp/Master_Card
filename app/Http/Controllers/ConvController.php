@@ -7,6 +7,7 @@ use App\Models\Conv_M;
 use App\Models\HasilControl;
 use App\Models\HasilConv;
 use App\Models\HasilCorr;
+use App\Models\HasilProduksi;
 use App\Models\Opi_M;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -560,9 +561,9 @@ class ConvController extends Controller
 
     public function control() 
     {
-        $control = HasilControl::get();
+        $control = Opi_M::opi()->get();
 
-        // dd($control);
+        dd($control);
 
         return view('admin.plan.hasilconv.control', compact('control'));
     }
