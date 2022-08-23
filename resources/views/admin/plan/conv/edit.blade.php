@@ -43,7 +43,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                              <div class="col-md-4">
+                              <div class="col-md-3">
                                   <div class="row">
                                       <div class="col-md-4">
                                           <label>Mesin</label>
@@ -53,7 +53,7 @@
                                       </div>
                                   </div>
                               </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Kode Planning</label>
@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Tanggal</label>
@@ -73,13 +73,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Shift</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="shift" id="shift" value="{{ $data2->shift }}" onfocusout="getKode()" readonly>
+                                            <input type="text" class="form-control txt_line" name="shift" id="shift" value="{{ $data2->shiftM }}" onfocusout="getKode()" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -105,48 +105,50 @@
                                                                 <table class="table table-bordered" id="data_corr">
                                                                   <thead>
                                                                     <tr>
-                                                                        <th scope="col">Kode</th>
-                                                                        <th scope="col">Delivery Time</th>
-                                                                        <th scope="col">Customer</th>
-                                                                        <th scope="col">Barang</th>
-                                                                        <th scope="col">MC</th>
-                                                                        <th scope="col">Sheet P</th>
-                                                                        <th scope="col">Sheet L</th>
-                                                                        <th scope="col">tipe Box</th>
-                                                                        <th scope="col">Flute</th>
-                                                                        <th scope="col">jumlah Order</th>
-                                                                        <th scope="col">Warna</th>
-                                                                        <th scope="col">Tipe Order</th>
-                                                                        <th scope="col">Finishing</th>
-                                                                        <th scope="col">opi</th>
+                                                                      <th scope="col">Kode</th>
+                                                                      <th scope="col">Delivery Time</th>
+                                                                      <th scope="col">Customer</th>
+                                                                      <th scope="col">Barang</th>
+                                                                      <th scope="col">MC</th>
+                                                                      <th scope="col">Sheet P</th>
+                                                                      <th scope="col">Sheet L</th>
+                                                                      <th scope="col">tipe Box</th>
+                                                                      <th scope="col">Flute</th>
+                                                                      <th scope="col">jumlah Order</th>
+                                                                      <th scope="col">Warna</th>
+                                                                      <th scope="col">Tipe Order</th>
+                                                                      <th scope="col">Finishing</th>
+                                                                      <th scope="col">opi</th>
+                                                                      <th scope="col">Wax</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <?php 
                                                                     foreach ($opi as $data) { ?>
                                                                         <tr>
-                                                                            <td scope="row">{{ $data->noopi }}</td>
-                                                                            <td>{{ $data->tglKirimDt }}</td>
-                                                                            <td>{{ $data->Cust }}</td>
-                                                                            <td>{{ $data->namaBarang }}</td>
-                                                                            <td>
+                                                                          <td scope="row">{{ $data->noopi }}</td>
+                                                                          <td>{{ $data->tglKirimDt }}</td>
+                                                                          <td>{{ $data->Cust }}</td>
+                                                                          <td>{{ $data->namaBarang }}</td>
+                                                                          <td>
                                                                               <?php
-                                                                                if ($data->revisimc != '') {
+                                                                                  if ($data->revisimc != '') {
                                                                                   echo $data->mcKode."-".$data->revisimc;
-                                                                                } else {
+                                                                                  } else {
                                                                                   echo $data->mcKode;
-                                                                                }
+                                                                                  }
                                                                               ?>
-                                                                            </td>
-                                                                            <td>{{ $data->panjangSheet }}</td>
-                                                                            <td>{{ $data->lebarSheet }}</td>
-                                                                            <td>{{ $data->tipeBox }}</td>
-                                                                            <td>{{ $data->flute }}</td>
-                                                                            <td>{{ $data->pcsDt }}</td>
-                                                                            <td>{{ $data->ccnama }}</td>
-                                                                            <td>{{ $data->tipeOrder }}</td>
-                                                                            <td>{{ $data->joint }}</td>
-                                                                            <td>{{ $data->opiid }}</td>
+                                                                          </td>
+                                                                          <td>{{ $data->panjangSheet }}</td>
+                                                                          <td>{{ $data->lebarSheet }}</td>
+                                                                          <td>{{ $data->tipeBox }}</td>
+                                                                          <td>{{ $data->flute }}</td>
+                                                                          <td>{{ $data->pcsDt }}</td>
+                                                                          <td>{{ $data->ccnama }}</td>
+                                                                          <td>{{ $data->tipeOrder }}</td>
+                                                                          <td>{{ $data->joint }}</td>
+                                                                          <td>{{ $data->opiid }}</td>
+                                                                          <td>{{ $data->wax }}</td>
                                                                         </tr>
                                                                         <?php
                                                                     }
@@ -182,7 +184,7 @@
                                   <input type='hidden' class='form-control txt_line' name='roll[{{ $count }}]' id='roll[{{ $count }}]'>
                                   <input type='hidden' class='form-control txt_line' name='bungkus[{{ $count }}]' id='bungkus[{{ $count }}]'>
                                   <input type='hidden' class='form-control txt_line' name='opi_id[{{ $count }}]' id='opi_id[{{ $count }}]'>
-                                  <input type='text' class='form-control txt_line' name='detail[{{ $count }}]' id='detail[{{ $count }}]' value="{{ $data->id }}">
+                                  <input type='hidden' class='form-control txt_line' name='detail[{{ $count }}]' id='detail[{{ $count }}]' value="{{ $data->id }}">
                                 </div>  
                                 <div class='col-md-1'>
                                   <label>DT</label>
@@ -271,6 +273,11 @@
                                 </div>
                                 <div class='col-md-2'>
                                   <input type='text' class='form-control txt_line' name='finishing[{{ $count }}]' id='finishing[{{ $count }}]' value="{{ $data->joint }}" readonly>
+                                </div><div class='col-md-1'>
+                                  <label>Wax</label>
+                                </div>
+                                <div class='col-md-2'>
+                                  <input type='text' class='form-control txt_line' name='wax[{{ $count }}]' id='wax[{{ $count }}]' value="{{ $data->wax }}" readonly>
                                 </div>
                               </div>
                               <div class='row'>
@@ -371,7 +378,7 @@ $(document).ready(function(){
 
     //Once add button is clicked
     $(addButton).click(function(){
-        $("#planconv").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='wax["+countrow+"]' id='wax["+countrow+"]'><input type='hidden' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'><input type='hidden' class='form-control txt_line' name='bungkus["+countrow+"]' id='bungkus["+countrow+"]'><input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'><input type='hidden' class='form-control txt_line' name='detail["+countrow+"]' id='detail["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Out Conv / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='outconv["+countrow+"]' id='outconv["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Jumlah Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label> Warna </label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'> </div> <div class='col-md-1'>  <label>Finishing</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'> </div></div><div class='row'> <div class='col-md-1'>  <label>Tipe Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='tipeOrder["+countrow+"]' id='tipeOrder["+countrow+"]'>   </div> <div class='col-md-1'>  <label>Tipe Box</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-1'>  <label>Urutan</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
+        $("#planconv").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'><input type='hidden' class='form-control txt_line' name='bungkus["+countrow+"]' id='bungkus["+countrow+"]'><input type='hidden' class='form-control txt_line' name='detail["+countrow+"]' id='detail["+countrow+"]'><input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'><input type='hidden' class='form-control txt_line' name='hasilcorrid["+countrow+"]' id='hasilcorrid["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Out Conv / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='outconv["+countrow+"]' id='outconv["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Jumlah Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label> Warna </label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'> </div> <div class='col-md-1'>  <label>Finishing</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'> </div><div class='col-md-1'>  <label>Wax</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='wax["+countrow+"]' id='wax["+countrow+"]'> </div></div><div class='row'> <div class='col-md-1'>  <label>Tipe Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='tipeOrder["+countrow+"]' id='tipeOrder["+countrow+"]'>   </div> <div class='col-md-1'>  <label>Tipe Box</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-1'>  <label>Urutan</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
 
         countrow++;
                 countdata++;
@@ -395,19 +402,21 @@ $(document).ready(function(){
             
             if (countdata-1 != 'null') {
               document.getElementById("noOpi["+(countdata-1)+"]").value = cust[0];
-                document.getElementById("dt["+(countdata-1)+"]").value = cust[1];
-                document.getElementById("customer["+(countdata-1)+"]").value = cust[2];
-                document.getElementById("item["+(countdata-1)+"]").value = cust[3];
-                document.getElementById("mc["+(countdata-1)+"]").value = cust[4];
-                document.getElementById("sheetp["+(countdata-1)+"]").value = cust[5];
-                document.getElementById("sheetl["+(countdata-1)+"]").value = cust[6];
-                document.getElementById("warna["+(countdata-1)+"]").value = cust[10];
-                document.getElementById("tipebox["+(countdata-1)+"]").value = cust[7];
-                document.getElementById("flute["+(countdata-1)+"]").value = cust[8];
-                document.getElementById("order["+(countdata-1)+"]").value = cust[9];
-                document.getElementById("tipeOrder["+(countdata-1)+"]").value = cust[11];
-                document.getElementById("finishing["+(countdata-1)+"]").value = cust[12];
-                document.getElementById("opi_id["+(countdata-1)+"]").value = cust[13];
+              document.getElementById("dt["+(countdata-1)+"]").value = cust[1];
+              document.getElementById("customer["+(countdata-1)+"]").value = cust[2];
+              document.getElementById("item["+(countdata-1)+"]").value = cust[3];
+              document.getElementById("mc["+(countdata-1)+"]").value = cust[4];
+              document.getElementById("sheetp["+(countdata-1)+"]").value = cust[5];
+              document.getElementById("sheetl["+(countdata-1)+"]").value = cust[6];
+              document.getElementById("warna["+(countdata-1)+"]").value = cust[10];
+              document.getElementById("tipebox["+(countdata-1)+"]").value = cust[7];
+              document.getElementById("flute["+(countdata-1)+"]").value = cust[8];
+              document.getElementById("order["+(countdata-1)+"]").value = cust[9];
+              document.getElementById("tipeOrder["+(countdata-1)+"]").value = cust[11];
+              document.getElementById("finishing["+(countdata-1)+"]").value = cust[12];
+              document.getElementById("opi_id["+(countdata-1)+"]").value = cust[13];
+              // document.getElementById("tipebox["+(countdata-1)+"]").value = cust[21];
+              document.getElementById("wax["+(countdata-1)+"]").value = cust[14];
             }
 
             

@@ -42,7 +42,7 @@
                 @endif
                 
                 <form action="{{ route('hasil_produksi') }}"  method="POST">
-                    @csrf
+                @csrf
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
@@ -52,9 +52,11 @@
                                         <label>OPI</label>
                                     </div>
                                     <div class="col-md-10">
-                                        <input type="hidden" class="form-control txt_line" name="opi_id" id="opi_id" value="{{ $opi->id }}" readonly>
+                                        <input type="text" class="form-control txt_line" name="idurl" id="idurl" value="{{ $corr->plan_corr_m_id }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="plan_id" id="plan_id" value="{{ $corr->id }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="opi_id" id="opi_id" value="{{ $corr->opi_id }}" readonly>
                                         {{-- <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $corrd->corrdid }}" readonly> --}}
-                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $opi->namaBarang }}" readonly>
+                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $corr->barang }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +67,7 @@
                                     </div>
                                     <div class="col-md-10">
                                         {{-- <input type="hidden" class="form-control txt_line" value="{{ $corrd->opi_id }}" name="opi_id" id="opi_id" readonly> --}}
-                                        <input type="text" class="form-control txt_line" value="{{ $opi->Cust }}" name="Cust" id="Cust" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $corr->customer }}" name="Cust" id="Cust" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +83,7 @@
                                         <label>Tanggal Kirim</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="date" class="form-control txt_line" value="{{ $opi->tglKirimDt }}" name="tanggal" id="tanggal" readonly>
+                                        <input type="date" class="form-control txt_line" value="{{ $corr->tglkirim }}" name="tanggal" id="tanggal" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +93,7 @@
                                         <label>Qty Plan</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $opi->jumlahOrder }}" name="plan" id="plan" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $corr->qtyOrder }}" name="plan" id="plan" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +103,7 @@
                                         <label>No OPI</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $opi->nama }}" name="nama_opi" id="nama_opi" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $corr->opikode }}" name="nama_opi" id="nama_opi" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +113,7 @@
                                         <label>Berat</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $opi->gramSheet }}" name="berat" id="berat" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $corr->gramSheet }}" name="berat" id="berat" readonly>
                                     </div>
                                 </div>
                             </div>

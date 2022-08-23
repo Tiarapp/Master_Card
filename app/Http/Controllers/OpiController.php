@@ -314,9 +314,11 @@ class OpiController extends Controller
     {
         $opi = Opi_M::find($id);
 
+        $opi->nama = $opi->nama."(CANCEL)";
+        $opi->NoOPI = $opi->NoOPI."(CANCEL)";
 
 
-        dd($opi->kontrak_m_id);
+        $opi->save();
     }
 
     /**

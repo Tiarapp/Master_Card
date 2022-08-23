@@ -69,6 +69,12 @@ class CorrController extends Controller
     {
         return view('admin.plan.corr.index');
     }
+    
+    public function input_hasil()
+    {
+        $data = Corr_M::get();
+        return view('admin.plan.hasilcorr.index',compact('data'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -335,53 +341,14 @@ class CorrController extends Controller
     }
 
     // Hasil Corr
-    public function index_hasil_corr()
+
+    
+    public function control()
     {
-        return view('admin.plan.hasilcorr.index');
+        return view('admin.plan.control.index');
     }
 
-    public function edit_hasil_corr($id)
-    {
-        $opi = Opi_M::opi()->where('opi_m.id', '=', $id)->first();
-        
-        $mesin = Mesin::get();
-        // dd($opi);
-
-        return view('admin.plan.hasilcorr.edit', compact('opi','mesin'));
-    }
-
-    public function hasil_produksi(Request $request)
-    {
-        $hasil = HasilProduksi::create([
-            'opi_id' => $request->opi_id,
-            'noOpi' => $request->nama_opi,
-            'start_date' => $request->start,
-            'end_date' => $request->end,
-            'hasil_baik' => $request->baik,
-            'tonase_baik' => $request->tonase_baik,
-            'hasil_jelek' => $request->jelek,
-            'tonase_jelek' => $request->tonase_jelek,
-            'mesin' => $request->mesin,
-            'keterangan' => $request->keterangan,
-            'downtime' => $request->downtime,
-            'durasi' => $request->durasi,
-            'palet' => $request->palet
-        ]);
-
-        if ($request->mesin == 'STB') {
-            $opi = Opi_M::find($request->opi_id);
-
-            $opi->sisa_order = $opi->jumlahOrder - $request->baik;
-
-            // dd($opi->sisa_order);
-            $opi->save();
-
-            // dd($opi);
-        }
-
-         return redirect('admin/plan/control');
-    }
-
+    
     public function json(Request $request)
     {
         $columns = array(
@@ -436,7 +403,7 @@ class CorrController extends Controller
             foreach ($opi as $opi)
             {
                 $show =  route('detail',$opi->id);
-                $edit =  route('hasilcorr.edit',$opi->id);
+                // $edit =  route('hasilcorr.edit',$opi->id);
                 // $cancel = route('opi.cancel', $opi->id);
 
                 $cek_opi = strpos($opi->nama,"CANCEL");
@@ -444,7 +411,7 @@ class CorrController extends Controller
                 $nestedData['id'] = $opi->id;
                 $nestedData['NoOPI'] = $opi->NoOPI;
 
-                $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='far fa-eye' data-toggle='tooltip' data-placement='bottom' title='Detail' id='Detail'></i></a><a href='{$edit}' title='Edit' class='btn btn-outline-success' type='button'><i class='far fa-edit' data-toggle='tooltip' data-placement='bottom'></i></a>";
+                $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='far fa-eye' data-toggle='tooltip' data-placement='bottom' title='Detail' id='Detail'></i></a>";
                 $nestedData['kode'] = $opi->kode;
                 $nestedData['created_at'] = date('j M Y',strtotime($opi->created_at));
                 $nestedData['tglKirimDt'] = $opi->tglKirimDt;
