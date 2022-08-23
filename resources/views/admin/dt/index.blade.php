@@ -7,7 +7,14 @@
 @section('content')
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
-  <div class="content-header">
+  <div class="content-header"> @if ($message = Session::get('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{ $message }}</strong>
+    </div>
+  @endif
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
@@ -55,9 +62,21 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="../admin/dt/show/{{ $data->id }}" class="btn btn-outline-success" type="button">
-                        <i class="fa fa-eye" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
+                      <?php
+                        if ($data->approve_mkt == 0 && $data->approve_ppic == 1) {
+                      ?>    
+                      <a href="../admin/dt/approve/{{ $data->id }}" class="btn btn-outline-success" type="button">
+                        Need Approve MKT
                       </a>
+                      <?php  }  
+                      else if ($data->approve_mkt == 1 && $data->approve_ppic == 0) {
+                      ?>    
+                        <a href="../admin/dt/approve/{{ $data->id }}" class="btn btn-outline-success" type="button">
+                          Need Approve PPIC
+                        </a>
+                      <?php
+                      }
+                      ?>
                       <a href="../admin/dt/edit/{{ $data->id }}" class="btn btn-outline-warning" type="button">
                         <i class="fa fa-edit" data-toggle="tooltip" data-placement="bottom" title="edit" id="edit"></i>
                       </a>

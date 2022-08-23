@@ -1236,7 +1236,7 @@ td
 <td class='x21'></td>
  </tr>
  <tr height='30' style='mso-height-source:userset;height:22.5pt' id='r2'>
-<td colspan='18' height='30' class='x22' x:fmla="=IF(D4=&quot;&quot;,&quot;&quot;,IF(MID($D$4,5,1)=&quot;A&quot;,&quot;Mesin Flexo A&quot;,IF(MID($D$4,5,1)=&quot;B&quot;,&quot;Mesin Flexo B&quot;,IF(MID($D$4,5,1)=&quot;C&quot;,&quot;Mesin Flexo C&quot;,&quot;&quot;))))" style='height:22.5pt;'>Mesin Flexo A</td>
+<td colspan='18' height='30' class='x22' x:fmla="=IF(D4=&quot;&quot;,&quot;&quot;,IF(MID($D$4,5,1)=&quot;A&quot;,&quot;Mesin Flexo A&quot;,IF(MID($D$4,5,1)=&quot;B&quot;,&quot;Mesin Flexo B&quot;,IF(MID($D$4,5,1)=&quot;C&quot;,&quot;Mesin Flexo C&quot;,&quot;&quot;))))" style='height:22.5pt;'>Mesin Flexo</td>
 <td class='x21'></td>
 <td class='x21'></td>
  </tr>
@@ -1275,8 +1275,8 @@ td
 <td class='x26'></td>
 <td class='x32'></td>
 <td class='x28'></td>
-<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right;'>{{ $total1 }}</td>
-<td class='x34' align='right' x:num="21459" style='text-align:right;'>{{ $kg1 }}</td>
+<td class='x33' align='right' x:num="84439" x:fmla="=SUM(O8:O306)" style='text-align:right; font-size:20px'>{{ $total1 }}</td>
+<td class='x34' align='right' x:num="21459" style='text-align:right;font-size:20px'>{{ $kg1 }}</td>
 <td class='x19'>&nbsp;</td>
 <td class='x16'></td>
 <td class='x21'></td>
@@ -1353,7 +1353,7 @@ td
  
    {{-- Shift 2 --}}
 
-  @if (count($shift2) !== 0)
+  {{-- @if (count($shift2) !== 0)
  <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r3'>
   <td height='31' class='x16' style='height:23.25pt;'></td>
   <td colspan='2' class='x23' >No Planning :</td>
@@ -1467,11 +1467,11 @@ td
    </tr>
    @endforeach
    
-  @endif
+  @endif --}}
 
 
   {{-- Shift 3 --}}
-  @if (count($shift3) !== 0)
+  {{-- @if (count($shift3) !== 0)
  <tr height='31' style='mso-height-source:userset;height:23.25pt' id='r3'>
   <td height='31' class='x16' style='height:23.25pt;'></td>
   <td colspan='2' class='x23' >No Planning :</td>
@@ -1585,7 +1585,7 @@ td
    </tr>
    @endforeach
    
-  @endif
+  @endif --}}
 </table>
 
 </body>

@@ -6,6 +6,7 @@ use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Mastercard;
+use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use Carbon\Carbon;
 // use Yajra\DataTables\Contracts\DataTable;
@@ -597,7 +598,7 @@ class Kontrak_DController extends Controller
     public function add_realisasi($id)
     {
         
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
 
         $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -615,7 +616,7 @@ class Kontrak_DController extends Controller
         return view('admin.kontrak.createrealisasi', compact(
             'kontrak_D', 
             'kontrak_M', 
-            'cust', 
+            // 'cust', 
             'opi'
         ));
     }
@@ -624,11 +625,18 @@ class Kontrak_DController extends Controller
     {
         RealisasiKirim::create([
             'kontrak_m_id' => $request->idkontrak,
-            'opi_id' => $request->opi,
+            // 'opi_id' => $request->opi,
             'tanggal_kirim' => $request->tanggal,
             'qty_kirim' => $request->qtyKirim,
             'createdBy' => $request->createdBy
         ]);
+
+        // $opi = Opi_M::where('id', '=', $request->opi )->first();
+        
+        // $opi->sisa_order = $opi->jumlahOrder - $request->opi;
+        // $opi->save();
+
+        // dd($opi);
 
         return redirect('admin/kontrak');
     }

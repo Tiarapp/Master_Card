@@ -34,27 +34,11 @@
   <section class="content">
     <div class="container-fluid">
     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasilflexo') }}" style="margin-bottom: 20px; color:white;" >FLEXO</a>
+      <a href="{{ route('conv.hasilflexo') }}" style="margin-bottom: 20px; color:white;" >Converting</a>
     </button>
     
     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasiltokai') }}" style="margin-bottom: 20px; color:white;" >TOKAI</a>
-    </button>
-
-    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasilstich') }}" style="margin-bottom: 20px; color:white;" >STICHING</a>
-    </button>
-    
-    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasilwax') }}" style="margin-bottom: 20px; color:white;" >WAX</a>
-    </button>
-    
-    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasilslitter') }}" style="margin-bottom: 20px; color:white;" >SLITTER</a>
-    </button>
-
-    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-      <a href="{{ route('conv.hasilglue') }}" style="margin-bottom: 20px; color:white;" >GLUE</a>
+      <a href="{{ route('index_corr') }}" style="margin-bottom: 20px; color:white;" >Corrugating</a>
     </button>
 
       <div class="card-body">
@@ -93,11 +77,11 @@
         serverSide:true,
         ajax:"{{ route('convd.flexo') }}",
         columns: [
-          { data: 'kodeplanM', name: 'kodeplanM' },
-          { data: 'nomc', name: 'nomc' },
-          { data: 'noopi', name: 'noopi' },
-          { data: 'tgl_kirim', name: 'tgl_kirim' },
-          { data: 'pcsKontrak', name: 'pcsKontrak' },
+          { data: 'kode', name: 'kode' },
+          { data: 'tanggal', name: 'tanggal' },
+          { data: 'shiftM', name: 'shiftM' },
+          { data: 'total_pcs', name: 'total_pcs' },
+          { data: 'total_kg', name: 'total_kg' },
           {
             data: 'action',
             name: 'action',
@@ -105,18 +89,18 @@
             searchable: false
           },
         ],
-        "columnDefs": [
-        {
-          'targets': [0
-          ],
-          'render': function(data, type, full, meta){
-            if(type === 'display'){
-              data = strtrunc(data, 20);
-            }
-            return data;
-          }
-        }
-        ],
+        // "columnDefs": [
+        // {
+        //   'targets': [0
+        //   ],
+        //   'render': function(data, type, full, meta){
+        //     if(type === 'display'){
+        //       data = strtrunc(data, 20);
+        //     }
+        //     return data;
+        //   }
+        // }
+        // ],
         "order": [0, 'asc'],
         "pageLength": 1000,
         dom: 'Bftrip',

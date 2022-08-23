@@ -1507,7 +1507,7 @@ td
  @endforeach
  @endif
 <br>
- @if (count($shift2) != 0)
+ {{-- @if (count($shift2) != 0)
  <tr height='26' style='mso-height-source:userset;height:19.5pt'>
 <td height='26' class='x38' style='height:19.5pt;'></td>
 <td class='x53' style='overflow:hidden;'>No Planning<span style='display:none'>&nbsp;:</span></td>
@@ -1681,7 +1681,7 @@ td
 <td class='x28'></td>
  </tr>
  @endforeach
- @endif
+ @endif --}}
 
 </table>
 

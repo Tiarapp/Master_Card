@@ -70,14 +70,36 @@ class OpiController extends Controller
             {
                 $show =  route('opi.print',$opi->id);
                 $edit =  route('opi.edit',$opi->id);
+                $cancel = route('opi.cancel', $opi->id);
+
+                $cek_opi = strpos($opi->nama,"CANCEL");
 
                 $nestedData['id'] = $opi->id;
                 $nestedData['NoOPI'] = $opi->NoOPI;
-                $nestedData['action'] = "&emsp;<a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a>
-                &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
+
+                if ($cek_opi == '') {    
+                    $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='far fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
+                    <a href='{$cancel}' class='btn btn-outline-danger' type='button' title='CANCEL' ><i class='far fa-window-close' data-toggle='tooltip' data-placement='bottom' title='CANCEL' id='CANCEL'></i></a>";
+                } else {
+                
+                    $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
+                    ";
+                }
                 $nestedData['kode'] = $opi->kode;
                 $nestedData['created_at'] = date('j M Y',strtotime($opi->created_at));
-                $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+
+                if ($opi->dt_perubahan !== '') {
+                    if ($opi->approve_mkt == 1 && $opi->approve_ppic == 1) {
+                        $dt = $opi->dt_perubahan;
+                    } else {
+                        $dt = $opi->tglKirimDt;
+                    }
+                } else {
+                    $dt = $opi->tglKirimDt;
+                }
+
+                $nestedData['tglKirimDt'] = $dt;
+
                 $nestedData['pcsDt'] = $opi->pcsDt;
                 $nestedData['Cust'] = $opi->Cust;
                 $nestedData['namaBarang'] = $opi->namaBarang;
@@ -213,21 +235,22 @@ class OpiController extends Controller
         
         $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
 
+        // dd($checkMesin);
         $totalB1 = 0;
         $totaldc = 0;
         $lain = 0;
 
         foreach ($checkMesin as $mesin) {
-            if ($request->bentuk == 'B1') {
+            if ($mesin->tipeBox == 'B1') {
                 $totalB1 = $totalB1 + $mesin->jumlahOrder;
-            } else if ($request->bentuk == 'DC') {
+            } else if ($mesin->tipeBox == 'DC') {
                 $totaldc = $totaldc + $mesin->jumlahOrder;
             } else {
                 $lain = $mesin->jumlahOrder + $lain;
             }
         }
 
-        // dd($request->jumlahOrder + $totalB1);
+        // dd($totalB1, $totaldc + $request->jumlahOrder);
 
     
         $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
@@ -240,9 +263,16 @@ class OpiController extends Controller
             if ($request->jumlahOrder > $kontrakd->pcsSisaKontrak ) {
                 return redirect('admin/opi/create')->with('error', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
             } else 
-            // if ($request->jumlahOrder + $totalB1 > 15000) {
-            //     return redirect('admin/opi/create')->with('error', 'Kapasitas OPI pada tanggal tersebut sudah maksimal');
-            // } else 
+            if ($request->bentuk == 'B1') {    
+                if ($request->jumlahOrder + $totalB1 > 15000) {
+                    return redirect('admin/opi/create')->with('error', 'Kapasitas OPI B1 pada tanggal tersebut sudah maksimal');
+                } 
+            } else 
+            if ($request->bentuk == 'DC') {
+                if ($request->jumlahOrder + $totaldc > 54000) {
+                    return redirect('admin/opi/create')->with('error', 'Kapasitas OPI DC pada tanggal tersebut sudah maksimal');
+                } 
+            }
             {
 
                 $opim = Opi_M::create([   
@@ -280,9 +310,15 @@ class OpiController extends Controller
      * @param  \App\Models\Opi  $opi
      * @return \Illuminate\Http\Response
      */
-    public function show(Opi_M $opi)
+    public function cancel($id)
     {
-        //
+        $opi = Opi_M::find($id);
+
+        $opi->nama = $opi->nama."(CANCEL)";
+        $opi->NoOPI = $opi->NoOPI."(CANCEL)";
+
+
+        $opi->save();
     }
 
     /**

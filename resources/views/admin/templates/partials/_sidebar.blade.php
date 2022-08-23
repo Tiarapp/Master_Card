@@ -239,23 +239,33 @@
               <li class="nav-item">
                 <a href="{{ route('hasilcorr') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Hasil Plan Corr</p>
+                  <p>Control</p>
                 </a>
               </li>
             </ul>
-            <ul class="nav nav-treeview"> 
-              <li class="nav-item">
-                <a href="{{ route('conv.hasilflexo') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Hasil Plan Print</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview"> 
+            
+            {{-- <ul class="nav nav-treeview"> 
               <li class="nav-item">
                 <a href="{{ route('conv.control') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Hasil Control</p>
+                </a>
+              </li>
+            </ul> --}}
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                PRODUKSI
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="{{ route('conv.hasilflexo') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Hasil Produksi</p>
                 </a>
               </li>
             </ul>
