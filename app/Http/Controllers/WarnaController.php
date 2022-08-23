@@ -17,8 +17,8 @@ class WarnaController extends Controller
     public function index()
     {
         $warna = DB::table('color')
-            ->orderBy('nama', 'asc')
-            ->orderBy('mudaTua', 'asc')
+            ->orderBy('id', 'desc')
+            // ->orderBy('mudaTua', 'asc')
             ->get();
 
         return view('admin.warna.index', ['warna' => $warna]);

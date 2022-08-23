@@ -203,6 +203,7 @@ class MastercardController extends Controller
     {
         $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // dd($cust);
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -562,6 +563,7 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
             ->leftJoin('box', 'box_id', 'box.id')
             ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4')
+
             ->where('mc.id', $id)
             ->first();
         // dd($mc);
