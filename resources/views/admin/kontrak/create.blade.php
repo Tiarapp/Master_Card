@@ -267,7 +267,7 @@
                                                 <label>PO Customer</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="poCustomer" id="poCustomer">
+                                                <input type="text" class="form-control txt_line" name="poCustomer" id="poCustomer" required>
                                             </div>
                                         </div>
                                     </div>

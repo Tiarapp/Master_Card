@@ -64,6 +64,14 @@
               <th scope="col">Realisasi Kirim</th>
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
+              <th scope="col">Komisi</th>
+              <?php
+                // if (Auth::user()->divisi_id == 2) {
+              ?>
+                {{-- <th scope="col">Komisi</th> --}}
+              <?php
+                // }
+              ?>
               {{-- <th scope="col">No PO Customer</th> --}}
             </tr>
           </thead>
@@ -106,6 +114,7 @@
           {"data": "realisasi"},
           {"data": "sisaKirim"},
           {"data": "sales"},
+          {"data": "komisi"},
           
         ],
         // "order": [2, 'desc'],

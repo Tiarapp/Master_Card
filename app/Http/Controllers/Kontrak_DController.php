@@ -99,6 +99,12 @@ class Kontrak_DController extends Controller
                 $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                 $nestedData['keterangan'] = $kontrak->keterangan;
 
+                if (Auth::user()->divisi_id == 2) {
+                    $nestedData['komisi'] = $kontrak->komisi;
+                } else {
+                    $nestedData['komisi'] = 0;
+                }
+
                 // Realisasi Kirim
                 $terkirim = 0;
                 $dataRealisasi = [];
