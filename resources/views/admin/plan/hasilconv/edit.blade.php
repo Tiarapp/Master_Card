@@ -27,7 +27,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Planning convugating</h4>
+                <h4 class="modal-title">Planning Corrugating</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -41,42 +41,49 @@
                 </div>
                 @endif
                 
-                <form action={{ route('conv.storehasilconv') }}  method="POST">
-                {{ csrf_field() }}
-                    @csrf
+                <form action="{{ route('hasil_produksi') }}"  method="POST">
+                @csrf
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Kode Planning</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="hidden" class="form-control txt_line" name="planmid" id="planmid" value="{{ $data1->planmid }}" readonly>
-                                        <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $data1->plandid }}" readonly>
-                                        <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $data1->kodeplanM }}" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Tanggal Hasil</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="date" class="form-control txt_line" name="tglhasil" id="tglhasil">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <label>OPI</label>
                                     </div>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control txt_line" name="idurl" id="idurl" value="{{ $conv->plan_conv_m_id }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="plan_id" id="plan_id" value="{{ $conv->id }}" readonly>
+                                        <input type="hidden" class="form-control txt_line" name="opi_id" id="opi_id" value="{{ $conv->opi_id }}" readonly>
+                                        {{-- <input type="hidden" class="form-control txt_line" name="plandid" id="plandid" value="{{ $convd->corrdid }}" readonly> --}}
+                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $conv->nama_item }}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Customer</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{-- <input type="hidden" class="form-control txt_line" value="{{ $convd->opi_id }}" name="opi_id" id="opi_id" readonly> --}}
+                                        <input type="text" class="form-control txt_line" value="{{ $conv->customer }}" name="Cust" id="Cust" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-12">
+                        <div class="row"> 
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tanggal Kirim</label>
+                                    </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $data1->opi_id }}" name="opi_id" id="opi_id" readonly>
-                                        <input type="text" class="form-control txt_line" value="{{ $data1->noopi }}" name="noopi" id="noopi" readonly>
+                                        <input type="date" class="form-control txt_line" value="{{ $conv->tgl_kirim }}" name="tanggal" id="tanggal" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +93,27 @@
                                         <label>Qty Plan</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" value="{{ $data1->jml_plan }}" name="plan" id="plan" readonly>
+                                        <input type="text" class="form-control txt_line" value="{{ $conv->jml_plan }}" name="plan" id="plan" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>No OPI</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" value="{{ $conv->noopi }}" name="nama_opi" id="nama_opi" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Berat</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" value="{{ $conv->mc_kg }}" name="berat" id="berat" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -99,57 +126,190 @@
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>Item</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="start" id="start" value="{{ $data1->nama_item }}" >
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label>Customer</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="end" id="end" value="{{ $data1->customer }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="row">
-                                    <div class="col-md-4">
                                         <label>Mesin</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control txt_line" name="mesin" id="mesin" value="{{ $data1->mesin }}" readonly>
+                                        <select name="mesin" id="mesin" class="js-example-basic-single">
+                                            @foreach ($mesin as $data)
+                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Start</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="datetime-local" class="form-control txt_line" name="start" id="start" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>End</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="datetime-local" class="form-control txt_line" name="end" id="end" onfocusout="diffTime();">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Durasi</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="durasi" id="durasi">
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Out</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="out_corr" id="out_corr" value="{{ $convd->out_corr }}" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row">
                                     <div class='col-md-4'>
-                                        <label>Baik / Jelek</label>
+                                        <label>P x L</label>
                                     </div>
                                     <div class='col-md-8'>
                                         <div class='row'>
                                             <div class='col-md-5'>
-                                                <input type='text' class='form-control txt_line' name='hasil_baik' id='hasil_baik' required>
+                                                <input type='text' class='form-control txt_line' name='sheetp' id='sheetp' value="{{ $convd->sheet_p }}" readonly>
                                             </div>
                                             <div class='col-md-2'>
-                                                <label for=''>/</label>
+                                                <label for=''>X</label>
                                             </div>
                                             <div class='col-md-5'>
-                                                <input type='text' class='form-control txt_line' name='hasil_jelek' id='hasil_jelek' required>
+                                                <input type='text' class='form-control txt_line' name='sheetl' id='sheetl' value="{{ $convd->sheet_l }}" readonly>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div> 
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Hasil Baik</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="number" class="form-control txt_line" name="baik" id="baik" onchange="getSisa()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Hasil Jelek</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="number" class="form-control txt_line" name="jelek" id="jelek" onchange="getSisa()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Jumlah Palet</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="number" class="form-control txt_line" name="palet" id="palet" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Downtime</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number" class="form-control txt_line" name="downtime" id="downtime" > 
+                                    </div>
+                                    <div class="col-md-2">
+                                        Menit
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-                
+                </div>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tonase Hasil Baik</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" name="tonase_baik" id="tonase_baik">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Tonase Hasil Jelek</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" name="tonase_jelek" id="tonase_jelek">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Keterangan</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <textarea name="keterangan" id="keterangan" cols="50" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>M2</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control txt_line" name="meter_persegi" id="meter_persegi">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Status Corr</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select class="js-example-basic-single col-md-12" name="status" id="status">
+                                            <option value='Proses'>Proses</option>
+                                            <option value='Belum Selesai'>Belum Selesai</option>
+                                            <option value='Selesai'>Selesai</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
                 <button class="btn btn-lg btn-primary" type="submit">SIMPAN
                 </form>
             </div>
@@ -195,19 +355,19 @@
     }
 
     function getSisa() {
-        plan = document.getElementById("plan").value;
-        hasilbaik = document.getElementById("baik").value;
-        panjang = document.getElementById("sheetp").value;
-        lebar = document.getElementById("sheetl").value;
-        out = document.getElementById("out_conv").value;
+        gram = document.getElementById('berat').value;
+        baik = document.getElementById('baik').value;
+        jelek = document.getElementById('jelek').value;
 
-        sisa = plan - hasilbaik ;
-        rm = ((hasilbaik/out)*(panjang/1000));
-        m2 = (panjang*lebar*hasilbaik)/1000000;
+        gramBaik = gram*baik;
+        gramJelek = gram*jelek;
 
-        document.getElementById("sisa").value = sisa;
-        document.getElementById("prod_meter").value = rm.toFixed(2);
-        document.getElementById("meter_persegi").value = m2.toFixed(2);
+
+        console.log(gramBaik);
+        console.log(gramJelek);
+        document.getElementById('tonase_baik').value = gramBaik;
+        document.getElementById('tonase_jelek').value = gramJelek;
+
     }
 </script>
 @endsection

@@ -13,6 +13,8 @@ class HasilProduksi extends Model
 
     protected $fillable = [
         'opi_id',
+        'corr_id',
+        'conv_id',
         'noOpi',
         'start_date',
         'end_date',
@@ -25,5 +27,15 @@ class HasilProduksi extends Model
         'downtime',
         'durasi'
     ];
+
+    public function corrd()
+    {
+        return $this->belongsTo(Corr_D::class, 'corr_id','id');
+    }
+
+    public function convd()
+    {
+        return $this->belongsTo(Conv_D::class, 'conv_id','id');
+    }
 
 }

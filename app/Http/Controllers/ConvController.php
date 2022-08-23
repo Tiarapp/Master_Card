@@ -119,7 +119,7 @@ class ConvController extends Controller
                 'tipe_order' => $request->tipeOrder[$i],
                 'joint' => $request->finishing[$i],
                 'wax' => $request->wax[$i],
-                'mesin' => $request->mesin,
+                'mesin' => $request->tipemesin,
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
                 'flute' => $request->flute[$i],
@@ -188,8 +188,14 @@ class ConvController extends Controller
                 'tipe_order' => $request->tipeOrder[$i],
                 'joint' => $request->finishing[$i],
                 'wax' => $request->wax[$i],
-                'mesin' => $request->mesin,
+                'mesin' => $request->tipemesin,
+                'sheet_p' => $request->sheetp[$i],
+                'sheet_l' => $request->sheetl[$i],
+                'flute' => $request->flute[$i],
+                'bentuk' => $request->tipebox[$i],
+                'warna' => $request->warna[$i],
                 'qtyOrder' => $request->order[$i],
+                'out_flexo' => $request->outconv[$i],
                 'jml_plan' => $request->plan[$i],
                 'ukuran_roll' => $request->roll[$i],
                 'bungkus' => $request->bungkus[$i],
@@ -223,18 +229,12 @@ class ConvController extends Controller
     public function conv_pdf($id)
     {
         $convm = Conv_M::find($id);
-        $shift1 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 1)->get();
-        $shift2 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 2)->get();
-        $shift3 = Conv_D::convd()->where("kodeplanM", '=', $convm->kode)->where("shift", "=", 3)->get();
+        $shift1 = Conv_D::convd()->where("plan_conv_m_id", '=', $convm->id)->get();
 
         // dd($shift1);
 
         $total1 = 0;
-        $total2 = 0;
-        $total3 = 0;
         $kg1 = 0;
-        $kg2 = 0;
-        $kg3 = 0;
 
         if (count($shift1) != 0) {
             for ($i=0; $i < count($shift1) ; $i++) { 
@@ -242,46 +242,20 @@ class ConvController extends Controller
                 $kg1 = $kg1 + ($shift1[$i]->jml_plan * $shift1[$i]->mc_kg );
             }
         }
-        
-        if(count($shift2) != 0){
-            for ($i=0; $i < count($shift2) ; $i++) { 
-                $total2 = $total2 + $shift2[$i]->jml_plan;
-                $kg2 = $kg2 + ($shift2[$i]->jml_plan * $shift2[$i]->mc_kg );
-            }
-        }
-        
-        if (count($shift3) != 0) {
-            for ($i=0; $i < count($shift3) ; $i++) { 
-                $total3 = $total3 + $shift3[$i]->jml_plan;
-                $kg3 = $kg3 + ($shift3[$i]->jml_plan * $shift3[$i]->mc_kg );
-            }
-        }
 
         if ($shift1[0]->mesin == 'FLEXO') {
             return view('admin.plan.conv.pdf', compact(
                 'convm',
                 'shift1',
-                'shift2',
-                'shift3',
-                'total1',
-                'total2',
-                'total3', 
+                'total1', 
                 'kg1',  
-                'kg2',  
-                'kg3', 
             ));
         } else {
             return view('admin.plan.conv.nppdf', compact(
                 'convm',
                 'shift1',
-                'shift2',
-                'shift3',
-                'total1',
-                'total2',
-                'total3', 
+                'total1', 
                 'kg1',  
-                'kg2',  
-                'kg3', 
             ));
         }
     }
@@ -295,6 +269,8 @@ class ConvController extends Controller
         $data1 = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->get();
         $mesin = Conv_D::convd()->where('plan_conv_m_id', '=', $id)->first();
         $data2 = Conv_M::where('plan_conv_m.id', '=', $id)->first();
+
+        // dd($data2);
 
 
         // dd($mesin);
@@ -320,27 +296,31 @@ class ConvController extends Controller
             } else {
                 // dd($request->detail[$i]);
                 if ($request->detail[$i] == NULL) {
-                    $add_detail = Conv_D::create([
-                        'plan_conv_m_id' => $id,
-                        'opi_id' => $request->opi_id[$i],
-                        'tgl_kirim' => $request->dt[$i],
-                        'nomc' => $request->mc[$i],
-                        'urutan' => $request->urutan[$i],
-                        'sheet_p' => $request->sheetp[$i],
-                        'sheet_l' => $request->sheetl[$i],
-                        'customer' => $request->customer[$i],
-                        'nama_item' => $request->item[$i],
-                        'flute' => $request->flute[$i],
-                        'bentuk' => $request->tipebox[$i],
-                        'mesin' => $request->mesin,
-                        'out_flexo' => $request->outconv[$i],
-                        'qtyOrder' => $request->order[$i],
-                        'jml_plan' => $request->plan[$i],
-                        'warna' => $request->warna[$i],
-                        'joint' => $request->finishing[$i],
-                        'tipe_order' => $request->tipeOrder[$i],
-                        'keterangan' => $request->keterangan[$i],
-                    ]);
+                    if ($request->noOpi[$i] != '') {
+                        // dd($request->kodeplan);
+                        $add_detail = Conv_D::create([
+                            'plan_conv_m_id' => $id,
+                            'kodeplanM' => $request->kodeplan,
+                            'opi_id' => $request->opi_id[$i],
+                            'tgl_kirim' => $request->dt[$i],
+                            'nomc' => $request->mc[$i],
+                            'urutan' => $request->urutan[$i],
+                            'sheet_p' => $request->sheetp[$i],
+                            'sheet_l' => $request->sheetl[$i],
+                            'customer' => $request->customer[$i],
+                            'nama_item' => $request->item[$i],
+                            'flute' => $request->flute[$i],
+                            'bentuk' => $request->tipebox[$i],
+                            'mesin' => $request->mesin,
+                            'out_flexo' => $request->outconv[$i],
+                            'qtyOrder' => $request->order[$i],
+                            'jml_plan' => $request->plan[$i],
+                            'warna' => $request->warna[$i],
+                            'joint' => $request->finishing[$i],
+                            'tipe_order' => $request->tipeOrder[$i],
+                            'keterangan' => $request->keterangan[$i],
+                        ]);
+                    }
 
                     // dd($add_detail);
                 }
@@ -354,156 +334,134 @@ class ConvController extends Controller
         return redirect('admin/plan/conv');
     }
 
-    public function convd_flexo(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'FLEXO')->get();
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
-
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
-
-    public function convd_tokai(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'TOKAI')->get();
-            // dd($data);              
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
-
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
-
-    public function convd_stich(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', 'LIKE', '%STICH%')->get();
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
-
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
-
-    public function convd_wax(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'WAX')->get();
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
-
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
     
-    public function convd_slitter(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'SLITTER')->get();
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
+
+    // public function convd_tokai(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Conv_D::convd()->where('plan_conv_d.mesin', '=', 'TOKAI')->get();
+    //         // dd($data);              
+    //         return DataTables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('action', function($row){
      
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
+    //                     $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
+    //                     <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
+    //                     return $btn;
+    //                 })
+    //                 ->rawColumns(['action'])
+    //                 ->make(true);
+    //         // dd($data);                    
+    //     }
+    //     // return view('admin.plan.corr.index');
+    // }
 
-    public function convd_glue(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Conv_D::convd()->where('mesin', '=', 'GLUE MANUAL')->get();
-            return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
+    // public function convd_stich(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Conv_D::convd()->where('plan_conv_d.mesin', 'LIKE', '%STICH%')->get();
+    //         return DataTables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('action', function($row){
      
-                        $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
-                        <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
+    //                     $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
+    //                     <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-            // dd($data);                    
-        }
-        // return view('admin.plan.corr.index');
-    }
+    //                     return $btn;
+    //                 })
+    //                 ->rawColumns(['action'])
+    //                 ->make(true);
+    //         // dd($data);                    
+    //     }
+    //     // return view('admin.plan.corr.index');
+    // }
 
-    public function index_hasil_flexo()
-    {
-        return view('admin.plan.hasilconv.indexflexo');
-    }
+    // public function convd_wax(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Conv_D::convd()->where('plan_conv_d.mesin', '=', 'WAX')->get();
+    //         return DataTables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('action', function($row){
+     
+    //                     $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
+    //                     <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-    public function index_hasil_tokai()
-    {
-        return view('admin.plan.hasilconv.indextokai');
-    }
+    //                     return $btn;
+    //                 })
+    //                 ->rawColumns(['action'])
+    //                 ->make(true);
+    //         // dd($data);                    
+    //     }
+    //     // return view('admin.plan.corr.index');
+    // }
+    
+    // public function convd_slitter(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Conv_D::convd()->where('plan_conv_d.mesin', '=', 'SLITTER')->get();
+    //         return DataTables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('action', function($row){
+     
+    //                     $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
+    //                     <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-    public function index_hasil_stich()
-    {
-        return view('admin.plan.hasilconv.indexstich');
-    }
+    //                     return $btn;
+    //                 })
+    //                 ->rawColumns(['action'])
+    //                 ->make(true);
+    //         // dd($data);                    
+    //     }
+    //     // return view('admin.plan.corr.index');
+    // }
 
-    public function index_hasil_wax()
-    {
-        return view('admin.plan.hasilconv.indexwax');
-    }
+    // public function convd_glue(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Conv_D::convd()->where('plan_conv_d.mesin', '=', 'GLUE MANUAL')->get();
+    //         return DataTables::of($data)
+    //                 ->addIndexColumn()
+    //                 ->addColumn('action', function($row){
+     
+    //                     $btn = "<a href='../plan/hasilconvflexo/edit/".$row->plandid."' class='edit btn btn-primary btn-sm'>View</a>
+    //                     <a href='../plan/hasilconvflexo/print/".$row->plandid."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
-    public function index_hasil_slitter()
-    {
-        return view('admin.plan.hasilconv.indexslitter');
-    }
+    //                     return $btn;
+    //                 })
+    //                 ->rawColumns(['action'])
+    //                 ->make(true);
+    //         // dd($data);                    
+    //     }
+    //     // return view('admin.plan.corr.index');
+    // }
 
-    public function index_hasil_glue()
-    {
-        return view('admin.plan.hasilconv.indexglue');
-    }
+
+    // public function index_hasil_tokai()
+    // {
+    //     return view('admin.plan.hasilconv.indextokai');
+    // }
+
+    // public function index_hasil_stich()
+    // {
+    //     return view('admin.plan.hasilconv.indexstich');
+    // }
+
+    // public function index_hasil_wax()
+    // {
+    //     return view('admin.plan.hasilconv.indexwax');
+    // }
+
+    // public function index_hasil_slitter()
+    // {
+    //     return view('admin.plan.hasilconv.indexslitter');
+    // }
+
+    // public function index_hasil_glue()
+    // {
+    //     return view('admin.plan.hasilconv.indexglue');
+    // }
 
     public function edit_hasil_conv($id)
     {
@@ -517,47 +475,47 @@ class ConvController extends Controller
         return view('admin.plan.hasilconv.edit', compact('data1','data2',));
     }
 
-    public function storeEdit(Request $request)
-    {
+    // public function storeEdit(Request $request)
+    // {
 
-        $control = HasilControl::where('noOpi', '=', $request->noopi )->first();
-        $flexo = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_flexo', '=', $request->tglhasil)->first();
-        $tokai = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_tokai', '=', $request->tglhasil)->first();
-        $stitch = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_stitch', '=', $request->tglhasil)->first();
-        $wax = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_wax', '=', $request->tglhasil)->first();
-        $slitter = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_slitter', '=', $request->tglhasil)->first();
-        $glue = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_glue', '=', $request->tglhasil)->first();
+    //     $control = HasilControl::where('noOpi', '=', $request->noopi )->first();
+    //     $flexo = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_flexo', '=', $request->tglhasil)->first();
+    //     $tokai = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_tokai', '=', $request->tglhasil)->first();
+    //     $stitch = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_stitch', '=', $request->tglhasil)->first();
+    //     $wax = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_wax', '=', $request->tglhasil)->first();
+    //     $slitter = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_slitter', '=', $request->tglhasil)->first();
+    //     $glue = HasilControl::where('noOpi', '=', $request->noopi )->where('tgl_glue', '=', $request->tglhasil)->first();
 
-        dd($flexo);
+    //     dd($flexo);
 
-        if($request->mesin == 'FLEXO')
-        {
-            if($flexo != null)
-            { 
-                $uphasilconv = HasilConv::where('noOpi', '=', $request->noopi)
-                ->where('tgl_mesin1', '=', $request->tglhasil)->first();
-                if ($uphasilconv != null) {
-                    // $uphasilconv->tgl_mesin1 = $request->tglhasil; 
-                    $uphasilconv->mesin1 = $request->mesin;
-                    $uphasilconv->hasil_baik_mesin1 = $request->hasil_baik;
-                    $uphasilconv->hasil_jelek_mesin1 = $request->hasil_jelek;
+    //     if($request->mesin == 'FLEXO')
+    //     {
+    //         if($flexo != null)
+    //         { 
+    //             $uphasilconv = HasilConv::where('noOpi', '=', $request->noopi)
+    //             ->where('tgl_mesin1', '=', $request->tglhasil)->first();
+    //             if ($uphasilconv != null) {
+    //                 // $uphasilconv->tgl_mesin1 = $request->tglhasil; 
+    //                 $uphasilconv->mesin1 = $request->mesin;
+    //                 $uphasilconv->hasil_baik_mesin1 = $request->hasil_baik;
+    //                 $uphasilconv->hasil_jelek_mesin1 = $request->hasil_jelek;
 
-                    $uphasilconv->save();
+    //                 $uphasilconv->save();
 
-                    $flexo->tgl_flexo = $request->tglhasil; 
-                    $flexo->flexo = $request->mesin;
-                    $flexo->hasil_baik_flexo = $request->hasil_baik;
-                    $flexo->hasil_jelek_flexo = $request->hasil_jelek;
+    //                 $flexo->tgl_flexo = $request->tglhasil; 
+    //                 $flexo->flexo = $request->mesin;
+    //                 $flexo->hasil_baik_flexo = $request->hasil_baik;
+    //                 $flexo->hasil_jelek_flexo = $request->hasil_jelek;
 
-                    $flexo->save();
+    //                 $flexo->save();
 
-                } else {
+    //             } else {
 
-                }
-            }
-        }
+    //             }
+    //         }
+    //     }
         
-    }
+    // }
 
     public function control() 
     {

@@ -47,6 +47,10 @@ class Conv_D extends Model
         return $this->belongsTo(Conv_M::class, 'plan_conv_m_id', 'id');
     }
 
+    public function hasil()
+    {
+        return $this->hasMany(HasilProduksi::class, 'conv_id','id');
+    }
 
     public function scopeConvd($query)
     {

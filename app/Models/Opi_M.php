@@ -115,4 +115,17 @@ class Opi_M extends Model
         // dd($query);
         return $query;
     }
+
+    public function scopeKapasitasB1($query)
+    {
+        $query->leftJoin('dt', 'dt_id', 'dt.id')
+        ->leftJoin('mc', 'mc_id', 'mc.id')
+        ->select('opi_m.jumlahOrder', 'dt.tglKirimDt', 'mc.tipeBox')
+        ->where('mc.tipeBox', '=', 'B1')
+        ->sum('opi_m.jumlahOrder')
+        ->groupBy('dt.tglKirimDt')
+        ->get();
+
+        return $query;
+    }
 }
