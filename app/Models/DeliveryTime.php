@@ -22,6 +22,7 @@ class DeliveryTime extends Model
         'createdBy',
         'lastUpdatedBy',
     ];
+
     
 
 }

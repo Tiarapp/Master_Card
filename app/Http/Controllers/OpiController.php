@@ -264,7 +264,7 @@ class OpiController extends Controller
                 return redirect('admin/opi/create')->with('error', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
             } else 
             if ($request->bentuk == 'B1') {    
-                if ($request->jumlahOrder + $totalB1 > 15000) {
+                if ($request->jumlahOrder + $totalB1 > 150000) {
                     return redirect('admin/opi/create')->with('error', 'Kapasitas OPI B1 pada tanggal tersebut sudah maksimal');
                 } 
             } else 
@@ -319,6 +319,10 @@ class OpiController extends Controller
 
 
         $opi->save();
+
+        return redirect('admin/opi');
+
+        
     }
 
     /**

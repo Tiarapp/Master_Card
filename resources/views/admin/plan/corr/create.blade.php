@@ -255,7 +255,7 @@ $(document).ready(function(){
 
             rmorder = (sheetp*cop)/1000;
 
-            tonase = order*gramSheet;
+            tonase = qtyPlan*gramSheet;
 
             if (gAtas != '') {
                 KAtas = rmorder*(UkRoll/1000)*gAtas/1000;
