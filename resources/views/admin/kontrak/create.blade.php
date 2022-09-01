@@ -170,6 +170,7 @@
                                                     <option value="OUP Nama & Ukuran">OUP Nama & Ukuran</option>
                                                     <option value="OUP Nama & Warna">OUP Nama & Warna</option>
                                                     <option value="OUP Design, Nama & Kualitas">OUP Design, Nama & Kualitas</option>
+                                                    <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
                                                 </select>
                                             </div>
                                         </div>

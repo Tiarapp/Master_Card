@@ -76,7 +76,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label>No. PO Customer</label>
+                                        <label>Mastercard</label>
                                     </div>
                                     <div class="col-md-6">
                                         <?php

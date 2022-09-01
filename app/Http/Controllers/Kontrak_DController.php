@@ -401,8 +401,31 @@ class Kontrak_DController extends Controller
     public function add_dt($id)
     {
         // menampilkan untuk dropdown
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+
+        $date = date('Y-m-d');
+        // dd($date);
         
+        $b1 = DB::table('opi_m')
+        ->join('dt', 'dt_id', 'dt.id')
+        ->join('mc', 'mc_id', 'mc.id')
+        ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->where('mc.tipeBox', '=', 'B1')
+        ->where('dt.tglKirimDt', '>=', $date)
+        ->groupBy('dt.tglKirimDt')
+        ->get();
+
+        $dc = DB::table('opi_m')
+        ->join('dt', 'dt_id', 'dt.id')
+        ->join('mc', 'mc_id', 'mc.id')
+        ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->where('mc.tipeBox', '=', 'DC')
+        ->where('dt.tglKirimDt', '>=', $date)
+        ->groupBy('dt.tglKirimDt')
+        ->get();
+
+        // dd($b1, $dc);
+
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -434,7 +457,9 @@ class Kontrak_DController extends Controller
 
         // dd($kontrak_M);
         return view('admin.kontrak.add_dt', compact(
-            'cust',
+            // 'cust',
+            'b1',
+            'dc',
             'mc',
             'top',
             'sales',

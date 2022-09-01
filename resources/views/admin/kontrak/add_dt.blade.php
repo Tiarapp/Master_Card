@@ -22,7 +22,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Surat Jalan Palet</h4>
+                <h4 class="modal-title">Input Delivery Time</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -41,6 +41,70 @@
                     
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="card-body">
+                                <h3>Kapasitas B1 yang Sudah Ada</h3>
+                                <table class="table table-bordered" id="data_b1">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Tanggal.</th>
+                                      <th scope="col">Qty</th>
+                                      <th scope="col">Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    @foreach ($b1 as $data)
+                                      <tr>
+                                        <td>{{ $data->tglKirimDt }}</td>
+                                        <td>{{ $data->qty }}</td>
+                                        <td>
+                                            @if ($data->qty <= 100000)
+                                                Tersedia
+                                            @elseif ($data->qty <=150000)
+                                                Almost Full
+                                            @else
+                                                Melebihi Batas
+                                            @endif
+                                        </td>
+                                      </tr>
+                                    @endforeach
+                                  </tbody>
+                                </table>
+                              </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h3>Kapasitas DC yang Sudah Ada</h3>
+                                <table class="table table-bordered" id="data_dc">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Tanggal.</th>
+                                      <th scope="col">Qty</th>
+                                      <th scope="col">Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    @foreach ($dc as $data)
+                                      <tr>
+                                        <td>{{ $data->tglKirimDt }}</td>
+                                        <td>{{ $data->qty }}</td>
+                                        <td>
+                                            @if ($data->qty <= 40000)
+                                                Tersedia
+                                            @elseif ($data->qty <= 50000)
+                                                Almost Full
+                                            @else
+                                                Melebihi Batas
+                                            @endif
+                                        </td>
+                                      </tr>
+                                    @endforeach
+                                  </tbody>
+                                </table>
+                              </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -50,7 +114,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $kontrak_M->kode }}">
-                                                <input type="text" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak_M->id }}">
+                                                <input type="hidden" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak_M->id }}">
                                             </div>
                                         </div>
                                     </div>
@@ -63,7 +127,7 @@
                                             <div class="col-md-4">
                                                 <label>Tanggal</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}" autofocus onfocusout="getData();">
                                             </div>
                                         </div>
@@ -77,7 +141,7 @@
                                             <div class="col-md-4">
                                                 <label>Pilih Customer</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
                                             </div>
                                         </div>
@@ -115,13 +179,10 @@
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
-                    <?php
-                        for ($i=0; $i <5 ; $i++) { 
-                            echo "<input type='text' name='idmcpel[$i]' id='idmcpel[$i]' readonly>";
-                        }
-                    ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
                     <table class="table table-bordered" id="detail_kontrak">
                         <thead>
                             <tr>
@@ -144,6 +205,10 @@
                             
                         </tbody>
                         </table>
+
+                        </div>
+                    </div>
+                    
                         {{-- <div class="card-body" style="border-right: -20px"> 
                         
                             <table class="table table-bordered" id="detail_kontrak">
@@ -155,20 +220,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $counts = 5;
-                                    
-                                    for ($i=1; $i<=$counts; $i++) { 
-                                        
-                                        echo "<tr>";
-                                        echo "<td><input type='date' name='tglKirim[$i]' id='tglKirim[$i]'></td>";
-                                        echo "<td><input type='text' name='dtPcs[$i]' id='dtPcs[$i]' onchange='getData();'></td>";
-                                        echo "<td><input type='text' name='dtKg[$i]' id='dtKg[$i]' onchange='getData();'></td>";
-                                        echo "</tr>";
-    
-                                        
-                                    }
-                                    ?>
                                                 
                                 </tbody>
                             </table>
@@ -206,24 +257,27 @@
         select: true,
     });
 
-    $(".Customer").ready(function(){
-                
-        var table = $("#data_customer").DataTable({
-            select: true,
-        });
-        
-        $('#data_customer tbody').on( 'click', 'td', function () {
-            var cust = (table.row(this).data());
-            
-            // document.getElementById('customer_id').value = cust[0]    ;
-            document.getElementById('namaCust').value = cust[1];
-            document.getElementById('alamatKirim').value = cust[5];
-            document.getElementById('telp').value = cust[3];
-            // document.getElementById('fax').value = cust[4];
-            
-            // getGramKontrak();
-        } );
-    } );
+    $("#data_b1").DataTable({
+        "paging":   true,
+        "ordering": true,
+        "info":     false,
+        "searching": true,
+        // "scrollX": true,
+        // "autoWidth": true, 
+        // "scrollY": "400px",
+        select: true,
+    });
+
+    $("#data_dc").DataTable({
+        "paging":   true,
+        "ordering": true,
+        "info":     false,
+        "searching": true,
+        // "scrollX": true,
+        // "autoWidth": true, 
+        // "scrollY": "400px",
+        select: true,
+    });
                             
     function getData() {
         var data1 = document.getElementById("nama_0").value;

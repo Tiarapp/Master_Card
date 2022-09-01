@@ -1171,7 +1171,9 @@ td
 <td class='x22'>TIPE ORDER</td>
 <td class='x27'></td>
 <td class='x27'>:</td>
-<td class='x32' >{{ $kontrak_M->tipeOrder }}</td>
+<td class='x32' >
+  <textarea name="" id="" cols="20" rows="2" style="border: none">{{ $kontrak_M->tipeOrder }}</textarea>
+</td>
 <td colspan='3' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='32' style='mso-height-source:userset;height:24pt'>
