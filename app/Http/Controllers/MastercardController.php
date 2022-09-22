@@ -201,8 +201,8 @@ class MastercardController extends Controller
      */
     public function edit($id)
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -257,8 +257,8 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
         
         return view('admin.mastercard.edit', compact([
-            'item',
-            'cust',
+            // 'item',
+            // 'cust',
             'tipe',
             'substance',
             'box',
@@ -342,6 +342,12 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
+        if ($request->outConv == 0) {
+            $outconv = 1;
+        } else {
+            $outconv = $request->outConv;
+        }
+
         Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,
@@ -368,7 +374,7 @@ class MastercardController extends Controller
             'substanceProduksi_id' => $request->substanceProduksi_id,
             'tipeMc' => $request->tipeMc,
             'mesin' => $request->mesin,
-            'outConv' => $request->outConv,
+            'outConv' => $outconv,
             'brt_kualitas' => $request->gram_kualitas,
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
@@ -393,8 +399,8 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -451,8 +457,8 @@ class MastercardController extends Controller
         }
         
         return view('admin.mastercard.revisi', compact([
-            'cust',
-            'item',
+            // 'cust',
+            // 'item',
             'tipe',
             'substance',
             'box',
@@ -489,7 +495,11 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
-        // dd($nama_file);
+        if ($request->outConv == 0) {
+            $outconv = 1;
+        } else {
+            $outconv = $request->outConv;
+        }
 
         // dd($rev);
         $mc->kode = $request->kode;
@@ -511,7 +521,7 @@ class MastercardController extends Controller
         $mc->luasSheetBox = $request->luasSheetBox;
         $mc->luasSheetProd = $request->luasSheetProd;
         $mc->luasSheetBoxProd = $request->luasSheetBoxProd;
-        $mc->outConv = $request->outConv;
+        $mc->outConv = $outconv;
         $mc->brt_kualitas = $request->gram_kualitas;
         $mc->koli = $request->koli;
         $mc->bungkus = $request->bungkus;

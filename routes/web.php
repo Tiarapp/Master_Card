@@ -277,29 +277,10 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
     Route::post('/admin/produksi/hasil', 'HasilProduksiController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
     Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
-    // Route::get('/admin/plan/corrd', 'CorrController@corrd')->middleware(['auth'])->name('corrd');
-    // Route::get('/admin/plan/opi', 'CorrController@json')->middleware(['auth'])->name('json.opi');
-    // Route::post('/admin/plan/hasil', 'CorrController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
-    // Route::get('/admin/plan/hasilcorr/edit/{id}', 'CorrController@input_hasil_corr')->name('hasilcorr.edit');
-    // Route::put('/admin/plan/hasilcorr/update/{id}', 'CorrController@update_hasil_corr')->name('hasilcorr.update');
 
-
-    //Hasil Converting
-    // Route::get('/admin/plan/hasil/control', 'ConvController@control')->middleware(['auth'])->name('conv.control');
-    // Route::get('/admin/plan/hasilconvstich', 'ConvController@index_hasil_stich')->middleware(['auth'])->name('conv.hasilstich');
-    // Route::get('/admin/plan/hasilconvtokai', 'ConvController@index_hasil_tokai')->middleware(['auth'])->name('conv.hasiltokai');
-    // Route::get('/admin/plan/hasilconvwax', 'ConvController@index_hasil_wax')->middleware(['auth'])->name('conv.hasilwax');
-    // Route::get('/admin/plan/hasilconvslitter', 'ConvController@index_hasil_slitter')->middleware(['auth'])->name('conv.hasilslitter');
-    // Route::get('/admin/plan/hasilconvglue', 'ConvController@index_hasil_glue')->middleware(['auth'])->name('conv.hasilglue');
-    // Route::get('/admin/plan/convd_tokai', 'ConvController@convd_tokai')->middleware(['auth'])->name('convd.tokai');
-    // Route::get('/admin/plan/convd_stich', 'ConvController@convd_stich')->middleware(['auth'])->name('convd.stich');
-    // Route::get('/admin/plan/convd_wax', 'ConvController@convd_wax')->middleware(['auth'])->name('convd.wax');
-    // Route::get('/admin/plan/convd_slitter', 'ConvController@convd_slitter')->middleware(['auth'])->name('convd.slitter');
-    // Route::get('/admin/plan/convd_glue', 'ConvController@convd_glue')->middleware(['auth'])->name('convd.glue');
-    // Route::post('/admin/plan/conv/storehasilconv', 'ConvController@storeEdit')->name('conv.storehasilconv');
-    // Route::get('/admin/plan/hasilconvflexo/edit/{id}', 'ConvController@edit_hasil_conv')->name('hasilconv.edit');
-    // Route::put('/admin/plan/hasilconv/update/{id}', 'ConvController@update_hasil_conv')->name('hasilconv.update');
-    // Route::get('/admin/plan/hasilconv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');    
+    //Produksi
+    Route::get('/admin/produksi/index',     'LaporanProduksiController@index')->name('lap.produksi');
+    Route::get('/produksi/filter',          'LaporanProduksiController@get_filter')->name('filter');
 
     Route::get('/admin/roll',                       'RollController@index')->name('roll');
     Route::get('/admin/roll/bbm',                   'RollController@indexBbm')->name('roll.bbm');
