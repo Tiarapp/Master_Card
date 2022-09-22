@@ -54,19 +54,20 @@
                                         <td>{{ $data->tglKirimDt }}</td>
                                         <td>{{ $data->qty }}</td>
                                         <td>
-                                            @if ($data->qty <= 100000)
-                                                
-                                            @elseif ($data->qty <=150000)
-                                                Almost Full
-                                            @else
-                                                Melebihi Batas
-                                            @endif
+                                            <?php 
+                                                $sisa = 150000 - $data->qty;
+                                                if ($sisa < 0) {
+                                                    echo 0;
+                                                } else {
+                                                    $sisa;
+                                                }
+                                            ?>
                                         </td>
                                         <td>
                                             @if ($data->qty <= 100000)
                                                 Tersedia
                                             @elseif ($data->qty <=150000)
-                                                Almost Full
+                                                Hampir Penuh
                                             @else
                                                 Melebihi Batas
                                             @endif
@@ -85,6 +86,7 @@
                                     <tr>
                                       <th scope="col">Tanggal.</th>
                                       <th scope="col">Qty</th>
+                                      <th scope="col">Sisa</th>
                                       <th scope="col">Status</th>
                                     </tr>
                                   </thead>
@@ -94,10 +96,20 @@
                                         <td>{{ $data->tglKirimDt }}</td>
                                         <td>{{ $data->qty }}</td>
                                         <td>
+                                            <?php 
+                                                $sisa = 54000 - $data->qty;
+                                                if ($sisa < 0) {
+                                                    echo 0;
+                                                } else {
+                                                    $sisa;
+                                                }
+                                            ?>
+                                        </td>
+                                        <td>
                                             @if ($data->qty <= 40000)
                                                 Tersedia
                                             @elseif ($data->qty <= 50000)
-                                                Almost Full
+                                                Hampir Penuh
                                             @else
                                                 Melebihi Batas
                                             @endif

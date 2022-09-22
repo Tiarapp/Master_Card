@@ -201,8 +201,8 @@ class MastercardController extends Controller
      */
     public function edit($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -257,8 +257,8 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
         
         return view('admin.mastercard.edit', compact([
-            // 'item',
-            // 'cust',
+            'item',
+            'cust',
             'tipe',
             'substance',
             'box',
@@ -399,8 +399,8 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
             ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -457,8 +457,8 @@ class MastercardController extends Controller
         }
         
         return view('admin.mastercard.revisi', compact([
-            // 'cust',
-            // 'item',
+            'cust',
+            'item',
             'tipe',
             'substance',
             'box',

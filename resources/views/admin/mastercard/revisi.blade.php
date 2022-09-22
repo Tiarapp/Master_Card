@@ -102,7 +102,7 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                                {{-- @foreach ($cust as $data)
+                                                                                @foreach ($cust as $data)
                                                                                 <tr>
                                                                                     <td scope="row">{{ $data->Kode }}</td>
                                                                                     <td>{{ $data->Nama }}</td>
@@ -111,7 +111,7 @@
                                                                                     <td>{{ $data->FaxKantor }}</td>
                                                                                     <td>{{ $data->AlamatKirim }}</td>
                                                                                 </tr>
-                                                                                @endforeach --}}
+                                                                                @endforeach
                                                                                   
                                                                             </tbody>
                                                                         </table>

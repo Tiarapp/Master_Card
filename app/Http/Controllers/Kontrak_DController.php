@@ -299,9 +299,10 @@ class Kontrak_DController extends Controller
                     'kontrak_m_id' => $kontrakm->id,
                     'mc_id' => $request->idmcpel[$i],
                     'pcsKontrak' => $request->qtyPcs[$i],
-                    'pcsSisaKontrak' => $request->qtyPcs[$i] + $request->pcsToleransiLebih[$i],
+                    // + $request->pcsToleransiLebih[$i] + $request->kgToleransiLebih[$i]
+                    'pcsSisaKontrak' => $request->qtyPcs[$i],
                     'kgKontrak' => $request->qtyKg[$i],
-                    'kgSisaKontrak' => $request->qtyKg[$i] + $request->kgToleransiLebih[$i],
+                    'kgSisaKontrak' => $request->qtyKg[$i],
                     'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
                     'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
                     'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
@@ -410,7 +411,7 @@ class Kontrak_DController extends Controller
         $b1 = DB::table('opi_m')
         ->join('dt', 'dt_id', 'dt.id')
         ->join('mc', 'mc_id', 'mc.id')
-        ->select(DB::raw("SUM(dt.pcsDt ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
         ->where('mc.tipeBox', '=', 'B1')
         ->where('dt.tglKirimDt', '>=', $date)
         ->groupBy('dt.tglKirimDt')
@@ -419,7 +420,7 @@ class Kontrak_DController extends Controller
         $dc = DB::table('opi_m')
         ->join('dt', 'dt_id', 'dt.id')
         ->join('mc', 'mc_id', 'mc.id')
-        ->select(DB::raw("SUM(dt.pcsDt ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
         ->where('mc.tipeBox', '=', 'DC')
         ->where('dt.tglKirimDt', '>=', $date)
         ->groupBy('dt.tglKirimDt')
