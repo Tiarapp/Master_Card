@@ -65,6 +65,7 @@
               <th scope="col">Realisasi Kirim</th>
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
+              <th scope="col">Komisi</th>
               {{-- <th scope="col">No PO Customer</th> --}}
             </tr>
           </thead>
@@ -82,6 +83,9 @@
   <script>
     $(function(){
       $('#data_kontrak').DataTable({
+        "pageLength": 50,
+        dom: 'Bftrip',
+        buttons: [ 'copy', 'csv', 'excel', 'pdf', 'colvis' ],
         "processing":true,
         "serverSide":true,
         "ajax":{
@@ -108,26 +112,10 @@
           {"data": "realisasi"},
           {"data": "sisaKirim"},
           {"data": "sales"},
+          {"data": "komisi"},
           
         ],
-        dom: 'Bftrip',
-        buttons: [
-          'copy',
-          'csv',
-          'excel',
-          'pdf',
-          'colvis',
-          {
-            extend: 'print',
-            text: 'Print',
-            exportOption: {
-              modifier: {
-                selected: null
-              }
-            }
-          }
-        ],
-        select: true,
+        // select: true,
       });
     });
   </script>

@@ -51,6 +51,8 @@ class Kontrak_DController extends Controller
         $limit = $request->input('length');
         $start = $request->input('start');
 
+        // dd($start);
+
         if(empty($request->input('search.value')))
         {            
             $kontrak = Kontrak_M::offset($start)
@@ -68,7 +70,7 @@ class Kontrak_DController extends Controller
                             ->orWhere('kode', 'LIKE',"%{$search}%")
                             ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                             ->offset($start)
-                            ->limit($limit)
+                            ->limit(50)
                             ->orderBy('id', 'desc')
                             ->get();
 
@@ -116,6 +118,13 @@ class Kontrak_DController extends Controller
 
                     $terkirim = $terkirim + $realisasi->qty_kirim;
                 }
+
+                if (Auth::user()->divisi_id == 2) {
+                    $nestedData['komisi'] = $kontrak->komisi;
+                } else {
+                    $nestedData['komisi'] = 0;
+                }
+                
                 $nestedData['realisasi'] = $dataRealisasi;
                 $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
                 $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
@@ -151,7 +160,9 @@ class Kontrak_DController extends Controller
             "draw"            => intval($request->input('draw')),  
             "recordsTotal"    => intval($totalData),  
             "recordsFiltered" => intval($totalFiltered), 
-            "data"            => $data  
+            "data"            => $data,
+            "start"           => $start,
+            "limit"           => $limit
         );
 
         // dd($json_data);
