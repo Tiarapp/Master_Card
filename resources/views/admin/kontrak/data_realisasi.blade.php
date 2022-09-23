@@ -31,7 +31,7 @@
                     <strong>{{ $message }}</strong>
                 </div>
                  @endif
-                 
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
@@ -111,7 +111,7 @@
                             <th scope="col">action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>   
                         @foreach ($kontrak_M->realisasi as $o)
                         <tr>
                             <td scope="col">{{ $o->tanggal_kirim }}</td>
@@ -120,10 +120,10 @@
                                 <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $o->id }}">Edit</button>
                             </td>
                         </tr>
+                        @include('admin.kontrak.edit_kirim')
                         @endforeach
                     </tbody>
                     </table>
-                    @include('admin.kontrak.edit_kirim')
                     <br>
                 </div>
             </div>
