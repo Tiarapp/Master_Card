@@ -23,16 +23,15 @@
                 <h4 class="modal-title">Realisasi Kirim</h4>
                 <hr>
                 
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Error!</strong> 
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $errors }}</li>
-                        @endforeach
-                    </ul>
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>{{ $message }}</strong>
                 </div>
-                @endif
+                 @endif
+                 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">

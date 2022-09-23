@@ -756,7 +756,7 @@ class Kontrak_DController extends Controller
             'qty_kirim' => $request->jumlahKirim
         ]);
 
-        dd($kirim);
+        return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
         
     }
 }
