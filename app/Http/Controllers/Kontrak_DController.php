@@ -51,6 +51,8 @@ class Kontrak_DController extends Controller
         $limit = $request->input('length');
         $start = $request->input('start');
 
+        // dd($start);
+
         if(empty($request->input('search.value')))
         {            
             $kontrak = Kontrak_M::offset($start)
@@ -68,7 +70,7 @@ class Kontrak_DController extends Controller
                             ->orWhere('kode', 'LIKE',"%{$search}%")
                             ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                             ->offset($start)
-                            ->limit($limit)
+                            ->limit(50)
                             ->orderBy('id', 'desc')
                             ->get();
 
@@ -116,6 +118,13 @@ class Kontrak_DController extends Controller
 
                     $terkirim = $terkirim + $realisasi->qty_kirim;
                 }
+
+                if (Auth::user()->divisi_id == 2) {
+                    $nestedData['komisi'] = $kontrak->komisi;
+                } else {
+                    $nestedData['komisi'] = 0;
+                }
+                
                 $nestedData['realisasi'] = $dataRealisasi;
                 $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
                 $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
@@ -151,7 +160,9 @@ class Kontrak_DController extends Controller
             "draw"            => intval($request->input('draw')),  
             "recordsTotal"    => intval($totalData),  
             "recordsFiltered" => intval($totalFiltered), 
-            "data"            => $data  
+            "data"            => $data,
+            "start"           => $start,
+            "limit"           => $limit
         );
 
         // dd($json_data);
@@ -451,6 +462,8 @@ class Kontrak_DController extends Controller
             ->where('kontrak_m.id', '=', $id)
             ->first();
 
+        dd($kontrak_M->realisasi);
+
         $opi = Opi_M::opi()->where('kontrak_m.id', '=', $id)
             ->get();
         // End tampilkan untuk edit
@@ -717,23 +730,18 @@ class Kontrak_DController extends Controller
         
         // $cust = DB::connection('firebird')->table('TCustomer')->get();
 
-        $kontrak_D = DB::table('kontrak_d')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
-            ->first();
+        $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
 
         $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
 
-        $kontrak_M = DB::table('kontrak_m')
-            ->where('kontrak_m.id', '=', $id)
+        $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();
 
-        return view('admin.kontrak.createrealisasi', compact(
+        // dd($kontrak_M->realisasi);
+
+        return view('admin.kontrak.data_realisasi', compact(
             'kontrak_D', 
             'kontrak_M', 
-            // 'cust', 
             'opi'
         ));
     }
@@ -741,20 +749,25 @@ class Kontrak_DController extends Controller
     public function store_realisasi(Request $request)
     {
         RealisasiKirim::create([
-            'kontrak_m_id' => $request->idkontrak,
-            // 'opi_id' => $request->opi,
-            'tanggal_kirim' => $request->tanggal,
-            'qty_kirim' => $request->qtyKirim,
-            'createdBy' => $request->createdBy
+            'kontrak_m_id'  => $request->idkontrakm,
+            'tanggal_kirim' => $request->tglKirim,
+            'qty_kirim'     => $request->jumlahKirim,
+            'createdBy'     => Auth::user()->name
         ]);
 
-        // $opi = Opi_M::where('id', '=', $request->opi )->first();
-        
-        // $opi->sisa_order = $opi->jumlahOrder - $request->opi;
-        // $opi->save();
-
-        // dd($opi);
-
         return redirect('admin/kontrak');
+    }
+
+    public function edit_realisasi(Request $request, $id)
+    {
+        $kirim = RealisasiKirim::findOrFail($id);
+
+        $kirim->update([
+            'tanggal_kirim' => $request->tglKirim,
+            'qty_kirim' => $request->jumlahKirim
+        ]);
+
+        return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
+        
     }
 }
