@@ -210,6 +210,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/realisasi/{id}', 'Kontrak_DController@add_realisasi')->name('kontrak.realisasi');
     Route::get('/admin/kontrak/dt/{id}', 'Kontrak_DController@add_dt')->name('kontrak.dt');
     Route::post('/admin/kontrak/store_dt', 'Kontrak_DController@store_dt')->name('kontrak.store_dt');
+    Route::put('/admin/kontrak/realisasi/edit{id}', 'Kontrak_DController@edit_realisasi')->name('kontrak.edit_kirim');
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
 

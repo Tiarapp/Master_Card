@@ -59,7 +59,7 @@
                                                 if ($sisa < 0) {
                                                     echo 0;
                                                 } else {
-                                                    $sisa;
+                                                    echo $sisa;
                                                 }
                                             ?>
                                         </td>
@@ -101,7 +101,7 @@
                                                 if ($sisa < 0) {
                                                     echo 0;
                                                 } else {
-                                                    $sisa;
+                                                    echo $sisa;
                                                 }
                                             ?>
                                         </td>

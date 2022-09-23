@@ -41,6 +41,12 @@ class Kontrak_D extends Model
     
     public function mc()
     {
-        return $this->hasMany(Mastercard::class, 'id', 'id');
+        return $this->belongsTo(Mastercard::class, 'mc_id', 'id');
     }
+
+    public function kontrakm()
+    {
+        return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id', 'id');
+    }
+
 }

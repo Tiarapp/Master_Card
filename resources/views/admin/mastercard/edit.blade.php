@@ -79,7 +79,7 @@
                                                     </div>
                                                     
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="Customer">
+                                                    <div class="modal fade" id="List-Customer">
                                                         <div class="modal-dialog modal-xl">
                                                             
                                                             <!-- Modal content-->
@@ -126,7 +126,7 @@
                                                             
                                                         </div>
                                                     </div>
-                                                    <button type="button" data-toggle="modal" data-target="#Customer">
+                                                    <button type="button" data-toggle="modal" data-target="#List-Customer">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>

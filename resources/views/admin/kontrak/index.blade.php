@@ -110,8 +110,6 @@
           {"data": "sales"},
           
         ],
-        // "order": [2, 'desc'],
-        // "pageLength": 1000,
         dom: 'Bftrip',
         buttons: [
           'copy',
@@ -132,29 +130,6 @@
         select: true,
       });
     });
-    // $(document).ready(function() {
-    //   $("#data_kontrak").DataTable({
-    //     "order": [0, 'desc'],
-    //     dom: 'Bfrtip',
-    //     buttons: [
-    //       'copy',
-    //       'csv',
-    //       'excel',
-    //       'pdf',
-    //       'colvis',
-    //       {
-    //         extend: 'print',
-    //         text: 'Print',
-    //         exportOption: {
-    //           modifier: {
-    //             selected: null
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     select: true
-    //   });
-    // });
   </script>
 
   @endsection
