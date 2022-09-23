@@ -85,7 +85,8 @@ class HasilProduksiController extends Controller
     {
         // $opi = Opi_M::opi()->find($id);
         $corr = Corr_D::corr()->find($id);
-        $mesin = Mesin::get();
+        $mesin = 'CORR';
+        // $datamesin = Mesin::get();
 
         // dd($corr);
         return view('admin.plan.hasilcorr.edit', compact('corr','mesin'));

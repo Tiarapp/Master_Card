@@ -78,15 +78,17 @@ class OpiController extends Controller
                 $nestedData['NoOPI'] = $opi->NoOPI;
 
                 if ($cek_opi == '') {    
-                    $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='far fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
-                    <a href='{$cancel}' class='btn btn-outline-danger' type='button' title='CANCEL' ><i class='far fa-window-close' data-toggle='tooltip' data-placement='bottom' title='CANCEL' id='CANCEL'></i></a>";
+                    $nestedData['action'] = "
+                    <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
+                    <a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-print' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
+                    ";
                 } else {
                 
                     $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
                     ";
                 }
                 $nestedData['kode'] = $opi->kode;
-                $nestedData['created_at'] = date('j M Y',strtotime($opi->created_at));
+                $nestedData['created_at'] = date('j M Y H:i:s',strtotime($opi->created_at));
 
                 if ($opi->dt_perubahan !== '') {
                     if ($opi->approve_mkt == 1 && $opi->approve_ppic == 1) {

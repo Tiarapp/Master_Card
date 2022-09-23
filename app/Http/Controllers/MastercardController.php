@@ -343,6 +343,12 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
+        if ($request->outConv == 0) {
+            $outconv = 1;
+        } else {
+            $outconv = $request->outConv;
+        }
+
         Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,
@@ -369,7 +375,7 @@ class MastercardController extends Controller
             'substanceProduksi_id' => $request->substanceProduksi_id,
             'tipeMc' => $request->tipeMc,
             'mesin' => $request->mesin,
-            'outConv' => $request->outConv,
+            'outConv' => $outconv,
             'brt_kualitas' => $request->gram_kualitas,
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
@@ -490,7 +496,11 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
-        // dd($nama_file);
+        if ($request->outConv == 0) {
+            $outconv = 1;
+        } else {
+            $outconv = $request->outConv;
+        }
 
         // dd($rev);
         $mc->kode = $request->kode;
@@ -512,7 +522,7 @@ class MastercardController extends Controller
         $mc->luasSheetBox = $request->luasSheetBox;
         $mc->luasSheetProd = $request->luasSheetProd;
         $mc->luasSheetBoxProd = $request->luasSheetBoxProd;
-        $mc->outConv = $request->outConv;
+        $mc->outConv = $outconv;
         $mc->brt_kualitas = $request->gram_kualitas;
         $mc->koli = $request->koli;
         $mc->bungkus = $request->bungkus;

@@ -58,6 +58,7 @@
               <th scope="col">PO Customer</th>
               <th scope="col">Alamat</th>
               <th scope="col">QTY Kontrak</th>
+              <th scope="col">Kg Kontrak</th>
               <th scope="col">No MC</th>
               <th scope="col">Harga / PCS</th>
               <th scope="col">Harga / Kg</th>
@@ -108,6 +109,7 @@
           {"data": "poCustomer"},
           {"data": "alamatKirim"},
           {"data": "pcsKontrak"},
+          {"data": "kgKontrak"},
           {"data": "nomc"},
           {"data": "rp_pcs"},
           {"data": "rp_kg"},

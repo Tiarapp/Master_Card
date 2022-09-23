@@ -49,7 +49,7 @@
                                             <option value="Tidak Ada" disabled selected>Warna 1</option>
                                             <option value="Tidak Ada">Tidak Ada</option>
                                             @foreach ($color as $data)
-                                            <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -63,7 +63,7 @@
                                             <option value="Tidak Ada" disabled selected>Warna 2</option>
                                             <option value="Tidak Ada">Tidak Ada</option>
                                             @foreach ($color as $data)
-                                            <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -77,7 +77,7 @@
                                             <option value="Tidak Ada" disabled selected>Warna 3</option>
                                             <option value="Tidak Ada">Tidak Ada</option>
                                             @foreach ($color as $data)
-                                            <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -91,7 +91,7 @@
                                             <option value="Tidak Ada" disabled selected>Warna 4</option>
                                             <option value="Tidak Ada">Tidak Ada</option>
                                             @foreach ($color as $data)
-                                            <option value="{{ $data->id }} {{ $data->nama }}">{{ $data->nama }}</option>
+                                            <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -137,7 +137,7 @@
                 document.getElementById("idColor1").value = null;
                 document.getElementById("warna1").value = '-';
             } else {
-                wrn1 = wrn1.split(" ");
+                wrn1 = wrn1.split("|");
                 document.getElementById("idColor1").value = wrn1[0];
                 document.getElementById("warna1").value = wrn1[1];
             }
@@ -146,7 +146,7 @@
                 document.getElementById("idColor2").value = null;
                 document.getElementById("warna2").value = '-';
             } else {
-                wrn2 = wrn2.split(" ");
+                wrn2 = wrn2.split("|");
                 document.getElementById("idColor2").value = wrn2[0];
                 document.getElementById("warna2").value = wrn2[1];
             }
@@ -155,7 +155,7 @@
                 document.getElementById("idColor3").value = null;
                 document.getElementById("warna3").value = '-';
             } else {
-                wrn3 = wrn3.split(" ");
+                wrn3 = wrn3.split("|");
                 document.getElementById("idColor3").value = wrn3[0];
                 document.getElementById("warna3").value = wrn3[1];
             }
@@ -164,7 +164,7 @@
                 document.getElementById("idColor4").value = null;
                 document.getElementById("warna4").value = '-';
             } else {
-                wrn4 = wrn4.split(" ");
+                wrn4 = wrn4.split("|");
                 document.getElementById("idColor4").value = wrn4[0];
                 document.getElementById("warna4").value = wrn4[1];
             }            

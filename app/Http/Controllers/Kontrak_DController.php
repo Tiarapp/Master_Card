@@ -118,6 +118,7 @@ class Kontrak_DController extends Controller
                 }
                 $nestedData['realisasi'] = $dataRealisasi;
                 $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
+                $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
 
                 $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
                 $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
@@ -298,9 +299,10 @@ class Kontrak_DController extends Controller
                     'kontrak_m_id' => $kontrakm->id,
                     'mc_id' => $request->idmcpel[$i],
                     'pcsKontrak' => $request->qtyPcs[$i],
-                    'pcsSisaKontrak' => $request->qtyPcs[$i] + $request->pcsToleransiLebih[$i],
-                    'kgKontrak' => $request->qtyKg[$i] + $request->kgToleransiLebih[$i],
-                    'kgSisaKontrak' => $request->qtyPcs[$i],
+                    // + $request->pcsToleransiLebih[$i] + $request->kgToleransiLebih[$i]
+                    'pcsSisaKontrak' => $request->qtyPcs[$i],
+                    'kgKontrak' => $request->qtyKg[$i],
+                    'kgSisaKontrak' => $request->qtyKg[$i],
                     'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
                     'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
                     'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
@@ -418,7 +420,7 @@ class Kontrak_DController extends Controller
         $dc = DB::table('opi_m')
         ->join('dt', 'dt_id', 'dt.id')
         ->join('mc', 'mc_id', 'mc.id')
-        ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
         ->where('mc.tipeBox', '=', 'DC')
         ->where('dt.tglKirimDt', '>=', $date)
         ->groupBy('dt.tglKirimDt')
@@ -442,12 +444,15 @@ class Kontrak_DController extends Controller
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', )
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.tipeBox as tipebox', 'mc.gramSheetCorrKontrak as berat')
             ->first();
 
         $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
+
+        $opi = Opi_M::opi()->where('kontrak_m.id', '=', $id)
+            ->get();
         // End tampilkan untuk edit
 
 
@@ -456,35 +461,122 @@ class Kontrak_DController extends Controller
 
 
         // dd($kontrak_M);
-        return view('admin.kontrak.add_dt', compact(
+        return view('admin.kontrak.data_dt', compact(
             // 'cust',
             'b1',
             'dc',
             'mc',
             'top',
             'sales',
-            // 'count',
+            'opi',
             'kontrak_D'
         ), ['kontrak_M' => $kontrak_M]);
     }
 
     public function store_dt(Request $request)
     {
-        for ($i=1; $i < 16; $i++) { 
-            if ($request->tglKirim[$i] !== null) {
-                $dt = DeliveryTime::create([
-                    'kontrak_m_id' => $request->idkontrakm,
-                    'kodeKontrak' => $request->kode,
-                    'tglKirimDt' => $request->tglKirim[$i],
-                    'pcsDt' => $request->jumlahKirim[$i],
-                    // 'kgDt' => $request->dtKg[$i],
-                    'createdBy' => $request->createdBy,
-                ]);
+        $date = date_create($request->tglKirim);
+        $day = date_format($date, "D");
+
+        if ($request->tglKirim != null) {
+            $lastOpi = Opi_M::latest()->first();
+            $nomer = preg_replace('/[^0-9]/', '', $lastOpi->nama)+1;
+            $numb_opi = $nomer."B";
+
+            $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
+
+            $totalB1 = 0;
+            $totaldc = 0;
+            $lain = 0;
+
+            foreach ($checkMesin as $mesin) {
+                if ($mesin->tipeBox == 'B1') {
+                    $totalB1 = $totalB1 + $mesin->jumlahOrder;
+                } else if ($mesin->tipeBox == 'DC') {
+                    $totaldc = $totaldc + $mesin->jumlahOrder;
+                } else {
+                    $lain = $mesin->jumlahOrder + $lain;
+                }
+            }
+
+            $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
+
+            if ($checkOpi == null) {
+                $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
+                
+                if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak) {
+                    return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
+                } else {
+                    if ($request->tipebox == 'B1') {
+                        if ($request->jumlahKirim + $totalB1 > 150000) {
+                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal');
+                        } else {
+                            $dt = DeliveryTime::create([
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kodeKontrak' => $request->kode,
+                                'tglKirimDt' => $request->tglKirim,
+                                'pcsDt' => $request->jumlahKirim,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            $opim = Opi_M::create([   
+                                'nama' => $numb_opi,
+                                'NoOPI' => $numb_opi,
+                                'dt_id' => $dt->id,
+                                'mc_id' => $kontrakd->mc_id,
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kontrak_d_id' => $kontrakd->id,
+                                'keterangan' => $kontrakd->keterangan,
+                                'tglKirimDt' => $request->tglKirim,
+                                'jumlahOrder' => $request->jumlahKirim,
+                                'sisa_order' => $request->jumlahKirim,
+                                'hariKirimDt' => $day,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+            
+                            $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                            $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
+                            $kontrakd->save();
+                        }
+                    } elseif($request->tipebox == 'DC') {
+                        if ($request->jumlahKirim + $totaldc > 54000) {
+                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI DC pada tanggal '.$request->tglKirim.' sudah maksimal');
+                        } else {
+                            $dt = DeliveryTime::create([
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kodeKontrak' => $request->kode,
+                                'tglKirimDt' => $request->tglKirim,
+                                'pcsDt' => $request->jumlahKirim,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            $opim = Opi_M::create([   
+                                'nama' => $numb_opi,
+                                'NoOPI' => $numb_opi,
+                                'dt_id' => $dt->id,
+                                'mc_id' => $kontrakd->mc_id,
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kontrak_d_id' => $kontrakd->id,
+                                'keterangan' => $kontrakd->keterangan,
+                                'tglKirimDt' => $request->tglKirim,
+                                'jumlahOrder' => $request->jumlahKirim,
+                                'sisa_order' => $request->jumlahKirim,
+                                'hariKirimDt' => $day,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+            
+                            $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                            $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
+                            $kontrakd->save();
+
+    
+                        }
+                    }
+                }
             }
         }
-
-        return redirect('admin/kontrak');
-    } 
+        return redirect()->to(url()->previous())->with('success', 'Data DT dan OPI Berhasi disimpan dengan Nomor OPI'.$numb_opi );
+    }
 
     /**
      * Update the specified resource in storage.

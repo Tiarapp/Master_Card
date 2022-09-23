@@ -203,7 +203,7 @@ function getKode() {
     } else if (mesin == "SLITTER") {
         kodemesin = "SLITTER"
     } else if (mesin == "WAX A & B") {
-        kodemesin = "WAXAAB"
+        kodemesin = "WAXAB"
     } else if (mesin == "STITCH C") {
         kodemesin = "STICTHC"
     } else if (mesin == "WAX") {

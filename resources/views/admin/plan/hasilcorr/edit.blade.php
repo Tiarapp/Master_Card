@@ -129,11 +129,7 @@
                                         <label>Mesin</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select name="mesin" id="mesin" class="js-example-basic-single">
-                                            @foreach ($mesin as $data)
-                                                <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" class="form-control txt_line" value="{{ $mesin }}" readonly>
                                     </div>
                                 </div>
                             </div>
