@@ -387,7 +387,9 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td style="border-top: 0px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle rowspan=3><b><font face="Calibri" color="#000000" size=2>KETERANGAN</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 0px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle rowspan=3><b><font face="Calibri" color="#000000" size=2>{{ $mc->keterangan }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 0px solid #000000; border-right: 1px solid #000000" colspan=2 align="left" valign=middle rowspan=3><b><font face="Calibri" color="#000000" size=2>
+			<textarea name="" id="" cols="30" rows="10">{{ $mc->keterangan }}</textarea>
+		</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -492,7 +494,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="700px" height="290px" src="{{ url('/upload/'.$mc->gambar) }}" alt=""></font></td>
+		<td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="700px" height="300px" src="{{ url('/upload/'.$mc->gambar) }}" alt=""></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
