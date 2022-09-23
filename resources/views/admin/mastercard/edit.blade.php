@@ -75,7 +75,7 @@
                                                         <label>Pilih Customer</label>
                                                     </div>
                                                     <div class="col-md-5">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" onchange="getGramKontrak()" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" value="{{ $mc->customer }}" onchange="getGramKontrak()" readonly>
                                                     </div>
                                                     
                                                     <!-- Modal -->

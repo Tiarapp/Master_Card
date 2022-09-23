@@ -37,6 +37,7 @@
               <th scope="col">No.</th>
               <th scope="col">Nama</th>
               <th scope="col">Muda Tua</th>
+              <th scope="col">Tanggal Dibuat</th>
               <th scope="col">Branch</th>
               <!-- <th scope="col">Action</th> -->
             </tr>
@@ -49,6 +50,7 @@
                 <td scope="row">{{ $no++ }}</td>
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->mudaTua }}</td>
+                <td>{{ $data->created_at }}</td>
                 <td>{{ $data->branch }}</td>
                 <!-- <td>
                   <div class="input-group">

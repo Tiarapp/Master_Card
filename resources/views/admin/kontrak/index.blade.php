@@ -66,6 +66,13 @@
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
               <th scope="col">Komisi</th>
+              <?php
+                // if (Auth::user()->divisi_id == 2) {
+              ?>
+                {{-- <th scope="col">Komisi</th> --}}
+              <?php
+                // }
+              ?>
               {{-- <th scope="col">No PO Customer</th> --}}
             </tr>
           </thead>
