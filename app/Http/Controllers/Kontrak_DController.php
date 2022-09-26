@@ -500,14 +500,67 @@ class Kontrak_DController extends Controller
             $totaldc = 0;
             $lain = 0;
 
-            foreach ($checkMesin as $mesin) {
-                if ($mesin->tipeBox == 'B1') {
-                    $totalB1 = $totalB1 + $mesin->jumlahOrder;
-                } else if ($mesin->tipeBox == 'DC') {
-                    $totaldc = $totaldc + $mesin->jumlahOrder;
-                } else {
-                    $lain = $mesin->jumlahOrder + $lain;
-                }
+
+            
+            // dd($checkMesin);
+
+            // foreach ($checkMesin as $mesin) {
+            //     if ($mesin->tipeBox == 'B1') {
+                    
+            //         $b1 = DB::table('opi_m')
+            //         ->join('dt', 'dt_id', 'dt.id')
+            //         ->join('mc', 'mc_id', 'mc.id')
+            //         ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+            //         ->where('mc.tipeBox', '=', 'B1')
+            //         ->where('dt.tglKirimDt', '>=', $request->tglKirim)
+            //         ->groupBy('dt.tglKirimDt')
+            //         ->first();
+
+            //         // dd($b1);
+            //         $totalB1 = $totalB1 + ($mesin->jumlahOrder);
+            //     } else if ($mesin->tipeBox == 'DC') {
+                    
+            //         $dc = DB::table('opi_m')
+            //         ->join('dt', 'dt_id', 'dt.id')
+            //         ->join('mc', 'mc_id', 'mc.id')
+            //         ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+            //         ->where('mc.tipeBox', '=', 'DC')
+            //         ->where('dt.tglKirimDt', '>=', $request->tglKirim)
+            //         ->groupBy('dt.tglKirimDt')
+            //         ->get();
+
+            //         dd($dc);
+            //         $totaldc = $totaldc + ($mesin->jumlahOrder / $mesin->outConv);
+            //     } else {
+            //         $lain = ($mesin->jumlahOrder / $mesin->outConv) + $lain;
+            //     }
+            // }
+
+            if ($request->tipebox == 'B1') {
+                $b1 = DB::table('opi_m')
+                    ->join('dt', 'dt_id', 'dt.id')
+                    ->join('mc', 'mc_id', 'mc.id')
+                    ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+                    ->where('mc.tipeBox', '=', 'B1')
+                    ->where('dt.tglKirimDt', '>=', $request->tglKirim)
+                    ->groupBy('dt.tglKirimDt')
+                    ->first();
+                $totalB1 = $b1->qty;
+
+                // dd($totalB1);
+            } elseif ($request->tipebox == 'DC') {
+                $dc = DB::table('opi_m')
+                    ->join('dt', 'dt_id', 'dt.id')
+                    ->join('mc', 'mc_id', 'mc.id')
+                    ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+                    ->where('mc.tipeBox', '=', 'DC')
+                    ->where('dt.tglKirimDt', '>=', $request->tglKirim)
+                    ->groupBy('dt.tglKirimDt')
+                    ->first();
+
+                $totaldc = $dc->qty;
+
+                // dd($totaldc);
             }
 
             $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
@@ -519,7 +572,7 @@ class Kontrak_DController extends Controller
                     return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
                 } else {
                     if ($request->tipebox == 'B1') {
-                        if ($request->jumlahKirim + $totalB1 > 150000) {
+                        if ($request->jumlahKirim + $totalB1 > 1500000) {
                             return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal');
                         } else {
                             $dt = DeliveryTime::create([
@@ -550,7 +603,7 @@ class Kontrak_DController extends Controller
                             $kontrakd->save();
                         }
                     } elseif($request->tipebox == 'DC') {
-                        if ($request->jumlahKirim + $totaldc > 54000) {
+                        if ($request->jumlahKirim + $totaldc > 540000) {
                             return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI DC pada tanggal '.$request->tglKirim.' sudah maksimal');
                         } else {
                             $dt = DeliveryTime::create([

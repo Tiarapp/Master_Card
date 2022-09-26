@@ -108,7 +108,7 @@
                                         <td>
                                             @if ($data->qty <= 40000)
                                                 Tersedia
-                                            @elseif ($data->qty <= 50000)
+                                            @elseif ($data->qty <= 54000)
                                                 Hampir Penuh
                                             @else
                                                 Melebihi Batas
