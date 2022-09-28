@@ -107,7 +107,7 @@ class OpiController extends Controller
                 $nestedData['namaBarang'] = $opi->namaBarang;
                 $nestedData['jumlahOrder'] = $opi->jumlahOrder;
                 $nestedData['sisa_order'] = $opi->sisa_order;
-                $nestedData['keterangan'] = $opi->keterangan;
+                $nestedData['keterangan'] = $opi->ketkontrak;
                 $nestedData['NoOPI'] = $opi->NoOPI;
                 $nestedData['poCustomer'] = $opi->poCustomer;
 

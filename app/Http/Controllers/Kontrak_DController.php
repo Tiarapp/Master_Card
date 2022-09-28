@@ -567,7 +567,8 @@ class Kontrak_DController extends Controller
 
             if ($checkOpi == null) {
                 $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
-                
+                $kontrakm = Kontrak_M::whetr('id', '=', $request->idkontrakm)->first();
+
                 if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak) {
                     return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
                 } else {
@@ -590,7 +591,7 @@ class Kontrak_DController extends Controller
                                 'mc_id' => $kontrakd->mc_id,
                                 'kontrak_m_id' => $request->idkontrakm,
                                 'kontrak_d_id' => $kontrakd->id,
-                                'keterangan' => $kontrakd->keterangan,
+                                'keterangan' => $kontrakm->keterangan,
                                 'tglKirimDt' => $request->tglKirim,
                                 'jumlahOrder' => $request->jumlahKirim,
                                 'sisa_order' => $request->jumlahKirim,
@@ -621,7 +622,7 @@ class Kontrak_DController extends Controller
                                 'mc_id' => $kontrakd->mc_id,
                                 'kontrak_m_id' => $request->idkontrakm,
                                 'kontrak_d_id' => $kontrakd->id,
-                                'keterangan' => $kontrakd->keterangan,
+                                'keterangan' => $kontrakm->keterangan,
                                 'tglKirimDt' => $request->tglKirim,
                                 'jumlahOrder' => $request->jumlahKirim,
                                 'sisa_order' => $request->jumlahKirim,
