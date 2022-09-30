@@ -77,11 +77,17 @@ class OpiController extends Controller
                 $nestedData['id'] = $opi->id;
                 $nestedData['NoOPI'] = $opi->NoOPI;
 
-                if ($cek_opi == '') {    
-                    $nestedData['action'] = "
-                    <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
-                    <a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-print' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
-                    ";
+                if ($cek_opi == '') { 
+                    if (Auth::user()->divisi_id == 3) {
+                           
+                        $nestedData['action'] = "
+                        <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
+                        <a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-print' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
+                        ";
+                    } else {
+                        $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
+                        ";
+                    }
                 } else {
                 
                     $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
@@ -322,12 +328,19 @@ class OpiController extends Controller
     public function cancel($id)
     {
         $opi = Opi_M::find($id);
+        $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
+
+        // dd($opi);
 
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
+        
+        $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
+        $opi->jumlahOrder = 0;
 
         $opi->save();
+        $kontrakd->save();
 
         return redirect('admin/opi');
 
