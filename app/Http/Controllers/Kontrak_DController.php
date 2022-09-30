@@ -102,12 +102,6 @@ class Kontrak_DController extends Controller
                 $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                 $nestedData['keterangan'] = $kontrak->keterangan;
 
-                if (Auth::user()->divisi_id == 2) {
-                    $nestedData['komisi'] = $kontrak->komisi;
-                } else {
-                    $nestedData['komisi'] = 0;
-                }
-
                 // Realisasi Kirim
                 $terkirim = 0;
                 $dataRealisasi = [];
@@ -567,7 +561,7 @@ class Kontrak_DController extends Controller
 
             if ($checkOpi == null) {
                 $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
-                $kontrakm = Kontrak_M::whetr('id', '=', $request->idkontrakm)->first();
+                $kontrakm = Kontrak_M::where('id', '=', $request->idkontrakm)->first();
 
                 if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak) {
                     return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);

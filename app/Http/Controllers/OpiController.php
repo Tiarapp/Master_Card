@@ -145,7 +145,14 @@ class OpiController extends Controller
                 $nestedData['kertasMcbawah'] = ($opi->kertasMcbawah == "BK" ? "K" : $opi->kertasMcbawah);
                 // $nestedData['kertasMcbawah'] = $opi->kertasMcbawah;
                 $nestedData['wax'] = $opi->wax;
-                $nestedData['gram'] = $opi->gram;
+
+                if (Auth::user()->divisi_id == 3) {
+                    $nestedData['gram'] = $opi->gramKontrak;
+                } else {
+                    $nestedData['gram'] = $opi->gramProd;
+                }
+
+                // $nestedData['gram'] = $opi->gramProd;
                 $nestedData['tglKontrak'] = $opi->tglKontrak;
                 $nestedData['alamatKirim'] = $opi->alamatKirim;
                 $nestedData['toleransi'] = $opi->toleransiKurang.'%/'.$opi->toleransiLebih.'%';
