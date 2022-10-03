@@ -33,18 +33,29 @@ class OpiController extends Controller
 
         if(empty($request->input('search.value')))
         {            
-            $opi = Opi_M::opi()->offset($start)
-                         ->limit(100)
-                         ->orderBy('NoOPI')
-                         ->get();
-                         
-            $totalFiltered = Opi_M::opi()->count();
-            // dd($opi);
+           if (Auth::user()->divisi_id == 5) {
+                $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+                ->offset($start)
+                ->limit(100)
+                ->orderBy('NoOPI')
+                ->get();
+                
+                $totalFiltered = Opi_M::opi()->count();
+           } else {
+                $opi = Opi_M::opi()->offset($start)
+                ->limit(100)
+                ->orderBy('NoOPI')
+                ->get();
+                
+                $totalFiltered = Opi_M::opi()->count();
+           }
         }
         else {
             $search = $request->input('search.value'); 
 
-            $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+            if (Auth::user()->divisi_id == 5) {
+                $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+                            ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
@@ -55,11 +66,11 @@ class OpiController extends Controller
                             ->orderBy($order, $dir)
                             ->get();
 
-            $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+                $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                              ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                              ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                              ->count();
-            // dd($opi);
+            }
         }
 
 
@@ -159,7 +170,6 @@ class OpiController extends Controller
                     $nestedData['gram'] = $opi->gramProd;
                 }
 
-                // $nestedData['gram'] = $opi->gramProd;
                 $nestedData['tglKontrak'] = $opi->tglKontrak;
                 $nestedData['alamatKirim'] = $opi->alamatKirim;
                 $nestedData['toleransi'] = $opi->toleransiKurang.'%/'.$opi->toleransiLebih.'%';
@@ -170,14 +180,12 @@ class OpiController extends Controller
                 $nestedData['status'] = $opi->status;
                 $nestedData['harga_kg'] = $opi->harga_kg;
                 $nestedData['kertasMcAtasK'] = ($opi->kertasMcAtasK == "BK" ? "K" : $opi->kertasMcAtasK);
-                // $nestedData['kertasMcAtasK'] = $opi->kertasMcAtasK;
                 $nestedData['gramKertasAtasK'] = $opi->gramKertasAtasK;
                 $nestedData['gramKertasflute1K'] = $opi->gramKertasflute1K;
                 $nestedData['gramKertastengahK'] = $opi->gramKertastengahK;
                 $nestedData['gramKertasflute2K'] = $opi->gramKertasflute2K;
                 $nestedData['gramKertasbawahK'] = $opi->gramKertasbawahK;
                 $nestedData['kertasMcbawahK'] = ($opi->kertasMcbawahK == "BK" ? "K" : $opi->kertasMcbawahK);
-                // $nestedData['kertasMcbawahK'] = $opi->kertasMcbawahK;
                 $nestedData['kodeBarang'] = $opi->kodeBarang;
                 $nestedData['tipeCreasCorr'] = $opi->tipeCreasCorr;
                 $nestedData['bungkus'] = $opi->bungkus;
@@ -242,82 +250,7 @@ class OpiController extends Controller
      */
     public function store(Request $request)
     {
-        $day = date("D", $request->tglKirimDt);
         
-        $lastOpi = Opi_M::latest()->first();
-        $alphabet = "B";
-        $nomer = preg_replace('/[^0-9]/', '', $lastOpi->nama)+1;
-        $numb_opi = $nomer.$alphabet;
-        
-        $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
-
-        // dd($checkMesin);
-        $totalB1 = 0;
-        $totaldc = 0;
-        $lain = 0;
-
-        foreach ($checkMesin as $mesin) {
-            if ($mesin->tipeBox == 'B1') {
-                $totalB1 = $totalB1 + $mesin->jumlahOrder;
-            } else if ($mesin->tipeBox == 'DC') {
-                $totaldc = $totaldc + $mesin->jumlahOrder;
-            } else {
-                $lain = $mesin->jumlahOrder + $lain;
-            }
-        }
-
-        // dd($totalB1, $totaldc + $request->jumlahOrder);
-
-    
-        $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
-        // dd($numb_opi);
-
-        if ($checkOpi == null) {
-        
-            $kontrakd = Kontrak_D::where('id', '=', $request->kontrakdid)->first();
-            
-            if ($request->jumlahOrder > $kontrakd->pcsSisaKontrak ) {
-                return redirect('admin/opi/create')->with('error', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
-            } else 
-            if ($request->bentuk == 'B1') {    
-                if ($request->jumlahOrder + $totalB1 > 150000) {
-                    return redirect('admin/opi/create')->with('error', 'Kapasitas OPI B1 pada tanggal tersebut sudah maksimal');
-                } 
-            } else 
-            if ($request->bentuk == 'DC') {
-                if ($request->jumlahOrder + $totaldc > 54000) {
-                    return redirect('admin/opi/create')->with('error', 'Kapasitas OPI DC pada tanggal tersebut sudah maksimal');
-                } 
-            }
-            {
-
-                $opim = Opi_M::create([   
-                    'nama' => $numb_opi,
-                    'NoOPI' => $numb_opi,
-                    'dt_id' => $request->dtid,
-                    'mc_id' => $request->mcid,
-                    'kontrak_m_id' => $request->kontrakmid,
-                    'kontrak_d_id' => $request->kontrakdid,
-                    'keterangan' => $request->keterangan,
-                    'tglKirimDt' => $request->tglKirim,
-                    'jumlahOrder' => $request->jumlahOrder,
-                    'sisa_order' => $request->jumlahOrder,
-                    'hariKirimDt' => $day,
-                    'createdBy' => Auth::user()->name,
-                ]);
-
-                $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahOrder;
-                $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
-            }
-
-            $kontrakd->save();
-        
-            // dd($kontrakd);
-
-                return redirect('admin/opi')->with('success', 'OPI Berhasi disimpan dengan Nomor OPI '.$numb_opi );
-        } else {
-                return redirect('admin/opi/create')->with('error', 'No OPI Sudah Ada, Silahkan isi OPI Ulang');
-        }
     }
 
     /**
