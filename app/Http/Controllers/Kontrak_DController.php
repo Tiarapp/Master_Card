@@ -590,6 +590,33 @@ class Kontrak_DController extends Controller
 
     
                         }
+                    } else {
+                        $dt = DeliveryTime::create([
+                            'kontrak_m_id' => $request->idkontrakm,
+                            'kodeKontrak' => $request->kode,
+                            'tglKirimDt' => $request->tglKirim,
+                            'pcsDt' => $request->jumlahKirim,
+                            'createdBy' => Auth::user()->name,
+                        ]);
+
+                        $opim = Opi_M::create([   
+                            'nama' => $numb_opi,
+                            'NoOPI' => $numb_opi,
+                            'dt_id' => $dt->id,
+                            'mc_id' => $kontrakd->mc_id,
+                            'kontrak_m_id' => $request->idkontrakm,
+                            'kontrak_d_id' => $kontrakd->id,
+                            'keterangan' => $kontrakm->keterangan,
+                            'tglKirimDt' => $request->tglKirim,
+                            'jumlahOrder' => $request->jumlahKirim,
+                            'sisa_order' => $request->jumlahKirim,
+                            'hariKirimDt' => $day,
+                            'createdBy' => Auth::user()->name,
+                        ]);
+        
+                        $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                        $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
+                        $kontrakd->save();
                     }
                 }
             }

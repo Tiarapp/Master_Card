@@ -70,6 +70,22 @@ class OpiController extends Controller
                              ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                              ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                              ->count();
+            } else {
+                $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
+                            ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                            ->orWhere('mc.kode', 'LIKE',"%{$search}%")
+                            ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
+                            ->offset($start)
+                            ->limit(100)
+                            ->orderBy($order, $dir)
+                            ->get();
+
+                $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
+                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
+                             ->count();
             }
         }
 
