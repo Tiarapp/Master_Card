@@ -174,9 +174,9 @@
                                                     <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
                                                     <option value="OUP Nama Item & Flute">OUP Nama Item & Flute</option>
                                                     <option value="OUP Design & Warna">OUP Design & Warna</option>
-                                                    <option value="OUP Nama & Kualiatas">OUP Nama & Kualitas</option>
                                                     <option value="OUP Ukuran, Design & Warna">OUP Ukuran, Design & Warna</option>
                                                     <option value="OUP Ukuran Sheet & Warna">OUP Ukuran Sheet & Warna</option>
+                                                    <option value="OUP Desain dan Kode Warna">OUP Desain dan Kode Warna</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -81,7 +81,6 @@
               <th scope="col">Mesin</th>
             </tr>
           </thead>
-          
         </table>
       </div>
       <!-- /.row -->

@@ -527,8 +527,34 @@ class Kontrak_DController extends Controller
                     return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
                 } else {
                     if ($request->tipebox == 'B1') {
-                        if ($request->jumlahKirim + $totalB1 > 1500000) {
-                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal');
+                        if ($request->jumlahKirim + $totalB1 > 150000) {
+
+                            $dt = DeliveryTime::create([
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kodeKontrak' => $request->kode,
+                                'tglKirimDt' => $request->tglKirim,
+                                'locked' => 1,
+                                'pcsDt' => $request->jumlahKirim,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            $opim = Opi_M::create([   
+                                'nama' => $numb_opi,
+                                'NoOPI' => $numb_opi,
+                                'dt_id' => $dt->id,
+                                'mc_id' => $kontrakd->mc_id,
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kontrak_d_id' => $kontrakd->id,
+                                'keterangan' => $kontrakm->keterangan,
+                                'tglKirimDt' => $request->tglKirim,
+                                'jumlahOrder' => $request->jumlahKirim,
+                                'sisa_order' => $request->jumlahKirim,
+                                'hariKirimDt' => $day,
+                                'status' => 'Butuh Approve',
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal silahkan Kontak pihak PPIC untuk approve DT');
                         } else {
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
@@ -558,8 +584,34 @@ class Kontrak_DController extends Controller
                             $kontrakd->save();
                         }
                     } elseif($request->tipebox == 'DC') {
-                        if ($request->jumlahKirim + $totaldc > 540000) {
-                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI DC pada tanggal '.$request->tglKirim.' sudah maksimal');
+                        if ($request->jumlahKirim + $totaldc > 54000) {
+
+                            $dt = DeliveryTime::create([
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kodeKontrak' => $request->kode,
+                                'tglKirimDt' => $request->tglKirim,
+                                'locked' => 1,
+                                'pcsDt' => $request->jumlahKirim,
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            $opim = Opi_M::create([   
+                                'nama' => $numb_opi,
+                                'NoOPI' => $numb_opi,
+                                'dt_id' => $dt->id,
+                                'mc_id' => $kontrakd->mc_id,
+                                'kontrak_m_id' => $request->idkontrakm,
+                                'kontrak_d_id' => $kontrakd->id,
+                                'keterangan' => $kontrakm->keterangan,
+                                'tglKirimDt' => $request->tglKirim,
+                                'jumlahOrder' => $request->jumlahKirim,
+                                'sisa_order' => $request->jumlahKirim,
+                                'hariKirimDt' => $day,
+                                'status' => 'Butuh Approve',
+                                'createdBy' => Auth::user()->name,
+                            ]);
+
+                            return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI DC pada tanggal '.$request->tglKirim.' sudah maksimal silahkan Kontak pihak PPIC untuk approve DT');
                         } else {
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
@@ -587,8 +639,6 @@ class Kontrak_DController extends Controller
                             $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
                             $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
                             $kontrakd->save();
-
-    
                         }
                     } else {
                         $dt = DeliveryTime::create([
