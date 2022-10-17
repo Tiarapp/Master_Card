@@ -39,252 +39,309 @@
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
 
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Tanggal</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}" autofocus onfocusout="getData();">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Pilih Customer</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
-                                            </div>
-                                            
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="Customer">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">List Customer</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body customer">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_customer">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Nama Customer</th>
-                                                                            <th scope="col">Alamat Kantor</th>
-                                                                            <th scope="col">Telp</th>
-                                                                            <th scope="col">Fax</th>
-                                                                            <th scope="col">Alamat Kirim</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php 
-                                                                        foreach ($cust as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->Kode }}</td>
-                                                                                <td>{{ $data->Nama }}</td>
-                                                                                <td>{{ $data->AlamatKantor }}</td>
-                                                                                <td>{{ $data->TelpKantor }}</td>
-                                                                                <td>{{ $data->FaxKantor }}</td>
-                                                                                <td>{{ $data->AlamatKirim }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
+                    <div style="border-bottom: 1px solid black">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Tanggal</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}" autofocus onfocusout="getData();">
                                                 </div>
                                             </div>
-                                            <button type="button" data-toggle="modal" data-target="#Customer">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Alamat Kirim</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak_M->alamatKirim }}</textarea>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Telp</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_M->custTelp }}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Pilih Customer</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
+                                                </div>
+                                                
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="Customer">
+                                                    <div class="modal-dialog modal-xl">
+                                                        
+                                                        <!-- Modal content-->
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">List Customer</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                            <div class="modal-body customer">
+                                                                <div class="card-body">
+                                                                    <table class="table table-bordered" id="data_customer">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Kode</th>
+                                                                                <th scope="col">Nama Customer</th>
+                                                                                <th scope="col">Alamat Kantor</th>
+                                                                                <th scope="col">Telp</th>
+                                                                                <th scope="col">Fax</th>
+                                                                                <th scope="col">Alamat Kirim</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php 
+                                                                            foreach ($cust as $data) { ?>
+                                                                                <tr>
+                                                                                    <td scope="row">{{ $data->Kode }}</td>
+                                                                                    <td>{{ $data->Nama }}</td>
+                                                                                    <td>{{ $data->AlamatKantor }}</td>
+                                                                                    <td>{{ $data->TelpKantor }}</td>
+                                                                                    <td>{{ $data->FaxKantor }}</td>
+                                                                                    <td>{{ $data->AlamatKirim }}</td>
+                                                                                </tr>
+                                                                                <?php
+                                                                            }
+                                                                            ?>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <button type="button" data-toggle="modal" data-target="#Customer">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Tipe Order</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
-                                                    <option value="{{ $kontrak_M->tipeOrder }}">{{ $kontrak_M->tipeOrder }}</option>
-                                                    <option value="Order Baru">Order Baru</option>
-                                                    <option value="Order Ulang">Order Ulang</option>
-                                                    <option value="OUP Design">OUP Design</option>
-                                                    <option value="OUP Ukuran">OUP Ukuran</option>
-                                                    <option value="OUP Kualitas">OUP Kualitas</option>
-                                                    <option value="OUP Warna">OUP Warna</option>
-                                                    <option value="OUP Nama Item">OUP Nama Item</option>
-                                                    <option value="OUP Nama & Design">OUP Nama & Design</option>
-                                                    <option value="OUP Kupingan">OUP Kupingan</option>
-                                                    <option value="OUP Joint">OUP Joint</option>
-                                                    <option value="OUP Ukuran & Kualitas">OUP Ukuran & Kualitas</option>
-                                                    <option value="OUP Nama & Ukuran">OUP Nama & Ukuran</option>
-                                                    <option value="OUP Nama & Warna">OUP Nama & Warna</option>  
-                                                    <option value="OUP Nama & Kualitas">OUP Nama & Kualitas</option>
-                                                    <option value="OUP Design, Nama & Kualitas">OUP Design, Nama & Kualitas</option>
-                                                    <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
-                                                    <option value="OUP Nama Item & Flute">OUP Nama Item & Flute</option>
-                                                    <option value="OUP Design & Warna">OUP Design & Warna</option>
-                                                    <option value="OUP Ukuran, Design & Warna">OUP Ukuran, Design & Warna</option>
-                                                    <option value="OUP Ukuran Sheet & Warna">OUP Ukuran Sheet & Warna</option>
-                                                    <option value="OUP Desain dan Kode Warna">OUP Desain dan Kode Warna</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Komisi</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Term of Payment</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select class='js-example-basic-single col-md-12' name="top" id="top">
-                                                    <option value="{{ $kontrak_M->top }}">{{ $kontrak_M->top }}</option>
-                                                    @foreach ($top as $data)
-                                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Alamat Kirim</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
+                                                    <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak_M->alamatKirim }}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Cara Kirim</label>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Telp</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_M->custTelp }}">
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
-                                                    <option value="{{ $kontrak_M->caraKirim }}">{{ $kontrak_M->caraKirim }}</option>
-                                                    <option value="Kirim">Kirim</option>
-                                                    <option value="Ambil Sendiri">Ambil Sendiri</option>
-                                                </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Tipe Order</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
+                                                        <option value="{{ $kontrak_M->tipeOrder }}">{{ $kontrak_M->tipeOrder }}</option>
+                                                        <option value="Order Baru">Order Baru</option>
+                                                        <option value="Order Ulang">Order Ulang</option>
+                                                        <option value="OUP Design">OUP Design</option>
+                                                        <option value="OUP Ukuran">OUP Ukuran</option>
+                                                        <option value="OUP Kualitas">OUP Kualitas</option>
+                                                        <option value="OUP Warna">OUP Warna</option>
+                                                        <option value="OUP Nama Item">OUP Nama Item</option>
+                                                        <option value="OUP Nama & Design">OUP Nama & Design</option>
+                                                        <option value="OUP Kupingan">OUP Kupingan</option>
+                                                        <option value="OUP Joint">OUP Joint</option>
+                                                        <option value="OUP Ukuran & Kualitas">OUP Ukuran & Kualitas</option>
+                                                        <option value="OUP Nama & Ukuran">OUP Nama & Ukuran</option>
+                                                        <option value="OUP Nama & Warna">OUP Nama & Warna</option>  
+                                                        <option value="OUP Nama & Kualitas">OUP Nama & Kualitas</option>
+                                                        <option value="OUP Design, Nama & Kualitas">OUP Design, Nama & Kualitas</option>
+                                                        <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
+                                                        <option value="OUP Nama Item & Flute">OUP Nama Item & Flute</option>
+                                                        <option value="OUP Design & Warna">OUP Design & Warna</option>
+                                                        <option value="OUP Ukuran, Design & Warna">OUP Ukuran, Design & Warna</option>
+                                                        <option value="OUP Ukuran Sheet & Warna">OUP Ukuran Sheet & Warna</option>
+                                                        <option value="OUP Desain dan Kode Warna">OUP Desain dan Kode Warna</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Komisi</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Biaya Expedisi(Rp/Kg)</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="biaya_exp" id="biaya_exp" value="{{ $kontrak_M->biaya_exp }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Biaya Glue  Manual(Rp/Pcs)</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="biaya_glue" id="biaya_glue" value="{{ $kontrak_M->biaya_glue }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Biaya Wax(Rp/Pcs)</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="biaya_wax" id="biaya_wax" value="{{ $kontrak_M->biaya_wax }}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Sales</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <select class='js-example-basic-single col-md-12' name="sales" id="sales">
-                                                    <option value="{{ $kontrak_M->sales }}">{{ $kontrak_M->sales }}</option>
-                                                    @foreach ($sales as $data)
-                                                        <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>PO Customer</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" value="{{ $kontrak_M->poCustomer }}" name="poCustomer" id="poCustomer">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Term of Payment</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name="top" id="top">
+                                                        <option value="{{ $kontrak_M->top }}">{{ $kontrak_M->top }}</option>
+                                                        @foreach ($top as $data)
+                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label>Keterangan</label>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Cara Kirim</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
+                                                        <option value="{{ $kontrak_M->caraKirim }}">{{ $kontrak_M->caraKirim }}</option>
+                                                        <option value="Kirim">Kirim</option>
+                                                        <option value="Ambil Sendiri">Ambil Sendiri</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                <textarea name="keterangan" id="keterangan" cols="30" rows="4" value="">{{ $kontrak_M->keterangan }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Tanggal Kirim</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim" value="{{ $kontrak_M->min_tgl_kirim }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Sales</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name="sales" id="sales">
+                                                        <option value="{{ $kontrak_M->sales }}">{{ $kontrak_M->sales }}</option>
+                                                        @foreach ($sales as $data)
+                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>PO Customer</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line" value="{{ $kontrak_M->poCustomer }}" name="poCustomer" id="poCustomer">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Keterangan</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
+                                                    <textarea name="keterangan" id="keterangan" cols="30" rows="4" value="">{{ $kontrak_M->keterangan }}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -292,7 +349,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-top: 20px">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
@@ -679,20 +736,20 @@
                 } );
             } );
                             
-    function getData() {
+    // function getData() {
         
-        harga_pcs = document.getElementById("harga").value;
-        // harga_kg = document.getElementById("hargakg").value;
-        qtyPcs = document.getElementById("qtyPcs").value;
-        qtyKg = document.getElementById("qtyKg").value;
+    //     harga_pcs = document.getElementById("harga").value;
+    //     // harga_kg = document.getElementById("hargakg").value;
+    //     qtyPcs = document.getElementById("qtyPcs").value;
+    //     qtyKg = document.getElementById("qtyKg").value;
 
-        total = harga_pcs * qtyPcs;
+    //     total = harga_pcs * qtyPcs;
 
-        harga_kg = total/qtyKg;
+    //     harga_kg = total/qtyKg;
 
-        document.getElementById("total").value = total;
-        document.getElementById("hargakg").value = harga_kg;
-    }
+    //     document.getElementById("total").value = total;
+    //     document.getElementById("hargakg").value = harga_kg;
+    // }
                     
                         
 </script>

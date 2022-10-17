@@ -143,6 +143,10 @@ class Kontrak_DController extends Controller
                 $nestedData['namaBarang'] = $mc->namaBarang;
                 $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
                 &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>";
+
+                $nestedData['b_expedisi'] = $kontrak->biaya_exp;
+                $nestedData['b_glue'] = $kontrak->biaya_glue;
+                $nestedData['b_wax'] = $kontrak->biaya_wax;
                 
                 
                 
@@ -289,6 +293,9 @@ class Kontrak_DController extends Controller
             'createdBy' => $request->createdBy,
             'keterangan' => $request->keterangan,
             'komisi' => $request->komisi,
+            'biaya_exp' => $request->biaya_exp,
+            'biaya_glue' => $request->biaya_glue,
+            'biaya_wax' => $request->biaya_wax,
             'min_tgl_kirim' => $request->tglkirim
         ]);
         // End Insert Into
@@ -697,6 +704,10 @@ class Kontrak_DController extends Controller
         $kontrakm->komisi = $request->komisi;
         $kontrakm->caraKirim = $request->caraKirim;
         $kontrakm->keterangan = $request->keterangan;
+        $kontrakm->min_tgl_kirim = $request->tglkirim;
+        $kontrakm->biaya_exp = $request->biaya_exp;
+        $kontrakm->biaya_glue = $request->biaya_glue;
+        $kontrakm->biaya_wax = $request->biaya_wax;
         // End untuk set value yang di update
 
         $kontrakm->save();

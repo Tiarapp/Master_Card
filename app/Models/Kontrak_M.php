@@ -46,6 +46,9 @@ class Kontrak_M extends Model
         'lock',
         'sales',
         'komisi',
+        'biaya_exp',
+        'biaya_glue',
+        'biaya_wax',
         'harga',
         'keterangan',
         'createdBy'

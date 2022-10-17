@@ -15,14 +15,19 @@ class OpiPPICController extends Controller
 
     public function get_opibyperiode(Request $request)
     {
-        $opi = Opi_M::opi()->whereBetween('dt.tglKirimDt', ['2022-10-01', '2022-10-31'])->take(5)->get();
+        $filter = Opi_M::opi()->where('opi_m.created_at', 'LIKE', '%2022-10-01%' )->get();
+        $opi = Opi_M::opi()->whereBetween('opi_m.created_at', ['2022-10-01', '2022-10-02'])->get();
 
         if ($opi == NULL) {
             return response()->json(['data' => []]);
         }elseif (!empty($request->mulai) && !empty($request->end)) {
-            $filter = Opi_M::opi()->whereBetween('dt.tglKirimDt', [$request->mulai, $request->end])->get();
-
-            return response()->json([ 'data' => $filter ]);
+            if ($request->mulai == $request->end) {
+                $filter = Opi_M::opi()->where('opi_m.created_at', 'LIKE', '%'.$request->mulai.'%' )->get();
+                return response()->json([ 'data' => $filter ]);
+            } else {
+                $filter = Opi_M::opi()->whereBetween('opi_m.created_at', [$request->mulai, $request->end])->get();
+                return response()->json([ 'data' => $filter ]);
+            }
         } else {
             return redirect('admin/ppic/opi')->with('success', "masukkan tanggal dengan benar!!!");
         }

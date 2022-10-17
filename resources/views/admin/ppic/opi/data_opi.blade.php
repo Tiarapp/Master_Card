@@ -121,7 +121,7 @@
             "processing":true,
             "serverSide":true,
             "ajax":{
-              "url": "/admin/ppic/opidata?mulai="+mulai+"&end="+end,
+              "url": "../ppic/opidata?mulai="+mulai+"&end="+end,
               "dataType": "json",
               "type": "GET",
               "data":{_token: "{{ csrf_token() }}"}
@@ -173,132 +173,6 @@
         }
       })
     });
-
-
-
-    // $(function(){
-    //   $('#data_opi').DataTable({
-    //     "processing": true,
-    //     "serverSide": true,
-    //     "ajax": {
-    //         "url": "{{ url('opijson') }}",
-    //         "dataType": "json",
-    //         "type": "POST",
-    //         "data":{ _token: "{{ csrf_token() }}"}
-    //     },
-    //     "columns": [
-    //         {"data": "id"},
-    //         {"data": "NoOPI" },
-    //         {"data": "action" },
-    //         {"data": "kode" },
-    //         {"data": "created_at" },
-    //         {"data": "tglKirimDt"},
-    //         {"data": "pcsDt" },
-    //         {"data": "Cust" },
-    //         {"data": "namaBarang" },
-    //         {"data": "jumlahOrder" },
-    //         {"data": "sisa_order" },
-    //         {"data": "keterangan" },
-    //         {"data": "NoOPI"},
-    //         {"data": "poCustomer" },
-    //         {"data": "nomc" },
-    //         {"data": "hari" },
-    //         {"data": "flute" },
-    //         {"data": "tipeBox"},
-    //         {"data": "panjangSheet" },
-    //         {"data": "lebarSheet" },
-    //         {"data": "outConv" },
-    //         {"data": "Ukroll" },
-    //         {"data": "tipeOrder" },
-    //         {"data": "namacc" },
-    //         {"data": "joint"},
-    //         {"data": "KertasAtas" },
-    //         {"data": "gramKertasAtas" },
-    //         {"data": "gramKertasflute1" },
-    //         {"data": "gramKertastengah" },
-    //         {"data": "gramKertasflute2"},
-    //         {"data": "gramKertasbawah" },
-    //         {"data": "kertasMcbawah" },
-    //         {"data": "wax" },
-    //         {"data": "gram" },
-    //         {"data": "tglKontrak" },
-    //         {"data": "alamatKirim" },
-    //         {"data": "toleransi" },
-    //         {"data": "panjang" },
-    //         {"data": "lebar" },
-    //         {"data": "tinggi" },
-    //         {"data": "koli"},
-    //         {"data": "tglKirimDt" },
-    //         {"data": "harga_kg" },
-    //         {"data": "Ukroll" },
-    //         {"data": "Ukroll" },
-    //         {"data": "status" },
-    //         {"data": "kode"},
-    //         {"data": "tglKontrak" },
-    //         {"data": "kertasMcAtasK" },
-    //         {"data": "gramKertasAtasK" },
-    //         {"data": "gramKertasflute1K" },
-    //         {"data": "gramKertastengahK"},
-    //         {"data": "gramKertasflute2K" },
-    //         {"data": "gramKertasbawahK" },
-    //         {"data": "kertasMcbawahK" },
-    //         {"data": "Ukroll" },
-    //         {"data": "kodeBarang" },
-    //         {"data": "tipeCreasCorr" },
-    //         {"data": "bungkus" },
-    //         {"data": "Ukroll" },
-            
-    //     ],
-    //     // initComplete: function () {
-    //     //   // Apply the search
-    //     //   this.api()
-    //     //       .columns()
-    //     //       .every(function () {
-    //     //           var that = this;
-
-    //     //           $('input', this.footer()).on('keyup change clear', function () {
-    //     //               if (that.search() !== this.value) {
-    //     //                   that.search(this.value).draw();
-    //     //               }
-    //     //           });
-    //     //       });
-    //     // },
-    //     // "columnDefs": [
-    //     // {
-    //     //   'targets': [0
-    //     //   ],
-    //     //   'render': function(data, type, full, meta){
-    //     //     if(type === 'display'){
-    //     //       data = strtrunc(data, 10);
-    //     //     }
-    //     //     return data;
-    //     //   }
-    //     // }
-    //     // ],
-    //     "order":[1, 'desc'],
-    //     "pageLength": 25,
-    //     dom: 'Bftrip',
-    //     buttons: [
-    //       'copy',
-    //       'csv',
-    //       'excel',
-    //       'pdf',
-    //       'colvis',
-    //       {
-    //         extend: 'print',
-    //         text: 'Print',
-    //         exportOption: {
-    //           modifier: {
-    //             selected: null
-    //           }
-    //         }
-    //       }
-    //     ],
-    //     // "scrollX": true,
-    //     select: true,
-    //   });
-    // });
-    // });
 
     
   </script>

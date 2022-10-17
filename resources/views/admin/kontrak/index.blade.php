@@ -11,14 +11,6 @@
 </style> --}}
 
 @section('content')
-@if ($message = Session::get('success'))
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-    <strong>{{ $message }}</strong>
-  </div>
-@endif
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
@@ -41,6 +33,14 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+      @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>{{ $message }}</strong>
+        </div>
+      @endif
       <!-- Small boxes (Stat box) -->
 
       <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
@@ -66,14 +66,9 @@
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
               <th scope="col">Komisi</th>
-              <?php
-                // if (Auth::user()->divisi_id == 2) {
-              ?>
-                {{-- <th scope="col">Komisi</th> --}}
-              <?php
-                // }
-              ?>
-              {{-- <th scope="col">No PO Customer</th> --}}
+              <th scope="col">B. Expedisi</th>
+              <th scope="col">B. Glue Manual</th>
+              <th scope="col">B. Wax</th>
             </tr>
           </thead>
           
@@ -120,6 +115,9 @@
           {"data": "sisaKirim"},
           {"data": "sales"},
           {"data": "komisi"},
+          {"data": "b_expedisi"},
+          {"data": "b_glue"},
+          {"data": "b_wax"},
           
         ],
         // select: true,
