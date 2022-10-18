@@ -108,7 +108,7 @@
                                         <td>
                                             @if ($data->qty <= 40000)
                                                 Tersedia
-                                            @elseif ($data->qty <= 50000)
+                                            @elseif ($data->qty <= 54000)
                                                 Hampir Penuh
                                             @else
                                                 Melebihi Batas
@@ -247,6 +247,7 @@
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Jumlah</th>
                                     <th scope="col">OPI</th>
+                                    <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -255,6 +256,7 @@
                                     <td scope="col">{{ $o->tglKirimDt }}</td>
                                     <td scope="col">{{ $o->jumlahOrder }}</td>
                                     <td scope="col">{{ $o->nama }}</td>
+                                    <td scope="col">{{ $o->status }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

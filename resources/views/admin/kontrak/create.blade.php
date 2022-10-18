@@ -174,15 +174,16 @@
                                                     <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
                                                     <option value="OUP Nama Item & Flute">OUP Nama Item & Flute</option>
                                                     <option value="OUP Design & Warna">OUP Design & Warna</option>
-                                                    <option value="OUP Nama & Kualiatas">OUP Nama & Kualitas</option>
                                                     <option value="OUP Ukuran, Design & Warna">OUP Ukuran, Design & Warna</option>
+                                                    <option value="OUP Ukuran Sheet & Warna">OUP Ukuran Sheet & Warna</option>
+                                                    <option value="OUP Desain dan Kode Warna">OUP Desain dan Kode Warna</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-bottom: 2px solid black">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">
@@ -192,6 +193,48 @@
                                             <div class="col-md-6">
                                                 <input type="text" name="komisi" id="komisi">
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Biaya Expedisi(Rp/Kg)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="number" name="biaya_exp" id="biaya_exp" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Biaya Glue Manual(Rp/Pcs)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="number" name="biaya_glue" id="biaya_glue" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Biaya Wax(Rp/Pcs)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="number" name="biaya_wax" id="biaya_wax" required>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -279,7 +322,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="border-bottom: 2px solid black">
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">

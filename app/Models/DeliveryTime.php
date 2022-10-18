@@ -18,7 +18,7 @@ class DeliveryTime extends Model
         'dt_perubahan',
         'pcsDt',
         'kgDt',
-        'lock',
+        'locked',
         'createdBy',
         'lastUpdatedBy',
     ];
