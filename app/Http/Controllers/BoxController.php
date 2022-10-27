@@ -98,34 +98,6 @@ class BoxController extends Controller
                 $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
             }
         }
-        // End calculating Number Sequence
-
-        // dd($nobukti);
-
-        // $request->validate([
-        //     'kode' => 'required',
-        //     'kodeBarang' => 'nullable',
-        //     'namaBarang' => 'required',
-        //     'tipebox' => 'required',
-        //     'flute' => 'required',
-        //     'tipeCreasCorr' => 'required',
-        //     // 'lebarSheetBox' => 'nullable',
-        //     // 'panjangSheetBox' => 'nullable',
-        //     // 'tinggiSheetBox' => 'nullable',
-        //     // 'luasSheetBox' => 'nullable',
-        //     'panjangDalamBox' => 'nullable',
-        //     'lebarDalamBox' => 'nullable',
-        //     'kuping' => 'nullable',
-        //     'panjangCrease' => 'nullable',
-        //     'lebarCrease1' => 'nullable',
-        //     'lebarCrease2' => 'nullable',
-        //     'flapCrease' => 'nullable',
-        //     'tinggiCrease' => 'nullable',
-        //     'tinggiDalamBox' => 'nullable',
-        //     'sizeCreasCorr' => 'nullable',
-        //     'sizeCreasConv' => 'nullable',
-        //     'createdBy' => 'required'
-        // ]);
 
         Box::create([
             'kode' => $nobukti,
