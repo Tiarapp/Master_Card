@@ -423,22 +423,24 @@ class Kontrak_DController extends Controller
         $b1 = DB::table('opi_m')
         ->join('dt', 'dt_id', 'dt.id')
         ->join('mc', 'mc_id', 'mc.id')
-        ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->select(DB::raw("SUM(opi_m.jumlahOrder) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
         ->where('mc.tipeBox', '=', 'B1')
-        ->where('dt.tglKirimDt', '>=', $date)
-        ->groupBy('dt.tglKirimDt')
+        ->where('opi_m.tglKirimDt', '>=', $date)
+        ->where('opi_m.status', '=', 'Proses')
+        ->groupBy('opi_m.tglKirimDt')
         ->get();
 
         $dc = DB::table('opi_m')
         ->join('dt', 'dt_id', 'dt.id')
         ->join('mc', 'mc_id', 'mc.id')
-        ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+        ->select(DB::raw("ROUND(SUM(opi_m.jumlahOrder / mc.outConv )) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
         ->where('mc.tipeBox', '=', 'DC')
-        ->where('dt.tglKirimDt', '>=', $date)
-        ->groupBy('dt.tglKirimDt')
+        ->where('opi_m.tglKirimDt', '>=', $date)
+        ->where('opi_m.status', '=', 'Proses')
+        ->groupBy('opi_m.tglKirimDt')
         ->get();
 
-        // dd($b1, $dc);
+        // // dd($b1, $dc);
 
         $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -510,7 +512,11 @@ class Kontrak_DController extends Controller
                     ->where('dt.tglKirimDt', '>=', $request->tglKirim)
                     ->groupBy('dt.tglKirimDt')
                     ->first();
-                $totalB1 = $b1->qty;
+                if ($b1 != null) {
+                    $totalB1 = $b1->qty;
+                } else {
+                    $totalB1 = 0;
+                }
             } elseif ($request->tipebox == 'DC') {
                 $dc = DB::table('opi_m')
                     ->join('dt', 'dt_id', 'dt.id')
@@ -521,7 +527,11 @@ class Kontrak_DController extends Controller
                     ->groupBy('dt.tglKirimDt')
                     ->first();
 
-                $totaldc = $dc->qty;
+                if ($dc != null) {
+                    $totaldc = $dc->qty;
+                } else {
+                    $totaldc = 0;
+                }
             }
 
             $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
@@ -538,6 +548,7 @@ class Kontrak_DController extends Controller
 
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
+                                'opi' => $numb_opi,
                                 'kodeKontrak' => $request->kode,
                                 'tglKirimDt' => $request->tglKirim,
                                 'locked' => 1,
@@ -565,6 +576,7 @@ class Kontrak_DController extends Controller
                         } else {
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
+                                'opi' => $numb_opi,
                                 'kodeKontrak' => $request->kode,
                                 'tglKirimDt' => $request->tglKirim,
                                 'pcsDt' => $request->jumlahKirim,
@@ -595,6 +607,7 @@ class Kontrak_DController extends Controller
 
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
+                                'opi' => $numb_opi,
                                 'kodeKontrak' => $request->kode,
                                 'tglKirimDt' => $request->tglKirim,
                                 'locked' => 1,
@@ -622,6 +635,7 @@ class Kontrak_DController extends Controller
                         } else {
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
+                                'opi' => $numb_opi,
                                 'kodeKontrak' => $request->kode,
                                 'tglKirimDt' => $request->tglKirim,
                                 'pcsDt' => $request->jumlahKirim,
@@ -650,6 +664,7 @@ class Kontrak_DController extends Controller
                     } else {
                         $dt = DeliveryTime::create([
                             'kontrak_m_id' => $request->idkontrakm,
+                            'opi' => $numb_opi,
                             'kodeKontrak' => $request->kode,
                             'tglKirimDt' => $request->tglKirim,
                             'pcsDt' => $request->jumlahKirim,
@@ -821,12 +836,15 @@ class Kontrak_DController extends Controller
 
     public function add_realisasi($id)
     {
-        
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
 
         $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
 
         $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
+        $sj = DB::connection('firebird2')->table('TDetSJ')
+            ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
+            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
+
+        dd($sj);
 
         $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();

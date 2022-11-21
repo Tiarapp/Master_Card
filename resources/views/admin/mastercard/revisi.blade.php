@@ -1059,6 +1059,10 @@
 
         $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
+        
+        $out = $result/$result2;
+
+        document.getElementById('outConv').value = $out.toFixed(0);
 
         document.getElementById('luasSheet').value = $result.toFixed(3);
         document.getElementById('luasSheetBox').value = $result2.toFixed(3);

@@ -302,6 +302,8 @@ Route::middleware(['auth'])->group(function (){
 
         Route::get('/admin/ppic/opi',  [OpiPPICController::class, 'index'])->name('ppic.opi');
         Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
+        Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
+        Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
 });
 
 
