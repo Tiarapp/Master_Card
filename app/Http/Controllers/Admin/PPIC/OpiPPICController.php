@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\PPIC;
 use App\Http\Controllers\Controller;
 use App\Models\Opi_M;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OpiPPICController extends Controller
 {
@@ -15,21 +16,43 @@ class OpiPPICController extends Controller
 
     public function get_opibyperiode(Request $request)
     {
-        $filter = Opi_M::opi()->where('opi_m.created_at', 'LIKE', '%2022-10-01%' )->get();
+        // $filter = Opi_M::opi()->where('opi_m.created_at', 'LIKE', '%2022-10-01%' )->get();
         $opi = Opi_M::opi()->whereBetween('opi_m.created_at', ['2022-10-01', '2022-10-02'])->get();
 
         if ($opi == NULL) {
             return response()->json(['data' => []]);
         }elseif (!empty($request->mulai) && !empty($request->end)) {
             if ($request->mulai == $request->end) {
-                $filter = Opi_M::opi()->where('opi_m.created_at', 'LIKE', '%'.$request->mulai.'%' )->get();
+                $filter = Opi_M::opi()->where('opi_m.tglKirimDt', 'LIKE', '%'.$request->mulai.'%' )->get();
                 return response()->json([ 'data' => $filter ]);
             } else {
-                $filter = Opi_M::opi()->whereBetween('opi_m.created_at', [$request->mulai, $request->end])->get();
+                $filter = Opi_M::opi()->whereBetween('opi_m.tglKirimDt', [$request->mulai, $request->end])->get();
                 return response()->json([ 'data' => $filter ]);
             }
         } else {
             return redirect('admin/ppic/opi')->with('success', "masukkan tanggal dengan benar!!!");
         }
+    }
+
+    public function approve_opi()
+    {
+        $opi = Opi_M::opi()->where('status', '=', 'Butuh Approve')
+            ->get();
+
+        return view('admin.ppic.opi.data_approve_opi', compact('opi'));
+    }
+
+    public function proses_approve($id)
+    {
+        $opi = Opi_M::opi()->where('opi_m.id', '=', $id)->first();
+
+        // dd($opi);
+        $opi->status = 'Proses';
+        $opi->lastUpdatedBy = Auth::user()->name;
+        // $opi->last
+
+        $opi->save();
+
+        return redirect('admin/ppic/opi_approve');
     }
 }

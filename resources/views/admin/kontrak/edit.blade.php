@@ -184,6 +184,9 @@
                                                         <option value="OUP Ukuran Sheet & Warna">OUP Ukuran Sheet & Warna</option>
                                                         <option value="OUP Design dan Kode Warna">OUP Design dan Kode Warna</option>
                                                         <option value="OUP Design - Kualitas">OUP Design - Kualitas</option>
+                                                        <option value="OUP Koli">OUP Koli</option>
+                                                        <option value="OUP Pisau">OUP Pisau</option>
+                                                        <option value="OUP Pisau & Nama Item">OUP Pisau & Nama Item</option>
                                                     </select>
                                                 </div>
                                             </div>

@@ -110,70 +110,6 @@
               <th scope="col">Lain-Lain</th>
             </tr>
           </thead>
-          {{-- <tfoot>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">No OPI</th>
-              <th scope="col">Action</th>
-              <th scope="col">Kontrak</th>
-              <th scope="col">OPI ke</th>
-              <th scope="col">DT</th>
-              <th scope="col">QTY Kirim</th>
-              <th scope="col">Customer</th>
-              <th scope="col">Item</th>
-              <th scope="col">Qty Order</th>
-              <th scope="col">Sisa Qty Order</th>
-              <th scope="col">Keterangan OPI</th>
-              <th scope="col">Opi</th>
-              <th scope="col">PO Customer</th>
-              <th scope="col">No MC</th>
-              <th scope="col">Hari</th>
-              <th scope="col">Flute</th>
-              <th scope="col">Bentuk</th>
-              <th scope="col">Sheet P</th>
-              <th scope="col">Sheet L</th>
-              <th scope="col">Out</th>
-              <th scope="col">UK Roll</th>
-              <th scope="col">Tipe Order</th>
-              <th scope="col">Warna</th>
-              <th scope="col">Finishing</th>
-              <th scope="col">Kualitas Produksi K/M Atas</th>
-              <th scope="col">Kualitas Produksi I1</th>
-              <th scope="col">Kualitas Produksi I2</th>
-              <th scope="col">Kualitas Produksi I3</th>
-              <th scope="col">Kualitas Produksi I4</th>
-              <th scope="col">Kualitas Produksi I5</th>
-              <th scope="col">Kualitas Produksi K/M Bawah</th>
-              <th scope="col">Wax</th>
-              <th scope="col">Gram</th>
-              <th scope="col">Tanggal Order</th>
-              <th scope="col">Alamat</th>
-              <th scope="col">Toleransi (lebih/kurang)</th>
-              <th scope="col">Box P</th>
-              <th scope="col">Box L</th>
-              <th scope="col">Box T</th>
-              <th scope="col">Koli</th>
-              <th scope="col">DT Perubahan</th>
-              <th scope="col">Harga (kg)</th>
-              <th scope="col">Real Kirim</th>
-              <th scope="col">Sisa DT</th>
-              <th scope="col">Status</th>
-              <th scope="col">No Kontrak + Urut</th>
-              <th scope="col">TGL Kontrak</th>
-              <th scope="col">Kualitas Kontrak K/M Atas</th>
-              <th scope="col">Kualitas Kontrak I1</th>
-              <th scope="col">Kualitas Kontrak I2</th>
-              <th scope="col">Kualitas Kontrak I3</th>
-              <th scope="col">Kualitas Kontrak I4</th>
-              <th scope="col">Kualitas Kontrak I5</th>
-              <th scope="col">Kualitas Kontrak K/M Bawah</th>
-              <th scope="col"></th>
-              <th scope="col">Kode Barang</th>
-              <th scope="col">Tipe Crease</th>
-              <th scope="col">Bungkus</th>
-              <th scope="col">Lain-Lain</th>
-            </tr>
-          </tfoot> --}}
         </table>
       </div>
       <!-- /.row -->
@@ -186,10 +122,6 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-    //   function strtrunc(str, max, add){
-    //   add = add || '...';
-    //   return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
-    // };
     $('#data_opi tfoot th').each(function () {
         var title = $(this).text();
         $(this).html('<input type="text" style="width:50px" placeholder="Search ' + title + '" />');
@@ -267,34 +199,8 @@
             {"data": "Ukroll" },
             
         ],
-        // initComplete: function () {
-        //   // Apply the search
-        //   this.api()
-        //       .columns()
-        //       .every(function () {
-        //           var that = this;
-
-        //           $('input', this.footer()).on('keyup change clear', function () {
-        //               if (that.search() !== this.value) {
-        //                   that.search(this.value).draw();
-        //               }
-        //           });
-        //       });
-        // },
-        // "columnDefs": [
-        // {
-        //   'targets': [0
-        //   ],
-        //   'render': function(data, type, full, meta){
-        //     if(type === 'display'){
-        //       data = strtrunc(data, 10);
-        //     }
-        //     return data;
-        //   }
-        // }
-        // ],
         "order":[1, 'desc'],
-        "pageLength": 25,
+        "pageLength": 100,
         dom: 'Bftrip',
         buttons: [
           'copy',

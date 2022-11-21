@@ -343,7 +343,7 @@ class MastercardController extends Controller
             $nama_file = $request->old;
         }
 
-        if ($request->outConv == 0) {
+        if ($request->outConv == '' ) {
             $outconv = 1;
         } else {
             $outconv = $request->outConv;
