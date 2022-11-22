@@ -844,12 +844,8 @@ class Kontrak_DController extends Controller
             ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
             ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
 
-        dd($sj);
-
         $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();
-
-        // dd($kontrak_M->realisasi);
 
         return view('admin.kontrak.data_realisasi', compact(
             'kontrak_D', 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\PPIC;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kontrak_D;
 use App\Models\Opi_M;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,11 +46,15 @@ class OpiPPICController extends Controller
     public function proses_approve($id)
     {
         $opi = Opi_M::opi()->where('opi_m.id', '=', $id)->first();
+        $kontrak = Kontrak_D::where('id', '=', $opi->kontrak_d_id);
 
-        // dd($opi);
+        dd($kontrak);
+
+        $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $opi->jumlahOrder;
+        $kontrak->save();
+
         $opi->status = 'Proses';
         $opi->lastUpdatedBy = Auth::user()->name;
-        // $opi->last
 
         $opi->save();
 
