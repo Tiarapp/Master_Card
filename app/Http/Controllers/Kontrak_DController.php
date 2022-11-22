@@ -465,7 +465,7 @@ class Kontrak_DController extends Controller
             ->where('kontrak_m.id', '=', $id)
             ->first();
 
-        $opi = Opi_M::opi()->where('kontrak_m.id', '=', $id)
+        $opi = Opi_M::opi()->where('opi_m.kontrak_m_id', '=', $id)
             ->get();
         // End tampilkan untuk edit
 
