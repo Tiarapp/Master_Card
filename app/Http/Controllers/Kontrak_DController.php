@@ -458,14 +458,14 @@ class Kontrak_DController extends Controller
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.tipeBox as tipebox', 'mc.gramSheetCorrKontrak as berat')
+            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.tipeBox as tipebox', 'mc.gramSheetCorrKontrak as berat', 'mc.outConv as outConv')
             ->first();
 
         $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
 
-        $opi = Opi_M::opi()->where('opi_m.kontrak_m_id', '=', $id)
+        $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
             ->get();
         // End tampilkan untuk edit
 
@@ -544,7 +544,7 @@ class Kontrak_DController extends Controller
                     return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
                 } else {
                     if ($request->tipebox == 'B1') {
-                        if ($request->jumlahKirim + $totalB1 > 150000) {
+                        if (($request->jumlahKirim/$request->outconv) + $totalB1 > 150000) {
 
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
@@ -603,8 +603,9 @@ class Kontrak_DController extends Controller
                             $kontrakd->save();
                         }
                     } elseif($request->tipebox == 'DC') {
-                        if ($request->jumlahKirim + $totaldc > 54000) {
+                        if (($request->jumlahKirim/$request->outconv) + $totaldc > 54000) {
 
+                            // dd($totaldc);
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
                                 'opi' => $numb_opi,

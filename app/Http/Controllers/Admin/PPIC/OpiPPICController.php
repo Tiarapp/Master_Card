@@ -37,7 +37,7 @@ class OpiPPICController extends Controller
 
     public function approve_opi()
     {
-        $opi = Opi_M::opi()->where('status', '=', 'Butuh Approve')
+        $opi = Opi_M::opidt()->where('status', '=', 'Butuh Approve')
             ->get();
 
         return view('admin.ppic.opi.data_approve_opi', compact('opi'));
@@ -45,10 +45,8 @@ class OpiPPICController extends Controller
 
     public function proses_approve($id)
     {
-        $opi = Opi_M::opi()->where('opi_m.id', '=', $id)->first();
-        $kontrak = Kontrak_D::where('id', '=', $opi->kontrak_d_id);
-
-        dd($kontrak);
+        $opi = Opi_M::opidt()->where('opi_m.id', '=', $id)->first();
+        $kontrak = Kontrak_D::where('id', '=', $opi->kontrak_d_id)->first();
 
         $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $opi->jumlahOrder;
         $kontrak->save();
