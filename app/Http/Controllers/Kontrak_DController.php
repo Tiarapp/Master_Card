@@ -507,10 +507,11 @@ class Kontrak_DController extends Controller
                 $b1 = DB::table('opi_m')
                     ->join('dt', 'dt_id', 'dt.id')
                     ->join('mc', 'mc_id', 'mc.id')
-                    ->select(DB::raw("SUM(dt.pcsDt) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+                    ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
                     ->where('mc.tipeBox', '=', 'B1')
-                    ->where('dt.tglKirimDt', '>=', $request->tglKirim)
-                    ->groupBy('dt.tglKirimDt')
+                    ->where('status', '=', 'Proses')
+                    ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
+                    ->groupBy('opi_m.tglKirimDt')
                     ->first();
                 if ($b1 != null) {
                     $totalB1 = $b1->qty;
@@ -521,10 +522,11 @@ class Kontrak_DController extends Controller
                 $dc = DB::table('opi_m')
                     ->join('dt', 'dt_id', 'dt.id')
                     ->join('mc', 'mc_id', 'mc.id')
-                    ->select(DB::raw("SUM(dt.pcsDt / mc.outConv ) as qty"), 'dt.tglKirimDt', 'mc.tipeBox')
+                    ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
                     ->where('mc.tipeBox', '=', 'DC')
-                    ->where('dt.tglKirimDt', '>=', $request->tglKirim)
-                    ->groupBy('dt.tglKirimDt')
+                    ->where('status', '=', 'Proses')
+                    ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
+                    ->groupBy('opi_m.tglKirimDt')
                     ->first();
 
                 if ($dc != null) {
@@ -604,8 +606,6 @@ class Kontrak_DController extends Controller
                         }
                     } elseif($request->tipebox == 'DC') {
                         if (($request->jumlahKirim/$request->outconv) + $totaldc > 54000) {
-
-                            // dd($totaldc);
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
                                 'opi' => $numb_opi,
