@@ -1067,10 +1067,10 @@
 
         document.getElementById('outConv').value = $out.toFixed(0);
 
-        document.getElementById('luasSheet').value = $result;
-        document.getElementById('luasSheetBox').value = $result2;
-        document.getElementById('luasSheetProd').value = $result;
-        document.getElementById('luasSheetBoxProd').value = $result2;
+        document.getElementById('luasSheet').value = $result.toFixed(2);
+        document.getElementById('luasSheetBox').value = $result2.toFixed(2);
+        document.getElementById('luasSheetProd').value = $result.toFixed(2);
+        document.getElementById('luasSheetBoxProd').value = $result2.toFixed(2);
     }
 
     function getGramProduksi(){
