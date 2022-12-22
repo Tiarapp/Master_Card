@@ -195,7 +195,7 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
-        return redirect('admin/mastercard/b1');
+        return redirect('mastercard');
     }
 
     /**
@@ -411,7 +411,7 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
-        return redirect('admin/mastercard/b1');
+        return redirect('mastercard');
     }
 
     public function revisi($id)
@@ -562,7 +562,7 @@ class MastercardController extends Controller
 
        $mc->save();
 
-        return redirect('admin/mastercard/b1');
+        return redirect('mastercard');
         
 
     }
