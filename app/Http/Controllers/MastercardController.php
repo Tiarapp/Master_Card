@@ -6,6 +6,7 @@ use App\Models\Mastercard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class MastercardController extends Controller
 {
@@ -14,13 +15,28 @@ class MastercardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function get_mc_all()
+    {
+
+        // "AA";
+        $mc = Mastercard::query();
+        
+        // dd($mc);
+
+        return DataTables::of($mc)
+                ->addColumn('action', function(Mastercard $mastercard) {
+                    $data = [
+                        "mastercard" => $mastercard
+                    ];
+                    return view('admin.mastercard.datatable-action', $data);
+                })
+                ->make(true);
+    }
+
     public function indexb1()
     {
-        $mc = DB::table('mc')
-        // ->where('tipeBox', '!=', 'DC')
-        ->get();
-
-        return view('admin.mastercard.index', compact('mc'));
+        return view('admin.mastercard.index');
     }
 
     public function indexdc()
@@ -586,4 +602,10 @@ class MastercardController extends Controller
         return view('admin.mastercard.print', compact('mc','namaSubsK','namaSubsP'));
     }
 
+    public function add_note($id,Request $request)
+    {
+        $mc = Mastercard::findOrFail($id);
+
+        $mc->note ;
+    }
 }

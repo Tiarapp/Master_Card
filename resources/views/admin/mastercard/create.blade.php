@@ -929,6 +929,7 @@
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
             
             getGramKontrak();
+            getLuasDC();
         } );
     } );
     

@@ -153,7 +153,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('mastercardb1') }}" class="nav-link">
+                <a href="{{ route('mastercard.b1') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Master Card</p>
                 </a>

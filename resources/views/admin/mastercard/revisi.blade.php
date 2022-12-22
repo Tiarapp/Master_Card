@@ -699,7 +699,7 @@
                     <i class='far fa-check-square'></i>
                 </button>
                 <button type="button" id="cancel" class="btn" data-toggle="tooltip" data-placement="right" title="Cancel">
-                    <a href="{{ route('mastercarddc') }}">
+                    <a href="{{ route('mastercard.b1') }}">
                         <i class='far fa-window-close' style='color:red'></i>
                     </a></button>
                 </div>
@@ -936,6 +936,7 @@
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
             
             getGramKontrak();
+            getLuasDC();
         } );
     } );
     
@@ -1063,7 +1064,6 @@
         $out = $result/$result2;
 
         document.getElementById('outConv').value = $out.toFixed(0);
-
         document.getElementById('luasSheet').value = $result.toFixed(3);
         document.getElementById('luasSheetBox').value = $result2.toFixed(3);
         document.getElementById('luasSheetProd').value = $result.toFixed(3);
