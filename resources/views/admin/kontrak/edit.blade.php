@@ -187,6 +187,7 @@
                                                         <option value="OUP Koli">OUP Koli</option>
                                                         <option value="OUP Pisau">OUP Pisau</option>
                                                         <option value="OUP Pisau & Nama Item">OUP Pisau & Nama Item</option>
+                                                        <option value="OUP Proses">OUP Proses</option>
                                                     </select>
                                                 </div>
                                             </div>

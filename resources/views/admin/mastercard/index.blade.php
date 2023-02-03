@@ -41,8 +41,9 @@
         <table class="table table-bordered" id="data_mc">
             <thead>
                 <tr>
-                    {{-- <th scope="col">No.</th> --}}
+                    <th scope="col">ID</th>
                     <th scope="col">Kode</th>
+                    <th scope="col">Revisi</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
                     <th scope="col">Creas Corr P</th>
@@ -52,24 +53,23 @@
                     <th scope="col">Lebar Sheet</th>
                     <th scope="col">Luas Sheet</th>
                     <th scope="col">Keterangan</th>
-                    <th scope="col">Gambar</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                     <?php 
-                        $no = 1;
-                        foreach ($mc as $data) { 
-                          if ($data->revisi == null) {
-                            $revisi = "";
-                          } else if ($data->revisi == "R0"){
-                            $revisi = "";
-                          } else {
-                            $revisi = "-".$data->revisi;
-                          }
+                        // $no = 1;
+                        // foreach ($mc as $data) { 
+                        //   if ($data->revisi == null) {
+                        //     $revisi = "";
+                        //   } else if ($data->revisi == "R0"){
+                        //     $revisi = "";
+                        //   } else {
+                        //     $revisi = "-".$data->revisi;
+                        //   }
                           ?>
-                        <tr>
-                            {{-- <td scope="row">{{ $no++ }}</td> --}}
+                        {{-- <tr>
+                            <td scope="row">{{ $no++ }}</td>
                             <td>{{ $data->kode }}{{ $revisi }}</td>
                             <td>{{ $data->namaBarang }}</td>
                             <td>{{ $data->tipeBox }}</td>
@@ -86,9 +86,9 @@
                                 <a href="../mastercard/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Revisi</a> 
                                 <a href="../mastercard/revisi/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a> 
                             </td>
-                        </tr>
+                        </tr> --}}
                             <?php
-                        }    
+                        // }    
                     ?>
             </tbody>
         </table>
@@ -104,28 +104,50 @@
 <!-- DataTables -->
 <script> 
     $(document).ready(function(){
-     $("#data_mc").DataTable({
-        "scrollX": true,
-       dom: 'Bfrtip',
-       buttons: [
-         'copy',
-         'csv',
-         'excel',
-         'pdf',
-         'colvis',
-         {
-           extend: 'print',
-           text: 'Print',
-           exportOption:{
-             modifier: {
-               selected: null
-             }
-           }
-         }
-       ],
-       "orderable":false,
-       select: true
-     });
+        var $table = $("#data_mc").DataTable({
+            // order: [0, "desc"],
+            responsive: true,
+            pageLength: 10,
+            processing: true,
+            serverSide: true,
+            ajax: '{!! route('mastercard.get_data') !!}',
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'kode', name: 'kode' },
+                { data: 'revisi', name: 'revisi' },
+                { data: 'namaBarang', name: 'namaBarang' },
+                { data: 'tipeBox', name: 'tipeBox' },
+                { data: 'CreasCorrP', name: 'CreasCorrP' },
+                { data: 'CreasCorrL', name: 'CreasCorrL' },
+                { data: 'joint', name: 'joint' },
+                { data: 'panjangSheet', name: 'panjangSheet' },
+                { data: 'lebarSheet', name: 'lebarSheet' },
+                { data: 'luasSheet', name: 'luasSheet' },
+                { data: 'keterangan', name: 'keterangan' },
+                { data: 'action', name: 'action' }
+            ]
+
+        //   "scrollX": true,
+        //  dom: 'Bfrtip',
+        //  buttons: [
+        //    'copy',
+        //    'csv',
+        //    'excel',
+        //    'pdf',
+        //    'colvis',
+        //    {
+        //      extend: 'print',
+        //      text: 'Print',
+        //      exportOption:{
+        //        modifier: {
+        //          selected: null
+        //        }
+        //      }
+        //    }
+        //  ],
+        //  "orderable":false,
+        //  select: true
+      });
    });
 </script>
 

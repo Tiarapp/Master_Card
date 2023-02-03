@@ -237,13 +237,13 @@
                                     <div class='col-md-2'>  
                                         <div class='row'>   
                                             <div class='col-md-5'>  
-                                                <input type='text' class='form-control txt_line' value="{{ $detail->panjangSheet }}" name='sheetp[{{ $count }}]' id='sheetp[{{ $count }}]'>   
+                                                <input type='text' class='form-control txt_line' value="{{ $detail->sheet_p }}" name='sheetp[{{ $count }}]' id='sheetp[{{ $count }}]'>   
                                             </div>   
                                             <div class='col-md-2'>  
                                                 <label for=''>X</label>  
                                             </div>   
                                             <div class='col-md-5'>  
-                                                <input type='text' class='form-control txt_line' value="{{ $detail->lebarSheet }}" name='sheetl[{{ $count }}]' id='sheetl[{{ $count }}]'>   
+                                                <input type='text' class='form-control txt_line' value="{{ $detail->sheet_l }}" name='sheetl[{{ $count }}]' id='sheetl[{{ $count }}]'>   
                                             </div>  
                                         </div> 
                                     </div> 

@@ -13,6 +13,7 @@ class DeliveryTime extends Model
 
     protected $fillable = [
         'kontrak_m_id',
+        'opi',
         'kodeKontrak',
         'tglKirimDt',
         'dt_perubahan',

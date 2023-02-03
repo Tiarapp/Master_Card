@@ -336,7 +336,7 @@ class CorrController extends Controller
         // $data1= $data->sortBy('urutan','asc');
         $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
 
-        // dd($data2);
+        // dd($data1);
         return view('admin.plan.corr.pdfcorr', compact('data1','data2'));
     }
 

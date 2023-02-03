@@ -190,15 +190,21 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
     
     //Mastercard
-    Route::get('/admin/mastercard/b1', 'MastercardController@indexb1')->middleware(['auth'])->name('mastercardb1');
-    Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('mastercarddc');
-    Route::get('/admin/mastercard/create', 'MastercardController@create')->name('mastercard.create');
-    Route::post('/admin/mastercard/store', 'MastercardController@store')->name('mastercard.store');
-    Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('mastercard.edit');
-    Route::get('/admin/mastercard/revisi/{id}', 'MastercardController@revisi')->name('mastercard.revisi');
-    Route::post('/admin/mastercard/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('mastercard.saveRevisi');
-    Route::post('/admin/mastercard/update', 'MastercardController@update')->name('mastercard.update');
-    Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('mastercard.pdfb1');
+    Route::name('mastercard.')->prefix('mastercard')->group(function() {
+        Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
+        Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
+        Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
+        Route::get('/admin/mastercard/create', 'MastercardController@create')->name('create');
+        Route::post('/admin/mastercard/store', 'MastercardController@store')->name('store');
+        Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('edit');
+        Route::get('/admin/mastercard/revisi/{id}', 'MastercardController@revisi')->name('revisi');
+        Route::post('/admin/mastercard/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
+        Route::post('/admin/mastercard/update', 'MastercardController@update')->name('update');
+        Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
+    });
+
+    
+
 
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');

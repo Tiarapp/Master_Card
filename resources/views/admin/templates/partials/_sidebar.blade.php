@@ -153,7 +153,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('mastercardb1') }}" class="nav-link">
+                <a href="{{ route('mastercard.b1') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Master Card</p>
                 </a>
@@ -240,6 +240,14 @@
                 <a href="{{ route('ppic.opi') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>OPI</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview"> 
+              <li class="nav-item">
+                <a href="{{ route('ppic.opi.approve') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Approve OPI</p>
                 </a>
               </li>
             </ul>

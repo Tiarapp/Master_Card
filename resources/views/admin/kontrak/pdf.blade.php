@@ -1109,7 +1109,7 @@ td
  </tr>
  <tr height='16' style='mso-height-source:userset;height:12pt'>
 <td colspan='6' height='16' class='x22' style='mso-ignore:colspan;height:12pt;'></td>
-<td colspan='3' class='x70' x:num="44688" x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,2,FALSE)">{{ date_format($mytime, "d M Y") }}</td>
+<td colspan='3' class='x70' x:num="44688" x:fmla="=VLOOKUP($D$10,&apos;C:\Users\Tiara\Downloads\[Marketing (8).xlsx]KONTRAK&apos;!$D:$CA,2,FALSE)">{{ date_format($date, 'd M Y') }}</td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='20' style='mso-height-source:userset;height:15pt'>

@@ -233,6 +233,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak_D->berat }}">
+                                                <input type="text" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
                                             </div>
                                         </div>
                                     </div>

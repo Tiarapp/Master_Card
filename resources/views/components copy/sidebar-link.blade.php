@@ -1,0 +1,11 @@
+@props(['active' => false])
+
+@php
+    $class = ($active)?'nav-link active':'nav-link';
+@endphp
+
+<li class="nav-item">
+    <a {{ $attributes->merge(['class' => $class]) }}>
+        {{ $slot }}
+    </a>
+</li>
