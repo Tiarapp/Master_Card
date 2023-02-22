@@ -95,13 +95,6 @@
                                 
                             </div>
                         </div>
-                        {{-- <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
-                            <div class="form-group">
-                                <label>Kode Item</label>
-                                <textarea name="nama" id="nama" cols="30" rows="10"></textarea>
-                                <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang">
-                            </div>
-                        </div> --}}
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
                             <div class="form-group">
                                 <label>Tipe Box</label>
@@ -134,37 +127,6 @@
                                     <option value="TANPA CREASE">TANPA CREASE</option>
                                 </select>
                             </div>
-                        {{-- </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="input Lebar Sheet Box (mm)">
-                            <div class="form-group">
-                                <label>Lebar</label>
-                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="lebarSheetBox" id="lebarSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Terima kasih</div>
-                                <div class="invalid-feedback">Masukkan Lebar Sheet Box (mm)</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
-                            <div class="form-group">
-                                <label>Panjang</label>
-                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="panjangSheetBox" id="panjangSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Terima kasih</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
-                            <div class="form-group">
-                                <label>Tinggi</label>
-                                <input type="text" class="form-control txt_line" placeholder="in milimeters" name="tinggiSheetBox" id="tinggiSheetBox" onchange="luas(); getNama();" required>
-                                <div class="valid-feedback">Terima kasih</div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Luas sheet">
-                            <div class="form-group">
-                                <label>Luas</label>
-                                <input type="text" class="form-control txt_line" name="luasSheetBox" id="luasSheetBox" required readonly>
-                            </div>
-                        </div> --}}
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan panjang dalam box (mm)">
                             <div class="form-group">
                                 <label>Panjang Dalam Box</label>

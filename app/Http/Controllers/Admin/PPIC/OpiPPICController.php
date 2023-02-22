@@ -37,7 +37,7 @@ class OpiPPICController extends Controller
 
     public function approve_opi()
     {
-        $opi = Opi_M::opidt()->where('status', '=', 'Butuh Approve')
+        $opi = Opi_M::opidt()->where('status_opi', '=', 'Butuh Approve')
             ->get();
 
         return view('admin.ppic.opi.data_approve_opi', compact('opi'));
@@ -51,7 +51,7 @@ class OpiPPICController extends Controller
         $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $opi->jumlahOrder;
         $kontrak->save();
 
-        $opi->status = 'Proses';
+        $opi->status_opi = 'Proses';
         $opi->lastUpdatedBy = Auth::user()->name;
 
         $opi->save();

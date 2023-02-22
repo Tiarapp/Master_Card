@@ -98,7 +98,7 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/admin/box/store', 'BoxController@store')->name('box.store');
     Route::get('/admin/box/show/{id}', 'BoxController@show');
     Route::get('/admin/box/edit/{id}', 'BoxController@edit');
-    Route::put('/admin/box/update/{id}', 'BoxController@update');
+    Route::put('/admin/box/update/{id}', 'BoxController@update')->name('box.update');
     Route::get('/admin/box/delete/{id}', 'BoxController@updateDeleted');
     
     //Koli
@@ -220,6 +220,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/realisasi/edit{id}', 'Kontrak_DController@edit_realisasi')->name('kontrak.edit_kirim');
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
+    Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
 
     //Delivery Time
     // Route::post('kontrakjson', 'DTController@json')->name('kontrak.json');

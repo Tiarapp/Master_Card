@@ -182,6 +182,7 @@
                                                     <option value="OUP Pisau">OUP Pisau</option>
                                                     <option value="OUP Pisau & Nama Item">OUP Pisau & Nama Item</option>
                                                     <option value="OUP Proses">OUP Proses</option>
+                                                    <option value="OUP Kualitas - Warna">OUP Kualitas - Warna</option>
                                                 </select>
                                             </div>
                                         </div>
