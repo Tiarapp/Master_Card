@@ -874,6 +874,8 @@
                 document.getElementById("luasSheetBox").value = luasmkt.toFixed(2);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
+                
+                getKodeBarang();
             } else {
 
                 document.getElementById("panjangSheet").value = null;
@@ -884,6 +886,7 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
+                getKodeBarang();
             }
         } );
         
@@ -937,6 +940,7 @@
             
             getGramKontrak();
             getLuasDC();
+            getKodeBarang();
         } );
     } );
     
@@ -958,6 +962,8 @@
             document.getElementById('substanceProduksi_id').value = SubstanceProduksi[0];
             document.getElementById('subsProduksi').value = SubstanceProduksi[2];
             
+            
+            getKodeBarang();
             getGramProduksi();
         } );
     } );
@@ -1003,6 +1009,8 @@
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            
+            getKodeBarang();
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -1030,6 +1038,7 @@
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            getKodeBarang();
             
         } else {
             
@@ -1043,6 +1052,7 @@
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            getKodeBarang();
         }
         
         return result;
@@ -1068,6 +1078,7 @@
         document.getElementById('luasSheetBox').value = $result2.toFixed(3);
         document.getElementById('luasSheetProd').value = $result.toFixed(3);
         document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
+        getKodeBarang();
     }
 
     function getGramProduksi(){
@@ -1110,6 +1121,8 @@
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            
+            getKodeBarang();
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -1137,6 +1150,7 @@
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            getKodeBarang();
             
         } else {
 
@@ -1150,6 +1164,7 @@
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            getKodeBarang();
         }
     }
     

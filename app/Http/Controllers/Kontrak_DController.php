@@ -93,21 +93,22 @@ class Kontrak_DController extends Controller
                         $edit =  route('kontrak.edit',$kontrak->id);
                     }
 
+                    $cancel = route('kontrak.cancel', $kontrak->id);
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
 
                     if($kontrak->status == 2){
                         $nestedData['id'] = "<p style='color:red'>".$kontrak->id."</p>";
-                        $nestedData['kontrak'] = $kontrak->kode;
-                        $nestedData['cust'] = $kontrak->customer_name;
-                        $nestedData['tglKontrak'] = $kontrak->tglKontrak;
-                        $nestedData['alamatKirim'] = $kontrak->alamatKirim;
-                        $nestedData['custTelp'] = $kontrak->custTelp;
-                        $nestedData['poCustomer'] = $kontrak->poCustomer;
-                        $nestedData['top'] = $kontrak->top;
-                        $nestedData['sales'] = $kontrak->sales;
-                        $nestedData['tipeOrder'] = $kontrak->tipeOrder;
-                        $nestedData['keterangan'] = $kontrak->keterangan;
+                        $nestedData['kontrak'] = "<p style='color:red'>".$kontrak->kode."</p>";
+                        $nestedData['cust'] = "<p style='color:red'>".$kontrak->customer_name."</p>";
+                        $nestedData['tglKontrak'] = "<p style='color:red'>".$kontrak->tglKontrak."</p>";
+                        $nestedData['alamatKirim'] = "<p style='color:red'>".$kontrak->alamatKirim."</p>";
+                        $nestedData['custTelp'] = "<p style='color:red'>".$kontrak->custTelp."</p>";
+                        $nestedData['poCustomer'] = "<p style='color:red'>".$kontrak->poCustomer."</p>";
+                        $nestedData['top'] = "<p style='color:red'>".$kontrak->top."</p>";
+                        $nestedData['sales'] = "<p style='color:red'>".$kontrak->sales."</p>";
+                        $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
+                        $nestedData['keterangan'] = "<p style='color:red'>".$kontrak->keterangan."</p>";
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -121,18 +122,20 @@ class Kontrak_DController extends Controller
                         }
                         
                         if (Auth::user()->divisi_id == 2) {
-                            $nestedData['komisi'] = $kontrak->komisi;
+                            $nestedData['komisi'] = "<p style='color:red'>".$kontrak->komisi."</p>";
                         } else {
-                            $nestedData['komisi'] = 0;
+                            $nestedData['komisi'] = "<p style='color:red'>0</p>";
                         }
                         
                         $nestedData['realisasi'] = $dataRealisasi;
-                        $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
-                        $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
+                        $nestedData['pcsKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
+                        $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
-                        $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
-                        $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
-                        $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
+                        $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+
+                        $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
+                        $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
+                        $nestedData['rp_kg'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_kg']."</p>";
                         
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
@@ -145,15 +148,15 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
-                        $nestedData['nomc'] = $mcKode;
-                        $nestedData['kodeBarang'] = $mc->kodeBarang;
-                        $nestedData['namaBarang'] = $mc->namaBarang;
+                        $nestedData['nomc'] = "<p style='color:red'>".$mcKode."</p>";
+                        $nestedData['kodeBarang'] = "<p style='color:red'>".$mc->kodeBarang."</p>";
+                        $nestedData['namaBarang'] = "<p style='color:red'>".$mc->namaBarang."</p>";
                         $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
-                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>";
+                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>";
                         
-                        $nestedData['b_expedisi'] = $kontrak->biaya_exp;
-                        $nestedData['b_glue'] = $kontrak->biaya_glue;
-                        $nestedData['b_wax'] = $kontrak->biaya_wax;
+                        $nestedData['b_expedisi'] = "<p style='color:red'>".$kontrak->biaya_exp."</p>";
+                        $nestedData['b_glue'] = "<p style='color:red'>".$kontrak->biaya_glue."</p>";
+                        $nestedData['b_wax'] = "<p style='color:red'>".$kontrak->biaya_wax."</p>";
                     } else {                    
                         $nestedData['id'] = $kontrak->id;
                         $nestedData['kontrak'] = $kontrak->kode;
@@ -207,7 +210,7 @@ class Kontrak_DController extends Controller
                         $nestedData['kodeBarang'] = $mc->kodeBarang;
                         $nestedData['namaBarang'] = $mc->namaBarang;
                         $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
-                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>";
+                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>";
                         
                         $nestedData['b_expedisi'] = $kontrak->biaya_exp;
                         $nestedData['b_glue'] = $kontrak->biaya_glue;
@@ -475,7 +478,7 @@ class Kontrak_DController extends Controller
             ->select(DB::raw("SUM(opi_m.jumlahOrder) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
             ->where('mc.tipeBox', '=', 'B1')
             ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status', '=', 'Proses')
+            ->where('opi_m.status_opi', '=', 'Proses')
             ->groupBy('opi_m.tglKirimDt')
             ->get();
             
@@ -485,7 +488,7 @@ class Kontrak_DController extends Controller
             ->select(DB::raw("ROUND(SUM(opi_m.jumlahOrder / mc.outConv )) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
             ->where('mc.tipeBox', '=', 'DC')
             ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status', '=', 'Proses')
+            ->where('opi_m.status_opi', '=', 'Proses')
             ->groupBy('opi_m.tglKirimDt')
             ->get();
             
@@ -568,7 +571,7 @@ class Kontrak_DController extends Controller
                     ->join('mc', 'mc_id', 'mc.id')
                     ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
                     ->where('mc.tipeBox', '=', 'B1')
-                    ->where('status', '=', 'Proses')
+                    ->where('status_opi', '=', 'Proses')
                     ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
                     ->groupBy('opi_m.tglKirimDt')
                     ->first();
@@ -583,7 +586,7 @@ class Kontrak_DController extends Controller
                     ->join('mc', 'mc_id', 'mc.id')
                     ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
                     ->where('mc.tipeBox', '=', 'DC')
-                    ->where('status', '=', 'Proses')
+                    ->where('status_opi', '=', 'Proses')
                     ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
                     ->groupBy('opi_m.tglKirimDt')
                     ->first();
@@ -630,7 +633,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status' => 'Butuh Approve',
+                                    'status_opi' => 'Butuh Approve',
                                     'createdBy' => Auth::user()->name,
                                 ]);
                                 
@@ -690,7 +693,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status' => 'Butuh Approve',
+                                    'status_opi' => 'Butuh Approve',
                                     'createdBy' => Auth::user()->name,
                                 ]);
                                 
@@ -788,11 +791,11 @@ class Kontrak_DController extends Controller
             $kontrakm->biaya_exp = $request->biaya_exp;
             $kontrakm->biaya_glue = $request->biaya_glue;
             $kontrakm->biaya_wax = $request->biaya_wax;
+            $kontrakm->status = 4;
+            $kontrakm->lastUpdatedBy = Auth::user()->name;
             // End untuk set value yang di update
             
             $kontrakm->save();
-            
-            // dd($kontrakm);
             
             $kontrakd = Kontrak_D::find($request->kontrakd_id);
             
@@ -940,5 +943,14 @@ class Kontrak_DController extends Controller
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
             
+        }
+
+        public function cancel_kontrak($id)
+        {
+            $kontrak = Kontrak_M::find($id);
+            $kontrak->status = 2;
+
+            $kontrak->save();
+            return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
         }
     }
