@@ -16,6 +16,125 @@ class MastercardController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     public function json(Request $request)
+        {
+            $columns = [
+                1=>'id',
+                2=>'action',
+                3=>'kode',
+                4=>'tglKontrak',
+                5=>'cust',
+                6=>'alamatKirim',
+            ];
+            
+            $totalData = Mastercard::count();
+            $mastercard= Mastercard::get();
+            // $mastercard = Kontrak_M::all();
+            
+            // dd($mastercard);
+            
+            $totalData = Mastercard::count();
+            $limit = $request->input('length');
+            $start = $request->input('start');
+            
+            // dd($start);
+            
+            if(empty($request->input('search.value')))
+            {            
+                $mastercard = Mastercard::offset($start)
+                ->limit(50)
+                ->orderBy('id', 'desc')
+                ->get();
+                
+                $totalFiltered = Mastercard::count();
+                // dd($opi);
+            }
+            else {
+                $search = $request->input('search.value'); 
+                
+                $mastercard =  Mastercard::where('kode','LIKE',"%{$search}%")
+                ->orWhere('namaBarang', 'LIKE',"%{$search}%")
+                ->orWhere('customer', 'LIKE',"%{$search}%")
+                ->offset($start)
+                ->limit(50)
+                ->orderBy('id', 'desc')
+                ->get();
+                
+                $totalFiltered = Mastercard::where('kode','LIKE',"%{$search}%")
+                ->orWhere('namaBarang', 'LIKE',"%{$search}%")
+                ->orWhere('customer', 'LIKE',"%{$search}%")
+                ->count();
+                // dd($opi);
+            }
+            
+            $data = array();
+            if (!empty($mastercard)) {
+                foreach ($mastercard as $mastercard)
+                {
+                    $edit =  route('mastercard.edit',$mastercard->id);
+                    $revisi = route('mastercard.revisi', $mastercard->id);
+                    $print =  route('mastercard.pdfb1',$mastercard->id);
+                    // $kirim =  route('mastercard.realisasi',$mastercard->id);
+
+                    if($mastercard->status == 5){
+                        $nestedData['id'] = "<p style='color:#4842f5'>".$mastercard->id."</p>";
+                        $nestedData['kode'] = "<p style='color:#4842f5'>".$mastercard->kode."</p>";
+                        $nestedData['revisi'] = "<p style='color:#4842f5'>".$mastercard->revisi."</p>";
+                        $nestedData['namaBarang'] = "<p style='color:#4842f5'>".$mastercard->namaBarang."</p>";
+                        $nestedData['tipeBox'] = "<p style='color:#4842f5'>".$mastercard->tipeBox."</p>";
+                        $nestedData['CreasCorrP'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrP."</p>";
+                        $nestedData['CreasCorrL'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrL."</p>";
+                        $nestedData['joint'] = "<p style='color:#4842f5'>".$mastercard->joint."</p>";
+                        $nestedData['panjangSheet'] = "<p style='color:#4842f5'>".$mastercard->panjangSheet."</p>";
+                        $nestedData['lebarSheet'] = "<p style='color:#4842f5'>".$mastercard->lebarSheet."</p>";
+                        $nestedData['luasSheet'] = "<p style='color:#4842f5'>".$mastercard->luasSheet."</p>";
+                        $nestedData['keterangan'] = "<p style='color:#4842f5'>".$mastercard->keterangan."</p>";
+                        $nestedData['action'] = 
+                                "<ul>
+                                    &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>
+                                    &emsp;<li><button class='btn-warning btn-sm mr-2'><a style='color:white' href='{$revisi}' title='Edit' ><span class='glyphicon glyphicon-list'>Edit</span></a></button></li>
+                                    &emsp;<li><button class='btn-primary btn-sm mr-2'><a style='color:white' href='{$edit}' title='Revisi' ><span class='glyphicon glyphicon-list'>Revisi</span></a></button></li>
+                                </ul>";
+                    } else {                    
+                        $nestedData['id'] = $mastercard->id;
+                        $nestedData['kode'] = $mastercard->kode;
+                        $nestedData['revisi'] = $mastercard->revisi;
+                        $nestedData['namaBarang'] = $mastercard->namaBarang;
+                        $nestedData['tipeBox'] = $mastercard->tipeBox;
+                        $nestedData['CreasCorrP'] = $mastercard->CreasCorrP;
+                        $nestedData['CreasCorrL'] = $mastercard->CreasCorrL;
+                        $nestedData['joint'] = $mastercard->joint;
+                        $nestedData['panjangSheet'] = $mastercard->panjangSheet;
+                        $nestedData['lebarSheet'] = $mastercard->lebarSheet;
+                        $nestedData['luasSheet'] = $mastercard->luasSheet;
+                        $nestedData['keterangan'] = $mastercard->keterangan;
+                        $nestedData['action'] = 
+                                "<ul>
+                                    &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>
+                                    &emsp;<li><button class='btn-warning btn-sm mr-2'><a style='color:white' href='{$revisi}' title='Edit' ><span class='glyphicon glyphicon-list'>Edit</span></a></button></li>
+                                    &emsp;<li><button class='btn-primary btn-sm mr-2'><a style='color:white' href='{$edit}' title='Revisi' ><span class='glyphicon glyphicon-list'>Revisi</span></a></button></li>
+                                </ul>";
+                    }
+                    
+                    
+                    
+                    $data[] = $nestedData;
+                }
+            }
+            
+            $json_data = array(
+                "draw"            => intval($request->input('draw')),  
+                "recordsTotal"    => intval($totalData),  
+                "recordsFiltered" => intval($totalFiltered), 
+                "data"            => $data,
+                "start"           => $start,
+                "limit"           => $limit
+            );
+            
+            // dd($json_data);
+            echo json_encode($json_data); 
+        }
+
     public function get_mc_all()
     {
 

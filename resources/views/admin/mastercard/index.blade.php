@@ -110,7 +110,7 @@
             pageLength: 10,
             processing: true,
             serverSide: true,
-            ajax: '{!! route('mastercard.get_data') !!}',
+            ajax: '{!! route('mastercard.json') !!}',
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'kode', name: 'kode' },
