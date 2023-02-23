@@ -259,7 +259,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
             ->leftJoin('box', 'box_id', '=', 'box.id')
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
-            // ->where('id', '=', $variable)->orderBy('id', '=', 'ASC')
+            ->where('mc.status', '=', '1')
             ->get();
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')->get();

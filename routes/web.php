@@ -191,6 +191,7 @@ Route::middleware(['auth'])->group(function (){
     
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
+        Route::get('/json', 'MastercardController@json')->name('json');
         Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
         Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
         Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
