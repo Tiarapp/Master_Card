@@ -115,7 +115,7 @@
               "processing":true,
               "serverSide":true,
               "ajax":{
-                "url": "/produksi/filter?mesin="+mesin,
+                "url": "../produksi/filter?mesin="+mesin,
                 "dataType": "json",
                 "type": "GET",
                 "data":{_token: "{{ csrf_token() }}"}
@@ -145,7 +145,7 @@
             "processing":true,
             "serverSide":true,
             "ajax":{
-              "url": "/produksi/filter?mulai="+mulai+"&end="+end,
+              "url": "../produksi/filter?mulai="+mulai+"&end="+end,
               "dataType": "json",
               "type": "GET",
               "data":{_token: "{{ csrf_token() }}"}
@@ -172,7 +172,7 @@
             "processing":true,
             "serverSide":true,
             "ajax":{
-              "url": "/produksi/filter?mesin="+mesin+"&mulai="+mulai+"&end="+end,
+              "url": "../produksi/filter?mesin="+mesin+"&mulai="+mulai+"&end="+end,
               "dataType": "json",
               "type": "GET",
               "data":{_token: "{{ csrf_token() }}"}

@@ -37,7 +37,7 @@ class LaporanProduksiController extends Controller
             } else {
                 if (empty($request->mesin)) {
                     $filter = HasilProduksi::
-                    whereBetween('start_date', [$request->mulai, $request->end])
+                    whereBetween('start_date', [$request->mulai." 00:00:00", $request->end." 23:59:59"])
                     ->get();
                     
                     // dd($filter);
@@ -45,7 +45,7 @@ class LaporanProduksiController extends Controller
                     return response()->json([ 'data' => $filter ]);
                 } else {
                     $filter = HasilProduksi::
-                    whereBetween('start_date', [$request->mulai, $request->end])
+                    whereBetween('start_date', [$request->mulai." 00:00:00", $request->end." 23:59:59"])
                     ->where('mesin', '=', $request->mesin)  
                     ->get();
                     
