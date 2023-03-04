@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use Illuminate\Support\Facades\Route;
 
@@ -290,7 +291,7 @@ Route::middleware(['auth'])->group(function (){
 
     //Produksi
     Route::get('/admin/produksi/index',     'LaporanProduksiController@index')->name('lap.produksi');
-    Route::get('/produksi/filter',          'LaporanProduksiController@get_filter')->name('filter');
+    Route::get('/admin/produksi/filter',          'LaporanProduksiController@get_filter')->name('filter');
 
     Route::get('/admin/roll',                       'RollController@index')->name('roll');
     Route::get('/admin/roll/bbm',                   'RollController@indexBbm')->name('roll.bbm');
@@ -312,6 +313,12 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
         Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
         Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
+
+    // Accounting
+        // 
+        
+        Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
+        Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
 });
 
 
