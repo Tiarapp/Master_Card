@@ -297,6 +297,7 @@ class MastercardController extends Controller
             'brt_kualitas' => $request->gram_kualitas,
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
+            'lain' => $request->lain,
             'wax' => $request->wax,
             'lock' => 0,
             'box_id' => $request->box_id,
@@ -514,6 +515,7 @@ class MastercardController extends Controller
             'brt_kualitas' => $request->gram_kualitas,
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
+            'lain' => $request->lain,
             'wax' => $request->wax,
             'box_id' => $request->box_id,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
@@ -661,6 +663,7 @@ class MastercardController extends Controller
         $mc->brt_kualitas = $request->gram_kualitas;
         $mc->koli = $request->koli;
         $mc->bungkus = $request->bungkus;
+        $mc->lain = $request->lain;
         $mc->keterangan = $request->keterangan;
         $mc->wax = $request->wax;
         $mc->tipeMc = $request->tipeMc;
@@ -707,7 +710,7 @@ class MastercardController extends Controller
             ->leftJoin('jenis_gram as cfP', 'SubsProduksi.jenisGramFlute2_id', '=', 'cfP.id')
             ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
             ->leftJoin('box', 'box_id', 'box.id')
-            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4')
+            ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4', 'box.kuping as kuping', 'box.kuping2 as kuping2', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease')
 
             ->where('mc.id', $id)
             ->first();
@@ -718,7 +721,7 @@ class MastercardController extends Controller
         // dd($mc);
         $namaSubsK = $mc->SubsKontrakNama;
         $namaSubsP = $mc->SubsProduksiNama;
-        return view('admin.mastercard.print', compact('mc','namaSubsK','namaSubsP'));
+        return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
     }
 
     public function add_note($id,Request $request)

@@ -375,7 +375,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td style="border-top: 0px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=2>LAIN-LAIN</font></td>
-		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000"></font></td>
+		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size="4">{{ $mc->lain }}</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

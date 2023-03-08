@@ -106,7 +106,7 @@ class OpiController extends Controller
                 $nestedData['NoOPI'] = $opi->NoOPI;
 
                 if ($cek_opi == '') { 
-                    if (Auth::user()->divisi_id == 3) {
+                    if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2) {
                            
                         $nestedData['action'] = "
                         <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
@@ -284,6 +284,7 @@ class OpiController extends Controller
 
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
+        $opi->lastUpdatedBy = Auth::user()->name;
         
         $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
