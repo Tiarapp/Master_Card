@@ -585,6 +585,7 @@
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc" onchange="getKodeBarang()">
                                                 <option value='B1'>B1</option>
+                                                <option value='B1 Terbalik'>B1 Terbalik</option>
                                                 <option value='DC'>DC</option>
                                                 <option value='SINGLEFACE'>SINGLEFACE</option>
                                                 <option value='LAYER'>LAYER</option>
@@ -658,6 +659,14 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" name="bungkus" id="bungkus">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Lain-lain</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" name="lain" id="lain">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -755,7 +764,7 @@
             kodeKoli = koli;
         }
 
-        if (tipemc == 'B1') {
+        if (tipemc == 'B1' || tipemc == 'B1 Terbalik') {
             tipemc = 'B';
         } else if (tipemc == 'DC') {
             tipemc = 'D';

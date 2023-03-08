@@ -590,6 +590,7 @@
                                             <select class="js-example-basic-single col-md-12" name="tipeMc" id="tipeMc" onchange="getKodeBarang();">
                                                 <option value='{{ $mc->tipeMc }}'>{{ $mc->tipeMc }}</option>
                                                 <option value='B1'>B1</option>
+                                                <option value='B1 Terbalik'>B1 Terbalik</option>
                                                 <option value='DC'>DC</option>
                                                 <option value='LAYER'>LAYER</option>
                                                 <option value='SHEET'>SHEET</option>
@@ -661,6 +662,14 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control txt_line" value="{{ $mc->bungkus }}" name="bungkus" id="bungkus">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Lain-lain</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->lain }}" name="lain" id="lain">
                                         </div>
                                     </div>
                                     <div class="row">
