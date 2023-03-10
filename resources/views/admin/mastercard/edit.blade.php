@@ -644,11 +644,18 @@
                                         <div class="col-md-2">
                                             <label class="control-label">Packing</label>
                                         </div>
+                                        <?php
+                                            if ($mc->koli < 10) {
+                                                $koli = '0'.$mc->koli;
+                                            } else {
+                                                $koli = $mc->koli;
+                                            }
+                                        ?>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
-                                                <option value='{{ $mc->koli }}'>{{ $mc->koli }}</option>
+                                                <option value='{{ $koli }}'>{{ $koli }}</option>
                                                 <option value='00'>Tidak Ada</option>
-                                                <option value='05'>5 Koli</option>
+                                                <option value='05'>05 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
                                                 <option value='25'>25 Koli</option>

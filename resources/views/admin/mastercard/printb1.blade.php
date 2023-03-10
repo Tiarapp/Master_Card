@@ -52,7 +52,14 @@
 		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000"><br></font></b></td>
 	</tr>
 	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="25" align="left" valign=bottom><font size=4>{{ $mc->kode }}</font></td>
+		<?php
+			if ($mc->revisi == "R0" ) {
+				$kodemc = $mc->kode;
+			} else {
+				$kodemc = $mc->kode."-".$mc->revisi;
+			}
+		?>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="25" align="left" valign=bottom><font size=4>{{ $kodemc }}</font></td>
 		<td colspan=7 align="center" valign=bottom><b><font size=5 color="#000000">PT. SARANA PACKAGING AGRAPANA</font></b></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=bottom sdnum="1033;0;#,##0"><font face="Calibri" color="#000000"><br></font></td>
