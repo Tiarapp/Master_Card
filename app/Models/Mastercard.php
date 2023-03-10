@@ -33,6 +33,7 @@ class Mastercard extends Model
         'outConv',
         'brt_kualitas',
         'flute',
+        'berat_roll',
         'koli',
         'tipeMc',
         'gramSheetBoxKontrak',

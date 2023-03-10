@@ -280,6 +280,7 @@ class MastercardController extends Controller
             'CreasCorrL' => $request->creasCorr,
             'joint' => $request->joint,
             'flute' => $request->flute,
+            'berat_roll' => $request->berat_roll,
             'lebarSheet' => $request->lebarSheet,
             'panjangSheet' => $request->panjangSheet,
             'tinggiSheet' => $request->tinggiSheet,
@@ -498,6 +499,7 @@ class MastercardController extends Controller
             'CreasCorrL' => $request->creasCorr,
             'joint' => $request->joint,
             'flute' => $request->flute,
+            'berat_roll' => $request->berat_roll,
             'lebarSheet' => $request->lebarSheet,
             'panjangSheet' => $request->panjangSheet,
             'tinggiSheet' => $request->tinggiSheet,
@@ -651,6 +653,7 @@ class MastercardController extends Controller
         $mc->CreasCorrL = $request->creasConv;
         $mc->joint = $request->joint;
         $mc->flute = $request->flute;
+        $mc->berat_roll = $request->berat_roll;
         $mc->lebarSheet = $request->lebarSheet;
         $mc->panjangSheet = $request->panjangSheet;
         $mc->lebarSheetBox = $request->lebarSheetBox;
@@ -721,7 +724,15 @@ class MastercardController extends Controller
         // dd($mc);
         $namaSubsK = $mc->SubsKontrakNama;
         $namaSubsP = $mc->SubsProduksiNama;
-        return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
+        // return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
+
+        if ($mc->tipeMc == 'DC' ) {
+            return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));
+        } else if ($mc->tipeMc == 'B1 Terbalik' ) {
+            return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));
+        } else {
+            return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
+        }
     }
 
     public function add_note($id,Request $request)

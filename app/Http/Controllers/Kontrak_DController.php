@@ -669,6 +669,7 @@ class Kontrak_DController extends Controller
                                 $kontrakd->save();
                             }
                         } elseif($request->tipebox == 'DC') {
+                            // dd($request->outconv);
                             if (($request->jumlahKirim/$request->outconv) + $totaldc > 54000) {
                                 $dt = DeliveryTime::create([
                                     'kontrak_m_id' => $request->idkontrakm,

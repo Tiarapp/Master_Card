@@ -254,7 +254,7 @@
                                             <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
+                                            <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Gram Kualitas</label>
@@ -385,6 +385,14 @@
                                                     MM
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Roll</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line berat-roll" name="berat_roll" id="berat_roll">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -642,10 +650,17 @@
                                         <div class="col-md-2">
                                             <label class="control-label">Packing</label>
                                         </div>
+                                        <?php
+                                            if ($mc->koli < 10) {
+                                                $koli = '0'.$mc->koli;
+                                            } else {
+                                                $koli = $mc->koli;
+                                            }
+                                        ?>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
-                                                <option value='{{ $mc->koli }}'>{{ $mc->koli }}</option>
-                                                <option value='05'>5 Koli</option>
+                                                <option value='{{ $koli }}'>{{ $koli }}</option>
+                                                <option value='05'>05 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
                                                 <option value='25'>25 Koli</option>
@@ -727,6 +742,35 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
+        if (document.getElementById('tipebox').value == 'SF') {
+            $('.berat-roll').show();
+        } else {
+            $('.berat-roll').hide();
+        }
+    });
+    // Datatable Barang(Item)
+
+    $(document).on("keyup", ".lebar-box", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            lebar = $(this).val();
+
+            document.getElementById("lebarSheet").value = lebar;
+            document.getElementById("panjangSheet").value = 0;
+        }
+    });
+
+    $(document).on("keyup", ".berat-roll", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            berat = $(this).val();
+            lebar = document.getElementById("lebarSheet").value;
+            kualitas = document.getElementById("gram_kualitas").value;
+
+            panjang = berat / (lebar*kualitas/1000);
+
+            document.getElementById("panjangSheet").value = panjang.toFixed(0);
+
+
+        }
     });
     // Datatable Barang(Item)
 
@@ -886,8 +930,8 @@
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
                 
                 getKodeBarang();
-            } else {
-
+            } else if (Box[3] == 'DC') {
+                $('.berat-roll').hide();
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
                 document.getElementById("luasSheet").value = null;
@@ -896,6 +940,19 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
+                
+                getKodeBarang();
+            } else {
+                $('.berat-roll').show();
+                document.getElementById("panjangSheet").value = null;
+                document.getElementById("lebarSheet").value = null;
+                document.getElementById("luasSheet").value = null;
+                document.getElementById("panjangSheetBox").value = null;
+                document.getElementById("lebarSheetBox").value = null;
+                document.getElementById("luasSheetBox").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
+                
                 getKodeBarang();
             }
         } );
@@ -1177,6 +1234,8 @@
             getKodeBarang();
         }
     }
+
+
     
     
 </script>

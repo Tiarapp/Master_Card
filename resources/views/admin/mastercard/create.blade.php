@@ -250,7 +250,7 @@
                                             <input type="text" class="form-control txt_line" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC()">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC()">
+                                            <input type="text" class="form-control txt_line lebar-box" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC()">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Gram Kualitas</label>
@@ -381,6 +381,14 @@
                                                     MM
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Berat Roll</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control txt_line berat-roll" name="berat_roll" id="berat_roll">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -619,7 +627,7 @@
                                                 <option value='OUTSIDE'>OUTSIDE</option>
                                                 <option value='IN & OUT'>IN & OUT</option>
                                             </select>
-                                        </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                        </div>                                                          
                                     </div>
                                     
                                     <div class="row">
@@ -642,7 +650,7 @@
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
                                                 <option value='00'>Tidak Ada</option>
-                                                <option value='05'>5 Koli</option>
+                                                <option value='05'>05 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
                                                 <option value='25'>25 Koli</option>
@@ -723,8 +731,36 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
+        if (document.getElementById('tipebox').value == 'SF') {
+            $('.berat-roll').show();
+        } else {
+            $('.berat-roll').hide();
+        }
     });
     // Datatable Barang(Item)
+
+    $(document).on("keyup", ".lebar-box", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            lebar = $(this).val();
+
+            document.getElementById("lebarSheet").value = lebar;
+            document.getElementById("panjangSheet").value = 0;
+        }
+    });
+
+    $(document).on("keyup", ".berat-roll", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            berat = $(this).val();
+            lebar = document.getElementById("lebarSheet").value;
+            kualitas = document.getElementById("gram_kualitas").value;
+
+            panjang = berat / (lebar*kualitas/1000);
+
+            document.getElementById("panjangSheet").value = panjang.toFixed(0);
+
+
+        }
+    });
 
     $(".customer").ready(function(){
         
@@ -846,6 +882,8 @@
             document.getElementById('creasConv').value = Box[9];
             document.getElementById('flute').value = Box[4];
             
+            $('.berat-roll').hide();
+            
             if (Box[3] == 'B1') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
@@ -877,8 +915,18 @@
                 document.getElementById("luasSheetBox").value = luasmkt.toFixed(2);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
+            } else if (Box[3] == 'DC') {
+                $('.berat-roll').hide();
+                document.getElementById("panjangSheet").value = null;
+                document.getElementById("lebarSheet").value = null;
+                document.getElementById("luasSheet").value = null;
+                document.getElementById("panjangSheetBox").value = null;
+                document.getElementById("lebarSheetBox").value = null;
+                document.getElementById("luasSheetBox").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
             } else {
-
+                $('.berat-roll').show();
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
                 document.getElementById("luasSheet").value = null;
@@ -1006,12 +1054,6 @@
             document.getElementById('gramSheetBoxKontrak').value = result2;
             document.getElementById('gramSheetBoxKontrak2').value = result2;
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
-
-            // document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            // document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
-            // document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
             
         } else
         if (flutenama == 'CF') {
@@ -1034,14 +1076,6 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-
-            // document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            // document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
-            // document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
-
-            
             document.getElementById('gramSheetCorrKontrak').value = result;
             document.getElementById('gramSheetCorrKontrak2').value = result;
             document.getElementById('gramSheetBoxKontrak').value = result2;
@@ -1054,12 +1088,6 @@
 
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-
-            // document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            // document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
-            
             document.getElementById('gramSheetCorrKontrak').value = result;
             document.getElementById('gramSheetCorrKontrak2').value = result2;
             document.getElementById('gramSheetBoxKontrak').value = result;
@@ -1122,11 +1150,6 @@
 
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-            
-            // document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            // document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
 
             document.getElementById('gramSheetCorrProduksi').value = result;
             document.getElementById('gramSheetBoxProduksi').value = result2;
@@ -1155,11 +1178,6 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
 
-            // document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            // document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
-
             
             document.getElementById('gramSheetCorrProduksi').value = result;
             document.getElementById('gramSheetBoxProduksi').value = result2;
@@ -1173,11 +1191,6 @@
 
             result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
             result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-
-            // document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            // document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            // document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
 
             
             document.getElementById('gramSheetCorrProduksi').value = result;
