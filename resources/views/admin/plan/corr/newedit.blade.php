@@ -345,7 +345,7 @@
                                             <input type='text' name='keterangan[{{ $item->opi_id }}]' value='{{ $item->keterangan }}'>
                                         </td>
                                         <td>
-                                            <a href="{{ route('corr.delet', $item->idcorr ) }}"><button type='button'  class='remove-plan-data btn btn-danger'>
+                                            <a href="{{ route('corr.delete', $item->idcorr ) }}"><button type='button'  class='remove-plan-data btn btn-danger'>
                                                 <i class='fa fa-trash' aria-hidden='true'></i></a>
                                             </button>
                                         </td>
