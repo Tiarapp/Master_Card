@@ -224,6 +224,15 @@ class OpiController extends Controller
         // $data = Opi_M::opi()->get();
         // return Datatables::of($data)->make(true);
     }
+
+    public function single($id)
+    {
+        $data = Opi_M::opi2()
+            ->where('opi_m.id', '=', $id)
+            ->first();
+        
+        echo (json_encode($data));
+    }
     
     public function index(Request $request)
     {

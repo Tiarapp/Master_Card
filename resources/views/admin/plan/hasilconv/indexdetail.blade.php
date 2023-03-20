@@ -51,7 +51,8 @@
             <tr>
               <th scope="col">urutan</th>
               <th scope="col">No OPI</th>
-              <th scope="col">Order</th>
+              <th scope="col">Jumlah Order</th>
+              <th scope="col">Plan</th>
               <th scope="col">Panjang</th>
               <th scope="col">Lebar</th>
               <th scope="col">Bentuk</th>
@@ -65,6 +66,7 @@
               <tr>
                 <td scope="col">{{ $data->urutan }}</td> 
                 <td scope="col">{{ $data->noopi }}</td> 
+                <td scope="col">{{ $data->pcsKontrak }}</td> 
                 <td scope="col">{{ $data->jml_plan }}</td> 
                 <td scope="col">{{ $data->sheet_p }}</td> 
                 <td scope="col">{{ $data->sheet_l }}</td> 

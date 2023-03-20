@@ -1,0 +1,616 @@
+@extends('admin.templates.partials.default')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+{{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> --}}
+
+<style>
+    .select2 {
+        width: 206px !important;
+    }
+</style>
+
+
+@section('content')
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="row" id="form_list_mc">
+            <div class="col-md-12">
+                <h4 class="modal-title">Planning Corrugating</h4>
+                <hr>
+                
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> 
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $errors }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                
+                <form action="../newupdate/{{ $data2->id }}"  method="POST"">
+                {{ csrf_field() }}
+                {{ method_field('PUT') }}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Kode Planning</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="hidden" name="id" value="{{ $data2->id }}">
+                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" value="{{ $data2->kodeplanM }}" onfocusout="getKode()" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Tanggal</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" class="form-control txt_line" name="tgl" id="tgl" autofocus value="{{ $data2->tglplan }}" onfocusout="getKode()">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Shift</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line" name="shift" id="shift" value="{{ $data2->shift }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modal-opi">
+                                                <div class="modal-dialog modal-xl">
+                                                    
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">List OPI</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body opi">
+                                                            <div class="card-body">
+                                                                <table class="table table-bordered" id="data_opi">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Action</th>
+                                                                            <th scope="col">Kode</th>
+                                                                            <th scope="col">Delivery Time</th>
+                                                                            <th scope="col">Customer</th>
+                                                                            <th scope="col">Barang</th>
+                                                                            <th scope="col">MC</th>
+                                                                            <th scope="col">Sheet P</th>
+                                                                            <th scope="col">Sheet L</th>
+                                                                            <th scope="col">tipe Box</th>
+                                                                            <th scope="col">Flute</th>
+                                                                            <th scope="col">jumlah Order</th>
+                                                                            <th scope="col">Toleransi</th>
+                                                                            <th scope="col">Jenis Atas</th>
+                                                                            <th scope="col">Kertas Atas</th>
+                                                                            <th scope="col">Jenis Flute 1</th>
+                                                                            <th scope="col">Kertas Flute 1</th>
+                                                                            <th scope="col">Jenis Tengah</th>
+                                                                            <th scope="col">Kertas Tengah</th>
+                                                                            <th scope="col">Jenis Flute 2</th>
+                                                                            <th scope="col">Kertas Flute 2</th>
+                                                                            <th scope="col">Jenis Bawah</th>
+                                                                            <th scope="col">Kertas Bawah</th>
+                                                                            <th scope="col">Berat Std Sheet</th>
+                                                                            <th scope="col">opi</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php 
+                                                                        foreach ($opi as $data) { ?>
+                                                                            <tr class="modal-plan-list">
+                                                                                <td>
+                                                                                    <input type="hidden" class="form-control opi_id" value="{{ $data->opiid }}">
+                                                                                    <button class="btn btn-success btn-insert-opi" type="button">Add</button>
+                                                                                </td>
+                                                                                <td scope="row">{{ $data->noopi }}</td>
+                                                                                <td>{{ $data->tglKirimDt }}</td>
+                                                                                <td>{{ $data->Cust }}</td>
+                                                                                <td>{{ $data->namaBarang }}</td>
+                                                                                <td>{{ $data->mcKode }}-{{ $data->revisimc }}</td>
+                                                                                <td>{{ $data->panjangSheet }}</td>
+                                                                                <td>{{ $data->lebarSheet }}</td>
+                                                                                <td>{{ $data->tipeBox }}</td>
+                                                                                <td>{{ $data->flute }}</td>
+                                                                                <td>{{ $data->pcsDt }}</td>
+                                                                                <td>{{ $data->toleransiLebih }}</td>
+                                                                                <td>{{ $data->kertasMcAtas }}</td>
+                                                                                <td>{{ $data->gramKertasAtas }}</td>
+                                                                                <td>{{ $data->kertasMcflute1 }}</td>
+                                                                                <td>{{ $data->gramKertasflute1 }}</td>
+                                                                                <td>{{ $data->kertasMctengah }}</td>
+                                                                                <td>{{ $data->gramKertastengah }}</td>
+                                                                                <td>{{ $data->kertasMcflute2 }}</td>
+                                                                                <td>{{ $data->gramKertasflute2 }}</td>
+                                                                                <td>{{ $data->kertasMcbawah }}</td>
+                                                                                <td>{{ $data->gramKertasbawah }}</td>
+                                                                                <td>{{ $data->gramSheet }}</td>
+                                                                                <td>{{ $data->opiid }}</td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <th>Urutan</th>
+                                    <th>OPI</th>
+                                    <th>DT</th>
+                                    <th>DT Perubahan</th>
+                                    <th>Customer</th>
+                                    <th>Item</th>
+                                    <th>MC</th>
+                                    <th>Panjang</th>
+                                    <th>Lebar</th>
+                                    <th>Tipe</th>
+                                    <th>Flute</th>
+                                    <th>Order</th>
+                                    <th>Out Corr</th>
+                                    <th>Out Conv</th>
+                                    <th>Lebar Roll</th>
+                                    <th>Planning</th>
+                                    <th>Trim (MM)</th>
+                                    <th>Cop</th>
+                                    <th>Kualitas Atas</th>
+                                    <th>Kualitas BF</th>
+                                    <th>Kualitas Tengah</th>
+                                    <th>Kualitas CF</th>
+                                    <th>Kualitas Bawah</th>
+                                    <th>Toleransi</th>
+                                    <th>Kebutuhan Atas</th>
+                                    <th>Kebutuhan BF</th>
+                                    <th>Kebutuhan Tengah</th>
+                                    <th>Kebutuhan CF</th>
+                                    <th>Kebutuhan Bawah</th>
+                                    <th>Berat/PCS</th>
+                                    <th>RM Order</th>
+                                    <th>Berat Order</th>
+                                    <th>Keterangan</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody id="plan-list">
+                                    @foreach ($data1 as $item)
+                                    <tr class='plan-list'>
+                                        <td>
+                                            <input type='hidden' name='opi_id[{{ $item->opi_id }}]' value='{{ $item->opi_id }}'>
+                                            <input type='hidden' class="id" name='plan_id[{{ $item->opi_id }}]' value='{{ $item->idcorr }}'>
+                                            <input class='col-md-12' type='text'  name='urutan[{{ $item->opi_id }}]' value='{{ $item->urutan }}'>
+                                        </td>
+                                        <td> {{ $item->noopi }} </td>
+                                        <td>{{ $item->tglDt }}</td>
+                                        <td>
+                                            <input type='date' name='dt_perubahan[{{ $item->opi_id }}]' value='{{ $item->dt_perubahan }}'>
+                                        </td>
+                                        <td>{{ $item->customer }}</td>
+                                        <td>{{ $item->barang }}</td>
+                                        <td>{{ $item->mckode }}-{{ $item->revisi }}</td>
+                                        <td>
+                                            <input type='text' class='col-md-12 panjangSheet' name='panjang[{{ $item->opi_id }}]' value='{{ $item->sheet_p }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 lebarSheet' name='lebar[{{ $item->opi_id }}]' value='{{ $item->sheet_l }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 tipebox' name='tipe[{{ $item->opi_id }}]' value='{{ $item->bentuk }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12' name='flute[{{ $item->opi_id }}]' value='{{ $item->flute }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='jml-order' name='jumlahOrder[{{ $item->opi_id }}]' value='{{ $item->jml_order }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 out-corr' name='outCorr[{{ $item->opi_id }}]' value='{{ $item->out_corr }}'>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 outconv' name='outConv[{{ $item->opi_id }}]' value='{{ $item->out_flexo }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='lebar-roll' name='lebarRoll[{{ $item->opi_id }}]' value='{{ $item->ukuran_roll }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 plan' name='plan[{{ $item->opi_id }}]' value='{{ $item->jml_order }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='trim' name='trim[{{ $item->opi_id }}]' value='{{ $item->trim_waste }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='cop' name='cop[{{ $item->opi_id }}]' value='{{ $item->cop }}' readonly>
+                                        </td>
+                                        <td>
+                                            <div class='row' style='width:200px'>
+                                                <div class='col-md-6'>
+                                                    <input class='col-md-12' type='text' name='jenis_atas[{{ $item->opi_id }}]' value='{{ $item->jenis_atas }}' >
+                                                </div>
+                                                <div class='col-6'>
+                                                    <input class='col-md-12 gram_atas' type='text' name='gram_atas[{{ $item->opi_id }}]' value='{{ $item->gram_atas }}' >
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class='row' style='width:200px'>
+                                                <div class='col-md-6'>
+                                                    <input class='col-md-12' type='text' name='jenis_bf[{{ $item->opi_id }}]' value='{{ $item->jenis_bf }}'>
+                                                </div>
+                                                <div class='col-6'>
+                                                    <input class='col-md-12 gram_bf' type='text' name='gram_bf[{{ $item->opi_id }}]' value='{{ $item->gram_bf }}'>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class='row' style='width:200px'>
+                                                <div class='col-md-6'>
+                                                    <input class='col-md-12' type='text' name='jenis_tengah[{{ $item->opi_id }}]' value='{{ $item->jenis_tengah }}'>
+                                                </div>
+                                                <div class='col-6'>
+                                                    <input class='col-md-12 gram_tengah' type='text' name='gram_tengah[{{ $item->opi_id }}]' value='{{ $item->gram_tengah }}'>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class='row' style='width:200px'>
+                                                <div class='col-md-6'>
+                                                    <input class='col-md-12' type='text' name='jenis_cf[{{ $item->opi_id }}]' value='{{ $item->jenis_cf }}'>
+                                                </div>
+                                                <div class='col-6'>
+                                                    <input class='col-md-12 gram_cf' type='text' name='gram_cf[{{ $item->opi_id }}]' value='{{ $item->gram_cf }}'>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class='row' style='width:200px'>
+                                                <div class='col-md-6'>
+                                                    <input class='col-md-12' type='text' name='jenis_bawah[{{ $item->opi_id }}]' value='{{ $item->jenis_bawah }}'>
+                                                </div>
+                                                <div class='col-6'>
+                                                    <input class='col-md-12 gram_bawah' type='text' name='gram_bawah[{{ $item->opi_id }}]' value='{{ $item->gram_bawah }}'>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 toleransi' name='toleransi[{{ $item->opi_id }}]' value='{{ $item->toleransi }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 line-atas' name='kebutuhan_atas[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasAtas }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 flute-bf' name='kebutuhan_bf[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasFlute1 }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 line-tengah' name='kebutuhan_tengah[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasTengah }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 flute-cf' name='kebutuhan_cf[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasFlute2 }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 line-bawah' name='kebutuhan_bawah[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasBawah }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='gram-box' name='gram[{{ $item->opi_id }}]' value='{{ $item->gramSheet }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='rm-order' name='rm_order[{{ $item->opi_id }}]' value='{{ $item->rm_order }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='tonase' name='tonase[{{ $item->opi_id }}]' value='{{ $item->tonase }}' readonly>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='keterangan[{{ $item->opi_id }}]' value='{{ $item->keterangan }}'>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('corr.delete', $item->idcorr ) }}"><button type='button'  class='remove-plan-data btn btn-danger'>
+                                                <i class='fa fa-trash' aria-hidden='true'></i></a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div> 
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <br>
+                            <button type="button" data-toggle="modal" data-target="#modal-opi" class="btn btn-search">
+                                Cari OPI  <i class="fas fa-search"></i>
+                            </button>
+                            <button class="btn btn-lg btn-primary" type="submit">SIMPAN
+                        </div>
+                    </div> 
+            </div>
+        </div>
+    </div>    
+</div>
+@endsection
+
+@section('javascripts')
+<script type="text/javascript">
+function getKode() {
+    tgl = document.getElementById("tgl").value;
+    kode = new Date(tgl);
+
+    year = kode.getFullYear();
+    month = kode.getMonth()+1;
+    dd = kode.getDate();
+
+    if (month <= 9 ) {
+        month = "0"+ month;
+    } 
+    if (dd < 9 ) {
+        dd =  "0"+dd;
+    } 
+
+    document.getElementById("kodeplan").value = dd+""+month+""+year;
+}
+
+$("#modal-opi").ready(function(){
+        
+        var table = $("#data_opi").DataTable({
+            select: true,
+            "initComplete": function (settings, json) {  
+            $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+        },
+        });
+    });
+
+$(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
+    opi_id = $(this).closest(".modal-plan-list").find('.opi_id').val();
+    var url = "../../../opi/single/:opi_id";
+    url = url.replace(':opi_id', opi_id);
+
+    $.get(url, function(data) {
+    
+        var json = (JSON.parse(data));
+
+        var html = '';
+                
+        html += "<tr class='plan-list'>";
+            html += "<td>";
+                html += "<input type='hidden' name='opi_id["+ json.opiid +"]' value='"+ json.opiid +"'>";
+                html += "<input type='text' class='id' name='plan_id["+ json.opiid +"]' value=''>";
+                html += "<input class='col-md-12' type='text'  name='urutan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>"+ json.noopi +"</td>";
+            html += "<td>"+ json.tglKirimDt +"</td>";
+            html += "<td>";
+                html += "<input type='date' name='dt_perubahan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>"+ json.Cust +"</td>";
+            html += "<td>"+ json.namaBarang +"</td>";
+            html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 lebarSheet' name='lebar["+ json.opiid +"]' value='"+ json.lebarSheet +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 tipebox' name='tipe["+ json.opiid +"]' value='"+ json.tipeBox +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12' name='flute["+ json.opiid +"]' value='"+ json.flute +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 out-corr' name='outCorr["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 outconv' name='outConv["+ json.opiid +"]' value='"+ json.outConv +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='lebar-roll' name='lebarRoll["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='trim' name='trim["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='cop' name='cop["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<div class='row' style='width:200px'>";
+                    html += "<div class='col-md-6'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_atas["+ json.opiid +"]' value='"+ json.kertasMcAtas +"'>";
+                    html += "</div>";
+                    html += "<div class='col-6'>";
+                        html += "<input class='col-md-12 gram_atas' type='text' name='gram_atas["+ json.opiid +"]' value='"+ json.gramKertasAtas +"'>";
+                    html += "</div>";
+                html += "</div>";
+            html += "</td>";
+            html += "<td>";
+                html += "<div class='row' style='width:200px'>";
+                    html += "<div class='col-md-6'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bf["+ json.opiid +"]' value='"+ json.kertasMcflute1 +"'>";
+                    html += "</div>";
+                    html += "<div class='col-6'>";
+                        html += "<input class='col-md-12 gram_bf' type='text' name='gram_bf["+ json.opiid +"]' value='"+ json.gramKertasflute1 +"'>";
+                    html += "</div>";
+                html += "</div>";
+            html += "</td>";
+            html += "<td>";
+                html += "<div class='row' style='width:200px'>";
+                    html += "<div class='col-md-6'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_tengah["+ json.opiid +"]' value='"+ json.kertasMctengah +"'>";
+                    html += "</div>";
+                    html += "<div class='col-6'>";
+                        html += "<input class='col-md-12 gram_tengah' type='text' name='gram_tengah["+ json.opiid +"]' value='"+ json.gramKertastengah +"'>";
+                    html += "</div>";
+                html += "</div>";
+            html += "</td>";
+            html += "<td>";
+                html += "<div class='row' style='width:200px'>";
+                    html += "<div class='col-md-6'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_cf["+ json.opiid +"]' value='"+ json.kertasMcflute2 +"'>";
+                    html += "</div>";
+                    html += "<div class='col-6'>";
+                        html += "<input class='col-md-12 gram_cf' type='text' name='gram_cf["+ json.opiid +"]' value='"+ json.gramKertasflute2 +"'>";
+                    html += "</div>";
+                html += "</div>";
+            html += "</td>";
+            html += "<td>";
+                html += "<div class='row' style='width:200px'>";
+                    html += "<div class='col-md-6'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bawah["+ json.opiid +"]' value='"+ json.kertasMcbawah +"'>";
+                    html += "</div>";
+                    html += "<div class='col-6'>";
+                        html += "<input class='col-md-12 gram_bawah' type='text' name='gram_bawah["+ json.opiid +"]' value='"+ json.gramKertasbawah +"'>";
+                    html += "</div>";
+                html += "</div>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.toleransiLebih +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 flute-bf' name='kebutuhan_bf["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 line-tengah' name='kebutuhan_tengah["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 flute-cf' name='kebutuhan_cf["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 line-bawah' name='kebutuhan_bawah["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='gram-box' name='gram["+ json.opiid +"]' value='"+ json.gram +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='rm-order' name='rm_order["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='tonase' name='tonase["+ json.opiid +"]' value='' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' name='keterangan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>";
+                html += "<button type='button' class='remove-plan btn btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+            html += "</td>";
+        html += "</tr>";
+        $("#plan-list").append(html);
+    });
+    $("#modal-opi").modal("hide");
+});
+
+$(document).on("keyup", ".out-corr", function(e) {
+    outcorr = $(this).val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    outconv = $(this).closest(".plan-list").find(".outconv").val();
+    order = $(this).closest(".plan-list").find(".jml-order").val();
+    toleransi = $(this).closest(".plan-list").find(".toleransi").val();
+    gram = $(this).closest(".plan-list").find(".gram-box").val();
+    tipebox = $(this).closest(".plan-list").find(".tipebox").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+
+    if (tipebox = 'DC') {
+        UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
+    } else {
+        UkRoll =Math.ceil(((outcorr*lebar)+30)/50)*50;
+    }
+
+    qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    cop = parseInt(qtyPlan)/ parseInt(outcorr);
+    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
+
+    rmorder = (panjang * cop) / 1000;
+    tonase = qtyPlan * gram;
+
+    if (gram_atas != 'null') {
+        KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+        $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    } 
+    if (gram_bf != 'null') {
+        KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+        $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    } 
+    if (gram_tengah != 'null') {
+        KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
+        $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    } 
+    if (gram_cf != 'null') {
+        KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+        $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    } 
+    if (gram_bawah != 'null') {
+        KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
+        $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+    } 
+
+    $(this).closest(".plan-list").find(".plan").val(qtyPlan);
+    $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(2));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
+
+
+})
+
+$(document).on("click", ".remove-plan", function(e) {
+    if (confirm('Yakin ingin menghapus OPI ini ?')) {
+            $(this).closest(".plan-list").remove();
+       }
+});
+
+</script>
+@endsection

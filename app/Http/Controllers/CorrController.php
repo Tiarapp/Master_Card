@@ -53,7 +53,7 @@ class CorrController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                        $btn = "<a href='../plan/corr/edit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
+                        $btn = "<a href='../plan/corr/newedit/".$row->id."' class='edit btn btn-primary btn-sm'>View</a>
                         <a href='../plan/corr/print/".$row->id."' class='btn btn-outline-secondary' type='button'>Print</a>";
 
                         return $btn;
@@ -89,12 +89,125 @@ class CorrController extends Controller
         return view('admin.plan.corr.create', compact('opi'));
     }
 
+    public function create2()
+    {
+        $opi = Opi_M::opi2()->get();
+        
+        // dd($opi);
+        return view('admin.plan.corr.newcreate', compact('opi'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function new_store(Request $request)
+    {
+        
+        $corrm = Corr_M::create([   
+            'kode_plan' => $request->kodeplan,
+            'tanggal' => $request->tgl,
+            'shift' => $request->shift
+        ]);
+
+        
+        $rmjumlah = 0;
+        $berattotal = 0;
+        $id = array_merge($request->opi_id);
+        // dd(count($id));
+
+        for ($i=1; $i <= count($id); $i++) { 
+            $temp = $id[$i-1];
+
+            if ($request->jenis_atas[$temp] == "null") {
+                $jenis_atas = '';
+            } else {
+                $jenis_atas = $request->jenis_atas[$temp];
+            }
+
+            if ($request->jenis_bf[$temp] == "null") {
+                $jenis_bf = '';
+            } else {
+                $jenis_bf = $request->jenis_bf[$temp];
+            }
+            if ($request->jenis_tengah[$temp] == "null") {
+                $jenis_tengah = '';
+            } else {
+                $jenis_tengah = $request->jenis_tengah[$temp];
+            }
+            if ($request->jenis_cf[$temp] == "null") {
+                $jenis_cf = '';
+            }else {
+                $jenis_cf = $request->jenis_cf[$temp];
+            }
+            if ($request->jenis_bawah[$temp] == "null") {
+                $jenis_bawah = '';
+            }else {
+                $jenis_bawah = $request->jenis_bawah[$temp];
+            }
+
+            $status = 'Proses';
+            $lock = 1;
+            
+           $corrd = Corr_D::create([
+            'plan_corr_m_id' => $corrm->id,
+            'kode_plan_d' => $corrm->kode_plan,
+            'opi_id' => $request->opi_id[$temp],
+            'urutan' => $request->urutan[$temp],
+            'dt_perubahan' => $request->dt_perubahan[$temp],
+            'sheet_p' => $request->panjang[$temp],
+            'sheet_l' => $request->lebar[$temp],
+            'flute' => $request->flute[$temp],
+            'bentuk' => $request->tipe[$temp],
+            'out_corr' => $request->outCorr[$temp],
+            'out_flexo' => $request->outConv[$temp],
+            'qtyOrder' => $request->jumlahOrder[$temp],
+            'jml_order' => $request->plan[$temp],
+            'sisa' => $request->jumlahOrder[$temp],
+            'ukuran_roll' => $request->lebarRoll[$temp],
+            'custom_roll' => '',
+            'cop' => $request->cop[$temp],
+            'trim_waste' => $request->trim[$temp],
+            'rm_order' => $request->rm_order[$temp],
+            'tonase' => $request->tonase[$temp],
+            'jenis_atas' => $jenis_atas,
+            'gram_atas' => $request->gram_atas[$temp],
+            'jenis_bf' => $jenis_bf,
+            'gram_bf' => $request->gram_bf[$temp],
+            'jenis_tengah' => $jenis_tengah,
+            'gram_tengah' => $request->gram_tengah[$temp],
+            'jenis_cf' => $jenis_cf,
+            'gram_cf' => $request->gram_cf[$temp],
+            'jenis_bawah' => $jenis_bawah,
+            'gram_bawah' => $request->gram_bawah[$temp],
+            'kebutuhan_kertasAtas' => $request->kebutuhan_atas[$temp],
+            'kebutuhan_kertasFlute1' => $request->kebutuhan_bf[$temp],
+            'kebutuhan_kertasTengah' => $request->kebutuhan_tengah[$temp],
+            'kebutuhan_kertasFlute2' => $request->kebutuhan_cf[$temp],
+            'kebutuhan_kertasBawah' => $request->kebutuhan_bawah[$temp],
+            'keterangan' => $request->keterangan[$temp],
+            'toleransi' => $request->toleransi[$temp],
+            'status' => 'Proses',
+            'lock' => 1
+           ]); 
+           
+           $rmjumlah = $rmjumlah + $request->rm_order[$temp];
+           $berattotal = $berattotal + $request->tonase[$temp];
+           
+        }
+            
+        $upCorrm = Corr_M::find($corrm->id);
+
+        $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->total_Berat = $berattotal;
+
+        $upCorrm->save();
+        
+        return redirect('admin/plan/corr');
+    }
+
     public function store(Request $request)
     {
         $corrm = Corr_M::create([   
@@ -202,6 +315,164 @@ class CorrController extends Controller
 
         // dd($data2);
         return view('admin.plan.corr.edit', compact('data1','data2','opi'));
+    }
+
+    public function new_edit($id)
+    {
+        
+        $opi = Opi_M::opi2()->get();
+        $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->orderBy('urutan','asc')->get();
+
+        // dd($data1);
+
+        $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
+
+        // dd($data2);
+        return view('admin.plan.corr.newedit', compact('data1','data2','opi'));
+    }
+
+    public function new_update(Request $request, $id)
+    {
+        $corrm = Corr_M::find($id);
+
+        $status = 'Proses';
+        $lock = 1;
+        $rmjumlah = 0;
+        $berattotal = 0;
+        $point = array_merge($request->opi_id);
+
+        // dd($id);
+
+        for ($i=1; $i <= count($point); $i++) { 
+            $temp = $point[$i-1];
+
+            if ($request->jenis_atas[$temp] == "null") {
+                $jenis_atas = '';
+            } else {
+                $jenis_atas = $request->jenis_atas[$temp];
+            }
+
+            if ($request->jenis_bf[$temp] == "null") {
+                $jenis_bf = '';
+            } else {
+                $jenis_bf = $request->jenis_bf[$temp];
+            }
+            if ($request->jenis_tengah[$temp] == "null") {
+                $jenis_tengah = '';
+            } else {
+                $jenis_tengah = $request->jenis_tengah[$temp];
+            }
+            if ($request->jenis_cf[$temp] == "null") {
+                $jenis_cf = '';
+            }else {
+                $jenis_cf = $request->jenis_cf[$temp];
+            }
+            if ($request->jenis_bawah[$temp] == "null") {
+                $jenis_bawah = '';
+            }else {
+                $jenis_bawah = $request->jenis_bawah[$temp];
+            }
+            // dd($temp);
+
+            $check = Corr_D::where('plan_corr_m_id', '=', $id)
+                ->where('opi_id', '=', $temp)->first();
+
+            // dd($check == null);
+
+            if ($check != null) {
+                $check->opi_id = $request->opi_id[$temp];
+                $check->urutan = $request->urutan[$temp];
+                $check->dt_perubahan = $request->dt_perubahan[$temp];
+                $check->sheet_p = $request->panjang[$temp];
+                $check->sheet_l = $request->lebar[$temp];
+                $check->bentuk = $request->tipe[$temp];
+                $check->flute = $request->flute[$temp];
+                $check->out_corr = $request->outCorr[$temp];
+                $check->out_flexo = $request->outConv[$temp];
+                $check->qtyOrder = $request->jumlahOrder[$temp];
+                $check->jml_order = $request->plan[$temp];
+                $check->sisa = $request->jumlahOrder[$temp];
+                $check->ukuran_roll = $request->lebarRoll[$temp];
+                $check->custom_roll = '';
+                $check->cop = $request->cop[$temp];
+                $check->trim_waste = $request->trim[$temp];
+                $check->jenis_atas = $jenis_atas;
+                $check->gram_atas = $request->gram_atas[$temp];
+                $check->jenis_bf = $jenis_bf;
+                $check->gram_bf = $request->gram_bf[$temp];
+                $check->jenis_tengah = $jenis_tengah;
+                $check->gram_tengah = $request->gram_tengah[$temp];
+                $check->jenis_cf = $jenis_cf;
+                $check->gram_cf = $request->gram_cf[$temp];
+                $check->jenis_bawah = $jenis_bawah;
+                $check->gram_bawah = $request->gram_bawah[$temp];
+                $check->kebutuhan_kertasAtas = $request->kebutuhan_atas[$temp];
+                $check->kebutuhan_kertasFlute1 = $request->kebutuhan_bf[$temp];
+                $check->kebutuhan_kertasTengah = $request->kebutuhan_tengah[$temp];
+                $check->kebutuhan_kertasFlute2 = $request->kebutuhan_cf[$temp];
+                $check->kebutuhan_kertasBawah = $request->kebutuhan_bawah[$temp];
+                $check->tonase = $request->tonase[$temp];
+                $check->toleransi = $request->toleransi[$temp];
+                $check->rm_order = $request->rm_order[$temp];
+                $check->keterangan = $request->keterangan[$temp];
+
+                $check->save();
+
+                $rmjumlah = $rmjumlah + $request->rm_order[$temp];
+                $berattotal = $berattotal + $request->tonase[$temp];
+            } else {
+                $corrd = Corr_D::create([
+                    'plan_corr_m_id' => $corrm->id,
+                    'kode_plan_d' => $corrm->kode_plan,
+                    'opi_id' => $request->opi_id[$temp],
+                    'urutan' => $request->urutan[$temp],
+                    'dt_perubahan' => $request->dt_perubahan[$temp],
+                    'sheet_p' => $request->panjang[$temp],
+                    'sheet_l' => $request->lebar[$temp],
+                    'flute' => $request->flute[$temp],
+                    'bentuk' => $request->tipe[$temp],
+                    'out_corr' => $request->outCorr[$temp],
+                    'out_flexo' => $request->outConv[$temp],
+                    'qtyOrder' => $request->jumlahOrder[$temp],
+                    'jml_order' => $request->plan[$temp],
+                    'sisa' => $request->jumlahOrder[$temp],
+                    'ukuran_roll' => $request->lebarRoll[$temp],
+                    'custom_roll' => '',
+                    'cop' => $request->cop[$temp],
+                    'trim_waste' => $request->trim[$temp],
+                    'rm_order' => $request->rm_order[$temp],
+                    'tonase' => $request->tonase[$temp],
+                    'jenis_atas' => $jenis_atas,
+                    'gram_atas' => $request->gram_atas[$temp],
+                    'jenis_bf' => $jenis_bf,
+                    'gram_bf' => $request->gram_bf[$temp],
+                    'jenis_tengah' => $jenis_tengah,
+                    'gram_tengah' => $request->gram_tengah[$temp],
+                    'jenis_cf' => $jenis_cf,
+                    'gram_cf' => $request->gram_cf[$temp],
+                    'jenis_bawah' => $jenis_bawah,
+                    'gram_bawah' => $request->gram_bawah[$temp],
+                    'kebutuhan_kertasAtas' => $request->kebutuhan_atas[$temp],
+                    'kebutuhan_kertasFlute1' => $request->kebutuhan_bf[$temp],
+                    'kebutuhan_kertasTengah' => $request->kebutuhan_tengah[$temp],
+                    'kebutuhan_kertasFlute2' => $request->kebutuhan_cf[$temp],
+                    'kebutuhan_kertasBawah' => $request->kebutuhan_bawah[$temp],
+                    'keterangan' => $request->keterangan[$temp],
+                    'toleransi' => $request->toleransi[$temp],
+                    'status' => 'Proses',
+                    'lock' => 1
+                ]);
+            }
+             
+        }
+        $upCorrm = Corr_M::find($id);
+
+        $upCorrm->total_RM = $rmjumlah;
+        $upCorrm->total_Berat = $berattotal;
+
+        $upCorrm->save();
+        
+        return redirect('admin/plan/corr');
     }
 
     /**
@@ -332,12 +603,169 @@ class CorrController extends Controller
     public function corr_pdf($id)
     {
         $data1 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->orderBy('urutan','asc')->get();
+        // dd($data1);
 
-        // $data1= $data->sortBy('urutan','asc');
+        $plan1= [];
+        
+        $plan2= [];
+        $plan3= [];
+        $plan4= [];
+
+        for ($i=0; $i < count($data1); $i++) { 
+            if($i <= 14){
+                $nested['urutan'] = $data1[$i]->urutan;
+                $nested['tglDt'] = $data1[$i]->tglDt;
+                $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
+                $nested['noopi'] = $data1[$i]->noopi;
+                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['customer'] = $data1[$i]->customer;
+                $nested['lebar'] = $data1[$i]->lebar;
+                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['flute'] = $data1[$i]->flute;
+                $nested['bentuk'] = $data1[$i]->bentuk;
+                $nested['out_flexo'] = $data1[$i]->out_flexo;
+                $nested['qtyOrder'] = $data1[$i]->qtyOrder;
+                $nested['jml_order'] = $data1[$i]->jml_order;
+
+
+                $nested['out_corr'] = $data1[$i]->out_corr;
+                $nested['ukuran_roll'] = $data1[$i]->ukuran_roll;
+                $nested['trim_waste'] = $data1[$i]->trim_waste;
+                $nested['cop'] = $data1[$i]->cop;
+                $nested['jenis_atas'] = $data1[$i]->jenis_atas;
+                $nested['gram_atas'] = $data1[$i]->gram_atas;
+                $nested['jenis_bf'] = $data1[$i]->jenis_bf;
+                $nested['gram_bf'] = $data1[$i]->gram_bf;
+                $nested['jenis_tengah'] = $data1[$i]->jenis_tengah;
+                $nested['gram_tengah'] = $data1[$i]->gram_tengah;
+                $nested['jenis_cf'] = $data1[$i]->jenis_cf;
+                $nested['gram_cf'] = $data1[$i]->gram_cf;
+                $nested['jenis_bawah'] = $data1[$i]->jenis_bawah;
+                $nested['gram_bawah'] = $data1[$i]->gram_bawah;
+                $nested['gramSheet'] = $data1[$i]->gramSheet;
+                $nested['rm_order'] = $data1[$i]->rm_order;
+                $nested['tonase'] = $data1[$i]->tonase;
+                $nested['keterangan'] = $data1[$i]->keterangan;
+                $nested['barang'] = $data1[$i]->barang;
+                $nested['tipebox'] = $data1[$i]->tipebox;
+                $nested['order'] = $data1[$i]->order;
+
+                $nested['kebutuhan_kertasAtas'] = $data1[$i]->kebutuhan_kertasAtas;
+                $nested['kebutuhan_kertasFlute1'] = $data1[$i]->kebutuhan_kertasFlute1;
+                $nested['kebutuhan_kertasTengah'] = $data1[$i]->kebutuhan_kertasTengah;
+                $nested['kebutuhan_kertasFlute2'] = $data1[$i]->kebutuhan_kertasFlute2;
+                $nested['kebutuhan_kertasBawah'] = $data1[$i]->kebutuhan_kertasBawah;
+
+                $plan1[] = $nested;
+                // dd($plan1);
+            } else if ($i > 14 && $i <= 29) {
+                // $nested['opi_id'] = $data1[$i]->opi_id;
+
+                $nested['urutan'] = $data1[$i]->urutan;
+                $nested['tglDt'] = $data1[$i]->tglDt;
+                $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
+                $nested['noopi'] = $data1[$i]->noopi;
+                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['customer'] = $data1[$i]->customer;
+                $nested['lebar'] = $data1[$i]->lebar;
+                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['flute'] = $data1[$i]->flute;
+                $nested['bentuk'] = $data1[$i]->bentuk;
+                $nested['out_flexo'] = $data1[$i]->out_flexo;
+                $nested['qtyOrder'] = $data1[$i]->qtyOrder;
+                $nested['jml_order'] = $data1[$i]->jml_order;
+
+
+                $nested['out_corr'] = $data1[$i]->out_corr;
+                $nested['ukuran_roll'] = $data1[$i]->ukuran_roll;
+                $nested['trim_waste'] = $data1[$i]->trim_waste;
+                $nested['cop'] = $data1[$i]->cop;
+                $nested['jenis_atas'] = $data1[$i]->jenis_atas;
+                $nested['gram_atas'] = $data1[$i]->gram_atas;
+                $nested['jenis_bf'] = $data1[$i]->jenis_bf;
+                $nested['gram_bf'] = $data1[$i]->gram_bf;
+                $nested['jenis_tengah'] = $data1[$i]->jenis_tengah;
+                $nested['gram_tengah'] = $data1[$i]->gram_tengah;
+                $nested['jenis_cf'] = $data1[$i]->jenis_cf;
+                $nested['gram_cf'] = $data1[$i]->gram_cf;
+                $nested['jenis_bawah'] = $data1[$i]->jenis_bawah;
+                $nested['gram_bawah'] = $data1[$i]->gram_bawah;
+                $nested['gramSheet'] = $data1[$i]->gramSheet;
+                $nested['rm_order'] = $data1[$i]->rm_order;
+                $nested['tonase'] = $data1[$i]->tonase;
+                $nested['keterangan'] = $data1[$i]->keterangan;
+                $nested['barang'] = $data1[$i]->barang;
+                $nested['tipebox'] = $data1[$i]->tipebox;
+                $nested['order'] = $data1[$i]->order;
+
+                $nested['kebutuhan_kertasAtas'] = $data1[$i]->kebutuhan_kertasAtas;
+                $nested['kebutuhan_kertasFlute1'] = $data1[$i]->kebutuhan_kertasFlute1;
+                $nested['kebutuhan_kertasTengah'] = $data1[$i]->kebutuhan_kertasTengah;
+                $nested['kebutuhan_kertasFlute2'] = $data1[$i]->kebutuhan_kertasFlute2;
+                $nested['kebutuhan_kertasBawah'] = $data1[$i]->kebutuhan_kertasBawah;
+
+                $plan2[] = $nested;
+                // dd($plan2);
+            } else if ($i > 29 && $i < 44) {
+                // $nested['opi_id'] = $data1[$i]->opi_id;
+
+                $nested['urutan'] = $data1[$i]->urutan;
+                $nested['tglDt'] = $data1[$i]->tglDt;
+                $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
+                $nested['noopi'] = $data1[$i]->noopi;
+                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['customer'] = $data1[$i]->customer;
+                $nested['lebar'] = $data1[$i]->lebar;
+                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['flute'] = $data1[$i]->flute;
+                $nested['bentuk'] = $data1[$i]->bentuk;
+                $nested['out_flexo'] = $data1[$i]->out_flexo;
+                $nested['qtyOrder'] = $data1[$i]->qtyOrder;
+                $nested['jml_order'] = $data1[$i]->jml_order;
+
+
+                $nested['out_corr'] = $data1[$i]->out_corr;
+                $nested['ukuran_roll'] = $data1[$i]->ukuran_roll;
+                $nested['trim_waste'] = $data1[$i]->trim_waste;
+                $nested['cop'] = $data1[$i]->cop;
+                $nested['jenis_atas'] = $data1[$i]->jenis_atas;
+                $nested['gram_atas'] = $data1[$i]->gram_atas;
+                $nested['jenis_bf'] = $data1[$i]->jenis_bf;
+                $nested['gram_bf'] = $data1[$i]->gram_bf;
+                $nested['jenis_tengah'] = $data1[$i]->jenis_tengah;
+                $nested['gram_tengah'] = $data1[$i]->gram_tengah;
+                $nested['jenis_cf'] = $data1[$i]->jenis_cf;
+                $nested['gram_cf'] = $data1[$i]->gram_cf;
+                $nested['jenis_bawah'] = $data1[$i]->jenis_bawah;
+                $nested['gram_bawah'] = $data1[$i]->gram_bawah;
+                $nested['gramSheet'] = $data1[$i]->gramSheet;
+                $nested['rm_order'] = $data1[$i]->rm_order;
+                $nested['tonase'] = $data1[$i]->tonase;
+                $nested['keterangan'] = $data1[$i]->keterangan;
+                $nested['barang'] = $data1[$i]->barang;
+                $nested['tipebox'] = $data1[$i]->tipebox;
+                $nested['order'] = $data1[$i]->order;
+
+                $nested['kebutuhan_kertasAtas'] = $data1[$i]->kebutuhan_kertasAtas;
+                $nested['kebutuhan_kertasFlute1'] = $data1[$i]->kebutuhan_kertasFlute1;
+                $nested['kebutuhan_kertasTengah'] = $data1[$i]->kebutuhan_kertasTengah;
+                $nested['kebutuhan_kertasFlute2'] = $data1[$i]->kebutuhan_kertasFlute2;
+                $nested['kebutuhan_kertasBawah'] = $data1[$i]->kebutuhan_kertasBawah;
+
+                $plan3[] = $nested;
+            } else if ($i > 44 && $i < 59) {
+                $nested['opi_id'] = $data1[$i]->opi_id;
+
+                $plan4[] = $nested;
+            } 
+        }
+
+        // dd($plan1);
+
+        // dd($plan1 , $plan2);
         $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
 
-        // dd($data1);
-        return view('admin.plan.corr.pdfcorr', compact('data1','data2'));
+        return view('admin.plan.corr.pdfcorr', compact('data1','data2', 'plan1', 'plan2', 'plan3', 'plan3'));
     }
 
     // Hasil Corr
