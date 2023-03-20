@@ -555,7 +555,7 @@ class Kontrak_DController extends Controller
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+1,4, '0', STR_PAD_LEFT).$alphabet   ;
+                    $numb_opi = str_pad(count($lastOpi)+2,4, '0', STR_PAD_LEFT).$alphabet   ;
                 };
 
                 
