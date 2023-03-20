@@ -77,7 +77,7 @@ class KontrakAccController extends Controller
                     
                     $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
 
-                    $nestedData['namaBarang'] = $mc->namaBarang;
+                    // $nestedData['namaBarang'] = $mc->namaBarang;
                     
                     $data[] = $nestedData;
                 }

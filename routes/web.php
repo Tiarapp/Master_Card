@@ -249,15 +249,20 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
     Route::get('/admin/opi/print/{id}', 'OpiController@print')->name('opi.print');
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
+    Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     //PLAN
     Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
     Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
     Route::get('/admin/plan/corrmhasil', 'CorrController@corrm_hasil')->middleware(['auth'])->name('corrm.hasil');
     Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
+    Route::get('/admin/plan/corr/newcreate', 'CorrController@create2')->name('corr.create2');
     Route::post('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
     Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
+    Route::post('/admin/plan/corr/newstore', 'CorrController@new_store')->name('corr.newstore');
     Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
+    Route::get('/admin/plan/corr/newedit/{id}', 'CorrController@new_edit')->name('corr.edit');
+    Route::put('/admin/plan/corr/newupdate/{id}', 'CorrController@new_update')->name('corr.newupdate');
     Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
     Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
