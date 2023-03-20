@@ -846,7 +846,7 @@
         }
 
         if (tipemc == 'F' || tipebox == 'R') {  
-            kodebarang = tujuan+tipemc+"E."+flute+".01.W01"."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
             kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
         }
