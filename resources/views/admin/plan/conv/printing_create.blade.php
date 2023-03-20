@@ -109,6 +109,7 @@
                                                                 <table class="table table-bordered" id="data_corr">
                                                                     <thead>
                                                                         <tr>
+                                                                            <th scope="col">Tanggal OPI</th>
                                                                             <th scope="col">Kode</th>
                                                                             <th scope="col">Delivery Time</th>
                                                                             <th scope="col">Customer</th>
@@ -124,19 +125,21 @@
                                                                             <th scope="col">Finishing</th>
                                                                             <th scope="col">opi</th>
                                                                             <th scope="col">Wax</th>
+                                                                            <th scope="col">out Conv</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php 
                                                                         foreach ($opi as $data) { ?>
                                                                             <tr>
-                                                                                <td scope="row">{{ $data->noopi }}</td>
+                                                                                <td>{{ $data->tglopi }}</td>
+                                                                                <td>{{ $data->noopi }}</td>
                                                                                 <td>{{ $data->tglKirimDt }}</td>
                                                                                 <td>{{ $data->Cust }}</td>
                                                                                 <td>{{ $data->namaBarang }}</td>
                                                                                 <td>
                                                                                     <?php
-                                                                                        if ($data->revisimc != '') {
+                                                                                        if ($data->revisimc !== 'R0') {
                                                                                         echo $data->mcKode."-".$data->revisimc;
                                                                                         } else {
                                                                                         echo $data->mcKode;
@@ -153,6 +156,7 @@
                                                                                 <td>{{ $data->joint }}</td>
                                                                                 <td>{{ $data->opiid }}</td>
                                                                                 <td>{{ $data->wax }}</td>
+                                                                                <td>{{ $data->outConv }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -249,6 +253,7 @@ $(document).ready(function(){
     $(".Corr").ready(function(){
         
         var table = $("#data_corr").DataTable({
+            order: [0, 'desc'],
             select: true,
             "initComplete": function (settings, json) {  
             $("#data_corr").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
@@ -275,6 +280,7 @@ $(document).ready(function(){
                 document.getElementById("opi_id["+(countdata-1)+"]").value = cust[13];
                 // document.getElementById("tipebox["+(countdata-1)+"]").value = cust[21];
                 document.getElementById("wax["+(countdata-1)+"]").value = cust[14];
+                document.getElementById("outconv["+(countdata-1)+"]").value = cust[16];
                 // document.getElementById("hasilcorrid["+(countdata-1)+"]").value = cust[25];
                 // document.getElementById("bungkus["+(countdata-1)+"]").value = cust[19];
                 // document.getElementById("roll["+(countdata-1)+"]").value = cust[18];

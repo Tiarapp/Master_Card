@@ -312,7 +312,7 @@ class Kontrak_DController extends Controller
             
             if (strpos($fromDate, $start) !== false ) {
                 $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$fromDate, $tillDate])->get();
-                $count = count($result)+1;
+                $count = count($result)+2;
                 if ($nobukti === $nobukti) {
                     $nobukti = str_replace('~YYYY~', date('Y'), $nobukti);
                     $nobukti = str_replace('~MM~', date('m'), $nobukti);                
@@ -320,7 +320,7 @@ class Kontrak_DController extends Controller
                 }
             } else {
                 $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$start, $end])->get();
-                $count = count($result)+1;
+                $count = count($result)+2;
                 if ($nobukti === $nobukti) {
                     $nobukti = str_replace('~YYYY~', date('Y', strtotime($start)), $nobukti);
                     $nobukti = str_replace('~MM~', date('m', strtotime($start)), $nobukti);                
@@ -555,7 +555,7 @@ class Kontrak_DController extends Controller
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+1,4, '0', STR_PAD_LEFT).$alphabet   ;
+                    $numb_opi = str_pad(count($lastOpi)+2,4, '0', STR_PAD_LEFT).$alphabet   ;
                 };
 
                 

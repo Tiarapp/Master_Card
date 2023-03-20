@@ -101,7 +101,7 @@
             },
             "columns": [
               {"data": "kode" },
-              {"data": "namaBarang" },
+              // {"data": "namaBarang" },
               {"data": "tglKontrak" },
               {"data": "pcsKontrak" },
               {"data": "cust" },

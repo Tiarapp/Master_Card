@@ -73,7 +73,7 @@ class ConvController extends Controller
         // $corr = HasilCorr::hasilcorr()->orderBy('next_mesin', 'asc')->get();
         $opi = Opi_M::opi2()->get();
 
-        // dd($corr);
+        // dd($opi);
         return view('admin.plan.conv.printing_create', compact('opi'));
     }
 
