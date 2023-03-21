@@ -233,8 +233,12 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan1[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan1[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+				if ($plan1[$i]['dt_perubahan'] != null) {
+					$date=date_create($plan1[$i]['dt_perubahan']);
+					echo date_format($date,"d M");
+				} else {
+					echo '';
+				}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan1[$i]['mckode'] }}</font></b></td>
@@ -410,6 +414,8 @@
 		</thead>
 		<tbody>
 			<?php
+				if ($plan2 != null) {
+					
 				for ($i=0; $i < count($plan2) ; $i++) { 
 					# code...
 			?>
@@ -452,8 +458,12 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan2[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan2[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+					if ($plan2[$i]['dt_perubahan'] != null) {
+						$date=date_create($plan2[$i]['dt_perubahan']);
+						echo date_format($date,"d M");
+					} else {
+						echo '';
+					}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan2[$i]['mckode'] }}</font></b></td>
@@ -471,7 +481,10 @@
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 			</tr>
-			<?php } ?>
+			<?php 
+				} 
+			}
+		?>
 			
 		</tbody>
 			
@@ -481,7 +494,7 @@
 
 	<table cellspacing="0" border="0">
 		<thead>
-			<?php
+			<?php if ($plan3 != null) {
 				for ($i=0; $i < count($plan3) ; $i++) { 
 					# code...
 			?>
@@ -630,10 +643,16 @@
 				<!-- <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; " align="center" valign=middle><b><font size=1 color="#000000">Finish</font></b></td> -->
 				<!-- <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=1 color="#000000">Down Time</font></b></td> -->
 			</tr>
-			<?php } ?>
+			<?php 
+				} 
+			}
+		?>
 		</thead>
 		<tbody>
 			<?php
+				if ($plan3 != null) {
+				echo 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+				
 				for ($i=0; $i < count($plan3) ; $i++) { 
 					# code...
 			?>
@@ -676,8 +695,12 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan3[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan3[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+					if ($plan3[$i]['dt_perubahan'] != null) {
+						$date=date_create($plan3[$i]['dt_perubahan']);
+						echo date_format($date,"d M");
+					} else {
+						echo '';
+					}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan3[$i]['mckode'] }}</font></b></td>
@@ -696,7 +719,10 @@
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 					
 			</tr>
-			<?php } ?>	
+				<?php 
+				} 
+			}
+			?>	
 		</tbody>
 			
 	</table>
