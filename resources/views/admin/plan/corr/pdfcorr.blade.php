@@ -651,7 +651,6 @@
 		<tbody>
 			<?php
 				if ($plan3 != null) {
-				echo 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 				
 				for ($i=0; $i < count($plan3) ; $i++) { 
 					# code...

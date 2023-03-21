@@ -35,7 +35,7 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('corr.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('corr.create2') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_opi">
           <thead>
