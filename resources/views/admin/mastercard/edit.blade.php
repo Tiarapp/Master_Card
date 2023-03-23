@@ -695,7 +695,7 @@
                                             <label class="control-label">Keterangan</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->keterangan }}" name="keterangan" id="keterangan">
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->keterangan }}" name="keterangan" id="keterangan" onchange="getKodeBarang()">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -814,7 +814,7 @@
         if (tipemc == 'F' || tipebox == 'R') {  
             kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
-            kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+revisi+"."+golongan;
         }
 
         // console.log(kodebarang);

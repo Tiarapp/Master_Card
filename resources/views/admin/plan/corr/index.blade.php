@@ -50,34 +50,8 @@
             </tr>
           </thead>
           <tbody>
-            {{-- <?php 
-            // $no = 1;
-            // foreach ($data as $data) { 
-               ?> --}}
-              {{-- <tr> --}}
-                {{-- <td scope="row">{{ $data->id }}</td> --}}
-                {{-- <td> --}}
-                  {{-- <div class="input-group"> --}}
-                    {{-- <div class="input-group-append" id="button-addon4"> --}}
-                      {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
-                      {{-- <a href="../admin/opi/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a> --}}
-                      {{-- <a href="../admin/kontrak/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a> --}}
-                      {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
-                    {{-- </div> --}}
-                  {{-- </div> --}}
-                {{-- </td> --}}
-                {{-- <td><b>{{ $data->noOPI }}</b></td> --}}
-                {{-- <td>{{ $data->kode }}</td> --}}
-                {{-- <td>{{ $data->tglKirimDt }}</td> --}}
-                {{-- <td>{{ $data->pcsDt }}</td> --}}
-                {{-- <td>{{ $data->namaBarang }}</td> --}}
-                {{-- <td>{{ $data->status }}</td> --}}
-                {{-- <td>{{ $data->noPoCustomer }}</td> --}}
-              {{-- </tr> --}}
-            {{-- <?php 
-            // }
-             ?> --}}
-          {{-- </tbody> --}}
+            
+          </tbody>
         </table>
       </div>
       <!-- /.row -->

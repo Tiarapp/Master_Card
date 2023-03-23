@@ -606,7 +606,6 @@ class CorrController extends Controller
         // dd($data1);
 
         $plan1= [];
-        
         $plan2= [];
         $plan3= [];
         $plan4= [];
@@ -619,8 +618,8 @@ class CorrController extends Controller
                 $nested['noopi'] = $data1[$i]->noopi;
                 $nested['mckode'] = $data1[$i]->mckode;
                 $nested['customer'] = $data1[$i]->customer;
-                $nested['lebar'] = $data1[$i]->lebar;
-                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['lebar'] = $data1[$i]->sheet_l;
+                $nested['panjang'] = $data1[$i]->sheet_p;
                 $nested['flute'] = $data1[$i]->flute;
                 $nested['bentuk'] = $data1[$i]->bentuk;
                 $nested['out_flexo'] = $data1[$i]->out_flexo;
@@ -667,8 +666,8 @@ class CorrController extends Controller
                 $nested['noopi'] = $data1[$i]->noopi;
                 $nested['mckode'] = $data1[$i]->mckode;
                 $nested['customer'] = $data1[$i]->customer;
-                $nested['lebar'] = $data1[$i]->lebar;
-                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['lebar'] = $data1[$i]->sheet_l;
+                $nested['panjang'] = $data1[$i]->sheet_p;
                 $nested['flute'] = $data1[$i]->flute;
                 $nested['bentuk'] = $data1[$i]->bentuk;
                 $nested['out_flexo'] = $data1[$i]->out_flexo;
@@ -715,8 +714,8 @@ class CorrController extends Controller
                 $nested['noopi'] = $data1[$i]->noopi;
                 $nested['mckode'] = $data1[$i]->mckode;
                 $nested['customer'] = $data1[$i]->customer;
-                $nested['lebar'] = $data1[$i]->lebar;
-                $nested['panjang'] = $data1[$i]->panjang;
+                $nested['lebar'] = $data1[$i]->sheet_l;
+                $nested['panjang'] = $data1[$i]->sheet_p;
                 $nested['flute'] = $data1[$i]->flute;
                 $nested['bentuk'] = $data1[$i]->bentuk;
                 $nested['out_flexo'] = $data1[$i]->out_flexo;
