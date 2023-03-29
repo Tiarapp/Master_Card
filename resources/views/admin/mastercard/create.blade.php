@@ -312,7 +312,7 @@
                                             <input type="hidden" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
                                             <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" >
                                         </div>
-                                    </div>
+                                </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Berat Sheet Box Produksi</label>

@@ -176,7 +176,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">m</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td colspan=2 align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>BERAT KUALITAS PRODUKSI</font></b></td>
-		<td align="center" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ $mc->brt_kualitas }}</font></td>
+		<td align="center" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->brt_kualitas,3,",",".") }}   /M2</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
