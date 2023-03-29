@@ -2418,8 +2418,24 @@
           <td class="column3 style33 n style34" colspan="4">{{ date('d F Y', strtotime($opi->tglKirimDt)) }}</td>
           <td class="column7 style49 s">Out</td>
           <td class="column8 style54 null">{{ $opi->outConv }}</td>
-          <td class="column9 style59 null"></td>
-          <td class="column10 style59 null"></td>
+          <td class="column9 style59 null">RM :</td>
+          @php
+            if ($opi->tipeBox == 'DC') {
+                $toleransi = 2;
+            } else if ($opi->tipeBox == 'B1') {
+                $toleransi = 5;
+            } else {
+                $toleransi = 0;
+            }
+
+            $qty = ($opi->jumlahOrder + ($opi->jumlahOrder * $toleransi / 100)) / $opi->outConv ; 
+            // dd($qty);
+            $outCorr = floor(2500/$opi->lebarSheet);
+            $cop = $qty / $outCorr;
+
+            $rm = ($opi->panjangSheet * $cop) / 1000;
+          @endphp
+          <td class="column10 style59 null">{{ floor($rm) }}</td>
           <td class="column11 style35 null"></td>
         </tr>
         <tr class="row13">

@@ -164,7 +164,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">mm</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>OUT</font></b></td>
-		<td align="center" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF" size=2>{{ $mc->outConv }}</font></td>
+		<td align="center" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF" size=2>{{ number_format(2500/$mc->lebarSheet,0,",",".") }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

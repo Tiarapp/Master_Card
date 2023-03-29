@@ -248,15 +248,34 @@
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Jumlah</th>
                                     <th scope="col">OPI</th>
+                                    <th scope="col">Running Meter</th>
                                     <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($opi as $o)
+
+                                @php
+                                    if ($o->tipeBox == 'DC') {
+                                        $toleransi = 2;
+                                    } else if ($o->tipeBox == 'B1') {
+                                        $toleransi = 5;
+                                    } else {
+                                        $toleransi = 0;
+                                    }
+
+                                    $qty = ($o->jumlahOrder + ($o->jumlahOrder * $toleransi / 100)) / $o->outConv ; 
+                                    // dd($qty);
+                                    $outCorr = floor(2500/$o->lebarSheet);
+                                    $cop = $qty / $outCorr;
+
+                                    $rm = ($o->panjangSheet * $cop) / 1000;
+                                @endphp
                                 <tr>
                                     <td scope="col">{{ $o->tglKirimDt }}</td>
                                     <td scope="col">{{ $o->jumlahOrder }}</td>
                                     <td scope="col">{{ $o->nama }}</td>
+                                    <td scope="col">{{ floor($rm) }}</td>
                                     <td scope="col">{{ $o->status }}</td>
                                 </tr>
                                 @endforeach

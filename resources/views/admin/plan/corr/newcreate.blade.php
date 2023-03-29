@@ -274,6 +274,14 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
     
         var json = (JSON.parse(data));
 
+        if (json.tipeBox == 'DC') {
+            toleransi = 2;
+        } else if (json.tipeBox == 'B1') {
+            toleransi = 5;
+        } else {
+            toleransi = 0;
+        }
+
         var html = '';
                 
         html += "<tr class='plan-list'>";
@@ -373,7 +381,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "</div>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.toleransiLebih +"' readonly>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"' readonly>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";

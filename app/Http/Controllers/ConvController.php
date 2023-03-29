@@ -8,6 +8,7 @@ use App\Models\HasilControl;
 use App\Models\HasilConv;
 use App\Models\HasilCorr;
 use App\Models\HasilProduksi;
+use App\Models\Mesin;
 use App\Models\Opi_M;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -63,18 +64,18 @@ class ConvController extends Controller
         }
         // return view('admin.plan.corr.index');
     }
-    public function index_printing_conv()
+    public function index()
     {
         return view('admin.plan.conv.index');
     }
 
-    public function create_printing()
+    public function create()
     {
-        // $corr = HasilCorr::hasilcorr()->orderBy('next_mesin', 'asc')->get();
+        $mesin = Mesin::all();
         $opi = Opi_M::opi2()->get();
 
         // dd($opi);
-        return view('admin.plan.conv.printing_create', compact('opi'));
+        return view('admin.plan.conv.create', compact('opi','mesin'));
     }
 
     
@@ -88,74 +89,65 @@ class ConvController extends Controller
     }
 
     
-    public function storeFlexoA(Request $request)
+    public function store(Request $request)
     {
+        $mesin = explode("||", $request->tipemesin);
+        $id = array_merge($request->opi_id);
+
+        // dd($id);
+
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
             'tanggal' => $request->tgl,
             'shiftM' => $request->shift
         ]);
 
-        $data = count($request->noOpi);
+        // $data = count($request->noOpi);
         
-        $rmjumlah = 0;
-        $berattotal = 0;
+        $totalpcs = 0;
+        $totalkg = 0;
 
-        for ($i=1; $i <= $data ; $i++) { 
+        for ($i=1; $i <= count($id); $i++) { 
+            $temp = $id[$i-1];
             $status = 'Proses';
             $lock = 1;
 
-            if ($request->opi_id[$i] != null) {
-            
             $convd = Conv_D::create([
-                'opi_id'=> $request->opi_id[$i],
+                'opi_id'=> $request->opi_id[$temp],
                 'plan_conv_m_id' => $convm->id,
                 'kodeplanM' => $convm->kode,
                 'shift' => $convm->shiftM,
-                'tgl_kirim' => $request->dt[$i],
-                'nomc' => $request->mc[$i],
-                'nama_item' => $request->item[$i],
-                'customer' => $request->customer[$i],
-                'tipe_order' => $request->tipeOrder[$i],
-                'joint' => $request->finishing[$i],
-                'wax' => $request->wax[$i],
-                'mesin' => $request->tipemesin,
-                'sheet_p' => $request->sheetp[$i],
-                'sheet_l' => $request->sheetl[$i],
-                'flute' => $request->flute[$i],
-                'bentuk' => $request->tipebox[$i],
-                'warna' => $request->warna[$i],
-                'qtyOrder' => $request->order[$i],
-                'out_flexo' => $request->outconv[$i],
-                'jml_plan' => $request->plan[$i],
-                'ukuran_roll' => $request->roll[$i],
-                'bungkus' => $request->bungkus[$i],
-                'urutan'=> $request->urutan[$i],
-                // 'lain_lain' => $request->kebutuhanFlute2[$i],
-                // 'rm_order' => $request->kebutuhanBawah[$i],
-                // 'tonase' => $request->kebutuhanBawah[$i],
-                'keterangan' => $request->keterangan[$i],
+                'dt_perubahan' => $request->dt_perubahan[$temp],
+                // 'nomc' => $request->mc[$temp],               
+                'nama_item' => $request->item[$temp],
+                'customer' => $request->customer[$temp],
+                'tipe_order' => $request->tipeOrder[$temp],
+                'joint' => $request->finishing[$temp],
+                'wax' => $request->wax[$temp],
+                'mesin_id' => $mesin[0],
+                'mesin' => $mesin[1],
+                'sheet_p' => $request->sheetp[$temp],
+                'sheet_l' => $request->sheetl[$temp],
+                'flute' => $request->flute[$temp],
+                'bentuk' => $request->tipebox[$temp],
+                'warna' => $request->warna[$temp],
+                'qtyOrder' => $request->order[$temp],
+                'out_flexo' => $request->outconv[$temp],
+                'jml_plan' => $request->plan[$temp],
+                'ukuran_roll' => $request->roll[$temp],
+                'bungkus' => $request->bungkus[$temp],
+                'urutan'=> $request->urutan[$temp],
+                // 'lain_lain' => $request->kebutuhanFlute2[$temp],
+                // 'rm_order' => $request->kebutuhanBawah[$temp],
+                // 'tonase' => $request->kebutuhanBawah[$temp],
+                'keterangan' => $request->keterangan[$temp],
                 'status' => $status,
                 'lock' => $lock
             ]);
 
-            // dd($convd);
+            $totalpcs = $totalpcs + $request->plan;
+            $totalkg = $totalkg + $request->berat_total;
         }
-            // $uphasilcorr = HasilCorr::find($request->hasilcorrid[$i])->first();
-            // $uphasilcorr->sisa = $request->order[$i] - $request->plan[$i];
-
-            // $uphasilcorr->save();
-        }
-            
-        // $upCorrm = Conv_M::find($convm->id);
-
-        // $upCorrm->total_RM = $rmjumlah;
-        // $upCorrm->total_Berat = $berattotal;
-
-        // $upCorrm->save();
-
-        
-        
         return redirect('admin/plan/conv');
     }
 

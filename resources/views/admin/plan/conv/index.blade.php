@@ -36,7 +36,7 @@
       <!-- Small boxes (Stat box) -->
       
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('conv.create_printing') }}" style="margin-bottom: 20px; color:white;" >Plan Printing</a>
+        <a href="{{ route('conv.create') }}" style="margin-bottom: 20px; color:white;" >Plan Printing</a>
       </button>
       
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">

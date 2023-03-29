@@ -23,7 +23,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-12">
-                <h4 class="modal-title">Planning Corrugating</h4>
+                <h4 class="modal-title">Planning Converting</h4>
                 <hr>
                 
                 @if ($errors->any())
@@ -37,7 +37,7 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('conv.storeflexoa') }}"  method="POST">
+                <form action="{{ route('conv.store') }}"  method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -50,9 +50,10 @@
                                         <input type="hidden" name="mesin" id="mesin">
                                         <div class="col-md-8">
                                             <select class="js-example-basic-single col-md-12" name="tipemesin" id="tipemesin" onchange="getKode()">
-                                                <option value='FLEXO A'>FLEXO A</option>
-                                                <option value='FLEXO B'>FLEXO B</option>
-                                                <option value='FLEXO C'>FLEXO C</option>
+                                                @foreach ($mesin as $item)
+                                                <option value='{{ $item->id }}||{{ $item->nama }}||{{ $item->kode }}'>{{ $item->nama }}</option>    
+                                                @endforeach
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -95,7 +96,7 @@
                                         <div class="row">
                                             
                                             <!-- Modal -->
-                                            <div class="modal fade" id="Corr">
+                                            <div class="modal fade" id="modal_opi">
                                                 <div class="modal-dialog modal-xl">
                                                     
                                                     <!-- Modal content-->
@@ -106,9 +107,10 @@
                                                         </div>
                                                         <div class="modal-body corr">
                                                             <div class="card-body">
-                                                                <table class="table table-bordered" id="data_corr">
+                                                                <table class="table table-bordered" id="data_opi">
                                                                     <thead>
                                                                         <tr>
+                                                                            <th scope="col">Action</th>
                                                                             <th scope="col">Tanggal OPI</th>
                                                                             <th scope="col">Kode</th>
                                                                             <th scope="col">Delivery Time</th>
@@ -131,7 +133,11 @@
                                                                     <tbody>
                                                                         <?php 
                                                                         foreach ($opi as $data) { ?>
-                                                                            <tr>
+                                                                            <tr class="modal-opi-list">
+                                                                                <td>
+                                                                                    <input type="hidden" class="form-control opi-id" value="{{ $data->opiid }}">
+                                                                                    <button class="btn btn-success btn-insert-opi" type="button">Add</button>
+                                                                                </td>
                                                                                 <td>{{ $data->tglopi }}</td>
                                                                                 <td>{{ $data->noopi }}</td>
                                                                                 <td>{{ $data->tglKirimDt }}</td>
@@ -177,13 +183,49 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    <div class="card-body">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <th>Urutan</th>
+                                    <th>OPI</th>
+                                    <th>DT</th>
+                                    <th>DT Perubahan</th>
+                                    <th>Customer</th>
+                                    <th>Item</th>
+                                    <th>MC</th>
+                                    <th>Panjang</th>
+                                    <th>Lebar</th>
+                                    <th>Tipe</th>
+                                    <th>Berat Box</th>
+                                    <th>Flute</th>
+                                    <th>Order</th>
+                                    {{-- <th>Out Corr</th> --}}
+                                    <th>Out Conv</th>
+                                    {{-- <th>Lebar Roll</th> --}}
+                                    <th>Planning</th>
+                                    <th>Berat Planning</th>
+                                    <th>Warna</th>
+                                    <th>Finishing</th>
+                                    <th>Wax</th>
+                                    <th>Tipe Order</th>
+                                    <th>Bungkus</th>
+                                    <th>Lain-Lain</th>
+                                    <th>Keterangan</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody id="plan-list"></tbody>
+                            </table>
+                        </div> 
+                    </div>
                     <div class="col-md-12" id="planconv" style="margin-bottom: 10px;">
                         
                     </div>
                     <div class="col-md-4">
                         <div class="row">
                             <br>
-                            <button type="button" data-toggle="modal" data-target="#Corr" class="btn btn-search">
+                            <button type="button" data-toggle="modal" data-target="#modal_opi" class="btn btn-search">
                                 Cari OPI  <i class="fas fa-search"></i>
                             </button>
                             <a class="btn btn-success" href="javascript:void(0);" id="add_button" title="Add field">TAMBAH</a>
@@ -202,6 +244,9 @@ function getKode() {
     tgl = document.getElementById("tgl").value;
     mesin = document.getElementById("tipemesin").value;
     kode = new Date(tgl);
+    kodemesin = mesin.split("||");
+
+    console.log(kodemesin[2]);
 
     year = kode.getFullYear();
     month = kode.getMonth()+1;
@@ -214,85 +259,116 @@ function getKode() {
         dd =  "0"+dd;
     } 
 
-    if (mesin == 'FLEXO A') {
-        kodemesin = "COVPA";
-        document.getElementById("mesin").value = "FLEXO";
-    } else if (mesin == 'FLEXO B') {
-        kodemesin = "COVPB"
-        document.getElementById("mesin").value = "FLEXO";
-    } else if (mesin == 'FLEXO C') {
-        kodemesin = "COVPC"
-        document.getElementById("mesin").value = "FLEXO";
-    }
-
     console.log(month);
 
-    document.getElementById("kodeplan").value = kodemesin+dd+""+month+""+year;
+    document.getElementById("kodeplan").value = kodemesin[2]+dd+""+month+""+year;
 }
 
-$(document).ready(function(){
-    $('.js-example-basic-single').select2();
-    var countrow = 1; //Input fields increment limitation
-    var countdata = 1; //Input fields increment limitation
-    var addButton = $('#add_button'); //Add button selector
-
-    //Once add button is clicked
-    $(addButton).click(function(){
-        $("#planconv").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'><input type='hidden' class='form-control txt_line' name='bungkus["+countrow+"]' id='bungkus["+countrow+"]'><input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'><input type='hidden' class='form-control txt_line' name='hasilcorrid["+countrow+"]' id='hasilcorrid["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>X</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Out Conv / Flute</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='outconv["+countrow+"]' id='outconv["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label>Jumlah Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-12'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'>   </div>  </div> </div> <div class='col-md-1'>  <label> Warna </label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='warna["+countrow+"]' id='warna["+countrow+"]'> </div> <div class='col-md-1'>  <label>Finishing</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='finishing["+countrow+"]' id='finishing["+countrow+"]'> </div><div class='col-md-1'>  <label>Wax</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='wax["+countrow+"]' id='wax["+countrow+"]'> </div></div><div class='row'> <div class='col-md-1'>  <label>Tipe Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='tipeOrder["+countrow+"]' id='tipeOrder["+countrow+"]'>   </div> <div class='col-md-1'>  <label>Tipe Box</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-1'>  <label>Urutan</label> </div> <div class='col-md-2'> <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]'> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
-
-        $('.js-example-basic-single').select2();
-
-        countrow++;
-        countdata++;
-        console.log(countdata);
-    });
-    
-    // countrow++;
-    
-
-    $(".Corr").ready(function(){
+$("#modal_opi").ready(function(){
         
-        var table = $("#data_corr").DataTable({
-            order: [0, 'desc'],
+        var table = $("#data_opi").DataTable({
             select: true,
             "initComplete": function (settings, json) {  
-            $("#data_corr").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+            $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
         },
         });
-        
-        $('#data_corr tbody').on( 'click', 'td', function () {
-            var cust = (table.row(this).data());
-            
-            if (countdata-1 != 'null') {
-                document.getElementById("noOpi["+(countdata-1)+"]").value = cust[0];
-                document.getElementById("dt["+(countdata-1)+"]").value = cust[1];
-                document.getElementById("customer["+(countdata-1)+"]").value = cust[2];
-                document.getElementById("item["+(countdata-1)+"]").value = cust[3];
-                document.getElementById("mc["+(countdata-1)+"]").value = cust[4];
-                document.getElementById("sheetp["+(countdata-1)+"]").value = cust[5];
-                document.getElementById("sheetl["+(countdata-1)+"]").value = cust[6];
-                document.getElementById("warna["+(countdata-1)+"]").value = cust[10];
-                document.getElementById("tipebox["+(countdata-1)+"]").value = cust[7];
-                document.getElementById("flute["+(countdata-1)+"]").value = cust[8];
-                document.getElementById("order["+(countdata-1)+"]").value = cust[9];
-                document.getElementById("tipeOrder["+(countdata-1)+"]").value = cust[11];
-                document.getElementById("finishing["+(countdata-1)+"]").value = cust[12];
-                document.getElementById("opi_id["+(countdata-1)+"]").value = cust[13];
-                // document.getElementById("tipebox["+(countdata-1)+"]").value = cust[21];
-                document.getElementById("wax["+(countdata-1)+"]").value = cust[14];
-                document.getElementById("outconv["+(countdata-1)+"]").value = cust[16];
-                // document.getElementById("hasilcorrid["+(countdata-1)+"]").value = cust[25];
-                // document.getElementById("bungkus["+(countdata-1)+"]").value = cust[19];
-                // document.getElementById("roll["+(countdata-1)+"]").value = cust[18];
-                // document.getElementById("mesin["+(countdata-1)+"]").value = cust[1];
-            }
-
-            
-        });
     });
-    
 
+$(document).on("click", "#modal_opi .btn-insert-opi", function(e) {
+    opiid = $(this).closest(".modal-opi-list").find(".opi-id").val();
+    var url = "../../opi/single/:opi_id";
+    url = url.replace(':opi_id', opiid);
+
+    $.get(url, function(data) {
+        var json = (JSON.parse(data));
+
+        console.log(json);
+
+        var html = '';
+        html += "<tr class='plan-list'>";
+            html += "<td>";
+                html += "<input type='hidden' name='opi_id["+ json.opiid +"]' value='"+ json.opiid +"'>";
+                html += "<input class='col-md-12' type='text'  name='urutan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>"+ json.noopi +"</td>";
+            html += "<td>"+ json.tglKirimDt +"</td>";
+            html += "<td>";
+                html += "<input type='date' name='dt_perubahan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>"+ json.Cust +"</td>";
+            html += "<td>"+ json.namaBarang +"</td>";
+            html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 lebarSheet' name='lebar["+ json.opiid +"]' value='"+ json.lebarSheet +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 tipebox' name='tipe["+ json.opiid +"]' value='"+ json.tipeBox +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='gram' name='gram["+ json.opiid +"]' value='"+ json.gram +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12' name='flute["+ json.opiid +"]' value='"+ json.flute +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 outconv' name='outConv["+ json.opiid +"]' value='"+ json.outConv +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='' >";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='berat-total' name='berat_total["+ json.opiid +"]' value='' >";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='warna' name='warna["+ json.opiid +"]' value='"+ json.namacc +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='joint' name='joint["+ json.opiid +"]' value='"+ json.joint +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='wax' name='wax["+ json.opiid +"]' value='"+ json.wax +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='tipe-order' name='tipe-order["+ json.opiid +"]' value='"+ json.tipeOrder +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='bungkus' name='bungkus["+ json.opiid +"]' value='"+ json.bungkus +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='lain' name='lain["+ json.opiid +"]' value='"+ json.lain +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' name='keterangan["+ json.opiid +"]' value=''>";
+            html += "</td>";
+            html += "<td>";
+                html += "<button type='button' class='remove-plan btn btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+            html += "</td>";
+        html += "</tr>";
+        $("#plan-list").append(html);
+    });
+    $("#modal_opi").modal("hide");
+});
+
+$(document).on("keyup", ".plan", function(e) {
+    plan = $(this).val();
+    gram = $(this).closest('.plan-list').find('.gram').val();
+
+    totalgram = plan * gram;
     
+    $(this).closest(".plan-list").find('.berat-total').val(totalgram.toFixed(2));
+});
+
+
+$(document).on("click", ".remove-plan", function(e) {
+    if (confirm('Yakin ingin menghapus OPI ini ?')) {
+        $(this).closest(".plan-list").remove();
+    }
 });
 </script>
 @endsection

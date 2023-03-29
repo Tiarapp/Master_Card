@@ -93,7 +93,7 @@ class CorrController extends Controller
     {
         $opi = Opi_M::opi2()->get();
         
-        // dd($opi);
+        // dd($opi[0]);
         return view('admin.plan.corr.newcreate', compact('opi'));
     }
 
@@ -105,7 +105,6 @@ class CorrController extends Controller
      */
     public function new_store(Request $request)
     {
-        
         $corrm = Corr_M::create([   
             'kode_plan' => $request->kodeplan,
             'tanggal' => $request->tgl,
@@ -116,7 +115,6 @@ class CorrController extends Controller
         $rmjumlah = 0;
         $berattotal = 0;
         $id = array_merge($request->opi_id);
-        // dd(count($id));
 
         for ($i=1; $i <= count($id); $i++) { 
             $temp = $id[$i-1];

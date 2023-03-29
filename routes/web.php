@@ -225,20 +225,11 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
 
     //Delivery Time
-    // Route::post('kontrakjson', 'DTController@json')->name('kontrak.json');
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
-    // Route::get('/admin/kontrak/json', 'DTController@json')->name('kontrak.json');
-    // Route::get('/admin/kontrak/create', 'DTController@create')->name('kontrak.create');
-    // Route::post('/admin/kontrak/store', 'DTController@store')->name('kontrak.store');
-    // Route::post('/admin/kontrak/store_realisasi', 'DTController@store_realisasi')->name('kontrak.store_realisasi');
     Route::get('/admin/dt/edit/{id}', 'DTController@edit')->name('dt.edit');
-    // Route::get('/admin/kontrak/realisasi/{id}', 'DTController@add_realisasi')->name('kontrak.realisasi');
-    // Route::get('/admin/kontrak/dt/{id}', 'DTController@add_dt')->name('kontrak.dt');
-    // Route::post('/admin/kontrak/store_dt', 'DTController@store_dt')->name('kontrak.store_dt');
     Route::put('/admin/dt/update/{id}', 'DTController@update')->name('dt.update');
     Route::get('/admin/dt/approve/{id}', 'DTController@approve')->name('dt.approve');
     Route::get('/admin/dt/delete/{id}', 'DTController@destroy')->name('dt.destroy');
-    // Route::get('/admin/kontrak/pdf/{id}', 'DTController@pdfprint')->name('kontrak.pdfb1');
 
     //OPI
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
@@ -255,28 +246,28 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
     Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
     Route::get('/admin/plan/corrmhasil', 'CorrController@corrm_hasil')->middleware(['auth'])->name('corrm.hasil');
-    Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
+    // Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
     Route::get('/admin/plan/corr/newcreate', 'CorrController@create2')->name('corr.create2');
     Route::post('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
-    Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
+    // Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
     Route::post('/admin/plan/corr/newstore', 'CorrController@new_store')->name('corr.newstore');
-    Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
+    // Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
     Route::get('/admin/plan/corr/newedit/{id}', 'CorrController@new_edit')->name('corr.edit');
     Route::put('/admin/plan/corr/newupdate/{id}', 'CorrController@new_update')->name('corr.newupdate');
-    Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
+    // Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
     Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
 
     
-    Route::get('/admin/plan/conv', 'ConvController@index_printing_conv')->middleware(['auth'])->name('conv');
+    Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');
     Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
     Route::post('/admin/plan/conv/storenonprint', 'ConvController@storeNonPrinting')->middleware(['auth'])->name('conv.storenonprint');
-    Route::get('/admin/plan/conv/createprinting', 'ConvController@create_printing')->name('conv.create_printing');
+    Route::get('/admin/plan/conv/create', 'ConvController@create')->name('conv.create');
     Route::get('/admin/plan/conv/createnonprinting', 'ConvController@create_non_printing')->name('conv.create_non_printing');
     Route::get('/admin/plan/conv/convd', 'ConvController@convd')->name('convd');
     Route::get('/admin/plan/conv/convm', 'ConvController@convm')->name('convm');
     Route::get('/admin/plan/conv/json', 'ConvController@json')->name('conv.json');
-    Route::post('/admin/plan/conv/flexoastore', 'ConvController@storeFlexoA')->name('conv.storeflexoa');
+    Route::post('/admin/plan/conv/store', 'ConvController@store')->name('conv.store');
     Route::get('/admin/plan/conv/edit/{id}', 'ConvController@edit')->name('conv.edit');
     Route::put('/admin/plan/conv/update/{id}', 'ConvController@update')->name('conv.update');
     Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
