@@ -298,7 +298,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>"+ json.namaBarang +"</td>";
             html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
+                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' >";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 lebarSheet' name='lebar["+ json.opiid +"]' value='"+ json.lebarSheet +"' readonly>";
@@ -381,7 +381,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "</div>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"' readonly>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";
@@ -442,7 +442,6 @@ $(document).on("keyup", ".out-corr", function(e) {
 
     qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
     cop = parseInt(qtyPlan)/ parseInt(outcorr);
-    console.log(cop);
     trim = (UkRoll - (lebar * outcorr)) / UkRoll;
 
     rmorder = (panjang * cop) / 1000;
@@ -478,6 +477,60 @@ $(document).on("keyup", ".out-corr", function(e) {
 
 
 })
+
+$(document).on("keyup", ".panjangSheet", function(e) {
+    panjang = $(this).val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+
+    if (gram_atas == 'null') {
+        gram_atas = 0;
+    }
+    if (gram_bf == 'null') {
+        gram_bf = 0;
+    }
+    if (gram_tengah == 'null') {
+        gram_tengah = 0;
+    }
+    if (gram_cf == 'null') {
+        gram_cf = 0;
+    }
+
+    brt_kualitas = (parseInt(gram_atas) + (parseInt(gram_bf) * 1.36) + parseInt(gram_tengah) + (parseInt(gram_cf) * 1.46) + parseInt(gram_bawah))/1000;
+    luas = parseInt(panjang) * parseInt(lebar) / 1000000;
+
+    brt_std = brt_kualitas * luas ;
+
+    console.log(brt_std.toFixed(2));
+
+    // trim = (UkRoll - (lebar * outcorr)) / UkRoll;
+    // if (gram_atas != 'null') {
+    //     KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+    //     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    // } 
+    // if (gram_bf != 'null') {
+    //     KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    //     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    // } 
+    // if (gram_tengah != 'null') {
+    //     KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
+    //     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    // } 
+    // if (gram_cf != 'null') {
+    //     KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    //     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    // } 
+    // if (gram_bawah != 'null') {
+    //     KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
+    //     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+    // } 
+
+});
 
 $(document).on("click", ".remove-plan", function(e) {
     if (confirm('Yakin ingin menghapus OPI ini ?')) {

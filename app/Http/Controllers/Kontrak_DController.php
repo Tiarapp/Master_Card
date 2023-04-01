@@ -128,14 +128,14 @@ class Kontrak_DController extends Controller
                         }
                         
                         $nestedData['realisasi'] = $dataRealisasi;
-                        $nestedData['pcsKontrak'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['pcsKontrak'],0,",",".")."</p>";
-                        $nestedData['kgKontrak'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['kgKontrak'],2,",",".")."</p>";
+                        $nestedData['pcsKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
+                        $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
-                        $sisakontrak = number_format($kontrak->kontrak_d['pcsKontrak'] - $terkirim,0,",",".");
+                        $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
 
-                        $nestedData['sisaKirim'] = "<p style='color:red'>".number_format($sisakontrak,0,",",".")."</p>";
-                        $nestedData['rp_pcs'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_pcs'],2,",",".")."</p>";
-                        $nestedData['rp_kg'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_kg'],2,",",".")."</p>";
+                        $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
+                        $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
+                        $nestedData['rp_kg'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_kg']."</p>";
                         
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
@@ -176,7 +176,7 @@ class Kontrak_DController extends Controller
                         foreach ($kontrak->realisasi as $realisasi) {
                             
                             $dataRealisasi[] = 
-                            "&emsp;<li><span class='glyphicon glyphicon-list'>".number_format($realisasi->qty_kirim,0,",",".")." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
+                            "&emsp;<li><span class='glyphicon glyphicon-list'>".$realisasi->qty_kirim." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
                             
                             $terkirim = $terkirim + $realisasi->qty_kirim;
                         }
@@ -188,12 +188,12 @@ class Kontrak_DController extends Controller
                         }
                         
                         $nestedData['realisasi'] = $dataRealisasi;
-                        $nestedData['pcsKontrak'] = number_format($kontrak->kontrak_d['pcsKontrak'],0,",",".");
-                        $nestedData['kgKontrak'] = number_format($kontrak->kontrak_d['kgKontrak'],2,",",".");
+                        $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
+                        $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
                         
-                        $nestedData['sisaKirim'] = number_format($kontrak->kontrak_d['pcsKontrak'] - $terkirim,0,",",".");
-                        $nestedData['rp_pcs'] = number_format($kontrak->kontrak_d['harga_pcs'],2,",",".");
-                        $nestedData['rp_kg'] = number_format($kontrak->kontrak_d['harga_kg'],2,",",".");
+                        $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+                        $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
+                        $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
                         
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);

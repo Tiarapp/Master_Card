@@ -256,16 +256,7 @@
                                 @foreach ($opi as $o)
 
                                 @php
-                                    if ($o->tipeBox == 'DC') {
-                                        $toleransi = 2;
-                                    } else if ($o->tipeBox == 'B1') {
-                                        $toleransi = 5;
-                                    } else {
-                                        $toleransi = 0;
-                                    }
-
-                                    $qty = ($o->jumlahOrder + ($o->jumlahOrder * $toleransi / 100)) / $o->outConv ; 
-                                    // dd($qty);
+                                    $qty = ($o->jumlahOrder + $o->jumlahOrder) / $o->outConv ; 
                                     $outCorr = floor(2500/$o->lebarSheet);
                                     $cop = $qty / $outCorr;
 

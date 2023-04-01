@@ -2420,15 +2420,8 @@
           <td class="column8 style54 null">{{ $opi->outConv }}</td>
           <td class="column9 style59 null">RM :</td>
           @php
-            if ($opi->tipeBox == 'DC') {
-                $toleransi = 2;
-            } else if ($opi->tipeBox == 'B1') {
-                $toleransi = 5;
-            } else {
-                $toleransi = 0;
-            }
 
-            $qty = ($opi->jumlahOrder + ($opi->jumlahOrder * $toleransi / 100)) / $opi->outConv ; 
+            $qty = ($opi->jumlahOrder + $opi->jumlahOrder) / $opi->outConv ; 
             // dd($qty);
             $outCorr = floor(2500/$opi->lebarSheet);
             $cop = $qty / $outCorr;
