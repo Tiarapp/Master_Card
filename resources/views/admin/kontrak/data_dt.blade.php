@@ -256,7 +256,7 @@
                                 @foreach ($opi as $o)
 
                                 @php
-                                    $qty = ($o->jumlahOrder + $o->jumlahOrder) / $o->outConv ; 
+                                    $qty = ($o->jumlahOrder) / $o->outConv ; 
                                     $outCorr = floor(2500/$o->lebarSheet);
                                     $cop = $qty / $outCorr;
 

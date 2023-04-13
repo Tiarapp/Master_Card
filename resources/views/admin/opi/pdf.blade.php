@@ -2421,7 +2421,7 @@
           <td class="column9 style59 null">RM :</td>
           @php
 
-            $qty = ($opi->jumlahOrder + $opi->jumlahOrder) / $opi->outConv ; 
+            $qty = ($opi->jumlahOrder) / $opi->outConv ; 
             // dd($qty);
             $outCorr = floor(2500/$opi->lebarSheet);
             $cop = $qty / $outCorr;
