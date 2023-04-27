@@ -299,6 +299,7 @@ class MastercardController extends Controller
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
             'lain' => $request->lain,
+            'text' => $request->text_block,
             'wax' => $request->wax,
             'lock' => 0,
             'box_id' => $request->box_id,
@@ -518,6 +519,7 @@ class MastercardController extends Controller
             'koli' => $request->koli,
             'bungkus' => $request->bungkus,
             'lain' => $request->lain,
+            'text' => $request->text_block,
             'wax' => $request->wax,
             'box_id' => $request->box_id,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
@@ -667,6 +669,7 @@ class MastercardController extends Controller
         $mc->koli = $request->koli;
         $mc->bungkus = $request->bungkus;
         $mc->lain = $request->lain;
+        $mc->text = $request->text_block;
         $mc->keterangan = $request->keterangan;
         $mc->wax = $request->wax;
         $mc->tipeMc = $request->tipeMc;
@@ -730,8 +733,11 @@ class MastercardController extends Controller
             return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1 Terbalik' ) {
             return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));
-        } else {
+        } else if ($mc->tipeMc == 'B1'){
             return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
+        } else if ($mc->tipeMc == 'SHEET' || $mc->tipeMc == 'LAYER') {
+            // dd($mc);
+            return view('admin.mastercard.printsheet', compact('mc','namaSubsK','namaSubsP'));
         }
     }
 

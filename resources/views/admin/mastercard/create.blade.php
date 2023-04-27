@@ -383,12 +383,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row berat-roll">
                                         <div class="col-md-2">
                                             <label class="control-label">Berat Roll</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line berat-roll" name="berat_roll" id="berat_roll">
+                                            <input type="text" class="form-control txt_line qty-roll" name="berat_roll" id="berat_roll">
+                                        </div>
+                                    </div>
+                                    <div class="row text">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Text</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="text_block" id="text_block">
+                                                <option value='Non Block'>Non Block</option>
+                                                <option value='Block'>Block</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -748,7 +759,7 @@
         }
     });
 
-    $(document).on("keyup", ".berat-roll", function() {
+    $(document).on("keyup", ".qty-roll", function() {
         if (document.getElementById("tipebox").value == "SF") {
             berat = $(this).val();
             lebar = document.getElementById("lebarSheet").value;
@@ -938,6 +949,8 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
+                
+                getKodeBarang();
             }
         } );
         

@@ -46,6 +46,7 @@ class Mastercard extends Model
         'gramSheetCorrProduksi2',
         'bungkus',
         'lain',
+        'text',
         'keterangan',
         'gambar',
         'substanceKontrak_id',

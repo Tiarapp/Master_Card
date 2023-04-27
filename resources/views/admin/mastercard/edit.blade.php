@@ -388,6 +388,26 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row berat-roll">
+                                            <div class="col-md-2">
+                                                <label class="control-label">Berat Roll</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control txt_line qty-roll" name="berat_roll" id="berat_roll">
+                                            </div>
+                                        </div>
+                                        <div class="row text">
+                                            <div class="col-md-2">
+                                                <label class="control-label">Text</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="js-example-basic-single col-md-12" name="text_block" id="text_block">
+                                                    <option value='{{ $mc->text }}'>{{ $mc->text }}</option>
+                                                    <option value='Non Block'>Non Block</option>
+                                                    <option value='Block'>Block</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
@@ -737,9 +757,37 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
+        if (document.getElementById('tipebox').value == 'SF') {
+            $('.berat-roll').show();
+        } else {
+            $('.berat-roll').hide();
+        }
     });
     // Datatable Barang(Item)
     
+    $(document).on("keyup", ".lebar-box", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            lebar = $(this).val();
+
+            document.getElementById("lebarSheet").value = lebar;
+            document.getElementById("panjangSheet").value = 0;
+        }
+    });
+
+    $(document).on("keyup", ".qty-roll", function() {
+        if (document.getElementById("tipebox").value == "SF") {
+            berat = $(this).val();
+            lebar = document.getElementById("lebarSheet").value;
+            kualitas = document.getElementById("gram_kualitas").value;
+
+            panjang = berat / (lebar*kualitas/1000);
+
+            document.getElementById("panjangSheet").value = panjang.toFixed(0);
+
+
+        }
+    });
+
     $(".customer").ready(function(){
         
         var table = $("#data_customer").DataTable({
@@ -780,11 +828,11 @@
         }
 
 
-        if (tipemc == 'B1') {
+        if (tipemc == 'B1' || tipemc == 'B1 Terbalik') {
             tipemc = 'B';
         } else if (tipemc == 'DC') {
             tipemc = 'D';
-        } else if (tipemc == 'Layer') {
+        } else if (tipemc == 'LAYER') {
             tipemc = 'L';
         } else if(tipemc == 'SINGLEFACE') {
             tipemc = 'F';
@@ -797,6 +845,8 @@
         } else if (tipemc == 'RMG') {
             tipemc = 'Z';
         }
+
+        console.log(tipemc);
         
 
         if (flute == 'BF') {
@@ -866,6 +916,8 @@
             document.getElementById('creasConv').value = Box[9];
             document.getElementById('flute').value = Box[4];
             
+            $('.berat-roll').hide();
+            
             if (Box[3] == 'B1') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
@@ -899,8 +951,9 @@
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
 
                 getKodeBarang();
-            } else {
+            } else if (Box[3] == 'DC') {
 
+                $('.berat-roll').hide();
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
                 document.getElementById("luasSheet").value = null;
@@ -910,6 +963,19 @@
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
 
+                getKodeBarang();
+            } else {
+
+                $('.berat-roll').show();
+                document.getElementById("panjangSheet").value = null;
+                document.getElementById("lebarSheet").value = null;
+                document.getElementById("luasSheet").value = null;
+                document.getElementById("panjangSheetBox").value = null;
+                document.getElementById("lebarSheetBox").value = null;
+                document.getElementById("luasSheetBox").value = null;
+                document.getElementById("subsKontrak").value = null;
+                document.getElementById("subsProduksi").value = null;
+                
                 getKodeBarang();
             }
         } );
