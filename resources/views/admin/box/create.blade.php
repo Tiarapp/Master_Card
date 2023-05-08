@@ -174,7 +174,7 @@
                                 <input type="hidden" name="panjangCrease" id="panjangCrease">
                                 <input type="hidden" name="lebarCrease1" id="lebarCrease1">
                                 <input type="hidden" name="lebarCrease2" id="lebarCrease2">
-                                <input type="hidden" name="kuping2" id="kuping2">
+                                {{-- <input type="hidden" name="kuping2" id="kuping2"> --}}
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>

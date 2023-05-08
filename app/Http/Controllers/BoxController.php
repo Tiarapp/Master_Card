@@ -148,9 +148,10 @@ class BoxController extends Controller
     public function edit($id)
     {
         $tipebox = DB::table('tipe_box')->get();
+        $flute = DB::table('flute')->get();
         $box = Box::find($id);
 
-        return view('admin.box.show', ['box' => $box], compact('tipebox'));
+        return view('admin.box.edit', compact('tipebox', 'box', 'flute'));
     }
 
     /**
@@ -162,50 +163,28 @@ class BoxController extends Controller
      */
     public function update($id, Request $request)
     {
-        // Check input
-        $request->validate([
-            'kode' => 'required',
-            'nama' => 'required',
-            'boxtipe_id' => 'required',
-            'tipeCreasCorr' => 'required',
-            'lebarSheetCorr' => 'required|numeric',
-            'panjangSheetBox' => 'required|numeric',
-            'tinggiSheetBox' => 'required|numeric',
-            'satuanSizeSheetBox' => 'required',
-            'luasSheetBox' => 'required|numeric',
-            'satuanLuasSheetBox' => 'required',
-            'panjangDalamBox' => 'required',
-            'lebarDalamBox' => 'required',
-            'tinggiDalamBox' => 'required',
-            'satuanSizeDalamBox' => 'required',
-            'sizeCreasCorr' => 'required',
-            'sizeCreasConv' => 'required',
-            'satuanCreas' => 'required',
-            'lastUpdatedBy' => 'required'
-        ]);
-        // End check input
+        
+        // dd($request->all()); 
 
         $box = Box::find($id);
 
-        $box->kode = $request->kode;
-        $box->nama = $request->nama;
-        $box->tipebox_id = $request->tipebox_id;
-        $box->tipeCreasCorr = $request->tipeCreasCorr;
-        $box->lebarSheetCorr = $request->lebarSheetCorr;
-        $box->panjangSheetBox = $request->panjangSheetBox;
-        $box->tinggiSheetBox = $request->tinggiSheetBox;
-        $box->satuanSizeSheetBox = $request->satuanSizeSheetBox;
-        $box->luasSheetBox = $request->luasSheetBox;
-        $box->satuanLuasSheetBox = $request->satuanLuasSheetBox;
-        $box->gramSheetBox = $request->gramSheetBox;
+        // $box->kode = $request->kode;
+        $box->namaBarang = $request->namaBarang;
+        $box->tipebox = $request->tipebox;
+        $box->flute = $request->flute;
         $box->panjangDalamBox = $request->panjangDalamBox;
         $box->lebarDalamBox = $request->lebarDalamBox;
         $box->tinggiDalamBox = $request->tinggiDalamBox;
-        $box->satuanSizeDalamBox = $request->satuanSizeDalamBox;
         $box->sizeCreasCorr = $request->sizeCreasCorr;
         $box->sizeCreasConv = $request->sizeCreasConv;
-        $box->satuanCreas = $request->satuanCreas;
-        $box->lastUpdatedBy = $request->lastUpdatedBy;
+        $box->kuping = $request->kuping;
+        $box->kuping2 = $request->kuping2;
+        $box->panjangCrease = $request->panjangCrease;
+        $box->lebarCrease1 = $request->lebarCrease1;
+        $box->lebarCrease2 = $request->lebarCrease2;
+        $box->flapCrease = $request->flapCrease;
+        $box->tinggiCrease = $request->tinggiCrease;
+        $box->lastUpdatedBy = $request->createdBy;
 
         $box->save();
 

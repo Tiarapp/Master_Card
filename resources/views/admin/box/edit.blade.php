@@ -27,8 +27,9 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('box.update') }}" method="POST" class="inputSheet" enctype="multipart/form-data">
-                    @csrf
+                <form action="{{ route('box.update', $box->id) }}" method="POST" class="inputSheet">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
                     <div class="row was-validated">
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
                             <div class="form-group">
@@ -37,69 +38,17 @@
                                 {{-- <textarea name="nama" id="nama" cols="30" rows="10"></textarea> --}}
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" class="col-md-1" data-toggle="modal" data-target="#Item" id>
-                                            <i class="fas fa-search"></i>
-                                        </button>
+                                        <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" value="{{ $box->namaBarang }}">
                                     </div>
                                 </div>
                                 
                             </div>
                         </div>
-                        {{-- <div class="modal fade" id="Item">
-                            <div class="modal-dialog modal-xl">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Barang PHP</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body Item">
-                                        <div class="card-body">
-                                            <table class="table table-bordered" id="data_barang">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Kode Barang.</th>
-                                                        <th scope="col">Nama</th>
-                                                        <th scope="col">Satuan</th>
-                                                        <th scope="col">MC ID</th>
-                                                        <th scope="col">Tgl Jadi</th>
-                                                        <th scope="col">Gram</th>
-                                                    </tr>
-                                                </thead>
-                                                {{-- <tbody>
-                                                    <?php
-                                                    $no = 1;
-                                                    foreach ($item as $data) { ?>
-                                                        <tr>
-                                                            <td scope="row">{{ $data->KodeBrg }}</td>
-                                                            <td>{{ $data->NamaBrg }}</td>
-                                                            <td>{{ $data->Satuan }}</td>
-                                                            <td>{{ $data->WeightValue }}</td>
-                                                            <td>{{ $data->TglKeluar }}</td>
-                                                            <td>{{ $data->BeratStandart }}</td>
-                                                        </tr>
-                                                        <?php
-                                                    }
-                                                    ?>
-                                                </tbody> --}}
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div> --}}
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
                             <div class="form-group">
                                 <label>Tipe Box</label>
                                 <select class="js-example-basic-single col-md-12" name="tipebox" id="tipebox" onchange="getTipe()">
-                                    <option value="">Pilih Tipe ..</option>
+                                    <option value="{{ $box->tipebox }}">{{ $box->tipebox }}</option>
                                     @foreach ($tipebox as $data)
                                     <option value="{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
@@ -110,7 +59,7 @@
                             <div class="form-group">
                                 <label>Flute</label>
                                 <select class="js-example-basic-single col-md-12" name="flute" id="flute" onchange="update_crease_corr()">
-                                    <option value="">Pilih Flute ..</option>
+                                    <option value="{{ $box->flute }}">{{ $box->flute }}</option>
                                     @foreach ($flute as $data)
                                     <option value="{{ $data->kode }}">{{ $data->kode }}</option>
                                     @endforeach
@@ -121,6 +70,7 @@
                             <div class="form-group">
                                 <label>Tipe Crease Corr</label>
                                 <select class="js-example-basic-single col-md-12" name="tipeCreasCorr" id="tipeCreasCorr">
+                                    <option value="{{ $box->tipeCreasCorr }}">{{ $box->tipeCreasCorr }}</option>
                                     <option value="MALE-FLAT">MALE-FLAT</option>
                                     <option value="MALE-MALE">MALE-MALE</option>
                                     <option value="MALE-FEMALE">MALE-FEMALE</option>
@@ -130,7 +80,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan panjang dalam box (mm)">
                             <div class="form-group">
                                 <label>Panjang Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="panjangDalamBox" id="panjangDalamBox" value="{{ $box->panjangDalamBox }}" onkeyup="update_crease_corr(); getNama();" required>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Masukkan panjang dalam box (mm)</div>
                             </div>
@@ -138,7 +88,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan lebar dalam box (mm)">
                             <div class="form-group">
                                 <label>Lebar Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="lebarDalamBox" id="lebarDalamBox" value="{{ $box->lebarDalamBox }}" onkeyup="update_crease_corr(); getNama();" required>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Masukkan lebar dalam box (mm)</div>
                             </div>
@@ -146,7 +96,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan tinggi dalam box (mm)">
                             <div class="form-group">
                                 <label>Tinggi Dalam Box</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" onchange="update_crease_corr(); getNama();" required>
+                                <input type="text" class="form-control txt_line" placeholder="" name="tinggiDalamBox" id="tinggiDalamBox" value="{{ $box->tinggiDalamBox }}" onkeyup="update_crease_corr(); getNama();" required>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Masukkan tinggi dalam box (mm)</div>
                             </div>
@@ -154,7 +104,7 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Masukkan tinggi dalam box (mm)">
                             <div class="form-group">
                                 <label>Kondisi Tambahan</label>
-                                <input type="text" class="form-control txt_line" placeholder="" name="kuping2" id="kuping2" onchange="update_crease_corr(); getNama();">
+                                <input type="text" class="form-control txt_line" placeholder="" name="kuping2" id="kuping2" value="{{ $box->kuping2 }}" onkeyup="update_crease_corr(); getNama();">
                             </div>
                         </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
@@ -162,7 +112,7 @@
                                 <label>Creas Corr</label>
                                 <input type="hidden" name="flapCrease" id="flapCrease">
                                 <input type="hidden" name="tinggiCrease" id="tinggiCrease">
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" onchange="getNama();" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" value="{{ $box->sizeCreasCorr }}" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
@@ -175,7 +125,7 @@
                                 <input type="hidden" name="lebarCrease1" id="lebarCrease1">
                                 <input type="hidden" name="lebarCrease2" id="lebarCrease2">
                                 <input type="hidden" name="kuping2" id="kuping2">
-                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" onchange="getNama();" readonly>
+                                <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" value="{{ $box->sizeCreasConv }}" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
