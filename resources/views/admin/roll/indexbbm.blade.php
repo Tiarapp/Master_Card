@@ -47,7 +47,7 @@
       <!-- Small boxes (Stat box) -->
       
       <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('roll.bbm') }}" style="margin-bottom: 20px; color:white;" >BBM Roll</a>
+        <a href="{{ route('roll.createbbm') }}" style="margin-bottom: 20px; color:white;" >BBM Roll</a>
       </button>
       <div class="card-body">
         <table class="table table-bordered" id="data_planconv">

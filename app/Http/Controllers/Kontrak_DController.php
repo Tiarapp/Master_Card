@@ -148,6 +148,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
+                        $nestedData['brt_kualitas'] = "<p style='color:red'>".$mc->brt_kualitas."</p>" ;
                         $nestedData['nomc'] = "<p style='color:red'>".$mcKode."</p>";
                         $nestedData['kodeBarang'] = "<p style='color:red'>".$mc->kodeBarang."</p>";
                         $nestedData['namaBarang'] = "<p style='color:red'>".$mc->namaBarang."</p>";
@@ -206,6 +207,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
+                        $nestedData['brt_kualitas'] = $mc->brt_kualitas;
                         $nestedData['nomc'] = $mcKode;
                         $nestedData['kodeBarang'] = $mc->kodeBarang;
                         $nestedData['namaBarang'] = $mc->namaBarang;

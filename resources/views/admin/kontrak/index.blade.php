@@ -57,6 +57,7 @@
               <th scope="col">Customer</th>
               <th scope="col">PO Customer</th>
               <th scope="col">Alamat</th>
+              <th scope="col">Berat(KG)</th>
               <th scope="col">QTY Kontrak</th>
               <th scope="col">Kg Kontrak</th>
               <th scope="col">No MC</th>
@@ -106,6 +107,7 @@
           {"data": "cust"},
           {"data": "poCustomer"},
           {"data": "alamatKirim"},
+          {"data": "brt_kualitas"},
           {"data": "pcsKontrak"},
           {"data": "kgKontrak"},
           {"data": "nomc"},
