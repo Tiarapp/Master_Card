@@ -2292,7 +2292,7 @@
         <tr class="row1">
           <td class="column0">&nbsp;</td>
           <td class="column1 style71 s style44" colspan="9">&nbsp;&nbsp;&nbsp;Order Produksi Internal</td>
-          <td class="column10 style69 s">FR-PPC-02</td>
+          <td class="column10 style69 s">FR-PPIC-02</td>
           <td class="column11 style5 null"></td>
         </tr>
         <tr class="row2">

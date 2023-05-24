@@ -69,6 +69,7 @@ class Kontrak_DController extends Controller
                 $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
                 ->orWhere('kode', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
+                ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('id', 'desc')
@@ -77,6 +78,7 @@ class Kontrak_DController extends Controller
                 $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                 ->orWhere('customer_name', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
+                ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
                 ->count();
                 // dd($opi);
             }
@@ -109,6 +111,7 @@ class Kontrak_DController extends Controller
                         $nestedData['sales'] = "<p style='color:red'>".$kontrak->sales."</p>";
                         $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
                         $nestedData['keterangan'] = "<p style='color:red'>".$kontrak->keterangan."</p>";
+                        $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -170,6 +173,7 @@ class Kontrak_DController extends Controller
                         $nestedData['sales'] = $kontrak->sales;
                         $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                         $nestedData['keterangan'] = $kontrak->keterangan;
+                        $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                         
                         // Realisasi Kirim
                         $terkirim = 0;

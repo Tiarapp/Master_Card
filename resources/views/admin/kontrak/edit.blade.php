@@ -244,6 +244,7 @@
                                                         <option value="OUP Pisau & Nama Item">OUP Pisau & Nama Item</option>
                                                         <option value="OUP Proses">OUP Proses</option>
                                                         <option value="OUP Kualitas - Warna">OUP Kualitas - Warna</option>
+                                                        <option value="OUP Nama Item, Ukuran & Koli">OUP Nama Item, Ukuran & Koli</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -412,10 +413,16 @@
                                                                     <tbody>
                                                                         <?php
                                                                         $no = 1;
-                                                                        foreach ($mc as $data) { ?>
+                                                                        foreach ($mc as $data) { 
+                                                                            if ($data->revisi == 'R0') {
+                                                                                $mc = $data->kode.'-'.$data->revisi;
+                                                                            } else {
+                                                                                $mc = $data->kode;
+                                                                            }
+                                                                            ?>
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
+                                                                                <td>{{ $mc }}</td>
                                                                                 <td>{{ $data->box }}</td>
                                                                                 <td>{{ $data->tipeBox }}</td>
                                                                                 <td>{{ $data->flute }}</td>

@@ -54,6 +54,7 @@
               <th scope="col">Tanggal</th>
               <th scope="col">Kode Barang</th>
               <th scope="col">Nama Barang</th>
+              <th scope="col">Tipe Order</th>
               <th scope="col">Customer</th>
               <th scope="col">PO Customer</th>
               <th scope="col">Alamat</th>
@@ -104,6 +105,7 @@
           {"data": "tglKontrak"},
           {"data": "kodeBarang"},
           {"data": "namaBarang"},
+          {"data": "tipeOrder"},
           {"data": "cust"},
           {"data": "poCustomer"},
           {"data": "alamatKirim"},
