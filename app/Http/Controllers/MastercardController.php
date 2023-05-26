@@ -82,6 +82,7 @@ class MastercardController extends Controller
                         $nestedData['revisi'] = "<p style='color:#4842f5'>".$mastercard->revisi."</p>";
                         $nestedData['namaBarang'] = "<p style='color:#4842f5'>".$mastercard->namaBarang."</p>";
                         $nestedData['tipeBox'] = "<p style='color:#4842f5'>".$mastercard->tipeBox."</p>";
+                        $nestedData['gram'] = "<p style='color:#4842f5'>".$mastercard->gramSheetBoxKontrak."</p>";
                         $nestedData['CreasCorrP'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrP."</p>";
                         $nestedData['CreasCorrL'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrL."</p>";
                         $nestedData['joint'] = "<p style='color:#4842f5'>".$mastercard->joint."</p>";
@@ -101,6 +102,7 @@ class MastercardController extends Controller
                         $nestedData['revisi'] = $mastercard->revisi;
                         $nestedData['namaBarang'] = $mastercard->namaBarang;
                         $nestedData['tipeBox'] = $mastercard->tipeBox;
+                        $nestedData['gram'] = $mastercard->gramSheetBoxKontrak;
                         $nestedData['CreasCorrP'] = $mastercard->CreasCorrP;
                         $nestedData['CreasCorrL'] = $mastercard->CreasCorrL;
                         $nestedData['joint'] = $mastercard->joint;
@@ -117,8 +119,9 @@ class MastercardController extends Controller
                     }
                     
                     
-                    
+                    // dd($nestedData);
                     $data[] = $nestedData;
+
                 }
             }
             

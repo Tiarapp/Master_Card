@@ -46,6 +46,7 @@
                     <th scope="col">Revisi</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
+                    <th scope="col">Gram</th>
                     <th scope="col">Creas Corr P</th>
                     <th scope="col">Creas Corr L</th>
                     <th scope="col">Joint</th>
@@ -117,6 +118,7 @@
                 { data: 'revisi', name: 'revisi' },
                 { data: 'namaBarang', name: 'namaBarang' },
                 { data: 'tipeBox', name: 'tipeBox' },
+                { data: 'gram', name: 'gram' },
                 { data: 'CreasCorrP', name: 'CreasCorrP' },
                 { data: 'CreasCorrL', name: 'CreasCorrL' },
                 { data: 'joint', name: 'joint' },
