@@ -245,6 +245,7 @@
                                                         <option value="OUP Proses">OUP Proses</option>
                                                         <option value="OUP Kualitas - Warna">OUP Kualitas - Warna</option>
                                                         <option value="OUP Nama Item, Ukuran & Koli">OUP Nama Item, Ukuran & Koli</option>
+                                                        <option value="OUP Nama Item & Proses">OUP Nama Item & Proses</option>
                                                     </select>
                                                 </div>
                                             </div>

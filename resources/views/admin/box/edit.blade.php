@@ -110,8 +110,8 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Corr</label>
-                                <input type="hidden" name="flapCrease" id="flapCrease">
-                                <input type="hidden" name="tinggiCrease" id="tinggiCrease">
+                                <input type="hidden" name="flapCrease" id="flapCrease" value="{{ $box->flapCrease }}">
+                                <input type="hidden" name="tinggiCrease" id="tinggiCrease" value="{{ $box->tinggiCrease }}">
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasCorr" id="sizeCreasCorr" value="{{ $box->sizeCreasCorr }}" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -120,11 +120,11 @@
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="">
                             <div class="form-group">
                                 <label>Creas Conv</label>
-                                <input type="hidden" name="kuping" id="kuping">
-                                <input type="hidden" name="panjangCrease" id="panjangCrease">
-                                <input type="hidden" name="lebarCrease1" id="lebarCrease1">
-                                <input type="hidden" name="lebarCrease2" id="lebarCrease2">
-                                <input type="hidden" name="kuping2" id="kuping2">
+                                <input type="hidden" name="kuping" id="kuping" value="{{ $box->kuping }}">
+                                <input type="hidden" name="panjangCrease" id="panjangCrease" value="{{ $box->panjangCrease }}">
+                                <input type="hidden" name="lebarCrease1" id="lebarCrease1" value="{{ $box->lebarCrease1 }}">
+                                <input type="hidden" name="lebarCrease2" id="lebarCrease2" value="{{ $box->lebarCrease2 }}">
+                                <input type="hidden" name="kuping2" id="kuping2" value="{{ $box->kuping2 }}">
                                 <input type="text" class="form-control txt_line" placeholder="" name="sizeCreasConv" id="sizeCreasConv" value="{{ $box->sizeCreasConv }}" onchange="getNama();" readonly>
                                 <div class="valid-feedback">Terima kasih</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>

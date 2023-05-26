@@ -172,6 +172,7 @@ class BoxController extends Controller
         $box->namaBarang = $request->namaBarang;
         $box->tipebox = $request->tipebox;
         $box->flute = $request->flute;
+        $box->tipeCreasCorr = $request->tipeCreasCorr;
         $box->panjangDalamBox = $request->panjangDalamBox;
         $box->lebarDalamBox = $request->lebarDalamBox;
         $box->tinggiDalamBox = $request->tinggiDalamBox;
