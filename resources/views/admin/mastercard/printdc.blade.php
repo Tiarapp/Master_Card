@@ -189,7 +189,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=1>BERAT / BOX</font></b></td>
-		<td align="center" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ $mc->gramSheetBoxProduksi2 }}</font></td>
+		<td align="center" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->gramSheetBoxProduksi2,2,",",".")  }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

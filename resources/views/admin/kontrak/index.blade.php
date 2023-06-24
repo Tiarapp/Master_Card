@@ -50,20 +50,19 @@
             <tr>
               <th scope="col">ID.</th>
               <th scope="col">Action</th>
-              <th scope="col">No Kontrak</th>
               <th scope="col">Tanggal</th>
-              <th scope="col">Kode Barang</th>
-              <th scope="col">Nama Barang</th>
-              <th scope="col">Tipe Order</th>
+              <th scope="col">No MC</th>
               <th scope="col">Customer</th>
               <th scope="col">PO Customer</th>
+              <th scope="col">No Kontrak</th>
+              <th scope="col">Nama Barang</th>
+              <th scope="col">Tipe Order</th>
               <th scope="col">Alamat</th>
               <th scope="col">Berat(KG)</th>
-              <th scope="col">QTY Kontrak</th>
-              <th scope="col">Kg Kontrak</th>
-              <th scope="col">No MC</th>
               <th scope="col">Harga / PCS</th>
               <th scope="col">Harga / Kg</th>
+              <th scope="col">QTY Kontrak</th>
+              <th scope="col">Kg Kontrak</th>
               <th scope="col">Realisasi Kirim</th>
               <th scope="col">Sisa Kontrak</th>
               <th scope="col">Sales</th>
@@ -71,6 +70,7 @@
               <th scope="col">B. Expedisi</th>
               <th scope="col">B. Glue Manual</th>
               <th scope="col">B. Wax</th>
+              <th scope="col">Kode Barang</th>
             </tr>
           </thead>
           
@@ -101,20 +101,19 @@
         "columns": [
           {"data": "id"},
           {"data": "action"},
-          {"data": "kontrak"},
           {"data": "tglKontrak"},
-          {"data": "kodeBarang"},
-          {"data": "namaBarang"},
-          {"data": "tipeOrder"},
+          {"data": "nomc"},
           {"data": "cust"},
           {"data": "poCustomer"},
+          {"data": "kontrak"},
+          {"data": "namaBarang"},
+          {"data": "tipeOrder"},
           {"data": "alamatKirim"},
           {"data": "brt_kualitas"},
-          {"data": "pcsKontrak"},
-          {"data": "kgKontrak"},
-          {"data": "nomc"},
           {"data": "rp_pcs"},
           {"data": "rp_kg"},
+          {"data": "pcsKontrak"},
+          {"data": "kgKontrak"},
           {"data": "realisasi"},
           {"data": "sisaKirim"},
           {"data": "sales"},
@@ -122,6 +121,7 @@
           {"data": "b_expedisi"},
           {"data": "b_glue"},
           {"data": "b_wax"},
+          {"data": "kodeBarang"},
           
         ],
         // select: true,

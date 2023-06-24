@@ -90,6 +90,7 @@ class MastercardController extends Controller
                         $nestedData['lebarSheet'] = "<p style='color:#4842f5'>".$mastercard->lebarSheet."</p>";
                         $nestedData['luasSheet'] = "<p style='color:#4842f5'>".$mastercard->luasSheet."</p>";
                         $nestedData['keterangan'] = "<p style='color:#4842f5'>".$mastercard->keterangan."</p>";
+                        $nestedData['blok'] = "<p style='color:#4842f5'>".$mastercard->text."</p>";
                         $nestedData['action'] = 
                                 "<ul>
                                     &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>
@@ -110,6 +111,7 @@ class MastercardController extends Controller
                         $nestedData['lebarSheet'] = $mastercard->lebarSheet;
                         $nestedData['luasSheet'] = $mastercard->luasSheet;
                         $nestedData['keterangan'] = $mastercard->keterangan;
+                        $nestedData['blok'] = $mastercard->text;
                         $nestedData['action'] = 
                                 "<ul>
                                     &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>

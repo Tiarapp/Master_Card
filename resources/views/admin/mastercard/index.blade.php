@@ -50,6 +50,7 @@
                     <th scope="col">Creas Corr P</th>
                     <th scope="col">Creas Corr L</th>
                     <th scope="col">Joint</th>
+                    <th scope="col">Type Warna</th>
                     <th scope="col">Panjang Sheet</th>
                     <th scope="col">Lebar Sheet</th>
                     <th scope="col">Luas Sheet</th>
@@ -122,6 +123,7 @@
                 { data: 'CreasCorrP', name: 'CreasCorrP' },
                 { data: 'CreasCorrL', name: 'CreasCorrL' },
                 { data: 'joint', name: 'joint' },
+                { data: 'blok', name: 'blok' },
                 { data: 'panjangSheet', name: 'panjangSheet' },
                 { data: 'lebarSheet', name: 'lebarSheet' },
                 { data: 'luasSheet', name: 'luasSheet' },

@@ -70,6 +70,7 @@ class Kontrak_DController extends Controller
                 ->orWhere('kode', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                 ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
+                ->orWhere('sales', 'LIKE',"%{$search}%")
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('id', 'desc')
@@ -79,6 +80,7 @@ class Kontrak_DController extends Controller
                 ->orWhere('customer_name', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
                 ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
+                ->orWhere('sales', 'LIKE',"%{$search}%")
                 ->count();
                 // dd($opi);
             }
@@ -134,7 +136,7 @@ class Kontrak_DController extends Controller
                         $nestedData['pcsKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
                         $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
-                        $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+                        $sisakontrak = $kontrak->kontrak_d['pcsSisaKontrak'];
 
                         $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
                         $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
@@ -151,7 +153,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
-                        $nestedData['brt_kualitas'] = "<p style='color:red'>".$mc->brt_kualitas."</p>" ;
+                        $nestedData['brt_kualitas'] = "<p style='color:red'>".$mc->gramSheetBoxKontrak."</p>" ;
                         $nestedData['nomc'] = "<p style='color:red'>".$mcKode."</p>";
                         $nestedData['kodeBarang'] = "<p style='color:red'>".$mc->kodeBarang."</p>";
                         $nestedData['namaBarang'] = "<p style='color:red'>".$mc->namaBarang."</p>";
@@ -211,7 +213,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
-                        $nestedData['brt_kualitas'] = $mc->brt_kualitas;
+                        $nestedData['brt_kualitas'] = $mc->gramSheetBoxKontrak;
                         $nestedData['nomc'] = $mcKode;
                         $nestedData['kodeBarang'] = $mc->kodeBarang;
                         $nestedData['namaBarang'] = $mc->namaBarang;
@@ -929,6 +931,13 @@ class Kontrak_DController extends Controller
         
         public function store_realisasi(Request $request)
         {
+            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $request->idkontrakm)->first();
+
+            $kontrak->pcsSisaKontrak = $kontrak->pcsSisaKontrak - $request->jumlahKirim;
+            $kontrak->kgSisaKontrak = $kontrak->pcsSisaKontrak * ($kontrak->kgKontrak / $kontrak->kgKontrak);
+
+            $kontrak->save();
+
             RealisasiKirim::create([
                 'kontrak_m_id'  => $request->idkontrakm,
                 'tanggal_kirim' => $request->tglKirim,
@@ -942,6 +951,13 @@ class Kontrak_DController extends Controller
         public function edit_realisasi(Request $request, $id)
         {
             $kirim = RealisasiKirim::findOrFail($id);
+
+            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
+
+            $kontrak->pcsSisaKontrak = $kontrak->pcsSisaKontrak - $request->jumlahKirim;
+            $kontrak->kgSisaKontrak = $kontrak->pcsSisaKontrak * ($kontrak->kgKontrak / $kontrak->kgKontrak);
+
+            $kontrak->save();
             
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
