@@ -233,7 +233,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak_D->berat }}">
-                                                <input type="text" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
                                             </div>
                                         </div>
                                     </div>
@@ -282,6 +292,9 @@
                         </div>
                     </div>
                     </form>
+                    <div class="col-md-6">
+                        <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                    </div>
                 </div>
             </div>
         </div>    
