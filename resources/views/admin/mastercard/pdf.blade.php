@@ -254,14 +254,6 @@
                         <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                             <div class="form-group">
                                 <h4 class="form-section">Ukuran Sheet</h4>
-                                {{-- <div class="row">
-                                    <div class="col-md-2">
-                                        <label class="control-label">Flute</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control txt_line" value="{{ $mc->flute }}" readonly>
-                                    </div>
-                                </div> --}}
                                 <div class="row">
                                     <div class="col-md-2" style="margin-top: 30px;">
                                         <label class="control-label">Ukuran Sheet Box</label> 
@@ -317,17 +309,6 @@
                                         <p> Gram </p>
                                     </div>
                                 </div>
-                                {{-- <div class="row">
-                                    <div class="col-md-2">
-                                        <label class="control-label">Berat Sheet Corr</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control txt_line" value="{{ $mc->gramSheetCorrKontrak }}" readonly>
-                                    </div>
-                                    <div class="col-md-2">
-                                        Gram
-                                    </div>
-                                </div> --}}
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label class="control-label">Substance Kontrak</label>

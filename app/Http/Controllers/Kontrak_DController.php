@@ -90,17 +90,17 @@ class Kontrak_DController extends Controller
                 foreach ($kontrak as $kontrak)
                 {
                     $show =  route('kontrak.pdfb1',$kontrak->id);
-
+                    
                     if ($kontrak->status == 4) {
                         $edit =  null;
                     } else {  
                         $edit =  route('kontrak.edit',$kontrak->id);
                     }
-
+                    
                     $cancel = route('kontrak.cancel', $kontrak->id);
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
-
+                    
                     if($kontrak->status == 2){
                         $nestedData['id'] = "<p style='color:red'>".$kontrak->id."</p>";
                         $nestedData['kontrak'] = "<p style='color:red'>".$kontrak->kode."</p>";
@@ -137,7 +137,7 @@ class Kontrak_DController extends Controller
                         $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
                         $sisakontrak = $kontrak->kontrak_d['pcsSisaKontrak'];
-
+                        
                         $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
                         $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
                         $nestedData['rp_kg'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_kg']."</p>";
@@ -526,7 +526,7 @@ class Kontrak_DController extends Controller
             ->first();
             
             $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
-                ->get();
+            ->get();
             // End tampilkan untuk edit
             
             
@@ -556,7 +556,7 @@ class Kontrak_DController extends Controller
             
             if ($request->tglKirim != null) {
                 $lastOpi = Opi_M::where('periode', '=', $tahun) 
-                            ->first();
+                ->first();
                 
                 if($lastOpi == null){
                     $numb_opi = '0001'.$alphabet;
@@ -565,7 +565,7 @@ class Kontrak_DController extends Controller
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
                     $numb_opi = str_pad(count($lastOpi)+2,4, '0', STR_PAD_LEFT).$alphabet   ;
                 };
-
+                
                 
                 $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
                 
@@ -889,9 +889,9 @@ class Kontrak_DController extends Controller
             $dt = DB::table('dt')
             ->where('kontrak_m_id', '=', $id)
             ->get();
-
+            
             $date = date_create($kontrak_M->tglKontrak);
-
+            
             $count = count($kontrak_D);
             
             
@@ -932,12 +932,7 @@ class Kontrak_DController extends Controller
         public function store_realisasi(Request $request)
         {
             $kontrak = Kontrak_D::where('kontrak_m_id', "=", $request->idkontrakm)->first();
-
-            $kontrak->pcsSisaKontrak = $kontrak->pcsSisaKontrak - $request->jumlahKirim;
-            $kontrak->kgSisaKontrak = $kontrak->pcsSisaKontrak * ($kontrak->kgKontrak / $kontrak->kgKontrak);
-
-            $kontrak->save();
-
+            
             RealisasiKirim::create([
                 'kontrak_m_id'  => $request->idkontrakm,
                 'tanggal_kirim' => $request->tglKirim,
@@ -951,13 +946,6 @@ class Kontrak_DController extends Controller
         public function edit_realisasi(Request $request, $id)
         {
             $kirim = RealisasiKirim::findOrFail($id);
-
-            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
-
-            $kontrak->pcsSisaKontrak = $kontrak->pcsSisaKontrak - $request->jumlahKirim;
-            $kontrak->kgSisaKontrak = $kontrak->pcsSisaKontrak * ($kontrak->kgKontrak / $kontrak->kgKontrak);
-
-            $kontrak->save();
             
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
@@ -967,13 +955,29 @@ class Kontrak_DController extends Controller
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
             
         }
-
+        
         public function cancel_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
             $kontrak->status = 2;
-
+            
             $kontrak->save();
             return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
+        }
+        
+        public function recall($id) 
+        {
+            $order = 0;
+            $kontrak = Kontrak_D::where("kontrak_m_id", "=", $id)->first();
+            $opi = Opi_M::where("kontrak_m_id", "=", $id)->get();
+            
+            foreach ($opi as $opi) {
+                $order = $order + $opi->jumlahOrder;
+            }
+            
+            $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $order ;
+            $kontrak->save();
+            
+            return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');
         }
     }

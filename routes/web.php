@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
+use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use Illuminate\Support\Facades\Route;
 
@@ -223,6 +224,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
     Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
+    Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
@@ -315,6 +317,10 @@ Route::middleware(['auth'])->group(function (){
         
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
+
+        
+    // Data
+        Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
 });
 
 

@@ -186,6 +186,7 @@
                                                     <option value="OUP Nama Item, Ukuran & Koli">OUP Nama Item, Ukuran & Koli</option>
                                                     <option value="OUP Nama Item & Proses">OUP Nama Item & Proses</option>
                                                     <option value="OUP Nama, Ukuran, Warna">OUP Nama, Ukuran, Warna</option>
+                                                    <option value="OUP Arah Flute">OUP Arah Flute</option>
                                                 </select>
                                             </div>
                                         </div>
