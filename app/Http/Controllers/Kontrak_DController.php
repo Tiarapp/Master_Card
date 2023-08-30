@@ -915,9 +915,9 @@ class Kontrak_DController extends Controller
             $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
             
             $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
-            $sj = DB::connection('firebird2')->table('TDetSJ')
-            ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
-            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
+            // $sj = DB::connection('firebird2')->table('TDetSJ')
+            // ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
+            // ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
             
             $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();

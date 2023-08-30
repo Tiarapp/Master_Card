@@ -580,7 +580,7 @@
 	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td colspan="4" align="middle" valign=middle><font face="Calibri" color="#000000" size='2'><br><b>{{ $mc->panjangSheetBox }}</b></font></td>
+		<td colspan="4" align="middle" valign=middle><font face="Calibri" color="#000000" size='2'><br><b>{{ $mc->panjangSheet }}</b></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>

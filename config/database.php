@@ -56,11 +56,11 @@ return [
 
         'firebird2' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.1.250'),
-            'port'     => env('DB_PORT2', '3050'),
-            'database' => env('DB_DATABASE2', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
-            'username' => env('DB_USERNAME2', 'sysdba'),
-            'password' => env('DB_PASSWORD2', 'masterkey'),
+            'host'     => env('DB_HOST', '192.168.1.250'),
+            'port'     => env('DB_PORT', '3050'),
+            'database' => env('DB_DATABASE', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME', 'sysdba'),
+            'password' => env('DB_PASSWORD', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -68,11 +68,11 @@ return [
 
         'firebird3' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.1.250'),
-            'port'     => env('DB_PORT2', '3050'),
-            'database' => env('DB_DATABASE2', 'D:\Database\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
-            'username' => env('DB_USERNAME2', 'sysdba'),
-            'password' => env('DB_PASSWORD2', 'masterkey'),
+            'host'     => env('DB_HOST', '192.168.1.250'),
+            'port'     => env('DB_PORT', '3050'),
+            'database' => env('DB_DATABASE', 'D:\Database\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME', 'sysdba'),
+            'password' => env('DB_PASSWORD', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -80,11 +80,11 @@ return [
 
         'fbteknik' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.1.250'),
-            'port'     => env('DB_PORT2', '3050'),
-            'database' => env('DB_DATABASE2', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
-            'username' => env('DB_USERNAME2', 'sysdba'),
-            'password' => env('DB_PASSWORD2', 'masterkey'),
+            'host'     => env('DB_HOST', '192.168.1.250'),
+            'port'     => env('DB_PORT', '3050'),
+            'database' => env('DB_DATABASE', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
+            'username' => env('DB_USERNAME', 'sysdba'),
+            'password' => env('DB_PASSWORD', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -92,11 +92,23 @@ return [
 
         'firebird' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST2', '192.168.1.250'),
-            'port'     => env('DB_PORT2', '3050'),
-            'database' => env('DB_DATABASE2', 'D:\Database\FBDB\MASTER_SPA.FDB'),
-            'username' => env('DB_USERNAME2', 'sysdba'),
-            'password' => env('DB_PASSWORD2', 'masterkey'),
+            'host'     => env('DB_HOST4', '192.168.1.250'),
+            'port'     => env('DB_PORT4', '3050'),
+            'database' => env('DB_DATABASE4', 'D:\Database\FBDB\MASTER_SPA.FDB'),
+            'username' => env('DB_USERNAME4', 'sysdba'),
+            'password' => env('DB_PASSWORD4', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+        ],
+
+        'firebird4' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST3', 'localhost'),
+            'port'     => env('DB_PORT3', '3050'),
+            'database' => env('DB_DATABASE3', 'D:\TES_DELPHI\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME3', 'sysdba'),
+            'password' => env('DB_PASSWORD3', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -108,9 +120,49 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => env('DB_DATABASE', 'mc_live'),
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'mysql2' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST2', '180.178.100.42'),
+            'port' => env('DB_PORT2', '3306'),
+            'database' => env('DB_DATABASE2', 'spa-23'),
+            'username' => env('DB_USERNAME2', 'spa23'),
+            'password' => env('DB_PASSWORD2', 'spa2023'),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'tes2' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '180.178.100.42'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'spa-23'),
+            'username' => env('DB_USERNAME', 'spa23'),
+            'password' => env('DB_PASSWORD', 'spa2023'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
