@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -242,6 +243,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
     Route::get('/admin/opi/print/{id}', 'OpiController@print')->name('opi.print');
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
+    Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     //PLAN
@@ -320,8 +322,11 @@ Route::middleware(['auth'])->group(function (){
 
         
     // Data
+        Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
         Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
-});
+        Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
+        Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
+}); 
 
 
 

@@ -36,37 +36,44 @@
         </div>
       @endif
       <!-- Small boxes (Stat box) -->
-
-      <a href="{{ route('data.sync') }}" style="margin-bottom: 20px;margin-left: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <form action="{{ route('data.detbbm') }}" method="GET">
+        @csrf
+        Tanggal Awal <input type="date" name="mulai" id="mulai">
+        Tanggal Akhir <input type="date" name="selesai" id="selesai">
+        <button type="submit" class="btn-success">Recall</button>
+      </form>
+      {{-- <a href="{{ route('data.sync') }}" style="margin-bottom: 20px;margin-left: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a> --}}
       <div class="card-body">
         <table class="table table-bordered" id="data_divisi">
           <thead>
             <tr>
-              <th scope="col">Kode.</th>
-              <th scope="col">Nama</th>
-              <th scope="col">NPWP</th>
-              <th scope="col">Alamat Kantor</th>
-              <th scope="col">Telp Kantor</th>
-              <th scope="col">PIC</th>
-              <th scope="col">Alamat Kirim</th>
-              <th scope="col">Plafond</th>
-              <th scope="col">top</th>
+              <th scope="col">BBM</th>
+              <th scope="col">Tanggal Masuk</th>
+              <th scope="col">Kode Barang</th>
+              <th scope="col">Nama Barang</th>
+              <th scope="col">Ukuran</th>
+              <th scope="col">Gsm</th>
+              <th scope="col">Kode Roll</th>
+              <th scope="col">QTY (Kg)</th>
+              <th scope="col">Kode Roll Supp</th>
+              <th scope="col">Kode Supp</th>
             </tr>
           </thead>
           <tbody>
             <?php
             $no = 1;
-            foreach ($cust as $data) { ?>
+            foreach ($detbbm as $data) { ?>
               <tr>
-                <td scope="row">{{ $data->Kode }}</td>
-                <td>{{ $data->Nama }}</td>
-                <td>{{ $data->NPWP }}</td>
-                <td>{{ $data->AlamatKantor }}</td>
-                <td>{{ $data->TelpKantor }}</td>
-                <td>{{ $data->PIC }}</td>
-                <td>{{ $data->AlamatKirim }}</td>
-                <td>{{ $data->plafond }}</td>
-                <td>{{ $data->top }}</td>
+                <td scope="row">{{ $data->NoBukti }}</td>
+                <td scope="row">{{ $data->TglMasuk }}</td>
+                <td scope="row">{{ $data->KodeBrg }}</td>
+                <td scope="row">{{ $data->NamaBrg }}</td>
+                <td scope="row">{{ $data->NamaKel }}</td>
+                <td scope="row">{{ $data->JenisProduksi }}</td>
+                <td>{{ $data->KodeRoll }}</td>
+                <td>{{ number_format($data->BrtRew,2,".",",") }}</td>
+                <td>{{ $data->KDROLLSUP }}</td>
+                <td>{{ $data->KodeSupp }}</td>
               </tr>
             <?php
             }

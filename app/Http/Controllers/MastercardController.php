@@ -182,7 +182,7 @@ class MastercardController extends Controller
      */
     public function create()
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
@@ -199,7 +199,7 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            'item',
+            // 'item',
             'cust',
             'substance',
             'box',
@@ -344,7 +344,7 @@ class MastercardController extends Controller
      */
     public function edit($id)
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         // dd($cust);
         $substance = DB::table('substance')
@@ -401,7 +401,7 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
         
         return view('admin.mastercard.edit', compact([
-            'item',
+            // 'item',
             'cust',
             'tipe',
             'substance',
@@ -546,7 +546,7 @@ class MastercardController extends Controller
 
     public function revisi($id)
     {
-        $item = DB::connection('firebird2')->table('TBarangConv')->get();
+        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
             ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -605,7 +605,7 @@ class MastercardController extends Controller
         
         return view('admin.mastercard.revisi', compact([
             'cust',
-            'item',
+            // 'item',
             'tipe',
             'substance',
             'box',
@@ -740,7 +740,7 @@ class MastercardController extends Controller
             return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1'){
             return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
-        } else if ($mc->tipeMc == 'SHEET' || $mc->tipeMc == 'LAYER') {
+        } else if ($mc->tipeMc == 'SHEET' || $mc->tipeMc == 'LAYER' || $mc->tipeMc == 'SINGLEFACE') {
             // dd($mc);
             return view('admin.mastercard.printsheet', compact('mc','namaSubsK','namaSubsP'));
         }
