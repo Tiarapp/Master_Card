@@ -848,10 +848,10 @@
     $(document).on("keyup", ".harga", function(e) {
         harga = $(this).val();
         qty = document.getElementById("qtyPcs").value;
-        kg = document.getElementById("qtyKg").value;
+        kg = document.getElementById("gram").value;
 
         total = parseFloat(harga) * parseInt(qty);
-        hargakg = total / parseFloat(kg)
+        hargakg = parseFloat(harga) / parseFloat(kg)
 
         document.getElementById("total").value = total.toFixed(0);
         document.getElementById("hargakg").value = hargakg.toFixed(2);
