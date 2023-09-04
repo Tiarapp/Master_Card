@@ -1093,10 +1093,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
         } else
         if (flutenama == 'CF') {
@@ -1120,10 +1120,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
             
@@ -1134,10 +1134,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
             result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
-            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(2);
-            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(2);
-            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
         }
@@ -1199,10 +1199,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
         } else
         if (flutenama == 'CF') {
@@ -1226,10 +1226,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
             result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
             
@@ -1240,10 +1240,10 @@
             result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
             result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
-            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(2);
-            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(2);
-            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
         }

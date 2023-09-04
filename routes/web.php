@@ -3,6 +3,10 @@
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Models\Kontrak_D;
+use App\Models\Kontrak_M;
+use App\Models\Opi_M;
+use App\Models\RealisasiKirim;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +30,41 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/admin', function () {
-    return view('admin.index');
+    $periode = date("Y-m");
+
+    $dt = RealisasiKirim::where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
+        ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+        ->get();
+
+        $realisasi = 0;
+
+        foreach ($dt as $key) {
+            $kontrak = Kontrak_D::where('kontrak_m_id','=',$key->kontrak_m_id)
+                ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+                ->first();
+            $hitung = $key->qty_kirim * $kontrak->gramSheetBoxKontrak;
+
+            $realisasi = $realisasi + $hitung;
+        }
+
+    $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
+        ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
+        ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+        // ->take(2)
+        ->get();
+
+        // dd($opi);
+        $tonase = 0;    
+        foreach ($opi as $key) {
+            $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
+
+            $tonase = $tonase + $order ;
+        }
+
+    $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
+            ->get();
+    $jumlah_kontrak = count($kontrak);
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi'));
 })->middleware(['auth'])->name('admin');
 
 
