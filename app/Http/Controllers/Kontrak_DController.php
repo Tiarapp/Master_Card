@@ -162,9 +162,13 @@ class Kontrak_DController extends Controller
                         $nestedData['b_expedisi'] = "<p style='color:red'>".$kontrak->biaya_exp."</p>";
                         $nestedData['b_glue'] = "<p style='color:red'>".$kontrak->biaya_glue."</p>";
                         $nestedData['b_wax'] = "<p style='color:red'>".$kontrak->biaya_wax."</p>";
-                        $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
+                        if ($mc->tipeBox == 'SF') {
+                            $nestedData['rp_kg'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_pcs'],2,',','.')."</p>";
+                        } else {               
+                            $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
 
-                        $nestedData['rp_kg'] = "<p style='color:red'>".number_format($rpkg,2,',','.')."</p>";
+                            $nestedData['rp_kg'] = "<p style='color:red'>".number_format($rpkg,2,',','.')."</p>";
+                        }
                     } else {                    
                         $nestedData['id'] = $kontrak->id;
                         $nestedData['kontrak'] = $kontrak->kode;
@@ -225,9 +229,13 @@ class Kontrak_DController extends Controller
                         $nestedData['b_expedisi'] = $kontrak->biaya_exp;
                         $nestedData['b_glue'] = $kontrak->biaya_glue;
                         $nestedData['b_wax'] = $kontrak->biaya_wax;
-                        $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
+                        if ($mc->tipeBox == 'SF') {
+                            $nestedData['rp_kg'] = number_format($kontrak->kontrak_d['harga_pcs'],2,',','.');
+                        } else {                            
+                            $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
 
-                        $nestedData['rp_kg'] = number_format($rpkg,2,',','.');
+                            $nestedData['rp_kg'] = number_format($rpkg,2,',','.');
+                        }
                     }
                     
                     

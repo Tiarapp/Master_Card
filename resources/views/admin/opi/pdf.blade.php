@@ -2439,7 +2439,7 @@
           <td class="column5 style8 null"></td>
           <td class="column6 style8 null"></td>
           <td class="column7 style49 s">Berat Box</td>
-          <td class="column8 style60 s">{{ $opi->gram }} Kg</td>
+          <td class="column8 style60 s">{{ number_format($opi->gram,2,",",".") }} Kg</td>
           <td class="column9 style35 null"></td>
           <td class="column10 style35 null"></td>
           <td class="column11 style30 null"></td>
