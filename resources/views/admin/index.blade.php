@@ -3,6 +3,20 @@
 @extends('admin.templates.partials.default')
 
 @section('content')
+
+<?php
+  $periode = '';
+  $hasil = '';
+
+  for ($i=0; $i < count($all_periode) ; $i++) { 
+    if ($periode == '') {
+      $periode = $all_periode[$i];
+    } else {    
+      $periode = $periode.'/'.$all_periode[$i];
+    }
+  }
+?>
+
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <div class="content-header">
@@ -33,7 +47,7 @@
             <div class="inner">
               <h3>{{ $jumlah_kontrak }}</h3>
 
-              <p>Kontrak Baru</p>
+              <p>Kontrak Baru {{ date('m-Y') }}</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -48,7 +62,7 @@
             <div class="inner">
               <h3>{{ number_format($tonase,2,',','.') }}<sup style="font-size: 20px">   Kg</sup></h3>
 
-              <p>Estimasi Tonase Bulan Ini</p>
+              <p>Estimasi Tonase {{ date('m-Y') }}</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -89,15 +103,108 @@
         <!-- ./col -->
       </div>
       <div class="col-md-12">
-        <h2>UPDATE :</h2>
-        <ul>
-          <li> Penambahan Edit Surat Jalan </li>
-          <li> Catatan sekarang hanya memasukkan Nomer BOX SJ </li>
-        </ul>
+          <!-- LINE CHART -->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Line Chart</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <input type="text" id="periode" value="{{ $periode }}">
+                {{-- <input type="text" id="tonase" value="{{ $hasil }}"> --}}
+                <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
       </div>
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
 </div>
+
+<script>
+  $(function () {
+
+    var all_periode = document.getElementById('periode').value;
+    var periode = all_periode.split("/")
+    var tonase = document.getElementById('tonase').value;
+    var data = all_periode.split("/")
+
+    // var per
+
+    var areaChartData = {
+      labels  : periode,
+      datasets: [
+        // {
+        //   label               : 'Digital Goods',
+        //   backgroundColor     : 'rgba(60,141,188,0.9)',
+        //   borderColor         : 'rgba(60,141,188,0.8)',
+        //   pointRadius          : false,
+        //   pointColor          : '#3b8bba',
+        //   pointStrokeColor    : 'rgba(60,141,188,1)',
+        //   pointHighlightFill  : '#fff',
+        //   pointHighlightStroke: 'rgba(60,141,188,1)',
+        //   data                : [28, 48, 40, 19, 86, 27, 90]
+        // },
+        {
+          label               : 'Electronics',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : data
+        },
+      ]
+    }
+
+    var areaChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: true
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : true,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+    var lineChartOptions = $.extend(true, {}, areaChartOptions)
+    var lineChartData = $.extend(true, {}, areaChartData)
+    lineChartData.datasets[0].fill = false;
+    // lineChartData.datasets[1].fill = false;
+    lineChartOptions.datasetFill = false
+
+    var lineChart = new Chart(lineChartCanvas, {
+      type: 'line',
+      data: lineChartData,
+      options: lineChartOptions
+    })
+  })
+</script>
 @endsection

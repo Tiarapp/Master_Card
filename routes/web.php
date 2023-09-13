@@ -36,35 +36,42 @@ Route::get('/admin', function () {
         ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
         ->get();
 
-        $realisasi = 0;
+        $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->orderBy('realisasi_kirim.id', 'desc')
+            ->groupBy('periode')
+            ->get();
 
+            $all_periode = [];
+
+            foreach ($kirim as $key) {
+                $all_periode[] = $key->periode;
+            }
+
+        $realisasi = 0;
         foreach ($dt as $key) {
             $kontrak = Kontrak_D::where('kontrak_m_id','=',$key->kontrak_m_id)
                 ->leftJoin('mc', 'mc_id', '=', 'mc.id')
                 ->first();
             $hitung = $key->qty_kirim * $kontrak->gramSheetBoxKontrak;
-
             $realisasi = $realisasi + $hitung;
         }
+        
+        $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
+            ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->get();    
 
-    $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
-        ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
-        ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-        // ->take(2)
-        ->get();
-
-        // dd($opi);
         $tonase = 0;    
         foreach ($opi as $key) {
             $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
-
             $tonase = $tonase + $order ;
         }
 
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi'));
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode'));
 })->middleware(['auth'])->name('admin');
 
 
@@ -364,6 +371,25 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
         Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
         Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
+
+        Route::get('admin/periode', function () {
+            $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->orderBy('realisasi_kirim.id', 'desc')
+            ->groupBy('periode')
+            // ->take(10)
+            ->get();
+
+            $all_periode = [];
+
+            foreach ($kirim as $key) {
+
+                $all_periode[] = $key->periode;
+            }
+
+            return response()->json($all_periode);
+
+        })->name('periode');
 }); 
 
 

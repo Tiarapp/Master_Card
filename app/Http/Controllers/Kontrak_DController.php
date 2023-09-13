@@ -283,16 +283,9 @@ class Kontrak_DController extends Controller
             ->where('mc.status', '=', '1')
             ->get();
             $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
-            
-            // menampilkan halaman form input dengan passing data dari query diatas
-            
-            // $tgl1 = '17-02-2021 12:00:00';
-            // $tgl2 = '20-02-2021 12:30:00';
-            
-            // $selisih = (strtotime($tgl2) -  strtotime($tgl1))/60;
-            // // $hari = $selisih/(60*60*24);
-            // var_dump($selisih);
+            $sales = DB::table('sales_m')
+            ->orderBy('nama', 'Asc')
+            ->get();
             
             return view('admin.kontrak.create', compact(
                 'mc', 'top', 'cust', 'sales'
@@ -450,7 +443,9 @@ class Kontrak_DController extends Controller
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease','box.namaBarang as box')
             ->get();
             $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
+            $sales = DB::table('sales_m')
+            ->orderBy('nama', 'Asc')
+            ->get();
             // End Dropdown
             
             
@@ -945,11 +940,13 @@ class Kontrak_DController extends Controller
         public function store_realisasi(Request $request)
         {
             $kontrak = Kontrak_D::where('kontrak_m_id', "=", $request->idkontrakm)->first();
-            
+
+            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
             RealisasiKirim::create([
                 'kontrak_m_id'  => $request->idkontrakm,
                 'tanggal_kirim' => $request->tglKirim,
                 'qty_kirim'     => $request->jumlahKirim,
+                'kg_kirim'      => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
                 'createdBy'     => Auth::user()->name
             ]);
             
@@ -959,10 +956,14 @@ class Kontrak_DController extends Controller
         public function edit_realisasi(Request $request, $id)
         {
             $kirim = RealisasiKirim::findOrFail($id);
+
+            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
+            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
             
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
-                'qty_kirim' => $request->jumlahKirim
+                'qty_kirim' => $request->jumlahKirim,
+                'kg_kirim'      => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
             ]);
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
