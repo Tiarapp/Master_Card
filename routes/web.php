@@ -32,14 +32,18 @@ Route::get('/dashboard', function () {
 Route::get('/admin', function () {
     $periode = date("Y-m");
 
-    $dt = RealisasiKirim::where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
+    $dt = RealisasiKirim::select(DB::raw('SUM(kg_kirim) as kirim'))
+        ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
         ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
-        ->get();
+        ->first();
+
+        // dd($dt->kirim);
 
         $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
             ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
-            ->orderBy('realisasi_kirim.id', 'desc')
+            ->orderBy('periode', 'desc')
             ->groupBy('periode')
+            ->take(12)
             ->get();
 
             $all_periode = [];
@@ -48,14 +52,7 @@ Route::get('/admin', function () {
                 $all_periode[] = $key->periode;
             }
 
-        $realisasi = 0;
-        foreach ($dt as $key) {
-            $kontrak = Kontrak_D::where('kontrak_m_id','=',$key->kontrak_m_id)
-                ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-                ->first();
-            $hitung = $key->qty_kirim * $kontrak->gramSheetBoxKontrak;
-            $realisasi = $realisasi + $hitung;
-        }
+        $realisasi = $dt->kirim;
         
         $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
             ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
@@ -67,11 +64,20 @@ Route::get('/admin', function () {
             $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
             $tonase = $tonase + $order ;
         }
+    
+    $data = RealisasiKirim::select('id', DB::raw('SUM(kg_kirim) as kirim, DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+    // ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
+    ->orderBy('periode', 'Desc')
+    ->groupBy('periode')
+    ->take(12)
+    ->get();
+
+    // dd($data);
 
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode'));
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data'));
 })->middleware(['auth'])->name('admin');
 
 

@@ -15,6 +15,7 @@ class RealisasiKirim extends Model
         'opi_id',
         'tanggal_kirim',
         'qty_kirim',
+        'kg_kirim',
         'createdBy'
     ];
 

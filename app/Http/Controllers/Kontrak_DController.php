@@ -91,9 +91,12 @@ class Kontrak_DController extends Controller
                 {
                     $show =  route('kontrak.pdfb1',$kontrak->id);
                     
-                    if ($kontrak->status == 4) {
+                    if ($kontrak->status == 4 && Auth::user()->divisi_id == 2) {
+                        $edit =  route('kontrak.edit',$kontrak->id);
+                    } else if($kontrak->status == 4) {
                         $edit =  null;
-                    } else {  
+                    }
+                    else {  
                         $edit =  route('kontrak.edit',$kontrak->id);
                     }
                     
@@ -101,7 +104,7 @@ class Kontrak_DController extends Controller
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
                     
-                    if($kontrak->status == 2){
+                    if($kontrak->status == 2 ){
                         $nestedData['id'] = "<p style='color:red'>".$kontrak->id."</p>";
                         $nestedData['kontrak'] = "<p style='color:red'>".$kontrak->kode."</p>";
                         $nestedData['cust'] = "<p style='color:red'>".$kontrak->customer_name."</p>";

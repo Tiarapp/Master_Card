@@ -15,6 +15,13 @@
       $periode = $periode.'/'.$all_periode[$i];
     }
   }
+  for ($i=0; $i < count($data) ; $i++) { 
+    if ($hasil == '') {
+      $hasil = $data[$i]->kirim;
+    } else {    
+      $hasil = $hasil.'/'.$data[$i]->kirim;
+    }
+  }
 ?>
 
 <div class="content-wrapper">
@@ -102,11 +109,13 @@
         </div>
         <!-- ./col -->
       </div>
-      <div class="col-md-12">
+      @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
+        
+      <div class="col-md-6">
           <!-- LINE CHART -->
           <div class="card card-info">
             <div class="card-header">
-              <h3 class="card-title">Line Chart</h3>
+              <h3 class="card-title">Chart Penjualan</h3>
 
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -117,16 +126,17 @@
                 </button>
               </div>
             </div>
-            <div class="card-body">
+            <div class="card-body" >
               <div class="chart">
-                <input type="text" id="periode" value="{{ $periode }}">
-                {{-- <input type="text" id="tonase" value="{{ $hasil }}"> --}}
+                <input type="hidden" id="periode" value="{{ $periode }}">
+                <input type="hidden" id="tonase" value="{{ $hasil }}">
                 <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
               </div>
             </div>
             <!-- /.card-body -->
           </div>
       </div>
+      @endif
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
@@ -137,9 +147,9 @@
   $(function () {
 
     var all_periode = document.getElementById('periode').value;
-    var periode = all_periode.split("/")
     var tonase = document.getElementById('tonase').value;
-    var data = all_periode.split("/")
+    var periode = all_periode.split("/")
+    var data = tonase.split("/")
 
     // var per
 
@@ -158,52 +168,73 @@
         //   data                : [28, 48, 40, 19, 86, 27, 90]
         // },
         {
-          label               : 'Electronics',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          label               : 'Penjualan',
+          barPercentage       : 0.8,
+          backgroundColor     : 'rgba(255, 0, 0, 0.8)',
           borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
+          pointRadius         : true,
           pointColor          : 'rgba(210, 214, 222, 1)',
           pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
+          pointHighlightFill  : '#000',
           pointHighlightStroke: 'rgba(220,220,220,1)',
           data                : data
         },
       ]
     }
 
-    var areaChartOptions = {
-      maintainAspectRatio : false,
-      responsive : true,
-      legend: {
-        display: true
-      },
-      scales: {
-        xAxes: [{
-          gridLines : {
-            display : true,
-          }
-        }],
-        yAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }]
-      }
-    }
-    //-------------
-    //- LINE CHART -
-    //--------------
-    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-    var lineChartOptions = $.extend(true, {}, areaChartOptions)
-    var lineChartData = $.extend(true, {}, areaChartData)
-    lineChartData.datasets[0].fill = false;
-    // lineChartData.datasets[1].fill = false;
-    lineChartOptions.datasetFill = false
+    // var areaChartOptions = {
+    //   maintainAspectRatio : false,
+    //   responsive : true,
+    //   legend: {
+    //     display: true
+    //   },
+    //   scales: {
+    //     xAxes: [{
+    //       gridLines : {
+    //         display : true,
+    //       }
+    //     }],
+    //     yAxes: [{
+    //       gridLines : {
+    //         display : true,
+    //       }
+    //     }]
+    //   }
+    // }
+    // //-------------
+    // //- LINE CHART -
+    // //--------------
+    // var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+    // var lineChartOptions = $.extend(true, {}, areaChartOptions)
+    // var lineChartData = $.extend(true, {}, areaChartData)
+    // lineChartData.datasets[0].fill = false;
+    // // lineChartData.datasets[1].fill = false;
+    // lineChartOptions.datasetFill = false
 
-    var lineChart = new Chart(lineChartCanvas, {
-      type: 'line',
-      data: lineChartData,
-      options: lineChartOptions
+    // var lineChart = new Chart(lineChartCanvas, {
+    //   type: 'line',
+    //   data: lineChartData,
+    //   options: lineChartOptions
+    // })
+
+    var barChartCanvas = $('#lineChart').get(0).getContext('2d')
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[0] = temp0
+
+    var barChartOptions = {
+      locale  : 'en-US',
+      responsive              : true,
+      maintainAspectRatio     : false,
+      datasetFill             : false
+    }
+
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
     })
   })
 </script>
