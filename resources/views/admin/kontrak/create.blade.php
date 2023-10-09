@@ -190,6 +190,9 @@
                                                     <option value="OUP Design, Kualitas, Creasing">OUP Design, Kualitas, Creasing</option>
                                                     <option value="OUP Nama, Ukuran, Design">OUP Nama, Ukuran, Design</option>
                                                     <option value="OUP Kualitas, Ukuran, Design">OUP Kualitas, Ukuran, Design</option>
+                                                    <option value="OUP Design, Warna, Nama Item">OUP Design, Warna, Nama Item</option>
+                                                    <option value="OUP Customer, Design, Kualitas">OUP Customer, Design, Kualitas</option>
+                                                    <option value="OUP Berat">OUP Berat</option>
                                                 </select>
                                             </div>
                                         </div>

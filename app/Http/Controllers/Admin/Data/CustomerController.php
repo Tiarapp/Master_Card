@@ -11,12 +11,18 @@ use App\Models\TCustModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class CustomerController extends Controller
+    class CustomerController extends Controller
 {
     public function syncronize()
     {
-        $cust = DB::connection('firebird')->table('TCustomer')->orderBy('Kode', 'asc')->take(5)->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->orderBy('Kode', 'asc')
+            // ->take(5)
+            ->get();
         $count = count($cust);  
+
+        // $tcust = TCustModel::get();
+
+        // dd($tcust);
         
         // return response()->json($cust);
         TCustModel::truncate(); 

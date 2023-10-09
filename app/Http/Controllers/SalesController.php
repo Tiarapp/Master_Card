@@ -44,7 +44,7 @@ class SalesController extends Controller
         $request->validate([
             'nama' => 'required',
             'alias' => 'required',
-            'hp' => 'required | numeric',
+            // 'hp' => 'required | numeric',
             'komisi' => 'required | numeric',
             'createdBy' => 'required',
             'branch' => 'required'
@@ -93,7 +93,7 @@ class SalesController extends Controller
         $request->validate([
             'nama' => 'required',
             'alias' => 'required',
-            'hp' => 'required|numeric',
+            // 'hp' => 'required|numeric',
             'komisi' => 'required|numeric',
             'lastUpdatedBy' => 'required',
             'branch' => 'required'

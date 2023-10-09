@@ -264,7 +264,7 @@ Route::middleware(['auth'])->group(function (){
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
-    Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
+    // Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::post('/admin/kontrak/store_realisasi', 'Kontrak_DController@store_realisasi')->name('kontrak.store_realisasi');
@@ -335,8 +335,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/produksi/hasilconv', 'HasilProduksiController@index_conv')->middleware(['auth'])->name('conv.hasilflexo');
     Route::get('/admin/produksi/inputhasilcorr/{id}', 'HasilProduksiController@index_detail_corr')->middleware(['auth'])->name('hasilcorr.edit');
     Route::get('/admin/produksi/inputhasilconv/{id}', 'HasilProduksiController@index_detail_conv')->middleware(['auth'])->name('hasilconv.edit');
-    Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
-    Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
+    // Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
+    // Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
     Route::post('/admin/produksi/hasil', 'HasilProduksiController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
     Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
 

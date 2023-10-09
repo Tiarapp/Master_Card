@@ -1029,7 +1029,7 @@
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
             
             getGramKontrak();
-            getLuasDC();
+            // getLuasDC();
             getKodeBarang()
         } );
     } );
@@ -1150,18 +1150,28 @@
         $lebar = document.getElementById("lebarSheet").value;
         $panjangbox = document.getElementById("panjangSheetBox").value;
         $lebarbox = document.getElementById("lebarSheetBox").value;
+        $tipebox = document.getElementById("tipebox").value;
 
-        $result = ($panjang * $lebar)/1000000;
+        if ($tipebox == 'DC') {
+            $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
 
         $out = $result/$result2;
 
         document.getElementById('outConv').value = $out.toFixed(0);
-        document.getElementById('luasSheet').value = $result.toFixed(2);
-        document.getElementById('luasSheetBox').value = $result2.toFixed(2);
-        document.getElementById('luasSheetProd').value = $result.toFixed(2);
-        document.getElementById('luasSheetBoxProd').value = $result2.toFixed(2);
-        getKodeBarang()
+        document.getElementById('luasSheet').value = $result.toFixed(3);
+        document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+        document.getElementById('luasSheetProd').value = $result.toFixed(3);
+        document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
+        getKodeBarang();
+        } else { 
+            $result = ($panjang * $lebar)/1000000;
+            $result2 = ($panjangbox * $lebarbox)/1000000;
+
+            $out = $result/$result2;
+            document.getElementById('outConv').value = $out.toFixed(0); 
+            getKodeBarang();
+        }
     }
 
     function getGramProduksi(){
