@@ -23,12 +23,22 @@ class OpiPPICController extends Controller
         if ($opi == NULL) {
             return response()->json(['data' => []]);
         }elseif (!empty($request->mulai) && !empty($request->end)) {
-            if ($request->mulai == $request->end) {
-                $filter = Opi_M::opi()->where('opi_m.tglKirimDt', 'LIKE', '%'.$request->mulai.'%' )->get();
-                return response()->json([ 'data' => $filter ]);
+            if (empty($request->cust)) {
+                if ($request->mulai == $request->end) {
+                    $filter = Opi_M::opi()->where('opi_m.tglKirimDt', 'LIKE', '%'.$request->mulai.'%' )->get();
+                    return response()->json([ 'data' => $filter ]);
+                } else {
+                    $filter = Opi_M::opi()->whereBetween('opi_m.tglKirimDt', [$request->mulai, $request->end])
+                        ->get();
+                    return response()->json([ 'data' => $filter ]);
+                }
             } else {
-                $filter = Opi_M::opi()->whereBetween('opi_m.tglKirimDt', [$request->mulai, $request->end])->get();
-                return response()->json([ 'data' => $filter ]);
+                $filter = Opi_M::opi()
+                        ->where('kontrak_m.customer_name', 'LIKE', '%'.$request->cust.'%')
+                        ->whereBetween('opi_m.tglKirimDt', [$request->mulai, $request->end])
+                        ->get();
+                    // dd($filter);
+                    return response()->json([ 'data' => $filter ]);
             }
         } else {
             return redirect('admin/ppic/opi')->with('success', "masukkan tanggal dengan benar!!!");

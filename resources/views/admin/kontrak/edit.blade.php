@@ -253,6 +253,10 @@
                                                         <option value="OUP Design, Warna, Nama Item">OUP Design, Warna, Nama Item</option>
                                                         <option value="OUP Customer, Design, Kualitas">OUP Customer, Design, Kualitas</option>
                                                         <option value="OUP Berat">OUP Berat</option>
+                                                        <option value="OUP Design & Koli">OUP Design & Koli</option>
+                                                        <option value="OUP Pisau & Design">OUP Pisau & Design</option>
+                                                        <option value="OUP Design & Kualitas Produksi">OUP Design & Kualitas Produksi</option>
+                                                        <option value="OUP Ukuran Tinggi">OUP Ukuran Tinggi</option>
                                                     </select>
                                                 </div>
                                             </div>

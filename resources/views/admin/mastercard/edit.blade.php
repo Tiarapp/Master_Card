@@ -1165,7 +1165,7 @@
         document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
         getKodeBarang();
         } else { 
-            $result = ($panjang * $lebar)/1000000;
+        $result = ($panjang * $lebar)/1000000;
             $result2 = ($panjangbox * $lebarbox)/1000000;
 
             $out = $result/$result2;

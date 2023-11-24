@@ -198,6 +198,12 @@
                     <p>OPI</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('ppic.opi.approve') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rekap OPI</p>
+                  </a>
+                </li>
               </ul>
             </li>
           @endif
@@ -279,12 +285,6 @@
                   <a href="{{ route('opi') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>OPI</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('ppic.opi.approve') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Approve OPI</p>
                   </a>
                 </li>
                 <li class="nav-item">

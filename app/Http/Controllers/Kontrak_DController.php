@@ -93,14 +93,16 @@ class Kontrak_DController extends Controller
                     
                     if ($kontrak->status == 4 && Auth::user()->divisi_id == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
+                        $cancel = route('kontrak.cancel', $kontrak->id);
                     } else if($kontrak->status == 4) {
                         $edit =  null;
+                        $cancel = null;
                     }
                     else {  
                         $edit =  route('kontrak.edit',$kontrak->id);
+                        $cancel = null;
                     }
                     
-                    $cancel = route('kontrak.cancel', $kontrak->id);
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
                     
@@ -574,7 +576,7 @@ class Kontrak_DController extends Controller
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+2,4, '0', STR_PAD_LEFT).$alphabet   ;
+                    $numb_opi = str_pad(count($lastOpi)+3,4, '0', STR_PAD_LEFT).$alphabet;
                 };
                 
                 

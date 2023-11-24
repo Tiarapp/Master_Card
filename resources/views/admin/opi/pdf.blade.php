@@ -2446,7 +2446,7 @@
         </tr>
         <tr class="row14">
           <td class="column0">&nbsp;</td>
-          <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi->keterangan }}</td>
+          <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi2->ketkontrak }}</td>
           <td class="column6 style12 null"></td>
           <td class="column7 style49 s">Isi Colly</td>
           <td class="column8 style30 s">{{ $opi->koli }} pcs</td>

@@ -73,10 +73,11 @@ class OpiController extends Controller
                              ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                              ->count();
             } else {
-                $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
+                $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
                             ->where('status_opi', 'NOT LIKE', "closed")
-                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
+                            ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                             ->orWhere('mc.kode', 'LIKE',"%{$search}%")
                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
@@ -380,7 +381,7 @@ class OpiController extends Controller
         ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
         ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
         ->where('opi_m.id', '=', $id)
-        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder')
+        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak')
         ->first();
 
         return view('admin.opi.pdf', compact('opi','opi2'));

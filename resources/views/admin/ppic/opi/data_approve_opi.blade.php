@@ -42,14 +42,37 @@
   <section class="content">
     <div class="container-fluid">
       <div class="form-group">
-        <div class="row">
-          <div class="col-md-6">
-              <input type="date" name="mulai" id="mulai" required>
-              <input type="date" name="end" id="end" required>
+          <div class="col-md-12">
+            <div class="row">
+            <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-2">
+                  <label for="">Tanggal Awal </label>
+                </div>
+                <div class="col-md-4">
+                  <input type="date" name="mulai" id="mulai" required>
+                </div>
+                <div class="col-md-2">
+                  <label for="">Tanggal Akhir </label>
+                </div>
+                <div class="col-md-4">
+                  <input type="date" name="end" id="end" required>
+                </div>
+              </div>
+            </div>
+            {{-- <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-2">
+                  <label for="">Customer </label>
+                </div>
+                <div class="col-md-4"> --}}
+                  <input type="hidden" name="cust" id="cust" required>
+                {{-- </div>
+              </div>
+            </div> --}}
               <button name="search" id="search"> Search </button>
-            {{-- </form> --}}
+            </div>
           </div>
-        </div>
       </div>
       <!-- Small boxes (Stat box) -->
 
@@ -65,10 +88,38 @@
               <th scope="col">Customer</th>
               <th scope="col">Item</th>
               <th scope="col">Qty Order</th>
-              <th scope="col">Action</th>
+              <th scope="col">Keterangan</th>
+              <th scope="col">PO Customer</th>
+              <th scope="col">MC</th>
+              <th scope="col">Revisi</th>
+              <th scope="col">Flute</th>
+              <th scope="col">Tipe Box</th>
+              <th scope="col">Panjang</th>
+              <th scope="col">Lebar</th>
+              <th scope="col">Out Converting</th>
+              <th scope="col">Tipe Order</th>
+              <th scope="col">Warna</th>
+              <th scope="col">joint</th>
+              <th scope="col">Jenis K. Atas</th>
+              <th scope="col">Kualitas Produksi I1</th>
+              <th scope="col">Kualitas Produksi I2</th>
+              <th scope="col">Kualitas Produksi I3</th>
+              <th scope="col">Kualitas Produksi I4</th>
+              <th scope="col">Kualitas Produksi I5</th>
+              <th scope="col">Kualitas Produksi K/M Bawah</th>
+              <th scope="col">Wax</th>
+              <th scope="col">Gram</th>
+              <th scope="col">Toleransi (lebih)</th>
+              <th scope="col">Toleransi (kurang)</th>
+              <th scope="col">Box P</th>
+              <th scope="col">Box L</th>
+              <th scope="col">Box T</th>
+              <th scope="col">Koli</th>
+              <th scope="col">Tipe Crease</th>
+              <th scope="col">Bungkus</th>
             </tr>
           </thead>
-          <tbody>
+          {{-- <tbody>
             @foreach ($opi as $data)
             <tr>
                 <td>{{ $data->NoOPI }}</td>
@@ -87,7 +138,7 @@
                 </td>
             </tr>
               @endforeach
-          </tbody>
+          </tbody> --}}
         </table>
       </div>
       <!-- /.row -->
@@ -104,6 +155,7 @@
       $('#search').click(function() {
         var mulai = document.getElementById("mulai").value;
         var end = document.getElementById("end").value;
+        var cust = document.getElementById("cust").value;
 
         if (mulai !== '' && end !== '') {
           $('#data_opi').DataTable({
@@ -112,7 +164,7 @@
             "processing":true,
             "serverSide":true,
             "ajax":{
-              "url": "../ppic/opidata?mulai="+mulai+"&end="+end,
+              "url": "../ppic/opidata?mulai="+mulai+"&end="+end+"&cust="+cust,
               "dataType": "json",
               "type": "GET",
               "data":{_token: "{{ csrf_token() }}"}

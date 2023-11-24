@@ -60,7 +60,7 @@ use Illuminate\Support\Facades\DB;
     public function getBBM(Request $request) {
         
         // dd($request->all());
-        $returprod = DB::connection('firebird4')->table('TDetReturProd')
+        $returprod = DB::connection('firebird3')->table('TDetReturProd')
         ->leftJoin('TReturProd', 'TDetReturProd.NoBukti', '=', 'TReturProd.NoBukti')
         ->whereBetween('TReturProd.TglRetur', [$request->mulai, $request->selesai])->get();
         
@@ -70,7 +70,7 @@ use Illuminate\Support\Facades\DB;
             ->first();
             
             $detbbm->BrtRew = $retur->QtyS;
-            $detbbm->NOBBK = '';
+            $detbbm->NOBBK = null;
             $detbbm->save();
             
         }
@@ -80,12 +80,14 @@ use Illuminate\Support\Facades\DB;
     
     public function getStok(){
 
-        $detbbm = DB::connection('firebird4')->table('TDet2BBM')
+        $detbbm = DB::connection('firebird3')->table('TDet2BBM')
         ->leftJoin('TBBMConv', 'NomerBBM', '=', 'TBBMConv.NoBukti')
         ->leftJoin('TBarang', 'TDet2BBM.KodeBrg', '=', 'TBarang.KodeBrg')
         ->leftJoin('TJenisProd', 'TBarang.JenisProd', '=', 'TJenisProd.Kode')
         ->leftJoin('TKelompokBrg', 'TBarang.KdKelBrg', '=', 'TKelompokBrg.KodeKel')
-        ->where('NOBBK', '=', '')->get();
+        ->where('NOBBK', '=', null)->get();
+
+        // dd($detbbm);
 
         dumrolModel::truncate();
 
