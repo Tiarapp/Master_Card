@@ -312,7 +312,7 @@
                                             <input type="hidden" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
                                             <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" >
                                         </div>
-                                    </div>
+                                </div>
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Berat Sheet Box Produksi</label>
@@ -383,12 +383,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row berat-roll">
                                         <div class="col-md-2">
                                             <label class="control-label">Berat Roll</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line berat-roll" name="berat_roll" id="berat_roll">
+                                            <input type="text" class="form-control txt_line qty-roll" name="berat_roll" id="berat_roll">
+                                        </div>
+                                    </div>
+                                    <div class="row text">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Text</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="text_block" id="text_block">
+                                                <option value='Non Block'>Non Block</option>
+                                                <option value='Block'>Block</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -656,7 +667,7 @@
                                                 <option value='25'>25 Koli</option>
                                                 <option value='50'>50 Koli</option>
                                                 <option value='60'>60 Koli</option>
-                                                <option value='00'>100 Koli</option>
+                                                <option value='100'>100 Koli</option>
                                             </select>
                                         </div>
                                         /Koli
@@ -748,7 +759,7 @@
         }
     });
 
-    $(document).on("keyup", ".berat-roll", function() {
+    $(document).on("keyup", ".qty-roll", function() {
         if (document.getElementById("tipebox").value == "SF") {
             berat = $(this).val();
             lebar = document.getElementById("lebarSheet").value;
@@ -832,7 +843,7 @@
         }
 
         if (tipemc == 'F' || tipebox == 'R') {  
-            kodebarang = tujuan+tipemc+"E."+flute+".01.W01"."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
             kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
         }
@@ -909,8 +920,8 @@
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
-                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
-                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
+                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000;
+                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000;
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
                 // console.log(luas);
@@ -938,6 +949,8 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
+                
+                getKodeBarang();
             }
         } );
         
@@ -990,7 +1003,7 @@
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
             
             getGramKontrak();
-            getLuasDC();
+            // getLuasDC();
         } );
     } );
     
@@ -1049,14 +1062,14 @@
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             
-            document.getElementById('gramSheetCorrKontrak').value = result;
-            document.getElementById('gramSheetCorrKontrak2').value = result;
-            document.getElementById('gramSheetBoxKontrak').value = result2;
-            document.getElementById('gramSheetBoxKontrak2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             
         } else
         if (flutenama == 'CF') {
@@ -1077,25 +1090,25 @@
             }
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-            document.getElementById('gramSheetCorrKontrak').value = result;
-            document.getElementById('gramSheetCorrKontrak2').value = result;
-            document.getElementById('gramSheetBoxKontrak').value = result2;
-            document.getElementById('gramSheetBoxKontrak2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             
         } else {
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
-            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
-            document.getElementById('gramSheetCorrKontrak').value = result;
-            document.getElementById('gramSheetCorrKontrak2').value = result2;
-            document.getElementById('gramSheetBoxKontrak').value = result;
-            document.getElementById('gramSheetBoxKontrak2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas;
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
         }
         
         return result;
@@ -1106,17 +1119,28 @@
         $lebar = document.getElementById("lebarSheet").value;
         $panjangbox = document.getElementById("panjangSheetBox").value;
         $lebarbox = document.getElementById("lebarSheetBox").value;
+        $tipebox = document.getElementById("tipebox").value;
 
-        $result = ($panjang * $lebar)/1000000;
+        if ($tipebox == 'DC') {
+            $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
 
         $out = $result/$result2;
 
         document.getElementById('outConv').value = $out.toFixed(0);
         document.getElementById('luasSheet').value = $result.toFixed(3);
-        document.getElementById('luasSheetProd').value = $result.toFixed(3);
         document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+        document.getElementById('luasSheetProd').value = $result.toFixed(3);
         document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
+        getKodeBarang();
+        } else {
+            $result = ($panjang * $lebar)/1000000;
+            $result2 = ($panjangbox * $lebarbox)/1000000;
+
+            $out = $result/$result2;
+            document.getElementById('outConv').value = $out.toFixed(0); 
+            getKodeBarang();
+        }
     }
 
     function getGramProduksi(){
@@ -1151,14 +1175,14 @@
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
-            document.getElementById('gramSheetCorrProduksi').value = result;
-            document.getElementById('gramSheetBoxProduksi').value = result2;
-            document.getElementById('gramSheetCorrProduksi2').value = result;
-            document.getElementById('gramSheetBoxProduksi2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
         } else
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
@@ -1178,29 +1202,29 @@
             }
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2) ;
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
+            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
             
-            document.getElementById('gramSheetCorrProduksi').value = result;
-            document.getElementById('gramSheetBoxProduksi').value = result2;
-            document.getElementById('gramSheetCorrProduksi2').value = result;
-            document.getElementById('gramSheetBoxProduksi2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             
         } else {
 
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(2);
-            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(2);
+            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
 
             
-            document.getElementById('gramSheetCorrProduksi').value = result;
-            document.getElementById('gramSheetBoxProduksi').value = result2;
-            document.getElementById('gramSheetCorrProduksi2').value = result;
-            document.getElementById('gramSheetBoxProduksi2').value = result2;
-            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(2);
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
         }
     }
     

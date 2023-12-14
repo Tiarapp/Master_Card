@@ -35,6 +35,7 @@ class OpiController extends Controller
         {            
            if (Auth::user()->divisi_id == 5) {
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+                ->where('status_opi', '!=', "closed")
                 ->offset($start)
                 ->limit(100)
                 ->orderBy('NoOPI')
@@ -55,6 +56,7 @@ class OpiController extends Controller
 
             if (Auth::user()->divisi_id == 5) {
                 $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+                            ->where('status_opi', 'NOT LIKE', "closed")
                             ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
@@ -71,9 +73,11 @@ class OpiController extends Controller
                              ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                              ->count();
             } else {
-                $opi =  Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
-                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
+                $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+                            ->where('status_opi', 'NOT LIKE', "closed")
+                            ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
+                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
                             ->orWhere('mc.kode', 'LIKE',"%{$search}%")
                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
@@ -99,6 +103,7 @@ class OpiController extends Controller
                 $show =  route('opi.print',$opi->id);
                 $edit =  route('opi.edit',$opi->id);
                 $cancel = route('opi.cancel', $opi->id);
+                $closed = route('opi.closed', $opi->id);
 
                 $cek_opi = strpos($opi->nama,"CANCEL");
 
@@ -109,6 +114,7 @@ class OpiController extends Controller
                     if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2) {
                            
                         $nestedData['action'] = "
+                        <a href='{$closed}' title='Closed' class='btn btn-outline-warning' type='button'><i class='fa fa-lock' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
                         <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
                         <a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-print' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
                         ";
@@ -307,6 +313,28 @@ class OpiController extends Controller
         
     }
 
+    public function closed($id)
+    {
+        $opi = Opi_M::find($id);
+        $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
+
+        // dd($opi);
+
+        $opi->status_opi = "closed";
+        $opi->lastUpdatedBy = Auth::user()->name;
+        
+        // $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
+
+        $opi->jumlahOrder = 0;
+
+        $opi->save();
+        // $kontrakd->save();
+
+        return redirect('admin/opi');
+
+        
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -345,17 +373,16 @@ class OpiController extends Controller
             ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
             ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
             ->where('opi_m.id', '=', $id)
-            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid' )
+            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid', 'mc.lebarSheet', 'mc.panjangSheet' )
             ->first();
+
 
         $opi2 = DB::table('opi_m')
         ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
         ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
         ->where('opi_m.id', '=', $id)
-        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder' )
+        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak')
         ->first();
-
-        // dd($opi);
 
         return view('admin.opi.pdf', compact('opi','opi2'));
     }

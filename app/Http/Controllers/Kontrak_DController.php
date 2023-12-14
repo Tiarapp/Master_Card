@@ -69,6 +69,8 @@ class Kontrak_DController extends Controller
                 $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
                 ->orWhere('kode', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
+                ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
+                ->orWhere('sales', 'LIKE',"%{$search}%")
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('id', 'desc')
@@ -77,6 +79,8 @@ class Kontrak_DController extends Controller
                 $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                 ->orWhere('customer_name', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
+                ->orWhere('tipeOrder', 'LIKE',"%{$search}%")
+                ->orWhere('sales', 'LIKE',"%{$search}%")
                 ->count();
                 // dd($opi);
             }
@@ -86,18 +90,23 @@ class Kontrak_DController extends Controller
                 foreach ($kontrak as $kontrak)
                 {
                     $show =  route('kontrak.pdfb1',$kontrak->id);
-
-                    if ($kontrak->status == 4) {
-                        $edit =  null;
-                    } else {  
+                    
+                    if ($kontrak->status == 4 && Auth::user()->divisi_id == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
+                        $cancel = route('kontrak.cancel', $kontrak->id);
+                    } else if($kontrak->status == 4) {
+                        $edit =  null;
+                        $cancel = null;
                     }
-
-                    $cancel = route('kontrak.cancel', $kontrak->id);
+                    else {  
+                        $edit =  route('kontrak.edit',$kontrak->id);
+                        $cancel = null;
+                    }
+                    
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
-
-                    if($kontrak->status == 2){
+                    
+                    if($kontrak->status == 2 ){
                         $nestedData['id'] = "<p style='color:red'>".$kontrak->id."</p>";
                         $nestedData['kontrak'] = "<p style='color:red'>".$kontrak->kode."</p>";
                         $nestedData['cust'] = "<p style='color:red'>".$kontrak->customer_name."</p>";
@@ -109,6 +118,7 @@ class Kontrak_DController extends Controller
                         $nestedData['sales'] = "<p style='color:red'>".$kontrak->sales."</p>";
                         $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
                         $nestedData['keterangan'] = "<p style='color:red'>".$kontrak->keterangan."</p>";
+                        $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -128,14 +138,13 @@ class Kontrak_DController extends Controller
                         }
                         
                         $nestedData['realisasi'] = $dataRealisasi;
-                        $nestedData['pcsKontrak'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['pcsKontrak'],0,",",".")."</p>";
-                        $nestedData['kgKontrak'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['kgKontrak'],2,",",".")."</p>";
+                        $nestedData['pcsKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
+                        $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
-                        $sisakontrak = number_format($kontrak->kontrak_d['pcsKontrak'] - $terkirim,0,",",".");
-
-                        $nestedData['sisaKirim'] = "<p style='color:red'>".number_format($sisakontrak,0,",",".")."</p>";
-                        $nestedData['rp_pcs'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_pcs'],2,",",".")."</p>";
-                        $nestedData['rp_kg'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_kg'],2,",",".")."</p>";
+                        $sisakontrak = $kontrak->kontrak_d['pcsSisaKontrak'];
+                        
+                        $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
+                        $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
                         
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
@@ -148,6 +157,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
+                        $nestedData['brt_kualitas'] = "<p style='color:red'>".$mc->gramSheetBoxKontrak."</p>" ;
                         $nestedData['nomc'] = "<p style='color:red'>".$mcKode."</p>";
                         $nestedData['kodeBarang'] = "<p style='color:red'>".$mc->kodeBarang."</p>";
                         $nestedData['namaBarang'] = "<p style='color:red'>".$mc->namaBarang."</p>";
@@ -157,6 +167,13 @@ class Kontrak_DController extends Controller
                         $nestedData['b_expedisi'] = "<p style='color:red'>".$kontrak->biaya_exp."</p>";
                         $nestedData['b_glue'] = "<p style='color:red'>".$kontrak->biaya_glue."</p>";
                         $nestedData['b_wax'] = "<p style='color:red'>".$kontrak->biaya_wax."</p>";
+                        if ($mc->tipeBox == 'SF') {
+                            $nestedData['rp_kg'] = "<p style='color:red'>".number_format($kontrak->kontrak_d['harga_pcs'],2,',','.')."</p>";
+                        } else {               
+                            $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
+
+                            $nestedData['rp_kg'] = "<p style='color:red'>".number_format($rpkg,2,',','.')."</p>";
+                        }
                     } else {                    
                         $nestedData['id'] = $kontrak->id;
                         $nestedData['kontrak'] = $kontrak->kode;
@@ -169,6 +186,7 @@ class Kontrak_DController extends Controller
                         $nestedData['sales'] = $kontrak->sales;
                         $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                         $nestedData['keterangan'] = $kontrak->keterangan;
+                        $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -176,7 +194,7 @@ class Kontrak_DController extends Controller
                         foreach ($kontrak->realisasi as $realisasi) {
                             
                             $dataRealisasi[] = 
-                            "&emsp;<li><span class='glyphicon glyphicon-list'>".number_format($realisasi->qty_kirim,0,",",".")." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
+                            "&emsp;<li><span class='glyphicon glyphicon-list'>".$realisasi->qty_kirim." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
                             
                             $terkirim = $terkirim + $realisasi->qty_kirim;
                         }
@@ -188,12 +206,12 @@ class Kontrak_DController extends Controller
                         }
                         
                         $nestedData['realisasi'] = $dataRealisasi;
-                        $nestedData['pcsKontrak'] = number_format($kontrak->kontrak_d['pcsKontrak'],0,",",".");
-                        $nestedData['kgKontrak'] = number_format($kontrak->kontrak_d['kgKontrak'],2,",",".");
+                        $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
+                        $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
                         
-                        $nestedData['sisaKirim'] = number_format($kontrak->kontrak_d['pcsKontrak'] - $terkirim,0,",",".");
-                        $nestedData['rp_pcs'] = number_format($kontrak->kontrak_d['harga_pcs'],2,",",".");
-                        $nestedData['rp_kg'] = number_format($kontrak->kontrak_d['harga_kg'],2,",",".");
+                        $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+                        $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
+                        $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
                         
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
@@ -206,6 +224,7 @@ class Kontrak_DController extends Controller
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
                         
+                        $nestedData['brt_kualitas'] = $mc->gramSheetBoxKontrak;
                         $nestedData['nomc'] = $mcKode;
                         $nestedData['kodeBarang'] = $mc->kodeBarang;
                         $nestedData['namaBarang'] = $mc->namaBarang;
@@ -215,6 +234,13 @@ class Kontrak_DController extends Controller
                         $nestedData['b_expedisi'] = $kontrak->biaya_exp;
                         $nestedData['b_glue'] = $kontrak->biaya_glue;
                         $nestedData['b_wax'] = $kontrak->biaya_wax;
+                        if ($mc->tipeBox == 'SF') {
+                            $nestedData['rp_kg'] = number_format($kontrak->kontrak_d['harga_pcs'],2,',','.');
+                        } else {                            
+                            $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
+
+                            $nestedData['rp_kg'] = number_format($rpkg,2,',','.');
+                        }
                     }
                     
                     
@@ -262,16 +288,9 @@ class Kontrak_DController extends Controller
             ->where('mc.status', '=', '1')
             ->get();
             $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
-            
-            // menampilkan halaman form input dengan passing data dari query diatas
-            
-            // $tgl1 = '17-02-2021 12:00:00';
-            // $tgl2 = '20-02-2021 12:30:00';
-            
-            // $selisih = (strtotime($tgl2) -  strtotime($tgl1))/60;
-            // // $hari = $selisih/(60*60*24);
-            // var_dump($selisih);
+            $sales = DB::table('sales_m')
+            ->orderBy('nama', 'Asc')
+            ->get();
             
             return view('admin.kontrak.create', compact(
                 'mc', 'top', 'cust', 'sales'
@@ -312,7 +331,7 @@ class Kontrak_DController extends Controller
             
             if (strpos($fromDate, $start) !== false ) {
                 $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$fromDate, $tillDate])->get();
-                $count = count($result)+2;
+                $count = count($result)+1;
                 if ($nobukti === $nobukti) {
                     $nobukti = str_replace('~YYYY~', date('Y'), $nobukti);
                     $nobukti = str_replace('~MM~', date('m'), $nobukti);                
@@ -429,7 +448,9 @@ class Kontrak_DController extends Controller
             ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease','box.namaBarang as box')
             ->get();
             $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
+            $sales = DB::table('sales_m')
+            ->orderBy('nama', 'Asc')
+            ->get();
             // End Dropdown
             
             
@@ -518,7 +539,7 @@ class Kontrak_DController extends Controller
             ->first();
             
             $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
-                ->get();
+            ->get();
             // End tampilkan untuk edit
             
             
@@ -548,16 +569,16 @@ class Kontrak_DController extends Controller
             
             if ($request->tglKirim != null) {
                 $lastOpi = Opi_M::where('periode', '=', $tahun) 
-                            ->first();
+                ->first();
                 
                 if($lastOpi == null){
                     $numb_opi = '0001'.$alphabet;
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+2,4, '0', STR_PAD_LEFT).$alphabet   ;
+                    $numb_opi = str_pad(count($lastOpi)+3,4, '0', STR_PAD_LEFT).$alphabet;
                 };
-
+                
                 
                 $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
                 
@@ -881,9 +902,9 @@ class Kontrak_DController extends Controller
             $dt = DB::table('dt')
             ->where('kontrak_m_id', '=', $id)
             ->get();
-
+            
             $date = date_create($kontrak_M->tglKontrak);
-
+            
             $count = count($kontrak_D);
             
             
@@ -907,9 +928,9 @@ class Kontrak_DController extends Controller
             $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
             
             $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
-            $sj = DB::connection('firebird2')->table('TDetSJ')
-            ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
-            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
+            // $sj = DB::connection('firebird2')->table('TDetSJ')
+            // ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
+            // ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
             
             $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();
@@ -923,10 +944,14 @@ class Kontrak_DController extends Controller
         
         public function store_realisasi(Request $request)
         {
+            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $request->idkontrakm)->first();
+
+            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
             RealisasiKirim::create([
                 'kontrak_m_id'  => $request->idkontrakm,
                 'tanggal_kirim' => $request->tglKirim,
                 'qty_kirim'     => $request->jumlahKirim,
+                'kg_kirim'      => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
                 'createdBy'     => Auth::user()->name
             ]);
             
@@ -936,22 +961,42 @@ class Kontrak_DController extends Controller
         public function edit_realisasi(Request $request, $id)
         {
             $kirim = RealisasiKirim::findOrFail($id);
+
+            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
+            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
             
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
-                'qty_kirim' => $request->jumlahKirim
+                'qty_kirim' => $request->jumlahKirim,
+                'kg_kirim'      => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
             ]);
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
             
         }
-
+        
         public function cancel_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
             $kontrak->status = 2;
-
+            
             $kontrak->save();
             return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
+        }
+        
+        public function recall($id) 
+        {
+            $order = 0;
+            $kontrak = Kontrak_D::where("kontrak_m_id", "=", $id)->first();
+            $opi = Opi_M::where("kontrak_m_id", "=", $id)->get();
+            
+            foreach ($opi as $opi) {
+                $order = $order + $opi->jumlahOrder;
+            }
+            
+            $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $order ;
+            $kontrak->save();
+            
+            return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');
         }
     }

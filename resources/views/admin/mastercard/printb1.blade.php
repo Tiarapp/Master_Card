@@ -48,7 +48,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td colspan=2 align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000">FR-PPC-01</font></b></td>
+		<td colspan=2 align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000">FR-PPIC-01</font></b></td>
 		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000"><br></font></b></td>
 	</tr>
 	<tr>
@@ -163,7 +163,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">mm</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>OUT</font></b></td>
-		<td align="center" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF" size=2>{{ $mc->outConv }}</font></td>
+		<td align="center" valign=middle sdval="4.24448217317487" sdnum="1033;0;0.00"><font face="Calibri" color="#BFBFBF" size=2>{{ number_format(2500/$mc->lebarSheet,0,",",".") }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -175,7 +175,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000">m</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td colspan=2 align="right" valign=middle><b><font face="Calibri" color="#000000" size=2>BERAT KUALITAS PRODUKSI</font></b></td>
-		<td align="center" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ $mc->brt_kualitas }}</font></td>
+		<td align="center" valign=middle sdval="0.41" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->brt_kualitas,3,",",".") }}   /M2</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -188,7 +188,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="right" valign=middle><b><font face="Calibri" color="#000000" size=1>BERAT / BOX</font></b></td>
-		<td align="center" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->gramSheetBoxProduksi2,2,",",".")  }}</font></td>
+		<td align="center" valign=middle sdval="0.38" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->gramSheetBoxKontrak2,2,",",".")  }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>

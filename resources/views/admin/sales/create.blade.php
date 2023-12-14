@@ -17,7 +17,7 @@
                         <strong>Error!</strong> 
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li></li>
+                                <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>

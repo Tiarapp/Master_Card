@@ -274,6 +274,54 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
     
         var json = (JSON.parse(data));
 
+        if (json.tipeBox == 'DC') {
+            toleransi = 2;
+        } else if (json.tipeBox == 'B1') {
+            toleransi = 5;
+        } else {
+            toleransi = 0;
+        }
+
+        if (json.gramKertasAtas == null) {
+            kertas_atas = '';
+            gram_atas = 0;
+        } else {
+            gram_atas = json.gramKertasAtas;
+            kertas_atas = json.kertasMcAtas;
+        }
+        
+        if (json.gramKertasflute1 == null) {
+            kertas_bf = '';
+            gram_bf = 0;
+        } else {
+            kertas_bf = json.kertasMcflute1;
+            gram_bf = json.gramKertasflute1;
+        }
+
+        if (json.gramKertastengah == null) {
+            kertas_tengah = '';
+            gram_tengah = 0;
+        } else {
+            kertas_tengah = json.kertasMctengah;
+            gram_tengah = json.gramKertastengah;
+        }
+
+        if (json.gramKertasflute2 == null) {
+            kertas_cf = '';
+            gram_cf = 0;
+        } else {
+            kertas_cf = json.kertasMcflute2;
+            gram_cf = json.gramKertasflute2;
+        }
+
+        if (json.gramKertasbawah == null) {
+            kertas_bawah = '';
+            gram_bawah = 0;
+        } else {
+            kertas_bawah = json.kertasMcbawah;
+            gram_bawah = json.gramKertasbawah;
+        }
+
         var html = '';
                 
         html += "<tr class='plan-list'>";
@@ -290,7 +338,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>"+ json.namaBarang +"</td>";
             html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
+                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' >";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 lebarSheet' name='lebar["+ json.opiid +"]' value='"+ json.lebarSheet +"' readonly>";
@@ -311,10 +359,10 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12 outconv' name='outConv["+ json.opiid +"]' value='"+ json.outConv +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='lebar-roll' name='lebarRoll["+ json.opiid +"]' value='' readonly>";
+                html += "<input type='text' class='lebar-roll' name='lebarRoll["+ json.opiid +"]' value=''>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='' readonly>";
+                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value=''>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='trim' name='trim["+ json.opiid +"]' value='' readonly>";
@@ -325,55 +373,55 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_atas["+ json.opiid +"]' value='"+ json.kertasMcAtas +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_atas["+ json.opiid +"]' value='"+ kertas_atas +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_atas' type='text' name='gram_atas["+ json.opiid +"]' value='"+ json.gramKertasAtas +"'>";
+                        html += "<input class='col-md-12 gram_atas' type='text' name='gram_atas["+ json.opiid +"]' value='"+ gram_atas +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_bf["+ json.opiid +"]' value='"+ json.kertasMcflute1 +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bf["+ json.opiid +"]' value='"+ kertas_bf +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_bf' type='text' name='gram_bf["+ json.opiid +"]' value='"+ json.gramKertasflute1 +"'>";
+                        html += "<input class='col-md-12 gram_bf' type='text' name='gram_bf["+ json.opiid +"]' value='"+ gram_bf +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_tengah["+ json.opiid +"]' value='"+ json.kertasMctengah +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_tengah["+ json.opiid +"]' value='"+ kertas_tengah +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_tengah' type='text' name='gram_tengah["+ json.opiid +"]' value='"+ json.gramKertastengah +"'>";
+                        html += "<input class='col-md-12 gram_tengah' type='text' name='gram_tengah["+ json.opiid +"]' value='"+ gram_tengah +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_cf["+ json.opiid +"]' value='"+ json.kertasMcflute2 +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_cf["+ json.opiid +"]' value='"+ kertas_cf +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_cf' type='text' name='gram_cf["+ json.opiid +"]' value='"+ json.gramKertasflute2 +"'>";
+                        html += "<input class='col-md-12 gram_cf' type='text' name='gram_cf["+ json.opiid +"]' value='"+ gram_cf +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_bawah["+ json.opiid +"]' value='"+ json.kertasMcbawah +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bawah["+ json.opiid +"]' value='"+ kertas_bawah +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_bawah' type='text' name='gram_bawah["+ json.opiid +"]' value='"+ json.gramKertasbawah +"'>";
+                        html += "<input class='col-md-12 gram_bawah' type='text' name='gram_bawah["+ json.opiid +"]' value='"+ gram_bawah +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.toleransiLebih +"' readonly>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";
@@ -434,32 +482,21 @@ $(document).on("keyup", ".out-corr", function(e) {
 
     qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
     cop = parseInt(qtyPlan)/ parseInt(outcorr);
-    console.log(cop);
     trim = (UkRoll - (lebar * outcorr)) / UkRoll;
 
     rmorder = (panjang * cop) / 1000;
     tonase = qtyPlan * gram;
 
-    if (gram_atas != 'null') {
-        KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
-        $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    } 
-    if (gram_bf != 'null') {
-        KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
-        $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
-    } 
-    if (gram_tengah != 'null') {
-        KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
-        $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    } 
-    if (gram_cf != 'null') {
-        KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
-        $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
-    } 
-    if (gram_bawah != 'null') {
-        KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
-        $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
-    } 
+    KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
 
     $(this).closest(".plan-list").find(".plan").val(qtyPlan);
     $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
@@ -468,7 +505,122 @@ $(document).on("keyup", ".out-corr", function(e) {
     $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
 
+})
 
+$(document).on("keyup", ".panjangSheet", function(e) {
+    panjang = $(this).val();
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    outconv = $(this).closest(".plan-list").find(".outconv").val();
+    outcorr = $(this).closest(".plan-list").find(".out-corr").val();
+    UkRoll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    order = $(this).closest(".plan-list").find(".jml-order").val();
+    toleransi = $(this).closest(".plan-list").find(".toleransi").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    cop = $(this).closest(".plan-list").find(".cop").val();
+    gram = $(this).closest(".plan-list").find(".gram-box").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+
+
+    if (gram_atas == 'null') {
+        gram_atas = 0;
+    }
+    if (gram_bf == 'null') {
+        gram_bf = 0;
+    }
+    if (gram_tengah == 'null') {
+        gram_tengah = 0;
+    }
+    if (gram_cf == 'null') {
+        gram_cf = 0;
+    }
+
+    if (plan == 0) {
+        qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    } else {
+        qtyPlan = $(this).closest(".plan-list").find(".plan").val();
+    }
+
+    if (outcorr == '') {
+        outcorr = 0;
+    }
+    if (UkRoll == '') {
+        if (tipebox = 'DC') {
+            UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
+        } else {
+            UkRoll =Math.ceil(((outcorr*lebar)+30)/50)*50;
+        }
+    }
+
+    if (cop == '') {
+        cop = parseInt(qtyPlan)/ parseInt(outcorr);
+    } else {
+        cop = parseInt(cop);
+    }
+
+    brt_kualitas = (parseInt(gram_atas) + (parseInt(gram_bf) * 1.36) + parseInt(gram_tengah) + (parseInt(gram_cf) * 1.46) + parseInt(gram_bawah))/1000;
+    luas = parseInt(panjang) * parseInt(lebar) / 1000000;
+    gram = brt_kualitas * luas;
+
+    tonase = qtyPlan * gram.toFixed(2) ;
+
+    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
+    rmorder = (panjang * cop) / 1000;
+
+    KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+        
+    $(this).closest(".plan-list").find(".gram-box").val(gram.toFixed(2))
+    $(this).closest(".plan-list").find(".plan").val(qtyPlan);
+    $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
+});
+
+$(document).on("keyup", ".lebar-roll", function(e) {
+    roll = $(this).val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    outcorr = $(this).closest(".plan-list").find(".out-corr").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    gram = $(this).closest(".plan-list").find(".gram-box").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    
+    if (outcorr == '') {
+        outcorr = 0;
+    }
+
+    trim = (roll - (lebar * outcorr)) / roll;
+
+    KAtas = rmorder*(roll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.34;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    KTengah = rmorder*(roll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.42;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    KBawah = rmorder*(roll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+
+    
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
 })
 
 $(document).on("click", ".remove-plan", function(e) {

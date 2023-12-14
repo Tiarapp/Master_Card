@@ -2292,7 +2292,7 @@
         <tr class="row1">
           <td class="column0">&nbsp;</td>
           <td class="column1 style71 s style44" colspan="9">&nbsp;&nbsp;&nbsp;Order Produksi Internal</td>
-          <td class="column10 style69 s">FR-PPC-02</td>
+          <td class="column10 style69 s">FR-PPIC-02</td>
           <td class="column11 style5 null"></td>
         </tr>
         <tr class="row2">
@@ -2418,8 +2418,17 @@
           <td class="column3 style33 n style34" colspan="4">{{ date('d F Y', strtotime($opi->tglKirimDt)) }}</td>
           <td class="column7 style49 s">Out</td>
           <td class="column8 style54 null">{{ $opi->outConv }}</td>
-          <td class="column9 style59 null"></td>
-          <td class="column10 style59 null"></td>
+          <td class="column9 style59 null">RM :</td>
+          @php
+
+            $qty = ($opi->jumlahOrder) / $opi->outConv ; 
+            // dd($qty);
+            $outCorr = floor(2500/$opi->lebarSheet);
+            $cop = $qty / $outCorr;
+
+            $rm = ($opi->panjangSheet * $cop) / 1000;
+          @endphp
+          <td class="column10 style59 null">{{ floor($rm) }}</td>
           <td class="column11 style35 null"></td>
         </tr>
         <tr class="row13">
@@ -2430,14 +2439,14 @@
           <td class="column5 style8 null"></td>
           <td class="column6 style8 null"></td>
           <td class="column7 style49 s">Berat Box</td>
-          <td class="column8 style60 s">{{ $opi->gram }} Kg</td>
+          <td class="column8 style60 s">{{ number_format($opi->gram,2,",",".") }} Kg</td>
           <td class="column9 style35 null"></td>
           <td class="column10 style35 null"></td>
           <td class="column11 style30 null"></td>
         </tr>
         <tr class="row14">
           <td class="column0">&nbsp;</td>
-          <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi->keterangan }}</td>
+          <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi2->ketkontrak }}</td>
           <td class="column6 style12 null"></td>
           <td class="column7 style49 s">Isi Colly</td>
           <td class="column8 style30 s">{{ $opi->koli }} pcs</td>

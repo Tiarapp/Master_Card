@@ -209,7 +209,7 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="1589" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['panjang'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan1[$i]['flute'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="1" "><b><font size=3 color="#000000">{{ $plan1[$i]['out_flexo'] }}</font></b></td>
-				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5505.15" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['qtyOrder'],0,',','.') }}</font></b></td>
+				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5505.15" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['jml_order'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2" "><b><font size=3 color="#000000">{{ $plan1[$i]['out_corr'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2000" "><b><font size=2 color="#000000">{{ number_format($plan1[$i]['ukuran_roll'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="42" "><font size=3 color="#000000">{{ round($plan1[$i]['ukuran_roll']*$plan1[$i]['trim_waste']),0 }}</font></td>
@@ -233,16 +233,20 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan1[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan1[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+				if ($plan1[$i]['dt_perubahan'] != null) {
+					$date=date_create($plan1[$i]['dt_perubahan']);
+					echo date_format($date,"d M");
+				} else {
+					echo '';
+				}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan1[$i]['mckode'] }}</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><b><font size=2 color="#000000">{{ $plan1[$i]['barang'] }}</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=3 color="#000000">{{ $plan1[$i]['tipebox'] }}</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['order'],0,',','.') }}</font></b></td>
-				<td style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['order'],0,',','.') }}</font></b></td>
-				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['order']/$plan1[$i]['out_corr'],0,',','.') }}</font></b></td>
+				<td style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['jml_order'],0,',','.') }}</font></b></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['jml_order']/$plan1[$i]['out_corr'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="1749.53667" "><b><font size=2 color="#000000">{{ number_format($plan1[$i]['kebutuhan_kertasAtas'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($plan1[$i]['kebutuhan_kertasFlute1'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($plan1[$i]['kebutuhan_kertasTengah'],0,',','.') }}</font></b></td>
@@ -410,6 +414,8 @@
 		</thead>
 		<tbody>
 			<?php
+				if ($plan2 != null) {
+					
 				for ($i=0; $i < count($plan2) ; $i++) { 
 					# code...
 			?>
@@ -452,8 +458,12 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan2[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan2[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+					if ($plan2[$i]['dt_perubahan'] != null) {
+						$date=date_create($plan2[$i]['dt_perubahan']);
+						echo date_format($date,"d M");
+					} else {
+						echo '';
+					}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan2[$i]['mckode'] }}</font></b></td>
@@ -471,7 +481,10 @@
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 			</tr>
-			<?php } ?>
+			<?php 
+				} 
+			}
+		?>
 			
 		</tbody>
 			
@@ -481,7 +494,7 @@
 
 	<table cellspacing="0" border="0">
 		<thead>
-			<?php
+			<?php if ($plan3 != null) {
 				for ($i=0; $i < count($plan3) ; $i++) { 
 					# code...
 			?>
@@ -630,10 +643,15 @@
 				<!-- <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; " align="center" valign=middle><b><font size=1 color="#000000">Finish</font></b></td> -->
 				<!-- <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=1 color="#000000">Down Time</font></b></td> -->
 			</tr>
-			<?php } ?>
+			<?php 
+				} 
+			}
+		?>
 		</thead>
 		<tbody>
 			<?php
+				if ($plan3 != null) {
+				
 				for ($i=0; $i < count($plan3) ; $i++) { 
 					# code...
 			?>
@@ -651,7 +669,7 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="1589" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['panjang'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan3[$i]['flute'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="1" "><b><font size=3 color="#000000">{{ $plan3[$i]['out_flexo'] }}</font></b></td>
-				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5505.15" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['qtyOrder'],0,',','.') }}</font></b></td>
+				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5505.15" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['jml_order'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2" "><b><font size=3 color="#000000">{{ $plan3[$i]['out_corr'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2000" "><b><font size=2 color="#000000">{{ number_format($plan3[$i]['ukuran_roll'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="42" "><font size=3 color="#000000">{{ round($plan3[$i]['ukuran_roll']*$plan3[$i]['trim_waste']),0 }}</font></td>
@@ -676,8 +694,12 @@
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="30" align="center" valign=middle sdval="1" sdnum="1033;0;00"><b><font size=3 color="#000000">{{ $plan3[$i]['urutan'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle sdnum="1033;0;DD&quot; &quot;MMM"><b><font size=2 color="#000000">
 				<?php
-				$date=date_create($plan3[$i]['dt_perubahan']);
-				echo date_format($date,"d M");
+					if ($plan3[$i]['dt_perubahan'] != null) {
+						$date=date_create($plan3[$i]['dt_perubahan']);
+						echo date_format($date,"d M");
+					} else {
+						echo '';
+					}
 				?>
 				</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=2 color="#000000">{{ $plan3[$i]['mckode'] }}</font></b></td>
@@ -685,7 +707,7 @@
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font size=3 color="#000000">{{ $plan3[$i]['tipebox'] }}</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['order'],0,',','.') }}</font></b></td>
 				<td style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5243" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['order'],0,',','.') }}</font></b></td>
-				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['order']/$plan3[$i]['out_corr'],0,',','.') }}</font></b></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2621.5" "><b><font size=3 color="#000000">{{ number_format($plan3[$i]['jml_order']/$plan3[$i]['out_corr'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="1749.53667" "><b><font size=2 color="#000000">{{ number_format($plan3[$i]['kebutuhan_kertasAtas'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($plan3[$i]['kebutuhan_kertasFlute1'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000;" colspan=2 align="center" valign=middle sdval="0" "><b><font size=2 color="#000000">{{ number_format($plan3[$i]['kebutuhan_kertasTengah'],0,',','.') }}</font></b></td>
@@ -696,7 +718,10 @@
 				<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=3 color="#000000"><br></font></b></td>
 					
 			</tr>
-			<?php } ?>	
+				<?php 
+				} 
+			}
+			?>	
 		</tbody>
 			
 	</table>

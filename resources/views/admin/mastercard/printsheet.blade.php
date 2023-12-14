@@ -52,7 +52,6 @@
 		<td align="center" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" color="#000000"><br></font></b></td>
 	</tr>
 	<tr>
-		
 		<?php
 			if ($mc->revisi == "R0" ) {
 				$kodemc = $mc->kode;
@@ -104,7 +103,7 @@
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-		<td align="right" valign=bottom sdnum="1033;0;#,##0"><font face="Calibri" color="#000000"></font></td>
+		<td align="right" valign=bottom sdnum="1033;0;#,##0"><font face="Calibri" color="#000000">                                                                 </font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
@@ -184,7 +183,7 @@
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" height="20" align="left" valign=middle><b><font face="Calibri" color="#000000" size=2>BERAT SHEET CORR</font></b></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="right" valign=middle sdval="0.38372761" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ $mc->gramSheetCorrProduksi2 }}</font></td>
+		<td align="right" valign=middle sdval="0.38372761" sdnum="1033;0;0.00"><font face="Calibri" color="#000000" size=2>{{ number_format($mc->gramSheetCorrProduksi2,2,",",".")  }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000">Kg</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -371,7 +370,7 @@
 		<td align="left" valign=middle sdval="589" sdnum="1033;"><font face="Calibri" color="#000000" size=2>{{ $mc->lebarSheetBox }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 0px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=2>BUNGKUS</font></td>
-		<td style="border-right: 1px solid #000000" colspan="3" align="right" valign=bottom sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2>{{ $mc->bungkus }}</font></td>
+		<td style="border-right: 1px solid #000000" colspan="3" align="middle" valign=bottom sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size="2">{{ $mc->bungkus }}</font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -383,7 +382,7 @@
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td style="border-top: 0px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000" size=2>LAIN-LAIN</font></td>
-		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size="4">{{ $mc->lain }}</font></td>
+		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size="4"></font>{{ $mc->lain }}</td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
@@ -487,7 +486,7 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		<td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="700px" height="280px" src="{{ url('/upload/'.$mc->gambar) }}" alt=""></font></td>
+		{{-- <td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="700px" height="280px" src="{{ url('/upload/'.$mc->gambar) }}" alt=""></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -497,52 +496,91 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font color="#000000"><br></font></td> --}}
 	</tr>
-	{{-- <tr>
+	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000;" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style="border-top: 1px solid #000000;" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style="border-top: 1px solid #000000;" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->flapCrease }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr> --}}
-	{{-- <tr>
+	</tr>
+	<tr>
+		<?php 
+			$dt = new DateTime("now", new DateTimeZone('Asia/Jakarta'));
+			if ($mc->kuping2 == null) {
+				$kuping = $mc->kuping;
+			} else {
+				$kuping = $mc->kuping - $mc->kuping2;
+			}
+
+			$panjang = $mc->kuping - $mc->kuping2 + ($mc->panjangCrease * 2) + $mc->lebarCrease1 + $mc->lebarCrease2;
+			$lebar = ($mc->flapCrease * 2) + $mc->tinggiCrease;
+
+		?>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br>{{ $dt->format("l, F j, Y, g:i:s a") }}</font></td>
+
+		<td style="" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $kuping }}</td>
+		<td style="border-left: 1px solid #000000; " align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->panjangCrease }}</td>
+		<td style=" " align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->lebarCrease1 }}</td>
+		<td style=" " align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->panjangCrease }}</td>
+		<td style=" border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->lebarCrease2 }}</td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->tinggiCrease }}</font></td>
+		<td align="left" valign=left><font face="Calibri" color="#000000" size='2'><br><b>{{ $mc->lebarSheetBox }}</b></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+    <tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style="border-left: 1px solid #000000; " align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style=" border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr> --}}
-	{{-- <tr>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
+    <tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style="border-left: 1px solid #000000; " align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style=" border-right: 1px solid #000000" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr> --}}
+	</tr>
+	<tr>
+		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td style=" border-bottom: 1px solid #000000; border-left: 1px solid #000000;" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style=" border-bottom: 1px solid #000000; " align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style=" border-bottom: 1px solid #000000; " align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td style=" border-bottom: 1px solid #000000;  border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->flapCrease }}</font></td>
+		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
+	</tr>
 	
-	{{-- <tr>
+	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
+		<td colspan="4" align="middle" valign=middle><font face="Calibri" color="#000000" size='2'><br><b>{{ $mc->panjangSheet }}</b></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -551,7 +589,7 @@
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
-	</tr> --}}
+	</tr>
 	
 	{{-- <tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>

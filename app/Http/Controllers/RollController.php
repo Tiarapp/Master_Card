@@ -114,7 +114,7 @@ class RollController extends Controller
             ]);
             
             $rolld->stok = $rolld->stok - $request->qty;
-            $rolld->is_edit = 1;
+            // $rolld->is_edit = 1;
 
             $rolld->save();
 

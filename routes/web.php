@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
+use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Models\Kontrak_D;
+use App\Models\Kontrak_M;
+use App\Models\Opi_M;
+use App\Models\RealisasiKirim;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +30,54 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/admin', function () {
-    return view('admin.index');
+    $periode = date("Y-m");
+
+    $dt = RealisasiKirim::select(DB::raw('SUM(kg_kirim) as kirim'))
+        ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
+        ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+        ->first();
+
+        // dd($dt->kirim);
+
+        $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->orderBy('periode', 'desc')
+            ->groupBy('periode')
+            ->take(12)
+            ->get();
+
+            $all_periode = [];
+
+            foreach ($kirim as $key) {
+                $all_periode[] = $key->periode;
+            }
+
+        $realisasi = $dt->kirim;
+        
+        $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
+            ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
+            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+            ->get();    
+
+        $tonase = 0;    
+        foreach ($opi as $key) {
+            $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
+            $tonase = $tonase + $order ;
+        }
+    
+    $data = RealisasiKirim::select('id', DB::raw('SUM(kg_kirim) as kirim, DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+    // ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
+    ->orderBy('periode', 'Desc')
+    ->groupBy('periode')
+    ->take(12)
+    ->get();
+
+    // dd($data);
+
+    $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
+            ->get();
+    $jumlah_kontrak = count($kontrak);
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data'));
 })->middleware(['auth'])->name('admin');
 
 
@@ -211,7 +264,7 @@ Route::middleware(['auth'])->group(function (){
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
-    Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
+    // Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
     Route::post('/admin/kontrak/store_realisasi', 'Kontrak_DController@store_realisasi')->name('kontrak.store_realisasi');
@@ -223,22 +276,14 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
     Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
+    Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
 
     //Delivery Time
-    // Route::post('kontrakjson', 'DTController@json')->name('kontrak.json');
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
-    // Route::get('/admin/kontrak/json', 'DTController@json')->name('kontrak.json');
-    // Route::get('/admin/kontrak/create', 'DTController@create')->name('kontrak.create');
-    // Route::post('/admin/kontrak/store', 'DTController@store')->name('kontrak.store');
-    // Route::post('/admin/kontrak/store_realisasi', 'DTController@store_realisasi')->name('kontrak.store_realisasi');
     Route::get('/admin/dt/edit/{id}', 'DTController@edit')->name('dt.edit');
-    // Route::get('/admin/kontrak/realisasi/{id}', 'DTController@add_realisasi')->name('kontrak.realisasi');
-    // Route::get('/admin/kontrak/dt/{id}', 'DTController@add_dt')->name('kontrak.dt');
-    // Route::post('/admin/kontrak/store_dt', 'DTController@store_dt')->name('kontrak.store_dt');
     Route::put('/admin/dt/update/{id}', 'DTController@update')->name('dt.update');
     Route::get('/admin/dt/approve/{id}', 'DTController@approve')->name('dt.approve');
     Route::get('/admin/dt/delete/{id}', 'DTController@destroy')->name('dt.destroy');
-    // Route::get('/admin/kontrak/pdf/{id}', 'DTController@pdfprint')->name('kontrak.pdfb1');
 
     //OPI
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
@@ -249,34 +294,35 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
     Route::get('/admin/opi/print/{id}', 'OpiController@print')->name('opi.print');
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
+    Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     //PLAN
     Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
     Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
     Route::get('/admin/plan/corrmhasil', 'CorrController@corrm_hasil')->middleware(['auth'])->name('corrm.hasil');
-    Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
+    // Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
     Route::get('/admin/plan/corr/newcreate', 'CorrController@create2')->name('corr.create2');
     Route::post('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
-    Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
+    // Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
     Route::post('/admin/plan/corr/newstore', 'CorrController@new_store')->name('corr.newstore');
-    Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
+    // Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
     Route::get('/admin/plan/corr/newedit/{id}', 'CorrController@new_edit')->name('corr.edit');
     Route::put('/admin/plan/corr/newupdate/{id}', 'CorrController@new_update')->name('corr.newupdate');
-    Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
+    // Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
     Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
     Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
 
     
-    Route::get('/admin/plan/conv', 'ConvController@index_printing_conv')->middleware(['auth'])->name('conv');
+    Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');
     Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
     Route::post('/admin/plan/conv/storenonprint', 'ConvController@storeNonPrinting')->middleware(['auth'])->name('conv.storenonprint');
-    Route::get('/admin/plan/conv/createprinting', 'ConvController@create_printing')->name('conv.create_printing');
+    Route::get('/admin/plan/conv/create', 'ConvController@create')->name('conv.create');
     Route::get('/admin/plan/conv/createnonprinting', 'ConvController@create_non_printing')->name('conv.create_non_printing');
     Route::get('/admin/plan/conv/convd', 'ConvController@convd')->name('convd');
     Route::get('/admin/plan/conv/convm', 'ConvController@convm')->name('convm');
     Route::get('/admin/plan/conv/json', 'ConvController@json')->name('conv.json');
-    Route::post('/admin/plan/conv/flexoastore', 'ConvController@storeFlexoA')->name('conv.storeflexoa');
+    Route::post('/admin/plan/conv/store', 'ConvController@store')->name('conv.store');
     Route::get('/admin/plan/conv/edit/{id}', 'ConvController@edit')->name('conv.edit');
     Route::put('/admin/plan/conv/update/{id}', 'ConvController@update')->name('conv.update');
     Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
@@ -289,8 +335,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/produksi/hasilconv', 'HasilProduksiController@index_conv')->middleware(['auth'])->name('conv.hasilflexo');
     Route::get('/admin/produksi/inputhasilcorr/{id}', 'HasilProduksiController@index_detail_corr')->middleware(['auth'])->name('hasilcorr.edit');
     Route::get('/admin/produksi/inputhasilconv/{id}', 'HasilProduksiController@index_detail_conv')->middleware(['auth'])->name('hasilconv.edit');
-    Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
-    Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
+    // Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
+    // Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
     Route::post('/admin/produksi/hasil', 'HasilProduksiController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
     Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
 
@@ -324,7 +370,33 @@ Route::middleware(['auth'])->group(function (){
         
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
-});
+
+        
+    // Data
+        Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
+        Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
+        Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
+        Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
+
+        Route::get('admin/periode', function () {
+            $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->orderBy('realisasi_kirim.id', 'desc')
+            ->groupBy('periode')
+            // ->take(10)
+            ->get();
+
+            $all_periode = [];
+
+            foreach ($kirim as $key) {
+
+                $all_periode[] = $key->periode;
+            }
+
+            return response()->json($all_periode);
+
+        })->name('periode');
+}); 
 
 
 

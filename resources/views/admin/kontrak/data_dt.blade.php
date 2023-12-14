@@ -233,7 +233,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak_D->berat }}">
-                                                <input type="text" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
                                             </div>
                                         </div>
                                     </div>
@@ -248,15 +258,25 @@
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Jumlah</th>
                                     <th scope="col">OPI</th>
+                                    <th scope="col">Running Meter</th>
                                     <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($opi as $o)
+
+                                @php
+                                    $qty = ($o->jumlahOrder) / $o->outConv ; 
+                                    $outCorr = floor(2500/$o->lebarSheet);
+                                    $cop = $qty / $outCorr;
+
+                                    $rm = ($o->panjangSheet * $cop) / 1000;
+                                @endphp
                                 <tr>
                                     <td scope="col">{{ $o->tglKirimDt }}</td>
                                     <td scope="col">{{ $o->jumlahOrder }}</td>
                                     <td scope="col">{{ $o->nama }}</td>
+                                    <td scope="col">{{ floor($rm) }}</td>
                                     <td scope="col">{{ $o->status }}</td>
                                 </tr>
                                 @endforeach
@@ -272,6 +292,9 @@
                         </div>
                     </div>
                     </form>
+                    <div class="col-md-6">
+                        <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                    </div>
                 </div>
             </div>
         </div>    

@@ -69,9 +69,9 @@
                 <td>
                   <div class="input-group">
                     <div class="input-group-append" id="button-addon4">
-                      <a href="../admin/sheet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="../admin/sheet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../admin/sheet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                      {{-- <a href="../admin/box/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
+                      <a href="../admin/box/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                      {{-- <a href="../admin/box/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
                     </div>
                   </div>
                 </td>
