@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\DB;
                 'nama' => trim($cust->Nama),
                 'npwp' => trim($cust->NPWP),
                 'alamat1' => trim($cust->AlamatKantor),
-                'alamat2' => trim($cust->AlamatKantor),
+                'alamat2' => trim($cust->AlamatKirim),
             //  = trim($cust->AlamatKirim);
                 'umur' => trim($cust->WAKTUBAYAR),
                 'lkredit' => trim($cust->Plafond2),

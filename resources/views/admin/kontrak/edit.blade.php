@@ -257,6 +257,7 @@
                                                         <option value="OUP Pisau & Design">OUP Pisau & Design</option>
                                                         <option value="OUP Design & Kualitas Produksi">OUP Design & Kualitas Produksi</option>
                                                         <option value="OUP Ukuran Tinggi">OUP Ukuran Tinggi</option>
+                                                        <option value="OUP Warna & Kupingan">OUP Warna & Kupingan</option>
                                                     </select>
                                                 </div>
                                             </div>
