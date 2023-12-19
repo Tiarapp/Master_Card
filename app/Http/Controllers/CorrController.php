@@ -190,12 +190,23 @@ class CorrController extends Controller
             'status' => 'Proses',
             'lock' => 1
            ]); 
+
+           $opi = Opi_M::find($request->opi_id[$temp]);
+           $oscorr = $opi->jumlahOrder - $request->plan[$i];
+
+            if ($oscorr < 0) {
+                $opi->os_corr = 0;
+            } else {
+                $opi->os_corr = $oscorr;
+            }
+            
+            $opi->save();
            
            $rmjumlah = $rmjumlah + $request->rm_order[$temp];
            $berattotal = $berattotal + $request->tonase[$temp];
            
         }
-            
+
         $upCorrm = Corr_M::find($corrm->id);
 
         $upCorrm->total_RM = $rmjumlah;
@@ -211,7 +222,8 @@ class CorrController extends Controller
         $corrm = Corr_M::create([   
             'kode_plan' => $request->kodeplan,
             'tanggal' => $request->tgl,
-            'shift' => $request->shift
+            'shift' => $request->shift,
+            'note' => $request->note
         ]);
 
         $data = count($request->noOpi);
@@ -267,6 +279,17 @@ class CorrController extends Controller
                 'status' => $status,
                 'lock' => $lock
             ]);
+
+            $opi = Opi_M::find($request->opi_id[$i]);
+            $oscorr = $opi->jumlahOrder - $request->plan[$i];
+
+            if ($oscorr < 0) {
+                $opi->os_corr = 0;
+            } else {
+                $opi->os_corr = $oscorr;
+            }
+
+            $opi->save();
 
             $rmjumlah = $rmjumlah + $request->rmorder[$i];
             $berattotal = $berattotal + $request->beratOrder[$i];
@@ -325,7 +348,7 @@ class CorrController extends Controller
 
         $data2 = Corr_D::corrprint()->where('plan_corr_m.id', '=', $id)->first();
 
-        // dd($data2);
+        // dd($data2);  
         return view('admin.plan.corr.newedit', compact('data1','data2','opi'));
     }
 
@@ -339,7 +362,7 @@ class CorrController extends Controller
         $berattotal = 0;
         $point = array_merge($request->opi_id);
 
-        // dd($id);
+        // dd($request->all());
 
         for ($i=1; $i <= count($point); $i++) { 
             $temp = $point[$i-1];
@@ -416,6 +439,17 @@ class CorrController extends Controller
 
                 $check->save();
 
+                $opi = Opi_M::find($request->opi_id[$temp]);
+                $oscorr = $opi->jumlahOrder - $request->plan[$temp];
+
+                if ($oscorr < 0) {
+                    $opi->os_corr = 0;
+                } else {
+                    $opi->os_corr = $oscorr;
+                }
+
+                $opi->save();
+
                 $rmjumlah = $rmjumlah + $request->rm_order[$temp];
                 $berattotal = $berattotal + $request->tonase[$temp];
             } else {
@@ -460,6 +494,20 @@ class CorrController extends Controller
                     'status' => 'Proses',
                     'lock' => 1
                 ]);
+
+                $opi = Opi_M::find($request->opi_id[$temp]);
+                $oscorr = $opi->jumlahOrder - $request->plan[$temp];
+
+                if ($oscorr < 0) {
+                    $opi->os_corr = 0;
+                } else {
+                    $opi->os_corr = $oscorr;
+                }
+
+                $opi->save();
+
+                $rmjumlah = $rmjumlah + $request->rm_order[$temp];
+                $berattotal = $berattotal + $request->tonase[$temp];
             }
              
         }
@@ -467,6 +515,7 @@ class CorrController extends Controller
 
         $upCorrm->total_RM = $rmjumlah;
         $upCorrm->total_Berat = $berattotal;
+        $upCorrm->note = $request->note;
 
         $upCorrm->save();
         
@@ -609,7 +658,7 @@ class CorrController extends Controller
         $plan4= [];
 
         for ($i=0; $i < count($data1); $i++) { 
-            if($i <= 14){
+            if($i <= 13){
                 $nested['urutan'] = $data1[$i]->urutan;
                 $nested['tglDt'] = $data1[$i]->tglDt;
                 $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
@@ -655,7 +704,7 @@ class CorrController extends Controller
 
                 $plan1[] = $nested;
                 // dd($plan1);
-            } else if ($i > 14 && $i <= 29) {
+            } else if ($i > 13 && $i <= 29) {
                 // $nested['opi_id'] = $data1[$i]->opi_id;
 
                 $nested['urutan'] = $data1[$i]->urutan;
@@ -671,7 +720,6 @@ class CorrController extends Controller
                 $nested['out_flexo'] = $data1[$i]->out_flexo;
                 $nested['qtyOrder'] = $data1[$i]->qtyOrder;
                 $nested['jml_order'] = $data1[$i]->jml_order;
-
 
                 $nested['out_corr'] = $data1[$i]->out_corr;
                 $nested['ukuran_roll'] = $data1[$i]->ukuran_roll;

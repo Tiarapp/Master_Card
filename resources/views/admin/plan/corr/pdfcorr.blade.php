@@ -140,7 +140,7 @@
 				<td align="left" valign=middle "><font color="#000000"> </font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
-				<td align="right" colspan= 10 valign=middle ><b><font size=2 color="#000000">*NOTE : LT L2 PAKAI 1 ROLL UTUH (BCF)*</font></b></td>
+				<td align="right" colspan= 10 valign=middle ><b>*NOTE : <font size=2 color="red">{{ $data2->note }}*</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="70719.75905" "><b><font size=2 color="#000000">{{ number_format($data2->totalrm,0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="64305.5788871205" "><b><font size=2 color="#000000">{{ number_format($data2->totalberat,0,',','.') }}</font></b></td>
 				<td align="left" valign=middle><font color="#000000"><br></font></td>
@@ -212,7 +212,7 @@
 				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="5505.15" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['jml_order'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2" "><b><font size=3 color="#000000">{{ $plan1[$i]['out_corr'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="2000" "><b><font size=2 color="#000000">{{ number_format($plan1[$i]['ukuran_roll'],0,',','.') }}</font></b></td>
-				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="42" "><font size=3 color="#000000">{{ round($plan1[$i]['ukuran_roll']*$plan1[$i]['trim_waste']),0 }}</font></td>
+				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" rowspan=2 align="center" valign=middle sdval="42" "><font size=3 color="#000000">{{ $plan1[$i]['trim_waste'] }}</font></td>
 				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle sdval="2752.575" "><b><font size=3 color="#000000">{{ number_format($plan1[$i]['cop'],0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=middle "><b><font size=2 color="#000000">{{ $plan1[$i]['jenis_atas'] }}</font></b></td>
 				<td style="border-top: 1px solid #000000;" align="right" valign=middle sdval="200" "><b><font size=2 color="#000000">{{ $plan1[$i]['gram_atas'] }}</font></b></td>
@@ -323,7 +323,7 @@
 				<td colspan=2 align="center" valign=middle><b><font size=2 color="#000000">FR-PPC-04</font></b></td>
 			</tr>
 			<tr>
-				<td colspan=4 height="36" align="left" valign=middle><b><font size=2 color="#000000"> PLANNING PRODUKSI CORRUGATING pdfcorr</font></b></td>
+				<td colspan=4 height="36" align="left" valign=middle><b><font size=2 color="#000000"> PLANNING PRODUKSI CORRUGATING</font></b></td>
 				<td align="center" valign=middle><b><font size=2 color="#000000"><br></font></b></td>
 				<td align="center" valign=middle><b><font size=2 color="#000000"><br></font></b></td>
 				<td align="center" valign=middle><b><font color="#000000"><br></font></b></td>
@@ -362,7 +362,7 @@
 				<td align="left" valign=middle "><font color="#000000"> </font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
-				<td align="right" colspan= 10 valign=middle ><b><font size=2 color="#000000">*NOTE : LT L2 PAKAI 1 ROLL UTUH (BCF)*</font></b></td>
+				<td align="right" colspan= 10 valign=middle ><b>*NOTE : <font size=2 color="red">{{ $data2->note }}*</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="70719.75905" "><b><font size=2 color="#000000">{{ number_format($data2->totalrm,0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="64305.5788871205" "><b><font size=2 color="#000000">{{ number_format($data2->totalberat,0,',','.') }}</font></b></td>
 				<td align="left" valign=middle><font color="#000000"><br></font></td>
@@ -556,7 +556,7 @@
 				<td colspan=2 align="center" valign=middle><b><font size=2 color="#000000">FR-PPC-04</font></b></td>
 			</tr>
 			<tr>
-				<td colspan=4 height="36" align="left" valign=middle><b><font size=2 color="#000000"> PLANNING PRODUKSI CORRUGATING pdfcorr</font></b></td>
+				<td colspan=4 height="36" align="left" valign=middle><b><font size=2 color="#000000"> PLANNING PRODUKSI CORRUGATING</font></b></td>
 				<td align="center" valign=middle><b><font size=2 color="#000000"><br></font></b></td>
 				<td align="center" valign=middle><b><font size=2 color="#000000"><br></font></b></td>
 				<td align="center" valign=middle><b><font color="#000000"><br></font></b></td>
@@ -595,7 +595,7 @@
 				<td align="left" valign=middle "><font color="#000000"> </font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
 				<td style="border-bottom: 1px solid #000000" align="left" valign=middle "><font size=2 color="#000000"><br></font></td>
-				<td align="right" colspan= 10 valign=middle ><b><font size=2 color="#000000">*NOTE : LT L2 PAKAI 1 ROLL UTUH (BCF)*</font></b></td>
+				<td align="right" colspan= 10 valign=middle ><b>*NOTE : <font size=2 color="red">{{ $data2->note }}*</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="70719.75905" "><b><font size=2 color="#000000">{{ number_format($data2->totalrm,0,',','.') }}</font></b></td>
 				<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="64305.5788871205" "><b><font size=2 color="#000000">{{ number_format($data2->totalberat,0,',','.') }}</font></b></td>
 				<td align="left" valign=middle><font color="#000000"><br></font></td>

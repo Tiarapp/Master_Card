@@ -75,6 +75,19 @@
                                 </div>
                             </div>
 
+                            <div class="row mt-2">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Note</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <textarea name="note" id="note" cols="30" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -185,6 +198,7 @@
                                     <th>Customer</th>
                                     <th>Item</th>
                                     <th>MC</th>
+                                    <th>Toleransi</th>
                                     <th>Panjang</th>
                                     <th>Lebar</th>
                                     <th>Tipe</th>
@@ -201,7 +215,6 @@
                                     <th>Kualitas Tengah</th>
                                     <th>Kualitas CF</th>
                                     <th>Kualitas Bawah</th>
-                                    <th>Toleransi</th>
                                     <th>Kebutuhan Atas</th>
                                     <th>Kebutuhan BF</th>
                                     <th>Kebutuhan Tengah</th>
@@ -249,9 +262,6 @@ function getKode() {
         dd =  "0"+dd;
     } 
 
-
-    console.log(month);
-
     document.getElementById("kodeplan").value = dd+""+month+""+year;
 }
 
@@ -263,7 +273,7 @@ $("#modal-opi").ready(function(){
             $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
         },
         });
-    });
+});
 
 $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
     opi_id = $(this).closest(".modal-plan-list").find('.opi_id').val();
@@ -338,6 +348,9 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>"+ json.namaBarang +"</td>";
             html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
             html += "<td>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"'>";
+            html += "</td>";
+            html += "<td>";
                 html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' >";
             html += "</td>";
             html += "<td>";
@@ -350,7 +363,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12' name='flute["+ json.opiid +"]' value='"+ json.flute +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"' readonly>";
+                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 out-corr' name='outCorr["+ json.opiid +"]' value=''>";
@@ -421,9 +434,6 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "</div>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ toleransi +"'>";
-            html += "</td>";
-            html += "<td>";
                 html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";
             html += "</td>";
             html += "<td>";
@@ -439,7 +449,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12 line-bawah' name='kebutuhan_bawah["+ json.opiid +"]' value='' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='gram-box' name='gram["+ json.opiid +"]' value='"+ json.gram +"' readonly>";
+                html += "<input type='text' class='gram-box' name='gram["+ json.opiid +"]' value='"+ json.gramcorr.toFixed(2) +"' readonly>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='rm-order' name='rm_order["+ json.opiid +"]' value='' readonly>";
@@ -448,7 +458,8 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='tonase' name='tonase["+ json.opiid +"]' value='' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' name='keterangan["+ json.opiid +"]' value=''>";
+                html += "<textarea name='keterangan["+ json.opiid +"]' id='keterangan' cols='30' rows='5'></textarea>";
+                // html += "<input type='text' name='keterangan["+ json.opiid +"]' value=''>";
             html += "</td>";
             html += "<td>";
                 html += "<button type='button' class='remove-plan btn btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
@@ -474,35 +485,46 @@ $(document).on("keyup", ".out-corr", function(e) {
     gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
     gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
 
-    if (tipebox = 'DC') {
+    if (tipebox === 'DC') {
         UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
     } else {
         UkRoll =Math.ceil(((outcorr*lebar)+30)/50)*50;
     }
 
-    qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    qtyPlan =  (Math.round(order) + Math.round(order*(toleransi/100)))/outconv;
     cop = parseInt(qtyPlan)/ parseInt(outcorr);
-    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
+    trim = (UkRoll - (lebar * outcorr));
 
-    rmorder = (panjang * cop) / 1000;
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 50;
+        UkRoll = UkRoll + 50;
+    }
+    if (trim < 20 && tipebox === 'DC') {
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
+
+    console.log(Math.round(order*(toleransi/100)));
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
     tonase = qtyPlan * gram;
 
-    KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+    KAtas = rmorder * (UkRoll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
 
     $(this).closest(".plan-list").find(".plan").val(qtyPlan);
     $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
-    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(2));
-    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
-    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(0));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
 
 })
@@ -548,7 +570,7 @@ $(document).on("keyup", ".panjangSheet", function(e) {
         outcorr = 0;
     }
     if (UkRoll == '') {
-        if (tipebox = 'DC') {
+        if (tipebox === 'DC') {
             UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
         } else {
             UkRoll =Math.ceil(((outcorr*lebar)+30)/50)*50;
@@ -567,16 +589,25 @@ $(document).on("keyup", ".panjangSheet", function(e) {
 
     tonase = qtyPlan * gram.toFixed(2) ;
 
-    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
-    rmorder = (panjang * cop) / 1000;
+    trim = (UkRoll - (lebar * outcorr));
+
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 30;
+        UkRoll = UkRoll + 50;
+    } else if (trim < 20 && tipebox === 'DC') {
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
 
     KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
@@ -585,8 +616,8 @@ $(document).on("keyup", ".panjangSheet", function(e) {
     $(this).closest(".plan-list").find(".plan").val(qtyPlan);
     $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
     $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
-    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
-    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(0));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
 });
 
@@ -606,15 +637,23 @@ $(document).on("keyup", ".lebar-roll", function(e) {
         outcorr = 0;
     }
 
-    trim = (roll - (lebar * outcorr)) / roll;
+    trim = (roll - (lebar * outcorr));
+
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 50;
+        UkRoll = UkRoll + 50;
+    } else if (trim < 20 && tipebox === 'DC') {  
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
 
     KAtas = rmorder*(roll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(roll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(roll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
@@ -629,5 +668,169 @@ $(document).on("click", ".remove-plan", function(e) {
     }
 });
 
+$(document).on("keyup", ".gram_atas", function(e) {
+    gram_atas = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+
+    KAtas = rmorder*(roll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+
+$(document).on("keyup", ".gram_bf", function(e) {
+    gram_bf = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_bf = rmorder*(roll/1000)*gram_bf/1000*1.36;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(kebutuhan_bf));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_tengah", function(e) {
+    gram_tengah = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_tengah = rmorder*(roll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(kebutuhan_tengah));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_cf", function(e) {
+    gram_cf = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_cf = rmorder*(roll/1000)*gram_cf/1000*1.46;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(kebutuhan_cf));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_bawah", function(e) {
+    gram_bawah = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_bawah = rmorder*(roll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(kebutuhan_bawah));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+
+$(document).on("keyup", ".jml-order", function(e) {
+    order = $(this).val()
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    outconv = $(this).closest(".plan-list").find(".outconv").val();
+    outcorr = $(this).closest(".plan-list").find(".out-corr").val();
+    toleransi = $(this).closest(".plan-list").find(".toleransi").val();
+    gram = $(this).closest(".plan-list").find(".gram-box").val();
+    tipebox = $(this).closest(".plan-list").find(".tipebox").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val()
+
+    qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    cop = parseInt(qtyPlan)/ parseInt(outcorr);
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
+    tonase = qtyPlan * gram;
+
+    KAtas = rmorder * (roll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.36;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    KTengah = rmorder*(roll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.46;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    KBawah = rmorder*(roll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+
+    $(this).closest(".plan-list").find(".plan").val(qtyPlan);
+    // $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
+    // $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
+    $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
+
+
+})
 </script>
 @endsection

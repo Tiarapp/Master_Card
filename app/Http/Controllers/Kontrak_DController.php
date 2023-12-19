@@ -656,6 +656,9 @@ class Kontrak_DController extends Controller
                                     'hariKirimDt' => $day,
                                     'status_opi' => 'Butuh Approve',
                                     'createdBy' => Auth::user()->name,
+                                    'os_corr' => $request->jumlahKirim,
+                                    'os_flx' => $request->jumlahKirim,
+                                    'os_fin' => $request->jumlahKirim,
                                 ]);
                                 
                                 return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal silahkan Kontak pihak PPIC untuk approve DT');
@@ -683,6 +686,9 @@ class Kontrak_DController extends Controller
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
                                     'createdBy' => Auth::user()->name,
+                                    'os_corr' => $request->jumlahKirim,
+                                    'os_flx' => $request->jumlahKirim,
+                                    'os_fin' => $request->jumlahKirim,
                                 ]);
                                 
                                 $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
@@ -744,6 +750,9 @@ class Kontrak_DController extends Controller
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
                                     'createdBy' => Auth::user()->name,
+                                    'os_corr' => $request->jumlahKirim,
+                                    'os_flx' => $request->jumlahKirim,
+                                    'os_fin' => $request->jumlahKirim,
                                 ]);
                                 
                                 $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
@@ -774,6 +783,9 @@ class Kontrak_DController extends Controller
                                 'sisa_order' => $request->jumlahKirim,
                                 'hariKirimDt' => $day,
                                 'createdBy' => Auth::user()->name,
+                                'os_corr' => $request->jumlahKirim,
+                                'os_flx' => $request->jumlahKirim,
+                                'os_fin' => $request->jumlahKirim,
                             ]);
                             
                             $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
