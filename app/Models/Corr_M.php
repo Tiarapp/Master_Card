@@ -15,6 +15,7 @@ class Corr_M extends Model
         'tanggal',
         'shift',
         'revisi',
+        'note',
         'total_RM',
         'total_Berat'
     ];

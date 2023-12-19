@@ -77,6 +77,19 @@
                                 </div>
                             </div>
 
+                            <div class="row mt-2">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Note</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <textarea name="note" id="note" cols="30" rows="3">{{ $data2->note }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -187,6 +200,7 @@
                                     <th>Customer</th>
                                     <th>Item</th>
                                     <th>MC</th>
+                                    <th>Toleransi</th>
                                     <th>Panjang</th>
                                     <th>Lebar</th>
                                     <th>Tipe</th>
@@ -203,7 +217,6 @@
                                     <th>Kualitas Tengah</th>
                                     <th>Kualitas CF</th>
                                     <th>Kualitas Bawah</th>
-                                    <th>Toleransi</th>
                                     <th>Kebutuhan Atas</th>
                                     <th>Kebutuhan BF</th>
                                     <th>Kebutuhan Tengah</th>
@@ -232,7 +245,10 @@
                                         <td>{{ $item->barang }}</td>
                                         <td>{{ $item->mckode }}-{{ $item->revisi }}</td>
                                         <td>
-                                            <input type='text' class='col-md-12 panjangSheet' name='panjang[{{ $item->opi_id }}]' value='{{ $item->sheet_p }}' readonly>
+                                            <input type='text' class='col-md-12 toleransi' name='toleransi[{{ $item->opi_id }}]' value='{{ $item->toleransi }}'>
+                                        </td>
+                                        <td>
+                                            <input type='text' class='col-md-12 panjangSheet' name='panjang[{{ $item->opi_id }}]' value='{{ $item->sheet_p }}'>
                                         </td>
                                         <td>
                                             <input type='text' class='col-md-12 lebarSheet' name='lebar[{{ $item->opi_id }}]' value='{{ $item->sheet_l }}' readonly>
@@ -244,7 +260,7 @@
                                             <input type='text' class='col-md-12' name='flute[{{ $item->opi_id }}]' value='{{ $item->flute }}' readonly>
                                         </td>
                                         <td>
-                                            <input type='text' class='jml-order' name='jumlahOrder[{{ $item->opi_id }}]' value='{{ $item->qtyOrder }}' readonly>
+                                            <input type='text' class='jml-order' name='jumlahOrder[{{ $item->opi_id }}]' value='{{ $item->qtyOrder }}'>
                                         </td>
                                         <td>
                                             <input type='text' class='col-md-12 out-corr' name='outCorr[{{ $item->opi_id }}]' value='{{ $item->out_corr }}'>
@@ -253,7 +269,7 @@
                                             <input type='text' class='col-md-12 outconv' name='outConv[{{ $item->opi_id }}]' value='{{ $item->out_flexo }}' readonly>
                                         </td>
                                         <td>
-                                            <input type='text' class='lebar-roll' name='lebarRoll[{{ $item->opi_id }}]' value='{{ $item->ukuran_roll }}' readonly>
+                                            <input type='text' class='lebar-roll' name='lebarRoll[{{ $item->opi_id }}]' value='{{ $item->ukuran_roll }}'>
                                         </td>
                                         <td>
                                             <input type='text' class='col-md-12 plan' name='plan[{{ $item->opi_id }}]' value='{{ $item->jml_order }}' readonly>
@@ -313,9 +329,6 @@
                                                     <input class='col-md-12 gram_bawah' type='text' name='gram_bawah[{{ $item->opi_id }}]' value='{{ $item->gram_bawah }}'>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <input type='text' class='col-md-12 toleransi' name='toleransi[{{ $item->opi_id }}]' value='{{ $item->toleransi }}' readonly>
                                         </td>
                                         <td>
                                             <input type='text' class='col-md-12 line-atas' name='kebutuhan_atas[{{ $item->opi_id }}]' value='{{ $item->kebutuhan_kertasAtas }}' readonly>
@@ -409,12 +422,60 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
     
         var json = (JSON.parse(data));
 
+        if (json.tipeBox == 'DC') {
+            toleransi = 2;
+        } else if (json.tipeBox == 'B1') {
+            toleransi = 5;
+        } else {
+            toleransi = 0;
+        }
+
+        if (json.gramKertasAtas === null) {
+            kertas_atas = '';
+            gram_atas = 0;
+        } else {
+            gram_atas = json.gramKertasAtas;
+            kertas_atas = json.kertasMcAtas;
+        }
+        
+        if (json.gramKertasflute1 === null) {
+            kertas_bf = '';
+            gram_bf = 0;
+        } else {
+            kertas_bf = json.kertasMcflute1;
+            gram_bf = json.gramKertasflute1;
+        }
+
+        if (json.gramKertastengah === null) {
+            kertas_tengah = '';
+            gram_tengah = 0;
+        } else {
+            kertas_tengah = json.kertasMctengah;
+            gram_tengah = json.gramKertastengah;
+        }
+
+        if (json.gramKertasflute2 === null) {
+            kertas_cf = '';
+            gram_cf = 0;
+        } else {
+            kertas_cf = json.kertasMcflute2;
+            gram_cf = json.gramKertasflute2;
+        }
+
+        if (json.gramKertasbawah === null) {
+            kertas_bawah = '';
+            gram_bawah = 0;
+        } else {
+            kertas_bawah = json.kertasMcbawah;
+            gram_bawah = json.gramKertasbawah;
+        }
+
         var html = '';
                 
         html += "<tr class='plan-list'>";
             html += "<td>";
                 html += "<input type='hidden' name='opi_id["+ json.opiid +"]' value='"+ json.opiid +"'>";
-                html += "<input type='text' class='id' name='plan_id["+ json.opiid +"]' value=''>";
+                html += "<input type='hidden' class='id' name='plan_id["+ json.opiid +"]' value=''>";
                 html += "<input class='col-md-12' type='text'  name='urutan["+ json.opiid +"]' value=''>";
             html += "</td>";
             html += "<td>"+ json.noopi +"</td>";
@@ -426,7 +487,10 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>"+ json.namaBarang +"</td>";
             html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.toleransiLebih +"'>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 lebarSheet' name='lebar["+ json.opiid +"]' value='"+ json.lebarSheet +"' readonly>";
@@ -438,7 +502,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12' name='flute["+ json.opiid +"]' value='"+ json.flute +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"' readonly>";
+                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 out-corr' name='outCorr["+ json.opiid +"]' value=''>";
@@ -447,7 +511,7 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12 outconv' name='outConv["+ json.opiid +"]' value='"+ json.outConv +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='lebar-roll' name='lebarRoll["+ json.opiid +"]' value='' readonly>";
+                html += "<input type='text' class='lebar-roll' name='lebarRoll["+ json.opiid +"]' value=''>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='' readonly>";
@@ -461,55 +525,52 @@ $(document).on("click", "#modal-opi .btn-insert-opi", function(e) {
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_atas["+ json.opiid +"]' value='"+ json.kertasMcAtas +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_atas["+ json.opiid +"]' value='"+ kertas_atas +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_atas' type='text' name='gram_atas["+ json.opiid +"]' value='"+ json.gramKertasAtas +"'>";
+                        html += "<input class='col-md-12 gram_atas' type='text' name='gram_atas["+ json.opiid +"]' value='"+ gram_atas +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_bf["+ json.opiid +"]' value='"+ json.kertasMcflute1 +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bf["+ json.opiid +"]' value='"+ kertas_bf +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_bf' type='text' name='gram_bf["+ json.opiid +"]' value='"+ json.gramKertasflute1 +"'>";
+                        html += "<input class='col-md-12 gram_bf' type='text' name='gram_bf["+ json.opiid +"]' value='"+ gram_bf +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_tengah["+ json.opiid +"]' value='"+ json.kertasMctengah +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_tengah["+ json.opiid +"]' value='"+ kertas_tengah +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_tengah' type='text' name='gram_tengah["+ json.opiid +"]' value='"+ json.gramKertastengah +"'>";
+                        html += "<input class='col-md-12 gram_tengah' type='text' name='gram_tengah["+ json.opiid +"]' value='"+ gram_tengah +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_cf["+ json.opiid +"]' value='"+ json.kertasMcflute2 +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_cf["+ json.opiid +"]' value='"+ kertas_cf +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_cf' type='text' name='gram_cf["+ json.opiid +"]' value='"+ json.gramKertasflute2 +"'>";
+                        html += "<input class='col-md-12 gram_cf' type='text' name='gram_cf["+ json.opiid +"]' value='"+ gram_cf +"'>";
                     html += "</div>";
                 html += "</div>";
             html += "</td>";
             html += "<td>";
                 html += "<div class='row' style='width:200px'>";
                     html += "<div class='col-md-6'>";
-                        html += "<input class='col-md-12' type='text' name='jenis_bawah["+ json.opiid +"]' value='"+ json.kertasMcbawah +"'>";
+                        html += "<input class='col-md-12' type='text' name='jenis_bawah["+ json.opiid +"]' value='"+ kertas_bawah +"'>";
                     html += "</div>";
                     html += "<div class='col-6'>";
-                        html += "<input class='col-md-12 gram_bawah' type='text' name='gram_bawah["+ json.opiid +"]' value='"+ json.gramKertasbawah +"'>";
+                        html += "<input class='col-md-12 gram_bawah' type='text' name='gram_bawah["+ json.opiid +"]' value='"+ gram_bawah +"'>";
                     html += "</div>";
                 html += "</div>";
-            html += "</td>";
-            html += "<td>";
-                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.toleransiLebih +"' readonly>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 line-atas' name='kebutuhan_atas["+ json.opiid +"]' value='' readonly>";
@@ -562,35 +623,46 @@ $(document).on("keyup", ".out-corr", function(e) {
     gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
     gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
 
-    if (tipebox = 'DC') {
+    if (tipebox === 'DC') {
         UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
     } else {
         UkRoll =Math.ceil(((outcorr*lebar)+30)/50)*50;
     }
 
-    qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    qtyPlan =  (Math.round(order) + Math.round(order*(toleransi/100)))/outconv;
     cop = parseInt(qtyPlan)/ parseInt(outcorr);
-    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
+    trim = (UkRoll - (lebar * outcorr));
 
-    rmorder = (panjang * cop) / 1000;
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 50;
+        UkRoll = UkRoll + 50;
+    }
+    if (trim < 20 && tipebox === 'DC') {
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
+
+    console.log(Math.round(order*(toleransi/100)));
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
     tonase = qtyPlan * gram;
 
-    KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
+    KAtas = rmorder * (UkRoll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
 
     $(this).closest(".plan-list").find(".plan").val(qtyPlan);
     $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
-    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(2));
-    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
-    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(0));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
 
 })
@@ -655,16 +727,25 @@ $(document).on("keyup", ".panjangSheet", function(e) {
 
     tonase = qtyPlan * gram.toFixed(2) ;
 
-    trim = (UkRoll - (lebar * outcorr)) / UkRoll;
-    rmorder = (panjang * cop) / 1000;
+    trim = (UkRoll - (lebar * outcorr));
+
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 30;
+        UkRoll = UkRoll + 50;
+    } else if (trim < 20 && tipebox === 'DC') {
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
 
     KAtas = rmorder*(UkRoll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(UkRoll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(UkRoll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(UkRoll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
@@ -673,8 +754,8 @@ $(document).on("keyup", ".panjangSheet", function(e) {
     $(this).closest(".plan-list").find(".plan").val(qtyPlan);
     $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
     $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
-    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
-    $(this).closest(".plan-list").find(".rm-order").val(rmorder.toFixed(0));
+    $(this).closest(".plan-list").find(".trim").val(trim.toFixed(0));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
 });
 
@@ -694,15 +775,23 @@ $(document).on("keyup", ".lebar-roll", function(e) {
         outcorr = 0;
     }
 
-    trim = (roll - (lebar * outcorr)) / roll;
+    trim = (roll - (lebar * outcorr));
+
+    if (trim < 30 && tipebox === 'B1') {
+        trim = trim + 50;
+        UkRoll = UkRoll + 50;
+    } else if (trim < 20 && tipebox === 'DC') {  
+        trim = trim + 20;
+        UkRoll = UkRoll + 50;
+    }
 
     KAtas = rmorder*(roll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
-    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.34;
+    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.36;
     $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
     KTengah = rmorder*(roll/1000)*gram_tengah/1000;
     $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
-    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.42;
+    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.46;
     $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
     KBawah = rmorder*(roll/1000)*gram_bawah/1000;
     $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
@@ -717,6 +806,171 @@ $(document).on("click", ".remove-plan", function(e) {
             $(this).closest(".plan-list").remove();
        }
 });
+
+$(document).on("keyup", ".gram_atas", function(e) {
+    gram_atas = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+
+    KAtas = rmorder*(roll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+
+$(document).on("keyup", ".gram_bf", function(e) {
+    gram_bf = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_bf = rmorder*(roll/1000)*gram_bf/1000*1.36;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(kebutuhan_bf));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_tengah", function(e) {
+    gram_tengah = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_tengah = rmorder*(roll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(kebutuhan_tengah));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_cf", function(e) {
+    gram_cf = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_cf = rmorder*(roll/1000)*gram_cf/1000*1.46;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(kebutuhan_cf));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+$(document).on("keyup", ".gram_bawah", function(e) {
+    gram_bawah = $(this).val()
+    plan = $(this).closest(".plan-list").find(".plan").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    rmorder = $(this).closest(".plan-list").find(".rm-order").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val();
+    
+    berat_kualitas = ((Math.round(gram_atas)+(Math.round(gram_bf)*1.36)+Math.round(gram_tengah)+(Math.round(gram_cf)*1.46)+Math.round(gram_bawah))/1000)
+    luas = (Math.round(panjang)*Math.round(lebar)/1000000)
+
+    berat = (berat_kualitas * luas).toFixed(2)
+    tonase = berat * plan
+    
+    kebutuhan_bawah = rmorder*(roll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(kebutuhan_bawah));
+    $(this).closest(".plan-list").find(".gram-box").val(berat);
+    $(this).closest(".plan-list").find(".tonase").val(Math.round(tonase));
+})
+
+
+$(document).on("keyup", ".jml-order", function(e) {
+    order = $(this).val()
+    lebar = $(this).closest(".plan-list").find(".lebarSheet").val();
+    panjang = $(this).closest(".plan-list").find(".panjangSheet").val();
+    outconv = $(this).closest(".plan-list").find(".outconv").val();
+    outcorr = $(this).closest(".plan-list").find(".out-corr").val();
+    toleransi = $(this).closest(".plan-list").find(".toleransi").val();
+    gram = $(this).closest(".plan-list").find(".gram-box").val();
+    tipebox = $(this).closest(".plan-list").find(".tipebox").val();
+    gram_atas = $(this).closest(".plan-list").find(".gram_atas").val();
+    gram_bf = $(this).closest(".plan-list").find(".gram_bf").val();
+    gram_tengah = $(this).closest(".plan-list").find(".gram_tengah").val();
+    gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
+    gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
+    roll = $(this).closest(".plan-list").find(".lebar-roll").val()
+
+    qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outconv;
+    cop = parseInt(qtyPlan)/ parseInt(outcorr);
+
+    rmorder = ((panjang * cop) / 1000).toFixed(0);
+    tonase = qtyPlan * gram;
+
+    KAtas = rmorder * (roll/1000)*gram_atas/1000;
+    $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
+    KFlute1 = rmorder*(roll/1000)*(gram_bf/1000)*1.36;
+    $(this).closest(".plan-list").find(".flute-bf").val(Math.round(KFlute1));
+    KTengah = rmorder*(roll/1000)*gram_tengah/1000;
+    $(this).closest(".plan-list").find(".line-tengah").val(Math.round(KTengah));
+    KFlute2 = rmorder*(roll/1000)*(gram_cf/1000)*1.46;
+    $(this).closest(".plan-list").find(".flute-cf").val(Math.round(KFlute2));
+    KBawah = rmorder*(roll/1000)*gram_bawah/1000;
+    $(this).closest(".plan-list").find(".line-bawah").val(Math.round(KBawah));
+
+    $(this).closest(".plan-list").find(".plan").val(qtyPlan);
+    // $(this).closest(".plan-list").find(".lebar-roll").val(UkRoll);
+    $(this).closest(".plan-list").find(".cop").val(cop.toFixed(0));
+    // $(this).closest(".plan-list").find(".trim").val(trim.toFixed(2));
+    $(this).closest(".plan-list").find(".rm-order").val(rmorder);
+    $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
+
+
+})
 
 </script>
 @endsection
