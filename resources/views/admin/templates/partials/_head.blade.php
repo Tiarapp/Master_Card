@@ -16,7 +16,7 @@
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
 
-  <link rel="icon" href="../../asset/image/logo spa 1.png" type="image/icon type">
+  <link rel="icon" href="{{ asset('images/logo spa 1.png') }}" type="image/icon type">
 
 
   <!-- Google Font: Source Sans Pro -->

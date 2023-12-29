@@ -17,6 +17,7 @@ class Conv_M extends Model
         'revisi',
         'total_pcs',
         'total_kg',
+        'tipe_mesin'
     ];
 
     public function convd()

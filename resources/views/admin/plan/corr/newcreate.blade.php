@@ -74,7 +74,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div class="row">
@@ -86,17 +85,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>RM Total</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line rm-total" name="rmtotal" id="rmtotal">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Berat Total</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control txt_line berattotal" name="tonasetotal" id="tonasetotal">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <div class="row">
-                                            
+                                        <div class="row">    
                                             <!-- Modal -->
                                             <div class="modal fade" id="modal-opi">
-                                                <div class="modal-dialog modal-xl">
-                                                    
+                                                <div class="modal-dialog modal-xl">                                                    
                                                     <!-- Modal content-->
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -485,6 +501,8 @@ $(document).on("keyup", ".out-corr", function(e) {
     gram_cf = $(this).closest(".plan-list").find(".gram_cf").val();
     gram_bawah = $(this).closest(".plan-list").find(".gram_bawah").val();
 
+    rmtotal = document.getElementById("rmtotal").value;
+
     if (tipebox === 'DC') {
         UkRoll = Math.ceil(((outcorr*lebar)+20)/50)*50;
     } else {
@@ -509,6 +527,12 @@ $(document).on("keyup", ".out-corr", function(e) {
     rmorder = ((panjang * cop) / 1000).toFixed(0);
     tonase = qtyPlan * gram;
 
+    if (rmtotal === '') {
+        rmtotal = rmorder
+    } else {
+        rmtotal = rmtotal + rmorder
+    }
+
     KAtas = rmorder * (UkRoll/1000)*gram_atas/1000;
     $(this).closest(".plan-list").find(".line-atas").val(Math.round(KAtas));
     KFlute1 = rmorder*(UkRoll/1000)*(gram_bf/1000)*1.36;
@@ -526,6 +550,7 @@ $(document).on("keyup", ".out-corr", function(e) {
     $(this).closest(".plan-list").find(".trim").val(trim.toFixed(0));
     $(this).closest(".plan-list").find(".rm-order").val(rmorder);
     $(this).closest(".plan-list").find(".tonase").val(tonase.toFixed(0));
+    // document.getElementById("rmtotal").value = rmtotal;
 
 })
 

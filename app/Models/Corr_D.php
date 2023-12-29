@@ -85,7 +85,7 @@ class Corr_D extends Model
         ->leftJoin('mc', 'opi_m.mc_id', 'mc.id')
         ->leftJoin('box', 'mc.box_id', 'box.id')
         ->leftJoin('dt', 'opi_m.dt_id', 'dt.id')
-        ->select('plan_corr_d.*','plan_corr_d.id as idcorr','opi_m.id as opi_id', 'plan_corr_m.id', 'plan_corr_m.kode_plan as kodeplanM', 'plan_corr_m.tanggal as tglcorr', 'plan_corr_m.shift', 'plan_corr_m.revisi', 'plan_corr_m.total_RM', 'plan_corr_m.total_Berat', 'opi_m.NoOpi as noopi', 'kontrak_m.customer_name as customer', 'mc.gramSheetBoxKontrak as gramSheet', 'mc.kode as mckode', 'mc.namaBarang as barang', 'mc.tipeBox as tipebox', 'dt.pcsDt as order', 'dt.tglKirimDt as tglDt', 'plan_corr_m.tanggal as tglplan', 'plan_corr_m.total_RM as totalrm', 'plan_corr_m.total_Berat as totalberat','kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'plan_corr_m.note')
+        ->select('plan_corr_d.*','plan_corr_d.id as idcorr','opi_m.id as opi_id', 'plan_corr_m.id', 'plan_corr_m.kode_plan as kodeplanM', 'plan_corr_m.tanggal as tglcorr', 'plan_corr_m.shift', 'plan_corr_m.revisi', 'plan_corr_m.total_RM', 'plan_corr_m.total_Berat', 'opi_m.NoOpi as noopi', 'kontrak_m.customer_name as customer', 'mc.gramSheetBoxKontrak as gramSheet', 'mc.kode as mckode', 'mc.namaBarang as barang', 'mc.tipeBox as tipebox', 'dt.pcsDt as order', 'dt.tglKirimDt as tglDt', 'plan_corr_m.tanggal as tglplan', 'plan_corr_m.total_RM as totalrm', 'plan_corr_m.total_Berat as totalberat','kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'plan_corr_m.note', 'mc.revisi as revisimc')
         ->get();
 
         return $query;
