@@ -192,7 +192,8 @@ class CorrController extends Controller
            ]); 
 
            $opi = Opi_M::find($request->opi_id[$temp]);
-           $oscorr = $opi->jumlahOrder - $request->plan[$i];
+           $oscorr = $opi->jumlahOrder - $request->plan[$temp];
+           $opi->tol_corr = $request->toleransi[$temp];
 
             if ($oscorr < 0) {
                 $opi->os_corr = 0;
@@ -314,6 +315,11 @@ class CorrController extends Controller
     public function delete($id)
     {
         $corr = Corr_D::find($id);
+        $opi = Opi_M::find($corr->opi_id);
+
+        $opi->os_corr = $opi->os_corr + $corr->qtyOrder;
+
+        $opi->save();
         
         $corr->delete();
 
@@ -441,6 +447,7 @@ class CorrController extends Controller
 
                 $opi = Opi_M::find($request->opi_id[$temp]);
                 $oscorr = $opi->jumlahOrder - $request->plan[$temp];
+                $opi->tol_corr = $request->toleransi[$temp];
 
                 if ($oscorr < 0) {
                     $opi->os_corr = 0;
@@ -497,6 +504,7 @@ class CorrController extends Controller
 
                 $opi = Opi_M::find($request->opi_id[$temp]);
                 $oscorr = $opi->jumlahOrder - $request->plan[$temp];
+                $opi->tol_corr = $request->toleransi[$temp];
 
                 if ($oscorr < 0) {
                     $opi->os_corr = 0;
@@ -659,11 +667,18 @@ class CorrController extends Controller
 
         for ($i=0; $i < count($data1); $i++) { 
             if($i <= 13){
+
+                if ($data1[$i]->revisimc === 'R0') {
+                    $mc = $data1[$i]->mckode;
+                } else {
+                    $mc = $data1[$i]->mckode.'-'.$data1[$i]->revisimc;
+                }
+
                 $nested['urutan'] = $data1[$i]->urutan;
                 $nested['tglDt'] = $data1[$i]->tglDt;
                 $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
                 $nested['noopi'] = $data1[$i]->noopi;
-                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['mckode'] = $mc;
                 $nested['customer'] = $data1[$i]->customer;
                 $nested['lebar'] = $data1[$i]->sheet_l;
                 $nested['panjang'] = $data1[$i]->sheet_p;
@@ -704,14 +719,19 @@ class CorrController extends Controller
 
                 $plan1[] = $nested;
                 // dd($plan1);
-            } else if ($i > 13 && $i <= 29) {
-                // $nested['opi_id'] = $data1[$i]->opi_id;
+            } else if ($i > 13 && $i <= 29) 
+            
+                {if ($data1[$i]->revisimc === 'R0') {
+                    $mc = $data1[$i]->mckode;
+                } else {
+                    $mc = $data1[$i]->mckode.'-'.$data1[$i]->revisimc;
+                }
 
                 $nested['urutan'] = $data1[$i]->urutan;
                 $nested['tglDt'] = $data1[$i]->tglDt;
                 $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
                 $nested['noopi'] = $data1[$i]->noopi;
-                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['mckode'] = $mc;
                 $nested['customer'] = $data1[$i]->customer;
                 $nested['lebar'] = $data1[$i]->sheet_l;
                 $nested['panjang'] = $data1[$i]->sheet_p;
@@ -752,13 +772,17 @@ class CorrController extends Controller
                 $plan2[] = $nested;
                 // dd($plan2);
             } else if ($i > 29 && $i < 44) {
-                // $nested['opi_id'] = $data1[$i]->opi_id;
+                if ($data1[$i]->revisimc === 'R0') {
+                    $mc = $data1[$i]->mckode;
+                } else {
+                    $mc = $data1[$i]->mckode.'-'.$data1[$i]->revisimc;
+                }
 
                 $nested['urutan'] = $data1[$i]->urutan;
                 $nested['tglDt'] = $data1[$i]->tglDt;
                 $nested['dt_perubahan'] = $data1[$i]->dt_perubahan;
                 $nested['noopi'] = $data1[$i]->noopi;
-                $nested['mckode'] = $data1[$i]->mckode;
+                $nested['mckode'] = $mc;
                 $nested['customer'] = $data1[$i]->customer;
                 $nested['lebar'] = $data1[$i]->sheet_l;
                 $nested['panjang'] = $data1[$i]->sheet_p;

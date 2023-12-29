@@ -32,7 +32,7 @@ class Conv_D extends Model
         'out_flexo',
         'qtyOrder',
         'jml_plan',
-        'ukuran_roll',
+        // 'ukuran_roll',
         'bungkus',
         'lain_lain',
         'rm_order',
@@ -60,7 +60,7 @@ class Conv_D extends Model
         ->leftJoin('kontrak_d', 'opi_m.kontrak_d_id', 'kontrak_d.id')
         ->leftJoin('mc', 'kontrak_d.mc_id', 'mc.id')
         ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
-        ->select('plan_conv_d.*','plan_conv_d.id as plandid', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak', 'plan_conv_d.mesin', 'plan_conv_m.id as planmid', 'plan_conv_d.tgl_kirim', 'plan_conv_d.nomc', 'plan_conv_d.nama_item', 'plan_conv_d.customer', 'mc.gramSheetBoxKontrak as mc_kg', 'color_combine.nama as warna' )
+        ->select('plan_conv_d.*','plan_conv_d.id as plandid', 'opi_m.NoOPI as noopi', 'kontrak_d.pcsKontrak', 'plan_conv_d.mesin', 'plan_conv_m.id as planmid', 'plan_conv_d.tgl_kirim', 'mc.kode as mckode', 'plan_conv_d.nama_item', 'plan_conv_d.customer', 'mc.gramSheetBoxKontrak as mc_kg', 'color_combine.nama as warna', 'mc.revisi as revisimc')
         ->get();
     }
 }

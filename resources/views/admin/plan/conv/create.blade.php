@@ -48,10 +48,11 @@
                                             <label>Mesin</label>
                                         </div>
                                         <input type="hidden" name="mesin" id="mesin">
+                                        <input type="hidden" name="tipe" id="tipe">
                                         <div class="col-md-8">
                                             <select class="js-example-basic-single col-md-12" name="tipemesin" id="tipemesin" onchange="getKode()">
                                                 @foreach ($mesin as $item)
-                                                <option value='{{ $item->id }}||{{ $item->nama }}||{{ $item->kode }}'>{{ $item->nama }}</option>    
+                                                <option value='{{ $item->nama }}||{{ $item->kode }}||{{ $item->tipe }}'>{{ $item->nama }}</option>    
                                                 @endforeach
                                                 
                                             </select>
@@ -195,15 +196,14 @@
                                     <th>Customer</th>
                                     <th>Item</th>
                                     <th>MC</th>
+                                    <th>Toleransi(%)</th>
                                     <th>Panjang</th>
                                     <th>Lebar</th>
                                     <th>Tipe</th>
                                     <th>Berat Box</th>
                                     <th>Flute</th>
                                     <th>Order</th>
-                                    {{-- <th>Out Corr</th> --}}
                                     <th>Out Conv</th>
-                                    {{-- <th>Lebar Roll</th> --}}
                                     <th>Planning</th>
                                     <th>Berat Planning</th>
                                     <th>Warna</th>
@@ -243,10 +243,11 @@
 function getKode() {
     tgl = document.getElementById("tgl").value;
     mesin = document.getElementById("tipemesin").value;
+
     kode = new Date(tgl);
     kodemesin = mesin.split("||");
 
-    console.log(kodemesin[2]);
+    console.log(kodemesin);
 
     year = kode.getFullYear();
     month = kode.getMonth()+1;
@@ -261,7 +262,9 @@ function getKode() {
 
     console.log(month);
 
-    document.getElementById("kodeplan").value = kodemesin[2]+dd+""+month+""+year;
+    document.getElementById("kodeplan").value = kodemesin[1]+dd+""+month+""+year;
+    document.getElementById("mesin").value = kodemesin[0];
+    document.getElementById("tipe").value = kodemesin[2];
 }
 
 $("#modal_opi").ready(function(){
@@ -281,23 +284,40 @@ $(document).on("click", "#modal_opi .btn-insert-opi", function(e) {
 
     $.get(url, function(data) {
         var json = (JSON.parse(data));
+        var plan = json.jumlahOrder / json.outConv + (json.jumlahOrder * json.tol_corr / 100);
+        var berat = plan * json.gram * json.outConv;
 
-        console.log(json);
+        if (json.revisimc === 'R0') {
+            mc = json.mcKode
+        } else {
+            mc = json.mcKode +"-"+ json.revisimc
+        }
 
         var html = '';
         html += "<tr class='plan-list'>";
             html += "<td>";
                 html += "<input type='hidden' name='opi_id["+ json.opiid +"]' value='"+ json.opiid +"'>";
-                html += "<input class='col-md-12' type='text'  name='urutan["+ json.opiid +"]' value=''>";
+                html += "<input class='col-md-12' type='text'  name='urutan["+ json.opiid +"]' value='' required>";
             html += "</td>";
             html += "<td>"+ json.noopi +"</td>";
-            html += "<td>"+ json.tglKirimDt +"</td>";
+            html += "<td>";
+                html += "<input type='date' name='dt["+ json.opiid +"]' value='"+ json.tglKirimDt +"'readonly>";
+            html += "</td>";
             html += "<td>";
                 html += "<input type='date' name='dt_perubahan["+ json.opiid +"]' value=''>";
             html += "</td>";
-            html += "<td>"+ json.Cust +"</td>";
-            html += "<td>"+ json.namaBarang +"</td>";
-            html += "<td>"+ json.mcKode +"-"+ json.revisimc +"</td>";
+            html += "<td>";
+                html += "<input type='text' class='customer' name='customer["+ json.opiid +"]' value='"+ json.Cust +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='item' name='item["+ json.opiid +"]' value='"+ json.namaBarang +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='mc' name='mc["+ json.opiid +"]' value='"+ mc +"' readonly>";
+            html += "</td>";
+            html += "<td>";
+                html += "<input type='text' class='col-md-12 toleransi' name='toleransi["+ json.opiid +"]' value='"+ json.tol_corr +"' readonly>";
+            html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 panjangSheet' name='panjang["+ json.opiid +"]' value='"+ json.panjangSheet +"' readonly>";
             html += "</td>";
@@ -308,22 +328,22 @@ $(document).on("click", "#modal_opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='col-md-12 tipebox' name='tipe["+ json.opiid +"]' value='"+ json.tipeBox +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='gram' name='gram["+ json.opiid +"]' value='"+ json.gram +"' readonly>";
+                html += "<input type='text' class='gram' name='gram["+ json.opiid +"]' value='"+ json.gram.toFixed(3) +"' readonly>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12' name='flute["+ json.opiid +"]' value='"+ json.flute +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"' readonly>";
+                html += "<input type='text' class='jml-order' name='jumlahOrder["+ json.opiid +"]' value='"+ json.jumlahOrder +"'>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='col-md-12 outconv' name='outConv["+ json.opiid +"]' value='"+ json.outConv +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='' >";
+                html += "<input type='text' class='col-md-12 plan' name='plan["+ json.opiid +"]' value='"+ plan +"' >";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='berat-total' name='berat_total["+ json.opiid +"]' value='' >";
+                html += "<input type='text' class='berat-total' name='berat_total["+ json.opiid +"]' value='"+ berat.toFixed(2) +"' >";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='warna' name='warna["+ json.opiid +"]' value='"+ json.namacc +"' readonly>";
@@ -335,7 +355,7 @@ $(document).on("click", "#modal_opi .btn-insert-opi", function(e) {
                 html += "<input type='text' class='wax' name='wax["+ json.opiid +"]' value='"+ json.wax +"' readonly>";
             html += "</td>";
             html += "<td>";
-                html += "<input type='text' class='tipe-order' name='tipe-order["+ json.opiid +"]' value='"+ json.tipeOrder +"' readonly>";
+                html += "<input type='text' class='tipe-order' name='tipe_order["+ json.opiid +"]' value='"+ json.tipeOrder +"' readonly>";
             html += "</td>";
             html += "<td>";
                 html += "<input type='text' class='bungkus' name='bungkus["+ json.opiid +"]' value='"+ json.bungkus +"' readonly>";
@@ -358,11 +378,26 @@ $(document).on("click", "#modal_opi .btn-insert-opi", function(e) {
 $(document).on("keyup", ".plan", function(e) {
     plan = $(this).val();
     gram = $(this).closest('.plan-list').find('.gram').val();
+    outConv = $(this).closest('.plan-list').find('.outconv').val()
 
-    totalgram = plan * gram;
+    totalgram = plan * gram * outConv;
     
     $(this).closest(".plan-list").find('.berat-total').val(totalgram.toFixed(2));
 });
+
+$(document).on("keyup", ".jml-order", function(e) {
+    order = $(this).val()
+    outConv = $(this).closest('.plan-list').find('.outconv').val()
+    toleransi = $(this).closest('.plan-list').find('.toleransi').val()
+    gram = $(this).closest('.plan-list').find('.gram').val()
+
+    plan = parseInt(order) / parseInt(outConv) + (order * toleransi / 100);
+    totalgram = plan * gram * outConv;
+
+    $(this).closest('.plan-list').find('.plan').val(plan.toFixed(0))
+    $(this).closest(".plan-list").find('.berat-total').val(totalgram.toFixed(2));
+
+})
 
 
 $(document).on("click", ".remove-plan", function(e) {

@@ -71,7 +71,7 @@ class ConvController extends Controller
 
     public function create()
     {
-        $mesin = Mesin::all();
+        $mesin = Mesin::where('tipe', '=', 'flx')->get();
         $opi = Opi_M::opi2()->get();
 
         // dd($opi);
@@ -91,18 +91,16 @@ class ConvController extends Controller
     
     public function store(Request $request)
     {
-        $mesin = explode("||", $request->tipemesin);
+        // $mesin = explode("||", $request->tipemesin);
         $id = array_merge($request->opi_id);
-
-        // dd($id);
 
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
             'tanggal' => $request->tgl,
-            'shiftM' => $request->shift
+            'shiftM' => $request->shift,
+            'mesin' => $request->mesin,
+            'tipe_mesin' => $request->tipe
         ]);
-
-        // $data = count($request->noOpi);
         
         $totalpcs = 0;
         $totalkg = 0;
@@ -115,39 +113,51 @@ class ConvController extends Controller
             $convd = Conv_D::create([
                 'opi_id'=> $request->opi_id[$temp],
                 'plan_conv_m_id' => $convm->id,
-                'kodeplanM' => $convm->kode,
-                'shift' => $convm->shiftM,
+                // 'kodeplanM' => $convm->kode,
+                // 'shift' => $convm->shiftM,
+                'tgl_kirim' => $request->dt[$temp],
                 'dt_perubahan' => $request->dt_perubahan[$temp],
-                // 'nomc' => $request->mc[$temp],               
+                'nomc' => $request->mc[$temp],    
                 'nama_item' => $request->item[$temp],
                 'customer' => $request->customer[$temp],
-                'tipe_order' => $request->tipeOrder[$temp],
-                'joint' => $request->finishing[$temp],
+                'tipe_order' => $request->tipe_order[$temp],
+                'joint' => $request->joint[$temp],
                 'wax' => $request->wax[$temp],
-                'mesin_id' => $mesin[0],
-                'mesin' => $mesin[1],
-                'sheet_p' => $request->sheetp[$temp],
-                'sheet_l' => $request->sheetl[$temp],
+                'mesin' => $request->mesin,
+                'sheet_p' => $request->panjang[$temp],
+                'sheet_l' => $request->lebar[$temp],
                 'flute' => $request->flute[$temp],
-                'bentuk' => $request->tipebox[$temp],
+                'bentuk' => $request->tipe[$temp],
                 'warna' => $request->warna[$temp],
-                'qtyOrder' => $request->order[$temp],
-                'out_flexo' => $request->outconv[$temp],
+                'qtyOrder' => $request->jumlahOrder[$temp],
+                'out_flexo' => $request->outConv[$temp],
                 'jml_plan' => $request->plan[$temp],
-                'ukuran_roll' => $request->roll[$temp],
+                // 'ukuran_roll' => $request->roll[$temp],
                 'bungkus' => $request->bungkus[$temp],
                 'urutan'=> $request->urutan[$temp],
                 // 'lain_lain' => $request->kebutuhanFlute2[$temp],
                 // 'rm_order' => $request->kebutuhanBawah[$temp],
-                // 'tonase' => $request->kebutuhanBawah[$temp],
+                'tonase' => $request->berat_total[$temp],
                 'keterangan' => $request->keterangan[$temp],
                 'status' => $status,
                 'lock' => $lock
             ]);
 
-            $totalpcs = $totalpcs + $request->plan;
-            $totalkg = $totalkg + $request->berat_total;
+            $totalpcs = $totalpcs + $request->plan[$temp];
+            $totalkg = $totalkg + $request->berat_total[$temp];
+            
+            
+            $opi = Opi_M::find($request->opi_id[$temp]);
+            
+            $opi->os_flx = $opi->jumlahOrder - $request->plan[$temp];
+            $opi->save();
         }
+
+        $upConv = Conv_M::find($convm->id);
+        $upConv->total_pcs = $totalpcs;
+        $upConv->total_kg = $totalkg;
+        $upConv->save();
+
         return redirect('admin/plan/conv');
     }
 
@@ -156,7 +166,8 @@ class ConvController extends Controller
         $convm = Conv_M::create([   
             'kode' => $request->kodeplan,
             'tanggal' => $request->tgl,
-            'shiftM' => $request->shift
+            'shiftM' => $request->shift,
+            'mesin' => $request->mesin
         ]);
 
         $data = count($request->noOpi);
@@ -174,13 +185,14 @@ class ConvController extends Controller
                 'kodeplanM' => $convm->kode,
                 'shift' => $convm->shiftM,
                 'tgl_kirim' => $request->dt[$i],
+                'dt_perubahan' => $request->dt_perubahan[$i],
                 'nomc' => $request->mc[$i],
                 'nama_item' => $request->item[$i],
                 'customer' => $request->customer[$i],
                 'tipe_order' => $request->tipeOrder[$i],
                 'joint' => $request->finishing[$i],
                 'wax' => $request->wax[$i],
-                'mesin' => $request->tipemesin,
+                'mesin' => $request->mesin,
                 'sheet_p' => $request->sheetp[$i],
                 'sheet_l' => $request->sheetl[$i],
                 'flute' => $request->flute[$i],
@@ -189,7 +201,7 @@ class ConvController extends Controller
                 'qtyOrder' => $request->order[$i],
                 'out_flexo' => $request->outconv[$i],
                 'jml_plan' => $request->plan[$i],
-                'ukuran_roll' => $request->roll[$i],
+                // 'ukuran_roll' => $request->roll[$i],
                 'bungkus' => $request->bungkus[$i],
                 'urutan'=> $request->urutan[$i],
                 // 'lain_lain' => $request->kebutuhanFlute2[$i],
@@ -222,25 +234,25 @@ class ConvController extends Controller
     {
         $convm = Conv_M::find($id);
         $shift1 = Conv_D::convd()->where("plan_conv_m_id", '=', $convm->id)->get();
-
+        $mesin = Conv_D::convd()->where("plan_conv_m_id", '=', $convm->id)->first();
+        
+        $plan1= [];
+        $plan2= [];
+        $plan3= [];
+        $plan4= [];
         // dd($shift1);
 
-        $total1 = 0;
-        $kg1 = 0;
-
-        if (count($shift1) != 0) {
-            for ($i=0; $i < count($shift1) ; $i++) { 
-                $total1 = $total1 + $shift1[$i]->jml_plan;
-                $kg1 = $kg1 + ($shift1[$i]->jml_plan * $shift1[$i]->mc_kg );
+        for ($i=0; $i < count($shift1) ; $i++) { 
+            if ($i <= 13) {
+                
             }
         }
 
-        if ($shift1[0]->mesin == 'FLEXO') {
+        if ($convm->tipe_mesin == 'flx') {
             return view('admin.plan.conv.pdf', compact(
                 'convm',
                 'shift1',
-                'total1', 
-                'kg1',  
+                'mesin'
             ));
         } else {
             return view('admin.plan.conv.nppdf', compact(
