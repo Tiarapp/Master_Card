@@ -53,8 +53,10 @@ use Illuminate\Support\Facades\DB;
     public function index()
     {
         $cust = Customer::get();
+
+        phpinfo();
         
-        return view('admin.data.customer', compact('cust'));
+        // return view('admin.data.customer', compact('cust'));
     }
     
     public function getBBM(Request $request) {

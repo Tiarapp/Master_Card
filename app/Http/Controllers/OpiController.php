@@ -37,14 +37,14 @@ class OpiController extends Controller
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
                 ->where('status_opi', '!=', "closed")
                 ->offset($start)
-                ->limit(100)
+                ->limit(50)
                 ->orderBy('NoOPI')
                 ->get();
                 
                 $totalFiltered = Opi_M::opi()->count();
            } else {
                 $opi = Opi_M::opi()->offset($start)
-                ->limit(100)
+                ->limit(50)
                 ->orderBy('NoOPI')
                 ->get();
                 
@@ -64,7 +64,7 @@ class OpiController extends Controller
                             ->orWhere('mc.kode', 'LIKE',"%{$search}%")
                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                             ->offset($start)
-                            ->limit(100)
+                            ->limit(50)
                             ->orderBy($order, $dir)
                             ->get();
 
@@ -82,7 +82,7 @@ class OpiController extends Controller
                             ->orWhere('mc.kode', 'LIKE',"%{$search}%")
                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
                             ->offset($start)
-                            ->limit(100)
+                            ->limit(50)
                             ->orderBy($order, $dir)
                             ->get();
 
