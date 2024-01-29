@@ -8,6 +8,7 @@ use App\Models\DetBBM;
 use App\Models\dumrolModel;
 use App\Models\Mastercard;
 use App\Models\TCustModel;
+use App\Models\EkspedisiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,16 +17,21 @@ use Illuminate\Support\Facades\DB;
     public function syncronize()
     {
         $cust = DB::connection('firebird')->table('TCustomer')->orderBy('Kode', 'asc')
-            // ->take(5)
             ->get();
-        $count = count($cust);  
+        $count = count($cust);
 
-        // $tcust = TCustModel::get();
+        $exp = DB::connection('firebird')->table('TSupplier')->where('Kode', 'LIKE', 'J%')->get();
+        $cexp = count($exp);
 
-        // dd($tcust);
-        
-        // return response()->json($cust);
+        EkspedisiModel::truncate();
         TCustModel::truncate(); 
+
+        foreach ($exp as $data) {
+            EkspedisiModel::create([
+                'kode' => trim($data->Kode),
+                'expedisi' => trim($data->Nama)
+            ]);
+        }
         
         foreach ($cust as $cust) {
              TCustModel::create([
@@ -34,18 +40,13 @@ use Illuminate\Support\Facades\DB;
                 'npwp' => trim($cust->NPWP),
                 'alamat1' => trim($cust->AlamatKantor),
                 'alamat2' => trim($cust->AlamatKirim),
-            //  = trim($cust->AlamatKirim);
                 'umur' => trim($cust->WAKTUBAYAR),
                 'lkredit' => trim($cust->Plafond2),
                 'telp' => trim($cust->TelpKantor),
                 'kontak' => trim($cust->PIC)
              ]);
             
-            // $data[] = $nestedData;
         }
-        // for ($i=0; $i < count($data) ; $i++) { 
-        //     Customer::create($data[$i]);
-        // }
         
         return redirect('admin/data/cust')->with('success', 'Syncronize Data Selesai!!'); 
     }
