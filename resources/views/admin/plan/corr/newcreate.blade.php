@@ -254,7 +254,8 @@
                             </button>
                             <button class="btn btn-lg btn-primary" type="submit">SIMPAN
                         </div>
-                    </div> 
+                    </div>
+                </form> 
             </div>
         </div>
     </div>    

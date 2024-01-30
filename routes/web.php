@@ -377,6 +377,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
         Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
         Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
+        Route::get('admin/data/alamat', [CustomerController::class, 'alamat_cust'])->name('data.alamat');
+        Route::get('admin/cust/single/{id}', [CustomerController::class, 'single_cust'])->name('data.custsingle');
+        Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
 
         Route::get('admin/periode', function () {
             $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))

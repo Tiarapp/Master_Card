@@ -93,7 +93,6 @@ class OpiController extends Controller
             }
         }
 
-
         // dd($opi);
         $data = array();
         if(!empty($opi))

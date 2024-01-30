@@ -55,9 +55,9 @@ use Illuminate\Support\Facades\DB;
     {
         $cust = Customer::get();
 
-        phpinfo();
+        // phpinfo();
         
-        // return view('admin.data.customer', compact('cust'));
+        return view('admin.data.customer', compact('cust'));
     }
     
     public function getBBM(Request $request) {
@@ -114,5 +114,39 @@ use Illuminate\Support\Facades\DB;
         // dd($detbbm);
         
         return view('admin.data.stokRoll', compact('detbbm'));
+    }
+
+    public function single_cust($id){
+        $cust = DB::connection('firebird')->table('TCustomer')
+            ->where('Kode', '=', $id)
+            ->first();
+
+        echo (json_encode($cust));
+    }
+
+    public function alamat_cust(){
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        
+        return view('admin.data.alamat', compact('cust'));
+    }
+
+    public function print_cust(Request $request){
+        $data = array();
+        $id = array_merge($request->cust_id);
+
+        for ($i=0; $i < count($id); $i++) { 
+            $cust = DB::connection('firebird')->table('TCustomer')
+                    ->where('Kode', '=', $id[$i])
+                    ->first();
+            $nestedData['id'] = trim($cust->Kode, " ");
+            $nestedData['nama'] = trim($cust->Nama, " ");
+            $nestedData['alamat'] = $cust->AlamatKirim;
+            $nestedData['pic'] = $cust->PIC;
+            $nestedData['telp'] = $cust->TelpKirim;
+
+            $data[] = $nestedData;
+        }
+
+        return view('admin.data.print_alamat', compact('data'));
     }
 }
