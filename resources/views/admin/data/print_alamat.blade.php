@@ -19,10 +19,17 @@
     }
     .card {
         width: 40%;
-        height: 200px;
+        height: auto;
         border : 2px solid black;
         margin : 5px;
         padding-left: 10px;
+    }
+
+    textarea {
+        border: none;
+        font-style: bold;
+        font-size: 18px;
+        font-weight: 700;
     }
 </style>
 
@@ -34,8 +41,7 @@
             <div class="card">
                 <h3><b>YTH.</b></h3>
                 <h3>{{ $data[$i]['nama'] }}</h3>
-
-                <h4>{{ $data[$i]['alamat'] }}</h4>
+                <textarea name="" id="" cols="38" rows="3">{{ $data[$i]['alamat'] }}</textarea>
 
                 <h3>UP : {{ $data[$i]['pic'] }} - {{ $data[$i]['telp'] }}</h3>
             </div>

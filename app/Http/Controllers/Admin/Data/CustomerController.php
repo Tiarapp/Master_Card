@@ -140,7 +140,7 @@ use Illuminate\Support\Facades\DB;
                     ->first();
             $nestedData['id'] = trim($cust->Kode, " ");
             $nestedData['nama'] = trim($cust->Nama, " ");
-            $nestedData['alamat'] = $cust->AlamatKirim;
+            $nestedData['alamat'] = $cust->AlamatAcc;
             $nestedData['pic'] = $cust->PIC;
             $nestedData['telp'] = $cust->TelpKirim;
 
