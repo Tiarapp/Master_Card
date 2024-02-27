@@ -200,7 +200,7 @@
             
         ],
         "order":[1, 'desc'],
-        "pageLength": 100,
+        "pageLength": 50,
         dom: 'Bftrip',
         buttons: [
           'copy',

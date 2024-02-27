@@ -564,19 +564,19 @@ class Kontrak_DController extends Controller
         {
             $date = date_create($request->tglKirim);
             $day = date_format($date, "D");
-            $alphabet = 'C';
-            $tahun = '2023';
+            $alphabet = 'D';
+            $tahun = '2024';
             
             if ($request->tglKirim != null) {
                 $lastOpi = Opi_M::where('periode', '=', $tahun) 
                 ->first();
                 
-                if($lastOpi == null){
+                if($lastOpi === null){
                     $numb_opi = '0001'.$alphabet;
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+3,4, '0', STR_PAD_LEFT).$alphabet;
+                    $numb_opi = str_pad(count($lastOpi)+1,4, '0', STR_PAD_LEFT).$alphabet;
                 };
                 
                 
@@ -654,7 +654,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status_opi' => 'Butuh Approve',
+                                    'status_opi' => 'Proses',
                                     'createdBy' => Auth::user()->name,
                                     'os_corr' => $request->jumlahKirim,
                                     'os_flx' => $request->jumlahKirim,
@@ -721,7 +721,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status_opi' => 'Butuh Approve',
+                                    'status_opi' => 'Proses',
                                     'createdBy' => Auth::user()->name,
                                 ]);
                                 

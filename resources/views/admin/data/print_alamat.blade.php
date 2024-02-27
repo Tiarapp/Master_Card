@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<style>
+    body{
+        width : 1056px;
+        height : 816px;
+        margin : 0px auto;
+    }
+    .container{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .card {
+        width: 40%;
+        height: auto;
+        border : 2px solid black;
+        margin : 5px;
+        padding-left: 10px;
+    }
+
+    textarea {
+        border: none;
+        font-style: bold;
+        font-size: 18px;
+        font-weight: 700;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <?php 
+            for ($i=0; $i < count($data) ; $i++) { 
+        ?>
+            <div class="card">
+                <h3><b>YTH.</b></h3>
+                <h3>{{ $data[$i]['nama'] }}</h3>
+                <textarea name="" id="" cols="38" rows="3">{{ $data[$i]['alamat'] }}</textarea>
+
+                <h3>UP : {{ $data[$i]['pic'] }} - {{ $data[$i]['telp'] }}</h3>
+            </div>
+            
+        <?php }    ?>
+    </div>
+</body>
+</html>

@@ -53,6 +53,14 @@
                   </a>
                 </li>
               </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('data.alamat') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                      <p>Print Alamat</p>
+                  </a>
+                </li>
+              </ul>
             </li>
           @endif
           {{-- Marketing --}}

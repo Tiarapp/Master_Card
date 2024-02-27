@@ -126,7 +126,6 @@
                                                 <label>Alamat Kirim</label>
                                             </div>
                                             <div class="col-md-6">
-                                                {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
                                                 <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
                                             </div>
                                         </div>
@@ -198,6 +197,8 @@
                                                     <option value="OUP Design & Kualitas Produksi">OUP Design & Kualitas Produksi</option>
                                                     <option value="OUP Ukuran Tinggi">OUP Ukuran Tinggi</option>
                                                     <option value="OUP Warna & Kupingan">OUP Warna & Kupingan</option>
+                                                    <option value="OUP Warna & Ukuran">OUP Warna & Ukuran</option>
+                                                    <option value="OUP Joint & Kualitas">OUP Joint & Kualitas</option>
                                                 </select>
                                             </div>
                                         </div>
