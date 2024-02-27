@@ -1121,7 +1121,7 @@
         $lebarbox = document.getElementById("lebarSheetBox").value;
         $tipebox = document.getElementById("tipebox").value;
 
-        if ($tipebox == 'DC') {
+        if ($tipebox == 'DC' || $tipebox == 'SH') {
             $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
 

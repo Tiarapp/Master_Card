@@ -1149,7 +1149,7 @@
         // var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
         //         var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
 
-        if ($tipebox == 'DC') {
+        if ($tipebox == 'DC' || $tipebox == 'SH') {
             $result = ($panjang * $lebar)/1000000;
         $result2 = ($panjangbox * $lebarbox)/1000000;
         
