@@ -312,6 +312,7 @@ class MastercardController extends Controller
             'lain' => $request->lain,
             'text' => $request->text_block,
             'wax' => $request->wax,
+            'doubleJoint' => $request->doublejoint,
             'lock' => 0,
             'box_id' => $request->box_id,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
@@ -532,6 +533,7 @@ class MastercardController extends Controller
             'lain' => $request->lain,
             'text' => $request->text_block,
             'wax' => $request->wax,
+            'doubleJoint' => $request->doublejoint,
             'box_id' => $request->box_id,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
             'gramSheetBoxKontrak2' => $request->gramSheetBoxKontrak2,
@@ -683,6 +685,7 @@ class MastercardController extends Controller
         $mc->text = $request->text_block;
         $mc->keterangan = $request->keterangan;
         $mc->wax = $request->wax;
+        $mc->doubleJoint = $request->doublejoint;
         $mc->tipeMc = $request->tipeMc;
         $mc->substanceKontrak_id = $request->substanceKontrak_id;
         $mc->substanceProduksi_id = $request->substanceProduksi_id;
@@ -739,6 +742,11 @@ class MastercardController extends Controller
         $namaSubsK = $mc->SubsKontrakNama;
         $namaSubsP = $mc->SubsProduksiNama;
         // return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
+
+        if ($mc->doubleJoint == 'Ya') {
+            return view('admin.mastercard.printb1double', compact('mc', 'namaSubsK', 'namaSubsP'));
+        }
+
         
         if ($mc->tipeMc == 'DC' ) {
             return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));

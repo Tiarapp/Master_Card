@@ -36,6 +36,7 @@ class Mastercard extends Model
         'berat_roll',
         'koli',
         'tipeMc',
+        'doubleJoint',
         'gramSheetBoxKontrak',
         'gramSheetBoxProduksi',
         'gramSheetCorrKontrak',

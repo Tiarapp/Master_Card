@@ -173,6 +173,18 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="control-label">Double Joint</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="doublejoint" id="doublejoint">
+                                                <option value='{{ $mc->doubleJoint }}'>{{ $mc->doubleJoint }}</option>
+                                                <option value='Tidak'>Tidak</option>
+                                                <option value='Ya'>Ya</option>
+                                            </select>
+                                        </div>         
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
@@ -610,6 +622,7 @@
                                                 <option value='{{ $mc->tipeMc }}'>{{ $mc->tipeMc }}</option>
                                                 <option value='B1'>B1</option>
                                                 <option value='B1 Terbalik'>B1 Terbalik</option>
+                                                <option value='B3'>B3</option>
                                                 <option value='DC'>DC</option>
                                                 <option value='LAYER'>LAYER</option>
                                                 <option value='SHEET'>SHEET</option>
@@ -825,7 +838,7 @@
         }
 
 
-        if (tipemc == 'B1' || tipemc == 'B1 Terbalik') {
+        if (tipemc == 'B1' || tipemc == 'B1 Terbalik' || tipemc == 'B3') {
             tipemc = 'B';
         } else if (tipemc == 'DC') {
             tipemc = 'D';
@@ -1058,6 +1071,7 @@
         var Kbawah = parseFloat(document.getElementById('Kbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
         var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
+        var doublejoint = document.getElementById('doublejoint').value;
         
         var result;
         var result2;
@@ -1081,8 +1095,13 @@
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
             
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
@@ -1110,8 +1129,14 @@
             }
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
 
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
@@ -1124,8 +1149,13 @@
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
 
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
@@ -1166,7 +1196,11 @@
             $result2 = ($panjangbox * $lebarbox)/1000000;
 
             $out = $result/$result2;
-            document.getElementById('outConv').value = $out.toFixed(0); 
+            document.getElementById('outConv').value = $out.toFixed(0);
+            document.getElementById('luasSheet').value = $result.toFixed(3);
+            document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+            document.getElementById('luasSheetProd').value = $result.toFixed(3);
+            document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
             getKodeBarang();
         }
     }
@@ -1181,6 +1215,7 @@
         var Pbawah = parseFloat(document.getElementById('Pbawah').value);
         var luasSheet = parseFloat(document.getElementById('luasSheetProd').value);
         var luasSheetBox = parseFloat(document.getElementById('luasSheetBoxProd').value);
+        var doublejoint = document.getElementById('doublejoint').value;
         
         var result, result2;
         
@@ -1203,8 +1238,13 @@
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
             
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
@@ -1232,8 +1272,14 @@
             }
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3) ;
-            result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
@@ -1246,8 +1292,13 @@
 
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
 
-            result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-            result2 =  parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
