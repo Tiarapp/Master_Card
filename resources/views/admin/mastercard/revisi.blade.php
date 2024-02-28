@@ -923,7 +923,7 @@
             document.getElementById('creasConv').value = Box[9];
             document.getElementById('flute').value = Box[4];
             
-            if (Box[3] == 'B1') {
+            if (Box[3] == 'B1' || Box[3] == 'B3') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
                 if (Box[4] == "BF") {

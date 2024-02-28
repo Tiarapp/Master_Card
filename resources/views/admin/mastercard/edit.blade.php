@@ -931,7 +931,7 @@
             
             $('.berat-roll').hide();
             
-            if (Box[3] == 'B1') {
+            if (Box[3] == 'B1' || Box[3] == 'B3') {
                 var resultP = getID(Box[8]);
                 var resultL = getID(Box[9]);
                 if (Box[4] == "BF") {
@@ -1200,6 +1200,10 @@
 
             $out = $result/$result2;
             document.getElementById('outConv').value = $out.toFixed(0); 
+            document.getElementById('luasSheet').value = $result.toFixed(3);
+            document.getElementById('luasSheetBox').value = $result2.toFixed(3);
+            document.getElementById('luasSheetProd').value = $result.toFixed(3);
+            document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
             getKodeBarang();
         }
     }
