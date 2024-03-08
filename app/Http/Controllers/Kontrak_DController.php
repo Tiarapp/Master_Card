@@ -141,7 +141,13 @@ class Kontrak_DController extends Controller
                         $nestedData['pcsKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
                         $nestedData['kgKontrak'] = "<p style='color:red'>".$kontrak->kontrak_d['kgKontrak']."</p>";
                         
-                        $sisakontrak = $kontrak->kontrak_d['pcsSisaKontrak'];
+                        $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+
+                        if ($sisakontrak < 0) {
+                            $sisakontrak = 0;
+                        } else {
+                            $sisakontrak = $sisakontrak;
+                        }
                         
                         $nestedData['sisaKirim'] = "<p style='color:red'>".$sisakontrak."</p>";
                         $nestedData['rp_pcs'] = "<p style='color:red'>".$kontrak->kontrak_d['harga_pcs']."</p>";
@@ -208,8 +214,16 @@ class Kontrak_DController extends Controller
                         $nestedData['realisasi'] = $dataRealisasi;
                         $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
                         $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
+
+                        $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+
+                        if ($sisakontrak < 0) {
+                            $sisakontrak = 0;
+                        } else {
+                            $sisakontrak = $sisakontrak;
+                        }
                         
-                        $nestedData['sisaKirim'] = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
+                        $nestedData['sisaKirim'] = $sisakontrak;
                         $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
                         $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
                         
