@@ -425,7 +425,6 @@
                                                                     <tbody>
                                                                         <?php
                                                                         $no = 1;
-                                                                        $result = "";
                                                                         foreach ($mc as $data) { 
                                                                             if ($data->revisi == 'R0' || $data->revisi == '') {
                                                                                 $result = $data->kode;

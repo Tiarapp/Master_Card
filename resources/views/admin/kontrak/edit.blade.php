@@ -431,10 +431,10 @@
                                                                         <?php
                                                                         $no = 1;
                                                                         foreach ($mc as $data) { 
-                                                                            if ($data->revisi == 'R0') {
-                                                                                $mc = $data->kode.'-'.$data->revisi;
-                                                                            } else {
+                                                                            if ($data->revisi == 'R0' || $data->revisi == '') {
                                                                                 $mc = $data->kode;
+                                                                            } else {
+                                                                                $mc = $data->kode.'-'.$data->revisi;
                                                                             }
                                                                             ?>
                                                                             <tr>
