@@ -427,14 +427,14 @@
                                                                         $no = 1;
                                                                         foreach ($mc as $data) { 
                                                                             if ($data->revisi !== 'R0') {
-                                                                                $mc = $data->kode.'-'.$data->revisi;
+                                                                                $result = $data->kode.'-'.$data->revisi;
                                                                             } else {
-                                                                                $mc = $data->kode;
+                                                                                $result = $data->kode;
                                                                             }
                                                                             ?>
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $mc }}</td>
+                                                                                <td>{{ $result }}</td>
                                                                                 <td>{{ $data->box }}</td>
                                                                                 <td>{{ $data->tipeBox }}</td>
                                                                                 <td>{{ $data->flute }}</td>
