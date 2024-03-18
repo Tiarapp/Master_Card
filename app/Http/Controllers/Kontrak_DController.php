@@ -303,10 +303,11 @@ class Kontrak_DController extends Controller
             ->get();
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')
+            ->where('aktif', '=', 1)
             ->orderBy('nama', 'Asc')
             ->get();
             
-            return view('admin.kontrak.create', compact(
+            return view('admin.kontrak.newcreate', compact(
                 'mc', 'top', 'cust', 'sales'
             ));
         }
@@ -362,7 +363,7 @@ class Kontrak_DController extends Controller
             }
             
             
-            // // dd($nobukti);
+            // dd($nobukti, $request->all());
             
             // Insert Into ke table
             $kontrakm = Kontrak_M::create([   
@@ -390,43 +391,34 @@ class Kontrak_DController extends Controller
             $tax = 0 ;
             $sblTax = 0 ;
             $total = 0 ;
-            for ($i=1; $i < 6; $i++) { 
-                if ($request->idmcpel[$i] !== null) {
-                    $kontrakd = Kontrak_D::create([
-                        'kontrak_m_id' => $kontrakm->id,
-                        'mc_id' => $request->idmcpel[$i],
-                        'pcsKontrak' => $request->qtyPcs[$i],
-                        // + $request->pcsToleransiLebih[$i] + $request->kgToleransiLebih[$i]
-                        'pcsSisaKontrak' => $request->qtyPcs[$i],
-                        'kgKontrak' => $request->qtyKg[$i],
-                        'kgSisaKontrak' => $request->qtyKg[$i],
-                        'pctToleransiLebihKontrak' => $request->toleransiLebih[$i],
-                        'pctToleransiKurangKontrak' => $request->toleransiKurang[$i],
-                        'pcsLebihToleransiKontrak' => $request->pcsToleransiLebih[$i],
-                        'kgLebihToleransiKontrak' => $request->kgToleransiLebih[$i],
-                        'pcsKurangToleransiKontrak' => $request->pcsToleransiKurang[$i],
-                        'kgKurangToleransiKontrak' => $request->kgToleransiKurang[$i],
-                        'harga_pcs' => $request->harga[$i],
-                        'tax' => $request->tax[$i],
-                        'amountBeforeTax' => $request->totalSblTax[$i],
-                        'ppn' => $request->hargaTax[$i],
-                        'amountTotal' => $request->Total[$i],
-                        'harga_kg' => $request->hargaKg[$i],
-                        'createdBy' => $request->createdBy,
-                    ]);
-                    
-                    $tax = $tax + $request->hargaTax[$i];
-                    $sblTax = $sblTax + $request->totalSblTax[$i];
-                    $total = $total + $request->Total[$i];
-                    // dd($tax);
-                }
-            }
+            $kontrakd = Kontrak_D::create([
+                'kontrak_m_id' => $kontrakm->id,
+                'mc_id' => $request->mcid,
+                'pcsKontrak' => $request->qtyPcs,
+                // + $request->pcsToleransiLebih + $request->kgToleransiLebih
+                'pcsSisaKontrak' => $request->qtyPcs,
+                'kgKontrak' => $request->qtyKg,
+                'kgSisaKontrak' => $request->qtyKg,
+                'pctToleransiLebihKontrak' => $request->toleransiLebih,
+                'pctToleransiKurangKontrak' => $request->toleransiKurang,
+                'pcsLebihToleransiKontrak' => $request->toleransiLebihPcs,
+                'kgLebihToleransiKontrak' => $request->toleransiLebihKg,
+                'pcsKurangToleransiKontrak' => $request->toleransiKurangPcs,
+                'kgKurangToleransiKontrak' => $request->toleransiKurangKg,
+                'harga_pcs' => $request->harga,
+                'tax' => $request->ppn,
+                'amountBeforeTax' => $request->total,
+                'ppn' => $request->hargappn,
+                'amountTotal' => $request->total + $request->hargappn,
+                'harga_kg' => $request->hargakg,
+                'createdBy' => $request->createdBy,
+            ]);
             
             $upMaster = Kontrak_M::find($kontrakm->id); // finding row sesuai id untuk update ke table
             
-            $upMaster->amountBeforeTax = $sblTax; // update database field amountBefireTax dengan value sblTax
-            $upMaster->tax = $tax;
-            $upMaster->amountTotal = $total;
+            $upMaster->amountBeforeTax = $request->total; // update database field amountBefireTax dengan value sblTax
+            $upMaster->tax = $request->hargappn;
+            $upMaster->amountTotal = $request->total + $request->hargappn;
             
             $upMaster->save(); // simpan ke table
             
@@ -1014,14 +1006,30 @@ class Kontrak_DController extends Controller
         public function recall($id) 
         {
             $order = 0;
+            $kirim = 0;
             $kontrak = Kontrak_D::where("kontrak_m_id", "=", $id)->first();
             $opi = Opi_M::where("kontrak_m_id", "=", $id)->get();
+            $realisasi = RealisasiKirim::where("kontrak_m_id", "=", $id)->get();
             
             foreach ($opi as $opi) {
                 $order = $order + $opi->jumlahOrder;
             }
+
+            foreach ($realisasi as $data) {
+                $kirim = $kirim + $data->qty_kirim;
+            }
             
-            $kontrak->pcsSisaKontrak = $kontrak->pcsKontrak - $order ;
+            $sisakirim = $kontrak->pcsKontrak - $kirim;
+            $sisaopi = $kontrak->pcsKontrak - $order;
+
+            if ($sisakirim > $sisaopi) {
+                $sisakontrak = $sisakirim;
+            } else {
+                $sisakontrak = 0;
+            }
+
+            $kontrak->pcsSisaKontrak = $sisakontrak;
+
             $kontrak->save();
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');

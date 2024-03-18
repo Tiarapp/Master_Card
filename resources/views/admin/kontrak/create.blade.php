@@ -200,6 +200,7 @@
                                                     <option value="OUP Warna & Ukuran">OUP Warna & Ukuran</option>
                                                     <option value="OUP Joint & Kualitas">OUP Joint & Kualitas</option>
                                                     <option value="OUP Creasing">OUP Creasing</option>
+                                                    <option value="OUP Ukuran, Creasing, Arah Serat">OUP Ukuran, Creasing, Arah Serat</option>
                                                 </select>
                                             </div>
                                         </div>

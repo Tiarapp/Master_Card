@@ -35,9 +35,8 @@
                     </ul>
                 </div>
                 @endif
-                <form action="../update/{{ $kontrak_M->id }}" method="POST">
+                <form action="{{ route('kontrak.store') }}" method="POST">
                     {{ csrf_field() }}
-                    {{ method_field('PUT') }}
 
                     <h4 class="modal-title"><b>Master Kontrak</b></h4>
                     <hr>
@@ -52,7 +51,7 @@
                                                     <label>Pilih Customer</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
+                                                    <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" readonly>
                                                 </div>
                                                 
                                                 <!-- Modal -->
@@ -119,7 +118,7 @@
                                                     <label>Tanggal</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}">
+                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
                                                 </div>
                                             </div>
                                         </div>
@@ -133,7 +132,7 @@
                                                     <label>Komisi</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
+                                                    <input type="text" name="komisi" id="komisi">
                                                 </div>
                                             </div>
                                         </div>
@@ -148,7 +147,6 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <select class='js-example-basic-single col-md-12' name="top" id="top">
-                                                        <option value="{{ $kontrak_M->top }}">{{ $kontrak_M->top }}</option>
                                                         @foreach ($top as $data)
                                                             <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                                         @endforeach
@@ -167,7 +165,6 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <select class='js-example-basic-single col-md-12' name="sales" id="sales">
-                                                        <option value="{{ $kontrak_M->sales }}">{{ $kontrak_M->sales }}</option>
                                                         @foreach ($sales as $data)
                                                             <option value="{{ $data->nama }}">{{ $data->nama }}</option>
                                                         @endforeach
@@ -187,7 +184,7 @@
                                                     <label>Telp</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_M->custTelp }}">
+                                                    <input type="text" class="form-control txt_line" name="telp" id="telp">
                                                 </div>
                                             </div>
                                         </div>
@@ -201,7 +198,7 @@
                                                     <label>PO Customer</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" class="form-control txt_line" value="{{ $kontrak_M->poCustomer }}" name="poCustomer" id="poCustomer">
+                                                    <input type="text" class="form-control txt_line"name="poCustomer" id="poCustomer">
                                                 </div>
                                             </div>
                                         </div>
@@ -216,7 +213,6 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
-                                                        <option value="{{ $kontrak_M->tipeOrder }}">{{ $kontrak_M->tipeOrder }}</option>
                                                         <option value="Order Baru">Order Baru</option>
                                                         <option value="Order Ulang">Order Ulang</option>
                                                         <option value="OUP Design">OUP Design</option>
@@ -277,7 +273,6 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
-                                                        <option value="{{ $kontrak_M->caraKirim }}">{{ $kontrak_M->caraKirim }}</option>
                                                         <option value="Kirim">Kirim</option>
                                                         <option value="Ambil Sendiri">Ambil Sendiri</option>
                                                     </select>
@@ -294,7 +289,7 @@
                                                     <label>Tanggal Kirim</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim" value="{{ $kontrak_M->min_tgl_kirim }}">
+                                                    <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim">
                                                 </div>
                                             </div>
                                         </div>
@@ -311,7 +306,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                    <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak_M->alamatKirim }}</textarea>
+                                                    <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -326,7 +321,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                    <textarea name="keterangan" id="keterangan" cols="30" rows="4" value="">{{ $kontrak_M->keterangan }}</textarea>
+                                                    <textarea name="keterangan" id="keterangan" cols="30" rows="4"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -335,7 +330,6 @@
                             </div>
                         </div>
                     </div>
-
                     <h4 class="modal-title" style="margin-top: 20px;"><b>Biaya</b></h4>
                     <hr>
                     <div style="border-bottom: 2px solid black">
@@ -348,7 +342,7 @@
                                                 <label>Expedisi(Rp/Kg)</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="number" name="biaya_exp" id="biaya_exp" value="{{ $kontrak_M->biaya_exp }}">
+                                                <input type="number" name="biaya_exp" id="biaya_exp">
                                             </div>
                                         </div>
                                     </div>
@@ -363,7 +357,7 @@
                                                     <label>Glue Manual(Rp/Pcs)</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="number" name="biaya_glue" id="biaya_glue" value="{{ $kontrak_M->biaya_glue }}">
+                                                    <input type="number" name="biaya_glue" id="biaya_glue">
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +373,7 @@
                                                     <label>Wax(Rp/Pcs)</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="number" name="biaya_wax" id="biaya_wax" value="{{ $kontrak_M->biaya_wax }}">
+                                                    <input type="number" name="biaya_wax" id="biaya_wax">
                                                 </div>
                                             </div>
                                         </div>
@@ -400,9 +394,9 @@
                                                 <label>Pilih Mastercard</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="hidden" name="kontrakd_id" id="kontrakd_id" value="{{ $kontrak_D->id }}">
-                                                <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" value="{{ $kontrak_D->mc }}" readonly>
-                                                <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" value="{{ $kontrak_D->mc_id }}" readonly>
+                                                <input type="hidden" name="kontrakd_id" id="kontrakd_id">
+                                                <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" readonly>
+                                                <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" readonly>
                                             </div>
                                             <div class="modal fade" id="Mastercard">
                                                 <div class="modal-dialog modal-xl">
@@ -425,13 +419,14 @@
                                                                             <th scope="col">Kualitas</th>
                                                                             <th scope="col">Gram</th>
                                                                             <th scope="col">Warna</th>
+                                                                            <th scope="col">Keterangan</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <?php
                                                                         $no = 1;
                                                                         foreach ($mc as $data) { 
-                                                                            if ($data->revisi == 'R0') {
+                                                                            if ($data->revisi !== 'R0') {
                                                                                 $mc = $data->kode.'-'.$data->revisi;
                                                                             } else {
                                                                                 $mc = $data->kode;
@@ -446,6 +441,7 @@
                                                                                 <td>{{ $data->substance }}</td>
                                                                                 <td>{{ $data->gramSheetBoxKontrak2 }}</td>
                                                                                 <td>{{ $data->warna }}</td>
+                                                                                <td>{{ $data->keterangan }}</td>
                                                                             </tr>
                                                                             <?php
                                                                         }
@@ -475,7 +471,7 @@
                                                         <label>Flute</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="flute" id="flute" value="{{ $kontrak_D->flute }}" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="flute" id="flute" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -489,7 +485,7 @@
                                                         <label>Warna</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <input type="text" class="form-control txt_line col-md-11" name="warna" id="warna" value="{{ $kontrak_D->warna }}" readonly>
+                                                        <input type="text" class="form-control txt_line col-md-11" name="warna" id="warna" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -509,7 +505,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 {{-- <input type="text" class="form-control txt_line col-md-11" name="namaBarang" id="namaBarang" value="{{ $kontrak_D->box }}" readonly> --}}
-                                                <textarea name="namaBarang" id="namaBarang" cols="30" rows="3">{{ $kontrak_D->box }}</textarea>
+                                                <textarea name="namaBarang" id="namaBarang" cols="30" rows="3"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -523,7 +519,7 @@
                                                 <label>Gramatur</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="gram" id="gram" value="{{ $kontrak_D->gram }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="gram" id="gram" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -539,7 +535,7 @@
                                                 <label>Tipe Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="tipeBox" id="tipeBox" value="{{ $kontrak_D->tipeBox }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="tipeBox" id="tipeBox" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -553,7 +549,7 @@
                                                 <label>Kualitas</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="kualitas" id="kualitas" value="{{ $kontrak_D->substance }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="kualitas" id="kualitas" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -573,13 +569,13 @@
                                                 <label>Quantity</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 qty" name="qtyPcs" id="qtyPcs" value="{{ $kontrak_D->pcsKontrak }}">
+                                                <input type="text" class="form-control txt_line col-md-11 qty" name="qtyPcs" id="qtyPcs">
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Pcs</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="qtyKg" id="qtyKg" value="{{ $kontrak_D->kgKontrak }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="qtyKg" id="qtyKg" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -596,15 +592,15 @@
                                                 <label>Toleransi</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 toleransi-lebih" name="toleransiLebih" id="toleransiLebih" value="{{ $kontrak_D->pctToleransiLebihKontrak }}" >
+                                                <input type="text" class="form-control txt_line col-md-11 toleransi-lebih" name="toleransiLebih" id="toleransiLebih">
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 toleransi-kurang" name="toleransiKurang" id="toleransiKurang" value="{{ $kontrak_D->pctToleransiKurangKontrak }}" >
+                                                <input type="text" class="form-control txt_line col-md-11 toleransi-kurang" name="toleransiKurang" id="toleransiKurang">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -613,7 +609,7 @@
                                                 <label>Harga pcs</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11 harga" name="harga" id="harga" value="{{ $kontrak_D->harga_pcs }}" onchange="getData();">
+                                                <input type="text" class="form-control txt_line col-md-11 harga" name="harga" id="harga">
                                             </div>
                                         </div>
                                     </div>
@@ -629,13 +625,13 @@
                                                 <label>PPN</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="{{ $kontrak_D->tax }}">
+                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="11">
                                             </div>
                                             <div class="col-md-1">
                                                 <label>%</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="{{ $kontrak_D->ppn }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label></label>
@@ -643,7 +639,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div> 
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -652,13 +648,13 @@
                                                 <label>Toleransi Lebih</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihPcs" id="toleransiLebihPcs" value="{{ $kontrak_D->pcsLebihToleransiKontrak }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihPcs" id="toleransiLebihPcs" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>pcs</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihKg" id="toleransiLebihKg" value="{{ $kontrak_D->kgLebihToleransiKontrak }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiLebihKg" id="toleransiLebihKg" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -675,7 +671,7 @@
                                                 <label>Total</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="total" id="total" value="{{ $kontrak_D->amountTotal }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="total" id="total" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -692,7 +688,7 @@
                                                 <label>Harga kg</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" value="{{ $kontrak_D->harga_kg }}" >
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg">
                                             </div>
                                         </div>
                                     </div>
@@ -706,13 +702,13 @@
                                                 <label>Toleransi Kurang</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangPcs" id="toleransiKurangPcs" value="{{ $kontrak_D->pcsKurangToleransiKontrak }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangPcs" id="toleransiKurangPcs" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>pcs</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangKg" id="toleransiKurangKg" value="{{ $kontrak_D->pcsKurangToleransiKontrak }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="toleransiKurangKg" id="toleransiKurangKg" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Kg</label>
@@ -793,6 +789,7 @@
                     document.getElementById('kualitas').value = mc[5];
                     document.getElementById('gram').value = mc[6];
                     document.getElementById('warna').value = mc[7];
+                    document.getElementById('keterangan').value = mc[8];
                     document.getElementById('qtyPcs').value = 0;
                     document.getElementById('qtyKg').value = 0;
                     document.getElementById('hargakg').value = 0;
@@ -869,6 +866,7 @@
         hargakg = parseFloat(harga) / parseFloat(kg);
         hargappn = parseFloat(total) * parseInt(ppn) / 100;
 
+
         document.getElementById("hargappn").value = hargappn.toFixed(2);
         document.getElementById("total").value = total.toFixed(0);
         document.getElementById("hargakg").value = hargakg.toFixed(2);
@@ -879,6 +877,7 @@
         total = document.getElementById("total").value;
 
         if (total != 0 || total != null) {
+            hargappn = parseFloat(total) * parseInt(ppn) / 100;
         } else {
             hargappn = 0;
         }

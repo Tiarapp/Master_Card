@@ -291,10 +291,10 @@
                             </div>
                         </div>
                     </div>
-                    </form>
-                    <div class="col-md-6">
-                        <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
-                    </div>
+                </form>
+                <div class="col-md-6">
+                    <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                </div>
                 </div>
             </div>
         </div>    
