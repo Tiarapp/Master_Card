@@ -425,11 +425,12 @@
                                                                     <tbody>
                                                                         <?php
                                                                         $no = 1;
+                                                                        $result = "";
                                                                         foreach ($mc as $data) { 
-                                                                            if ($data->revisi !== 'R0') {
-                                                                                $result = $data->kode.'-'.$data->revisi;
-                                                                            } else {
+                                                                            if ($data->revisi == 'R0' || $data->revisi == '') {
                                                                                 $result = $data->kode;
+                                                                            } else {
+                                                                                $result = $data->kode.'-'.$data->revisi;
                                                                             }
                                                                             ?>
                                                                             <tr>
@@ -761,14 +762,10 @@
         
         $('#data_customer tbody').on( 'click', 'td', function () {
             var cust = (table.row(this).data());
-            
-            // document.getElementById('customer_id').value = cust[0]    ;
+
             document.getElementById('namaCust').value = cust[1];
             document.getElementById('alamatKirim').value = cust[5];
             document.getElementById('telp').value = cust[3];
-            // document.getElementById('fax').value = cust[4];
-            
-            // getGramKontrak();
         } );
     } );
 
