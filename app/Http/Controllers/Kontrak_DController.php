@@ -946,33 +946,53 @@ class Kontrak_DController extends Controller
             
             $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
             
-            $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
-            // $sj = DB::connection('firebird2')->table('TDetSJ')
-            // ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
-            // ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD')->first();
+            $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();            
             
             $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();
+            $sj = DB::connection('firebird2')->table('TDetSJ')
+            ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
+            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD', 'TDetSJ.Quantity', 'TSuratJalan.TglSJ')
+            ->where('TSuratJalan.NamaCust', 'LIKE', $kontrak_M->customer_name)
+            ->get();
+
+            // dd($sj);
+
+            $kontrakMaster = DB::table('kontrak_d')
+            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->where('kontrak_m.customer_name', 'Like', $kontrak_M->customer_name)
+            ->select('pcsKontrak', 'kontrak_m.*')
+            ->get();
+
+            // dd($kontrakMaster);
             
             return view('admin.kontrak.data_realisasi', compact(
                 'kontrak_D', 
                 'kontrak_M', 
-                'opi'
+                'opi',
+                'kontrakMaster',
+                'sj'
             ));
         }
         
         public function store_realisasi(Request $request)
         {
-            $kontrak = Kontrak_D::where('kontrak_m_id', "=", $request->idkontrakm)->first();
-
-            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
-            RealisasiKirim::create([
-                'kontrak_m_id'  => $request->idkontrakm,
-                'tanggal_kirim' => $request->tglKirim,
-                'qty_kirim'     => $request->jumlahKirim,
-                'kg_kirim'      => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
-                'createdBy'     => Auth::user()->name
-            ]);
+            $id = array_merge($request->idkontrak);
+            // dd($id);
+            for ($i=0; $i < count($id); $i++) { 
+                $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
+                $qty = intval(str_replace(',','',$request->jumlahKirim));
+                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
+                RealisasiKirim::create([
+                    'kontrak_m_id'  => $id[$i],
+                    'tanggal_kirim' => $request->tglKirim,
+                    'nomer_sj'      => $request->sj,
+                    'mod'           => $request->mod,
+                    'qty_kirim'     => $qty,
+                    'kg_kirim'      => $qty * $mc->gramSheetBoxKontrak,
+                    'createdBy'     => Auth::user()->name
+                ]);
+            }
             
             return redirect('admin/kontrak');
         }

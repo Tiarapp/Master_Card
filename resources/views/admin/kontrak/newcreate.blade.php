@@ -118,7 +118,7 @@
                                                     <label>Tanggal</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
+                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ date("Y-m-d") }}" readonly>
                                                 </div>
                                             </div>
                                         </div>

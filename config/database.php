@@ -56,11 +56,11 @@ return [
 
         'firebird2' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST', '192.168.1.250'),
-            'port'     => env('DB_PORT', '3050'),
-            'database' => env('DB_DATABASE', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
-            'username' => env('DB_USERNAME', 'sysdba'),
-            'password' => env('DB_PASSWORD', 'masterkey'),
+            'host'     => env('DB_HOST5', '192.168.1.250'),
+            'port'     => env('DB_PORT5', '3050'),
+            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME5', 'sysdba'),
+            'password' => env('DB_PASSWORD5', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
