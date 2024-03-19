@@ -34,7 +34,7 @@
                 <form id="jquery-val-form" action="{{ route('kontrak.store_realisasi') }}" onsubmit="return validateForm()" method="post">
                 {{csrf_field()}}
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div id="listKontrak">    
                                 <div class="row">
                                     <div class="col-md-12">
@@ -166,7 +166,7 @@
                                             <div class="col-md-4">
                                                 <label>Nama Barang</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <input type="text" class="form-control txt_line" name="barang" id="barang" value="{{ $kontrak_D->mc->namaBarang }}" readonly>
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@
                                             <div class="col-md-4">
                                                 <label>QTY Order</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="text" class="form-control txt_line" name="qtyOrder" id="qtyOrder" value="{{ $kontrak_D->pcsKontrak }}" readonly>
                                             </div>
                                         </div>
@@ -188,7 +188,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -196,7 +196,7 @@
                                             <div class="col-md-4">
                                                 <label for="message-text" class="col-form-label">Surat Jalan:</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="text" class="form-control" name="sj" id="sj" readonly>
                                             </div>
                                         </div>
@@ -210,7 +210,7 @@
                                             <div class="col-md-4">
                                                 <label for="message-text" class="col-form-label">Tanggal Kirim:</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="date" class="form-control" name="tglKirim" id="tglKirim" readonly>
                                             </div>
                                         </div>
@@ -224,7 +224,7 @@
                                             <div class="col-md-4">
                                                 <label for="message-text" class="col-form-label">MOD:</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="text" class="form-control" name="mod" id="mod" readonly>
                                             </div>
                                         </div>
@@ -238,7 +238,7 @@
                                             <div class="col-md-4">
                                                 <label for="message-text" class="col-form-label">Jumlah Kirim:</label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <input type="text" class="form-control" name="jumlahKirim" id="jumlahKirim" required>
                                             </div>
                                         </div>
@@ -252,7 +252,7 @@
                 </form>
                 
                 {{-- <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}"> --}}
-                @include('admin.kontrak.add_kirim')
+                {{-- @include('admin.kontrak.add_kirim') --}}
 
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
