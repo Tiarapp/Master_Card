@@ -1,4 +1,3 @@
-
 <script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 
 @extends('admin.templates.partials.default')
@@ -197,7 +196,7 @@
                                                 <label for="message-text" class="col-form-label">Surat Jalan:</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" name="sj" id="sj" readonly>
+                                                <input type="text" class="form-control" name="sj" id="sj" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -211,7 +210,7 @@
                                                 <label for="message-text" class="col-form-label">Tanggal Kirim:</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="date" class="form-control" name="tglKirim" id="tglKirim" readonly>
+                                                <input type="date" class="form-control" name="tglKirim" id="tglKirim" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +224,7 @@
                                                 <label for="message-text" class="col-form-label">MOD:</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" name="mod" id="mod" readonly>
+                                                <input type="text" class="form-control" name="mod" id="mod" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -250,10 +249,6 @@
                     </div>
                     
                 </form>
-                
-                {{-- <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}"> --}}
-                {{-- @include('admin.kontrak.add_kirim') --}}
-
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-sj">Tambah</button>
@@ -301,6 +296,7 @@
     $(".kontrak").ready(function(){            
         var table = $("#data_kontrak").DataTable({
             select: true,
+            "order": [0, 'desc']
         });
         
         $('#data_kontrak tbody').on( 'click', 'td', function () {
@@ -344,8 +340,6 @@
         "ordering": false,
         "info":     false,
         "searching": false,
-        // "scrollX": true,
-        // "autoWidth": true, 
         "initComplete": function (settings, json) {  
             $("#detail_kontrak").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
         },
@@ -356,6 +350,7 @@
     $(".sj").ready(function(){            
         var table = $("#data_sj").DataTable({
             select: true,
+            "order": [0, 'desc']
         });
         
         $('#data_sj tbody').on( 'click', 'td', function () {

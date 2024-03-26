@@ -399,6 +399,14 @@ Route::middleware(['auth'])->group(function (){
             return response()->json($all_periode);
 
         })->name('periode');
+    
+    // QC
+        Route::get('admin/qc', 'QcController@index')->name('qc.index');
+        Route::get('admin/qc/create', 'QcController@create')->name('qc.create');
+        Route::post('admin/qc/store', 'QcController@store')->name('qc.store');
+        Route::get('admin/qc/edit/{id}', 'QcController@edit')->name('qc.edit');
+        Route::put('admin/qc/update/{id}', 'QcController@update')->name('qc.update');
+        Route::get('admin/qc/print/{id}', 'QcController@print')->name('qc.print');
 }); 
 
 

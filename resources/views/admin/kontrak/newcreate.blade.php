@@ -198,7 +198,7 @@
                                                     <label>PO Customer</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="text" class="form-control txt_line"name="poCustomer" id="poCustomer">
+                                                    <input type="text" class="form-control txt_line"name="poCustomer" id="poCustomer" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -272,7 +272,7 @@
                                                     <label>Cara Kirim</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim">
+                                                    <select class='js-example-basic-single col-md-12' name="caraKirim" id="caraKirim" required>
                                                         <option value="Kirim">Kirim</option>
                                                         <option value="Ambil Sendiri">Ambil Sendiri</option>
                                                     </select>
@@ -289,7 +289,7 @@
                                                     <label>Tanggal Kirim</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim">
+                                                    <input type="date" class="form-control txt_line" name="tglkirim" id="tglkirim" >
                                                 </div>
                                             </div>
                                         </div>
@@ -569,7 +569,7 @@
                                                 <label>Quantity</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 qty" name="qtyPcs" id="qtyPcs">
+                                                <input type="text" class="form-control txt_line col-md-11 qty" name="qtyPcs" id="qtyPcs" required>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Pcs</label>
@@ -592,10 +592,10 @@
                                                 <label>Toleransi</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 toleransi-lebih" name="toleransiLebih" id="toleransiLebih">
+                                                <input type="text" class="form-control txt_line col-md-11 toleransi-lebih" name="toleransiLebih" id="toleransiLebih" required>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11 toleransi-kurang" name="toleransiKurang" id="toleransiKurang">
+                                                <input type="text" class="form-control txt_line col-md-11 toleransi-kurang" name="toleransiKurang" id="toleransiKurang" required>
                                             </div>
                                         </div>
                                     </div>
@@ -609,7 +609,7 @@
                                                 <label>Harga pcs</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11 harga" name="harga" id="harga">
+                                                <input type="text" class="form-control txt_line col-md-11 harga" name="harga" id="harga" required>
                                             </div>
                                         </div>
                                     </div>
@@ -625,7 +625,7 @@
                                                 <label>PPN</label>
                                             </div>
                                             <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="11">
+                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="11" readonly>
                                             </div>
                                             <div class="col-md-1">
                                                 <label>%</label>
@@ -688,7 +688,7 @@
                                                 <label>Harga kg</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg">
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargakg" id="hargakg" readonly>
                                             </div>
                                         </div>
                                     </div>

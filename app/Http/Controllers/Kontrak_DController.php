@@ -962,6 +962,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
             ->where('kontrak_m.customer_name', 'Like', $kontrak_M->customer_name)
             ->select('pcsKontrak', 'kontrak_m.*')
+            ->orderBy('id', 'desc')
             ->get();
 
             // dd($kontrakMaster);
