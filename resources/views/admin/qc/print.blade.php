@@ -89,7 +89,8 @@
 	<tr>
 		<td colspan="3" style="border-top: 1px solid #000000; border-left: 1px solid #000000" height="33" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000">Tanggal Analisa</font></td>
 		<td style="border-top: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000">:</font></td>
-		<td style="border-top: 1px solid #000000" align="left" valign=bottom sdval="45363" sdnum="1033;0;D-MMM-YY"><font face="Times New Roman" size=3 color="#000000">{{ $data->tanggal_analisa }}</font></td>
+        <?php $date = date_create($data->tanggal_analisa) ?>
+		<td style="border-top: 1px solid #000000" align="left" valign=bottom sdval="45363" sdnum="1033;0;D-MMM-YY"><font face="Times New Roman" size=3 color="#000000">{{ date_format($date, "d-M-Y") }}</font></td>
 		<td style="border-top: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
@@ -174,7 +175,8 @@
 	<tr>
 		<td colspan="3" style="border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="33" align="left" valign=bottom><font face="Times New Roman" color="#000000" size="3">Tanggal Kirim</font></td>
 		<td style="border-bottom: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000">:</font></td>
-		<td colspan="4" style="border-bottom: 1px solid #000000" align="left" valign=bottom sdval="45364" sdnum="1033;0;D-MMM-YY"><font face="Times New Roman" size="3" color="#000000">{{ $data->tanggal_kirim }}</font></td>
+        <?php $date2 = date_create($data->tanggal_kirim) ?>
+		<td colspan="4" style="border-bottom: 1px solid #000000" align="left" valign=bottom sdval="45364" sdnum="1033;0;D-MMM-YY"><font face="Times New Roman" size="3" color="#000000">{{ date_format($date2, "d-M-Y") }}</font></td>
 		<td style="border-bottom: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
 		<td style="border-bottom: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
 		<td style="border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
