@@ -37,6 +37,7 @@
   <section class="content">
     <div class="container-fluid">
       <div class="form-group">
+        <a href="{{ route('qc.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
         <div class="card-body">
             <table class="table table-bordered" id="testqc">
             <thead>
