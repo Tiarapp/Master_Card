@@ -374,7 +374,7 @@
                                         </td>
                                     </tbody>
                                     <tbody>
-                                        <td style="width: 300px">EST (Kgf/cm2)</td>
+                                        <td style="width: 300px">ECT (Kgf/cm2)</td>
                                         <td>
                                             <input type="text" class="form-control txt_line ect1" name="ect1" id="ect1" value="{{ $data->ect1 }}">
                                         </td>

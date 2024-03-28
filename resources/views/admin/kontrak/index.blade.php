@@ -4,11 +4,26 @@
 @extends('admin.templates.partials.default')
 
 
-{{-- <style>
-  td, tr {
-    border:1px solid black !important;
-  }
-</style> --}}
+<style>
+.label {
+  color: white;
+}
+
+.status {
+  width: auto;
+  height: auto;
+  margin-top: 20px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 10%;
+}
+
+.success {background-color: #04AA6D;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */
+</style>
 
 @section('content')
 <div class="content-wrapper">
@@ -49,6 +64,7 @@
           <thead>
             <tr>
               <th scope="col">ID.</th>
+              <th scope="col">Status</th>
               <th scope="col">Action</th>
               <th scope="col">Tanggal</th>
               <th scope="col">No MC</th>
@@ -100,6 +116,7 @@
         },
         "columns": [
           {"data": "id"},
+          {"data": "status"},
           {"data": "action"},
           {"data": "tglKontrak"},
           {"data": "nomc"},

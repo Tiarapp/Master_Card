@@ -30,7 +30,8 @@ class QcController extends Controller
 
         $datapertanggl = QcModel::where('tanggal_analisa', '=', $request->tgl_analisa)->get();
 
-        $day = date('d-m-Y');
+        $temp = date_create($request->tgl_analisa);
+        $day = date_format($temp, 'd-m-Y');
 
         $no_analisa = str_replace('-', '', $day). count($datapertanggl)+1;
         // dd($no_analisa);
@@ -152,5 +153,13 @@ class QcController extends Controller
 
         return view('admin.qc.print', compact('data'));
 
+    }
+
+    public function delete($id) {
+        $data = QcModel::find($id);
+
+        $data->delete();
+
+        return redirect('admin/qc')->with("success", "COA berhasil dihapus!!");
     }
 }

@@ -61,6 +61,7 @@
                   <td>
                     <a href="../admin/qc/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
                     <a href="../admin/qc/print/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                    <a href="../admin/qc/delete/{{ $data->id }}" class="btn btn-outline-secondary" onclick="return confirm('Are you sure?')" type="button">Hapus</a>
                   </td>
                 </tr>
                 <?php

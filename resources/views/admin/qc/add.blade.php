@@ -89,7 +89,15 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <?php 
-                                                                    foreach ($opi as $data) { ?>
+                                                                    foreach ($opi as $data) { 
+                                                                        if ($data->joint == 'No Joint') {
+                                                                            $joint = $data->joint;
+                                                                        } else {
+                                                                            $temp = explode(" ", $data->joint);
+                                                                            $joint = $temp[0];
+                                                                        }
+                                                                        ?>
+
                                                                         <tr class="modal-plan-list">
                                                                             <td>
                                                                                 <button class="btn btn-success btn-insert-opi" type="button">Add</button>
@@ -107,7 +115,7 @@
                                                                             <td>{{ $data->lebarSheet }}</td>
                                                                             <td>{{ $data->subsK }}</td>
                                                                             <td>{{ $data->gram }}</td>
-                                                                            <td>{{ $data->joint }}</td>
+                                                                            <td>{{ $joint }}</td>
                                                                             <td>{{ $data->flute }}</td>
                                                                             <td>{{ $data->opiid }}</td>
                                                                         </tr>
@@ -372,7 +380,7 @@
                                         </td>
                                     </tbody>
                                     <tbody>
-                                        <td style="width: 300px">EST (Kgf/cm2)</td>
+                                        <td style="width: 300px">ECT (Kgf/cm2)</td>
                                         <td>
                                             <input type="text" class="form-control txt_line ect1" name="ect1" id="ect1">
                                         </td>

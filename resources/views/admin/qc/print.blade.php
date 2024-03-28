@@ -49,10 +49,10 @@
 <table cellspacing="0" border="0">
 	<colgroup span="3" width="68"></colgroup>
 	<colgroup width="17"></colgroup>
-	<colgroup width="103"></colgroup>
-	<colgroup width="68"></colgroup>
-	<colgroup width="70"></colgroup>
-	<colgroup span="3" width="68"></colgroup>
+	<colgroup width="134"></colgroup>
+	<colgroup width="134"></colgroup>
+	<colgroup width="134"></colgroup>
+	<colgroup span="3" width="134"></colgroup>
 	<colgroup width="134"></colgroup>
 	<tr>
 		<td height="33" align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
@@ -101,7 +101,7 @@
 	<tr>
 		<td colspan="3" style="border-left: 1px solid #000000" height="33" align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000">No Analisa</font></td>
 		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000">:</font></td>
-		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000" ><br>{{ $data->no_analisa }}</font></td>
+		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000" ><br></font></td>
 		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Times New Roman" size=3 color="#000000"><br></font></td>
@@ -254,13 +254,21 @@
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 height="33" align="left" valign=bottom><font face="Times New Roman" color="#000000" size="3">Joint</font></td>
 		<td align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom bgcolor="#BFBFBF"><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $data->joint }}</font></b></td>
+        <?php 
+            if ($data->joint == 'No Joint') {
+                $joint = $data->joint;
+            } else {
+                $temp = explode(" ", $data->joint);
+                $joint = $temp[0];
+            }
+        ?>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom bgcolor="#BFBFBF"><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
+		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=bottom><b><font face="Times New Roman" color="#000000" size="3">{{ $joint }}</font></b></td>
 	</tr>
 	<tr>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 height="33" align="left" valign=bottom><font face="Times New Roman" color="#000000" size="3">Tipe Flute</font></td>

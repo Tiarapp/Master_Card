@@ -277,6 +277,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
     Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
+    Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
@@ -407,6 +408,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/qc/edit/{id}', 'QcController@edit')->name('qc.edit');
         Route::put('admin/qc/update/{id}', 'QcController@update')->name('qc.update');
         Route::get('admin/qc/print/{id}', 'QcController@print')->name('qc.print');
+        Route::get('admin/qc/delete/{id}', 'QcController@delete')->name('qc.delete');
 }); 
 
 

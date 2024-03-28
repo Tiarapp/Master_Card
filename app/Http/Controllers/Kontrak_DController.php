@@ -106,7 +106,7 @@ class Kontrak_DController extends Controller
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
                     
-                    if($kontrak->status == 2 ){
+                    if($kontrak->status == 2 || $kontrak->status == 3 ){
                         $nestedData['id'] = "<p style='color:red'>".$kontrak->id."</p>";
                         $nestedData['kontrak'] = "<p style='color:red'>".$kontrak->kode."</p>";
                         $nestedData['cust'] = "<p style='color:red'>".$kontrak->customer_name."</p>";
@@ -119,6 +119,14 @@ class Kontrak_DController extends Controller
                         $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
                         $nestedData['keterangan'] = "<p style='color:red'>".$kontrak->keterangan."</p>";
                         $nestedData['tipeOrder'] = "<p style='color:red'>".$kontrak->tipeOrder."</p>";
+
+                        if ($kontrak->status == 2) {
+                            $status = "<div class='status label danger'>Opened</div>";
+                        } else {
+                            $status = "<div class='status label warning'>Closed</div>";
+                        }
+
+                        $nestedData['status'] = $status;
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -193,6 +201,7 @@ class Kontrak_DController extends Controller
                         $nestedData['tipeOrder'] = $kontrak->tipeOrder;
                         $nestedData['keterangan'] = $kontrak->keterangan;
                         $nestedData['tipeOrder'] = $kontrak->tipeOrder;
+                        $nestedData['status'] = "<div class='status label success'>Processed</div>";
                         
                         // Realisasi Kirim
                         $terkirim = 0;
@@ -1029,6 +1038,7 @@ class Kontrak_DController extends Controller
             $order = 0;
             $kirim = 0;
             $kontrak = Kontrak_D::where("kontrak_m_id", "=", $id)->first();
+            $kontrakm = Kontrak_M::where("id", "=", $id)->first();
             $opi = Opi_M::where("kontrak_m_id", "=", $id)->get();
             $realisasi = RealisasiKirim::where("kontrak_m_id", "=", $id)->get();
             
@@ -1047,6 +1057,9 @@ class Kontrak_DController extends Controller
                 $sisakontrak = $sisakirim;
             } else {
                 $sisakontrak = 0;
+                $kontrakm->status = 3;
+
+                $kontrakm->save();
             }
 
             $kontrak->pcsSisaKontrak = $sisakontrak;
@@ -1054,5 +1067,16 @@ class Kontrak_DController extends Controller
             $kontrak->save();
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');
+        }
+
+        public function empty_opi() {
+            $data = Kontrak_D::leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+            ->select('kontrak_m.kode','kontrak_d.*', 'kontrak_m.status')
+            ->whereColumn('pcsKontrak', '=', 'pcsSisaKontrak')
+            ->where('kontrak_m.status', '=', 4)
+            ->get();
+
+            dd($data);
+
         }
     }
