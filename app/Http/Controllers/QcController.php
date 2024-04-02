@@ -42,6 +42,7 @@ class QcController extends Controller
             'mc' => $request->mc,
             'cust' => $request->cust,
             'item' => $request->item,
+            'tanggal_kirim' => $request->tglKirim,
             'kwalitas' => $request->kualitas,
             'no_po' => $request->po_cust,
             'no_analisa' => $no_analisa,
@@ -103,6 +104,7 @@ class QcController extends Controller
         $update = QcModel::where('id', '=', $id)->first();
 
         $update->tanggal_analisa = $request->tgl_analisa;
+        $update->tanggal_kirim = $request->tglKirim;
         $update->opi_id = $request->opiid;
         $update->mc = $request->mc;
         $update->cust = $request->cust;
