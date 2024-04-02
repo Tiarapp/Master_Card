@@ -988,7 +988,6 @@ class Kontrak_DController extends Controller
         public function store_realisasi(Request $request)
         {
             $id = array_merge($request->idkontrak);
-            // dd($id);
             for ($i=0; $i < count($id); $i++) { 
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
@@ -1002,6 +1001,11 @@ class Kontrak_DController extends Controller
                     'kg_kirim'      => $qty * $mc->gramSheetBoxKontrak,
                     'createdBy'     => Auth::user()->name
                 ]);
+
+                $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
+                        ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
+                        ->where('realisasi_kirim.kontrak_m_id', '=', $id[$i])
+                        ->first();
             }
             
             return redirect('admin/kontrak');

@@ -148,7 +148,7 @@ class QcController extends Controller
         ->leftJoin('opi_m', 'opi_id', '=', 'opi_m.id')
         ->leftJoin('mc', 'opi_m.mc_id', '=', 'mc.id')
         ->leftJoin('box', 'mc.box_id', '=', 'box.id')
-        ->select('testqc.*','opi_m.NoOPI as noopi', 'mc.flute', 'mc.gramSheetBoxKontrak2 as gram', 'mc.joint', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'mc.panjangSheetBoxBox', 'mc.lebarSheetBoxBox')
+        ->select('testqc.*','opi_m.NoOPI as noopi', 'mc.flute', 'mc.gramSheetBoxKontrak2 as gram', 'mc.joint', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'mc.panjangSheetBox', 'mc.lebarSheetBox')
         ->first();
 
         return view('admin.qc.print', compact('data'));
