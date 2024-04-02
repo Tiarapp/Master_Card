@@ -111,8 +111,8 @@
                                                                             <td>{{ $data->panjang }}</td>
                                                                             <td>{{ $data->lebar }}</td>
                                                                             <td>{{ $data->tinggi }}</td>
-                                                                            <td>{{ $data->panjangSheet }}</td>
-                                                                            <td>{{ $data->lebarSheet }}</td>
+                                                                            <td>{{ $data->panjangSheetBox }}</td>
+                                                                            <td>{{ $data->lebarSheetBox }}</td>
                                                                             <td>{{ $data->subsK }}</td>
                                                                             <td>{{ $data->gram }}</td>
                                                                             <td>{{ $joint }}</td>

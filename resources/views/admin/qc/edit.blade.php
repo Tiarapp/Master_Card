@@ -104,8 +104,8 @@
                                                                             <td>{{ $opi->panjang }}</td>
                                                                             <td>{{ $opi->lebar }}</td>
                                                                             <td>{{ $opi->tinggi }}</td>
-                                                                            <td>{{ $opi->panjangSheet }}</td>
-                                                                            <td>{{ $opi->lebarSheet }}</td>
+                                                                            <td>{{ $opi->panjangSheetBox }}</td>
+                                                                            <td>{{ $opi->lebarSheetBox }}</td>
                                                                             <td>{{ $opi->subsK }}</td>
                                                                             <td>{{ $opi->gram }}</td>
                                                                             <td>{{ $opi->joint }}</td>
@@ -262,7 +262,7 @@
                                                 <label for="">Panjang Sheet</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="number" class="form-control txt_line" id="panjang_sheet" name="panjang_sheet" value="{{ $data->panjangSheet }}">
+                                                <input type="number" class="form-control txt_line" id="panjang_sheet" name="panjang_sheet" value="{{ $data->panjangSheetBox }}">
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +273,7 @@
                                                 <label for="">Lebar Sheet</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="number" class="form-control txt_line" id="lebar_sheet" name="lebar_sheet" value="{{ $data->lebarSheet }}">
+                                                <input type="number" class="form-control txt_line" id="lebar_sheet" name="lebar_sheet" value="{{ $data->lebarSheetBox }}">
                                             </div>
                                         </div>
                                     </div>
