@@ -256,7 +256,7 @@
 		<td align="left" valign=bottom><font face="Times New Roman" color="#000000"><br></font></td>
         <?php 
             if ($data->joint == 'No Joint') {
-                $joint = $data->joint;
+                $joint = '';
             } else {
                 $temp = explode(" ", $data->joint);
                 $joint = $temp[0];

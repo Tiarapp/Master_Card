@@ -213,7 +213,7 @@
                                                 <label for="">Tanggal Kirim</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control txt_line" id="tglKirim" name="tglKirim" value="{{ $data->tanggal_kirim }}">
+                                                <input type="date" class="form-control txt_line" id="tglKirim" name="tglKirim" value="{{ $data->tanggal_kirim }}">
                                             </div>
                                         </div>
                                     </div> 
