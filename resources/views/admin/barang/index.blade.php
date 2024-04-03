@@ -39,6 +39,8 @@
               <th scope="col">Gram</th>
               <th scope="col">Satuan</th>
               <th scope="col">Isi Per Karton</th>
+              <th scope="col">Saldo Pcs</th>
+              <th scope="col">Saldo Kg</th>
               <th scope="col">Mastercard ID</th>
             </tr>
           </thead>
@@ -53,6 +55,8 @@
                 <td>{{ round($data->BeratStandart, 2) }}</td>
                 <td>{{ $data->Satuan }}</td>
                 <td>{{ round($data->IsiPerKarton, 0) }}</td>
+                <td>{{ round($data->SaldoPcs, 2) }}</td>
+                <td>{{ round($data->SaldoKg, 2) }}</td>
                 <td>{{ $data->WeightValue }}</td>
                 {{-- <td>
                   <div class="input-group">

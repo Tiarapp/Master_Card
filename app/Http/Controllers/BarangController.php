@@ -16,8 +16,15 @@ class BarangController extends Controller
     // Tampilkan awal
      public function index()
     {
-        // $barang = Barang::orderBy('kode', 'asc')->get();
-        $barang = DB::connection('firebird2')->table('TBarangConv')->orderBy('KodeBrg', 'asc')->get();
+
+        $periode = date("m/Y");
+        $barang = DB::connection('firebird2')->table('TPersediaan')
+        ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+        ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
+        ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
+        ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
+
+        // dd($barang);
 
         return view('admin.barang.index', compact('barang'));
     }

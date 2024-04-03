@@ -990,6 +990,7 @@ class Kontrak_DController extends Controller
             $id = array_merge($request->idkontrak);
             for ($i=0; $i < count($id); $i++) { 
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
+                $kontrakm = Kontrak_M::where('id', '=', $id)->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
                 $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
                 RealisasiKirim::create([
@@ -1006,6 +1007,11 @@ class Kontrak_DController extends Controller
                         ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
                         ->where('realisasi_kirim.kontrak_m_id', '=', $id[$i])
                         ->first();
+
+                if ($realisasi->qty >= $kontrak->pcsSisaKontrak) {
+                    $kontrakm->status = 3;
+                    $kontrakm->save();
+                } 
             }
             
             return redirect('admin/kontrak');
