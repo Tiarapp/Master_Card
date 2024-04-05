@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BoxType;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +46,12 @@ class BoxTypeController extends Controller
             'branch' => 'required'
         ]);
 
-        BoxType::create($request->all());
+        $type = BoxType::create($request->all());
+        
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Ubah Tipe ".$type->kode
+        ]);
 
         return redirect('admin/boxtype');
     }
@@ -100,6 +106,11 @@ class BoxTypeController extends Controller
         $boxtype->lastUpdatedBy = $request->lastUpdatedBy;
 
         $boxtype->save();
+        
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Ubah Box ".$boxtype->kode
+        ]);
 
         return redirect('admin/boxtype');
     }

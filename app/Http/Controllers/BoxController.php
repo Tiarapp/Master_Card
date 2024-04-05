@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Box;
+use App\Models\Tracking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +100,7 @@ class BoxController extends Controller
             }
         }
 
-        Box::create([
+        $box = Box::create([
             'kode' => $nobukti,
             // 'kodeBarang' => $request->kodeBarang,
             'namaBarang' =>strtoupper($request->namaBarang),
@@ -122,6 +123,11 @@ class BoxController extends Controller
             'tinggiCrease' => $request->tinggiCrease,
             'createdBy' => $request->createdBy
             ]);
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Box ".$nobukti
+        ]);
 
         return redirect('admin/box');
     }
@@ -188,6 +194,11 @@ class BoxController extends Controller
         $box->lastUpdatedBy = $request->createdBy;
 
         $box->save();
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Ubah Box ".$box->kode
+        ]);
 
         return redirect('admin/box');
     }

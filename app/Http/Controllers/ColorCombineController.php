@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ColorCombine;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +58,12 @@ class ColorCombineController extends Controller
             'createdBy' => 'required'
         ]);
 
-        ColorCombine::create($request->all());
+        $color = ColorCombine::create($request->all());
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah CC ".$color->nama
+        ]);
 
         return redirect('admin/colorcombine');
     }

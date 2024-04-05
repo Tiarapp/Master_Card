@@ -22,6 +22,7 @@ class BarangController extends Controller
         ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
         ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
         ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
+        ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
 
         // dd($barang);
