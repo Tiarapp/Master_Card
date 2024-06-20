@@ -100,6 +100,10 @@ class Kontrak_DController extends Controller
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = null;
                         $open = null;
+                    } else if ($kontrak->status == 3) {  
+                        $edit =  route('kontrak.edit',$kontrak->id);
+                        $cancel = null;
+                        $open = null;
                     }
                     
                     $dt =  route('kontrak.dt',$kontrak->id);
