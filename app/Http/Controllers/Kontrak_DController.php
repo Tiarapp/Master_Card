@@ -95,27 +95,28 @@ class Kontrak_DController extends Controller
                     if ($kontrak->status == 4 || $kontrak->status == 3 && Auth::user()->divisi_id == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = route('kontrak.cancel', $kontrak->id);
-                    } else if($kontrak->status == 4) {
-                        $edit =  null;
-                        $cancel = null;
-                    }
-                    else {  
+                        $open = route('kontrak.open', $kontrak->id);
+                    } else if ($kontrak->status == 2) {  
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = null;
+                        $open = null;
                     }
                     
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
                     
                     if ($kontrak->status == 2) {
-                        $color = '#f44336';
-                        $status = "<div class='status label danger'>Opened</div>";
+                        $color = '#ff9800';
+                        $status = "<div class='status label warning'>Opened</div>";
                     } else if ($kontrak->status == 3) {
                         $color = '#2196F3';
                         $status = "<div class='status label info'>Closed</div>";
-                    } else {
-                        $color = '#black';
+                    } else if ($kontrak->status == 4) {
+                        $color = 'black';
                         $status = "<div class='status label success'>Processed</div>";
+                    } else if ($kontrak->status == 5) {
+                        $color = 'f44336';
+                        $status = "<div class='status label danger'>Cancel</div>";
                     }
                     
                     // if($kontrak->status == 2 || $kontrak->status == 3 ){
@@ -186,7 +187,7 @@ class Kontrak_DController extends Controller
                         $nestedData['kodeBarang'] = "<p style='color:".$color."'>".$mc->kodeBarang."</p>";
                         $nestedData['namaBarang'] = "<p style='color:".$color."'>".$mc->namaBarang."</p>";
                         $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
-                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>";
+                        &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>&emsp;<a href='{$open}' title='SHOW' ><span class='glyphicon glyphicon-list'>Open</span></a>";
                         
                         $nestedData['b_expedisi'] = "<p style='color:".$color."'>".$kontrak->biaya_exp."</p>";
                         $nestedData['b_glue'] = "<p style='color:".$color."'>".$kontrak->biaya_glue."</p>";
@@ -1115,7 +1116,7 @@ class Kontrak_DController extends Controller
         public function cancel_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
-            $kontrak->status = 2;
+            $kontrak->status = 5;
             
             Tracking::create([
                 'user' => Auth::user()->name,
@@ -1126,6 +1127,20 @@ class Kontrak_DController extends Controller
             return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
         }
         
+        public function open_kontrak($id)
+        {
+            $kontrak = Kontrak_M::find($id);
+            $kontrak->status = 2;
+            
+            Tracking::create([
+                'user' => Auth::user()->name,
+                'event' => "Open Kontrak". $kontrak->kode
+            ]);
+            
+            $kontrak->save();
+            return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Buka');
+        }
+
         public function recall($id) 
         {
             $order = 0;
