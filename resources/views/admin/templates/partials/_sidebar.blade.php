@@ -263,7 +263,13 @@
                   </ul>
                 </li>
               </ul>
-              <ul class="nav nav-treeview"> 
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('barang') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Barang</p>
+                  </a>
+                </li> 
                 <li class="nav-item">
                   <a href="{{ route('mastercard.b1') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>

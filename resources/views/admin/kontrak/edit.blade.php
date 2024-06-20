@@ -262,6 +262,8 @@
                                                         <option value="OUP Joint & Kualitas">OUP Joint & Kualitas</option>
                                                         <option value="OUP Creasing">OUP Creasing</option>
                                                         <option value="OUP Ukuran, Creasing, Arah Serat">OUP Ukuran, Creasing, Arah Serat</option>
+                                                        <option value="OUP Design, Kualitas, Nama Item, Ukuran">OUP Design, Kualitas, Nama Item, Ukuran</option>
+                                                        <option value="OUP Type Box, Ukuran & Kualitas">OUP Type Box, Ukuran & Kualitas</option>
                                                     </select>
                                                 </div>
                                             </div>

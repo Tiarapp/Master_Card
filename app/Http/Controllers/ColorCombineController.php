@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ColorCombine;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ColorCombineController extends Controller

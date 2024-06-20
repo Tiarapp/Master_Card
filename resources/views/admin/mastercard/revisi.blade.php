@@ -837,6 +837,8 @@
             kodeKoli = koli;
         }
 
+        // console.log(tipemc);
+
 
         if (tipemc == 'B1' || tipemc == 'B1 Terbalik' || tipemc == 'B3') {
             tipemc = 'B';
@@ -867,6 +869,8 @@
         } else if (flute == 'Roll') {
             flute = '50';
         }
+
+        // console.log(tipemc);
 
         if (tipemc == 'F' || tipebox == 'R') {  
             kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;

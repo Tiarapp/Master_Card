@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\DB;
             ->get();
         $count = count($cust);
 
+        // dd($count);
+
         $exp = DB::connection('firebird')->table('TSupplier')->where('Kode', 'LIKE', 'J%')->get();
         $cexp = count($exp);
 
@@ -53,9 +55,8 @@ use Illuminate\Support\Facades\DB;
     
     public function index()
     {
-        $cust = Customer::get();
-
-        // phpinfo();
+        $cust = DB::connection('firebird')->table('TCustomer')->orderBy('Kode', 'asc')
+        ->get();        
         
         return view('admin.data.customer', compact('cust'));
     }

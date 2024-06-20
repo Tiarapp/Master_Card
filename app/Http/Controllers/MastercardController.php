@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mastercard;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -278,7 +279,7 @@ class MastercardController extends Controller
         }
         
         
-        Mastercard::create([
+        $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R0",
             'customer' => $request->customer,
@@ -327,6 +328,11 @@ class MastercardController extends Controller
             'keterangan' => $request->keterangan,
             'gambar' => $nama_file,
             'createdBy' => $request->createdBy
+        ]);
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Update MC ".$mc->kode
         ]);
         
         return redirect('mastercard');
@@ -499,7 +505,7 @@ class MastercardController extends Controller
             $outconv = $request->outConv;
         }
         
-        Mastercard::create([
+        $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,
             'customer' => $request->customer,
@@ -547,6 +553,11 @@ class MastercardController extends Controller
             'keterangan' => $request->keterangan,
             'gambar' => $nama_file,
             'createdBy' => $request->createdBy
+        ]);
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi
         ]);
         
         return redirect('mastercard');
@@ -703,6 +714,11 @@ class MastercardController extends Controller
         $mc->gambar = $nama_file;
         
         $mc->save();
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Update MC ".$mc->kode."-".$mc->revisi
+        ]);
         
         return redirect('mastercard');
         

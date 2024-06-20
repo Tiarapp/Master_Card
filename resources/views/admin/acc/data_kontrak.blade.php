@@ -59,7 +59,7 @@
           <thead>
             <tr>
               <th scope="col">No. Kontrak</th>
-              <th scope="col">Nama Barang</th>
+              {{-- <th scope="col">Nama Barang</th> --}}
               <th scope="col">Tgl Kontrak</th>
               <th scope="col">pcs Kontrak</th>
               <th scope="col">Customer</th>

@@ -92,7 +92,7 @@ class Kontrak_DController extends Controller
                 {
                     $show =  route('kontrak.pdfb1',$kontrak->id);
                     
-                    if ($kontrak->status == 4 && Auth::user()->divisi_id == 2) {
+                    if ($kontrak->status == 4 || $kontrak->status == 3 && Auth::user()->divisi_id == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = route('kontrak.cancel', $kontrak->id);
                     } else if($kontrak->status == 4) {
@@ -114,7 +114,7 @@ class Kontrak_DController extends Controller
                         $color = '#2196F3';
                         $status = "<div class='status label info'>Closed</div>";
                     } else {
-                        $color = '#04AA6D';
+                        $color = '#black';
                         $status = "<div class='status label success'>Processed</div>";
                     }
                     
@@ -132,9 +132,9 @@ class Kontrak_DController extends Controller
                         $nestedData['keterangan'] = "<p style='color:".$color."'>".$kontrak->keterangan."</p>";
                         $nestedData['tipeOrder'] = "<p style='color:".$color."'>".$kontrak->tipeOrder."</p>";
 
-                        if ($kontrak->status == 2) {
-                        } else {
-                        }
+                        // if ($kontrak->status == 2) {
+                        // } else {
+                        // }
 
                         $nestedData['status'] = $status;
                         
@@ -193,7 +193,7 @@ class Kontrak_DController extends Controller
                         $nestedData['b_wax'] = "<p style='color:".$color."'>".$kontrak->biaya_wax."</p>";
                         if ($mc->tipeBox == 'SF') {
                             $nestedData['rp_kg'] = "<p style='color:".$color."'>".number_format($kontrak->kontrak_d['harga_pcs'],2,',','.')."</p>";
-                        } else {               
+                        } else {
                             $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
 
                             $nestedData['rp_kg'] = "<p style='color:".$color."'>".number_format($rpkg,2,',','.')."</p>";
@@ -903,11 +903,20 @@ class Kontrak_DController extends Controller
             $kontrakd->kgKurangToleransiKontrak = $request->toleransiKurangKg;
             $kontrakd->kgLebihToleransiKontrak = $request->toleransiLebihKg;
             $kontrakd->lastUpdatedBy = Auth::user()->name;
-            // dd($kontrakd);
             
-            // var_dump($tax);
-            
-            $kontrakd->save();
+            $kontrakd->save();            
+
+            $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
+            ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
+            ->where('realisasi_kirim.kontrak_m_id', '=', $id)
+            ->first();
+
+            if ($realisasi->qty != null) {
+                if ($realisasi->qty >= $kontrakm->pcsKontrak) {
+                    $kontrakm->status = 3;
+                    $kontrakm->save();
+                } 
+            }
             
             Tracking::create([
                 'user' => Auth::user()->name,
@@ -1072,7 +1081,10 @@ class Kontrak_DController extends Controller
             $kirim = RealisasiKirim::findOrFail($id);
 
             $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
+            $kontrakm = Kontrak_M::where('id', '=', $kontrak->kontrak_m_id)->first();
             $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
+
+            // dd($id);
             
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
@@ -1084,6 +1096,17 @@ class Kontrak_DController extends Controller
                 'user' => Auth::user()->name,
                 'event' => "Ubah Realisasi Kirim SJ ". $kirim->nomer_sj
             ]);
+
+            $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
+                        ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
+                        ->where('realisasi_kirim.kontrak_m_id', '=', $kontrakm->id)
+                        ->first();
+                        
+
+                if ($realisasi->qty >= $kontrak->pcsKontrak) {
+                    $kontrakm->status = 3;
+                    $kontrakm->save();
+                } 
             
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
             
@@ -1123,12 +1146,14 @@ class Kontrak_DController extends Controller
             $sisakirim = $kontrak->pcsKontrak - $kirim;
             $sisaopi = $kontrak->pcsKontrak - $order;
 
-            if ($sisakirim > $sisaopi) {
+            // dd($order, $kirim);
+
+            if ($sisakirim > 0) {
                 $sisakontrak = $sisakirim;
+            } else if ($sisaopi){
+                $sisakontrak = $sisaopi;
             } else {
                 $sisakontrak = 0;
-                $kontrakm->status = 3;
-
                 $kontrakm->save();
             }
 
