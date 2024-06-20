@@ -102,17 +102,17 @@ return [
             'role'     => null,
         ],
 
-        // 'firebird4' => [
-        //     'driver'   => 'firebird',
-        //     'host'     => env('DB_HOST3', 'localhost'),
-        //     'port'     => env('DB_PORT3', '3050'),
-        //     'database' => env('DB_DATABASE3', 'D:\TES_DELPHI\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
-        //     'username' => env('DB_USERNAME3', 'sysdba'),
-        //     'password' => env('DB_PASSWORD3', 'masterkey'),
-        //     'charset'  => env('DB_CHARSET', 'UTF8'),
-        //     'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
-        //     'role'     => null,
-        // ],
+        'firebird4' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST3', 'localhost'),
+            'port'     => env('DB_PORT3', '3050'),
+            'database' => env('DB_DATABASE3', 'D:\TES_DELPHI\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME3', 'sysdba'),
+            'password' => env('DB_PASSWORD3', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+        ],
 
 
         'mysql' => [
