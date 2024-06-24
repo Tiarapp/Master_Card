@@ -57,7 +57,7 @@
                                                 <div class="col-md-8">
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" onchange="getKodeBarang()">
+                                                            <input type="text" class="form-control txt_line" name="namaBarang" id="namaBarang" onchange="getKodeBarang()" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -160,7 +160,7 @@
                                                     <label class="control-label">Value</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="mcnumb" id="mcnumb" onchange="getKodeBarang()">
+                                                    <input type="text" class="form-control txt_line" name="mcnumb" id="mcnumb" onchange="getKodeBarang()" required>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -212,7 +212,7 @@
                                                     <label class="control-label">Isi Perkarton</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="isi" id="isi">
+                                                    <input type="text" class="form-control txt_line" name="isi" id="isi" required>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -220,7 +220,7 @@
                                                     <label class="control-label">Berat Standart</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="berat" id="berat">
+                                                    <input type="text" class="form-control txt_line" name="berat" id="berat" required>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -228,7 +228,7 @@
                                                     <label class="control-label">Berat Per-CRT</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="beratcrt" id="beratcrt">
+                                                    <input type="text" class="form-control txt_line" name="beratcrt" id="beratcrt" required>
                                                 </div>
                                             </div>
                                             <div class="row">
