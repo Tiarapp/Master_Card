@@ -242,6 +242,8 @@ Route::middleware(['auth'])->group(function (){
     
     //Barang
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
+    Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
+    Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {

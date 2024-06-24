@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\fbBarang;
+use App\Models\Mastercard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,11 +19,13 @@ class BarangController extends Controller
      public function index()
     {
 
+        DB::connection('firebird2')->beginTransaction();
         $periode = date("m/Y");
         $barang = DB::connection('firebird2')->table('TPersediaan')
         ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
         ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
         ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
+        // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
         // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
 
@@ -43,7 +47,29 @@ class BarangController extends Controller
     // Tampilkan Halaman Input
      public function create()
     {
-        //
+        DB::connection('firebird2')->beginTransaction();
+        $substance = DB::table('substance')
+        ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
+        ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
+        ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
+        ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
+        ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
+        ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
+        ->get();
+        $box = DB::connection('firebird2')->table('TProdConv')->get();
+        $merk = DB::connection('firebird2')->table('TMerkConv')->get();
+        $joint = DB::table('joint')->get();
+        $warna = DB::connection('firebird2')->table('TWarnaConv')->get();
+        
+        
+        return view('admin.barang.create', compact([
+            // 'item',
+            'merk',
+            'substance',
+            'box',
+            'joint',
+            'warna'
+        ]));
     }
 
     /**
@@ -53,8 +79,47 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        DB::connection('firebird2')->beginTransaction();
+        
+        $periode = date("m/Y");
+        $barang = DB::connection('firebird2')->table('TBarangConv')->where('KodeBrg', '=', $request->kodeBarang)->first();
+        
+        if (!$barang) {
+            DB::connection('firebird2')->table('TBarangConv')->insert([
+                'KodeBrg' => $request->kodeBarang,
+                'NamaBrg' => $request->namaBarang,
+                'Eceran' => $request->ecer,
+                'Tujuan' => $request->tujuan,
+                'JenisProd' => $request->tipebox,
+                'Merk' => $request->flute,
+                'Design' => $request->design,
+                'WeightSheet' => $request->weight,
+                'Packing' => $request->koli,
+                'WeightValue' => $request->mcnumb,
+                'Warna' => $request->rev,
+                'Satuan' => $request->satuan,
+                'IsiPerKarton' => $request->isi,
+                'BeratStandart' => $request->berat,
+                'HargaJualRp' => $request->hargajual,
+                'HargaJualUSD' => $request->hargausd,
+                'BeratCRT' => $request->beratcrt,
+            ]);
+
+            DB::connection('firebird2')->table('TPersediaan')->insert([
+                'KodeBrg' => $request->kodeBarang,
+                'Periode' => $periode,
+                'SaldoAwalCrt' => 0,
+                'SaldoAwalKg' => 0,
+                'SaldoAkhirCrt' => 0,
+                'SaldoAkhirKg' => 0,
+            ]);
+
+            DB::connection('firebird2')->commit();
+            return redirect('admin/barang')->with('success', "Data Berhasil disimpan dengan kode Barang = ". $request->kodeBarang);
+        } else {
+            return redirect()->to(url()->previous())->with('danger', "Kode Barang ini ". $barang->KodeBrg." sudah ada dengan nama = ". $barang->NamaBrg);
+        }
     }
 
     /**

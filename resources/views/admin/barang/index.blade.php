@@ -26,9 +26,16 @@
      <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <!-- Small boxes (Stat box) -->
+      @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>{{ $message }}</strong>
+        </div>
+      @endif
       
-      <a href="#" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href={{ route('barang.create') }} style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
       <div class="card-body">
         <table class="table table-bordered" id="data_barang">
           <thead>
@@ -58,15 +65,6 @@
                 <td>{{ round($data->SaldoPcs, 2) }}</td>
                 <td>{{ round($data->SaldoKg, 2) }}</td>
                 <td>{{ $data->WeightValue }}</td>
-                {{-- <td>
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/divisi/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/divisi/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/divisi/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
-                    </div>
-                  </div>
-                </td> --}}
               </tr>
             <?php
             }
