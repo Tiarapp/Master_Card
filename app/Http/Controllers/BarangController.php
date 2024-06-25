@@ -104,6 +104,7 @@ class BarangController extends Controller
                 'HargaJualRp' => $request->hargajual,
                 'HargaJualUSD' => $request->hargausd,
                 'BeratCRT' => $request->beratcrt,
+                'CustNick' => $request->golongan
             ]);
 
             DB::connection('firebird2')->table('TPersediaan')->insert([
