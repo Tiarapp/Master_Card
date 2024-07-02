@@ -409,6 +409,9 @@ Route::middleware(['auth'])->group(function (){
         Route::put('admin/qc/update/{id}', 'QcController@update')->name('qc.update');
         Route::get('admin/qc/print/{id}', 'QcController@print')->name('qc.print');
         Route::get('admin/qc/delete/{id}', 'QcController@delete')->name('qc.delete');
+
+    // BP Converting
+        Route::get('admin/fb/bbm', [CustomerController::class, 'getPurchaseOrder'])->name('po');
 }); 
 
 

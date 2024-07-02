@@ -150,4 +150,13 @@ use Illuminate\Support\Facades\DB;
 
         return view('admin.data.print_alamat', compact('data'));
     }
+
+    public function getPurchaseOrder()
+    {
+        DB::connection('fbbp')->beginTransaction();
+
+       
+       $po =  DB::connection('fbbp')->table('TDetOPConv')->take(5)->get();
+       dd($po);
+    }
 }

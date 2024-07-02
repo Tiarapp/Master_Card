@@ -1012,6 +1012,8 @@ class Kontrak_DController extends Controller
         public function add_realisasi($id)
         {
             
+            DB::connection('firebird2')->beginTransaction();
+            
             $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
             
             $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();            
