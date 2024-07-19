@@ -203,87 +203,6 @@ class Kontrak_DController extends Controller
 
                             $nestedData['rp_kg'] = "<p style='color:".$color."'>".number_format($rpkg,2,',','.')."</p>";
                         }
-                    // } 
-                    // else {                    
-                    //     $nestedData['id'] = $kontrak->id;
-                    //     $nestedData['kontrak'] = $kontrak->kode;
-                    //     $nestedData['cust'] = $kontrak->customer_name;
-                    //     $nestedData['tglKontrak'] = $kontrak->tglKontrak;
-                    //     $nestedData['alamatKirim'] = $kontrak->alamatKirim;
-                    //     $nestedData['custTelp'] = $kontrak->custTelp;
-                    //     $nestedData['poCustomer'] = $kontrak->poCustomer;
-                    //     $nestedData['top'] = $kontrak->top;
-                    //     $nestedData['sales'] = $kontrak->sales;
-                    //     $nestedData['tipeOrder'] = $kontrak->tipeOrder;
-                    //     $nestedData['keterangan'] = $kontrak->keterangan;
-                    //     $nestedData['tipeOrder'] = $kontrak->tipeOrder;
-                    //     $nestedData['status'] = "<div class='status label success'>Processed</div>";
-                        
-                    //     // Realisasi Kirim
-                    //     $terkirim = 0;
-                    //     $dataRealisasi = [];
-                    //     foreach ($kontrak->realisasi as $realisasi) {
-                            
-                    //         $dataRealisasi[] = 
-                    //         "&emsp;<li><span class='glyphicon glyphicon-list'>".$realisasi->qty_kirim." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
-                            
-                    //         $terkirim = $terkirim + $realisasi->qty_kirim;
-                    //     }
-                        
-                    //     if (Auth::user()->divisi_id == 2) {
-                    //         $nestedData['komisi'] = $kontrak->komisi;
-                    //     } else {
-                    //         $nestedData['komisi'] = 0;
-                    //     }
-                        
-                    //     $nestedData['realisasi'] = $dataRealisasi;
-                    //     $nestedData['pcsKontrak'] = $kontrak->kontrak_d['pcsKontrak'];
-                    //     $nestedData['kgKontrak'] = $kontrak->kontrak_d['kgKontrak'];
-
-                    //     $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
-
-                    //     if ($sisakontrak < 0) {
-                    //         $sisakontrak = 0;
-                    //     } else {
-                    //         $sisakontrak = $sisakontrak;
-                    //     }
-                        
-                    //     $nestedData['sisaKirim'] = $sisakontrak;
-                    //     $nestedData['rp_pcs'] = $kontrak->kontrak_d['harga_pcs'];
-                    //     $nestedData['rp_kg'] = $kontrak->kontrak_d['harga_kg'];
-                        
-                    //     $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
-                    //     // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
-                        
-                    //     if($mc->revisi == ''){
-                    //         $mcKode = $mc->kode;
-                    //     } else if ($mc->revisi == "R0"){
-                    //         $mcKode = $mc->kode;
-                    //     } else {
-                    //         $mcKode = $mc->kode.'-'.$mc->revisi;
-                    //     }
-                        
-                    //     $nestedData['brt_kualitas'] = $mc->gramSheetBoxKontrak;
-                    //     $nestedData['nomc'] = $mcKode;
-                    //     $nestedData['kodeBarang'] = $mc->kodeBarang;
-                    //     $nestedData['namaBarang'] = $mc->namaBarang;
-                    //     $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
-                    //     &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>";
-                        
-                    //     $nestedData['b_expedisi'] = $kontrak->biaya_exp;
-                    //     $nestedData['b_glue'] = $kontrak->biaya_glue;
-                    //     $nestedData['b_wax'] = $kontrak->biaya_wax;
-                    //     if ($mc->tipeBox == 'SF') {
-                    //         $nestedData['rp_kg'] = number_format($kontrak->kontrak_d['harga_pcs'],2,',','.');
-                    //     } else {                            
-                    //         $rpkg = $kontrak->kontrak_d['harga_pcs'] / $mc->gramSheetBoxKontrak;
-
-                    //         $nestedData['rp_kg'] = number_format($rpkg,2,',','.');
-                    //     }
-                    // }
-                    
-                    
-                    
                     $data[] = $nestedData;
                 }
             }
@@ -297,7 +216,6 @@ class Kontrak_DController extends Controller
                 "limit"           => $limit
             );
             
-            // dd($json_data);
             echo json_encode($json_data); 
         }
         

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
+use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
+use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
@@ -411,7 +413,18 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/qc/delete/{id}', 'QcController@delete')->name('qc.delete');
 
     // BP Converting
-        Route::get('admin/fb/bbm', [CustomerController::class, 'getPurchaseOrder'])->name('po');
+        // Route::get('admin/fb/bbm', [CustomerController::class, 'getDetPurchaseOrder'])->name('po');
+        Route::get('admin/fb/bbm', [BbmRollController::class, 'getBBM'])->name('fb.list.bbm');
+        Route::get('admin/fb/bbm/add', [BbmRollController::class, 'add'])->name('fb.add.bbm');
+        Route::post('admin/fb/bbm/store', [BbmRollController::class, 'simpan_bbm'])->name('fb.store.bbm');
+        Route::get('admin/po/{supp}', [BbmRollController::class, 'getPurchaseOrderBySupp'])->name('fb.get.po');
+        Route::get('admin/po/id/{id}', [BbmRollController::class, 'getDetPoById'])->name('fb.get.byid');
+        Route::get('admin/po', [BbmRollController::class, 'getPurchaseOrderAll'])->name('fb.get.poall');
+        Route::get('admin/getSupp', [BbmRollController::class, 'getSupp'])->name('get.supp');
+
+    // Teknik
+        Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
+        Route::get('admin/fb/teknik', [BarangTeknikController::class, 'listBarang'])->name('fb.list.teknik');
 }); 
 
 

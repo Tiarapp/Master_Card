@@ -56,11 +56,11 @@ return [
 
         'fbteknik' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST', '192.168.1.250'),
-            'port'     => env('DB_PORT', '3050'),
-            'database' => env('DB_DATABASE', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
-            'username' => env('DB_USERNAME', 'sysdba'),
-            'password' => env('DB_PASSWORD', 'masterkey'),
+            'host'     => env('DB_HOST6', '192.168.1.250'),
+            'port'     => env('DB_PORT6', '3050'),
+            'database' => env('DB_DATABASE6', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
+            'username' => env('DB_USERNAME6', 'sysdba'),
+            'password' => env('DB_PASSWORD6', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -90,7 +90,7 @@ return [
             'driver'   => 'firebird',
             'host'     => env('DB_HOST3', '192.168.1.250'),
             'port'     => env('DB_PORT3', '3050'),
-            'database' => env('DB_DATABASE3', 'D:\Database\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
+            'database' => env('DB_DATABASE3', 'D:\Database\FBDB\BP_CONVERTING_SPA.FDB'),
             'username' => env('DB_USERNAME3', 'sysdba'),
             'password' => env('DB_PASSWORD3', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),

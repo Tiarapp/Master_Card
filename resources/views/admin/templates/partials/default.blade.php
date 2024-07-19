@@ -25,5 +25,7 @@
 @include('admin.templates.partials._script')
 
 @yield('javascripts')
+
+@livewireScripts
 </body>
 </html>

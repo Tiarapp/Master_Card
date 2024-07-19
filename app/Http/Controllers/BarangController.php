@@ -48,14 +48,7 @@ class BarangController extends Controller
      public function create()
     {
         DB::connection('firebird2')->beginTransaction();
-        $substance = DB::table('substance')
-        ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
-        ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
-        ->leftJoin('jenis_gram as linerTengah', 'jenisGramLinerTengah_id', '=', 'linerTengah.id')
-        ->leftJoin('jenis_gram as cf', 'jenisGramFlute2_id', '=', 'cf.id')
-        ->leftJoin('jenis_gram as linerBawah', 'jenisGramLinerBawah_id', '=', 'linerBawah.id')
-        ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
-        ->get();
+
         $box = DB::connection('firebird2')->table('TProdConv')->get();
         $merk = DB::connection('firebird2')->table('TMerkConv')->get();
         $joint = DB::table('joint')->get();
@@ -65,7 +58,6 @@ class BarangController extends Controller
         return view('admin.barang.create', compact([
             // 'item',
             'merk',
-            'substance',
             'box',
             'joint',
             'warna'
