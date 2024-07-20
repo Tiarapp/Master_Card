@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
@@ -425,6 +426,13 @@ Route::middleware(['auth'])->group(function (){
     // Teknik
         Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
         Route::get('admin/fb/teknik', [BarangTeknikController::class, 'listBarang'])->name('fb.list.teknik');
+
+    // Marketing
+        Route::get('admin/marketing/getformpermintaan', [FormPermintaan::class, 'getPermintaan'])->name('mkt.get.formpermintaan');
+        Route::get('admin/marketing/formpermintaan', [FormPermintaan::class, 'listPermintaan'])->name('mkt.list.formpermintaan');
+        Route::get('admin/marketing/formpermintaan/add', [FormPermintaan::class, 'add'])->name('mkt.add.formpermintaan');
+        Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
+        
 }); 
 
 
