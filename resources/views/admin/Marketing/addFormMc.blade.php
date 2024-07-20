@@ -14,7 +14,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Form Permintaan</h4>
+                <h4 class="modal-title">Tambah Form Mastercard</h4>
                 <hr>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -27,19 +27,9 @@
                 </div>
                 @endif
                 
-                <form action="{{ route('mkt.store.formpermintaan') }}" method="POST" class="inputSheet">
+                <form action="{{ route('mkt.store.formmc') }}" method="POST" class="inputSheet">
                     @csrf
                     <div class="row was-validated">
-                        <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Auto Generated">
-                            <div class="form-group">
-                                <label>Tanggal</label>
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Pilih Tipe Box">
                             <div class="form-group">
                                 <label>Customer</label>

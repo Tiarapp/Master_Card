@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
@@ -432,6 +433,11 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/formpermintaan', [FormPermintaan::class, 'listPermintaan'])->name('mkt.list.formpermintaan');
         Route::get('admin/marketing/formpermintaan/add', [FormPermintaan::class, 'add'])->name('mkt.add.formpermintaan');
         Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
+        
+        Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
+        Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
+        Route::get('admin/marketing/formmc/add', [FormMc::class, 'add'])->name('mkt.add.formmc');
+        Route::post('admin/marketing/formmc/store', [FormMc::class, 'store'])->name('mkt.store.formmc');
         
 }); 
 

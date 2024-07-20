@@ -234,6 +234,12 @@
                     <p>Form Permintaan</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('mkt.list.formmc') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Form Mastercard</p>
+                  </a>
+                </li>
               </ul>
             </li>
           @endif
