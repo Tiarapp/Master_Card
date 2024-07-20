@@ -229,7 +229,7 @@
               </a>
               <ul class="nav nav-treeview"> 
                 <li class="nav-item">
-                  <a href="{{ route('boxtype') }}" class="nav-link">
+                  <a href="{{ route('mkt.list.formpermintaan') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Form Permintaan</p>
                   </a>
