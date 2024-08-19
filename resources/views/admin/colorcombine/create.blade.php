@@ -97,6 +97,20 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <div class="form-group">
+                                        {{-- <label>Warna 4</label> --}}
+                                        <input type="hidden" name="idColor5" id="idColor5">
+                                        <input type="hidden" name="warna5" id="warna5">
+                                        <select class="js-example-basic-single col-md-12" name="wrn5" id="wrn5" onchange="getWarna();getNama()">
+                                            <option value="Tidak Ada" disabled selected>Warna 5</option>
+                                            <option value="Tidak Ada">Tidak Ada</option>
+                                            @foreach ($color as $data)
+                                            <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
                                     <button type="submit" id="new" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Add New Color">
                                         <i class='fas fa-plus-circle fa-2x'></i>
                                     </button>
@@ -132,6 +146,7 @@
             var wrn2 = document.getElementById("wrn2").value;
             var wrn3 = document.getElementById("wrn3").value;
             var wrn4 = document.getElementById("wrn4").value;
+            var wrn5 = document.getElementById("wrn5").value;
             
             if (wrn1 == 'Tidak Ada') {
                 document.getElementById("idColor1").value = null;
@@ -167,7 +182,16 @@
                 wrn4 = wrn4.split("|");
                 document.getElementById("idColor4").value = wrn4[0];
                 document.getElementById("warna4").value = wrn4[1];
-            }            
+            }  
+            
+            if (wrn5 == 'Tidak Ada') {
+                document.getElementById("idColor5").value = null;
+                document.getElementById("warna5").value = '-';
+            } else {
+                wrn5 = wrn5.split("|");
+                document.getElementById("idColor5").value = wrn5[0];
+                document.getElementById("warna5").value = wrn5[1];
+            }  
             
         }
         
@@ -176,8 +200,9 @@
             var wrn2 = document.getElementById("warna2").value;
             var wrn3 = document.getElementById("warna3").value;
             var wrn4 = document.getElementById("warna4").value;
+            var wrn5 = document.getElementById("warna5").value;
             
-            document.getElementById("nama").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4;
-            document.getElementById("kode").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4;
+            document.getElementById("nama").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4+' '+wrn5;
+            document.getElementById("kode").value = wrn1+' '+wrn2+' '+wrn3+' '+wrn4+' '+wrn5;
         }
     </script>

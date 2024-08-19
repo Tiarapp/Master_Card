@@ -258,7 +258,7 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC()">
+                                            <input type="text" class="form-control txt_line panjang-box" name="panjangSheetBox" id="panjangSheetBox" onchange="getLuasDC()">
                                         </div>
                                         <div class="col-md-2">
                                             <input type="text" class="form-control txt_line lebar-box" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC()">
@@ -378,7 +378,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="panjangSheet" id="panjangSheet" onchange="getLuasDC()">
+                                                    <input type="text" class="form-control txt_line panjang-sheet" name="panjangSheet" id="panjangSheet" onchange="getLuasDC()">
                                                 </div>
                                             </div>
                                         </div>
@@ -386,7 +386,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" name="lebarSheet" id="lebarSheet" onchange="getLuasDC()">
+                                                    <input type="text" class="form-control txt_line lebar-sheet" name="lebarSheet" id="lebarSheet" onchange="getLuasDC()">
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -768,6 +768,13 @@
 
             document.getElementById("lebarSheet").value = lebar;
             document.getElementById("panjangSheet").value = 0;
+        } else {
+            lebar = $(this).val();
+            panjang = document.getElementById("panjangSheet").value;
+
+            luas = panjang * lebar / 1000000
+
+            document.getElementById("luasSheet").value = luas
         }
     });
 

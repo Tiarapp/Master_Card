@@ -80,7 +80,7 @@ class BarangController extends Controller
         if (!$barang) {
             DB::connection('firebird2')->table('TBarangConv')->insert([
                 'KodeBrg' => $request->kodeBarang,
-                'NamaBrg' => $request->namaBarang,
+                'NamaBrg' => strtoupper($request->namaBarang),
                 'Eceran' => $request->ecer,
                 'Tujuan' => $request->tujuan,
                 'JenisProd' => $request->tipebox,

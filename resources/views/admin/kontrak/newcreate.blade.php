@@ -261,6 +261,9 @@
                                                         <option value="OUP Design, Kualitas, Nama Item, Ukuran">OUP Design, Kualitas, Nama Item, Ukuran</option>
                                                         <option value="OUP Type Box, Koli, Ukuran & Kualitas">OUP Type Box, Koli, Ukuran & Kualitas</option> 
                                                         <option value="OUP Nama, Ukuran, Kualitas">OUP Nama, Ukuran, Kualitas</option>
+                                                        <option value="OUP Ukuran & Koli">OUP Ukuran & Koli</option>
+                                                        <option value="OUP FLUTE, JOIN, CREASING DAN COLLY">OUP FLUTE, JOIN, CREASING DAN COLLY</option>
+                                                        <option value="OUP Design, Kualitas, Ukuran, Creasing">OUP Design, Kualitas, Ukuran, Creasing</option>
                                                     </select>
                                                 </div>
                                             </div>

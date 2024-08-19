@@ -22,7 +22,8 @@ class ColorCombineController extends Controller
             ->leftJoin('color AS color2', 'idColor2', '=', 'color2.id')
             ->leftJoin('color AS color3', 'idColor3', '=', 'color3.id')
             ->leftJoin('color AS color4', 'idColor4', '=', 'color4.id')
-            ->select('color_combine.*', 'color1.nama AS warna1', 'color2.nama AS warna2', 'color3.nama AS warna3', 'color4.nama AS warna4',)
+            ->leftJoin('color AS color5', 'idColor5', '=', 'color5.id')
+            ->select('color_combine.*', 'color1.nama AS warna1', 'color2.nama AS warna2', 'color3.nama AS warna3', 'color4.nama AS warna4', 'color5.nama AS warna5')
             ->get();
 
         return view('admin.colorcombine.index', ['combine' => $combine]);
@@ -56,6 +57,7 @@ class ColorCombineController extends Controller
             'idColor2' => 'nullable',
             'idColor3' => 'nullable',
             'idColor4' => 'nullable',
+            'idColor5' => 'nullable',
             'createdBy' => 'required'
         ]);
 

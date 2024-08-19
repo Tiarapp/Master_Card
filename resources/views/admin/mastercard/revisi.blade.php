@@ -263,7 +263,7 @@
                                             <label class="control-label">Ukuran Sheet Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
+                                            <input type="text" class="form-control txt_line panjang-box" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-2">
                                             <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
@@ -383,7 +383,7 @@
                                             <span class="x">P</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
+                                                    <input type="text" class="form-control txt_line panjang-sheet" value="{{ $mc->panjangSheet }}"  name="panjangSheet" id="panjangSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
                                                 </div>
                                             </div>
                                         </div>
@@ -391,7 +391,7 @@
                                             <span class="x">L</span>
                                             <div class="row">
                                                 <div class="col-md-10">
-                                                    <input type="text" class="form-control txt_line" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
+                                                    <input type="text" class="form-control txt_line lebar-sheet" value="{{ $mc->lebarSheet }}"  name="lebarSheet" id="lebarSheet" onchange="getLuasDC(); getKodeBarang(); getGramProduksi(); getGramKontrak();">
                                                 </div>
                                                 <div class="col-md-2">
                                                     MM
@@ -780,6 +780,115 @@
 
             document.getElementById("lebarSheet").value = lebar;
             document.getElementById("panjangSheet").value = 0;
+        } else {
+            lebar = $(this).val();
+            panjangbox = document.getElementById('panjangbox').value 
+            lebarbox = document.getElementById('lebarbox').value 
+            tinggi = document.getElementById('tinggibox').value 
+            panjang = document.getElementById("panjangSheetBox").value;
+            bentuk = document.getElementById("tipebox").value;
+            tipe = document.getElementById("flute").value;
+
+            if (bentuk === "B1" || bentuk === "B3") {
+                if (tipe == "BF") {
+                    faktorp = 43;
+                    faktorl = 10;
+                } else if(tipe == "CF"){
+                    faktorp = 47;
+                    faktorl = 13;
+                } else if (tipe == "BCF") {
+                    faktorp = 63;
+                    faktorl = 27;
+                }
+            luas = panjang * lebar / 1000000
+            luasmkt =(((panjangbox*2)+(lebarbox*2)+faktorp)/1000) * (faktorl+lebarbox+tinggi)/1000 ;
+            
+            document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
+            document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+            }
+        }
+    });
+
+    $(document).on("keyup", ".panjang-box", function() {
+        panjang = $(this).val();
+        panjangbox = document.getElementById('panjangbox').value 
+        lebarbox = document.getElementById('lebarbox').value 
+        tinggi = document.getElementById('tinggibox').value 
+        lebar = document.getElementById("lebarSheetBox").value;
+        bentuk = document.getElementById("tipebox").value;
+        tipe = document.getElementById("flute").value;
+
+        if (bentuk === "B1" || bentuk === "B3") {
+            if (tipe == "BF") {
+                faktorp = 43;
+                faktorl = 10;
+            } else if(tipe == "CF"){
+                faktorp = 47;
+                faktorl = 13;
+            } else if (tipe == "BCF") {
+                faktorp = 63;
+                faktorl = 27;
+            }
+        luas = panjang * lebar / 1000000
+        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+        
+        document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
+        document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+        }
+    });
+
+    $(document).on("keyup", ".panjang-sheet", function() {
+        panjang = $(this).val();
+        panjangbox = document.getElementById('panjangbox').value 
+        lebarbox = document.getElementById('lebarbox').value 
+        tinggi = document.getElementById('tinggibox').value 
+        lebar = document.getElementById("lebarSheet").value;
+        bentuk = document.getElementById("tipebox").value;
+        tipe = document.getElementById("flute").value;
+
+        if (bentuk === "B1" || bentuk === "B3") {
+            if (tipe == "BF") {
+                faktorp = 43;
+                faktorl = 10;
+            } else if(tipe == "CF"){
+                faktorp = 47;
+                faktorl = 13;
+            } else if (tipe == "BCF") {
+                faktorp = 63;
+                faktorl = 27;
+            }
+        luas = panjang * lebar / 1000000
+        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+        
+        document.getElementById("luasSheet").value = luasmkt.toFixed(3)
+        document.getElementById("luasSheetProd").value = luas.toFixed(3)
+        }
+    });
+    $(document).on("keyup", ".lebar-sheet", function() {
+        lebar = $(this).val();
+        panjangbox = document.getElementById('panjangbox').value 
+        lebarbox = document.getElementById('lebarbox').value 
+        tinggi = document.getElementById('tinggibox').value 
+        panjang = document.getElementById("panjangSheet").value;
+        bentuk = document.getElementById("tipebox").value;
+        tipe = document.getElementById("flute").value;
+
+        if (bentuk === "B1" || bentuk === "B3") {
+            if (tipe == "BF") {
+                faktorp = 43;
+                faktorl = 10;
+            } else if(tipe == "CF"){
+                faktorp = 47;
+                faktorl = 13;
+            } else if (tipe == "BCF") {
+                faktorp = 63;
+                faktorl = 27;
+            }
+        luas = panjang * lebar / 1000000
+        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+        
+        document.getElementById("luasSheet").value = luasmkt.toFixed(3)
+        document.getElementById("luasSheetProd").value = luas.toFixed(3)
         }
     });
 
@@ -904,19 +1013,15 @@
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": true,
-            // "autoWidth": true, 
             "initComplete": function (settings, json) {  
                 $("#data_box").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
             },
-            // "scrollY": "400px",
             select: true,
         });
         
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
-            
-            // document.getElementById('kodeBarang').value = Box[2];
+
             document.getElementById('namaBarang').value = Box[2];
             document.getElementById('tipebox').value = Box[3];
             document.getElementById('box_id').value = Box[0];
@@ -1100,8 +1205,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1135,8 +1240,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
             
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1154,8 +1259,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1201,10 +1306,6 @@
 
             $out = $result/$result2;
             document.getElementById('outConv').value = $out.toFixed(0);
-            document.getElementById('luasSheet').value = $result.toFixed(3);
-            document.getElementById('luasSheetBox').value = $result2.toFixed(3);
-            document.getElementById('luasSheetProd').value = $result.toFixed(3);
-            document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
             getKodeBarang();
         }
     }
@@ -1243,8 +1344,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1278,8 +1379,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
             
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1297,8 +1398,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);

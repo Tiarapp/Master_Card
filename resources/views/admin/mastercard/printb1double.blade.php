@@ -460,19 +460,6 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
-	{{-- <tr>
-		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-	</tr> --}}
 	<tr>
 		<td height="18" align="left" valign=middle><font face="Calibri" color="#000000"><br>Gambar</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -486,17 +473,6 @@
 		<td align="left" valign=bottom><font color="#000000"><br></font></td>
 	</tr>
 	<tr>
-		{{-- <td colspan="10" style="border: 2px black" height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br><img width="700px" height="280px" src="{{ url('/upload/'.$mc->gambar) }}" alt=""></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td>
-		<td align="left" valign=bottom><font color="#000000"><br></font></td> --}}
 	</tr>
 	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
@@ -520,17 +496,15 @@
 				$kuping = $mc->kuping - $mc->kuping2;
 			}
 
-			$panjang = $mc->kuping - $mc->kuping2 + $mc->panjangCrease + $mc->lebarCrease2;
+			$panjang = $mc->kuping - $mc->kuping2 + $mc->panjangCrease + $mc->lebarCrease1;
 			$lebar = ($mc->flapCrease * 2) + $mc->tinggiCrease;
 
 		?>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br>{{ $dt->format("l, F j, Y, g:i:s a") }}</font></td>
 
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $kuping }}</td>
-		{{-- <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->panjangCrease }}</td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $mc->lebarCrease1 }}</td> --}}
 		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->panjangCrease }}</td>
-		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->lebarCrease2 }}</td>
+		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->lebarCrease1 }}</td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->tinggiCrease }}</font></td>
 		<td align="left" valign=left><font face="Calibri" color="#000000" size='2'><br><b>{{ $lebar }}</b></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>

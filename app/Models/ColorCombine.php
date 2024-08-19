@@ -18,6 +18,7 @@ class ColorCombine extends Model
         'idColor2',
         'idColor3',
         'idColor4',
+    'idColor5',
         'createdBy',
         'lastUpdatedBy',
         'deleted',
