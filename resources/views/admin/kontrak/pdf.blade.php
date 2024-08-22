@@ -1389,7 +1389,7 @@ td
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='16' style='mso-height-source:userset;height:12pt'>
-<td colspan='9' height='16' class='x75' style='height:12pt;'>Office: JL. Imam Bonjol 101, RT 004 RW 001, Surabaya 62064</td>
+<td colspan='9' height='16' class='x75' style='height:12pt;'>Office: Jl. Raya Kupang Baru No.27, Surabaya, 60225</td>
 <td colspan='2' class='x22' style='mso-ignore:colspan;'></td>
  </tr>
  <tr height='16' style='mso-height-source:userset;height:12pt'>
