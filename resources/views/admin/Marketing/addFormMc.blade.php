@@ -55,7 +55,7 @@
                                 <label>Keterangan</label>
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
+                                        <input type="text" class="form-control txt_line" name="keterangan" id="keterangan" value="OB" readonly>
                                     </div>
                                 </div>
                             </div>

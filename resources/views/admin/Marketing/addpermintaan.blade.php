@@ -65,8 +65,21 @@
                                 <label>Keterangan</label>
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
+                                        <select class="js-example-basic-single col-md-12" name="keterangan" id="keterangan">
+                                            <option value='Design'>Design</option>
+                                            <option value='Design Pisau'>Design Pisau</option>
+                                            <option value='Revisi Design'>Revisi Design</option>
+                                            <option value='Revisi Design Pisau'>Revisi Design Pisau</option>
+                                            <option value='Dies Cetak'>Dies Cetak</option>
+                                            <option value='Pisau Punch'>Pisau Punch</option>
+                                            <option value='Contoh Polos'>Contoh Polos</option>
+                                            <option value='Contoh Cetakan'>Contoh Cetakan</option>
+                                            <option value='Contoh Tempelan'>Contoh Tempelan</option>
+                                        </select>
                                     </div>
+                                    {{-- <div class="col-md-10">
+                                        <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -83,4 +96,10 @@
     </div>    
 </div>
     
-    @endsection
+@endsection
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    })
+</script>
