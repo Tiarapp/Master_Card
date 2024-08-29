@@ -49,15 +49,19 @@
               <th scope="col">Saldo Pcs</th>
               <th scope="col">Saldo Kg</th>
               <th scope="col">Mastercard ID</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             <?php
             $no = 1;
             foreach ($barang as $data) { ?>
-              <tr>
+              <tr class="barang">
                 <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->KodeBrg }}</td>
+                <td>
+                  {{-- <input type="text" class="kode-barang" id="idbarang" value="{{ $data->KodeBrg }}" readonly> --}}
+                  {{ $data->KodeBrg }}
+                </td>
                 <td>{{ $data->NamaBrg }}</td>
                 <td>{{ round($data->BeratStandart, 2) }}</td>
                 <td>{{ $data->Satuan }}</td>
@@ -65,6 +69,38 @@
                 <td>{{ round($data->SaldoPcs, 2) }}</td>
                 <td>{{ round($data->SaldoKg, 2) }}</td>
                 <td>{{ $data->WeightValue }}</td>
+                <td>
+                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter">
+                    Launch demo modal
+                  </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <form action="{{ route('barang.mutasi', ['kodebarang' => trim($data->KodeBrg)]) }}" method="POST">
+                          {{ csrf_field() }}
+                          {{-- {{ method_field('PUT') }} --}}
+                          <div class="modal-body">
+                            <label for="">Periode</label>
+                            <input type="text" name="periode" id="periode" >
+                            {{-- <input type="text" name="kodebarang" id="kodebarang"> --}}
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
             <?php
             }
@@ -102,7 +138,7 @@
          }
        ],
        select: true
-     });
+     });   
    });
 </script>
 

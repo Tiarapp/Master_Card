@@ -7,6 +7,7 @@ use App\Models\fbBarang;
 use App\Models\Mastercard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class BarangController extends Controller
 {
@@ -121,9 +122,96 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function show(Barang $barang)
+    public function getMutasi(Request $request, $kodebarang)
     {
-        //
+        DB::connection('firebird2')->beginTransaction();
+
+        $result = [];
+
+        $barang = DB::connection('firebird2')->table('TBarangConv')->where('KodeBrg', '=', $kodebarang)->first();
+        $persediaan = DB::connection('firebird2')->table('TPersediaan')->where('KodeBrg', '=', $kodebarang)
+        ->where('TPersediaan.Periode', 'LIKE', "%".$request->periode."%")
+        ->select('SaldoAwalCrt', 'Periode as period', 'SaldoAkhirCrt')
+        ->first();
+
+        $php = DB::connection('firebird2')->table('TDetPHP')
+            ->leftJoin('TPHP', 'TDetPHP.NoPHP', '=', 'TPHP.NoBukti')
+            ->select('TDetPHP.*', 'TPHP.Periode', 'TPHP.TglPHP', 'TPHP.Keterangan')
+            ->where('TDetPHP.KodeBrg', 'LIKE', "%".$kodebarang."%")
+            ->where('TPHP.Periode', 'LIKE', "%".$request->periode."%")
+            ->get();
+
+        $sj = DB::connection('firebird2')->table('TDetSJ')
+        ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
+        ->select('TDetSJ.*', 'TSuratJalan.Periode', 'TSuratJalan.TglSJ', 'TSuratJalan.NamaCust')
+        ->where('TDetSJ.KodeBrg', 'LIKE', "%".$kodebarang."%")
+        ->where('TSuratJalan.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        $repack = DB::connection('firebird2')->table('TDetRepack')
+        ->leftJoin('TRepack', 'TDetRepack.NoRepack', '=', 'TRepack.NoRepack')
+        ->select('TDetRepack.*', 'TRepack.Periode', 'TRepack.TglRepack', 'TRepack.Keterangan')
+        ->where('TDetRepack.KodeBrg', 'LIKE', "%".$kodebarang."%")
+        ->where('TRepack.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        // dd($php);
+
+        if ($php) {
+            foreach ($php as $data) {
+                
+                $nestedData["tanggal"] = $data->TglPHP;
+                $nestedData["nobukti"] = $data->NoPHP;
+                $nestedData["masuk"] = $data->Quantity;
+                $nestedData["keluar"] = 0;
+                $nestedData["keterangan"] = $data->Keterangan;
+
+                $result[] = $nestedData;
+            }
+        } 
+
+
+        if ($sj) {
+            foreach ($sj as $data) {
+                $nestedData["tanggal"] = $data->TglSJ;
+                $nestedData["nobukti"] = $data->NomerSJ;
+                $nestedData["keluar"] = $data->Quantity;
+                $nestedData["masuk"] = 0;
+                $nestedData["keterangan"] = $data->NamaCust;
+                
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($repack) {
+            foreach ($repack as $data) {
+                $kode = explode("-", $data->NoRepack);
+
+                if($kode[0] === "RK") {
+                    $nestedData["tanggal"] = $data->TglRepack;
+                    $nestedData["nobukti"] = $data->NoRepack;
+                    $nestedData["masuk"] = 0;
+                    $nestedData["keluar"] = $data->TotRepackEcr;
+                    $nestedData["keterangan"] = $data->Keterangan;
+    
+                    
+                $result[] = $nestedData;
+                } else {
+                    
+                    $nestedData["tanggal"] = $data->TglRepack;
+                    $nestedData["nobukti"] = $data->NoRepack;
+                    $nestedData["masuk"] = $data->TotRepackEcr;
+                    $nestedData["keluar"] = 0;
+                    $nestedData["keterangan"] = $data->Keterangan;
+                    
+                $result[] = $nestedData;
+                }
+
+            }
+        }
+
+        return view('admin.barang.mutasi', compact('result', 'barang', 'persediaan'));
+
     }
 
     /**
