@@ -496,7 +496,7 @@
 				$kuping = $mc->kuping - $mc->kuping2;
 			}
 
-			$panjang = $mc->kuping - $mc->kuping2 + $mc->panjangCrease + $mc->lebarCrease1;
+			$panjang = $mc->kuping - $mc->kuping2 + $mc->panjangCrease + $mc->lebarCrease2;
 			$lebar = ($mc->flapCrease * 2) + $mc->tinggiCrease;
 
 		?>
@@ -504,7 +504,7 @@
 
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font>{{ $kuping }}</td>
 		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->panjangCrease }}</td>
-		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->lebarCrease1 }}</td>
+		<td colspan="3" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="middle" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=4></font>{{ $mc->lebarCrease2 }}</td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->tinggiCrease }}</font></td>
 		<td align="left" valign=left><font face="Calibri" color="#000000" size='2'><br><b>{{ $lebar }}</b></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
