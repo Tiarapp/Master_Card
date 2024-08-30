@@ -71,7 +71,7 @@
                 <td>{{ $data->WeightValue }}</td>
                 <td>
                   <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter">
-                    Launch demo modal
+                    Cek Mutasi
                   </button>
                   
                   <!-- Modal -->

@@ -63,6 +63,27 @@
               </ul>
             </li>
           @endif
+
+          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 6 )
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Logisitik
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('barang') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Barang</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
+
           {{-- Marketing --}}
           @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 3)
             <li class="nav-item">

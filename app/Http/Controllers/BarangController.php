@@ -143,7 +143,7 @@ class BarangController extends Controller
 
         $sj = DB::connection('firebird2')->table('TDetSJ')
         ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
-        ->select('TDetSJ.*', 'TSuratJalan.Periode', 'TSuratJalan.TglSJ', 'TSuratJalan.NamaCust')
+        ->select('TDetSJ.*', 'TSuratJalan.Periode', 'TSuratJalan.TglSJ', 'TSuratJalan.NamaCust', 'TSuratJalan.NoSeal as noopi')
         ->where('TDetSJ.KodeBrg', 'LIKE', "%".$kodebarang."%")
         ->where('TSuratJalan.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
@@ -165,6 +165,7 @@ class BarangController extends Controller
                 $nestedData["masuk"] = $data->Quantity;
                 $nestedData["keluar"] = 0;
                 $nestedData["keterangan"] = $data->Keterangan;
+                $nestedData["opi"] = $data->NOOPI;
 
                 $result[] = $nestedData;
             }
@@ -178,6 +179,7 @@ class BarangController extends Controller
                 $nestedData["keluar"] = $data->Quantity;
                 $nestedData["masuk"] = 0;
                 $nestedData["keterangan"] = $data->NamaCust;
+                $nestedData["opi"] = $data->noopi;
                 
                 $result[] = $nestedData;
             }
@@ -191,8 +193,9 @@ class BarangController extends Controller
                     $nestedData["tanggal"] = $data->TglRepack;
                     $nestedData["nobukti"] = $data->NoRepack;
                     $nestedData["masuk"] = 0;
-                    $nestedData["keluar"] = $data->TotRepackEcr;
+                    $nestedData["keluar"] = $data->Quantity;
                     $nestedData["keterangan"] = $data->Keterangan;
+                    $nestedData["opi"] = '';
     
                     
                 $result[] = $nestedData;
@@ -200,9 +203,10 @@ class BarangController extends Controller
                     
                     $nestedData["tanggal"] = $data->TglRepack;
                     $nestedData["nobukti"] = $data->NoRepack;
-                    $nestedData["masuk"] = $data->TotRepackEcr;
+                    $nestedData["masuk"] = $data->Quantity;
                     $nestedData["keluar"] = 0;
                     $nestedData["keterangan"] = $data->Keterangan;
+                    $nestedData["opi"] = '';
                     
                 $result[] = $nestedData;
                 }

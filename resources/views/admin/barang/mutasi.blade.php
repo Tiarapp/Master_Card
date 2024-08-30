@@ -54,6 +54,7 @@
               <th scope="col">Masuk</th>
               <th scope="col">Keluar</th>
               <th scope="col">Keterangan</th>
+              <th scope="col">OPI</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +69,7 @@
                 <td>{{ number_format((int)$data["masuk"]) }}</td>
                 <td>{{ number_format((int)$data["keluar"]) }}</td>
                 <td>{{ trim($data["keterangan"]) }}</td>
+                <td>{{ trim($data["opi"]) }}</td>
               </tr>
             <?php
             $masuk = $masuk + (int)$data["masuk"];
@@ -109,6 +111,11 @@
 <script> 
    $(document).ready(function(){
      $("#data_barang").DataTable({
+      "pageLength": 50,
+      "order":[
+        [0, 'asc'],
+        [2, 'desc']
+      ],
         // "scrollX": true,
        dom: 'Bfrtip',
     //    select: true
