@@ -70,7 +70,7 @@
                 <td>{{ round($data->SaldoKg, 2) }}</td>
                 <td>{{ $data->WeightValue }}</td>
                 <td>
-                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter">
+                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $data->KodeBrg }}">
                     Cek Mutasi
                   </button>
                   
@@ -84,13 +84,13 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <form action="{{ route('barang.mutasi', ['kodebarang' => trim($data->KodeBrg)]) }}" method="POST">
+                        <form action="{{ route('barang.mutasi') }}" method="POST">
                           {{ csrf_field() }}
                           {{-- {{ method_field('PUT') }} --}}
                           <div class="modal-body">
                             <label for="">Periode</label>
                             <input type="text" name="periode" id="periode" >
-                            {{-- <input type="text" name="kodebarang" id="kodebarang"> --}}
+                            <input type="hidden" name="kodebarang" id="kodebarang">
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -140,6 +140,13 @@
        select: true
      });   
    });
+
+   $(document).on("click", '.mutasi', function() {
+    kodebarang = $(this).val();
+
+    document.getElementById("kodebarang").value = kodebarang;
+    
+   })
 </script>
 
 @endsection

@@ -122,14 +122,13 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function getMutasi(Request $request, $kodebarang)
+    public function getMutasi(Request $request)
     {
         DB::connection('firebird2')->beginTransaction();
-
         $result = [];
 
-        $barang = DB::connection('firebird2')->table('TBarangConv')->where('KodeBrg', '=', $kodebarang)->first();
-        $persediaan = DB::connection('firebird2')->table('TPersediaan')->where('KodeBrg', '=', $kodebarang)
+        $barang = DB::connection('firebird2')->table('TBarangConv')->where('KodeBrg', '=', $request->kodebarang)->first();
+        $persediaan = DB::connection('firebird2')->table('TPersediaan')->where('KodeBrg', '=', $request->kodebarang)
         ->where('TPersediaan.Periode', 'LIKE', "%".$request->periode."%")
         ->select('SaldoAwalCrt', 'Periode as period', 'SaldoAkhirCrt')
         ->first();
@@ -137,21 +136,21 @@ class BarangController extends Controller
         $php = DB::connection('firebird2')->table('TDetPHP')
             ->leftJoin('TPHP', 'TDetPHP.NoPHP', '=', 'TPHP.NoBukti')
             ->select('TDetPHP.*', 'TPHP.Periode', 'TPHP.TglPHP', 'TPHP.Keterangan')
-            ->where('TDetPHP.KodeBrg', 'LIKE', "%".$kodebarang."%")
+            ->where('TDetPHP.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
             ->where('TPHP.Periode', 'LIKE', "%".$request->periode."%")
             ->get();
 
         $sj = DB::connection('firebird2')->table('TDetSJ')
         ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
         ->select('TDetSJ.*', 'TSuratJalan.Periode', 'TSuratJalan.TglSJ', 'TSuratJalan.NamaCust', 'TSuratJalan.NoSeal as noopi')
-        ->where('TDetSJ.KodeBrg', 'LIKE', "%".$kodebarang."%")
+        ->where('TDetSJ.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
         ->where('TSuratJalan.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
 
         $repack = DB::connection('firebird2')->table('TDetRepack')
         ->leftJoin('TRepack', 'TDetRepack.NoRepack', '=', 'TRepack.NoRepack')
         ->select('TDetRepack.*', 'TRepack.Periode', 'TRepack.TglRepack', 'TRepack.Keterangan')
-        ->where('TDetRepack.KodeBrg', 'LIKE', "%".$kodebarang."%")
+        ->where('TDetRepack.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
         ->where('TRepack.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
 
