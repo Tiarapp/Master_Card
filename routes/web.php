@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
+use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
@@ -439,6 +440,10 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
         Route::get('admin/marketing/formmc/add', [FormMc::class, 'add'])->name('mkt.add.formmc');
         Route::post('admin/marketing/formmc/store', [FormMc::class, 'store'])->name('mkt.store.formmc');
+
+        Route::get('admin/marketing/mod', [MarektingOrder::class, 'index'])->name('mkt.mod');
+        Route::get('admin/marketing/mod/{tanggal}', [MarektingOrder::class, 'getMod'])->name('mkt.get.mod');
+        
         
 }); 
 

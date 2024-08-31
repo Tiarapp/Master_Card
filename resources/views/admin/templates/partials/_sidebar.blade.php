@@ -261,6 +261,12 @@
                     <p>Form Mastercard</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('mkt.mod') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>List MOD</p>
+                  </a>
+                </li>
               </ul>
             </li>
           @endif
