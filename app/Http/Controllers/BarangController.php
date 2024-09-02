@@ -40,7 +40,7 @@ class BarangController extends Controller
         // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
 
-        if(count($temp1) > count($temp2))
+        if((count($temp1) / 2) > count($temp2))
         {
             $barang = $temp1;
             return view('admin.barang.index', compact("barang"));
