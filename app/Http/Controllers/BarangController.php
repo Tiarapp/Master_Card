@@ -22,7 +22,17 @@ class BarangController extends Controller
 
         DB::connection('firebird2')->beginTransaction();
         $periode = date("m/Y");
-        $barang = DB::connection('firebird2')->table('TPersediaan')
+        $periode1 = date('m/Y', strtotime(date('Y-m')." -1 month"));
+        
+        $temp1 = DB::connection('firebird2')->table('TPersediaan')
+        ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+        ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
+        ->where('TPersediaan.Periode', 'LIKE', "%".$periode1."%")
+        // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
+        // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
+        ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
+
+        $temp2 = DB::connection('firebird2')->table('TPersediaan')
         ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
         ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
         ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
@@ -30,14 +40,14 @@ class BarangController extends Controller
         // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
 
-        if (!$barang) {
-            $periode = date('Y-m-d', strtotime(date('Y-m-d')." -1 month"));
-            dd($periode);
+        if(count($temp1) > count($temp2))
+        {
+            $barang = $temp1;
+            return view('admin.barang.index', compact("barang"));
+        } else {
+            $barang = $temp2;
+            return view('admin.barang.index', compact("barang"));
         }
-
-        // dd($barang);
-
-        return view('admin.barang.index', compact('barang'));
     }
 
     /**

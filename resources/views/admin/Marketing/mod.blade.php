@@ -64,7 +64,7 @@
     if (tanggal) {
         $("#data_barang").DataTable({
             dom: 'Bfrtip',
-            pageLength: 50,
+            pageLength: 100,
             processing: true,
             serverSide: true,
             ajax: {
