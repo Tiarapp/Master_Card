@@ -268,7 +268,10 @@
                                                         <option value="OUP Ukuran & Koli">OUP Ukuran & Koli</option>
                                                         <option value="OUP FLUTE, JOIN, CREASING DAN COLLY">OUP FLUTE, JOIN, CREASING DAN COLLY</option>
                                                         <option value="OUP Design, Kualitas, Ukuran, Creasing">OUP Design, Kualitas, Ukuran, Creasing</option>
-                                                        <option value="OUP Nama Item, Ukuran, Design, Kualitas, Warna">OUP Nama Item, Ukuran, Design, Kualitas, Warna</option>s
+                                                        <option value="OUP Nama Item, Ukuran, Design, Kualitas, Warna">OUP Nama Item, Ukuran, Design, Kualitas, Warna</option>
+                                                        <option value="OUP Nama Item, Creasing">OUP Nama Item, Creasing</option>
+                                                        <option value="OUP Nama Item, Design, Creasing">OUP Nama Item, Design, Creasing</option>
+                                                        <option value="OUP Nama Item, Kualitas, Creasing">OUP Nama Item, Kualitas, Creasing</option>
                                                     </select>
                                                 </div>
                                             </div>
