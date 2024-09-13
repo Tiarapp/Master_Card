@@ -45,6 +45,8 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Item</th>
                 <th scope="col">keterangan</th>
+                <th scope="col">Dibuat Oleh</th>
+                <th scope="col">Diubah Oleh</th>
                 <th scope="col">Action</th>
             </tr>
           </thead>
@@ -70,6 +72,8 @@
             { data: 'customer', name: 'customer' },
             { data: 'barang', name: 'barang' },
             { data: 'keterangan', name: 'keterangan' },
+            { data: 'created_by', name: 'created_by' },
+            { data: 'updated_by', name: 'updated_by' },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],
         select: true,
