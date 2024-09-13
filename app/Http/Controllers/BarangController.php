@@ -60,8 +60,8 @@ class BarangController extends Controller
     {
         DB::connection('firebird2')->beginTransaction();
 
-        $box = DB::connection('firebird2')->table('TProdConv')->get();
-        $merk = DB::connection('firebird2')->table('TMerkConv')->get();
+        $box = DB::connection('firebird2')->table('TProdConv')->orderBy('Kode','Asc')->get();
+        $merk = DB::connection('firebird2')->table('TMerkConv')->orderBy('Kode','Asc')->get();
         $joint = DB::table('joint')->get();
         $warna = DB::connection('firebird2')->table('TWarnaConv')->get();
         
