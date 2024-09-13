@@ -10,7 +10,13 @@ class FormMc extends Model
     use HasFactory;
 
     protected $table = 'form_mc';
-    protected $primarykey = 'kode';
+    protected $primaryKey = 'kode';
+    protected $casts = [
+        'kode' => 'string',
+        'customer' => 'string',
+        'barang' => 'string',
+        'keterangan' => 'string'
+    ];
     protected $fillable = [
         'kode',
         'customer',

@@ -435,11 +435,15 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/formpermintaan', [FormPermintaan::class, 'listPermintaan'])->name('mkt.list.formpermintaan');
         Route::get('admin/marketing/formpermintaan/add', [FormPermintaan::class, 'add'])->name('mkt.add.formpermintaan');
         Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
+        Route::get('admin/marketing/formpermintaan/edit/{id}', [FormPermintaan::class, 'edit'])->name('mkt.edit.formpermintaan');
+        Route::put('admin/marketing/formpermintaan/update/{id}', [FormPermintaan::class, 'update'])->name('mkt.update.formpermintaan');
         
         Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
         Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
         Route::get('admin/marketing/formmc/add', [FormMc::class, 'add'])->name('mkt.add.formmc');
         Route::post('admin/marketing/formmc/store', [FormMc::class, 'store'])->name('mkt.store.formmc');
+        Route::get('admin/marketing/formmc/edit/{kode}', [FormMc::class, 'edit'])->name('mkt.edit.formmc');
+        Route::put('admin/marketing/formmc/update/{kode}', [FormMc::class, 'update'])->name('mkt.update.formmc');
 
         Route::get('admin/marketing/mod', [MarektingOrder::class, 'index'])->name('mkt.mod');
         Route::get('admin/marketing/mod/{tanggal}', [MarektingOrder::class, 'getMod'])->name('mkt.get.mod');

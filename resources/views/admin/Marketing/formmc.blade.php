@@ -44,11 +44,9 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Item</th>
                 <th scope="col">keterangan</th>
+                <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>
-            
-          </tbody>
         </table>
       </div>
       <!-- /.row -->
@@ -64,7 +62,7 @@
     var teknik = $("#data_barang").DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! route('mkt.get.formmc') !!}',
+        ajax: '{{ route('mkt.get.formmc') }}',
         columns: [{
                 data: 'kode',
                 name: 'kode'
@@ -80,6 +78,12 @@
             {
                 data: 'keterangan',
                 name: 'keterangan'
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false, 
+                searchable: false
             },
         ],
         select: true,

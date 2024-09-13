@@ -11,9 +11,13 @@ class FormMc extends Controller
 {
     public function getListMc()
     {
-        $list = MarketingFormMc::orderBy('kode', 'Desc');
-
-        return DataTables::of($list)->toJson();
+        $list = MarketingFormMc::orderBy('kode', 'Desc'); 
+        
+        return DataTables::of($list)
+            ->addColumn('action', function($list) {
+                return '<a href="/admin/marketing/formmc/edit/'. $list->kode .'" class="btn btn-primary"> Edit </a>';
+            })
+        ->make(true);
     }
 
     public function list()
@@ -30,16 +34,38 @@ class FormMc extends Controller
     {
         $mc = MarketingFormMc::orderBy('kode', 'Desc')->first();
 
-        $kode = (int)filter_var($mc->kode, FILTER_SANITIZE_NUMBER_INT) + 1;
+        preg_match_all('!\d+!', $mc->kode, $kode);
+
+        $res = ((int) $kode[0][0]) + 1;
 
         MarketingFormMc::create([
-            'kode' => "MC".$kode,
+            'kode' => "MC".$res,
             'customer' => $request->cust,
             'barang' => $request->barang,
             'keterangan' => $request->keterangan,
             'createdBy' => $request->createdBy
         ]);
 
-        return redirect('admin/marketing/formmc')->with('success', "Data Berhasil disimpan dengan kode = MC".$kode);
+        return redirect('admin/marketing/formmc')->with('success', "Data Berhasil disimpan dengan kode = MC".$res);
+    }
+
+    public function edit($kode)
+    {
+        $form = MarketingFormMc::where('kode', $kode)->first();
+
+        return view('admin.Marketing.editFormMC', compact('form'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $form = MarketingFormMc::where('kode', $id)->first();
+
+
+        $form->customer = $request->input('customer');
+        $form->barang = $request->input('barang');
+
+        $form->save();
+
+        return redirect('/admin/marketing/formmc')->with('success', 'Data berhasil diubah !!');
     }
 }
