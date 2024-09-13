@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
 use App\Models\MemoMastercard;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -43,9 +44,13 @@ class FormPermintaan extends Controller
             'customer' => $request->cust,
             'barang' => $request->barang,
             'keterangan' => $request->keterangan,
-            'createdBy' => Auth::user()->name 
+            'created_by' => Auth::user()->name 
         ]);
 
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => 'Tambah Form Permintaan '.$kode
+        ]);
         return redirect('admin/marketing/formpermintaan')->with('success', "Data Berhasil disimpan dengan kode = ". $kode);
     }
 
@@ -64,8 +69,13 @@ class FormPermintaan extends Controller
         $memo->customer = $request->input('customer');
         $memo->barang = $request->input('barang');
         $memo->keterangan = $request->input('keterangan');
+        $memo->updated_by = Auth::user()->name;
 
         $memo->save();
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => 'Update Form Permintaan '.$id
+        ]);
 
         return redirect('/admin/marketing/formpermintaan')->with('success', 'Data berhasil diubah!!');
     }

@@ -15,6 +15,8 @@ class MemoMastercard extends Model
         'tanggal',
         'customer',
         'barang',
-        'keterangan'
+        'keterangan',
+        'created_by',
+        'updated_by'
     ];
 }

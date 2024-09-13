@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
 use App\Models\Marketing\FormMc as MarketingFormMc;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class FormMc extends Controller
@@ -43,9 +45,13 @@ class FormMc extends Controller
             'customer' => $request->cust,
             'barang' => $request->barang,
             'keterangan' => $request->keterangan,
-            'createdBy' => $request->createdBy
+            'created_by' => Auth::user()->name
         ]);
 
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => 'Tambah Form Mastercard MC'.$res
+        ]);
         return redirect('admin/marketing/formmc')->with('success', "Data Berhasil disimpan dengan kode = MC".$res);
     }
 
@@ -60,11 +66,16 @@ class FormMc extends Controller
     {
         $form = MarketingFormMc::where('kode', $id)->first();
 
-
         $form->customer = $request->input('customer');
         $form->barang = $request->input('barang');
+        $form->updated_by = Auth::user()->name;
 
         $form->save();
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => 'Update Form Mastercard '.$form->kode
+        ]);
 
         return redirect('/admin/marketing/formmc')->with('success', 'Data berhasil diubah !!');
     }

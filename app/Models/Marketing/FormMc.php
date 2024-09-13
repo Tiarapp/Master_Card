@@ -15,13 +15,16 @@ class FormMc extends Model
         'kode' => 'string',
         'customer' => 'string',
         'barang' => 'string',
-        'keterangan' => 'string'
+        'keterangan' => 'string',
+        'created_by' => 'string',
+        'updated_by' => 'string'
     ];
     protected $fillable = [
         'kode',
         'customer',
         'barang',
         'keterangan',
-        'createdBy'
+        'created_by',
+        'updated_by',
     ];
 }
