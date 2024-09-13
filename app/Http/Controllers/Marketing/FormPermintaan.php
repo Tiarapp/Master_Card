@@ -17,7 +17,7 @@ class FormPermintaan extends Controller
 
         return DataTables::of($permintaan)
             ->addColumn('action', function($permintaan){
-                return '<a href="/admin/marketing/formpermintaan/edit/'.$permintaan->id.'" class="btn btn-primary"> Edit </a>';
+                return '<a href="../marketing/formpermintaan/edit/'.$permintaan->id.'" class="btn btn-primary"> Edit </a>';
             })
             ->make(true);
     }

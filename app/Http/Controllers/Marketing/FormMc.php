@@ -17,7 +17,7 @@ class FormMc extends Controller
         
         return DataTables::of($list)
             ->addColumn('action', function($list) {
-                return '<a href="/admin/marketing/formmc/edit/'. $list->kode .'" class="btn btn-primary"> Edit </a>';
+                return '<a href="../marketing/formmc/edit/'. $list->kode .'" class="btn btn-primary"> Edit </a>';
             })
         ->make(true);
     }
