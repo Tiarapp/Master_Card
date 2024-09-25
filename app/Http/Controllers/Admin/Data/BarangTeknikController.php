@@ -40,28 +40,30 @@ class BarangTeknikController extends Controller
         return view('admin.fb.listTeknik', compact('persediaan'));
     }
 
-    public function getMutasi(Request $request)
+    public function getMutasi($kodebarang)
     {
         DB::connection('fbteknik')->beginTransaction();
+        
+        $periode = date("m/Y");
         $result = [];
 
-        $barang = DB::connection('fbteknik')->table('TBarang')->where('KodeBrg', '=', $request->kodebarang)->first();
-        $persediaan = DB::connection('fbteknik')->table('TPersediaanTK')->where('KodeBrg', '=', $request->kodebarang)
-        ->where('TPersediaanTK.Periode', 'LIKE', "%".$request->periode."%")
+        $barang = DB::connection('fbteknik')->table('TBarang')->where('KodeBrg', '=', $kodebarang)->first();
+        $persediaan = DB::connection('fbteknik')->table('TPersediaanTK')->where('KodeBrg', '=', $kodebarang)
+        ->where('TPersediaanTK.Periode', 'LIKE', "%".$periode."%")
         ->select('SaldoAwal', 'Periode as period', 'SaldoAkhir')
         ->first();
 
         $bbm = DB::connection('fbteknik')->table('TDetBBMTK')
             ->leftJoin('TBBMTK', 'TDetBBMTK.NoBukti', '=', 'TBBMTK.NoBukti')
             ->select('TDetBBMTK.*', 'TBBMTK.Periode', 'TBBMTK.TglMasuk', 'TBBMTK.NamaSupp')
-            ->where('TDetBBMTK.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+            ->where('TDetBBMTK.KodeBrg', 'LIKE', "%".$kodebarang."%")
             // ->where('TBBMTK.Periode', 'LIKE', "%".$request->periode."%")
             ->get();
 
         $bbk = DB::connection('fbteknik')->table('TDetBBKTK')
         ->leftJoin('TBBKTK', 'TDetBBKTK.NoBukti', '=', 'TBBKTK.NoBukti')
         ->select('TDetBBKTK.*', 'TBBKTK.Periode', 'TBBKTK.TglKeluar', 'TBBKTK.Keterangan', 'TBBKTK.Peminta')
-        ->where('TDetBBKTK.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TDetBBKTK.KodeBrg', 'LIKE', "%".$kodebarang."%")
         // ->where('TBBKTK.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
 
@@ -70,7 +72,7 @@ class BarangTeknikController extends Controller
         $returbbm = DB::connection('fbteknik')->table('TDetReturBBM')
             ->leftJoin('TReturBBM', 'TDetReturBBM.NoBukti', '=', 'TReturBBM.NoBukti')
             ->select('TDetReturBBM.*', 'TReturBBM.TglRetur', 'TReturBBM.NamaSupp', 'TReturBBM.Keterangan')
-            ->where('TDetReturBBM.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+            ->where('TDetReturBBM.KodeBrg', 'LIKE', "%".$kodebarang."%")
             // ->where('TReturBBM.Periode', 'LIKE', "%".$request->periode."%")
             ->get();
 
@@ -78,14 +80,14 @@ class BarangTeknikController extends Controller
         $returbbk = DB::connection('fbteknik')->table('TDetReturBBK')
         ->leftJoin('TReturBBK', 'TDetReturBBK.NoBukti', '=', 'TReturBBK.NoBukti')
         ->select('TDetReturBBK.*', 'TReturBBK.TglRetur', 'TReturBBK.Keterangan')
-        ->where('TDetReturBBK.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TDetReturBBK.KodeBrg', 'LIKE', "%".$kodebarang."%")
         // ->where('TReturBBK.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
 
         $adjust = DB::connection('fbteknik')->table('TDetPenyTK')
         ->leftJoin('TPenyTK', 'TDetPenyTK.NoBukti', '=', 'TPenyTK.NoSesuai')
         ->select('TDetPenyTK.*', 'TPenyTK.Periode', 'TPenyTK.TglSesuai', 'TPenyTK.Keterangan')
-        ->where('TDetPenyTK.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TDetPenyTK.KodeBrg', 'LIKE', "%".$kodebarang."%")
         // ->where('TPenyTK.Periode', 'LIKE', "%".$request->periode."%")
         ->get();
 
@@ -98,7 +100,7 @@ class BarangTeknikController extends Controller
                 $nestedData["masuk"] = $data->QtyS;
                 $nestedData["keluar"] = 0;
                 $nestedData["harga"] = $data->HargaRp;
-                $nestedData["keterangan"] = $data->NamaSupp;
+                $nestedData["keterangan"] = "Beli di Supplier ". $data->NamaSupp;
 
                 $result[] = $nestedData;
             }
@@ -143,7 +145,7 @@ class BarangTeknikController extends Controller
                 $nestedData["keluar"] = $data->QtyS;
                 $nestedData["masuk"] = 0;
                 $nestedData["harga"] = $data->HargaRp;
-                $nestedData["keterangan"] = $data->Peminta ."-". $data->Keterangan;
+                $nestedData["keterangan"] = "Diambil oleh : ". $data->Peminta ."- ". $data->Keterangan;
                 
                 $result[] = $nestedData;
             }

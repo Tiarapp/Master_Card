@@ -64,36 +64,8 @@
                 <td>{{ $data->Spesifikasi }}</td>
                 <td>{{ round($data->SaldoAkhir, 2) }}</td>
                 <td>
-                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $data->KodeBrg }}">
-                    Cek Mutasi
-                  </button>
                   
-                  <!-- Modal -->
-                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <form action="{{ route('fb.teknik.mutasi') }}" method="POST">
-                          {{ csrf_field() }}
-                          {{-- {{ method_field('PUT') }} --}}
-                          <div class="modal-body">
-                            <label for="">Periode</label>
-                            <input type="text" name="periode" id="periode" >
-                            <input type="hidden" name="kodebarang" id="kodebarang">
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
+                  <a href="../fb/mutasi/{{ trim($data->KodeBrg) }}" class="btn btn-outline-secondary" type="button">Edit</a>
                 </td>
               </tr>
             <?php
@@ -134,7 +106,7 @@
        select: true
      });   
    });
-   
+
    $(document).on("click", '.mutasi', function() {
     kodebarang = $(this).val();
 

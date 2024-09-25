@@ -429,7 +429,7 @@ Route::middleware(['auth'])->group(function (){
     // Teknik
         Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
         Route::get('admin/fb/teknik', [BarangTeknikController::class, 'listBarang'])->name('fb.list.teknik');
-        Route::post('/admin/fb/mutasi', [BarangTeknikController::class, 'getMutasi'])->name('fb.teknik.mutasi');
+        Route::get('/admin/fb/mutasi/{kodebarang}', [BarangTeknikController::class, 'getMutasi'])->name('fb.teknik.mutasi');
 
     // Marketing
         Route::get('admin/marketing/getformpermintaan', [FormPermintaan::class, 'getPermintaan'])->name('mkt.get.formpermintaan');
