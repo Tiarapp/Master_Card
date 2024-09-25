@@ -63,7 +63,6 @@
                 <td>{{ $data->Spesifikasi }}</td>
                 <td>{{ round($data->SaldoAkhir, 2) }}</td>
                 <td>
-                  
                   <a href="../fb/mutasi/{{ trim($data->KodeBrg) }}" class="btn btn-outline-secondary" type="button">Edit</a>
                 </td>
               </tr>
