@@ -55,7 +55,6 @@
             foreach ($persediaan as $data) { ?>
               <tr class="barang">
                 <td>
-                  {{-- <input type="text" class="kode-barang" id="idbarang" value="{{ $data->KodeBrg }}" readonly> --}}
                   {{ $data->KodeBrg }}
                 </td>
                 <td>{{ $data->NamaBrg }}</td>

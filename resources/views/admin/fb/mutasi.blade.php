@@ -74,33 +74,10 @@
                 <td>{{ trim($data["keterangan"]) }}</td>
               </tr>
             <?php
-            // $masuk = $masuk + (int)$data["masuk"];
-            // $keluar = $keluar + (int)$data["keluar"];
             }
             ?>
           </tbody>
         </table>
-        {{-- <div class="row">
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <h3>Total Mutasi</h3>
-                    <div style="margin-left: 120px">
-                        <label for=""><h2>{{ number_format($masuk) }}  </h2></label>
-                    </div>
-                    <div style="margin-left: 220px">
-                        <label for=""><h2>{{ number_format($keluar) }}</h2></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <h3>Sisa :</h3> 
-                    <label for="" style="margin-left: 500px"><h2>{{ number_format((int)$persediaan->SaldoAkhir) }}</h2></label>
-                </div>
-            </div>
-            
-        </div> --}}
       </div>
       <!-- /.row -->
     </div><!-- /.container-fluid -->
