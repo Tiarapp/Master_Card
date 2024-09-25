@@ -46,10 +46,59 @@
                 <th scope="col">Tipe</th>
                 <th scope="col">Spesifikasi</th>
                 <th scope="col">Stok</th>
+                <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            
+            <?php
+            $no = 1;
+            foreach ($persediaan as $data) { ?>
+              <tr class="barang">
+                <td>
+                  {{-- <input type="text" class="kode-barang" id="idbarang" value="{{ $data->KodeBrg }}" readonly> --}}
+                  {{ $data->KodeBrg }}
+                </td>
+                <td>{{ $data->NamaBrg }}</td>
+                <td>{{ $data->Merk }}</td>
+                <td>{{ $data->Tipe }}</td>
+                <td>{{ $data->Spesifikasi }}</td>
+                <td>{{ round($data->SaldoAkhir, 2) }}</td>
+                <td>
+                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $data->KodeBrg }}">
+                    Cek Mutasi
+                  </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <form action="{{ route('fb.teknik.mutasi') }}" method="POST">
+                          {{ csrf_field() }}
+                          {{-- {{ method_field('PUT') }} --}}
+                          <div class="modal-body">
+                            <label for="">Periode</label>
+                            <input type="text" name="periode" id="periode" >
+                            <input type="hidden" name="kodebarang" id="kodebarang">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <?php
+            }
+            ?>
           </tbody>
         </table>
       </div>
@@ -63,38 +112,35 @@
 <!-- DataTables -->
 <script> 
    $(document).ready(function(){
-    var teknik = $("#data_barang").DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{!! route('fb.get.teknik') !!}',
-        columns: [{
-                data: 'KodeBrg',
-                name: 'KodeBrg'
-            },
-            {
-                data: 'NamaBrg',
-                name: 'TBarang.NamaBrg'
-            },
-            {
-                data: 'Merk',
-                name: 'TBarang.Merk'
-            },
-            {
-                data: 'Tipe',
-                name: 'TBarang.Tipe'
-            },
-            {
-                data: 'Spesifikasi',
-                name: 'TBarang.Spesifikasi'
-            },
-            {
-                data: 'SaldoAkhir',
-                name: 'SaldoAkhir'
-            },
-        ],
-        select: true,
-    });
+     $("#data_barang").DataTable({
+        // "scrollX": true,
+       dom: 'Bfrtip',
+       buttons: [
+         'copy',
+         'csv',
+         'excel',
+         'pdf',
+         'colvis',
+         {
+           extend: 'print',
+           text: 'Print',
+           exportOption:{
+             modifier: {
+               selected: null
+             }
+           }
+         }
+       ],
+       select: true
+     });   
    });
+   
+   $(document).on("click", '.mutasi', function() {
+    kodebarang = $(this).val();
+
+    document.getElementById("kodebarang").value = kodebarang;
+    
+   })
 </script>
 
 @endsection
