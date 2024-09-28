@@ -44,6 +44,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Kode</th>
                     <th scope="col">Revisi</th>
+                    <th scope="col">Kode Barang</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Tipe Box</th>
                     <th scope="col">Gram</th>
@@ -117,6 +118,7 @@
                 { data: 'id', name: 'id' },
                 { data: 'kode', name: 'kode' },
                 { data: 'revisi', name: 'revisi' },
+                { data: 'kodeBarang', name: 'kodeBarang' },
                 { data: 'namaBarang', name: 'namaBarang' },
                 { data: 'tipeBox', name: 'tipeBox' },
                 { data: 'gram', name: 'gram' },
