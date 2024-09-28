@@ -82,6 +82,7 @@ class MastercardController extends Controller
                     $nestedData['kode'] = "<p style='color:#4842f5'>".$mastercard->kode."</p>";
                     $nestedData['revisi'] = "<p style='color:#4842f5'>".$mastercard->revisi."</p>";
                     $nestedData['namaBarang'] = "<p style='color:#4842f5'>".$mastercard->namaBarang."</p>";
+                    $nestedData['kodeBarang'] = "<p style='color:#4842f5'>".$mastercard->kodeBarang."</p>";
                     $nestedData['tipeBox'] = "<p style='color:#4842f5'>".$mastercard->tipeBox."</p>";
                     $nestedData['gram'] = "<p style='color:#4842f5'>".$mastercard->gramSheetBoxKontrak."</p>";
                     $nestedData['CreasCorrP'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrP."</p>";
@@ -103,6 +104,7 @@ class MastercardController extends Controller
                     $nestedData['kode'] = $mastercard->kode;
                     $nestedData['revisi'] = $mastercard->revisi;
                     $nestedData['namaBarang'] = $mastercard->namaBarang;
+                    $nestedData['kodeBarang'] = $mastercard->kodeBarang;
                     $nestedData['tipeBox'] = $mastercard->tipeBox;
                     $nestedData['gram'] = $mastercard->gramSheetBoxKontrak;
                     $nestedData['CreasCorrP'] = $mastercard->CreasCorrP;
