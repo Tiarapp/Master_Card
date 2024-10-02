@@ -270,6 +270,7 @@
                                                         <option value="OUP Nama Item, Kualitas, Creasing">OUP Nama Item, Kualitas, Creasing</option>
                                                         <option value="OUP Palet">OUP Palet</option>
                                                         <option value="OUP Creasing dan OUP Kwalitas">OUP Creasing dan OUP Kwalitas</option>
+                                                        <option value="OUP Design, Warna, Kwalitas">OUP Design, Warna, Kwalitas</option>
                                                     </select>
                                                 </div>
                                             </div>
