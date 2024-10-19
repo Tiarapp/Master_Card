@@ -42,8 +42,6 @@ Route::get('/admin', function () {
         ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
         ->first();
 
-        // dd($dt->kirim);
-
         $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
             ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
             ->orderBy('periode', 'desc')

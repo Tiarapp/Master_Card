@@ -35,7 +35,10 @@
                                 <label>Tanggal</label>
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal">
+                                        <?php 
+
+                                        ?>
+                                        <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ date('Y-m-d') }}" readonly>
                                     </div>
                                 </div>
                             </div>

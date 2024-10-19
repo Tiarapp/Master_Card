@@ -96,8 +96,8 @@ class SJ_Palet_DController extends Controller
         $request->validate([
                 'tanggal' => 'required',
                 'noPolisi' => 'required',
-                'namaCustomer' => 'required',
-                'alamatCustomer' => 'required',
+                'namaCustomer' => 'nullable',
+                'alamatCustomer' => 'nullable',
             ]);
             
         $sjpaletm = SJ_Palet_M::create([

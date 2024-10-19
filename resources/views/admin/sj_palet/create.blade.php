@@ -73,6 +73,7 @@
                                     <div class="col-md-6">
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
                                         <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
+                                            <option value="PT. SUPRACOR SEJAHTERA">PT. SUPRACOR SEJAHTERA</option>
                                             @foreach ($customer as $data)
                                             <option value="{{ $data->Nama }}|{{ $data->AlamatKirim }}">{{ $data->Nama }}</option>
                                             @endforeach

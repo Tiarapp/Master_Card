@@ -266,7 +266,7 @@
                                             <input type="text" class="form-control txt_line panjang-box" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
+                                            <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();"                ``````````````````````````````````````````````+ +>
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Gram Kualitas</label>
@@ -366,7 +366,7 @@
                                             <label class="control-label">Flute</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getSheet();getKodeBarang();" >
+                                            <input type="text" class="form-control txt_line" value="{{ $mc->flute }}"  name="flute" id="flute" onchange="getKodeBarang();" >
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Out Conv</label>
@@ -801,10 +801,11 @@
                     faktorl = 27;
                 }
             luas = panjang * lebar / 1000000
-            luasmkt =(((panjangbox*2)+(lebarbox*2)+faktorp)/1000) * (faktorl+lebarbox+tinggi)/1000 ;
+            luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
             
             document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
             document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+            
             }
         }
     });
@@ -835,6 +836,9 @@
         document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
         document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
         }
+
+        // console.log("panjang-box");
+        
     });
 
     $(document).on("keyup", ".panjang-sheet", function() {
@@ -863,6 +867,8 @@
         document.getElementById("luasSheet").value = luasmkt.toFixed(3)
         document.getElementById("luasSheetProd").value = luas.toFixed(3)
         }
+        // console.log("panjang-sheet");
+        
     });
     $(document).on("keyup", ".lebar-sheet", function() {
         lebar = $(this).val();
@@ -890,6 +896,7 @@
         document.getElementById("luasSheet").value = luasmkt.toFixed(3)
         document.getElementById("luasSheetProd").value = luas.toFixed(3)
         }
+        // console.log("lebar-sheet");
     });
 
     $(document).on("keyup", ".berat-roll", function() {
@@ -904,6 +911,7 @@
 
 
         }
+        // console.log("lebar-roll");
     });
     // Datatable Barang(Item)
 
@@ -922,7 +930,7 @@
             // document.getElementById('telp').value = cust[3];
             // document.getElementById('fax').value = cust[4];
             
-            console.log(cust);
+            // console.log(cust);
         } );
     } );
 
@@ -1007,6 +1015,8 @@
             document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();
+        
+        // console.log("item");
     } );
     
     //Datatable Box
@@ -1093,7 +1103,7 @@
         } );
         
         
-        //  alert.row();
+        // console.log("kodebarang");
     } );
     
     function getID(a){
@@ -1119,6 +1129,8 @@
         var combine = getColorCombine(color);
 
         document.getElementById("colorCombine_id").value = combine;
+        
+        // console.log("getColor");
     }
     
     
@@ -1144,6 +1156,8 @@
             // getLuasDC();
             getKodeBarang();
         } );
+        
+        // console.log("subskontrak");
     } );
     
     $(".SubstanceProduksi").ready(function(){
@@ -1168,6 +1182,7 @@
             getKodeBarang();
             getGramProduksi();
         } );
+        // console.log("subskontrak");
     } );
     
     function getGramKontrak(){
@@ -1275,6 +1290,7 @@
         }
         
         return result;
+        // console.log("getGramKontrak");
     }
     
     function getLuasDC(){
@@ -1283,10 +1299,6 @@
         $panjangbox = document.getElementById("panjangSheetBox").value;
         $lebarbox = document.getElementById("lebarSheetBox").value;
         $tipebox = document.getElementById("tipebox").value;
-
-        
-        // var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
-        //         var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
 
         if ($tipebox == 'DC' || $tipebox == 'SH') {
             $result = ($panjang * $lebar)/1000000;
@@ -1308,6 +1320,7 @@
             document.getElementById('outConv').value = $out.toFixed(0);
             getKodeBarang();
         }
+        // console.log("getLuasDC");
     }
 
     function getGramProduksi(){
