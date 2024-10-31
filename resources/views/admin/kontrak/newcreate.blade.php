@@ -272,9 +272,10 @@
                                                         <option value="OUP Creasing dan OUP Kwalitas">OUP Creasing dan OUP Kwalitas</option>
                                                         <option value="OUP Design, Warna, Kwalitas">OUP Design, Warna, Kwalitas</option>
                                                         <option value="OUP Kwalitas & Kupingan">OUP Kwalitas & Kupingan</option>
+                                                        <option value="OUP Ukuran & Arah Flute">OUP Ukuran & Arah Flute</option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div>  
                                         </div>
                                     </div>
                                 </div>

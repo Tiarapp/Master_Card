@@ -19,6 +19,9 @@ class FormPermintaan extends Controller
             ->addColumn('action', function($permintaan){
                 return '<a href="../marketing/formpermintaan/edit/'.$permintaan->id.'" class="btn btn-primary"> Edit </a>';
             })
+            ->addColumn('date_entry', function($permintaan) {
+                return date_format(date_create($permintaan->created_at), 'd-m-Y');
+            })
             ->make(true);
     }
 

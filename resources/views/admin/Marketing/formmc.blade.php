@@ -40,6 +40,7 @@
         <table class="table table-bordered" id="data_barang">
           <thead>
             <tr>
+                <th scope="col">Tanggal Masuk</th>
                 <th scope="col">Kode</th>
                 <th scope="col">Customer</th>
                 <th scope="col">Item</th>
@@ -66,6 +67,10 @@
         serverSide: true,
         ajax: '{{ route('mkt.get.formmc') }}',
         columns: [{
+                data: 'date_entry',
+                name: 'date_entry'
+            },
+            {
                 data: 'kode',
                 name: 'kode'
             },

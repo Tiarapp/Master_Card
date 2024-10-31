@@ -19,6 +19,9 @@ class FormMc extends Controller
             ->addColumn('action', function($list) {
                 return '<a href="../marketing/formmc/edit/'. $list->kode .'" class="btn btn-primary"> Edit </a>';
             })
+            ->addColumn('date_entry', function($permintaan) {
+                return date_format(date_create($permintaan->created_at), 'd-m-Y');
+            })
         ->make(true);
     }
 

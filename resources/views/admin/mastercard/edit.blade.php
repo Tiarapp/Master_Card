@@ -727,8 +727,9 @@
                                         <div class="col-md-2">
                                             <label class="control-label">Keterangan</label>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" value="{{ $mc->keterangan }}" name="keterangan" id="keterangan" onchange="getKodeBarang()">
+                                        <div class="col-md-4" style="margin: 10 0 10 0;">
+                                            <textarea name="keterangan" id="keterangan" cols="60" rows="5">{{ $mc->keterangan }}</textarea>
+                                            {{-- <input type="text" class="form-control txt_line" value="{{ $mc->keterangan }}" name="keterangan" id="keterangan" onchange="getKodeBarang()"> --}}
                                         </div>
                                     </div>
                                     <div class="row">

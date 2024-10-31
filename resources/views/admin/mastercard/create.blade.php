@@ -712,8 +712,9 @@
                                         <div class="col-md-2">
                                             <label class="control-label">Keterangan</label>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="keterangan" id="keterangan">
+                                        <div class="col-md-4" style="margin-top: 10px; margin-bottom: 10px">
+                                            <textarea name="keterangan" id="keterangan" cols="60" rows="5"></textarea>
+                                            {{-- <input type="text" class="form-control txt_line" name="keterangan" id="keterangan"> --}}
                                         </div>
                                     </div>
                                     <div class="row">

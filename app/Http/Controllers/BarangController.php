@@ -149,6 +149,13 @@ class BarangController extends Controller
             ->where('TDetPHP.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
             ->where('TPHP.Periode', 'LIKE', "%".$request->periode."%")
             ->get();
+            
+        $bbm = DB::connection('firebird2')->table('TDetBBMLuar')
+        ->leftJoin('TBBMLuar', 'TDetBBMLuar.NoBBM', '=', 'TBBMLuar.NoBukti')
+        ->select('TDetBBMLuar.*', 'TBBMLuar.Periode', 'TBBMLuar.TglBBM', 'TBBMLuar.NamaSupp')
+        ->where('TDetBBMLuar.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TBBMLuar.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
 
         $sj = DB::connection('firebird2')->table('TDetSJ')
         ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
@@ -175,6 +182,20 @@ class BarangController extends Controller
                 $nestedData["keluar"] = 0;
                 $nestedData["keterangan"] = $data->Keterangan;
                 $nestedData["opi"] = $data->NOOPI;
+
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($bbm) {
+            foreach ($bbm as $data) {
+                
+                $nestedData["tanggal"] = $data->TglBBM;
+                $nestedData["nobukti"] = $data->NoBBM;
+                $nestedData["masuk"] = $data->Quantity;
+                $nestedData["keluar"] = 0;
+                $nestedData["keterangan"] = $data->NamaSupp." - ".$data->NomerPO;
+                $nestedData["opi"] = '';
 
                 $result[] = $nestedData;
             }
