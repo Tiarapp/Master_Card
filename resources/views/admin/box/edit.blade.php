@@ -233,7 +233,7 @@
             var crease_p, crease_l, kuping, flap, p1, l1, l2, tinggi, sheet_p, sheet_l;
             var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
             
-            if (tipe == "B1" || tipe == "B3") {
+            if (tipe == "B1") {
                 if (flute == "BF"){
                     flap_trim = 2;
                     tinggi_trim = 5;

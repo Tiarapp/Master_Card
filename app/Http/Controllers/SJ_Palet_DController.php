@@ -20,7 +20,7 @@ class SJ_Palet_DController extends Controller
     // Tampilan Awal
     public function index()
     {
-        $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->get();
+        $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->take(20)->get();
         
         return view('admin.sj_palet.index', compact('sj'));
     }

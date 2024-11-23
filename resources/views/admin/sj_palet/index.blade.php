@@ -35,6 +35,9 @@
       <!-- Small boxes (Stat box) -->
 
       <a href="../admin/sj_palet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <button class="btn btn-primary">
+        <a href={{ route('sync_sj') }} style="margin-bottom: 20px; color: white"> Sync Nomer SJ</a>  
+      </button>
 
       {{-- Datatable SJ Palet --}}
       <div class="card-body">

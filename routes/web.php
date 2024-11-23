@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
+use App\Http\Controllers\PaletController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
@@ -221,6 +222,7 @@ Route::middleware(['auth'])->group(function (){
     
     //Palet Item
     Route::get('/admin/palet', 'PaletController@index')->name('palet');
+    Route::get('/admin/sycn_sj', 'PaletController@sync_sj')->name('sync_sj');
     Route::get('/admin/palet/create', 'PaletController@create')->name('palet.create');
     Route::post('/admin/palet/store', 'PaletController@store')->name('palet.store');
     Route::get('/admin/palet/show/{id}', 'PaletController@show');
@@ -375,7 +377,6 @@ Route::middleware(['auth'])->group(function (){
         
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
-
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -383,6 +384,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
         Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
         Route::get('admin/data/alamat', [CustomerController::class, 'alamat_cust'])->name('data.alamat');
+        Route::get('/admin/data/sync_fa', [PaletController::class, 'sync_fa'])->name('sync_fa');
         Route::get('admin/cust/single/{id}', [CustomerController::class, 'single_cust'])->name('data.custsingle');
         Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
 

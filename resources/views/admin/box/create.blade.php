@@ -233,12 +233,6 @@
         
         function getNama(){
             var kode = document.getElementById('namaBarang').value;
-            tipe = getTipe();
-            
-            // var panjangbox = document.getElementById("panjangSheetBox").value;
-            // var lebarbox = document.getElementById("lebarSheetBox").value;
-            // var tinggibox = document.getElementById("tinggiSheetBox").value;
-            // var luasbox = document.getElementById("luasSheetBox").value;
             
             var panjangdalam = document.getElementById("panjangDalamBox").value;
             var lebardalam = document.getElementById("lebarDalamBox").value;
@@ -246,15 +240,6 @@
             
             var CreaseCorr = document.getElementById("sizeCreasCorr").value;
             var CreaseConv = document.getElementById("sizeCreasConv").value;
-            
-            // if (tipe == 'B1') {
-            //     // document.getElementById("kode").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM'+"\n"+CreaseCorr+"\n"+CreaseConv;
-            //     document.getElementById("kode").value = kode;
-            // }
-            // if (tipe == 'DC') {
-            //     // document.getElementById("kode").value = panjangdalam+'x'+lebardalam+'x'+tinggidalam+' MM';  
-            //     document.getElementById("kode").value = kode;
-            // }
             
         }
         
@@ -284,7 +269,7 @@
             var crease_p, crease_l, kuping, flap, p1, l1, l2, tinggi, sheet_p, sheet_l;
             var flap_trim, tinggi_trim, p1_trim, l1_trim, l2_trim;
             
-            if (tipe == "B1" || tipe == "B3") {
+            if (tipe == "B1") {
                 if (flute == "BF"){
                     flap_trim = 2;
                     tinggi_trim = 5;
@@ -311,7 +296,7 @@
                 }
                 flap =  ((box_l / 2) + flap_trim);
                 tinggi = ((box_t*1) + tinggi_trim);
-                sheet_l = (flap*2) + tinggi ;
+                sheet_l = (flap*2) + tinggi;
                 crease_p = flap+' - '+tinggi+' - '+flap+' = '+sheet_l+' MM';
                 
                 p1 = ((box_p*1) + p1_trim);

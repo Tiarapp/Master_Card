@@ -767,7 +767,7 @@ class MastercardController extends Controller
         }
 
         
-        if ($mc->tipeMc == 'DC' ) {
+        if ($mc->tipeMc == 'DC' || $mc->tipeMc == 'B3') {
             return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1 Terbalik' ) {
             return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));

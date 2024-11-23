@@ -273,6 +273,7 @@
                                                         <option value="OUP Design, Warna, Kwalitas">OUP Design, Warna, Kwalitas</option>
                                                         <option value="OUP Kwalitas & Kupingan">OUP Kwalitas & Kupingan</option>
                                                         <option value="OUP Ukuran & Arah Flute">OUP Ukuran & Arah Flute</option>
+                                                        <option value="OUP Lipatan">OUP Lipatan</option>
                                                     </select>
                                                 </div>
                                             </div>  

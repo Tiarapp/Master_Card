@@ -350,7 +350,7 @@
     $(".sj").ready(function(){            
         var table = $("#data_sj").DataTable({
             select: true,
-            "order": [0, 'desc']
+            "order": [1, 'desc']
         });
         
         $('#data_sj tbody').on( 'click', 'td', function () {

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Keyfield;
 use App\Models\Palet;
+use App\Models\SJ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +32,39 @@ class PaletController extends Controller
     {
         return view('admin.palet.create');
     }
+
+    public function sync_sj()
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $periode = '10/2024';
+
+        $barang = DB::connection('firebird2')->table('TSuratJalan')->where('Periode', '=', $periode)->get();
+        
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'CA-22410'.'%')->update([
+            'NoUrut' => count($barang)
+        ]);
+        
+        DB::connection('firebird2')->commit();
+
+        return redirect('/admin/sj_palet');
+    }
+
+    public function sync_fa()
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $periode = '10/2024';
+
+        $faktur = DB::connection('firebird2')->table('TFakturConv')->where('Periode', '=', $periode)->get();
+        
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/X/24'.'%')->update([
+            'NoUrut' => count($faktur)
+        ]);
+        
+        DB::connection('firebird2')->commit();
+
+        return redirect('/admin/data/alamat');
+    }
+
 
     /**
      * Store a newly created resource in storage.

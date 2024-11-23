@@ -36,6 +36,7 @@ class BarangTeknikController extends Controller
             ->get();
 
             // dd($persediaan);
+            // phpinfo();
 
         return view('admin.fb.listTeknik', compact('persediaan'));
     }

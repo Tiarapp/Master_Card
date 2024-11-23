@@ -34,13 +34,11 @@ class SubstanceController extends Controller
      */
     public function create()
     {
-        $jenisgram1 = DB::table('jenis_gram')->where('jenisKertasMc', '!=', 'MF')->get();
-        $jenisgram2 = DB::table('jenis_gram')->where('jenisKertasMc', '=', 'MF')->get();
+        $jenisgram1 = DB::table('jenis_gram')->get();
         $flute = DB::table('flute')->get();
 
         return view('admin.substance.create', compact(
             'jenisgram1',
-            'jenisgram2',
             'flute'
         ));
     }
