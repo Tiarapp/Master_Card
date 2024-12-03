@@ -68,7 +68,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: 'mod/'+tanggal,
+                url: 'mod_by_tanggal/'+tanggal,
                 // dataSrc: ''
             },
             columns: [{

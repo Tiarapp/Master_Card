@@ -248,6 +248,23 @@ class BarangController extends Controller
 
     }
 
+    public function get_barang($kode)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        $barang = DB::connection('firebird2')->table('TBarangConv')
+                ->where('KodeBrg', 'LIKE', $kode.'%')
+                ->first();
+
+        if ($barang) {
+            $data = [
+                'nama' => $barang->NamaBrg
+            ];
+        }
+
+        return response()->json($data);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

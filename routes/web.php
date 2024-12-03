@@ -250,6 +250,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
     Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');
+    Route::get('/barang/{kode}', 'BarangController@get_barang')->name('get_barang');
     
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
@@ -446,9 +447,15 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/formmc/edit/{kode}', [FormMc::class, 'edit'])->name('mkt.edit.formmc');
         Route::put('admin/marketing/formmc/update/{kode}', [FormMc::class, 'update'])->name('mkt.update.formmc');
 
-        Route::get('admin/marketing/mod', [MarektingOrder::class, 'index'])->name('mkt.mod');
-        Route::get('admin/marketing/mod/{tanggal}', [MarektingOrder::class, 'getMod'])->name('mkt.get.mod');
-        
+        Route::get('admin/marketing/mod_by_tanggal', [MarektingOrder::class, 'get_mod_by_tanggal'])->name('mod.by.tanggal');
+        Route::get('admin/marketing/mod_by_tanggal/{tanggal}', [MarektingOrder::class, 'getMod'])->name('mkt.get.mod');
+        Route::get('admin/marketing/mod', [MarektingOrder::class, 'index'])->name('mkt.index.mod');
+        Route::get('admin/marketing/mod/create', [MarektingOrder::class, 'create'])->name('mkt.create.mod');
+        Route::get('/mod_kode/{tujuan}', [MarektingOrder::class, 'get_kode_mod'])->name('mod.get_kode');
+        Route::get('/matauang/{kode}', [MarektingOrder::class, 'get_mata_uang'])->name('mod.get_uang');
+        Route::get('/detail_mod/{kode}', [MarektingOrder::class, 'get_detail'])->name('detail_mod');
+        Route::post('admin/marketing/mod/store', [MarektingOrder::class, 'save_master'])->name('mod.save_master');
+        Route::post('admin/marketing/mod/store_detail', [MarektingOrder::class, 'save_detail'])->name('mod.save_detail');
         
 }); 
 

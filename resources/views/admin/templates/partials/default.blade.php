@@ -26,6 +26,5 @@
 
 @yield('javascripts')
 
-@livewireScripts
 </body>
 </html>

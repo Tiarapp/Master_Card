@@ -262,9 +262,15 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('mkt.mod') }}" class="nav-link">
+                  <a href="{{ route('mkt.index.mod') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>List MOD</p>
+                    <p>MOD</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('mod.by.tanggal') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>List MOD by Tanggal</p>
                   </a>
                 </li>
               </ul>
@@ -448,6 +454,25 @@
                   <a href="{{ route('fb.list.teknik') }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>List Barang</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          @endif
+          @if (Auth::user()->divisi_id == 9 || Auth::user()->divisi_id == 2)
+            <li class="nav-item">
+              <a href="#" class="nav-link active">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  HRD/GA
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('opi') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>OPI</p>
                   </a>
                 </li>
               </ul>

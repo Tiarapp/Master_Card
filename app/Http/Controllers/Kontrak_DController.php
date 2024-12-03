@@ -1082,10 +1082,15 @@ class Kontrak_DController extends Controller
                 $kirim = $kirim + $data->qty_kirim;
             }
             
-            $sisakirim = $kontrak->pcsKontrak - $kirim;
+            if ($kirim > 0) { 
+                $sisakirim = $kontrak->pcsSisaKontrak + ($order - $kirim);
+            } else {
+                $sisakirim = 0;
+            }
+
             $sisaopi = $kontrak->pcsKontrak - $order;
 
-            // dd($order, $kirim);
+            // dd($sisakirim);
 
             if ($sisakirim > 0) {
                 $sisakontrak = $sisakirim;
