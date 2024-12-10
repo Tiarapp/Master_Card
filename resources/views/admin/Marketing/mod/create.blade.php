@@ -168,7 +168,7 @@
                                             <label>Alamat</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <textarea name="AlamatKantor" id="AlamatKantor" cols="35" rows="3"></textarea>
+                                            <textarea name="AlamatKantor" id="AlamatKantor" cols="50" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -219,7 +219,7 @@
                                             <label>Alamat Kirim</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <textarea name="AlamatKirim" id="AlamatKirim" cols="40" rows="3"></textarea>
+                                            <textarea name="AlamatKirim" id="AlamatKirim" cols="50" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -440,12 +440,13 @@
                                 <td>0</td>
                                 <td>${SubTotalAwal}</td>
                                 <td>
-                                    <button type='button' class='btn btn-danger'>Hapus</button>
+                                    <button class='btn btn-danger btn-sm delete-btn' data-id='${data.NoUrut}'>Hapus</button>
                                 </td>
                             </tr>
                         `
                     })
-                    $('#data_mod tbody').html(rows);
+
+                    $('#detail_data tbody').html(rows);
                         const gross = new Intl.NumberFormat().format(response['master'].TotalAwal);
                         const master_ppn = new Intl.NumberFormat().format(response['master'].PPN);
                         const total = new Intl.NumberFormat().format(response['master'].TotalAkhir);
@@ -526,6 +527,31 @@
                 alert('Gagal menyimpan data!')
             }
         })
+    })
+
+    $('#detail_data').on('click', '.delete-btn', function() {
+        const id = $(this).data('id');
+
+        console.log(id);
+        
+
+        if (confirm('Apakah anda yakin ingin menghapus data ini ? ')) {
+            const url = "{{ route('mod.delete', ['id' => ':id']) }}"
+            const finalRoute = url.replace(':id', id)
+            $.ajax({
+                url: finalRoute,
+                method: 'DELETE',
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    alert('Data berhasil dihapus')
+                },
+                error: function (xhr) {
+                    alert('Terjadi kesalahan', xhr.responseText)
+                }
+            })
+        }
     })
 
     loadData();

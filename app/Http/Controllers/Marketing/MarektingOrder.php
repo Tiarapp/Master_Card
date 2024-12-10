@@ -42,6 +42,9 @@ class MarektingOrder extends Controller
                 ->addColumn('action', function($mod){
                     return '<a href="../marketing/mod/edit/'. $mod->NoBukti .'" class="btn btn-outline-success" type="button">
                                 <i class="fa fa-eye" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
+                            </a>
+                            <a href="../marketing/mod/print/'. $mod->NoBukti .'" class="btn btn-outline-success" type="button">
+                                <i class="fa fa-print" data-toggle="tooltip" data-placement="bottom" title="view" id="view"></i>
                             </a>';
                 })
                 ->addColumn('qtyCrt', function($mod){
@@ -153,8 +156,9 @@ class MarektingOrder extends Controller
             'MataUang' => $request->matauang,
             'NilaiKursRp' => $request->kurs_rp,
             'NilaiKursUSD' => (int) $request->kurs_usd,
-            'Aktif' => 'N',
-            'Print' => 0
+            'Aktif' => 'Y',
+            'Print' => 0,
+            'APPROVE' => "N"
         ]);
 
         $key = DB::connection('firebird2')->table('TKeyfield')
@@ -182,7 +186,7 @@ class MarektingOrder extends Controller
         $detail = DB::connection('firebird2')->table('TDetMOD')
                 ->leftJoin('TBarangConv', 'TDetMOD.KodeBrg', '=', 'TBarangConv.KodeBrg')
                 ->where('NoMOD', 'LIKE', $kode.'%')
-                ->select('TDetMOD.KodeBrg as kode_barang', 'TBarangConv.NamaBrg', 'Quantity', 'HargaAwal', 'SubTotalAwal')
+                ->select('TDetMOD.KodeBrg as kode_barang', 'NoUrut', 'TBarangConv.NamaBrg', 'Quantity', 'HargaAwal', 'SubTotalAwal')
                 ->get();
         $master = DB::connection('firebird2')->table('TMOD')->where('NoBukti', 'LIKE', $kode.'%')
                 ->select('TotalAwal', 'PPN', 'TotalAkhir')
@@ -215,7 +219,7 @@ class MarektingOrder extends Controller
             ]);
 
         $data = DB::connection('firebird2')->table('TDetMOD')->insert([
-            'NoUrut' => $nurut->NoUrut+1,
+            // 'NoUrut' => $nurut->NoUrut+1,
             'NoMOD' => $request->nomod,
             'KodeBrg' => $request->kode_barang,
             'Quantity' => $request->qty,
@@ -243,4 +247,79 @@ class MarektingOrder extends Controller
             'data' => $data
         ]);
     }   
+
+    public function delete($id) 
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        $detail = DB::connection('firebird2')->table('TDetMOD')
+                ->where('NoUrut', 'LIKE', $id)
+                ->first();
+    
+        // dd($detail->NoMOD);
+
+        $master = DB::connection('firebird2')->table('TMOD')
+        ->where('NoBukti', 'LIKE', trim($detail->NoMOD).'%')
+        ->first();
+        
+        DB::connection('firebird2')->table('TMOD')
+                ->where('NoBukti', 'LIKE', trim($detail->NoMOD).'%')
+                ->update([
+                    'TotQtyCrt' => 0,
+                    'TotQtyEcr' => $master->TotQtyEcr - $detail->Quantity,
+                    'TotalAwal' => $master->TotalAwal - $detail->SubTotalAwal,
+                    'Potongan' => 0,
+                    'SebelumPPN' => $master->SebelumPPN - $detail->SubTotalAwal,
+                    'PPN' => $master->PPN - $detail->PPN,
+                    'TotalAkhir' => $master->TotalAkhir - $detail->SubTotalAkhir,
+                ]);
+
+        DB::connection('firebird2')->table('TDetMOD')->where('NoUrut', 'LIKE', $id)->delete();
+
+        DB::connection('firebird2')->commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil di hapus'
+        ]);
+    }
+
+    public function edit($id)
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $master = DB::connection('firebird2')->table('TMOD')
+                ->where('NoBukti', 'LIKE', $id.'%')
+                ->first();
+        
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $uang = DB::connection('firebird')->table('TMataUang')->get();
+        $date = Carbon::now()->format('Y-m-d');
+
+        return view('admin.Marketing.mod.edit', compact('master', 'cust', 'uang', 'date'));
+    }
+
+    public function approve_by_acc($kode)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        $approve = DB::connection('firebird2')->table('TMOD')
+                ->where('NoBukti', 'LIKE', $kode.'%')
+                ->update([
+                    ''
+                ]);
+    }
+
+    public function print_mod($kode)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        $mod = DB::connection('firebird2')->table('TDetMOD')
+        ->leftJoin('TMOD', 'TDetMOD.NoMOD', '=', 'TMOD.NoBukti')
+        ->leftJoin('TBarangConv', 'TDetMOD.KodeBrg', '=', 'TBarangConv.KodeBrg')
+        ->select('TDetMOD.*', 'TMOD.TglOrder', 'TMOD.NamaCust', 'TMOD.NomerSC', 'TBarangConv.NamaBrg')
+        ->where('NoMOD', 'LIKE', $kode)
+        ->get();
+
+        return view('admin.Marketing.mod.print');
+    }
 }

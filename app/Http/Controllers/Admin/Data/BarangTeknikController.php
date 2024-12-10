@@ -17,8 +17,8 @@ class BarangTeknikController extends Controller
         $persediaan = DB::connection('fbteknik')->table('TPersediaanTK')
             ->leftJoin('TBarang', 'TPersediaanTK.KodeBrg', 'TBarang.KodeBrg')
             ->select('TPersediaanTK.KodeBrg', 'TBarang.NamaBrg', 'TBarang.Merk', 'TBarang.Tipe','TBarang.Spesifikasi', 'TPersediaanTK.SaldoAkhir', 'TPersediaanTK.Periode')
-            ->where('TPersediaanTK.Periode', 'LIKE', "%".$periode."%")
-            ->where('TPersediaanTK.SaldoAkhir', '>', 0);
+            ->where('TPersediaanTK.Periode', 'LIKE', "%".$periode."%");
+            // ->where('TPersediaanTK.SaldoAkhir', '>', 0);
             
         return DataTables::of($persediaan)->toJson();
     }
@@ -32,7 +32,7 @@ class BarangTeknikController extends Controller
             ->leftJoin('TBarang', 'TPersediaanTK.KodeBrg', 'TBarang.KodeBrg')
             ->select('TPersediaanTK.KodeBrg', 'TBarang.NamaBrg', 'TBarang.Merk', 'TBarang.Tipe','TBarang.Spesifikasi', 'TPersediaanTK.SaldoAkhir', 'TPersediaanTK.Periode')
             ->where('TPersediaanTK.Periode', 'LIKE', "%".$periode."%")
-            ->where('TPersediaanTK.SaldoAkhir', '>', 0)
+            // ->where('TPersediaanTK.SaldoAkhir', '>', 0)
             ->get();
 
             // dd($persediaan);

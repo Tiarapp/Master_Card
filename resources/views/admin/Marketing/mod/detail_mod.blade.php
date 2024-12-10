@@ -1,8 +1,8 @@
 
-<div id="detail" style="display: none">
+<div id="detail">
     <div class="col-md-8">
         <h2>Data Tabel</h2>
-        <table class="table table-bordered" id="data_mod" style="width: 100%">
+        <table id="detail_data" class="table table-bordered" id="data_mod" style="width: 100%">
             <thead>
                 <tr>
                     <th>Kode Barang</th>
@@ -12,6 +12,7 @@
                     <th>Harga</th>
                     <th>Disc</th>
                     <th>Subtotal</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

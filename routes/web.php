@@ -456,6 +456,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/detail_mod/{kode}', [MarektingOrder::class, 'get_detail'])->name('detail_mod');
         Route::post('admin/marketing/mod/store', [MarektingOrder::class, 'save_master'])->name('mod.save_master');
         Route::post('admin/marketing/mod/store_detail', [MarektingOrder::class, 'save_detail'])->name('mod.save_detail');
+        Route::delete('/mod/delete/{id}', [MarektingOrder::class, 'delete'])->name('mod.delete');
+        Route::get('admin/marketing/mod/edit/{id}', [MarektingOrder::class, 'edit'])->name('mkt.edit.mod');
+        Route::get('admin/marketing/mod/print/{id}', [MarektingOrder::class, 'print_mod'])->name('mkt.print.mod');
         
 }); 
 

@@ -44,11 +44,7 @@
                                             <label>Tujuan</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <select class="js-example-basic-single col-md-12" name="tujuan" id="tujuan">
-                                                <option value="">Pilih Tujuan</option>
-                                                <option value="LOKAL">LOKAL</option>
-                                                <option value="EKSPOR">EKSPOR</option>
-                                            </select>
+                                            <input type="text" class="form-control txt_line" name="tujuan" id="tujuan" value="{{ $master->Tujuan }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +56,7 @@
                                             <label>Kode</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" readonly>
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $master->NoBukti }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -72,7 +68,7 @@
                                             <label>Tanggal</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $date }}">
+                                            <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $master->TglOrder }}">
                                         </div>
                                     </div>
                                 </div>
@@ -85,7 +81,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <select class="js-example-basic-single col-md-12" name="order" id="order">
-                                                <option value="">Pilih Order</option>
+                                                <option value="{{ $master->JenisOrder }}">{{ $master->JenisOrder }}</option>
                                                 <option value="SAMPLE">SAMPLE</option>
                                                 <option value="BONUS">BONUS</option>
                                                 <option value="JUAL">JUAL</option>
@@ -101,8 +97,8 @@
                                             <label>Customer</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control txt_line" name="KodeCust" id="KodeCust">
-                                            <input type="text" class="form-control txt_line" name="NamaCust" id="NamaCust">
+                                            <input type="text" class="form-control txt_line" name="KodeCust" id="KodeCust" value="{{ $master->KodeCustomer }}" readonly>
+                                            <input type="text" class="form-control txt_line" name="NamaCust" id="NamaCust" value="{{ $master->NamaCust }}" readonly>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="modal fade" id="Customer">
@@ -168,7 +164,7 @@
                                             <label>Alamat</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <textarea name="AlamatKantor" id="AlamatKantor" cols="35" rows="3"></textarea>
+                                            <textarea name="AlamatKantor" id="AlamatKantor" cols="50" rows="3">{{ $master->AlmtKantor }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -180,7 +176,7 @@
                                             <label>No Kontrak</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control txt_line" name="nokontrak" id="nokontrak" >
+                                            <input type="text" class="form-control txt_line" name="nokontrak" id="nokontrak" {{ $master->NomerSC }}>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +188,7 @@
                                             <label>No PO</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control txt_line" name="nopo" id="nopo" >
+                                            <input type="text" class="form-control txt_line" name="nopo" id="nopo" value="{{ $master->NomerPI_PO }}">
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +203,7 @@
                                             <label>Tanggal Kirim</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="date" class="form-control txt_line" name="tgl_kirim" id="tgl_kirim" value="{{ $date }}">
+                                            <input type="date" class="form-control txt_line" name="tgl_kirim" id="tgl_kirim" value="{{ $master->TglKirim }}">
                                         </div>
                                     </div>
                                 </div>
@@ -219,7 +215,7 @@
                                             <label>Alamat Kirim</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <textarea name="AlamatKirim" id="AlamatKirim" cols="40" rows="3"></textarea>
+                                            <textarea name="AlamatKirim" id="AlamatKirim" cols="50" rows="3">{{ $master->KirimKe }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +240,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="mata_uang" id="mata_uang">
-                                                <option value="">Pilih Uang</option>
+                                                <option value="{{ $master->MataUang }}">{{ $master->MataUang }}</option>
                                                 @foreach ($uang as $item)
                                                     <option value="{{ $item->MataUang }}">{{ $item->MataUang }}</option>
                                                 @endforeach
@@ -260,7 +256,7 @@
                                             <label>Kurs Rp</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="kurs_rp" id="kurs_rp" readonly>
+                                            <input type="text" class="form-control txt_line" name="kurs_rp" id="kurs_rp" value="{{ number_format($master->NilaiKursRp, 2) }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -272,7 +268,7 @@
                                             <label>Kurs USD</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="kurs_usd" id="kurs_usd" readonly>
+                                            <input type="text" class="form-control txt_line" name="kurs_usd" id="kurs_usd" value="{{ number_format($master->NilaiKursUSD,2) }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -284,19 +280,19 @@
                                             <label>Pembayaran</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control txt_line" name="top" id="top">
+                                            <input type="text" class="form-control txt_line" name="top" id="top" value="{{ $master->WaktuBayar }}">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="save_master" class="btn_master btn btn-primary" style="display: inline; margin-left: 20px">
+                    <button type="button" id="save_master" class="btn_master btn btn-primary" style="display: none; margin-left: 20px">
                         Save
                     </button>
                 </form>
                 
-                <button type="button" id="cari_barang" class="btn btn-primary" style="display:none; margin-left: 20px"  data-toggle="modal" data-target="#detail_mod">
+                <button type="button" id="cari_barang" class="btn btn-primary" style="display:inline; margin-left: 20px"  data-toggle="modal" data-target="#detail_mod">
                     Cari Barang
                 </button>
 
@@ -308,227 +304,238 @@
 </div>
 
 <script type="text/javascript"> 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    $(".Customer").ready(function(){
-        var table = $("#data_customer").DataTable({
-            select: true,
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
-        
-        $('#data_customer tbody').on( 'click', 'td', function () {
-            var cust = (table.row(this).data());
-            cust_name = cust[1]
-            name = cust_name.replace('&amp;', '&')
-            $("#KodeCust").val(cust[0]);
-            $("#NamaCust").val(cust_name);
-            $("#AlamatKantor").val(cust[2] + '\n' + cust[3]);
-            $("#AlamatKirim").val(cust_name + '\n' + cust[4] + '\n' + cust[5]);
-            $("#top").val(cust[6]);
+
+        $(".Customer").ready(function(){
+            var table = $("#data_customer").DataTable({
+                select: true,
+            });
+            
+            $('#data_customer tbody').on( 'click', 'td', function () {
+                var cust = (table.row(this).data());
+                cust_name = cust[1]
+                name = cust_name.replace('&amp;', '&')
+                $("#KodeCust").val(cust[0]);
+                $("#NamaCust").val(cust_name);
+                $("#AlamatKantor").val(cust[2] + '\n' + cust[3]);
+                $("#AlamatKirim").val(cust_name + '\n' + cust[4] + '\n' + cust[5]);
+                $("#top").val(cust[6]);
 
 
-            // document.getElementById("Customer").modal(hide);
-        } );
-    });
+                // document.getElementById("Customer").modal(hide);
+            } );
+        });
 
-    document.getElementById('tujuan').addEventListener('change', function(){
-        const route = "{{ route('mod.get_kode', ['tujuan' => ':tujuan']) }}"
-        tujuan = $(this).val();
+        document.getElementById('kode_barang').addEventListener('change', function() {
+            const route = "{{ route('get_barang', ['kode' => ':kode']) }}"
+            kode = $(this).val()
 
-        const finalRoute = route.replace(':tujuan', tujuan)
-
-        fetch(finalRoute)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-            })
-            .then(data => {
-                $("#kode").val(data['kode'])
-            })
-            .catch(error => {
-                console.error("Ada error saat mengambil dari API", error)
-            })
-    })
-
-    document.getElementById('kode_barang').addEventListener('change', function() {
-        const route = "{{ route('get_barang', ['kode' => ':kode']) }}"
-        kode = $(this).val()
-
-        const finalRoute = route.replace(':kode', kode)
-
-        fetch(finalRoute)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                } else {
-                    $('#nama_barang').val('')
-                    alert("Barang tidak ditemukan")
-                }
-            })
-            .then(data => {
-                $('#nama_barang').val(data['nama'])
-            })
-            .catch(error => {
-                console.error("Ada error saat mengambil dari API", error)
-            })
-    })
-
-    document.getElementById('mata_uang').addEventListener('change', function(){
-        const route = "{{ route('mod.get_uang', ['kode' => ':kode']) }}"
-        kode = $(this).val();
-
-        const finalRoute = route.replace(':kode', kode)
-
-        fetch(finalRoute)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-            })
-            .then(data => {
-                $("#kurs_rp").val(data['nilai']);
-                $("#kurs_usd").val(data['usd']);
-            })
-            .catch(error => {
-                console.error("Ada error saat mengambil API", error)
-            })
-    })
-
-    $('.harga').on('keyup', function() {
-        
-        harga = $(this).val()
-        qty = $('#qty').val()
-
-        subtotal = harga * qty
-        ppn = subtotal * 11/100
-        subtotal_akhir = subtotal + ppn
-
-        document.getElementById('subtotal_awal').value = subtotal
-        document.getElementById('ppn').value = ppn
-        document.getElementById('subtotal_akhir').value = subtotal_akhir
-        
-    })
-
-    function loadData()
-    {
-        kode = $('#kode').val()
-        if (kode) {
-            const route = "{{ route('detail_mod', ['kode' => ':kode']) }}"
             const finalRoute = route.replace(':kode', kode)
 
+            fetch(finalRoute)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        $('#nama_barang').val('')
+                        alert("Barang tidak ditemukan")
+                    }
+                })
+                .then(data => {
+                    $('#nama_barang').val(data['nama'])
+                })
+                .catch(error => {
+                    console.error("Ada error saat mengambil dari API", error)
+                })
+        })
+
+        document.getElementById('mata_uang').addEventListener('change', function(){
+            const route = "{{ route('mod.get_uang', ['kode' => ':kode']) }}"
+            kode = $(this).val();
+
+            const finalRoute = route.replace(':kode', kode)
+
+            fetch(finalRoute)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                })
+                .then(data => {
+                    $("#kurs_rp").val(data['nilai']);
+                    $("#kurs_usd").val(data['usd']);
+                })
+                .catch(error => {
+                    console.error("Ada error saat mengambil API", error)
+                })
+        })
+
+        $('.harga').on('keyup', function() {
+            
+            harga = $(this).val()
+            qty = $('#qty').val()
+
+            subtotal = harga * qty
+            ppn = subtotal * 11/100
+            subtotal_akhir = subtotal + ppn
+
+            document.getElementById('subtotal_awal').value = subtotal
+            document.getElementById('ppn').value = ppn
+            document.getElementById('subtotal_akhir').value = subtotal_akhir
+            
+        })
+
+        function loadData()
+        {
+            kode = $('#kode').val()
+            if (kode) {
+                const route = "{{ route('detail_mod', ['kode' => ':kode']) }}"
+                const finalRoute = route.replace(':kode', kode)
+
+                $.ajax({
+                    url: finalRoute,
+                    method: 'GET',
+                    success: function (response) {
+                        let rows = ''
+                        
+                        response['detail'].forEach(data => {
+                            const Quantity = new Intl.NumberFormat().format(data.Quantity);
+                            const HargaAwal = new Intl.NumberFormat().format(data.HargaAwal);
+                            const SubTotalAwal = new Intl.NumberFormat().format(data.SubTotalAwal);
+                            rows += `
+                                <tr>
+                                    <td>${data.kode_barang}</td>
+                                    <td>${data.NamaBrg}</td>
+                                    <td>0</td>
+                                    <td>${Quantity}</td>
+                                    <td>${HargaAwal}</td>
+                                    <td>0</td>
+                                    <td>${SubTotalAwal}</td>
+                                    <td>
+                                        <button class='btn btn-danger btn-sm delete-btn' data-id='${data.NoUrut}'>
+                                            Hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                            `
+                        })
+                        $('#detail_data tbody').html(rows);
+                            const gross = new Intl.NumberFormat().format(response['master'].TotalAwal);
+                            const master_ppn = new Intl.NumberFormat().format(response['master'].PPN);
+                            const total = new Intl.NumberFormat().format(response['master'].TotalAkhir);
+                        $('#gross').val(gross);
+                        $('#potongan').val(0.00);
+                        $('#netto').val(gross);
+                        $('#master_ppn').val(master_ppn);
+                        $('#master_pph').val(0.00);
+                        $('#total').val(total);
+                    }
+                })
+            }
+        }
+
+        $('#save_master').on('click', function () {
+            const masterData = {
+                tujuan: $('#tujuan').val(),
+                kode: $('#kode').val(),
+                tanggal: $('#tanggal').val(),
+                order: $('#order').val(),
+                KodeCust: $('#KodeCust').val(),
+                NamaCust: $('#NamaCust').val(),
+                AlamatKantor: $('#AlamatKantor').val(),
+                nokontrak: $('#nokontrak').val(),
+                nopo: $('#nopo').val(),
+                user: $('#createdBy').val(),
+                tanggal_kirim: $('#tgl_kirim').val(),
+                AlamatKirim: $('#AlamatKirim').val(),
+                pajak: $('#pajak').val(),
+                matauang: $('#mata_uang').val(),
+                kurs_rp: $('#kurs_rp').val(),
+                kurs_usd: $('#kurs_usd').val(),
+                top: $('#top').val(),
+            }
+            
+            $.ajax({
+                url: "{{ route('mod.save_master') }}",
+                method: 'POST',
+                data: masterData,
+                success: function (response) {
+                    if (response.success) {
+                        document.getElementById('detail').style.display = "block";
+                        document.getElementById('cari_barang').style.display = "block";
+                        document.getElementById('save_master').style.display = "none";
+                        alert('Data berhasil disimpan')
+                    }
+                },
+                error: function (response) {
+                    alert('Gagal menyimpan data!!')
+                }
+            })        
+        })
+
+        $('.save_detail').on('click', function() {
+            const detailData = {
+                nomod: $('#kode').val(),
+                kode_barang: $('#kode_barang').val(),
+                qty: $('#qty').val(),
+                harga: $('#harga').val(),
+                total_awal: $('#subtotal_awal').val(),
+                ppn: $('#ppn').val(),
+                total_akhir: $('#subtotal_akhir').val(),
+                bc_date: $('#bc_date').val()
+            }
+
+            $.ajax({
+                url: "{{ route('mod.save_detail') }}",
+                method: 'POST',
+                data: detailData,
+                success: function (response) {
+                    if (response.success) {
+                        alert('Data berhasil disimpan');
+                        $('#detail_form')[0].reset()
+                        loadData();
+                    }
+                },
+                error: function (response) {
+                    alert('Gagal menyimpan data!')
+                }
+            })
+        })
+
+        $('#detail_data').on('click', '.delete-btn', function() {
+        const id = $(this).data('id');
+
+            console.log(id);
+        
+
+        if (confirm('Apakah anda yakin ingin menghapus data ini ? ')) {
+            const url = "{{ route('mod.delete', ['id' => ':id']) }}"
+            const finalRoute = url.replace(':id', id)
             $.ajax({
                 url: finalRoute,
-                method: 'GET',
+                method: 'DELETE',
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
                 success: function (response) {
-                    let rows = ''
-                    
-                    response['detail'].forEach(data => {
-                        const Quantity = new Intl.NumberFormat().format(data.Quantity);
-                        const HargaAwal = new Intl.NumberFormat().format(data.HargaAwal);
-                        const SubTotalAwal = new Intl.NumberFormat().format(data.SubTotalAwal);
-                        rows += `
-                            <tr>
-                                <td>${data.kode_barang}</td>
-                                <td>${data.NamaBrg}</td>
-                                <td>0</td>
-                                <td>${Quantity}</td>
-                                <td>${HargaAwal}</td>
-                                <td>0</td>
-                                <td>${SubTotalAwal}</td>
-                                <td>
-                                    <button type='button' class='btn btn-danger'>Hapus</button>
-                                </td>
-                            </tr>
-                        `
-                    })
-                    $('#data_mod tbody').html(rows);
-                        const gross = new Intl.NumberFormat().format(response['master'].TotalAwal);
-                        const master_ppn = new Intl.NumberFormat().format(response['master'].PPN);
-                        const total = new Intl.NumberFormat().format(response['master'].TotalAkhir);
-                    $('#gross').val(gross);
-                    $('#potongan').val(0.00);
-                    $('#netto').val(gross);
-                    $('#master_ppn').val(master_ppn);
-                    $('#master_pph').val(0.00);
-                    $('#total').val(total);
+                    alert('Data berhasil dihapus')
+                    loadData();
+                },
+                error: function (xhr) {
+                    alert('Terjadi kesalahan', xhr.responseText)
+                    loadData()
                 }
             })
         }
-    }
-
-    $('#save_master').on('click', function () {
-        const masterData = {
-            tujuan: $('#tujuan').val(),
-            kode: $('#kode').val(),
-            tanggal: $('#tanggal').val(),
-            order: $('#order').val(),
-            KodeCust: $('#KodeCust').val(),
-            NamaCust: $('#NamaCust').val(),
-            AlamatKantor: $('#AlamatKantor').val(),
-            nokontrak: $('#nokontrak').val(),
-            nopo: $('#nopo').val(),
-            user: $('#createdBy').val(),
-            tanggal_kirim: $('#tgl_kirim').val(),
-            AlamatKirim: $('#AlamatKirim').val(),
-            pajak: $('#pajak').val(),
-            matauang: $('#mata_uang').val(),
-            kurs_rp: $('#kurs_rp').val(),
-            kurs_usd: $('#kurs_usd').val(),
-            top: $('#top').val(),
-        }
-        
-        $.ajax({
-            url: "{{ route('mod.save_master') }}",
-            method: 'POST',
-            data: masterData,
-            success: function (response) {
-                if (response.success) {
-                    document.getElementById('detail').style.display = "block";
-                    document.getElementById('cari_barang').style.display = "block";
-                    document.getElementById('save_master').style.display = "none";
-                    alert('Data berhasil disimpan')
-                }
-            },
-            error: function (response) {
-                alert('Gagal menyimpan data!!')
-            }
-        })        
     })
 
-    $('.save_detail').on('click', function() {
-        const detailData = {
-            nomod: $('#kode').val(),
-            kode_barang: $('#kode_barang').val(),
-            qty: $('#qty').val(),
-            harga: $('#harga').val(),
-            total_awal: $('#subtotal_awal').val(),
-            ppn: $('#ppn').val(),
-            total_akhir: $('#subtotal_akhir').val(),
-            bc_date: $('#bc_date').val()
-        }
-
-        $.ajax({
-            url: "{{ route('mod.save_detail') }}",
-            method: 'POST',
-            data: detailData,
-            success: function (response) {
-                if (response.success) {
-                    alert('Data berhasil disimpan');
-                    $('#detail_form')[0].reset()
-                    loadData();
-                }
-            },
-            error: function (response) {
-                alert('Gagal menyimpan data!')
-            }
-        })
+        loadData();
     })
-
-    loadData();
 </script>
     
 @endsection
