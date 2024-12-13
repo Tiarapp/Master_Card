@@ -375,7 +375,9 @@ Route::middleware(['auth'])->group(function (){
 
     // Accounting
         // 
-        
+        Route::get('admin/acc/mod', [MarektingOrder::class, 'index_acc'])->name('acc.mod.index');
+        Route::get('admin/acc/mod/approve/{kode}', [MarektingOrder::class, 'approve_by_acc'])->name('acc.mod.approve');
+        Route::post('admin/acc/mod/tolak', [MarektingOrder::class, 'tolak_acc'])->name('acc.mod.disapprove');
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         

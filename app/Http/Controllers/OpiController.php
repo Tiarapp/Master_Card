@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kontrak_D;
 use App\Models\Opi_M;
+use App\Models\Tracking;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -293,8 +294,11 @@ class OpiController extends Controller
     {
         $opi = Opi_M::find($id);
         $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
-
-        // dd($opi);
+                
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Cancel Kontrak". $opi->NoOPI
+        ]);
 
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
@@ -308,8 +312,6 @@ class OpiController extends Controller
         $kontrakd->save();
 
         return redirect('admin/opi');
-
-        
     }
 
     public function closed($id)
@@ -321,8 +323,6 @@ class OpiController extends Controller
 
         $opi->status_opi = "closed";
         $opi->lastUpdatedBy = Auth::user()->name;
-        
-        // $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
         $opi->jumlahOrder = 0;
 

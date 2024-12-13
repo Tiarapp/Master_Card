@@ -8,6 +8,7 @@ use Faker\Core\Number;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 use Yajra\DataTables\DataTables;
 
 class MarektingOrder extends Controller
@@ -62,6 +63,47 @@ class MarektingOrder extends Controller
                 ->make(true);
         }
         return view('admin.Marketing.mod.index');
+    }
+
+    public function index_acc(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        if ($request->ajax()) {
+            $mod = DB::connection('firebird2')->table('TMOD')
+            ->where('APPROVE', '!=', 'Y                   ')
+            ->orWhere('APPROVE', '=', NULL)
+            // ->take(2)
+            ->get();
+            
+            // dd($mod);
+
+            return DataTables::of($mod)
+                ->addColumn('action', function($mod) {
+                    return '
+                    <a href="../acc/mod/approve/'. $mod->NoBukti .'" type="button">
+                    <button type="button" class="btn btn-primary"> Approve </button>
+                    </a>
+                    <button type="button" class="btn btn-primary tolak" data-toggle="modal" data-target="#exampleModalCenter" value="'.$mod->NoBukti.'">
+                        Tolak
+                    </button>';
+                })
+                ->addColumn('qtyCrt', function($mod){
+                    $qty = intval($mod->TotQtyCrt);
+                    return number_format($qty, 2);
+                })
+                ->addColumn('qtyEcr', function($mod){
+                    $qty = intval($mod->TotQtyEcr);
+                    return number_format($qty, 2);
+                })
+                ->addColumn('total', function($mod){
+                    $qty = intval($mod->TotalAkhir);
+                    return number_format($qty, 2);
+                })
+                ->make(true);
+        }
+
+        return view('admin.acc.approve_mod');
     }
 
     public function get_mata_uang($kode)
@@ -158,7 +200,6 @@ class MarektingOrder extends Controller
             'NilaiKursUSD' => (int) $request->kurs_usd,
             'Aktif' => 'Y',
             'Print' => 0,
-            'APPROVE' => "N"
         ]);
 
         $key = DB::connection('firebird2')->table('TKeyfield')
@@ -305,8 +346,33 @@ class MarektingOrder extends Controller
         $approve = DB::connection('firebird2')->table('TMOD')
                 ->where('NoBukti', 'LIKE', $kode.'%')
                 ->update([
-                    ''
+                    'APPROVE' => 'Y',
+                    'Blocked' => 'Y',
                 ]);
+
+        DB::connection('firebird2')->commit();
+        
+        return redirect()->back()->with('success', 'berhasil approve');
+    }
+
+    public function tolak_acc(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        // dd($request->all());
+
+        $approve = DB::connection('firebird2')->table('TMOD')
+                ->where('NoBukti', 'LIKE', $request->kodebarang.'%')
+                ->update([
+                    'APPROVE' => 'N',
+                    'Blocked' => NULL,
+                    // 'Print' => 00,
+                    'ALASAN' => $request->alasan
+                ]);
+        
+        DB::connection('firebird2')->commit();
+
+        return redirect()->back()->with('success', trim($request->kodebarang).' Tidak di approve karena '. $request->alasan);
     }
 
     public function print_mod($kode)
