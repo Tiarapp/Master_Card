@@ -9,6 +9,7 @@ use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\PaletController;
+use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
@@ -240,6 +241,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/sj_palet/update/{id}', 'SJ_Palet_DController@update');
     Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
     Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
+    Route::get('/export/sjpalet', [SJ_Palet_DController::class, 'export_sjpalet_excel'])->name('export.sjpalet');
     
     //Supplier
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
