@@ -24,6 +24,10 @@ class BoxController extends Controller
 
         $box = DB::table('box')->get();
 
+        $finance = DB::connection('sqlsrv')->table('COA')->get();
+
+        dd($finance);
+
         // Tampilkan semua isi variable $box
         return view('admin.box.index', ['box' => $box]);
     }
