@@ -36,7 +36,7 @@
       @endif
       
       <div class="card-body">
-        <table class="table table-bordered" id="data_mod">
+        <table class="table table-bordered" id="data_mod" style="width: auto !important">
           <thead>
             <tr>
               <th scope="col">No Bukti</th>

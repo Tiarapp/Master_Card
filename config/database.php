@@ -203,14 +203,19 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST6', '192.168.1.250'),
+            'port' => env('DB_PORT6', '1433'),
+            'database' => env('DB_DATABASE6', 'Lauta_be_SPA'),
+            'username' => env('DB_USERNAME6', 'itspa18'),
+            'password' => env('DB_PASSWORD6', 'spaAdmin'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'options' => [
+                'Database' => env('DB_DATABASE', 'Lauta_be_SPA'),
+                'TrustServerCertificate' => true, // Jika SQL Server menggunakan self-signed certificate
+                'ODBCDriver' => 'ODBC Driver 17 for SQL Server', // Pastikan versi driver di sini
+            ],
         ],
 
     ],

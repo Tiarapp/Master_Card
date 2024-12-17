@@ -21,6 +21,7 @@ class BoxController extends Controller
     public function index()
     {
         // Ambil data dari table box
+
         $box = DB::table('box')->get();
 
         // Tampilkan semua isi variable $box
