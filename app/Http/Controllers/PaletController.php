@@ -36,11 +36,11 @@ class PaletController extends Controller
     public function sync_sj()
     {
         DB::connection('firebird2')->beginTransaction();
-        $periode = '10/2024';
+        $periode = '12/2024';
 
         $barang = DB::connection('firebird2')->table('TSuratJalan')->where('Periode', '=', $periode)->get();
         
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'CA-22410'.'%')->update([
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'CA-22412'.'%')->update([
             'NoUrut' => count($barang)
         ]);
         
@@ -52,11 +52,11 @@ class PaletController extends Controller
     public function sync_fa()
     {
         DB::connection('firebird2')->beginTransaction();
-        $periode = '10/2024';
+        $periode = '12/2024';
 
         $faktur = DB::connection('firebird2')->table('TFakturConv')->where('Periode', '=', $periode)->get();
         
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/X/24'.'%')->update([
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/XII/24'.'%')->update([
             'NoUrut' => count($faktur)
         ]);
         

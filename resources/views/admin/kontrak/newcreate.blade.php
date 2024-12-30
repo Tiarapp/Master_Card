@@ -274,6 +274,8 @@
                                                         <option value="OUP Kwalitas & Kupingan">OUP Kwalitas & Kupingan</option>
                                                         <option value="OUP Ukuran & Arah Flute">OUP Ukuran & Arah Flute</option>
                                                         <option value="OUP Lipatan">OUP Lipatan</option>
+                                                        <option value="OUP Kwalitas Produksi & Proses">OUP Kwalitas Produksi & Proses</option>
+                                                        <option value="OUP Ukuran & Joint">OUP Ukuran & Joint</option>
                                                     </select>
                                                 </div>
                                             </div>  
