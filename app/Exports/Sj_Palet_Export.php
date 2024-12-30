@@ -38,7 +38,8 @@ class Sj_Palet_Export implements FromCollection, WithHeadings
                         'cust' => $data->master_palet->namaCustomer,
                         'nopol' => $data->master_palet->noPolisi,
                         'ukuran' => $data->ukuran,
-                        'qty' => $data->qty
+                        'qty' => $data->qty,
+                        'alamat' => $data->master_palet->alamatCustomer
                     ];
                 });
     }
@@ -51,7 +52,8 @@ class Sj_Palet_Export implements FromCollection, WithHeadings
             'Customer',
             'No Polisi',
             'Palet',
-            'Quantity'
+            'Quantity',
+            'Alamat Customer'
         ];
     }
 }
