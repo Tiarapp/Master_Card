@@ -517,8 +517,8 @@ class Kontrak_DController extends Controller
         {
             $date = date_create($request->tglKirim);
             $day = date_format($date, "D");
-            $alphabet = 'D';
-            $tahun = '2024';
+            $alphabet = 'E';
+            $tahun = '2025';
             
             if ($request->tglKirim != null) {
                 $lastOpi = Opi_M::where('periode', '=', $tahun) 
@@ -529,7 +529,7 @@ class Kontrak_DController extends Controller
                     // dd($numb_opi);
                 } else {
                     $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+3,4, '0', STR_PAD_LEFT).$alphabet;
+                    $numb_opi = str_pad(count($lastOpi)+1,4, '0', STR_PAD_LEFT).$alphabet;
                     // dd($numb_opi);
                 };
                 
