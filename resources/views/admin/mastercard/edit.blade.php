@@ -959,8 +959,8 @@
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
                 // console.log(luas);
-                document.getElementById("luasSheet").value = luasmkt.toFixed(2);
-                document.getElementById("luasSheetBox").value = luasmkt.toFixed(2);
+                document.getElementById("luasSheet").value = luasmkt.toFixed(3);
+                document.getElementById("luasSheetBox").value = luasmkt.toFixed(3);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
 
