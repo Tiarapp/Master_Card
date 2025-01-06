@@ -34,45 +34,17 @@
         <table class="table table-bordered" id="data_sheet">
           <thead>
             <tr>
-              <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
-              <th scope="col">Lebar</th>
-              <th scope="col">Panjang</th>
-              <th scope="col">Satuan Size</th>
-              <th scope="col">Luas</th>
-              <th scope="col">Satuan Luas</th>
-              <th scope="col">Branch</th>
-              <th scope="col">Action</th>
+              <th scope="col">Satuan P</th>
+              <th scope="col">Satuan S</th>
+              <th scope="col">Berat Std</th>
+              <th scope="col">Stok P</th>
+              <th scope="col">Stok S</th>
             </tr>
           </thead>
           <tbody>
-            <?php
-            $no = 1;
-            foreach ($sheet as $data) { ?>
-              <tr>
-                <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->kode }}</td>
-                <td>{{ $data->nama }}</td>
-                <td>{{ $data->lebarSheet }}</td>
-                <td>{{ $data->panjangSheet }}</td>
-                <td>{{ $data->satuanSizeSheet }}</td>
-                <td>{{ $data->luasSheet }}</td>
-                <td>{{ $data->satuanLuasSheet }}</td>
-                <td>{{ $data->branch }}</td>
-                <td>
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                      <a href="../admin/sheet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="../admin/sheet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="../admin/sheet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            <?php
-            }
-            ?>
+            
           </tbody>
         </table>
       </div>
@@ -87,25 +59,18 @@
   <script>
     $(document).ready(function() {
       $("#data_sheet").DataTable({
-        "stripeClasses": [ 'strip1', 'strip2', 'strip3' ],
-        dom: 'Bfrtip',
-        buttons: [
-          'copy',
-          'csv',
-          'excel',
-          'pdf',
-          'colvis',
-          {
-            extend: 'print',
-            text: 'Print',
-            exportOption: {
-              modifier: {
-                selected: null
-              }
-            }
-          }
-        ],
-        select: true
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('getsheet') }}",
+        columns: [
+          {data: 'kode', name: 'kode' },
+          {data: 'NamaBrg', name: 'NamaBrg' },
+          {data: 'SatuanP', name: 'SatuanP' },
+          {data: 'SatuanS', name: 'SatuanS' },
+          {data: 'berat', name: 'berat' },
+          {data: 'stokp', name: 'stokp' },
+          {data: 'stoks', name: 'stoks' },
+        ]
       });
     });
   </script>

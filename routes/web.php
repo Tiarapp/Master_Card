@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
+use App\Http\Controllers\Admin\Converting\ConvertingController;
 use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\Data\BbmRollController;
@@ -16,6 +17,7 @@ use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,8 +145,9 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/joint/delete/{id}', 'JointController@updateDeleted');
     
     //Sheet
-    Route::get('/admin/sheet', 'SheetController@index')->name('sheet');
-    Route::get('/admin/sheet/create', 'SheetController@create')->name('sheet.create');
+    Route::get('converting/getsheet', [ConvertingController::class, 'get_sheet'])->name('getsheet');
+    Route::get('converting/sheet', [ConvertingController::class, 'index_sheet'])->name('sheet');
+    Route::get('/admin/sheet/create', [ConvertingController::class, 'create'])->name('sheet.create');
     Route::post('/admin/sheet/store', 'SheetController@store')->name('sheet.store');
     Route::get('/admin/sheet/show/{id}', 'SheetController@show');
     Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
@@ -268,6 +271,8 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/admin/mastercard/update', 'MastercardController@update')->name('update');
         Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
     });
+
+    //Converting
     
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');

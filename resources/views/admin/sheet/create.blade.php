@@ -13,7 +13,7 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <h4 class="modal-title">Tambah Sheet</h4>
                 <hr>
 
@@ -65,9 +65,9 @@
                             <div class="form-group">
                                 <label>Satuan Size</label>
                                 <select class="js-example-basic-single col-md-12" name="satuanSizeSheet" id="satuanSizeSheet">
-                                    @foreach ($satuan as $data)
+                                    {{-- @foreach ($satuan as $data)
                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -81,9 +81,9 @@
                             <div class="form-group">
                                 <label>Satuan Luas</label>
                                 <select class="js-example-basic-single col-md-12" name="satuanLuasSheet" id="satuanLuasSheet">
-                                    @foreach ($satuan as $data)
+                                    {{-- @foreach ($satuan as $data)
                                     <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>

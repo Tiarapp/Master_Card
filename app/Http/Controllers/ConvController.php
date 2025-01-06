@@ -12,6 +12,7 @@ use App\Models\Mesin;
 use App\Models\Opi_M;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class ConvController extends Controller
