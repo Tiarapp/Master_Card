@@ -67,7 +67,7 @@
         serverSide: true,
         ajax: '{{ route('mkt.get.formpermintaan') }}',
         columns: [
-            { data: 'id', name: 'id' },
+            { data: 'nomer', name: 'nomer' },
             { data: 'tanggal', name: 'tanggal' },
             { data: 'customer', name: 'customer' },
             { data: 'barang', name: 'barang' },

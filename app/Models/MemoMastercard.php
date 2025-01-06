@@ -12,6 +12,7 @@ class MemoMastercard extends Model
 
     protected $fillable = [
         'id',
+        'nomer',
         'tanggal',
         'customer',
         'barang',

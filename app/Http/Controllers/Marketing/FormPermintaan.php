@@ -37,12 +37,13 @@ class FormPermintaan extends Controller
 
     public function store(Request $request)
     {
-        $getLastID = MemoMastercard::orderBy('id', 'Desc')->first();
-
-        $kode = $getLastID->id +1;
+        $periode = date('Y-m');
+        $getLastID = MemoMastercard::where('tanggal', 'LIKE', $periode.'%')->get();
+        
+        $kode = str_pad(count($getLastID)+1,4, '0', STR_PAD_LEFT) ;
 
         MemoMastercard::create([
-            'id' => $kode,
+            'nomer' => $kode,
             'tanggal' => $request->tanggal,
             'customer' => $request->cust,
             'barang' => $request->barang,
