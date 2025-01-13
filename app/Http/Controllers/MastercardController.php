@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mastercard;
+use App\Models\Number_Sequence;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -185,8 +186,8 @@ class MastercardController extends Controller
     */
     public function create()
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        
+        $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
+        $kode = 'MC'. $nomer->nomer;
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -202,7 +203,7 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            // 'item',
+            'kode',
             'cust',
             'substance',
             'box',
@@ -331,6 +332,12 @@ class MastercardController extends Controller
             'gambar' => $nama_file,
             'createdBy' => $request->createdBy
         ]);
+
+        $nomer = Number_Sequence::where('noBukti', 'LIKE', 'mastercard')->first();
+        $nomer->nomer = $nomer->nomer + 1;
+
+        $nomer->save();
+        
 
         Tracking::create([
             'user' => Auth::user()->name,

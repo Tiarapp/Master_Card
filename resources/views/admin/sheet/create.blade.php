@@ -33,7 +33,7 @@
                     <div class="row was-validated">
                         <div class="col-md-12" data-toggle="tooltip" data-placement="right" title="Input kode sheet">
                             <div class="form-group">
-                                <label>Kode</label>
+                                <label>Kode Gudang</label>
                                 <input type="text" class="form-control txt_line" placeholder="Input kode sheet" name="kode" id="kode" required>
                                 <div class="valid-feedback">Valid.</div>
                                 <div class="invalid-feedback">Please fill out this field.</div>

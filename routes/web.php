@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Accounting\FinanceController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Converting\ConvertingController;
 use App\Http\Controllers\Admin\Data\BarangTeknikController;
@@ -468,6 +469,9 @@ Route::middleware(['auth'])->group(function (){
         Route::delete('/mod/delete/{id}', [MarektingOrder::class, 'delete'])->name('mod.delete');
         Route::get('admin/marketing/mod/edit/{id}', [MarektingOrder::class, 'edit'])->name('mkt.edit.mod');
         Route::get('admin/marketing/mod/print/{id}', [MarektingOrder::class, 'print_mod'])->name('mkt.print.mod');
+
+        Route::get('finance', [FinanceController::class, 'index'])->name('finance');
+        Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');
         
 }); 
 
