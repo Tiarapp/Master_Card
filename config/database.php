@@ -131,7 +131,7 @@ return [
             'driver'   => 'firebird',
             'host'     => env('DB_HOST5', '192.168.1.250'),
             'port'     => env('DB_PORT5', '3050'),
-            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\BJ_CONVERTING_SPA.FDB'),
+            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
             'username' => env('DB_USERNAME5', 'sysdba'),
             'password' => env('DB_PASSWORD5', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),

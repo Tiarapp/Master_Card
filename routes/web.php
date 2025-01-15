@@ -472,6 +472,9 @@ Route::middleware(['auth'])->group(function (){
 
         Route::get('finance', [FinanceController::class, 'index'])->name('finance');
         Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');
+        Route::get('finance/faktur', [FinanceController::class, 'index_faktur'])->name('finance.faktur');
+        Route::get('finance/getfaktur/', [FinanceController::class, 'get_faktur'])->name('finance.getfaktur');
+        Route::get('finance/faktur/print/{kode}', [FinanceController::class, 'print_faktur'])->name('finance.print.faktur');
         
 }); 
 
