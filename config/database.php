@@ -144,6 +144,23 @@ return [
             )
         ],
 
+        'stationary' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST5', '192.168.1.250'),
+            'port'     => env('DB_PORT5', '3050'),
+            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\STATIONARY_SPA.FDB'),
+            'username' => env('DB_USERNAME5', 'sysdba'),
+            'password' => env('DB_PASSWORD5', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+            'options' => array(
+            PDO::ATTR_PERSISTENT => false,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_AUTOCOMMIT => false,
+            )
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),

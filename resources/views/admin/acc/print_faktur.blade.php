@@ -62,6 +62,10 @@
             margin-right: 10px;
         }
 
+        .capitalize-first {
+            text-transform: none;
+        }
+
     </style>
 </head>
 
@@ -81,14 +85,14 @@
                 <tr>
                     <td><p class="font-detail">Nama Customer</p></td>
                     <td><p class="font-detail">:</p></td>
-                    <td><p class="font-detail">PT. SINAR KARYA DUTA ABADI</p></td>
+                    <td><p class="font-detail">{{ trim($faktur->NamaCust) }}</p></td>
                 </tr>
                 <tr>
                     <td class="font-detail" style="vertical-align: top">Alamat</td>
                     <td class="font-detail" style="vertical-align: top">:</td>
                     <td>
-                        <textarea class="font-detail" name="" id="" cols="40" rows="3" style="border-style: none; height: auto;">SENTRA NIAGA PURI INDAH BLOK T2/24 RT.002 RW.002 KEMBANGAN - KEMBANGAN SELATAN JAKARTA BARAT - DKI</textarea>
-                        <p class="font-detail">JAKARTA RAYA</p>
+                        <textarea class="font-detail" name="" id="" cols="40" rows="3" style="border-style: none; height: auto;">{{ trim($cust->AlamatKantor) ." ". trim($cust->KotaKantor) }}</textarea>
+                        {{-- <p class="font-detail">JAKARTA RAYA</p> --}}
                     </td>
                 </tr>
             </table>
@@ -98,27 +102,30 @@
                 <tr>
                     <td><p class="font-detail">Surat Jalan</p></td>
                     <td><p class="font-detail">:</p></td>
-                    <td><p class="font-detail">PT. SINAR KARYA DUTA ABADI</p></td>
+                    <td><p class="font-detail">{{ trim($faktur->NomerSJ) }}</p></td>
                 </tr>
                 <tr>
                     <td class="font-detail" style="vertical-align: top">Faktur No.</td>
                     <td class="font-detail" style="vertical-align: top">:</td>
                     <td class="font-detail">
-                        <strong>FA003/I/25</strong>
+                        <strong>{{ trim($faktur->NoFaktur) }}</strong>
                     </td>
                 </tr>
                 <tr>
                     <td class="font-detail" style="vertical-align: top">Tanggal</td>
                     <td class="font-detail" style="vertical-align: top">:</td>
                     <td>
-                        <p class="font-detail">JAKARTA RAYA</p>
+                        <?php
+                            $date = new Datetime($faktur->TglFaktur);    
+                        ?>
+                        <p class="font-detail">{{ date_format($date, 'd-m-Y' ) }}</p>
                     </td>
                 </tr>
                 <tr>
                     <td class="font-detail" style="vertical-align: top">Pembayaran</td>
                     <td class="font-detail" style="vertical-align: top">:</td>
                     <td>
-                        <p class="font-detail">90 hari / 02-04-2025</p>
+                        <p class="font-detail">{{ $faktur->WaktuBayar }} hari / {{ $top->format('d-m-Y') }}</p>
                     </td>
                 </tr>
             </table>
@@ -148,19 +155,19 @@
             </tr>
             <tr>
                 <td class="detail-barang" style="text-align: left; padding-left: 5px">
-                    <p>LDE.01.01.S50.35887.002</p>
-                    <p>BOX 60X60 ARNA SOLITARE MTP EXP T 8.4 MM</p>
+                    <p>{{ trim($faktur->KodeBrg) }}</p>
+                    <p>{{ trim($faktur->NamaBrg) }}</p>
                 </td>
                 <td class="detail-barang">PCS</td>
                 <td class="detail-barang">0</td>
-                <td class="detail-barang">21.600</td>
-                <td class="detail-barang">1.518,00</td>
+                <td class="detail-barang">{{ number_format($faktur->Quantity,0,) }}</td>
+                <td class="detail-barang">{{ number_format($faktur->HargaAwal, 2, '.') }}</td>
                 <td class="detail-barang">0.0</td>
                 <td class="detail-barang">0.0</td>
                 <td class="detail-barang">0.0</td>
                 <td class="detail-barang">0.0</td>
                 <td class="detail-barang">0.0</td>
-                <td class="detail-barang">32,788,800.00</td>
+                <td class="detail-barang">{{ number_format($faktur->TotalAwal, 2, '.') }}</td>
             </tr>
         </table>
         <div style="outline-style: double; outline-color: black"></div>
@@ -168,9 +175,7 @@
     <div class="info">
         <div class="terbilang">
             <p class="font-detail">Terbilang :</p>
-            <p class="font-detail" style="margin-left: 5px">
-                Tiga puluh enam juta tiga ratus sembilan puluh lima ribu lima ratus enam puluh delapan rupiah
-            </p>
+            <p class="font-detail capitalize-first" style="margin-left: 5px" id="sentence">{{ $terbilang }}</p>
             <br>
 
             <div class="font-detail" style="border: 2px solid black; width: 100%; padding: 5px">
@@ -189,7 +194,7 @@
                     <td class="font-detail">Jumlah Harga</td>
                     <td></td>
                     <td>   </td>
-                    <td class="font-detail" style="text-align: right">32,788,800.00</td>
+                    <td class="font-detail" style="text-align: right">{{ number_format($faktur->TotalAwal, 2, '.') }}</td>
                 </tr>
                 <tr>
                     <td class="font-detail">Potongan Harga</td>
@@ -201,13 +206,13 @@
                     <td class="font-detail">DPP</td>
                     <td></td>
                     <td></td>
-                    <td class="font-detail" style="text-align: right">3,606,768.00</td>
+                    <td class="font-detail" style="text-align: right">{{ number_format($faktur->TotalAwal*11/12, 2, '.') }}</td>
                 </tr>
                 <tr>
-                    <td class="font-detail">PPN = 11% X DPP</td>
+                    <td class="font-detail">PPN = 12% X DPP</td>
                     <td></td>
                     <td></td>
-                    <td class="font-detail" style="text-align: right">3,606,768.00</td>
+                    <td class="font-detail" style="text-align: right">{{ number_format(($faktur->TotalAwal*11/12)*12/100, 2, '.') }}</td>
                 </tr>
                 <tr>
                     <td class="font-detail">PPH 22</td>
@@ -219,7 +224,7 @@
                     <td class="font-detail" style="padding-right: 30px"><strong>JUMLAH YANG HARUS DIBAYAR</strong></td>
                     <td ></td>
                     <td></td>
-                    <td class="font-detail" style="text-align: right">36,395,568.00</td>
+                    <td class="font-detail" style="text-align: right">{{ number_format($faktur->TotalTagihan, 2, '.') }}</td>
                 </tr>
                 {{-- TTD --}}
                 <tr>
@@ -240,5 +245,10 @@
             </table>
         </div>
     </div>
+    <script>
+        const sentence = document.getElementById("sentence");
+        const text = sentence.textContent;        
+        sentence.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+    </script>
 </body>
 </html>
