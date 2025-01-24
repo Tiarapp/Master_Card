@@ -81,14 +81,14 @@
                 { data: 'KodeBrg', name: 'KodeBrg' },
                 { data: 'NamaBrg', name: 'NamaBrg' },
                 { data: 'Spesifikasi', name: 'Spesifikasi' },
-                { data: 'SaldoAkhirP', name: 'SaldoAkhirP' },
-                { data: 'SaldoAkhirS', name: 'SaldoAkhirS' }
+                { data: 'saldo_akhir_p', name: 'saldo_akhir_p' },
+                { data: 'saldo_akhir_s', name: 'saldo_akhir_s' }
             ]
         })
 
-        $('#search').click(function() {
-            table.ajax.reload()
-        })
+        // $('#search').click(function() {
+        //     table.ajax.reload()
+        // })
     })
   </script>
 
