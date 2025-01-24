@@ -494,6 +494,14 @@
                   </a>
                 </li>
               </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('stationary.barang') }}" class="nav-link">
+                    <i class="fa-solid fa-clipboard-check nav-icon"></i>
+                    <p>Stationary</p>
+                  </a>
+                </li>
+              </ul>
             </li>
           @endif
         </ul>

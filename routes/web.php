@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Converting\ConvertingController;
 use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\Data\BbmRollController;
+use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
@@ -263,14 +264,14 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/json', 'MastercardController@json')->name('json');
         Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
         Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
-        Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
-        Route::get('/admin/mastercard/create', 'MastercardController@create')->name('create');
-        Route::post('/admin/mastercard/store', 'MastercardController@store')->name('store');
-        Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('edit');
-        Route::get('/admin/mastercard/revisi/{id}', 'MastercardController@revisi')->name('revisi');
-        Route::post('/admin/mastercard/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
-        Route::post('/admin/mastercard/update', 'MastercardController@update')->name('update');
-        Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
+        Route::get('/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
+        Route::get('/create', 'MastercardController@create')->name('create');
+        Route::post('/store', 'MastercardController@store')->name('store');
+        Route::get('/edit/{id}', 'MastercardController@edit')->name('edit');
+        Route::get('/revisi/{id}', 'MastercardController@revisi')->name('revisi');
+        Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
+        Route::post('/update', 'MastercardController@update')->name('update');
+        Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
     });
 
     //Converting
@@ -476,6 +477,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('finance/getfaktur/', [FinanceController::class, 'get_faktur'])->name('finance.getfaktur');
         Route::get('finance/faktur/print/{kode}', [FinanceController::class, 'print_faktur'])->name('finance.print.faktur');
         
+        Route::get('hrd/stationary', [StationaryController::class, 'getBarang'])->name('stationary.barang');
 }); 
 
 
