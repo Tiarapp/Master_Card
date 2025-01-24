@@ -984,7 +984,7 @@ class Kontrak_DController extends Controller
                 
                 Tracking::create([
                     'user' => Auth::user()->name,
-                    'event' => "Tambah Realisasi Kirim SJ". $request->sj
+                    'event' => "Tambah Realisasi Kirim SJ ". $request->sj
                 ]);
 
                 $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
@@ -1058,7 +1058,7 @@ class Kontrak_DController extends Controller
             
             Tracking::create([
                 'user' => Auth::user()->name,
-                'event' => "Open Kontrak". $kontrak->kode
+                'event' => "Open Kontrak ". $kontrak->kode
             ]);
             
             $kontrak->save();
