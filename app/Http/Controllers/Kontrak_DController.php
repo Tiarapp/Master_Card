@@ -6,6 +6,7 @@ use App\Models\DeliveryTime;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Mastercard;
+use App\Models\Navbar\Notification;
 use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use App\Models\Tracking;
@@ -1056,6 +1057,14 @@ class Kontrak_DController extends Controller
             $kontrak = Kontrak_M::find($id);
             $kontrak->status = 2;
             
+            $notif = Notification::where('kode', '=', $kontrak->kode)
+                    ->where('status', '=', 'Proses')
+                    ->first();
+
+            $notif->pic = Auth::user()->name;
+            $notif->status = 'Done';
+    
+            $notif->save();        
             Tracking::create([
                 'user' => Auth::user()->name,
                 'event' => "Open Kontrak ". $kontrak->kode
