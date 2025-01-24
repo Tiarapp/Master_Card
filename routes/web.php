@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
 use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\HRD\StationaryController;
+use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
@@ -478,6 +479,12 @@ Route::middleware(['auth'])->group(function (){
         Route::get('finance/faktur/print/{kode}', [FinanceController::class, 'print_faktur'])->name('finance.print.faktur');
         
         Route::get('hrd/stationary', [StationaryController::class, 'getBarang'])->name('stationary.barang');
+
+        Route::get('/getnotif', [NavbarController::class, 'getNotifOpenKontrak'])->name('notif.open');
+        Route::get('/jobs', [NavbarController::class, 'index'])->name('job.index');
+        Route::get('/jobs/create', [NavbarController::class, 'create'])->name('job.create');
+        Route::post('/jobs/store', [NavbarController::class, 'store'])->name('job.store');
+        Route::get('/jobs/action/{id}', [NavbarController::class, 'update'])->name('job.update');
 }); 
 
 

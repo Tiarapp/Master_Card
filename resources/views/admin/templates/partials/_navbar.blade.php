@@ -13,6 +13,8 @@
     </li>
   </ul>
 
+  
+
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -42,6 +44,18 @@
         </x-slot>
       </x-dropdown>
     </div>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          Notifications <span class="badge bg-danger" id="notificationCount">0</span>
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="notificationDropdown" id="notificationList">
+        <li>
+          <a href="{{ route('job.index') }}">See More</a>
+        </li>
+      </ul>
+      <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+      </ul>
+    </li>
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
@@ -54,4 +68,36 @@
     </li>
   </ul>
 </nav>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+        fetchNotifications();
+
+        function fetchNotifications() {
+            fetch('/getnotif')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationCount = document.getElementById('notificationCount');
+                    // const notificationList = document.getElementById('notificationList');
+
+                    notificationCount.textContent = data.length;
+                    // notificationList.innerHTML = '';
+
+                    if (data.length === 0) {
+                        notificationList.innerHTML = '<li><span class="dropdown-item">No new notifications</span></li>';
+                    } else {
+                        data.forEach(notif => {
+                            const item = document.createElement('li');
+                            item.innerHTML = `
+                                <a href="#" class="dropdown-item">
+                                    <strong>${notif.kode}</strong><br>
+                                    <small>${notif.pemohon}</small>
+                                </a>
+                            `;
+                            notificationList.appendChild(item);
+                        });
+                    }
+                });
+        }
+    });
+</script>
 <!-- /.navbar -->

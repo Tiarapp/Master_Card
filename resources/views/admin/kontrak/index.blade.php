@@ -59,6 +59,12 @@
       <!-- Small boxes (Stat box) -->
 
       <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+
+      
+      <a href="{{ route('job.create') }}" class="btn btn-primary mx-4" style="margin-bottom: 20px;">
+        Request Buka Block
+      </a>
+
       <div class="card-body">
         <table class="table table-bordered" id="data_kontrak">
           <thead>
