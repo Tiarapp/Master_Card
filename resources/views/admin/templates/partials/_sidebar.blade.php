@@ -99,7 +99,7 @@
           @endif
 
           {{-- Marketing --}}
-          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 3)
+          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 3 ||Auth::user()->divisi_id == 13)
             <li class="nav-item">
               <a href="#" class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -291,7 +291,7 @@
             </li>
           @endif
           {{-- PPIC --}}
-          @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2 ||Auth::user()->divisi_id == 13 )
+          @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2 )
             <li class="nav-item">
               <a href="#" class="nav-link active">
                 <i class="fa-solid fa-users-gear nav-icon"></i>
