@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Navbar;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kontrak;
 use App\Models\Kontrak_M;
 use App\Models\Navbar\Notification;
 use Illuminate\Http\Request;
@@ -13,7 +14,11 @@ class NavbarController extends Controller
 {
     public function getNotifOpenKontrak()
     {
-        $notif = Notification::where('status', '=', "Proses")->get();
+        if (Auth::user()->divisi_id == 2) {
+            $notif = Notification::where('status', '=', "Proses")->get();
+        } else if (Auth::user()->divisi_id == 13) {
+            $notif = Kontrak_M::where('status', '=', 2)->get();
+        }
 
         return response()->json($notif);
     }
