@@ -276,6 +276,7 @@
                                                         <option value="OUP Lipatan">OUP Lipatan</option>
                                                         <option value="OUP Kwalitas Produksi & Proses">OUP Kwalitas Produksi & Proses</option>
                                                         <option value="OUP Ukuran & Joint">OUP Ukuran & Joint</option>
+                                                        <option value="OUP Nama Item, Design, Proses">OUP Nama Item, Design, Proses</option>
                                                     </select>
                                                 </div>
                                             </div>  

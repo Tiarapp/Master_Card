@@ -138,7 +138,7 @@
                                             <label class="control-label">Kode MC</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode" value="{{ $kode }}" readonly>
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" placeholder="Kode" value="{{ $kode }}">
                                         </div>
                                     </div>
                                     <div class="row">
