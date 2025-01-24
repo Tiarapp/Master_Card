@@ -291,7 +291,7 @@
             </li>
           @endif
           {{-- PPIC --}}
-          @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2)
+          @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2 ||Auth::user()->divisi_id == 13 )
             <li class="nav-item">
               <a href="#" class="nav-link active">
                 <i class="fa-solid fa-users-gear nav-icon"></i>
