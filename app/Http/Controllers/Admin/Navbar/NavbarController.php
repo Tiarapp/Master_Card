@@ -39,18 +39,27 @@ class NavbarController extends Controller
 
     public function create()
     {
-        return view('admin.notif.create');
+        $kontrak = Kontrak_M::take(1500)->get();
+
+        return view('admin.notif.create', compact('kontrak'));
     }
 
     public function store(Request $request)
     {
-        Notification::create([
-            'kode' => $request->kode,
-            'alasan' => $request->alasan,
-            'tanggal' => $request->tanggal,
-            'status' => 'Proses',
-            'pemohon' => Auth::user()->name
-        ]);
+
+        $id = array_merge($request->idkontrak);
+        for ($i=0; $i < count($id) ; $i++) { 
+            $kontrak = Kontrak_M::find($id[$i]);
+
+            Notification::create([
+                'kode' => $kontrak->kode,
+                'alasan' => $request->alasan,
+                'tanggal' => $request->tanggal,
+                'status' => 'Proses',
+                'pemohon' => Auth::user()->name
+            ]);
+
+        }
 
         return redirect('admin/kontrak')->with('success', 'Berhasil melakukan request buka Blok, tunggu Respon dari IT');
     }
