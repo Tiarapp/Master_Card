@@ -39,7 +39,7 @@ class NavbarController extends Controller
 
     public function create()
     {
-        $kontrak = Kontrak_M::take(1500)->get();
+        $kontrak = Kontrak_M::get();
 
         return view('admin.notif.create', compact('kontrak'));
     }
