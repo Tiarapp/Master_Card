@@ -26,10 +26,17 @@ class NavbarController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $notif = Notification::query();
+            $notif = Notification::with('kontrak')->get();
             return DataTables::of($notif)
                 ->addColumn('action', function($notif){
-                    return "<button><a href='../jobs/action/" .trim($notif->id). "' title='Done' ><span class='btn btn-success glyphicon glyphicon-list'>Done</span></a></button>";
+                    if ($notif->status == 'Proses') {
+                        return "<button><a href='../admin/kontrak/open/" .trim($notif->kontrak_id). "' title='OPEN' ><span class='btn btn-success glyphicon glyphicon-list'>OPEN</span></a></button>";
+                    } else {
+                        return "<button disabled class='btn btn-success'>Done</button>";
+                    }
+                })
+                ->addColumn('kontrak', function($notif){
+                    return $notif->kontrak->kode;
                 })
                 ->make(true);
         }
@@ -49,10 +56,8 @@ class NavbarController extends Controller
 
         $id = array_merge($request->idkontrak);
         for ($i=0; $i < count($id) ; $i++) { 
-            $kontrak = Kontrak_M::find($id[$i]);
-
             Notification::create([
-                'kode' => $kontrak->kode,
+                'kontrak_id' => $id[$i],
                 'alasan' => $request->alasan,
                 'tanggal' => $request->tanggal,
                 'status' => 'Proses',

@@ -1057,7 +1057,7 @@ class Kontrak_DController extends Controller
             $kontrak = Kontrak_M::find($id);
             $kontrak->status = 2;
             
-            $notif = Notification::where('kode', '=', $kontrak->kode)
+            $notif = Notification::where('kontrak_id', '=', $id)
                     ->where('status', '=', 'Proses')
                     ->first();
 
@@ -1071,7 +1071,7 @@ class Kontrak_DController extends Controller
             ]);
             
             $kontrak->save();
-            return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Buka');
+            return redirect()->back()->with('success', 'Kontrak Berhasil di Buka');
         }
 
         public function recall($id) 

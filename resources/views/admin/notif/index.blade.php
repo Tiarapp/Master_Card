@@ -81,7 +81,7 @@
             },
             columns: [
                 { data: 'tanggal', name: 'tanggal' },
-                { data: 'kode', name: 'kode' },
+                { data: 'kontrak', name: 'kontrak' },
                 { data: 'pemohon', name: 'pemohon' },
                 { data: 'alasan', name: 'alasan' },
                 { data: 'status', name: 'status' },
