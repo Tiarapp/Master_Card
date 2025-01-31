@@ -16,8 +16,8 @@ class NavbarController extends Controller
     {
         if (Auth::user()->divisi_id == 2) {
             $notif = Notification::where('status', '=', "Proses")->get();
-        } else if (Auth::user()->divisi_id == 13) {
-            $notif = Kontrak_M::where('status', '=', 2)->get();
+        } else {
+            $notif = [];
         }
 
         return response()->json($notif);

@@ -49,31 +49,31 @@ Route::get('/admin', function () {
         ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
         ->first();
 
-        $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
-            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
-            ->orderBy('periode', 'desc')
-            ->groupBy('periode')
-            ->take(12)
-            ->get();
+    $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+        ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+        ->orderBy('periode', 'desc')
+        ->groupBy('periode')
+        ->take(12)
+        ->get();
 
-            $all_periode = [];
+        $all_periode = [];
 
-            foreach ($kirim as $key) {
-                $all_periode[] = $key->periode;
-            }
-
-        $realisasi = $dt->kirim;
-        
-        $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
-            ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->get();    
-
-        $tonase = 0;    
-        foreach ($opi as $key) {
-            $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
-            $tonase = $tonase + $order ;
+        foreach ($kirim as $key) {
+            $all_periode[] = $key->periode;
         }
+
+    $realisasi = $dt->kirim;
+        
+    $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
+        ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
+        ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+        ->get();    
+
+    $tonase = 0;    
+    foreach ($opi as $key) {
+        $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
+        $tonase = $tonase + $order ;
+    }
     
     $data = RealisasiKirim::select('id', DB::raw('SUM(kg_kirim) as kirim, DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
     // ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
@@ -84,10 +84,12 @@ Route::get('/admin', function () {
 
     // dd($data);
 
+    $kontrak_open = Kontrak_M::where('status', '2')->get();
+
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data'));
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open'));
 })->middleware(['auth'])->name('admin');
 
 
@@ -295,6 +297,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/open/{id}', 'Kontrak_DController@open_kontrak')->name('kontrak.open');
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
+    Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');

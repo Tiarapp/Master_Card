@@ -11,12 +11,11 @@ use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use App\Models\Tracking;
 use Carbon\Carbon;
-// use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class Kontrak_DController extends Controller
 {
@@ -218,6 +217,21 @@ class Kontrak_DController extends Controller
             );
             
             echo json_encode($json_data); 
+        }
+
+        public function getOpenKontrak(Request $request)
+        {
+            if ($request->ajax()) {
+                $kontrak = Kontrak_M::where('status', 2)->get();
+
+                return DataTables::of($kontrak)
+                    ->addColumn('action', function($kontrak){
+                        return "&emsp;<a href='".route('kontrak.edit',$kontrak->id)."' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>";
+                    })
+                    ->make(true);
+            }
+
+            return view('admin.kontrak.open_kontrak');
         }
         
         public function index(Request $request)
