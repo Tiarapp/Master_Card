@@ -109,9 +109,9 @@
         </div>
         <!-- ./col -->
       </div>
-      @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 13)
+      @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
         
-      {{-- <div class="col-md-6">
+      <div class="col-md-6">
           <!-- LINE CHART -->
           <div class="card card-info">
             <div class="card-header">
@@ -135,13 +135,13 @@
             </div>
             <!-- /.card-body -->
           </div>
-      </div> --}}
-        @if (Auth::user()->divisi_id == 13)
-          <div class="col-md-6 p-3 text-left  border bg-gray-300">
-            <h5 class="mb-0">Terdapat {{ count($kontrak_open) }} Kontrak yang berstatus OPEN</h5>
-            <a href="">Details ..</a>
-          </div>
-        @endif
+      </div>
+      @endif
+      @if (Auth::user()->divisi_id == 13)
+        <div class="col-md-6 p-3 text-left  border bg-gray-300">
+          <h5 class="mb-0">Terdapat {{ count($kontrak_open) }} Kontrak yang berstatus OPEN. <a href="{{ route('kontrak.opened') }}"> click to see Details</a></h5>
+          
+        </div>
       @endif
       <!-- /.row -->
     </div><!-- /.container-fluid -->
