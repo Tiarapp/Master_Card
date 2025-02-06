@@ -255,8 +255,12 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
     Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('supplier.show');
     
-    //Barang
+    //Barang Jadi
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
+    Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
+    Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
+    Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
+    Route::get('/returjual/{tanggal}', 'BarangController@get_kode_retur')->name('barang.retur.get_kode');
     Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
     Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');

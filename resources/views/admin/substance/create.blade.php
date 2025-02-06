@@ -160,7 +160,7 @@
                 document.getElementById('tengah').disabled = true;
                 document.getElementById('flute2').disabled = false;
                 document.getElementById('bawah').disabled = false;
-            } else if (namaflute == 'BCF') {
+            } else if (namaflute == 'BCF' || namaflute == 'EBF') {
                 document.getElementById('atas').disabled = false;
                 document.getElementById('flute1').disabled = false;
                 document.getElementById('tengah').disabled = false;

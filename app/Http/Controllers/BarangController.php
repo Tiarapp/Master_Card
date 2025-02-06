@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\fbBarang;
 use App\Models\Mastercard;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use stdClass;
+use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
 {
@@ -43,10 +45,10 @@ class BarangController extends Controller
         if((count($temp1) / 2) > count($temp2))
         {
             $barang = $temp1;
-            return view('admin.barang.index', compact("barang"));
+            return view('admin.fg.barang.index', compact("barang"));
         } else {
             $barang = $temp2;
-            return view('admin.barang.index', compact("barang"));
+            return view('admin.fg.barang.index', compact("barang"));
         }
     }
 
@@ -66,7 +68,7 @@ class BarangController extends Controller
         $warna = DB::connection('firebird2')->table('TWarnaConv')->get();
         
         
-        return view('admin.barang.create', compact([
+        return view('admin.fg.barang.create', compact([
             // 'item',
             'merk',
             'box',
@@ -244,7 +246,7 @@ class BarangController extends Controller
             }
         }
 
-        return view('admin.barang.mutasi', compact('result', 'barang', 'persediaan'));
+        return view('admin.fg.barang.mutasi', compact('result', 'barang', 'persediaan'));
 
     }
 
@@ -265,40 +267,59 @@ class BarangController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Barang  $barang
-     * @return \Illuminate\Http\Response
-     */
-    // Tampilkan halaman Edit
-    public function edit(Barang $barang)
+    public function returjual(Request $request)
     {
-        //
+        DB::connection('firebird2')->beginTransaction();
+
+        if ($request->ajax()) {
+            $retur = DB::connection('firebird2')->table('TReturJual')
+                ->get();
+
+            return DataTables::of($retur)
+                ->make(true);
+        }
+
+        return view('admin.fg.barang.retur.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Barang  $barang
-     * @return \Illuminate\Http\Response
-     */
-    // Untuk Simpan yg sudah diedit    
-    public function update(Request $request, Barang $barang)
+    public function create_retur()
     {
-        //
+        DB::connection('firebird')->beginTransaction();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+
+        return view('admin.fg.barang.retur.create', compact('cust'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Barang  $barang
-     * @return \Illuminate\Http\Response
-     */
-    // Untuk Delete
-    public function destroy(Barang $barang)
+    public function get_kode_retur($tanggal)
     {
-        //
+        DB::connection('firebird2')->beginTransaction();
+
+
+        $year = date('y', strtotime($tanggal));
+        $month = date('m', strtotime($tanggal));
+
+        $concat = $year . $month;
+        $kode = "RA-2".$concat;
+
+        $key = DB::connection('firebird2')->table('TKeyfield')
+                    ->where('Nama', 'LIKE', $kode."%")->first();
+        if ($key) {
+            $nurut = str_pad($key->NoUrut + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            DB::connection('firebird2')->table('TKeyfield')->insert([
+                'Nama' => $kode,
+                'NoUrut' => 0
+            ]);
+            
+                DB::connection('firebird2')->commit();
+            $nurut = str_pad(1, 3, '0', STR_PAD_LEFT);
+        }
+
+        $no_bukti = $kode . $nurut;
+        $data = [
+            'kode' => $no_bukti
+        ];
+        
+        return response()->json($data);
     }
 }

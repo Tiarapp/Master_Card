@@ -869,6 +869,8 @@
             flute = '02';
         } else if (flute == 'BCF') {
             flute = '03';
+        } else if (flute == 'EBF') {
+            flute = '05';
         } else if (flute == 'EF') {
             flute = '04';
         } else if (flute == 'Roll') {
@@ -1153,6 +1155,41 @@
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
             
+        } else 
+        if (flutenama == 'EBF') {
+            if (isNaN(Katas)) {
+                Katas = 0;
+            } 
+            if (isNaN(Kbf)) {
+                Kbf = 0;
+            }
+            if (isNaN(Ktengah)) {
+                Ktengah = 0;
+            }
+            if (isNaN(Kcf)) {
+                Kcf = 0;
+            }
+            if (isNaN(Kbawah)) {
+                Kbawah = 0 ;
+            }
+            
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.27) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
+            
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
+
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
+            console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
+            
         } else {
             
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
@@ -1289,6 +1326,48 @@
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
+            
+        } else
+        if (flutenama == 'EBF') {
+            
+            if (isNaN(Patas)) {
+                Patas = 0;
+            } 
+            if (isNaN(Pbf)) {
+                Pbf = 0;
+            }
+            if (isNaN(Ptengah)) {
+                Ptengah = 0;
+            }
+            if (isNaN(Pcf)) {
+                Pcf = 0;
+            }
+            if (isNaN(Pbawah)) {
+                Pbawah = 0 ;
+            }
+
+            console.log(Patas, Pbf, Ptengah, Pcf, Pbawah);
+            
+            
+            gramKualitas = (parseInt(Patas) + (parseInt(Pcf)*1.27) + parseInt(Ptengah) + (parseInt(Pbf)*1.36) + parseInt(Pbawah))/1000;
+            
+            
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
+
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
+
+            console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
+            
             
         } else {
 

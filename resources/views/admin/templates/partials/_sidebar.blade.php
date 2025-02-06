@@ -81,18 +81,46 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview"> 
               <li class="nav-item">
-                <a href="{{ route('barang') }}" class="nav-link">
-                  <i class="fa-solid fa-boxes-stacked nav-icon"></i>
-                  <p>Barang Jadi</p>
-                </a>
+                <a href="#" class="nav-link">
+                  <i class="fa-solid fa-toilet-paper nav-icon"></i>
+                  <p>
+                    Barang Jadi                    
+                  <i class="right fas fa-angle-left"></i>
+                  </p>
+                <i class="right fas fa-angle-left"></i>
+                </a><ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('barang') }}" class="nav-link">
+                      <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                      <p>Barang Jadi</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('barang.retur') }}" class="nav-link">
+                      <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                      <p>Retur Penjualan</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item">
-                <a href="{{ route('sheet') }}" class="nav-link">
-                  <i class="fa-solid fa-layer-group nav-icon"></i>
-                  <p>Sheet</p>
-                </a>
+                <a href="#" class="nav-link">
+                  <i class="fa-solid fa-toilet-paper nav-icon"></i>
+                  <p>
+                    Sheet                    
+                  <i class="right fas fa-angle-left"></i>
+                  </p>
+                <i class="right fas fa-angle-left"></i>
+                </a><ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('sheet') }}" class="nav-link">
+                      <i class="fa-solid fa-layer-group nav-icon"></i>
+                      <p>Sheet</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
