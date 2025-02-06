@@ -37,7 +37,7 @@ class FormPermintaan extends Controller
 
     public function store(Request $request)
     {
-        $periode = date('Y-m');
+        $periode = date('Y');
         $getLastID = MemoMastercard::where('tanggal', 'LIKE', $periode.'%')->get();
         
         $kode = str_pad(count($getLastID)+1,4, '0', STR_PAD_LEFT) ;
