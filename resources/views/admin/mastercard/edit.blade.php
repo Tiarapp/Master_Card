@@ -139,7 +139,7 @@
                                             <label class="control-label">Kode</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode">
+                                            <input type="text" class="form-control txt_line" name="kode" id="kode" value="{{ $mc->kode }}" placeholder="Kode" onchange="getKodeBarang()">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Revisi</label>

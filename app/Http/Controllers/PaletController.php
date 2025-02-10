@@ -56,7 +56,7 @@ class PaletController extends Controller
 
         $faktur = DB::connection('firebird2')->table('TFakturConv')->where('Periode', '=', $periode)->get();
         
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/I/25-'.'%')->update([
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/I/25'.'%')->update([
             'NoUrut' => count($faktur)
         ]);
         
