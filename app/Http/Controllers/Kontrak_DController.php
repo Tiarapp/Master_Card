@@ -1106,7 +1106,7 @@ class Kontrak_DController extends Controller
             }
             
             if ($kirim > 0) { 
-                $sisakirim = $kontrak->pcsSisaKontrak + ($order - $kirim);
+                $sisakirim = $kontrak->pcsKontrak - ($order - $kirim);
             } else {
                 $sisakirim = 0;
             }
