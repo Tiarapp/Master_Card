@@ -222,7 +222,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST6', '192.168.1.250'),
             'port' => env('DB_PORT6', '1433'),
-            'database' => env('DB_DATABASE6', 'Lauta_be_SPA'),
+            'database' => env('DB_DATABASE6', 'blog'),
             'username' => env('DB_USERNAME6', 'itspa18'),
             'password' => env('DB_PASSWORD6', 'spaAdmin'),
             'charset' => 'utf8',

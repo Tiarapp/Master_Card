@@ -30,6 +30,7 @@ class Piutang extends Model
         'MataUang',
         'NilaiKurs',
         'Total',
+        'TotalRp',
         'TotalTerima',
         'Penjualan',
         'PPN',
