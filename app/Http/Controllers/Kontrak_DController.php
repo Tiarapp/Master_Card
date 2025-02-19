@@ -355,6 +355,7 @@ class Kontrak_DController extends Controller
                 'pcsKontrak' => $request->qtyPcs,
                 // + $request->pcsToleransiLebih + $request->kgToleransiLebih
                 'pcsSisaKontrak' => $request->qtyPcs,
+                'pcsSisaKirim' => $request->qtyPcs,
                 'kgKontrak' => $request->qtyKg,
                 'kgSisaKontrak' => $request->qtyKg,
                 'pctToleransiLebihKontrak' => $request->toleransiLebih,
@@ -594,8 +595,8 @@ class Kontrak_DController extends Controller
                     $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
                     $kontrakm = Kontrak_M::where('id', '=', $request->idkontrakm)->first();
                     
-                    if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak) {
-                        return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak);
+                    if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak && $request->jumlahKirim > $kontrakd->pcsSisaKirim) {
+                        return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak.' atau '.$kontrakd->pcsSisaKirim);
                     } else {
                         if ($request->tipebox == 'B1') {
                             if (($request->jumlahKirim/$request->outconv) + $totalB1 > 150000) {
@@ -671,6 +672,7 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                                // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
                                 $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
                                 $kontrakd->save();
                             }
@@ -745,6 +747,7 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                                // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
                                 $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
                                 $kontrakd->save();
                             }
@@ -783,6 +786,7 @@ class Kontrak_DController extends Controller
                             ]);
                             
                             $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
+                            // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
                             $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
                             $kontrakd->save();
                         }
@@ -996,6 +1000,9 @@ class Kontrak_DController extends Controller
                     'kg_kirim'      => $qty * $mc->gramSheetBoxKontrak,
                     'createdBy'     => Auth::user()->name
                 ]);
+
+                $kontrak->pcsSisaKirim = $kontrak->pcsSisaKontrak - $qty ;
+                $kontrak->save();
                 
                 Tracking::create([
                     'user' => Auth::user()->name,
@@ -1023,7 +1030,10 @@ class Kontrak_DController extends Controller
             $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
             $kontrakm = Kontrak_M::where('id', '=', $kontrak->kontrak_m_id)->first();
             $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
-
+            
+            // dd($kirim->qty_kirim);
+            $kontrak->pcsSisaKirim = $kontrak->pcsSisaKirim + $kirim->qty_kirim - $request->jumlahKirim;
+            $kontrak->save();
             // dd($id);
             
             $kirim->update([
@@ -1036,6 +1046,7 @@ class Kontrak_DController extends Controller
                 'user' => Auth::user()->name,
                 'event' => "Ubah Realisasi Kirim SJ ". $kirim->nomer_sj
             ]);
+
 
             $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
                         ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
@@ -1104,27 +1115,16 @@ class Kontrak_DController extends Controller
             foreach ($realisasi as $data) {
                 $kirim = $kirim + $data->qty_kirim;
             }
-            
-            if ($kirim > 0) { 
-                $sisakirim = $kontrak->pcsKontrak - ($order - $kirim);
-            } else {
-                $sisakirim = 0;
-            }
 
             $sisaopi = $kontrak->pcsKontrak - $order;
+            $sisakirim = $kontrak->pcsKontrak - $kirim;
 
-            // dd($sisakirim);
-
-            if ($sisakirim > 0) {
-                $sisakontrak = $sisakirim;
-            } else if ($sisaopi){
-                $sisakontrak = $sisaopi;
-            } else {
-                $sisakontrak = 0;
-                $kontrakm->save();
+            if ($sisaopi < 1) {
+                $sisaopi = 0;
             }
 
-            $kontrak->pcsSisaKontrak = $sisakontrak;
+            $kontrak->pcsSisaKontrak = $sisaopi;
+            $kontrak->pcsSisaKirim = $sisakirim;
 
             $kontrak->save();
             
