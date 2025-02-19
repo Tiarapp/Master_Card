@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\DataTables;
 
 class BoxController extends Controller
 {
@@ -18,18 +19,18 @@ class BoxController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Tampilkan Halaman Awal
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data dari table box
+        if ($request->ajax()) {
+            $box = Box::query();
+            return DataTables::of($box)
+                ->addColumn('action', function($box){
+                   return '<a href="../admin/box/edit/{{ $box->id }}" class="btn btn-outline-secondary" type="button">Edit</a>';
+                })
+                ->make(true);
+        }
 
-        $box = DB::table('box')->get();
-
-        // $finance = DB::connection('sqlsrv')->table('COA')->get();
-
-        // dd($finance);
-
-        // Tampilkan semua isi variable $box
-        return view('admin.box.index', ['box' => $box]);
+        return view('admin.box.index');
     }
     // End tampilkan Halaman Awal
 
