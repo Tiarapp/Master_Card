@@ -44,6 +44,7 @@
         </x-slot>
       </x-dropdown>
     </div>
+    @if (Auth::user()->divisi_id === 2)
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
           Notifications <span class="badge bg-danger" id="notificationCount">0</span>
@@ -56,6 +57,7 @@
       <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
       </ul>
     </li>
+    @endif
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
