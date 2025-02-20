@@ -221,10 +221,10 @@
                                                                             <th scope="col">Tipe Crease</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
+                                                                    {{-- <tbody>
                                                                         <?php
-                                                                        $no = 1;
-                                                                        foreach ($box as $data) { ?>
+                                                                        // $no = 1;
+                                                                        // foreach ($box as $data) { ?>
                                                                             <tr>
                                                                                 <td>{{ $data->id }}</td>
                                                                                 <td>{{ $data->kode }}</td>
@@ -239,9 +239,9 @@
                                                                                 <td>{{ $data->tipeCreasCorr }}</td>
                                                                             </tr>
                                                                             <?php
-                                                                        }
+                                                                        // }
                                                                         ?>
-                                                                    </tbody>
+                                                                    </tbody> --}}
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -895,34 +895,48 @@
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": true,
-            // "autoWidth": true, 
-            "initComplete": function (settings, json) {  
-                $("#data_box").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+            processing: true,
+            serverSide: true,
+            // scrollX: true,
+            // scrollY: "auto",
+            ajax: {
+                url: "{{ route('box') }}"
             },
-            // "scrollY": "400px",
-            select: true,
+            columns: [
+            { data: 'id', name: 'id' },
+            { data: 'kode', name: 'kode' },
+            { data: 'namaBarang', name: 'namaBarang' },
+            { data: 'tipebox', name: 'tipebox' },
+            { data: 'flute', name: 'flute' },
+            { data: 'panjangDalamBox', name: 'panjangDalamBox' },
+            { data: 'lebarDalamBox', name: 'lebarDalamBox' },
+            { data: 'tinggiDalamBox', name: 'tinggiDalamBox' },
+            { data: 'sizeCreasCorr', name: 'sizeCreasCorr' },
+            { data: 'sizeCreasConv', name: 'sizeCreasConv' },
+            { data: 'tipeCreasCorr', name: 'tipeCreasCorr' },
+            ],
+            select: true
         });
         
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
             
             // document.getElementById('kodeBarang').value = Box[2];
-            document.getElementById('namaBarang').value = Box[2];
-            document.getElementById('tipebox').value = Box[3];
-            document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[5];
-            document.getElementById('lebarbox').value = Box[6];
-            document.getElementById('tinggibox').value = Box[7];
-            document.getElementById('creasCorr').value = Box[8];
-            document.getElementById('creasConv').value = Box[9];
-            document.getElementById('flute').value = Box[4];
+            document.getElementById('namaBarang').value = Box['namaBarang'];
+            document.getElementById('tipebox').value = Box['tipebox'];
+            document.getElementById('box_id').value = Box['id'];
+            document.getElementById('panjangbox').value = Box['panjangDalamBox'];
+            document.getElementById('lebarbox').value = Box['lebarDalamBox'];
+            document.getElementById('tinggibox').value = Box['tinggiDalamBox'];
+            document.getElementById('creasCorr').value = Box['sizeCreasCorr'];
+            document.getElementById('creasConv').value = Box['sizeCreasConv'];
+            document.getElementById('flute').value = Box['flute'];
             
             $('.berat-roll').hide();
             
-            if (Box[3] == 'B1' || Box[3] == 'B3') {
-                var resultP = getID(Box[8]);
-                var resultL = getID(Box[9]);
+            if (Box['tipebox'] == 'B1' || Box['tipebox'] == 'B3') {
+                var resultP = getID(Box['sizeCreasCorr']);
+                var resultL = getID(Box['sizeCreasConv']);
                 if (Box[4] == "BF") {
                     faktorp = 43;
                     faktorl = 10;
@@ -933,9 +947,9 @@
                     faktorp = 63;
                     faktorl = 27;
                 }
-                var panjang = Box[5];
-                var lebar = Box[6];
-                var tinggi = Box[7];
+                var panjang = Box['panjangDalamBox'];
+                var lebar = Box['lebarDalamBox'];
+                var tinggi = Box['tinggiDalamBox'];
                 document.getElementById("lebarSheet").value = parseInt(resultP);
                 document.getElementById("panjangSheet").value = parseInt(resultL);
 
@@ -951,7 +965,7 @@
                 document.getElementById("luasSheetBox").value = luasmkt.toFixed(3);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
-            } else if (Box[3] == 'DC') {
+            } else if (Box['tipebox'] == 'DC') {
                 $('.berat-roll').hide();
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
