@@ -24,27 +24,15 @@ class BarangController extends Controller
 
         DB::connection('firebird2')->beginTransaction();
         $periode = date("m/Y");
-        $periode1 = date('m/Y', strtotime(date('Y-m')." -1 month"));
+        // $periode1 = date('m/Y', strtotime(date('Y-m')." -1 month"));
         
         $temp1 = DB::connection('firebird2')->table('TPersediaan')
         ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
         ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
-        ->where('TPersediaan.Periode', 'LIKE', "%".$periode1."%")
+        ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
         // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
         // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
-
-        // dd($temp1);
-
-        // $temp2 = DB::connection('firebird2')->table('TPersediaan')
-        // ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
-        // ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
-        // ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
-        // // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
-        // // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
-        // ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
-
-        // if((count($temp1) / 2) > count($temp2))
         // {
             if ($request->ajax()) {
                 return DataTables::of($temp1)
@@ -79,19 +67,6 @@ class BarangController extends Controller
                         })
                         ->make(true);
             }
-        // } 
-        // else { 
-        //     if ($request->ajax()) {
-        //         return DataTables::of($temp2)
-        //                 ->addColumn('action', function($temp2) {
-        //                     return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp2->KodeBrg }}">Cek Mutasi</button>`;
-        //                 })
-        //                 ->make(true);
-        //     }
-            
-        //     return view('admin.fg.barang.index');
-        // }
-        
 
         return view('admin.fg.barang.index');
     }
