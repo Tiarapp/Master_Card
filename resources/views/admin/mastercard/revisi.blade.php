@@ -225,6 +225,7 @@
                                                                             <th scope="col">Tinggi Dalam Box</th>
                                                                             <th scope="col">Ukuran Creas Corr</th>
                                                                             <th scope="col">Ukuran Creas Conv</th>
+                                                                            <th scope="col">Creasing</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
