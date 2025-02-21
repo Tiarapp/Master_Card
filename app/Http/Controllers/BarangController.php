@@ -34,36 +34,66 @@ class BarangController extends Controller
         // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
         ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
 
-        $temp2 = DB::connection('firebird2')->table('TPersediaan')
-        ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
-        ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
-        ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
-        // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
-        // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
-        ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
+        // dd($temp1);
 
-        if((count($temp1) / 2) > count($temp2))
-        {
+        // $temp2 = DB::connection('firebird2')->table('TPersediaan')
+        // ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+        // ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
+        // ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%")
+        // // ->where('TPersediaan.Periode', 'LIKE', "%04/2020%")
+        // // ->where('TPersediaan.SaldoAkhirCrt', '!=', 0)
+        // ->orderBy('TPersediaan.KodeBrg', 'asc')->get();
+
+        // if((count($temp1) / 2) > count($temp2))
+        // {
             if ($request->ajax()) {
                 return DataTables::of($temp1)
                         ->addColumn('action', function($temp1) {
-                            return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp1->KodeBrg }}">Cek Mutasi</button>`;
+                            return '<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="'.$temp1->KodeBrg.'">Cek Mutasi</button>
+                            
+                            <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <form action="'.route('barang.mutasi').'" method="POST">'.
+                                        csrf_field().'
+                                        <div class="modal-body">
+                                            <label for="">Periode</label>
+                                            <input type="text" name="periode" id="periode" >
+                                            <input type="hidden" name="kodebarang" id="kodebarang">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>';
                         })
                         ->make(true);
             }
-
-            return view('admin.fg.barang.index');
-        } else { 
-            if ($request->ajax()) {
-                return DataTables::of($temp2)
-                        ->addColumn('action', function($temp2) {
-                            return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp2->KodeBrg }}">Cek Mutasi</button>`;
-                        })
-                        ->make(true);
-            }
+        // } 
+        // else { 
+        //     if ($request->ajax()) {
+        //         return DataTables::of($temp2)
+        //                 ->addColumn('action', function($temp2) {
+        //                     return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp2->KodeBrg }}">Cek Mutasi</button>`;
+        //                 })
+        //                 ->make(true);
+        //     }
             
-            return view('admin.fg.barang.index');
-        }
+        //     return view('admin.fg.barang.index');
+        // }
+        
+
+        return view('admin.fg.barang.index');
     }
 
     /**

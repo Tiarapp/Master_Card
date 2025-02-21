@@ -40,7 +40,6 @@
         <table class="table table-bordered" id="data_barang">
           <thead>
             <tr>
-              <th scope="col">No.</th>
               <th scope="col">Kode</th>
               <th scope="col">Nama</th>
               <th scope="col">Gram</th>
@@ -52,33 +51,7 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>
-            <?php
-            $no = 1;
-            foreach ($barang as $data) { ?>
-              <tr class="barang">
-                <td scope="row">{{ $no++ }}</td>
-                <td>
-                  {{-- <input type="text" class="kode-barang" id="idbarang" value="{{ $data->KodeBrg }}" readonly> --}}
-                  {{ $data->KodeBrg }}
-                </td>
-                <td>{{ $data->NamaBrg }}</td>
-                <td>{{ round($data->BeratStandart, 2) }}</td>
-                <td>{{ $data->Satuan }}</td>
-                <td>{{ round($data->IsiPerKarton, 0) }}</td>
-                <td>{{ round($data->SaldoPcs, 2) }}</td>
-                <td>{{ round($data->SaldoKg, 2) }}</td>
-                <td>{{ $data->WeightValue }}</td>
-                <td>
-                  <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $data->KodeBrg }}">
-                    Cek Mutasi
-                  </button>
-                </td>
-              </tr>
-            <?php
-            }
-            ?>
-          </tbody>
+          
         </table>
       </div>
       <!-- /.row -->
@@ -105,7 +78,7 @@
         { data: 'IsiPerKarton', name: 'IsiPerKarton'},
         { data: 'SaldoPcs', name: 'SaldoPcs'},
         { data: 'SaldoKg', name: 'SaldoKg'},
-        { data: 'WeighValue', name: 'WeighValue'},
+        { data: 'WeightValue', name: 'WeightValue'},
         { data: 'action', name: 'action'},
       ],
        dom: 'Bfrtip',
