@@ -229,26 +229,6 @@
                                                                             <th scope="col">Ukuran Creas Conv</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($box as $data) { ?>
-                                                                            <tr>
-                                                                                <td>{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->namaBarang }}</td>
-                                                                                <td>{{ $data->tipebox }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->panjangDalamBox }}</td>
-                                                                                <td>{{ $data->lebarDalamBox }}</td>
-                                                                                <td>{{ $data->tinggiDalamBox }}</td>
-                                                                                <td>{{ $data->sizeCreasCorr }}</td>
-                                                                                <td>{{ $data->sizeCreasConv }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
