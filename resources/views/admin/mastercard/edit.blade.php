@@ -909,13 +909,27 @@
     $(".Box").ready(function(){
         
         var table = $("#data_box").DataTable({
-            // "scrollX": true,
-            // "autoWidth": true, 
-            "initComplete": function (settings, json) {  
-                $("#data_box").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+            processing: true,
+            serverSide: true,
+            // scrollX: true,
+            // scrollY: "auto",
+            ajax: {
+                url: "{{ route('box') }}"
             },
-            // "scrollY": "400px",
-            select: true,
+            columns: [
+            { data: 'id', name: 'id' },
+            { data: 'kode', name: 'kode' },
+            { data: 'namaBarang', name: 'namaBarang' },
+            { data: 'tipebox', name: 'tipebox' },
+            { data: 'flute', name: 'flute' },
+            { data: 'panjangDalamBox', name: 'panjangDalamBox' },
+            { data: 'lebarDalamBox', name: 'lebarDalamBox' },
+            { data: 'tinggiDalamBox', name: 'tinggiDalamBox' },
+            { data: 'sizeCreasCorr', name: 'sizeCreasCorr' },
+            { data: 'sizeCreasConv', name: 'sizeCreasConv' },
+            { data: 'tipeCreasCorr', name: 'tipeCreasCorr' },
+            ],
+            select: true
         });
         
         $('#data_box tbody').on( 'click', 'td', function () {

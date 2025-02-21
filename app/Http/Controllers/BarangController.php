@@ -19,7 +19,7 @@ class BarangController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Tampilkan awal
-     public function index()
+     public function index(Request $request)
     {
 
         DB::connection('firebird2')->beginTransaction();
@@ -44,11 +44,25 @@ class BarangController extends Controller
 
         if((count($temp1) / 2) > count($temp2))
         {
-            $barang = $temp1;
-            return view('admin.fg.barang.index', compact("barang"));
-        } else {
-            $barang = $temp2;
-            return view('admin.fg.barang.index', compact("barang"));
+            if ($request->ajax()) {
+                return DataTables::of($temp1)
+                        ->addColumn('action', function($temp1) {
+                            return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp1->KodeBrg }}">Cek Mutasi</button>`;
+                        })
+                        ->make(true);
+            }
+
+            return view('admin.fg.barang.index');
+        } else { 
+            if ($request->ajax()) {
+                return DataTables::of($temp2)
+                        ->addColumn('action', function($temp2) {
+                            return `<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $temp2->KodeBrg }}">Cek Mutasi</button>`;
+                        })
+                        ->make(true);
+            }
+            
+            return view('admin.fg.barang.index');
         }
     }
 

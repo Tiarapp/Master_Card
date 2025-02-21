@@ -73,33 +73,6 @@
                   <button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="{{ $data->KodeBrg }}">
                     Cek Mutasi
                   </button>
-                  
-                  <!-- Modal -->
-                  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <form action="{{ route('barang.mutasi') }}" method="POST">
-                          {{ csrf_field() }}
-                          {{-- {{ method_field('PUT') }} --}}
-                          <div class="modal-body">
-                            <label for="">Periode</label>
-                            <input type="text" name="periode" id="periode" >
-                            <input type="hidden" name="kodebarang" id="kodebarang">
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
                 </td>
               </tr>
             <?php
@@ -119,7 +92,22 @@
 <script> 
    $(document).ready(function(){
      $("#data_barang").DataTable({
-        // "scrollX": true,
+      processing: true,
+      serverSide: true,
+      ajax: {
+        url: "{{ route('barang') }}"
+      },
+      columns: [
+        { data: 'KodeBrg', name: 'KodeBrg'},
+        { data: 'NamaBrg', name: 'NamaBrg'},
+        { data: 'BeratStandart', name: 'BeratStandart'},
+        { data: 'Satuan', name: 'Satuan'},
+        { data: 'IsiPerKarton', name: 'IsiPerKarton'},
+        { data: 'SaldoPcs', name: 'SaldoPcs'},
+        { data: 'SaldoKg', name: 'SaldoKg'},
+        { data: 'WeighValue', name: 'WeighValue'},
+        { data: 'action', name: 'action'},
+      ],
        dom: 'Bfrtip',
        buttons: [
          'copy',
