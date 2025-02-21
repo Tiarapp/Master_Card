@@ -66,16 +66,16 @@ class BarangController extends Controller
                                 </div>';
                         })
                         ->addColumn('saldo_pcs', function($temp1) {
-                            return number_format($temp1->SaldoPcs, 2);
+                            return number_format($temp1->SaldoPcs, 0);
                         })
                         ->addColumn('saldo_kg', function($temp1) {
-                            return number_format($temp1->SaldoKg, 2);
+                            return number_format($temp1->SaldoKg, 0);
                         })
                         ->addColumn('berat', function($temp1) {
-                            return number_format($temp1->BeratStandart, 2);
+                            return number_format($temp1->BeratStandart, 0);
                         })
                         ->addColumn('isi_karton', function($temp1) {
-                            return number_format($temp1->IsiPerKarton, 2);
+                            return number_format($temp1->IsiPerKarton, 0);
                         })
                         ->make(true);
             }
