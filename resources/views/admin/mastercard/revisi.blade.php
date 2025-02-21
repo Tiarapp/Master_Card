@@ -1034,40 +1034,42 @@
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
 
-            document.getElementById('namaBarang').value = Box[2];
-            document.getElementById('tipebox').value = Box[3];
-            document.getElementById('box_id').value = Box[0];
-            document.getElementById('panjangbox').value = Box[5];
-            document.getElementById('lebarbox').value = Box[6];
-            document.getElementById('tinggibox').value = Box[7];
-            document.getElementById('creasCorr').value = Box[8];
-            document.getElementById('creasConv').value = Box[9];
-            document.getElementById('flute').value = Box[4];
+            document.getElementById('namaBarang').value = Box['namaBarang'];
+            document.getElementById('tipebox').value = Box['tipebox'];
+            document.getElementById('box_id').value = Box['id'];
+            document.getElementById('panjangbox').value = Box['panjangDalamBox'];
+            document.getElementById('lebarbox').value = Box['lebarDalamBox'];
+            document.getElementById('tinggibox').value = Box['tinggiDalamBox'];
+            document.getElementById('creasCorr').value = Box['sizeCreasCorr'];
+            document.getElementById('creasConv').value = Box['sizeCreasConv'];
+            document.getElementById('flute').value = Box['flute'];
             
-            if (Box[3] == 'B1' || Box[3] == 'B3') {
-                var resultP = getID(Box[8]);
-                var resultL = getID(Box[9]);
-                if (Box[4] == "BF") {
+            $('.berat-roll').hide();
+            
+            if (Box['tipebox'] == 'B1' || Box['tipebox'] == 'B3') {
+                var resultP = getID(Box['sizeCreasCorr']);
+                var resultL = getID(Box['sizeCreasConv']);
+                if (Box['flute'] == "BF") {
                     faktorp = 43;
                     faktorl = 10;
-                } else if(Box[4] == "CF"){
+                } else if(Box['flute'] == "CF"){
                     faktorp = 47;
                     faktorl = 13;
-                } else if (Box[4] == "BCF") {
+                } else if (Box['flute'] == "BCF") {
                     faktorp = 63;
                     faktorl = 27;
                 }
-                var panjang = Box[5];
-                var lebar = Box[6];
-                var tinggi = Box[7];
+                var panjang = Box['panjangDalamBox'];
+                var lebar = Box['lebarDalamBox'];
+                var tinggi = Box['tinggiDalamBox'];
                 document.getElementById("lebarSheet").value = parseInt(resultP);
                 document.getElementById("panjangSheet").value = parseInt(resultL);
 
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
                 
-                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000 ;
-                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000 ;
+                var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000;
+                var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000;
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
                 // console.log(luas);
@@ -1075,9 +1077,7 @@
                 document.getElementById("luasSheetBox").value = luasmkt.toFixed(3);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
-                
-                getKodeBarang();
-            } else if (Box[3] == 'DC') {
+            } else if (Box['tipebox'] == 'DC') {
                 $('.berat-roll').hide();
                 document.getElementById("panjangSheet").value = null;
                 document.getElementById("lebarSheet").value = null;
@@ -1087,8 +1087,6 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
-                
-                getKodeBarang();
             } else {
                 $('.berat-roll').show();
                 document.getElementById("panjangSheet").value = null;
