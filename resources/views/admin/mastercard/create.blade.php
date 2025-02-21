@@ -221,27 +221,6 @@
                                                                             <th scope="col">Tipe Crease</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    {{-- <tbody>
-                                                                        <?php
-                                                                        // $no = 1;
-                                                                        // foreach ($box as $data) { ?>
-                                                                            <tr>
-                                                                                <td>{{ $data->id }}</td>
-                                                                                <td>{{ $data->kode }}</td>
-                                                                                <td>{{ $data->namaBarang }}</td>
-                                                                                <td>{{ $data->tipebox }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->panjangDalamBox }}</td>
-                                                                                <td>{{ $data->lebarDalamBox }}</td>
-                                                                                <td>{{ $data->tinggiDalamBox }}</td>
-                                                                                <td>{{ $data->sizeCreasCorr }}</td>
-                                                                                <td>{{ $data->sizeCreasConv }}</td>
-                                                                                <td>{{ $data->tipeCreasCorr }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        // }
-                                                                        ?>
-                                                                    </tbody> --}}
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -937,13 +916,13 @@
             if (Box['tipebox'] == 'B1' || Box['tipebox'] == 'B3') {
                 var resultP = getID(Box['sizeCreasCorr']);
                 var resultL = getID(Box['sizeCreasConv']);
-                if (Box[4] == "BF") {
+                if (Box['flute'] == "BF") {
                     faktorp = 43;
                     faktorl = 10;
-                } else if(Box[4] == "CF"){
+                } else if(Box['flute'] == "CF"){
                     faktorp = 47;
                     faktorl = 13;
-                } else if (Box[4] == "BCF") {
+                } else if (Box['flute'] == "BCF") {
                     faktorp = 63;
                     faktorl = 27;
                 }
