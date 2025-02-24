@@ -51,7 +51,6 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
-          
         </table>
       </div>
       <!-- /.row -->

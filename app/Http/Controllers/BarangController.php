@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Barang;
-use App\Models\fbBarang;
-use App\Models\Mastercard;
-use Carbon\Carbon;
+use App\Models\PersediaanBj;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use stdClass;
 use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
@@ -352,5 +348,17 @@ class BarangController extends Controller
         ];
         
         return response()->json($data);
+    }
+
+    public function getPersediaan()
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $periode = date("m/Y");
+        $persediaan = PersediaanBj::with('barang')
+            ->where('Periode', 'LIKE', "%".$periode."%")
+            ->get();
+        
+        dd($persediaan);
+        
     }
 }

@@ -25,7 +25,7 @@ class BoxController extends Controller
             $box = Box::query();
             return DataTables::of($box)
                 ->addColumn('action', function($box){
-                   return '<a href="../admin/box/edit/{{ $box->id }}" class="btn btn-outline-secondary" type="button">Edit</a>';
+                   return '<a href="../admin/box/edit/'. $box->id .'" class="btn btn-outline-secondary" type="button">Edit</a>';
                 })
                 ->make(true);
         }
@@ -42,11 +42,8 @@ class BoxController extends Controller
     // Tampilkan Halaman Input
     public function create()
     {
-        // Ambil data dari table (flute,tipe_box,firebird(TBarangConv))
         $flute = DB::table('flute')->get();
         $tipebox = DB::table('tipe_box')->get();
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // End ambil data dari table (flute,tipe_box,firebird(TBarangConv))
 
         return view('admin.box.create', compact([
             'tipebox',

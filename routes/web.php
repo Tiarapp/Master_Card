@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
@@ -492,6 +493,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/jobs/create', [NavbarController::class, 'create'])->name('job.create');
         Route::post('/jobs/store', [NavbarController::class, 'store'])->name('job.store');
         Route::get('/jobs/action/{id}', [NavbarController::class, 'update'])->name('job.update');
+
+        
+        Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 }); 
 
 
