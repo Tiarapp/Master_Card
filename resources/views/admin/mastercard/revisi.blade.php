@@ -756,12 +756,6 @@
     // Datatable Barang(Item)
 
     $(document).on("keyup", ".lebar-box", function() {
-        if (document.getElementById("tipebox").value == "SF") {
-            lebar = $(this).val();
-
-            document.getElementById("lebarSheet").value = lebar;
-            document.getElementById("panjangSheet").value = 0;
-        } else {
             lebar = $(this).val();
             panjangbox = document.getElementById('panjangbox').value 
             lebarbox = document.getElementById('lebarbox').value 
@@ -788,7 +782,6 @@
             document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
             
             }
-        }
     });
 
     $(document).on("keyup", ".panjang-box", function() {
