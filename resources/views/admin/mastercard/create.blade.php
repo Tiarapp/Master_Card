@@ -743,19 +743,21 @@
     // Datatable Barang(Item)
 
     $(document).on("keyup", ".lebar-box", function() {
-        if (document.getElementById("tipebox").value == "SF") {
-            lebar = $(this).val();
-
-            document.getElementById("lebarSheet").value = lebar;
-            document.getElementById("panjangSheet").value = 0;
-        } else {
             lebar = $(this).val();
             panjang = document.getElementById("panjangSheet").value;
 
             luas = panjang * lebar / 1000000
 
             document.getElementById("luasSheet").value = luas
-        }
+    });
+
+    $(document).on("keyup", ".lebar-sheet", function() {
+            lebar = $(this).val();
+            panjang = $('.panjang-sheet').val();
+
+            luas = panjang * lebar / 1000000
+
+            document.getElementById("luasSheet").value = luas
     });
 
     $(document).on("keyup", ".qty-roll", function() {

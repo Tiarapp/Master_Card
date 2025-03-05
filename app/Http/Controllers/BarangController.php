@@ -354,11 +354,13 @@ class BarangController extends Controller
     {
         DB::connection('firebird2')->beginTransaction();
         $periode = date("m/Y");
-        $persediaan = PersediaanBj::with('barang')
-            ->where('Periode', 'LIKE', "%".$periode."%")
-            ->get();
-        
-        dd($persediaan);
+        $bulan = substr($periode, 0, 2);
+        $tahun = substr($periode, 3, 4);
+        $data = DB::connection('firebird2')->table('TPersediaan')
+        ->whereRaw("TRIM(Periode) = ?", [$periode])
+        ->take(5)->get();
+
+        dd($data);
         
     }
 }
