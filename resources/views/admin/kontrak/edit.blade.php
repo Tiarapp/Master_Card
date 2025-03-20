@@ -279,6 +279,10 @@
                                                         <option value="OUP Kwalitas Produksi & Proses">OUP Kwalitas Produksi & Proses</option>
                                                         <option value="OUP Ukuran & Joint">OUP Ukuran & Joint</option>
                                                         <option value="OUP Nama Item, Design, Proses">OUP Nama Item, Design, Proses</option>
+                                                        <option value="OUP Design & Creasing">OUP Design & Creasing</option>
+                                                        <option value="OUP Proses, Nama Item dan Kwalitas">OUP Proses, Nama Item dan Kwalitas</option>
+                                                        <option value="OUP Proses & Kwalitas">OUP Proses & Kwalitas</option>
+                                                        <option value="OUP Nama, Ukuran, Desain & Warna">OUP Nama, Ukuran, Desain & Warna</option>                                                        <!--  -->
                                                     </select>
                                                 </div>
                                             </div>

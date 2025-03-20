@@ -247,7 +247,7 @@
                                             <input type="text" class="form-control txt_line panjang-box" value="{{ $mc->panjangSheetBox }}" name="panjangSheetBox" id="panjangSheetBox" autofocus onfocusout="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();"                ``````````````````````````````````````````````+ +>
+                                            <input type="text" class="form-control txt_line lebar-box" value="{{ $mc->lebarSheetBox }}" name="lebarSheetBox" id="lebarSheetBox" onchange="getLuasDC(); getGramProduksi(); getGramKontrak();">
                                         </div>
                                         <div class="col-md-1">
                                             <label class="control-label">Gram Kualitas</label>
@@ -756,7 +756,10 @@
     // Datatable Barang(Item)
 
     $(document).on("keyup", ".lebar-box", function() {
+        
             lebar = $(this).val();
+            console.log(lebar);
+            
             panjangbox = document.getElementById('panjangbox').value 
             lebarbox = document.getElementById('lebarbox').value 
             tinggi = document.getElementById('tinggibox').value 
@@ -764,7 +767,13 @@
             bentuk = document.getElementById("tipebox").value;
             tipe = document.getElementById("flute").value;
 
-            if (bentuk === "B1" || bentuk === "B3") {
+            if (bentuk == 'SF') {
+            luas = panjang * lebar / 1000000
+            
+            document.getElementById("luasSheetBox").value = luas.toFixed(3)
+            document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+            } else {
+                if (bentuk === "B1" || bentuk === "B3") {
                 if (tipe == "BF") {
                     faktorp = 43;
                     faktorl = 10;
@@ -780,8 +789,8 @@
             
             document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
             document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
-            
             }
+        }
     });
 
     $(document).on("keyup", ".panjang-box", function() {
@@ -793,7 +802,14 @@
         bentuk = document.getElementById("tipebox").value;
         tipe = document.getElementById("flute").value;
 
-        if (bentuk === "B1" || bentuk === "B3") {
+        if (bentuk == 'SF') {
+            luas = panjang * lebar / 1000000;
+
+            document.getElementById("luasSheetBox").value = luas.toFixed(3)
+            document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+
+        } else {
+            if (bentuk === "B1" || bentuk === "B3") {
             if (tipe == "BF") {
                 faktorp = 43;
                 faktorl = 10;
@@ -804,11 +820,12 @@
                 faktorp = 63;
                 faktorl = 27;
             }
-        luas = panjang * lebar / 1000000
-        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
-        
-        document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
-        document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+            luas = panjang * lebar / 1000000
+            luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+            
+            document.getElementById("luasSheetBox").value = luasmkt.toFixed(3)
+            document.getElementById("luasSheetBoxProd").value = luas.toFixed(3)
+        }
         }
 
         // console.log("panjang-box");
@@ -824,7 +841,14 @@
         bentuk = document.getElementById("tipebox").value;
         tipe = document.getElementById("flute").value;
 
-        if (bentuk === "B1" || bentuk === "B3") {
+        if (bentuk == 'SF') {
+            luas = panjang * lebar / 1000000;
+            
+            document.getElementById("luasSheet").value = luas.toFixed(3)
+            document.getElementById("luasSheetProd").value = luas.toFixed(3)
+
+        } else {
+            if (bentuk === "B1" || bentuk === "B3") {
             if (tipe == "BF") {
                 faktorp = 43;
                 faktorl = 10;
@@ -835,11 +859,12 @@
                 faktorp = 63;
                 faktorl = 27;
             }
-        luas = panjang * lebar / 1000000
-        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
-        
-        document.getElementById("luasSheet").value = luasmkt.toFixed(3)
-        document.getElementById("luasSheetProd").value = luas.toFixed(3)
+            luas = panjang * lebar / 1000000
+            luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+            
+            document.getElementById("luasSheet").value = luasmkt.toFixed(3)
+            document.getElementById("luasSheetProd").value = luas.toFixed(3)
+        }
         }
         // console.log("panjang-sheet");
         
@@ -852,24 +877,32 @@
         panjang = document.getElementById("panjangSheet").value;
         bentuk = document.getElementById("tipebox").value;
         tipe = document.getElementById("flute").value;
-
-        if (bentuk === "B1" || bentuk === "B3") {
-            if (tipe == "BF") {
-                faktorp = 43;
-                faktorl = 10;
-            } else if(tipe == "CF"){
-                faktorp = 47;
-                faktorl = 13;
-            } else if (tipe == "BCF") {
-                faktorp = 63;
-                faktorl = 27;
-            }
-        luas = panjang * lebar / 1000000
-        luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
         
-        document.getElementById("luasSheet").value = luasmkt.toFixed(3)
-        document.getElementById("luasSheetProd").value = luas.toFixed(3)
+        if (bentuk == 'SF') {
+            luas = panjang * lebar / 1000000
+            document.getElementById("luasSheet").value = luas.toFixed(3)
+            document.getElementById("luasSheetProd").value = luas.toFixed(3)
+            } else {
+                if (bentuk === "B1" || bentuk === "B3") {
+                    if (tipe == "BF") {
+                        faktorp = 43;
+                        faktorl = 10;
+                    } else if(tipe == "CF"){
+                        faktorp = 47;
+                        faktorl = 13;
+                    } else if (tipe == "BCF") {
+                        faktorp = 63;
+                        faktorl = 27;
+                    }
+                    luas = panjang * lebar / 1000000
+                    luasmkt =(((parseInt(panjangbox)*2)+(parseInt(lebarbox)*2)+faktorp)/1000) * (faktorl+parseInt(lebarbox)+parseInt(tinggi))/1000 ;
+                    
+                    document.getElementById("luasSheet").value = luasmkt.toFixed(3)
+                    document.getElementById("luasSheetProd").value = luas.toFixed(3)
+                }
         }
+
+        
         // console.log("lebar-sheet");
     });
 
