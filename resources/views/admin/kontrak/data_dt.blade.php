@@ -291,7 +291,7 @@
                                     <td scope="col">{{ $o->jumlahOrder }}</td>
                                     <td scope="col">{{ $o->nama }}</td>
                                     <td scope="col">{{ floor($rm) }}</td>
-                                    <td scope="col">{{ $o->status }}</td>
+                                    <td scope="col">{{ $o->status_opi }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

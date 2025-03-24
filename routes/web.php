@@ -19,6 +19,7 @@ use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Row;
@@ -322,6 +323,14 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
     Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
+    
+    Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
+    Route::post('/approve', function (Request $request) {
+        $ids = $request->input('ids');
+        Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
+        
+        return response()->json(['message' => 'Status OPI berhasil diperbarui!']);
+    });
 
     //PLAN
     Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
@@ -386,10 +395,10 @@ Route::middleware(['auth'])->group(function (){
 
         // OPI
 
-        Route::get('/admin/ppic/opi',  [OpiPPICController::class, 'index'])->name('ppic.opi');
-        Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
-        Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
-        Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
+        // Route::get('/admin/ppic/opi',  [OpiPPICController::class, 'index'])->name('ppic.opi');
+        // Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
+        // Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
+        // Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
 
     // Accounting
         // 

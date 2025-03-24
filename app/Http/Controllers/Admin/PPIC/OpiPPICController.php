@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class OpiPPICController extends Controller
 {
-    public function index()
-    {
-        return view('admin.ppic.opi.data_opi');
-    }
+    // public function index()
+    // {
+    //     return view('admin.ppic.opi.data_opi');
+    // }
 
     public function get_opibyperiode(Request $request)
     {

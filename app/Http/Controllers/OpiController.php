@@ -9,6 +9,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\FuncCall;
 
 class OpiController extends Controller
 {
@@ -36,7 +37,7 @@ class OpiController extends Controller
         {            
            if (Auth::user()->divisi_id == 5) {
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                ->where('status_opi', '!=', "closed")
+                ->where('status_opi', '=', "Proses")
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('NoOPI')
@@ -57,7 +58,7 @@ class OpiController extends Controller
 
             if (Auth::user()->divisi_id == 5) {
                 $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                            ->where('status_opi', 'NOT LIKE', "closed")
+                            ->where('status_opi', '=', "Proses")
                             ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
@@ -231,6 +232,35 @@ class OpiController extends Controller
         // return Datatables::of($data)->make(true);
     }
 
+    public function approve_index(Request $request)
+    {
+        $opi = Opi_M::opi()->where('status_opi', '=', 'Pending')->get();
+        if ($request->ajax()) {
+            return DataTables::of($opi)
+                    ->addColumn('checkbox', function($opi){ 
+                        return '<input type="checkbox" class="rowCheckbox" value="'. $opi->id .'">';
+                    })
+                    ->addColumn('action', function($opi) {
+                        return '<a href="/admin/ppic/opi/approve/'. $opi->id .'" class="btn btn-primary rounded">Edit</a>';
+                    })
+                    ->rawColumns(['checkbox','action'])
+                    ->make(true);
+                }
+                // dd($opi);
+
+        return view('admin.ppic.opi.data_approve_opi');
+    }
+
+    public function proses_approve($id)
+    {
+        $opi = Opi_M::findOrFail($id);
+
+        $opi->status_opi = 'Proses';
+        $opi->save();
+        
+        return redirect()->back()->with('success', 'OPI '.$opi->NoOPI.' sudah diapprive!!');
+    }
+
     public function single($id)
     {
         $data = Opi_M::opi2()
@@ -365,7 +395,6 @@ class OpiController extends Controller
      */
     public function print($id)
     {
-
 
         $opi2 = DB::table('opi_m')
         ->leftJoin('dt', 'dt_id', 'dt.id')

@@ -624,7 +624,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status_opi' => 'Proses',
+                                    'status_opi' => 'Pending',
                                     'createdBy' => Auth::user()->name,
                                     'os_corr' => $request->jumlahKirim,
                                     'os_flx' => $request->jumlahKirim,
@@ -702,7 +702,7 @@ class Kontrak_DController extends Controller
                                     'jumlahOrder' => $request->jumlahKirim,
                                     'sisa_order' => $request->jumlahKirim,
                                     'hariKirimDt' => $day,
-                                    'status_opi' => 'Proses',
+                                    'status_opi' => 'Pending',
                                     'createdBy' => Auth::user()->name,
                                 ]);
                                 
