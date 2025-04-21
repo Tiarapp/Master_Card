@@ -1258,6 +1258,40 @@
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             
             getKodeBarang();
+        } else if (flutenama == 'EF') {
+            if (isNaN(Katas)) {
+                Katas = 0;
+            } 
+            if (isNaN(Kbf)) {
+                Kbf = 0;
+            }
+            if (isNaN(Ktengah)) {
+                Ktengah = 0;
+            }
+            if (isNaN(Kcf)) {
+                Kcf = 0;
+            }
+            if (isNaN(Kbawah)) {
+                Kbawah = 0 ;
+            }
+            
+            gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.21) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
+
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
+            
+            document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
+            document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
+            document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
+            
+            getKodeBarang();
         } else
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
@@ -1414,6 +1448,40 @@
             }
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
+
+            if (doublejoint == 'Ya') {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            } else {
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+            }
+            
+            document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
+            document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
+            document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
+            document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
+            
+            getKodeBarang();
+        } else if (flutenama == 'EF') {
+            if (isNaN(Patas)) {
+                Patas = 0;
+            } 
+            if (isNaN(Pbf)) {
+                Pbf = 0;
+            }
+            if (isNaN(Ptengah)) {
+                Ptengah = 0;
+            }
+            if (isNaN(Pcf)) {
+                Pcf = 0;
+            }
+            if (isNaN(Pbawah)) {
+                Pbawah = 0 ;
+            }
+            
+            gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.21) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
