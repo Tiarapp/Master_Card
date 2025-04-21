@@ -52,11 +52,11 @@ class PaletController extends Controller
     public function sync_fa()
     {
         DB::connection('firebird2')->beginTransaction();
-        $periode = '02/2025';
+        $periode = '03/2025';
 
         $faktur = DB::connection('firebird2')->table('TFakturConv')->where('Periode', '=', $periode)->get();
         
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/II/25'.'%')->update([
+        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/III/25'.'%')->update([
             'NoUrut' => count($faktur)
         ]);
         
