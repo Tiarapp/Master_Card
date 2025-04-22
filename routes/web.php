@@ -407,6 +407,7 @@ Route::middleware(['auth'])->group(function (){
         Route::post('admin/acc/mod/tolak', [MarektingOrder::class, 'tolak_acc'])->name('acc.mod.disapprove');
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
+        Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');

@@ -163,4 +163,12 @@ class FinanceController extends Controller
 
         return view('admin.acc.print_faktur', compact('terbilang', 'faktur', 'cust', 'top'));
     }
+
+    public function getCust()
+    {
+        DB::connection('firebird')->beginTransaction();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
+
+        return view('admin.acc.data_cust', compact('cust'));
+    }
 }

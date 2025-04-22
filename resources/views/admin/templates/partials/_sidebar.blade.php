@@ -47,6 +47,14 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="{{ route('acc.cust') }}" class="nav-link">
+                    <i class="fa-solid fa-file-contract nav-icon"></i>
+                      <p>Data Customer</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
                   <a href="{{ route('acc.kontrak.index') }}" class="nav-link">
                     <i class="fa-solid fa-file-contract nav-icon"></i>
                       <p>Export Kontrak</p>
