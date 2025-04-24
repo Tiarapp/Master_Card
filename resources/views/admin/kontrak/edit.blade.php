@@ -285,7 +285,8 @@
                                                         <option value="OUP Nama, Ukuran, Desain & Warna">OUP Nama, Ukuran, Desain & Warna</option>
                                                         <option value="OUP Creasing & OUP Warna">OUP Creasing & OUP Warna</option>
                                                         <option value="OUP Design, OUP Creasing, & OUP Ukuran">OUP Design, OUP Creasing, & OUP Ukuran</option>
-                                                        <option value="OUP Warna, Kualitas & Creasing">OUP Warna, Kualitas & Creasing</option>                                                        <!--  -->
+                                                        <option value="OUP Warna, Kualitas & Creasing">OUP Warna, Kualitas & Creasing</option>
+                                                        <option value="OUP Nama, Ukuran & Desain">OUP Nama, Ukuran & Desain </option>
                                                     </select>
                                                 </div>
                                             </div>
