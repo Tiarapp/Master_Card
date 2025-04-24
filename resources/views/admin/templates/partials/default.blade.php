@@ -25,5 +25,6 @@
 @include('admin.templates.partials._script')
 
 @yield('javascripts')
+
 </body>
 </html>

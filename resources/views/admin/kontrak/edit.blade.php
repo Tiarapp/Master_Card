@@ -35,7 +35,7 @@
                     </ul>
                 </div>
                 @endif
-                <form action="../update/{{ $kontrak_M->id }}" method="POST"  >
+                <form action="../update/{{ $kontrak_M->id }}" method="POST">
                     {{ csrf_field() }}
                     {{ method_field('PUT') }}
 
@@ -43,88 +43,6 @@
                     <hr>
                     <div style="border-bottom: 2px solid black">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Tanggal</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Telp</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_M->custTelp }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" >
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Komisi</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Term of Payment</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select class='js-example-basic-single col-md-12' name="top" id="top">
-                                                        <option value="{{ $kontrak_M->top }}">{{ $kontrak_M->top }}</option>
-                                                        @foreach ($top as $data)
-                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label>Sales</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select class='js-example-basic-single col-md-12' name="sales" id="sales">
-                                                        <option value="{{ $kontrak_M->sales }}">{{ $kontrak_M->sales }}</option>
-                                                        @foreach ($sales as $data)
-                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -198,6 +116,88 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-4">
+                                                    <label>Tanggal</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" >
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Komisi</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="komisi" id="komisi" value="{{ $kontrak_M->komisi }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Term of Payment</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name="top" id="top">
+                                                        <option value="{{ $kontrak_M->top }}">{{ $kontrak_M->top }}</option>
+                                                        @foreach ($top as $data)
+                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Sales</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class='js-example-basic-single col-md-12' name="sales" id="sales">
+                                                        <option value="{{ $kontrak_M->sales }}">{{ $kontrak_M->sales }}</option>
+                                                        @foreach ($sales as $data)
+                                                            <option value="{{ $data->nama }}">{{ $data->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Telp</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_M->custTelp }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
                                                     <label>PO Customer</label>
                                                 </div>
                                                 <div class="col-md-6">
@@ -260,6 +260,33 @@
                                                         <option value="OUP Warna & Kupingan">OUP Warna & Kupingan</option>
                                                         <option value="OUP Warna & Ukuran">OUP Warna & Ukuran</option>
                                                         <option value="OUP Joint & Kualitas">OUP Joint & Kualitas</option>
+                                                        <option value="OUP Creasing">OUP Creasing</option>
+                                                        <option value="OUP Ukuran, Creasing, Arah Serat">OUP Ukuran, Creasing, Arah Serat</option>
+                                                        <option value="OUP Design, Kualitas, Nama Item, Ukuran">OUP Design, Kualitas, Nama Item, Ukuran</option>
+                                                        <option value="OUP Type Box, Koli, Ukuran & Kualitas">OUP Type Box, Koli, Ukuran & Kualitas</option> 
+                                                        <option value="OUP Nama, Ukuran, Kualitas">OUP Nama, Ukuran, Kualitas</option>
+                                                        <option value="OUP Ukuran & Koli">OUP Ukuran & Koli</option>
+                                                        <option value="OUP FLUTE, JOIN, CREASING DAN COLLY">OUP FLUTE, JOIN, CREASING DAN COLLY</option>
+                                                        <option value="OUP Design, Kualitas, Ukuran, Creasing">OUP Design, Kualitas, Ukuran, Creasing</option>
+                                                        <option value="OUP Nama Item, Ukuran, Design, Kualitas, Warna">OUP Nama Item, Ukuran, Design, Kualitas, Warna</option>
+                                                        <option value="OUP Nama Item, Creasing">OUP Nama Item, Creasing</option>
+                                                        <option value="OUP Nama Item, Design, Creasing">OUP Nama Item, Design, Creasing</option>
+                                                        <option value="OUP Nama Item, Kualitas, Creasing">OUP Nama Item, Kualitas, Creasing</option>
+                                                        <option value="OUP Palet">OUP Palet</option>
+                                                        <option value="OUP Creasing dan OUP Kwalitas">OUP Creasing dan OUP Kwalitas</option>
+                                                        <option value="OUP Design, Warna, Kwalitas">OUP Design, Warna, Kwalitas</option>
+                                                        <option value="OUP Kwalitas & Kupingan">OUP Kwalitas & Kupingan</option>
+                                                        <option value="OUP Kwalitas Produksi & Proses">OUP Kwalitas Produksi & Proses</option>
+                                                        <option value="OUP Ukuran & Joint">OUP Ukuran & Joint</option>
+                                                        <option value="OUP Nama Item, Design, Proses">OUP Nama Item, Design, Proses</option>
+                                                        <option value="OUP Design & Creasing">OUP Design & Creasing</option>
+                                                        <option value="OUP Proses, Nama Item dan Kwalitas">OUP Proses, Nama Item dan Kwalitas</option>
+                                                        <option value="OUP Proses & Kwalitas">OUP Proses & Kwalitas</option>
+                                                        <option value="OUP Nama, Ukuran, Desain & Warna">OUP Nama, Ukuran, Desain & Warna</option>
+                                                        <option value="OUP Creasing & OUP Warna">OUP Creasing & OUP Warna</option>
+                                                        <option value="OUP Design, OUP Creasing, & OUP Ukuran">OUP Design, OUP Creasing, & OUP Ukuran</option>
+                                                        <option value="OUP Warna, Kualitas & Creasing">OUP Warna, Kualitas & Creasing</option>
+                                                        <option value="OUP Nama, Ukuran & Desain">OUP Nama, Ukuran & Desain </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -429,10 +456,10 @@
                                                                         <?php
                                                                         $no = 1;
                                                                         foreach ($mc as $data) { 
-                                                                            if ($data->revisi == 'R0') {
-                                                                                $mc = $data->kode.'-'.$data->revisi;
-                                                                            } else {
+                                                                            if ($data->revisi == 'R0' || $data->revisi == '') {
                                                                                 $mc = $data->kode;
+                                                                            } else {
+                                                                                $mc = $data->kode.'-'.$data->revisi;
                                                                             }
                                                                             ?>
                                                                             <tr>
@@ -608,31 +635,6 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label>PPN</label>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="{{ $kontrak_D->ppn }}">
-                                            </div>
-                                            <div class="col-md-1">
-                                                <label>%</label>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="{{ $kontrak_D->tax }}" readonly>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <label></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>  
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
                                                 <label>Harga pcs</label>
                                             </div>
                                             <div class="col-md-6">
@@ -642,6 +644,31 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>PPN</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" class="form-control txt_line col-md-11 ppn" name="ppn" id="ppn" value="{{ $kontrak_D->tax }}">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label>%</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control txt_line col-md-11" name="hargappn" id="hargappn" value="{{ $kontrak_D->ppn }}" readonly>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -801,6 +828,7 @@
                     document.getElementById('toleransiLebihKg').value = 0;
                     document.getElementById('toleransiKurangPcs').value = 0;
                     document.getElementById('toleransiKurangKg').value = 0;
+                    document.getElementById('hargappn').value = 0;
                     document.getElementById('total').value = 0;
                     
                     // getGramKontrak();
@@ -860,10 +888,13 @@
         harga = $(this).val();
         qty = document.getElementById("qtyPcs").value;
         kg = document.getElementById("gram").value;
+        ppn = document.getElementById("ppn").value;
 
         total = parseFloat(harga) * parseInt(qty);
-        hargakg = parseFloat(harga) / parseFloat(kg)
+        hargakg = parseFloat(harga) / parseFloat(kg);
+        hargappn = parseFloat(total) * parseInt(ppn) / 100;
 
+        document.getElementById("hargappn").value = hargappn.toFixed(2);
         document.getElementById("total").value = total.toFixed(0);
         document.getElementById("hargakg").value = hargakg.toFixed(2);
     });
@@ -873,7 +904,6 @@
         total = document.getElementById("total").value;
 
         if (total != 0 || total != null) {
-            hargappn = parseFloat(total) * parseInt(ppn) / 100;
         } else {
             hargappn = 0;
         }

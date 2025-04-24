@@ -41,82 +41,23 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <div class="form-group">
-          <div class="col-md-12">
-            <div class="row">
-            <div class="col-md-4">
-              <div class="row">
-                <div class="col-md-2">
-                  <label for="">Tanggal Awal </label>
-                </div>
-                <div class="col-md-4">
-                  <input type="date" name="mulai" id="mulai" required>
-                </div>
-                <div class="col-md-2">
-                  <label for="">Tanggal Akhir </label>
-                </div>
-                <div class="col-md-4">
-                  <input type="date" name="end" id="end" required>
-                </div>
-              </div>
-            </div>
-            {{-- <div class="col-md-4">
-              <div class="row">
-                <div class="col-md-2">
-                  <label for="">Customer </label>
-                </div>
-                <div class="col-md-4"> --}}
-                  <input type="hidden" name="cust" id="cust" required>
-                {{-- </div>
-              </div>
-            </div> --}}
-              <button name="search" id="search"> Search </button>
-            </div>
-          </div>
-      </div>
       <!-- Small boxes (Stat box) -->
 
       {{-- <a href="{{ route('opi.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a> --}}
       <div class="card-body">
+        
+      <button id="processSelected" class="btn btn-primary">Approve Data</button>
         <table class="table table-bordered" id="data_opi">
           <thead>
             <tr>
+              <th><input type="checkbox" id="selectAll"></th>
               <th scope="col">OPI</th>
               <th scope="col">Kontrak</th>
               <th scope="col">Tgl Kirim</th>
               <th scope="col">QTY Kirim</th>
-              <th scope="col">Customer</th>
               <th scope="col">Item</th>
-              <th scope="col">Qty Order</th>
-              <th scope="col">Keterangan</th>
-              <th scope="col">PO Customer</th>
-              <th scope="col">MC</th>
-              <th scope="col">Revisi</th>
-              <th scope="col">Flute</th>
-              <th scope="col">Tipe Box</th>
-              <th scope="col">Panjang</th>
-              <th scope="col">Lebar</th>
-              <th scope="col">Out Converting</th>
-              <th scope="col">Tipe Order</th>
-              <th scope="col">Warna</th>
-              <th scope="col">joint</th>
-              <th scope="col">Jenis K. Atas</th>
-              <th scope="col">Kualitas Produksi I1</th>
-              <th scope="col">Kualitas Produksi I2</th>
-              <th scope="col">Kualitas Produksi I3</th>
-              <th scope="col">Kualitas Produksi I4</th>
-              <th scope="col">Kualitas Produksi I5</th>
-              <th scope="col">Kualitas Produksi K/M Bawah</th>
-              <th scope="col">Wax</th>
-              <th scope="col">Gram</th>
-              <th scope="col">Toleransi (lebih)</th>
-              <th scope="col">Toleransi (kurang)</th>
-              <th scope="col">Box P</th>
-              <th scope="col">Box L</th>
-              <th scope="col">Box T</th>
-              <th scope="col">Koli</th>
-              <th scope="col">Tipe Crease</th>
-              <th scope="col">Bungkus</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           {{-- <tbody>
@@ -150,72 +91,60 @@
   @section('javascripts')
   <!-- DataTables -->
   <script>
-    $(function(){
-
-      $('#search').click(function() {
-        var mulai = document.getElementById("mulai").value;
-        var end = document.getElementById("end").value;
-        var cust = document.getElementById("cust").value;
-
-        if (mulai !== '' && end !== '') {
-          $('#data_opi').DataTable({
-            "bDestroy": true,
-            "searching": false,
-            "processing":true,
-            "serverSide":true,
-            "ajax":{
-              "url": "../ppic/opidata?mulai="+mulai+"&end="+end+"&cust="+cust,
-              "dataType": "json",
-              "type": "GET",
-              "data":{_token: "{{ csrf_token() }}"}
-            },
-            "columns": [
-              {"data": "NoOPI" },
-              {"data": "kode" },
-              {"data": "tglKirimDt"},
-              {"data": "pcsDt" },
-              {"data": "Cust" },
-              {"data": "namaBarang" },
-              {"data": "jumlahOrder" },
-              {"data": "keterangan" },
-              {"data": "poCustomer" },
-              {"data": "mcKode" },
-              {"data": "revisimc" },
-              {"data": "flute" },
-              {"data": "tipeBox"},
-              {"data": "panjangSheet" },
-              {"data": "lebarSheet" },
-              {"data": "outConv" },
-              {"data": "tipeOrder" },
-              {"data": "namacc" },
-              {"data": "joint"},
-              {"data": "kertasMcAtas" },
-              {"data": "gramKertasAtas" },
-              {"data": "gramKertasflute1" },
-              {"data": "gramKertastengah" },
-              {"data": "gramKertasflute2"},
-              {"data": "gramKertasbawah" },
-              {"data": "kertasMcbawah" },
-              {"data": "wax" },
-              {"data": "gramSheet" },
-              {"data": "toleransiLebih" },
-              {"data": "toleransiKurang" },
-              {"data": "panjang" },
-              {"data": "lebar" },
-              {"data": "tinggi" },
-              {"data": "koli"},
-              {"data": "tipeCreasCorr" },
-              {"data": "bungkus" },
-            ],
-          "paging": false,
-          dom: 'Bftrip',
-          buttons: [
-            'excel',
-          ],
-          });
-        }
+    $(document).ready(function() {
+      const table = $('#data_opi').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('opi.approve') }}",
+        columns: [
+          { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
+          { data: 'NoOPI', name: 'NoOPI' },
+          { data: 'kode', name: 'kode'},
+          { data: 'tglKirimDt', name: 'tglKirimDt'},
+          { data: 'pcsDt', name: 'pcsDt'},
+          { data: 'namaBarang', name: 'namaBarang'},
+          { data: 'Cust', name: 'Cust'},
+          { data: 'action', name: 'action'},
+        ]
       })
+      
+    $('#selectAll').on('change', function() {
+        $('.rowCheckbox').prop('checked', $(this).prop('checked'));
     });
+
+    $('#processSelected').click(function() {
+        let selectedIds = [];
+        $('.rowCheckbox:checked').each(function() {
+            selectedIds.push($(this).val());
+        });
+
+        if (selectedIds.length === 0) {
+            alert('Silakan pilih setidaknya satu data!');
+            return;
+        }
+        
+
+        $.ajax({
+            url: '/approve',
+            type: 'POST',
+            data: {
+                ids: selectedIds,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                alert(response.message);
+                table.ajax.reload(); // Reload DataTables jika perlu
+            },
+            error: function(xhr) {
+                alert('Terjadi kesalahan, coba lagi!');
+            }
+        });
+    });
+
+      // table.on('click', 'tbody tr', function (e) {
+      //   e.currentTarget.classList.toggle('selected');
+      // })
+    })
 
     
   </script>

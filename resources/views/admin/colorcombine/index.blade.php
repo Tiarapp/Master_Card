@@ -41,6 +41,7 @@
               <th scope="col">Warna 2</th>
               <th scope="col">Warna 3</th>
               <th scope="col">Warna 4</th>
+              <th scope="col">Warna 5</th>
               <th scope="col">Branch</th>
               <th scope="col">Action</th>
             </tr>
@@ -57,6 +58,7 @@
                 <td>{{ $data->warna2 }}</td>
                 <td>{{ $data->warna3 }}</td>
                 <td>{{ $data->warna4 }}</td>
+                <td>{{ $data->warna5 }}</td>
                 <td>{{ $data->branch }}</td>
                 <td>
                   <div class="input-group">

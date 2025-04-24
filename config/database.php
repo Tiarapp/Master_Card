@@ -54,37 +54,45 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'firebird2' => [
+        'fbteknik' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST', '192.168.1.250'),
-            'port'     => env('DB_PORT', '3050'),
-            'database' => env('DB_DATABASE', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
-            'username' => env('DB_USERNAME', 'sysdba'),
-            'password' => env('DB_PASSWORD', 'masterkey'),
+            'host'     => env('DB_HOST1', '192.168.1.250'),
+            'port'     => env('DB_PORT1', '3050'),
+            'database' => env('DB_DATABASE1', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
+            'username' => env('DB_USERNAME1', 'sysdba'),
+            'password' => env('DB_PASSWORD1', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
         ],
 
-        'firebird3' => [
+        'mysql2' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST2', '192.168.1.250'),
+            'port' => env('DB_PORT2', '3306'),
+            'database' => env('DB_DATABASE2', 'spa-24'),
+            'username' => env('DB_USERNAME2', 'root'),
+            'password' => env('DB_PASSWORD2', 'spa2023'),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'fbbp' => [
             'driver'   => 'firebird',
             'host'     => env('DB_HOST3', '192.168.1.250'),
             'port'     => env('DB_PORT3', '3050'),
-            'database' => env('DB_DATABASE3', 'D:\Database\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
+            'database' => env('DB_DATABASE3', 'D:\Database\FBDB\BP_CONVERTING_SPA.FDB'),
             'username' => env('DB_USERNAME3', 'sysdba'),
             'password' => env('DB_PASSWORD3', 'masterkey'),
-            'charset'  => env('DB_CHARSET', 'UTF8'),
-            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
-            'role'     => null,
-        ],
-
-        'fbteknik' => [
-            'driver'   => 'firebird',
-            'host'     => env('DB_HOST', '192.168.1.250'),
-            'port'     => env('DB_PORT', '3050'),
-            'database' => env('DB_DATABASE', 'D:\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
-            'username' => env('DB_USERNAME', 'sysdba'),
-            'password' => env('DB_PASSWORD', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -101,19 +109,57 @@ return [
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
         ],
-
-        // 'firebird4' => [
+        
+        // 'firebird2' => [
         //     'driver'   => 'firebird',
-        //     'host'     => env('DB_HOST3', 'localhost'),
-        //     'port'     => env('DB_PORT3', '3050'),
-        //     'database' => env('DB_DATABASE3', 'D:\TES_DELPHI\FBDB\BP_CONVERTING_SPA-NEW.FDB'),
-        //     'username' => env('DB_USERNAME3', 'sysdba'),
-        //     'password' => env('DB_PASSWORD3', 'masterkey'),
+        //     'host'     => env('DB_HOST5', '192.168.1.250'),
+        //     'port'     => env('DB_PORT5', '3050'),
+        //     'database' => env('DB_DATABASE5', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
+        //     'username' => env('DB_USERNAME5', 'sysdba'),
+        //     'password' => env('DB_PASSWORD5', 'masterkey'),
         //     'charset'  => env('DB_CHARSET', 'UTF8'),
         //     'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
         //     'role'     => null,
+        //     'options' => array(
+        //     PDO::ATTR_PERSISTENT => false,
+        //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        //     PDO::ATTR_AUTOCOMMIT => false,
+        //     )
         // ],
+        
+        'firebird2' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST5', '192.168.1.250'),
+            'port'     => env('DB_PORT5', '3050'),
+            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\BJ_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME5', 'sysdba'),
+            'password' => env('DB_PASSWORD5', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+            'options' => array(
+            PDO::ATTR_PERSISTENT => false,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_AUTOCOMMIT => false,
+            )
+        ],
 
+        'stationary' => [
+            'driver'   => 'firebird',
+            'host'     => env('DB_HOST5', '192.168.1.250'),
+            'port'     => env('DB_PORT5', '3050'),
+            'database' => env('DB_DATABASE5', 'D:\Database\FBDB\STATIONARY_SPA.FDB'),
+            'username' => env('DB_USERNAME5', 'sysdba'),
+            'password' => env('DB_PASSWORD5', 'masterkey'),
+            'charset'  => env('DB_CHARSET', 'UTF8'),
+            'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
+            'role'     => null,
+            'options' => array(
+            PDO::ATTR_PERSISTENT => false,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_AUTOCOMMIT => false,
+            )
+        ],
 
         'mysql' => [
             'driver' => 'mysql',
@@ -135,25 +181,6 @@ return [
             ]) : [],
         ],
 
-        'mysql2' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST2', '192.168.1.250'),
-            'port' => env('DB_PORT2', '3306'),
-            'database' => env('DB_DATABASE2', 'spa23'),
-            'username' => env('DB_USERNAME2', 'root'),
-            'password' => env('DB_PASSWORD2', 'spa2023'),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => false,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
 
         // 'tes2' => [
         //     'driver' => 'mysql',
@@ -193,14 +220,19 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST6', '192.168.1.250'),
+            'port' => env('DB_PORT6', '1433'),
+            'database' => env('DB_DATABASE6', 'Lauta_be_SPA'),
+            'username' => env('DB_USERNAME6', 'itspa18'),
+            'password' => env('DB_PASSWORD6', 'spaAdmin'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'options' => [
+                'Database' => env('DB_DATABASE', 'Lauta_be_SPA'),
+                'TrustServerCertificate' => true, // Jika SQL Server menggunakan self-signed certificate
+                'ODBCDriver' => 'ODBC Driver 17 for SQL Server', // Pastikan versi driver di sini
+            ],
         ],
 
     ],

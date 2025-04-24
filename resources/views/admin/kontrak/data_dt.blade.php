@@ -215,6 +215,20 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
+                                                <label>Sisa Kirim</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control txt_line" name="sisa_kirim" id="sisa_kirim" value="{{ $kontrak_D->pcsSisaKirim }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
                                                 <label>Tipe Box</label>
                                             </div>
                                             <div class="col-md-6">
@@ -277,7 +291,7 @@
                                     <td scope="col">{{ $o->jumlahOrder }}</td>
                                     <td scope="col">{{ $o->nama }}</td>
                                     <td scope="col">{{ floor($rm) }}</td>
-                                    <td scope="col">{{ $o->status }}</td>
+                                    <td scope="col">{{ $o->status_opi }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -291,10 +305,10 @@
                             </div>
                         </div>
                     </div>
-                    </form>
-                    <div class="col-md-6">
-                        <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
-                    </div>
+                </form>
+                <div class="col-md-6">
+                    <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                </div>
                 </div>
             </div>
         </div>    
@@ -348,10 +362,13 @@
     function validateForm() {
         sisa = document.getElementById("sisa").value;
         x = document.getElementById("jumlahKirim").value;
+        sisa_kirim = document.getElementById("sisa_kirim").value;
 
         if (x > parseInt(sisa)) {
-            alert("Masukkan Jumlah dibawah : "+sisa);
-            return false;
+            if (x > parseInt(sisa_kirim)) {
+                alert("Masukkan Jumlah dibawah : "+sisa_kirim);
+                return false;
+            } 
         } 
     }
                         

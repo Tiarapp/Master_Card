@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Box;
+use App\Models\Tracking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\DataTables;
 
 class BoxController extends Controller
 {
@@ -17,13 +19,18 @@ class BoxController extends Controller
      * @return \Illuminate\Http\Response
      */
     // Tampilkan Halaman Awal
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data dari table box
-        $box = DB::table('box')->get();
+        if ($request->ajax()) {
+            $box = Box::query();
+            return DataTables::of($box)
+                ->addColumn('action', function($box){
+                   return '<a href="../admin/box/edit/'. $box->id .'" class="btn btn-outline-secondary" type="button">Edit</a>';
+                })
+                ->make(true);
+        }
 
-        // Tampilkan semua isi variable $box
-        return view('admin.box.index', ['box' => $box]);
+        return view('admin.box.index');
     }
     // End tampilkan Halaman Awal
 
@@ -35,11 +42,8 @@ class BoxController extends Controller
     // Tampilkan Halaman Input
     public function create()
     {
-        // Ambil data dari table (flute,tipe_box,firebird(TBarangConv))
         $flute = DB::table('flute')->get();
         $tipebox = DB::table('tipe_box')->get();
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        // End ambil data dari table (flute,tipe_box,firebird(TBarangConv))
 
         return view('admin.box.create', compact([
             'tipebox',
@@ -99,7 +103,7 @@ class BoxController extends Controller
             }
         }
 
-        Box::create([
+        $box = Box::create([
             'kode' => $nobukti,
             // 'kodeBarang' => $request->kodeBarang,
             'namaBarang' =>strtoupper($request->namaBarang),
@@ -122,6 +126,11 @@ class BoxController extends Controller
             'tinggiCrease' => $request->tinggiCrease,
             'createdBy' => $request->createdBy
             ]);
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Box ".$nobukti
+        ]);
 
         return redirect('admin/box');
     }
@@ -188,6 +197,11 @@ class BoxController extends Controller
         $box->lastUpdatedBy = $request->createdBy;
 
         $box->save();
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Ubah Box ".$box->kode
+        ]);
 
         return redirect('admin/box');
     }

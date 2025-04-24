@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mastercard;
+use App\Models\Number_Sequence;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +83,7 @@ class MastercardController extends Controller
                     $nestedData['kode'] = "<p style='color:#4842f5'>".$mastercard->kode."</p>";
                     $nestedData['revisi'] = "<p style='color:#4842f5'>".$mastercard->revisi."</p>";
                     $nestedData['namaBarang'] = "<p style='color:#4842f5'>".$mastercard->namaBarang."</p>";
+                    $nestedData['kodeBarang'] = "<p style='color:#4842f5'>".$mastercard->kodeBarang."</p>";
                     $nestedData['tipeBox'] = "<p style='color:#4842f5'>".$mastercard->tipeBox."</p>";
                     $nestedData['gram'] = "<p style='color:#4842f5'>".$mastercard->gramSheetBoxKontrak."</p>";
                     $nestedData['CreasCorrP'] = "<p style='color:#4842f5'>".$mastercard->CreasCorrP."</p>";
@@ -102,6 +105,7 @@ class MastercardController extends Controller
                     $nestedData['kode'] = $mastercard->kode;
                     $nestedData['revisi'] = $mastercard->revisi;
                     $nestedData['namaBarang'] = $mastercard->namaBarang;
+                    $nestedData['kodeBarang'] = $mastercard->kodeBarang;
                     $nestedData['tipeBox'] = $mastercard->tipeBox;
                     $nestedData['gram'] = $mastercard->gramSheetBoxKontrak;
                     $nestedData['CreasCorrP'] = $mastercard->CreasCorrP;
@@ -182,8 +186,8 @@ class MastercardController extends Controller
     */
     public function create()
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
-        
+        $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
+        $kode = 'MC'. $nomer->nomer;
         $cust = DB::connection('firebird')->table('TCustomer')->get();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -199,7 +203,7 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
         
         return view('admin.mastercard.create', compact([
-            // 'item',
+            'kode',
             'cust',
             'substance',
             'box',
@@ -278,7 +282,7 @@ class MastercardController extends Controller
         }
         
         
-        Mastercard::create([
+        $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R0",
             'customer' => $request->customer,
@@ -327,6 +331,17 @@ class MastercardController extends Controller
             'keterangan' => $request->keterangan,
             'gambar' => $nama_file,
             'createdBy' => $request->createdBy
+        ]);
+
+        $nomer = Number_Sequence::where('noBukti', 'LIKE', 'mastercard')->first();
+        $nomer->nomer = $nomer->nomer + 1;
+
+        $nomer->save();
+        
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Update MC ".$mc->kode
         ]);
         
         return redirect('mastercard');
@@ -499,7 +514,7 @@ class MastercardController extends Controller
             $outconv = $request->outConv;
         }
         
-        Mastercard::create([
+        $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,
             'customer' => $request->customer,
@@ -547,6 +562,11 @@ class MastercardController extends Controller
             'keterangan' => $request->keterangan,
             'gambar' => $nama_file,
             'createdBy' => $request->createdBy
+        ]);
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi
         ]);
         
         return redirect('mastercard');
@@ -703,6 +723,11 @@ class MastercardController extends Controller
         $mc->gambar = $nama_file;
         
         $mc->save();
+
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Update MC ".$mc->kode."-".$mc->revisi
+        ]);
         
         return redirect('mastercard');
         
@@ -724,13 +749,14 @@ class MastercardController extends Controller
         ->leftJoin('color as color2', 'color_combine.idColor2', '=', 'color2.id')
         ->leftJoin('color as color3', 'color_combine.idColor3', '=', 'color3.id')
         ->leftJoin('color as color4', 'color_combine.idColor4', '=', 'color4.id')
+        ->leftJoin('color as color5', 'color_combine.idColor5', '=', 'color5.id')
         ->leftJoin('jenis_gram as linerAtasP', 'SubsProduksi.jenisGramLinerAtas_id', '=', 'linerAtasP.id')
         ->leftJoin('jenis_gram as bfP', 'SubsProduksi.jenisGramFlute1_id', '=', 'bfP.id')
         ->leftJoin('jenis_gram as linerTengahP', 'SubsProduksi.jenisGramLinerTengah_id', '=', 'linerTengahP.id')
         ->leftJoin('jenis_gram as cfP', 'SubsProduksi.jenisGramFlute2_id', '=', 'cfP.id')
         ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
         ->leftJoin('box', 'box_id', 'box.id')
-        ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4', 'box.kuping as kuping', 'box.kuping2 as kuping2', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease')
+        ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4', 'color5.nama as warna5', 'box.kuping as kuping', 'box.kuping2 as kuping2', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease')
         
         ->where('mc.id', $id)
         ->first();
@@ -748,7 +774,7 @@ class MastercardController extends Controller
         }
 
         
-        if ($mc->tipeMc == 'DC' ) {
+        if ($mc->tipeMc == 'DC' || $mc->tipeMc == 'B3') {
             return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1 Terbalik' ) {
             return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));

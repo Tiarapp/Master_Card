@@ -76,7 +76,7 @@
                                 <input type="hidden" id="jenisGramFlute1_id" name="jenisGramFlute1_id">
                                 <select class="js-example-basic-single col-md-12" name="flute1" id="flute1" onchange=getNamaSubstance() disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram2 as $data)
+                                    @foreach ($jenisgram1 as $data)
                                     <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
@@ -100,7 +100,7 @@
                                 <input type="hidden" id="jenisGramFlute2_id" name="jenisGramFlute2_id">
                                 <select class="js-example-basic-single col-md-12" name="flute2" id="flute2" onchange="getNamaSubstance();" disabled>
                                     <option value=''>--</option>
-                                    @foreach ($jenisgram2 as $data)
+                                    @foreach ($jenisgram1 as $data)
                                     <option value="{{ $data->id }}|{{ $data->namaMc }}|{{ $data->namaLog }}">{{ $data->namaMc }}/{{ $data->namaLog }}</option>
                                     @endforeach
                                 </select>
@@ -141,30 +141,6 @@
         $(document).ready(function() {
             $('.js-example-basic-single').select2();
         });
-        
-        // function getNama(a){
-        //     var pos = a.indexOf('|');
-        //     var panjang = a.length;
-        //     var nama = a.substr(pos+1, panjang);
-
-        //     return nama;
-        //     // console.log(nama);
-        // }
-
-        // function getNama(a) {
-        //     var array = a.split('|');
-        //     var id = array[0];
-        //     var namaMc = array[1];
-        //     var namaLog = array[2];
-        // }
-
-        // function getID(a){
-        //     var pos = a.indexOf('|');
-        //     var panjang = a.length;
-        //     var id = a.substr(0, pos);
-
-        //     return id;
-        // }
 
         function getFlute(){
             var namaflute = document.getElementById('flute').value;
@@ -184,7 +160,7 @@
                 document.getElementById('tengah').disabled = true;
                 document.getElementById('flute2').disabled = false;
                 document.getElementById('bawah').disabled = false;
-            } else if (namaflute == 'BCF') {
+            } else if (namaflute == 'BCF' || namaflute == 'EBF') {
                 document.getElementById('atas').disabled = false;
                 document.getElementById('flute1').disabled = false;
                 document.getElementById('tengah').disabled = false;
@@ -231,9 +207,7 @@
             var idbawah = bawah[0]
             var namaMcbawah = bawah[1];
             var namaLogbawah = bawah[2];
-            
-            
-            
+                        
             if (flute1 == '') {
                 namaMcflute1 = '--';
                 namaLogflute1 = '--';

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SJ_Palet_M extends Model
 {
@@ -24,4 +25,9 @@ class SJ_Palet_M extends Model
         'printedKe',
         'printedAt'
     ];
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(SJ_Palet_D::class, 'sj_palet_m_id', 'id');
+    }
 }

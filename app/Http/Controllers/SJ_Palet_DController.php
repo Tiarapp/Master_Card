@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Sj_Palet_Export;
 use App\Models\SJ_Palet_D;
 use App\Models\SJ_Palet_M;
 use Carbon\Carbon;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SJ_Palet_DController extends Controller
 {
@@ -20,7 +22,7 @@ class SJ_Palet_DController extends Controller
     // Tampilan Awal
     public function index()
     {
-        $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->get();
+        $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->take(20)->get();
         
         return view('admin.sj_palet.index', compact('sj'));
     }
@@ -96,8 +98,8 @@ class SJ_Palet_DController extends Controller
         $request->validate([
                 'tanggal' => 'required',
                 'noPolisi' => 'required',
-                'namaCustomer' => 'required',
-                'alamatCustomer' => 'required',
+                'namaCustomer' => 'nullable',
+                'alamatCustomer' => 'nullable',
             ]);
             
         $sjpaletm = SJ_Palet_M::create([
@@ -227,12 +229,6 @@ class SJ_Palet_DController extends Controller
         }
 
         return redirect('admin/sj_palet');
-
-        // $sjpaletd = SJ_Palet_D::where('sj_palet_m_id', '=', $id)->get();
-        
-        // $query = DB::getQueryLog();
-
-        // dd($sjpaletd);
     }
     
     /**
@@ -259,5 +255,19 @@ class SJ_Palet_DController extends Controller
 
         // dd($sj_Palet_D);
     }
+
+    public function export_sjpalet_excel(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date'
+        ]);
+
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        return Excel::download(new Sj_Palet_Export($startDate, $endDate), 'sj_palet '.$startDate.' - '.$endDate.'.xlsx');
+    }
+
 }
         

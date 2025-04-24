@@ -26,43 +26,45 @@
      <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      <!-- Small boxes (Stat box) -->
+      @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>{{ $message }}</strong>
+        </div>
+      @endif
       
-      <a href="#" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
+      {{-- <a href="{{ route('fb.add.bbm') }}" style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a> --}}
       <div class="card-body">
         <table class="table table-bordered" id="data_barang">
           <thead>
             <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Kode</th>
-              <th scope="col">Nama</th>
-              <th scope="col">Gram</th>
-              <th scope="col">Satuan</th>
-              <th scope="col">Isi Per Karton</th>
-              <th scope="col">Mastercard ID</th>
+                <th scope="col">Kode Barang</th>
+                <th scope="col">Nama Barang</th>
+                <th scope="col">Merk</th>
+                <th scope="col">Tipe</th>
+                <th scope="col">Spesifikasi</th>
+                <th scope="col">Stok</th>
+                <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             <?php
             $no = 1;
-            foreach ($barang as $data) { ?>
-              <tr>
-                <td scope="row">{{ $no++ }}</td>
-                <td>{{ $data->KodeBrg }}</td>
+            foreach ($persediaan as $data) { ?>
+              <tr class="barang">
+                <td>
+                  {{ $data->KodeBrg }}
+                </td>
                 <td>{{ $data->NamaBrg }}</td>
-                <td>{{ round($data->BeratStandart, 2) }}</td>
-                <td>{{ $data->Satuan }}</td>
-                <td>{{ round($data->IsiPerKarton, 0) }}</td>
-                <td>{{ $data->WeightValue }}</td>
-                {{-- <td>
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                      <a href="/admin/divisi/show/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">View</a>
-                      <a href="/admin/divisi/edit/{{ $data->KodeBrg }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      <a href="/admin/divisi/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a>
-                    </div>
-                  </div>
-                </td> --}}
+                <td>{{ $data->Merk }}</td>
+                <td>{{ $data->Tipe }}</td>
+                <td>{{ $data->Spesifikasi }}</td>
+                <td>{{ round($data->SaldoAkhir, 2) }}</td>
+                <td>
+                  <a href="../fb/mutasi/{{ trim($data->KodeBrg) }}" class="btn btn-outline-secondary" type="button">History</a>
+                </td>
               </tr>
             <?php
             }
@@ -100,8 +102,15 @@
          }
        ],
        select: true
-     });
+     });   
    });
+
+   $(document).on("click", '.mutasi', function() {
+    kodebarang = $(this).val();
+
+    document.getElementById("kodebarang").value = kodebarang;
+    
+   })
 </script>
 
 @endsection

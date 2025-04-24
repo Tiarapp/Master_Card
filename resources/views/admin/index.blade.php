@@ -137,6 +137,12 @@
           </div>
       </div>
       @endif
+      @if (Auth::user()->divisi_id == 13)
+        <div class="col-md-6 p-3 text-left  border bg-gray-300">
+          <h5 class="mb-0">Terdapat {{ count($kontrak_open) }} Kontrak yang berstatus OPEN. <a href="{{ route('kontrak.opened') }}"> click to see Details</a></h5>
+          
+        </div>
+      @endif
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>

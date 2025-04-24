@@ -7,6 +7,7 @@ use App\Models\Corr_M;
 use App\Models\HasilProduksi;
 use App\Models\Mesin;
 use App\Models\Opi_M;
+use App\Models\Tracking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -110,8 +111,12 @@ class CorrController extends Controller
             'tanggal' => $request->tgl,
             'shift' => $request->shift
         ]);
-
         
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Plan ".$corrm->kode_plan
+        ]);
+                
         $rmjumlah = 0;
         $berattotal = 0;
         $id = array_merge($request->opi_id);
@@ -520,6 +525,11 @@ class CorrController extends Controller
              
         }
         $upCorrm = Corr_M::find($id);
+               
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Ubah Plan ".$upCorrm->kode_plan
+        ]);
 
         $upCorrm->total_RM = $rmjumlah;
         $upCorrm->total_Berat = $berattotal;

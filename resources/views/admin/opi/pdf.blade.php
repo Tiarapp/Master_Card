@@ -2316,7 +2316,7 @@
           {{-- <td class="column4 style30 null"></td> --}}
           <td class="column5 style30 null"></td>
           <td class="column6 style30 s">Jumlah Order</td>
-          <td class="column7 style49 ">{{ $opi->pcsDt }}</td>
+          <td class="column7 style49 ">{{ $opi2->pcsDt }}</td>
           <td class="column8 style30 "></td>
           <td class="column9 style52 null"></td>
           <td class="column10 style52 null"></td>
@@ -2351,11 +2351,11 @@
         <tr class="row6">
           <td class="column0">&nbsp;</td>
           <td class="column1 style46 s style44" colspan="2">NO. OPI</td>
-          <td class="column3 style37 s style37" colspan="2">{{ $opi->nama }}</td>
+          <td class="column3 style37 s style37" colspan="2">{{ $opi2->nama }}</td>
           <td class="column5 style38 s">&nbsp;&nbsp;</td>
           <td class="column6 style35 s">&nbsp;</td>
           <td class="column7 style50 s">Product Item</td>
-          <td class="column8 style55 s style34" colspan="3">{{ $opi->namaBarang }}</td>
+          <td class="column8 style55 s style34" colspan="3">{{ $opi2->namaBarang }}</td>
           <td class="column11 style56 null"></td>
         </tr>
         <tr class="row7">
@@ -2364,7 +2364,7 @@
           <td class="column3 style39 s style39" colspan="3">{{ $opi2->kode }}</td>
           <td class="column6 style35 s">&nbsp;</td>
           <td class="column7 style49 s">Kode Barang</td>
-          <td class="column8 style39 s style39" colspan="3">{{ $opi->kodeBarang }}</td>
+          <td class="column8 style39 s style39" colspan="3">{{ $opi2->kodeBarang }}</td>
           <td class="column11 style35 null"></td>
         </tr>
         <tr class="row8">
@@ -2372,18 +2372,18 @@
           <td class="column1 style43 s style44" colspan="2">No. MC</td>
           <td class="column3 style39 s style34" colspan="3">
             <?php
-              if ($opi->revisi == '') {
-                echo $opi->mcKode;
-              } else if ($opi->revisi == "R0") {
-                echo $opi->mcKode;
+              if ($opi2->revisi == '') {
+                echo $opi2->mcKode;
+              } else if ($opi2->revisi == "R0") {
+                echo $opi2->mcKode;
               }else {
-                echo $opi->mcKode."-".$opi->revisi;
+                echo $opi2->mcKode."-".$opi2->revisi;
               }
             ?>
           </td>
           <td class="column6 style35 null"></td>
           <td class="column7 style49 s">Ukuran</td>
-          <td class="column8 style57 s style57" colspan="3">{{ $opi->panjang }}x{{ $opi->lebar }}x{{ $opi->tinggi }}</td>
+          <td class="column8 style57 s style57" colspan="3">{{ $opi2->panjang }}x{{ $opi2->lebar }}x{{ $opi2->tinggi }}</td>
           <td class="column11 style36 null"></td>
         </tr>
         <tr class="row9">
@@ -2391,7 +2391,7 @@
           <td class="column1 style43 s style44" colspan="2">PO Customer</td>
           <td class="column3 style40 s style34" colspan="4">{{ $opi2->poCustomer }}</td>
           <td class="column7 style49 s">Subs Produksi</td>
-          <td class="column8 style58 s style34" colspan="3">{{ $opi->subsKode }}</td>
+          <td class="column8 style58 s style34" colspan="3">{{ $opi2->subsKode }}</td>
           <td class="column11 style36 null"></td>
         </tr>
         <tr class="row10">
@@ -2399,7 +2399,7 @@
           <td class="column1 style47 s style48" colspan="2">Nama Customer</td>
           <td class="column3 style40 s style41" colspan="4">{{ $opi2->Cust }}</td>
           <td class="column7 style49 s">Flute</td>
-          <td class="column8 style54 s">{{ $opi->flute }}</td>
+          <td class="column8 style54 s">{{ $opi2->flute }}</td>
           <td class="column9 style30 null"></td>
           <td class="column10 style30 null"></td>
           <td class="column11 style35 null"></td>
@@ -2409,24 +2409,24 @@
           <td class="column1 style47 s style44" colspan="2">Alamat Kirim</td>
           <td class="column3 style42 s style34" colspan="4">{{ $opi2->alamatKirim }}</td>
           <td class="column7 style51 s">Warna</td>
-          <td class="column8 style42 s style34" colspan="3">{{ $opi->namacc }}</td>
+          <td class="column8 style42 s style34" colspan="3">{{ $opi2->namacc }}</td>
           <td class="column11 style36 null"></td>
         </tr>
         <tr class="row12">
           <td class="column0">&nbsp;</td>
           <td class="column1 style43 s style44" colspan="2">Jadwal Kirim</td>
-          <td class="column3 style33 n style34" colspan="4">{{ date('d F Y', strtotime($opi->tglKirimDt)) }}</td>
+          <td class="column3 style33 n style34" colspan="4">{{ date('d F Y', strtotime($opi2->tglKirimDt)) }}</td>
           <td class="column7 style49 s">Out</td>
-          <td class="column8 style54 null">{{ $opi->outConv }}</td>
+          <td class="column8 style54 null">{{ $opi2->outConv }}</td>
           <td class="column9 style59 null">RM :</td>
           @php
 
-            $qty = ($opi->jumlahOrder) / $opi->outConv ; 
+            $qty = ($opi2->jumlahOrder) / $opi2->outConv ; 
             // dd($qty);
-            $outCorr = floor(2500/$opi->lebarSheet);
+            $outCorr = floor(2500/$opi2->lebarSheet);
             $cop = $qty / $outCorr;
 
-            $rm = ($opi->panjangSheet * $cop) / 1000;
+            $rm = ($opi2->panjangSheet * $cop) / 1000;
           @endphp
           <td class="column10 style59 null">{{ floor($rm) }}</td>
           <td class="column11 style35 null"></td>
@@ -2439,7 +2439,7 @@
           <td class="column5 style8 null"></td>
           <td class="column6 style8 null"></td>
           <td class="column7 style49 s">Berat Box</td>
-          <td class="column8 style60 s">{{ number_format($opi->gram,2,",",".") }} Kg</td>
+          <td class="column8 style60 s">{{ number_format($opi2->gram,2,",",".") }} Kg</td>
           <td class="column9 style35 null"></td>
           <td class="column10 style35 null"></td>
           <td class="column11 style30 null"></td>
@@ -2449,7 +2449,7 @@
           <td class="column1 style9 s style18" colspan="7" rowspan="3">{{ $opi2->ketkontrak }}</td>
           <td class="column6 style12 null"></td>
           <td class="column7 style49 s">Isi Colly</td>
-          <td class="column8 style30 s">{{ $opi->koli }} pcs</td>
+          <td class="column8 style30 s">{{ $opi2->koli }} pcs</td>
           <td class="column9 style30 null"></td>
           <td class="column10 style30 null"></td>
           <td class="column11 style30 null"></td>
@@ -2458,14 +2458,14 @@
           <td class="column0">&nbsp;</td>
           <td class="column6 style15 null"></td>
           <td class="column7 style49 s">Finishing</td>
-          <td class="column8 style39 s style39" colspan="3">{{ $opi->joint }}</td>
+          <td class="column8 style39 s style39" colspan="3">{{ $opi2->joint }}</td>
           <td class="column11 style61 null"></td>
         </tr>
         <tr class="row16">
           <td class="column0">&nbsp;</td>
           <td class="column6 style6 null"></td>
           <td class="column7 style51 s">Bentuk</td>
-          <td class="column8 style62 s style62" colspan="3">{{ $opi->tipeBox }}</td>
+          <td class="column8 style62 s style62" colspan="3">{{ $opi2->tipeBox }}</td>
           <td class="column11 style72 null"></td>
         </tr>
         <tr class="row17">

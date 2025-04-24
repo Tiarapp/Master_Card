@@ -65,8 +65,8 @@
                 <td>{{ $data->TelpKantor }}</td>
                 <td>{{ $data->PIC }}</td>
                 <td>{{ $data->AlamatKirim }}</td>
-                <td>{{ $data->plafond }}</td>
-                <td>{{ $data->top }}</td>
+                <td>{{ $data->Plafond }}</td>
+                <td>{{ number_format(intval($data->WAKTUBAYAR),2,",",".")}}</td>
               </tr>
             <?php
             }

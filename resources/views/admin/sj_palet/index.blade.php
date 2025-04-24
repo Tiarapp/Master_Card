@@ -34,7 +34,33 @@
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
 
+      
+      <form action="{{ route('export.sjpalet') }}" method="GET">
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-2">
+              <label>Start Date:</label>
+            </div>
+            <div class="col-md-3">
+              <input type="date" class="form-control txt_line" name="start_date" required>
+            </div>
+            <div class="col-md-2">
+              <label>End Date:</label>
+            </div>
+            <div class="col-md-3">
+              <input type="date" class="form-control txt_line" name="end_date" required>
+            </div>
+            <div class="col-md-1">
+              <button type="submit" class="btn btn-success">Export</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
       <a href="../admin/sj_palet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <button class="btn btn-primary">
+        <a href={{ route('sync_sj') }} style="margin-bottom: 20px; color: white"> Sync Nomer SJ</a>  
+      </button>
 
       {{-- Datatable SJ Palet --}}
       <div class="card-body">

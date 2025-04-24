@@ -14,11 +14,13 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "harrygulliford/laravel-firebird": "^2.3",
+        "harrygulliford/laravel-firebird": "^3.2",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "livewire/livewire": "^2.12",
         "maatwebsite/excel": "^3.1",
         "realrashid/sweet-alert": "^5.0",
+        "yajra/laravel-datatables": "^1.5",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {

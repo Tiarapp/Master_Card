@@ -41,7 +41,7 @@ class KontrakAccController extends Controller
 
             // dd($request->periode);
             $kontrak = Kontrak_M::where('kode', 'LIKE', '%'.$request->periode.'%')
-                ->where('status', '=', 4)
+                ->where('status', '!=', 2)
                 ->get();           
             
             // dd($kontrak);

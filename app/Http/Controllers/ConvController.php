@@ -10,7 +10,9 @@ use App\Models\HasilCorr;
 use App\Models\HasilProduksi;
 use App\Models\Mesin;
 use App\Models\Opi_M;
+use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class ConvController extends Controller
@@ -102,6 +104,11 @@ class ConvController extends Controller
             'tipe_mesin' => $request->tipe
         ]);
         
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Plan ".$convm->kode
+        ]);
+        
         $totalpcs = 0;
         $totalkg = 0;
 
@@ -113,8 +120,6 @@ class ConvController extends Controller
             $convd = Conv_D::create([
                 'opi_id'=> $request->opi_id[$temp],
                 'plan_conv_m_id' => $convm->id,
-                // 'kodeplanM' => $convm->kode,
-                // 'shift' => $convm->shiftM,
                 'tgl_kirim' => $request->dt[$temp],
                 'dt_perubahan' => $request->dt_perubahan[$temp],
                 'nomc' => $request->mc[$temp],    
@@ -132,11 +137,8 @@ class ConvController extends Controller
                 'qtyOrder' => $request->jumlahOrder[$temp],
                 'out_flexo' => $request->outConv[$temp],
                 'jml_plan' => $request->plan[$temp],
-                // 'ukuran_roll' => $request->roll[$temp],
                 'bungkus' => $request->bungkus[$temp],
                 'urutan'=> $request->urutan[$temp],
-                // 'lain_lain' => $request->kebutuhanFlute2[$temp],
-                // 'rm_order' => $request->kebutuhanBawah[$temp],
                 'tonase' => $request->berat_total[$temp],
                 'keterangan' => $request->keterangan[$temp],
                 'status' => $status,
@@ -171,6 +173,11 @@ class ConvController extends Controller
         ]);
 
         $data = count($request->noOpi);
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Tambah Plan ".$convm->kode
+        ]);
+        
         
         $rmjumlah = 0;
         $berattotal = 0;
@@ -201,12 +208,8 @@ class ConvController extends Controller
                 'qtyOrder' => $request->order[$i],
                 'out_flexo' => $request->outconv[$i],
                 'jml_plan' => $request->plan[$i],
-                // 'ukuran_roll' => $request->roll[$i],
                 'bungkus' => $request->bungkus[$i],
                 'urutan'=> $request->urutan[$i],
-                // 'lain_lain' => $request->kebutuhanFlute2[$i],
-                // 'rm_order' => $request->kebutuhanBawah[$i],
-                // 'tonase' => $request->kebutuhanBawah[$i],
                 'keterangan' => $request->keterangan[$i],
                 'status' => $status,
                 'lock' => $lock

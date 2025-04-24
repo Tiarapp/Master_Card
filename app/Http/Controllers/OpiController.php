@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Kontrak_D;
 use App\Models\Opi_M;
+use App\Models\Tracking;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\FuncCall;
 
 class OpiController extends Controller
 {
@@ -35,7 +37,7 @@ class OpiController extends Controller
         {            
            if (Auth::user()->divisi_id == 5) {
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                ->where('status_opi', '!=', "closed")
+                ->where('status_opi', '=', "Proses")
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('NoOPI')
@@ -56,7 +58,7 @@ class OpiController extends Controller
 
             if (Auth::user()->divisi_id == 5) {
                 $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                            ->where('status_opi', 'NOT LIKE', "closed")
+                            ->where('status_opi', '=', "Proses")
                             ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
@@ -230,6 +232,35 @@ class OpiController extends Controller
         // return Datatables::of($data)->make(true);
     }
 
+    public function approve_index(Request $request)
+    {
+        $opi = Opi_M::opi()->where('status_opi', '=', 'Pending')->get();
+        if ($request->ajax()) {
+            return DataTables::of($opi)
+                    ->addColumn('checkbox', function($opi){ 
+                        return '<input type="checkbox" class="rowCheckbox" value="'. $opi->id .'">';
+                    })
+                    ->addColumn('action', function($opi) {
+                        return '<a href="/admin/ppic/opi/approve/'. $opi->id .'" class="btn btn-primary rounded">Edit</a>';
+                    })
+                    ->rawColumns(['checkbox','action'])
+                    ->make(true);
+                }
+                // dd($opi);
+
+        return view('admin.ppic.opi.data_approve_opi');
+    }
+
+    public function proses_approve($id)
+    {
+        $opi = Opi_M::findOrFail($id);
+
+        $opi->status_opi = 'Proses';
+        $opi->save();
+        
+        return redirect()->back()->with('success', 'OPI '.$opi->NoOPI.' sudah diapprive!!');
+    }
+
     public function single($id)
     {
         $data = Opi_M::opi2()
@@ -293,8 +324,11 @@ class OpiController extends Controller
     {
         $opi = Opi_M::find($id);
         $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
-
-        // dd($opi);
+                
+        Tracking::create([
+            'user' => Auth::user()->name,
+            'event' => "Cancel Kontrak". $opi->NoOPI
+        ]);
 
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
@@ -308,8 +342,6 @@ class OpiController extends Controller
         $kontrakd->save();
 
         return redirect('admin/opi');
-
-        
     }
 
     public function closed($id)
@@ -321,8 +353,6 @@ class OpiController extends Controller
 
         $opi->status_opi = "closed";
         $opi->lastUpdatedBy = Auth::user()->name;
-        
-        // $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
         $opi->jumlahOrder = 0;
 
@@ -365,24 +395,21 @@ class OpiController extends Controller
      */
     public function print($id)
     {
-        $opi = DB::table('opi_m')
-            ->leftJoin('dt', 'dt_id', 'dt.id')
-            ->leftJoin('mc', 'mc_id', 'mc.id')
-            ->leftJoin('box', 'mc.box_id', 'box.id')
-            ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
-            ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
-            ->where('opi_m.id', '=', $id)
-            ->select('opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid', 'mc.lebarSheet', 'mc.panjangSheet' )
-            ->first();
-
 
         $opi2 = DB::table('opi_m')
-        ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
+        ->leftJoin('dt', 'dt_id', 'dt.id')
+        ->leftJoin('kontrak_m', 'opi_m.kontrak_m_id', 'kontrak_m.id')
         ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
+        ->leftJoin('mc', 'kontrak_d.mc_id', 'mc.id')
+        ->leftJoin('box', 'mc.box_id', 'box.id')
+        ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
+        ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
         ->where('opi_m.id', '=', $id)
-        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak')
+        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak', 'opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid', 'mc.lebarSheet', 'mc.panjangSheet')
         ->first();
 
-        return view('admin.opi.pdf', compact('opi','opi2'));
+        // dd($opi2);
+
+        return view('admin.opi.pdf', compact('opi2'));
     }
 }

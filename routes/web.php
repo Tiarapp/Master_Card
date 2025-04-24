@@ -1,14 +1,28 @@
 <?php
 
+use App\Http\Controllers\Admin\Accounting\FinanceController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
+use App\Http\Controllers\Admin\Converting\ConvertingController;
+use App\Http\Controllers\Admin\Data\BarangTeknikController;
 use App\Http\Controllers\Admin\Data\CustomerController;
+use App\Http\Controllers\Admin\Data\BbmRollController;
+use App\Http\Controllers\Admin\HRD\StationaryController;
+use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\Marketing\FormMc;
+use App\Http\Controllers\Marketing\FormPermintaan;
+use App\Http\Controllers\Marketing\MarektingOrder;
+use App\Http\Controllers\PaletController;
+use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,33 +51,31 @@ Route::get('/admin', function () {
         ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
         ->first();
 
-        // dd($dt->kirim);
+    $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
+        ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
+        ->orderBy('periode', 'desc')
+        ->groupBy('periode')
+        ->take(12)
+        ->get();
 
-        $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
-            ->leftJoin('kontrak_m', 'kontrak_m_id', '=', 'kontrak_m.id')
-            ->orderBy('periode', 'desc')
-            ->groupBy('periode')
-            ->take(12)
-            ->get();
+        $all_periode = [];
 
-            $all_periode = [];
-
-            foreach ($kirim as $key) {
-                $all_periode[] = $key->periode;
-            }
-
-        $realisasi = $dt->kirim;
-        
-        $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
-            ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->get();    
-
-        $tonase = 0;    
-        foreach ($opi as $key) {
-            $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
-            $tonase = $tonase + $order ;
+        foreach ($kirim as $key) {
+            $all_periode[] = $key->periode;
         }
+
+    $realisasi = $dt->kirim;
+        
+    $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
+        ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
+        ->leftJoin('mc', 'mc_id', '=', 'mc.id')
+        ->get();    
+
+    $tonase = 0;    
+    foreach ($opi as $key) {
+        $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
+        $tonase = $tonase + $order ;
+    }
     
     $data = RealisasiKirim::select('id', DB::raw('SUM(kg_kirim) as kirim, DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
     // ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
@@ -74,10 +86,12 @@ Route::get('/admin', function () {
 
     // dd($data);
 
+    $kontrak_open = Kontrak_M::where('status', '2')->get();
+
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data'));
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open'));
 })->middleware(['auth'])->name('admin');
 
 
@@ -138,8 +152,9 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/joint/delete/{id}', 'JointController@updateDeleted');
     
     //Sheet
-    Route::get('/admin/sheet', 'SheetController@index')->name('sheet');
-    Route::get('/admin/sheet/create', 'SheetController@create')->name('sheet.create');
+    Route::get('converting/getsheet', [ConvertingController::class, 'get_sheet'])->name('getsheet');
+    Route::get('converting/sheet', [ConvertingController::class, 'index_sheet'])->name('sheet');
+    Route::get('/admin/sheet/create', [ConvertingController::class, 'create'])->name('sheet.create');
     Route::post('/admin/sheet/store', 'SheetController@store')->name('sheet.store');
     Route::get('/admin/sheet/show/{id}', 'SheetController@show');
     Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
@@ -218,6 +233,7 @@ Route::middleware(['auth'])->group(function (){
     
     //Palet Item
     Route::get('/admin/palet', 'PaletController@index')->name('palet');
+    Route::get('/admin/sycn_sj', 'PaletController@sync_sj')->name('sync_sj');
     Route::get('/admin/palet/create', 'PaletController@create')->name('palet.create');
     Route::post('/admin/palet/store', 'PaletController@store')->name('palet.store');
     Route::get('/admin/palet/show/{id}', 'PaletController@show');
@@ -235,32 +251,40 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/sj_palet/update/{id}', 'SJ_Palet_DController@update');
     Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
     Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
+    Route::get('/export/sjpalet', [SJ_Palet_DController::class, 'export_sjpalet_excel'])->name('export.sjpalet');
     
     //Supplier
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
     Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('supplier.show');
     
-    //Barang
+    //Barang Jadi
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
+    Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
+    Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
+    Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
+    Route::get('/returjual/{tanggal}', 'BarangController@get_kode_retur')->name('barang.retur.get_kode');
+    Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
+    Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
+    Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');
+    Route::get('/barang/{kode}', 'BarangController@get_barang')->name('get_barang');
     
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
         Route::get('/json', 'MastercardController@json')->name('json');
         Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
         Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
-        Route::get('/admin/mastercard/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
-        Route::get('/admin/mastercard/create', 'MastercardController@create')->name('create');
-        Route::post('/admin/mastercard/store', 'MastercardController@store')->name('store');
-        Route::get('/admin/mastercard/edit/{id}', 'MastercardController@edit')->name('edit');
-        Route::get('/admin/mastercard/revisi/{id}', 'MastercardController@revisi')->name('revisi');
-        Route::post('/admin/mastercard/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
-        Route::post('/admin/mastercard/update', 'MastercardController@update')->name('update');
-        Route::get('/admin/mastercard/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
+        Route::get('/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
+        Route::get('/create', 'MastercardController@create')->name('create');
+        Route::post('/store', 'MastercardController@store')->name('store');
+        Route::get('/edit/{id}', 'MastercardController@edit')->name('edit');
+        Route::get('/revisi/{id}', 'MastercardController@revisi')->name('revisi');
+        Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
+        Route::post('/update', 'MastercardController@update')->name('update');
+        Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
     });
 
+    //Converting
     
-
-
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
@@ -276,7 +300,10 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/kontrak/update/{id}', 'Kontrak_DController@update')->name('kontrak.update');
     Route::get('/admin/kontrak/pdf/{id}', 'Kontrak_DController@pdfprint')->name('kontrak.pdfb1');
     Route::get('/admin/kontrak/cancel/{id}', 'Kontrak_DController@cancel_kontrak')->name('kontrak.cancel');
+    Route::get('/admin/kontrak/open/{id}', 'Kontrak_DController@open_kontrak')->name('kontrak.open');
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
+    Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
+    Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
@@ -296,6 +323,14 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
     Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
+    
+    Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
+    Route::post('/approve', function (Request $request) {
+        $ids = $request->input('ids');
+        Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
+        
+        return response()->json(['message' => 'Status OPI berhasil diperbarui!']);
+    });
 
     //PLAN
     Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
@@ -360,17 +395,19 @@ Route::middleware(['auth'])->group(function (){
 
         // OPI
 
-        Route::get('/admin/ppic/opi',  [OpiPPICController::class, 'index'])->name('ppic.opi');
-        Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
-        Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
-        Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
+        // Route::get('/admin/ppic/opi',  [OpiPPICController::class, 'index'])->name('ppic.opi');
+        // Route::get('admin/ppic/opidata', [OpiPPICController::class, 'get_opibyperiode'])->name('ppic.opi.bydate');
+        // Route::get('admin/ppic/opi_approve', [OpiPPICController::class, 'approve_opi'])->name('ppic.opi.approve');
+        // Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
 
     // Accounting
         // 
-        
+        Route::get('admin/acc/mod', [MarektingOrder::class, 'index_acc'])->name('acc.mod.index');
+        Route::get('admin/acc/mod/approve/{kode}', [MarektingOrder::class, 'approve_by_acc'])->name('acc.mod.approve');
+        Route::post('admin/acc/mod/tolak', [MarektingOrder::class, 'tolak_acc'])->name('acc.mod.disapprove');
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
-
+        Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -378,6 +415,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/data/detbbm', [CustomerController::class, 'getBBM'])->name('data.detbbm');
         Route::get('admin/data/stokroll', [CustomerController::class, 'getStok'])->name('data.stok');
         Route::get('admin/data/alamat', [CustomerController::class, 'alamat_cust'])->name('data.alamat');
+        Route::get('/admin/data/sync_fa', [PaletController::class, 'sync_fa'])->name('sync_fa');
         Route::get('admin/cust/single/{id}', [CustomerController::class, 'single_cust'])->name('data.custsingle');
         Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
 
@@ -399,6 +437,75 @@ Route::middleware(['auth'])->group(function (){
             return response()->json($all_periode);
 
         })->name('periode');
+    
+    // QC
+        Route::get('admin/qc', 'QcController@index')->name('qc.index');
+        Route::get('admin/qc/create', 'QcController@create')->name('qc.create');
+        Route::post('admin/qc/store', 'QcController@store')->name('qc.store');
+        Route::get('admin/qc/edit/{id}', 'QcController@edit')->name('qc.edit');
+        Route::put('admin/qc/update/{id}', 'QcController@update')->name('qc.update');
+        Route::get('admin/qc/print/{id}', 'QcController@print')->name('qc.print');
+        Route::get('admin/qc/delete/{id}', 'QcController@delete')->name('qc.delete');
+
+    // BP Converting
+        // Route::get('admin/fb/bbm', [CustomerController::class, 'getDetPurchaseOrder'])->name('po');
+        Route::get('admin/fb/bbm', [BbmRollController::class, 'getBBM'])->name('fb.list.bbm');
+        Route::get('admin/fb/bbm/add', [BbmRollController::class, 'add'])->name('fb.add.bbm');
+        Route::post('admin/fb/bbm/store', [BbmRollController::class, 'simpan_bbm'])->name('fb.store.bbm');
+        Route::get('admin/po/{supp}', [BbmRollController::class, 'getPurchaseOrderBySupp'])->name('fb.get.po');
+        Route::get('admin/po/id/{id}', [BbmRollController::class, 'getDetPoById'])->name('fb.get.byid');
+        Route::get('admin/po', [BbmRollController::class, 'getPurchaseOrderAll'])->name('fb.get.poall');
+        Route::get('admin/getSupp', [BbmRollController::class, 'getSupp'])->name('get.supp');
+
+    // Teknik
+        Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
+        Route::get('admin/fb/teknik', [BarangTeknikController::class, 'listBarang'])->name('fb.list.teknik');
+        Route::get('/admin/fb/mutasi/{kodebarang}', [BarangTeknikController::class, 'getMutasi'])->name('fb.teknik.mutasi');
+
+    // Marketing
+        Route::get('admin/marketing/getformpermintaan', [FormPermintaan::class, 'getPermintaan'])->name('mkt.get.formpermintaan');
+        Route::get('admin/marketing/formpermintaan', [FormPermintaan::class, 'listPermintaan'])->name('mkt.list.formpermintaan');
+        Route::get('admin/marketing/formpermintaan/add', [FormPermintaan::class, 'add'])->name('mkt.add.formpermintaan');
+        Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
+        Route::get('admin/marketing/formpermintaan/edit/{id}', [FormPermintaan::class, 'edit'])->name('mkt.edit.formpermintaan');
+        Route::put('admin/marketing/formpermintaan/update/{id}', [FormPermintaan::class, 'update'])->name('mkt.update.formpermintaan');
+        
+        Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
+        Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
+        Route::get('admin/marketing/formmc/add', [FormMc::class, 'add'])->name('mkt.add.formmc');
+        Route::post('admin/marketing/formmc/store', [FormMc::class, 'store'])->name('mkt.store.formmc');
+        Route::get('admin/marketing/formmc/edit/{kode}', [FormMc::class, 'edit'])->name('mkt.edit.formmc');
+        Route::put('admin/marketing/formmc/update/{kode}', [FormMc::class, 'update'])->name('mkt.update.formmc');
+
+        Route::get('admin/marketing/mod_by_tanggal', [MarektingOrder::class, 'get_mod_by_tanggal'])->name('mod.by.tanggal');
+        Route::get('admin/marketing/mod_by_tanggal/{tanggal}', [MarektingOrder::class, 'getMod'])->name('mkt.get.mod');
+        Route::get('admin/marketing/mod', [MarektingOrder::class, 'index'])->name('mkt.index.mod');
+        Route::get('admin/marketing/mod/create', [MarektingOrder::class, 'create'])->name('mkt.create.mod');
+        Route::get('/mod_kode/{tujuan}', [MarektingOrder::class, 'get_kode_mod'])->name('mod.get_kode');
+        Route::get('/matauang/{kode}', [MarektingOrder::class, 'get_mata_uang'])->name('mod.get_uang');
+        Route::get('/detail_mod/{kode}', [MarektingOrder::class, 'get_detail'])->name('detail_mod');
+        Route::post('admin/marketing/mod/store', [MarektingOrder::class, 'save_master'])->name('mod.save_master');
+        Route::post('admin/marketing/mod/store_detail', [MarektingOrder::class, 'save_detail'])->name('mod.save_detail');
+        Route::delete('/mod/delete/{id}', [MarektingOrder::class, 'delete'])->name('mod.delete');
+        Route::get('admin/marketing/mod/edit/{id}', [MarektingOrder::class, 'edit'])->name('mkt.edit.mod');
+        Route::get('admin/marketing/mod/print/{id}', [MarektingOrder::class, 'print_mod'])->name('mkt.print.mod');
+
+        Route::get('finance', [FinanceController::class, 'index'])->name('finance');
+        Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');
+        Route::get('finance/faktur', [FinanceController::class, 'index_faktur'])->name('finance.faktur');
+        Route::get('finance/getfaktur/', [FinanceController::class, 'get_faktur'])->name('finance.getfaktur');
+        Route::get('finance/faktur/print/{kode}', [FinanceController::class, 'print_faktur'])->name('finance.print.faktur');
+        
+        Route::get('hrd/stationary', [StationaryController::class, 'getBarang'])->name('stationary.barang');
+
+        Route::get('/getnotif', [NavbarController::class, 'getNotifOpenKontrak'])->name('notif.open');
+        Route::get('/jobs', [NavbarController::class, 'index'])->name('job.index');
+        Route::get('/jobs/create', [NavbarController::class, 'create'])->name('job.create');
+        Route::post('/jobs/store', [NavbarController::class, 'store'])->name('job.store');
+        Route::get('/jobs/action/{id}', [NavbarController::class, 'update'])->name('job.update');
+
+        
+        Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 }); 
 
 

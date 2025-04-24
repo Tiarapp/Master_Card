@@ -13,6 +13,8 @@ class RealisasiKirim extends Model
     protected $fillable =[
         'kontrak_m_id',
         'opi_id',
+        'nomer_sj',
+        'mod',
         'tanggal_kirim',
         'qty_kirim',
         'kg_kirim',

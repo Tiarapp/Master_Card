@@ -93,7 +93,12 @@
             <button type="button" data-toggle="modal" data-target="#Customer" class="btn btn-success">
                 Cari Customer <i class="fas fa-search"></i>
             </button>
+        
+            <button class="btn btn-primary" style="maring-left: 10px">
+                <a href={{ route('sync_fa') }} style="margin-bottom: 20px; color: white"> Sync Nomer FA</a>  
+            </button>
         </div>
+        
         <form action="{{ route('cust.print') }}" method="POST">
             @csrf
             <div class="card-body">

@@ -211,7 +211,7 @@
             var tipe = document.getElementById('tipebox').value;
             
             
-            if (tipe == 'B1') {
+            if (tipe == 'B1' || tipe == 'B3') {
                 document.getElementById('sizeCreasCorr').disabled = false;
                 document.getElementById('sizeCreasConv').disabled = false;
             } else {
@@ -284,7 +284,4 @@
             } 
             
         }
-        
-        
-        
     </script>

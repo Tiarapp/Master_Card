@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Navbar\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -74,5 +75,10 @@ class Kontrak_M extends Model
     public function realisasi()
     {
         return $this->hasMany(RealisasiKirim::class, 'kontrak_m_id', 'id');
+    }
+
+    public function jobs()
+    {
+        return $this->hasMany(Notification::class, 'kontrak_id', 'id');
     }
 }
