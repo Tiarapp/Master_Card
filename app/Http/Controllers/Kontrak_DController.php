@@ -269,6 +269,8 @@ class Kontrak_DController extends Controller
                 'mc', 'top', 'cust', 'sales'
             ));
         }
+
+        
         
         /**
         * Store a newly created resource in storage.

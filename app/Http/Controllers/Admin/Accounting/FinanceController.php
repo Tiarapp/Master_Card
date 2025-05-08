@@ -171,4 +171,33 @@ class FinanceController extends Controller
 
         return view('admin.acc.data_cust', compact('cust'));
     }
+
+    public function get_piutang()
+    {
+        $piutang = Piutang::select('KodeCust','NamaCust', DB::raw('SUM(TotalRp) as total_piutang'), DB::raw('SUM(TotalTerima) as total_terima'))
+            ->where('Note', 'JUAL')
+            // ->where('TotalTerima', 0)
+            ->groupBy('KodeCust', 'NamaCust')
+            ->orderBy('KodeCust', 'Asc')
+            ->get();
+
+        return view('admin.acc.piutang', compact('piutang'));
+    }
+
+    // public function piutang()
+    // {
+    //     return view('admin.acc.piutang');
+    // }
+
+    public function get_piutang_cust($cust)
+    {
+        $piutang = Piutang::select('KodeCust', 'NoFaktur', 'TglFaktur', 'TotalRp', 'TotalTerima')
+            ->where('KodeCust', $cust)
+            ->where('Note', 'JUAL')
+            ->where('TotalTerima', 0)
+            ->orderBy('TglFaktur', 'Asc')
+            ->get();
+
+        return response()->json(['data' => $piutang]);
+    }
 }
