@@ -408,6 +408,8 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
+        // Route::get('admin/acc/piutang', [FinanceController::class, 'piutang'])->name('acc.piutang');
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -506,6 +508,8 @@ Route::middleware(['auth'])->group(function (){
 
         
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
+
+        
 }); 
 
 
