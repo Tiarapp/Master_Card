@@ -174,8 +174,14 @@ class FinanceController extends Controller
 
     public function get_piutang()
     {
-        $piutang = Piutang::select('KodeCust','NamaCust', DB::raw('SUM(TotalRp) as total_piutang'), DB::raw('SUM(TotalTerima) as total_terima'))
-            ->where('Note', 'JUAL')
+        $piutang = Piutang::select(
+            'KodeCust', 
+            'NamaCust', 
+            // 'Note', 
+            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
+            DB::raw('SUM(TotalTerima) as total_terima')
+            )
+            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
             // ->where('TotalTerima', 0)
             ->groupBy('KodeCust', 'NamaCust')
             ->orderBy('KodeCust', 'Asc')
