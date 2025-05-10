@@ -166,6 +166,12 @@
                 document.getElementById('tengah').disabled = false;
                 document.getElementById('flute2').disabled = false;
                 document.getElementById('bawah').disabled = false;
+            } else if (namaflute == 'NF') {
+                document.getElementById('atas').disabled = false;
+                document.getElementById('flute1').disabled = true;
+                document.getElementById('tengah').disabled = true;
+                document.getElementById('flute2').disabled = true;
+                document.getElementById('bawah').disabled = true;
             }
             
         }
@@ -222,6 +228,11 @@
                 namaMcflute2 = '--';
                 namaLogflute2 = '--';
                 idflute2 = '';
+            }
+            if (bawah == '') {
+                namaMcbawah = '--';
+                namaLogbawah = '--';
+                idbawah = '';
             }
             
 

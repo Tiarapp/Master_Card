@@ -961,6 +961,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
             ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD', 'TDetSJ.Quantity', 'TSuratJalan.TglSJ')
             ->where('TSuratJalan.NamaCust', 'LIKE', $kontrak_M->customer_name)
+            ->orWhere('TSuratJalan.NamaCust', 'LIKE', 'PT. SARANA PACKAGING AGRAPANA')
             ->get();
 
             // dd($sj);

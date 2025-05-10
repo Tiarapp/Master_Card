@@ -17,7 +17,6 @@ class FinanceController extends Controller
 {
     public function index()
     {
-        // dd(Piutang::get());
         return view('admin.acc.import_ju');
     }
 

@@ -65,10 +65,10 @@ class BarangController extends Controller
                             return number_format($temp1->SaldoPcs, 0);
                         })
                         ->addColumn('saldo_kg', function($temp1) {
-                            return number_format($temp1->SaldoKg, 0);
+                            return number_format($temp1->SaldoKg, 2);
                         })
                         ->addColumn('berat', function($temp1) {
-                            return number_format($temp1->BeratStandart, 0);
+                            return number_format($temp1->BeratStandart, 2);
                         })
                         ->addColumn('isi_karton', function($temp1) {
                             return number_format($temp1->IsiPerKarton, 0);

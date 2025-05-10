@@ -843,6 +843,8 @@
             flute = '05';
         } else if (flute == 'Roll') {
             flute = '50';
+         }else if (flute == 'NF') {
+            flute = '06';
         }
 
         if (tipemc == 'F' || tipebox == 'R') {  
