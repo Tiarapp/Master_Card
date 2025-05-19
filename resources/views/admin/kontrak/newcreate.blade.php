@@ -811,8 +811,8 @@
             document.getElementById('telp').value = cust[3];
 
             $.get('../acc/get_piutang/' + cust[0], function(response) {
-                let piutang = response.data[0].total_quantity ?? 0;
-                console.log(piutang);
+                console.log(response);
+                let piutang = response[0].total_piutang - response[0].total_terima;
                 
                 document.getElementById('piutang').value = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(piutang);
             }).fail(function(error) {

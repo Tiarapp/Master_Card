@@ -196,13 +196,19 @@ class FinanceController extends Controller
 
     public function get_piutang_cust($cust)
     {
-        $piutang = Piutang::select('KodeCust', 'NoFaktur', 'TglFaktur', 'TotalRp', 'TotalTerima')
+        $piutang = Piutang::select(
+            'KodeCust', 
+            // 'NamaCust', 
+            // 'Note', 
+            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
+            DB::raw('SUM(TotalTerima) as total_terima')
+            )
+            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
             ->where('KodeCust', $cust)
-            ->where('Note', 'JUAL')
-            ->where('TotalTerima', 0)
-            ->orderBy('TglFaktur', 'Asc')
+            ->groupBy('KodeCust')
+            ->orderBy('KodeCust', 'Asc')
             ->get();
 
-        return response()->json(['data' => $piutang]);
+        return response()->json($piutang);
     }
 }
