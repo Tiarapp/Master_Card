@@ -14,6 +14,7 @@ use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\PaletController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
@@ -509,7 +510,7 @@ Route::middleware(['auth'])->group(function (){
         
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 
-        
+        Route::get('/nomer_opi', [SettingController::class, 'get_opi'])->name('nomer_opi');
 }); 
 
 
