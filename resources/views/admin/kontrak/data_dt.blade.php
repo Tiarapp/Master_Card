@@ -32,6 +32,13 @@
                         </button>
                         <strong>{{ $message }}</strong>
                     </div>
+                @elseif ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>{{ $message }}</strong>
+                    </div>
                 @endif
                 <form action="{{ route('kontrak.store_dt') }}" method="POST"  >
                     {{ csrf_field() }}
@@ -300,7 +307,7 @@
                             <br>
                             
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_dt">Tambah DT & OPI</button>
+                                <button type="button" class="btn btn-primary opi" data-toggle="modal" data-target="#add_dt">Tambah DT & OPI</button>
                                 {{-- <button type="submit" class="btn btn-primary" >Tambah DT & OPI</button> --}}
                             </div>
                         </div>
@@ -335,6 +342,33 @@
         },
         // "scrollY": "400px",
         select: true,
+    });
+
+    // Ambil nomer OPI dari backend saat tombol diklik
+    $('.opi').on('click', function() {
+        var idkontrakm = "{{ $kontrak_M->id }}";
+        $.ajax({
+            url: "{{ route('nomer_opi') }}",
+            type: "GET",
+            success: function(response) {
+                // response.nomer_opi diasumsikan dikirim dari backend
+                console.log(response);
+                
+                $('#nomer_opi').val(response.nomer);
+            },
+            error: function() {
+                alert('Gagal mengambil nomer OPI');
+            }
+        });
+
+        // Set data lain jika diperlukan
+        var kode = "{{ $kontrak_M->kode }}";
+        var sisa = $('#sisa').val();
+        var sisa_kirim = $('#sisa_kirim').val();
+        $('#idkontrakm').val(idkontrakm);
+        $('#kode').val(kode);
+        $('#sisa').val(sisa);
+        $('#sisa_kirim').val(sisa_kirim);
     });
 
     $("#data_b1").DataTable({
