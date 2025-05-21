@@ -300,7 +300,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" name="gramSheetBoxKontrak2" id="gramSheetBoxKontrak2">
-                                            <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" >
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxKontrak" id="gramSheetBoxKontrak" required>
                                         </div>
                                 </div>
                                     <div class="row">
@@ -309,7 +309,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <input type="hidden" name="gramSheetBoxProduksi2" id="gramSheetBoxProduksi2">
-                                            <input type="text" class="form-control txt_line" name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" >
+                                            <input type="text" class="form-control txt_line" name="gramSheetBoxProduksi" id="gramSheetBoxProduksi" required>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -843,6 +843,8 @@
             flute = '05';
         } else if (flute == 'Roll') {
             flute = '50';
+         }else if (flute == 'NF') {
+            flute = '06';
         }
 
         if (tipemc == 'F' || tipebox == 'R') {  

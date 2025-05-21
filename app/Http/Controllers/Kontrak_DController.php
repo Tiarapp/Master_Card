@@ -269,6 +269,8 @@ class Kontrak_DController extends Controller
                 'mc', 'top', 'cust', 'sales'
             ));
         }
+
+        
         
         /**
         * Store a newly created resource in storage.
@@ -537,18 +539,6 @@ class Kontrak_DController extends Controller
             $tahun = '2025';
             
             if ($request->tglKirim != null) {
-                $lastOpi = Opi_M::where('periode', '=', $tahun) 
-                ->first();
-                
-                if($lastOpi === null){
-                    $numb_opi = '0001'.$alphabet;
-                    // dd($numb_opi);
-                } else {
-                    $lastOpi = Opi_M::where('periode', '=', $tahun)->get();
-                    $numb_opi = str_pad(count($lastOpi)+1,4, '0', STR_PAD_LEFT).$alphabet;
-                    // dd($numb_opi);
-                };
-                
                 
                 $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
                 
@@ -589,7 +579,7 @@ class Kontrak_DController extends Controller
                     }
                 }
                 
-                $checkOpi = Opi_M::where('nama', '=', $numb_opi )->first();
+                $checkOpi = Opi_M::where('nama', '=', $request->nomer_opi )->first();
                 
                 if ($checkOpi == null) {
                     $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
@@ -603,7 +593,7 @@ class Kontrak_DController extends Controller
                                 
                                 $dt = DeliveryTime::create([
                                     'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $numb_opi,
+                                    'opi' => $request->nomer_opi,
                                     'kodeKontrak' => $request->kode,
                                     'tglKirimDt' => $request->tglKirim,
                                     'locked' => 1,
@@ -612,9 +602,9 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $opim = Opi_M::create([   
-                                    'nama' => $numb_opi,
+                                    'nama' => $request->nomer_opi,
                                     'periode' => $tahun,
-                                    'NoOPI' => $numb_opi,
+                                    'NoOPI' => $request->nomer_opi,
                                     'dt_id' => $dt->id,
                                     'mc_id' => $kontrakd->mc_id,
                                     'kontrak_m_id' => $request->idkontrakm,
@@ -640,7 +630,7 @@ class Kontrak_DController extends Controller
                             } else {
                                 $dt = DeliveryTime::create([
                                     'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $numb_opi,
+                                    'opi' => $request->nomer_opi,
                                     'kodeKontrak' => $request->kode,
                                     'tglKirimDt' => $request->tglKirim,
                                     'pcsDt' => $request->jumlahKirim,
@@ -648,9 +638,9 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $opim = Opi_M::create([   
-                                    'nama' => $numb_opi,
+                                    'nama' => $request->nomer_opi,
                                     'periode' => $tahun,
-                                    'NoOPI' => $numb_opi,
+                                    'NoOPI' => $request->nomer_opi,
                                     'dt_id' => $dt->id,
                                     'mc_id' => $kontrakd->mc_id,
                                     'kontrak_m_id' => $request->idkontrakm,
@@ -681,7 +671,7 @@ class Kontrak_DController extends Controller
                             if (($request->jumlahKirim/$request->outconv) + $totaldc > 54000) {
                                 $dt = DeliveryTime::create([
                                     'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $numb_opi,
+                                    'opi' => $request->nomer_opi,
                                     'kodeKontrak' => $request->kode,
                                     'tglKirimDt' => $request->tglKirim,
                                     'locked' => 1,
@@ -690,9 +680,9 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $opim = Opi_M::create([   
-                                    'nama' => $numb_opi,
+                                    'nama' => $request->nomer_opi,
                                     'periode' => $tahun,
-                                    'NoOPI' => $numb_opi,
+                                    'NoOPI' => $request->nomer_opi,
                                     'dt_id' => $dt->id,
                                     'mc_id' => $kontrakd->mc_id,
                                     'kontrak_m_id' => $request->idkontrakm,
@@ -715,7 +705,7 @@ class Kontrak_DController extends Controller
                             } else {
                                 $dt = DeliveryTime::create([
                                     'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $numb_opi,
+                                    'opi' => $request->nomer_opi,
                                     'kodeKontrak' => $request->kode,
                                     'tglKirimDt' => $request->tglKirim,
                                     'pcsDt' => $request->jumlahKirim,
@@ -723,9 +713,9 @@ class Kontrak_DController extends Controller
                                 ]);
                                 
                                 $opim = Opi_M::create([   
-                                    'nama' => $numb_opi,
+                                    'nama' => $request->nomer_opi,
                                     'periode' => $tahun,
-                                    'NoOPI' => $numb_opi,
+                                    'NoOPI' => $request->nomer_opi,
                                     'dt_id' => $dt->id,
                                     'mc_id' => $kontrakd->mc_id,
                                     'kontrak_m_id' => $request->idkontrakm,
@@ -754,7 +744,7 @@ class Kontrak_DController extends Controller
                         } else {
                             $dt = DeliveryTime::create([
                                 'kontrak_m_id' => $request->idkontrakm,
-                                'opi' => $numb_opi,
+                                'opi' => $request->nomer_opi,
                                 'kodeKontrak' => $request->kode,
                                 'tglKirimDt' => $request->tglKirim,
                                 'pcsDt' => $request->jumlahKirim,
@@ -762,9 +752,9 @@ class Kontrak_DController extends Controller
                             ]);
                             
                             $opim = Opi_M::create([   
-                                'nama' => $numb_opi,
+                                'nama' => $request->nomer_opi,
                                 'periode' => $tahun,
-                                'NoOPI' => $numb_opi,
+                                'NoOPI' => $request->nomer_opi,
                                 'dt_id' => $dt->id,
                                 'mc_id' => $kontrakd->mc_id,
                                 'kontrak_m_id' => $request->idkontrakm,
@@ -791,9 +781,12 @@ class Kontrak_DController extends Controller
                             $kontrakd->save();
                         }
                     }
-                }
+                } else {
+                    return redirect()->to(url()->previous())->with('error', 'OPI ini '. $request->nomer_opi. ' sudah dibuat oleh '. $checkOpi->createdBy);
+                } 
+
             }
-            return redirect()->to(url()->previous())->with('success', 'Data DT dan OPI Berhasi disimpan dengan Nomor OPI'.$numb_opi );
+            return redirect()->to(url()->previous())->with('success', 'Data DT dan OPI Berhasi disimpan dengan Nomor OPI '.$request->nomer_opi, );
         }
         
         /**
@@ -961,6 +954,7 @@ class Kontrak_DController extends Controller
             ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
             ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD', 'TDetSJ.Quantity', 'TSuratJalan.TglSJ')
             ->where('TSuratJalan.NamaCust', 'LIKE', $kontrak_M->customer_name)
+            ->orWhere('TSuratJalan.NamaCust', 'LIKE', 'PT. SARANA PACKAGING AGRAPANA')
             ->get();
 
             // dd($sj);

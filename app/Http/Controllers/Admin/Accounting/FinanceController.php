@@ -17,7 +17,6 @@ class FinanceController extends Controller
 {
     public function index()
     {
-        // dd(Piutang::get());
         return view('admin.acc.import_ju');
     }
 
@@ -170,5 +169,46 @@ class FinanceController extends Controller
         $cust = DB::connection('firebird')->table('TCustomer')->get();
 
         return view('admin.acc.data_cust', compact('cust'));
+    }
+
+    public function get_piutang()
+    {
+        $piutang = Piutang::select(
+            'KodeCust', 
+            'NamaCust', 
+            // 'Note', 
+            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
+            DB::raw('SUM(TotalTerima) as total_terima')
+            )
+            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
+            // ->where('TotalTerima', 0)
+            ->groupBy('KodeCust', 'NamaCust')
+            ->orderBy('KodeCust', 'Asc')
+            ->get();
+
+        return view('admin.acc.piutang', compact('piutang'));
+    }
+
+    // public function piutang()
+    // {
+    //     return view('admin.acc.piutang');
+    // }
+
+    public function get_piutang_cust($cust)
+    {
+        $piutang = Piutang::select(
+            'KodeCust', 
+            // 'NamaCust', 
+            // 'Note', 
+            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
+            DB::raw('SUM(TotalTerima) as total_terima')
+            )
+            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
+            ->where('KodeCust', $cust)
+            ->groupBy('KodeCust')
+            ->orderBy('KodeCust', 'Asc')
+            ->get();
+
+        return response()->json($piutang);
     }
 }

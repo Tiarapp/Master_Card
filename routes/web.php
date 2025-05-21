@@ -14,6 +14,7 @@ use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\PaletController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
@@ -408,6 +409,8 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
+        Route::get('admin/acc/get_piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang');
+        // Route::get('admin/acc/piutang', [FinanceController::class, 'piutang'])->name('acc.piutang');
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -506,6 +509,8 @@ Route::middleware(['auth'])->group(function (){
 
         
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
+
+        Route::get('/nomer_opi', [SettingController::class, 'get_opi'])->name('nomer_opi');
 }); 
 
 

@@ -174,6 +174,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Piutang</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control txt_line" name="piutang" id="piutang" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row">
@@ -795,6 +809,15 @@
             document.getElementById('namaCust').value = name;
             document.getElementById('alamatKirim').value = cust[5];
             document.getElementById('telp').value = cust[3];
+
+            $.get('../acc/get_piutang/' + cust[0], function(response) {
+                console.log(response);
+                let piutang = response[0].total_piutang - response[0].total_terima;
+                
+                document.getElementById('piutang').value = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(piutang);
+            }).fail(function(error) {
+                console.error('Error fetching data:', error);
+            });
         } );
     } );
 
