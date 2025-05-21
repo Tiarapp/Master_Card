@@ -205,6 +205,7 @@ class FinanceController extends Controller
                 'Tanggal',
                 'TotalRp',
                 'TotalTerima',
+                'TglJT',
                 DB::raw("CASE 
                 WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
                 ELSE (TotalRp - TotalTerima)
@@ -220,13 +221,26 @@ class FinanceController extends Controller
                 ->addColumn('total', function($piutang){ 
                     return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
                 })
+                ->addColumn('terima', function($piutang){ 
+                    return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
+                })
+                ->addColumn('totalrp', function($piutang){ 
+                    return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
+                })
+                ->addColumn('tanggal', function($piutang){ 
+                    return date('d-m-Y', strtotime($piutang->Tanggal));
+                })
+                ->addColumn('tgljt', function($piutang){ 
+                    return date('d-m-Y', strtotime($piutang->TglJT));
+                })
                 ->make(true);
         }
 
         $cust = DB::connection('firebird')->table('TCustomer')
             ->where('Kode', 'LIKE', '%'.trim($cust).'%')
-            ->select('KotaKantor', 'AlamatKantor')
             ->first();
+
+        // dd($cust);
 
         return view('admin.acc.piutang_cust', compact('cust'));
     }

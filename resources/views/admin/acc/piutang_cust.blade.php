@@ -1,4 +1,6 @@
-@extends('layouts.admin')
+
+<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
+@extends('admin.templates.partials.default')
 
 @section('content')
 <div class="container mt-4">
@@ -8,10 +10,11 @@
             <strong>Informasi Customer</strong>
         </div>
         <div class="card-body">
-            <p><strong>Nama:</strong> {{ $customer->nama }}</p>
-            <p><strong>Kode Customer:</strong> {{ $customer->kode }}</p>
-            <p><strong>Alamat:</strong> {{ $customer->alamat }}</p>
-            <p><strong>No. Telepon:</strong> {{ $customer->telepon }}</p>
+            <p><strong>Nama:</strong> {{ $cust->Nama }}</p>
+            <p id="kode"><strong>Kode Customer:</strong> {{ $cust->Kode }}  </p>
+            <p><strong>Alamat:</strong> {{ $cust->AlamatKantor }} </p>
+            <p><strong>No. Telepon:</strong> {{ $cust->TelpKantor }} </p>
+            <p><strong>Term of Payment:</strong> {{ $cust->WAKTUBAYAR }} </p>
         </div>
     </div>
 
@@ -20,41 +23,48 @@
             <strong>Daftar Piutang</strong>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped" id="data_faktur">
                 <thead>
                     <tr>
                         <th>No. Faktur</th>
                         <th>Tanggal</th>
                         <th>Jatuh Tempo</th>
-                        <th>Total</th>
+                        <th>Total Bayar</th>
+                        <th>Total Terima</th>
                         <th>Sisa Piutang</th>
-                        <th>Status</th>
+                        {{-- <th>Status</th> --}}
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($piutangs as $piutang)
-                    <tr>
-                        <td>{{ $piutang->no_faktur }}</td>
-                        <td>{{ \Carbon\Carbon::parse($piutang->tanggal)->format('d-m-Y') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($piutang->jatuh_tempo)->format('d-m-Y') }}</td>
-                        <td>Rp {{ number_format($piutang->total, 0, ',', '.') }}</td>
-                        <td>Rp {{ number_format($piutang->sisa_piutang, 0, ',', '.') }}</td>
-                        <td>
-                            @if($piutang->sisa_piutang == 0)
-                                <span class="badge bg-success">Lunas</span>
-                            @else
-                                <span class="badge bg-warning text-dark">Belum Lunas</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Tidak ada data piutang.</td>
-                    </tr>
-                    @endforelse
+                    
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        var kodeCustomer = $('#kode').text();
+        console.log(kodeCustomer);
+        $('#data_faktur').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('acc.piutang.cust', $cust->Kode) }}",
+                type: 'GET'
+            },
+            columns: [
+                { data: 'NoBukti', name: 'NoBukti' },
+                { data: 'tanggal', name: 'tanggal' },
+                { data: 'tgljt', name: 'tgljt' },
+                { data: 'totalrp', name: 'totalrp' },
+                { data: 'terima', name: 'terima' },
+                { data: 'total', name: 'total' },
+            ],
+            pageLength: 50,
+            order: [[1, 'desc']],
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        });
+    });
+</script>
 @endsection
