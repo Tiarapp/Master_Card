@@ -13,6 +13,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 use Yajra\DataTables\DataTables;
 
+use function Ramsey\Uuid\v1;
+
 class FinanceController extends Controller
 {
     public function index()
@@ -194,15 +196,38 @@ class FinanceController extends Controller
     //     return view('admin.acc.piutang');
     // }
 
-    public function get_piutang_cust($cust)
+    public function get_piutang_cust(Request $request, $cust)
     {
-        $piutang = Piutang::select('KodeCust', 'NoFaktur', 'TglFaktur', 'TotalRp', 'TotalTerima')
+        if ($request->ajax()) {
+            $piutang = Piutang::select(
+                'NoBukti',
+                'NoRef',
+                'Tanggal',
+                'TotalRp',
+                'TotalTerima',
+                DB::raw("CASE 
+                WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
+                ELSE (TotalRp - TotalTerima)
+                END as sisa_piutang")
+            )
             ->where('KodeCust', $cust)
-            ->where('Note', 'JUAL')
-            ->where('TotalTerima', 0)
-            ->orderBy('TglFaktur', 'Asc')
+            ->whereIn('Note', ['JUAL', 'RETUR'])
+            ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+            ->orderBy('Tanggal', 'Asc')
             ->get();
 
-        return response()->json(['data' => $piutang]);
+            return DataTables::of($piutang)
+                ->addColumn('total', function($piutang){ 
+                    return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
+                })
+                ->make(true);
+        }
+
+        $cust = DB::connection('firebird')->table('TCustomer')
+            ->where('Kode', 'LIKE', '%'.trim($cust).'%')
+            ->select('KotaKantor', 'AlamatKantor')
+            ->first();
+
+        return view('admin.acc.piutang_cust', compact('cust'));
     }
 }

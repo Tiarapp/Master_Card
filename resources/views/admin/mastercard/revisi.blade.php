@@ -1345,7 +1345,7 @@
                 Kbawah = 0 ;
             }
             
-            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.27) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.21) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
             
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
@@ -1555,7 +1555,7 @@
             console.log(Patas, Pbf, Ptengah, Pcf, Pbawah);
             
             
-            gramKualitas = (parseInt(Patas) + (parseInt(Pcf)*1.27) + parseInt(Ptengah) + (parseInt(Pbf)*1.36) + parseInt(Pbawah))/1000;
+            gramKualitas = (parseInt(Patas) + (parseInt(Pcf)*1.21) + parseInt(Ptengah) + (parseInt(Pbf)*1.36) + parseInt(Pbawah))/1000;
             
             
             if (doublejoint == 'Ya') {

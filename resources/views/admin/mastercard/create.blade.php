@@ -1184,7 +1184,7 @@
                 Kbawah = 0 ;
             }
             
-            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.27) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
+            gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.21) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
             
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
