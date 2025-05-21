@@ -198,7 +198,6 @@ class FinanceController extends Controller
 
     public function get_piutang_cust(Request $request, $cust)
     {
-<<<<<<< HEAD
         if ($request->ajax()) {
             $piutang = Piutang::select(
                 'NoBukti',
@@ -230,21 +229,5 @@ class FinanceController extends Controller
             ->first();
 
         return view('admin.acc.piutang_cust', compact('cust'));
-=======
-        $piutang = Piutang::select(
-            'KodeCust', 
-            // 'NamaCust', 
-            // 'Note', 
-            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
-            DB::raw('SUM(TotalTerima) as total_terima')
-            )
-            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
-            ->where('KodeCust', $cust)
-            ->groupBy('KodeCust')
-            ->orderBy('KodeCust', 'Asc')
-            ->get();
-
-        return response()->json($piutang);
->>>>>>> 71c2ac6292966526c31b7247eed72a7a2f24518c
     }
 }

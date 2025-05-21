@@ -409,13 +409,8 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-<<<<<<< HEAD
         Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
         Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
-=======
-        Route::get('admin/acc/get_piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang');
-        // Route::get('admin/acc/piutang', [FinanceController::class, 'piutang'])->name('acc.piutang');
->>>>>>> 71c2ac6292966526c31b7247eed72a7a2f24518c
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
