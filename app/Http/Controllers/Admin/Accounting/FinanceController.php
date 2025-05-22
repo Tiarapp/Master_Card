@@ -14,6 +14,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 use Yajra\DataTables\DataTables;
 
 use function Ramsey\Uuid\v1;
+use Carbon\Carbon;
 
 class FinanceController extends Controller
 {
@@ -198,7 +199,7 @@ class FinanceController extends Controller
 
     public function get_piutang_cust(Request $request, $cust)
     {
-        if ($request->ajax()) {
+        // if ($request->ajax()) {
             $piutang = Piutang::select(
                 'NoBukti',
                 'NoRef',
@@ -207,9 +208,10 @@ class FinanceController extends Controller
                 'TotalTerima',
                 'TglJT',
                 DB::raw("CASE 
-                WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
-                ELSE (TotalRp - TotalTerima)
-                END as sisa_piutang")
+                    WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
+                    ELSE (TotalRp - TotalTerima)
+                    END as sisa_piutang"),
+                DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
             )
             ->where('KodeCust', $cust)
             ->whereIn('Note', ['JUAL', 'RETUR'])
@@ -217,24 +219,26 @@ class FinanceController extends Controller
             ->orderBy('Tanggal', 'Asc')
             ->get();
 
-            return DataTables::of($piutang)
-                ->addColumn('total', function($piutang){ 
-                    return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
-                })
-                ->addColumn('terima', function($piutang){ 
-                    return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
-                })
-                ->addColumn('totalrp', function($piutang){ 
-                    return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
-                })
-                ->addColumn('tanggal', function($piutang){ 
-                    return date('d-m-Y', strtotime($piutang->Tanggal));
-                })
-                ->addColumn('tgljt', function($piutang){ 
-                    return date('d-m-Y', strtotime($piutang->TglJT));
-                })
-                ->make(true);
-        }
+            // dd($piutang);
+
+            // return DataTables::of($piutang)
+            //     ->addColumn('total', function($piutang){ 
+            //         return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('terima', function($piutang){ 
+            //         return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('totalrp', function($piutang){ 
+            //         return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('tanggal', function($piutang){ 
+            //         return date('d-m-Y', strtotime($piutang->Tanggal));
+            //     })
+            //     ->addColumn('tgljt', function($piutang){ 
+            //         return date('d-m-Y', strtotime($piutang->TglJT));
+            //     })
+            //     ->make(true);
+        // }
 
         $cust = DB::connection('firebird')->table('TCustomer')
             ->where('Kode', 'LIKE', '%'.trim($cust).'%')
@@ -242,6 +246,6 @@ class FinanceController extends Controller
 
         // dd($cust);
 
-        return view('admin.acc.piutang_cust', compact('cust'));
+        return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
     }
 }
