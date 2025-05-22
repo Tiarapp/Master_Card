@@ -63,6 +63,7 @@
                 <th scope="col">Total Piutang</th>
                 <th scope="col">Total Terima</th>
               <th scope="col">Total Piutang Customer</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +76,9 @@
                 <td>{{ number_format($data->total_piutang, 2, '.', ',') }}</td>
                 <td>{{ number_format($data->total_terima, 2, '.', ',') }}</td>
                 <td>{{ number_format($data->total_piutang - $data->total_terima, 2, '.', ',') }}</td>
+                <td>
+                  <a href="{{ route('acc.piutang.cust', $data->KodeCust) }}" class="btn btn-primary">Detail</a>
+                </td>
               </tr>
             <?php
             }

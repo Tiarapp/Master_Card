@@ -13,6 +13,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 use Yajra\DataTables\DataTables;
 
+use function Ramsey\Uuid\v1;
+use Carbon\Carbon;
+
 class FinanceController extends Controller
 {
     public function index()
@@ -194,21 +197,55 @@ class FinanceController extends Controller
     //     return view('admin.acc.piutang');
     // }
 
-    public function get_piutang_cust($cust)
+    public function get_piutang_cust(Request $request, $cust)
     {
-        $piutang = Piutang::select(
-            'KodeCust', 
-            // 'NamaCust', 
-            // 'Note', 
-            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
-            DB::raw('SUM(TotalTerima) as total_terima')
+        // if ($request->ajax()) {
+            $piutang = Piutang::select(
+                'NoBukti',
+                'NoRef',
+                'Tanggal',
+                'TotalRp',
+                'TotalTerima',
+                'TglJT',
+                DB::raw("CASE 
+                    WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
+                    ELSE (TotalRp - TotalTerima)
+                    END as sisa_piutang"),
+                DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
             )
-            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
             ->where('KodeCust', $cust)
-            ->groupBy('KodeCust')
-            ->orderBy('KodeCust', 'Asc')
+            ->whereIn('Note', ['JUAL', 'RETUR'])
+            ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+            ->orderBy('Tanggal', 'Asc')
             ->get();
 
-        return response()->json($piutang);
+            // dd($piutang);
+
+            // return DataTables::of($piutang)
+            //     ->addColumn('total', function($piutang){ 
+            //         return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('terima', function($piutang){ 
+            //         return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('totalrp', function($piutang){ 
+            //         return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
+            //     })
+            //     ->addColumn('tanggal', function($piutang){ 
+            //         return date('d-m-Y', strtotime($piutang->Tanggal));
+            //     })
+            //     ->addColumn('tgljt', function($piutang){ 
+            //         return date('d-m-Y', strtotime($piutang->TglJT));
+            //     })
+            //     ->make(true);
+        // }
+
+        $cust = DB::connection('firebird')->table('TCustomer')
+            ->where('Kode', 'LIKE', '%'.trim($cust).'%')
+            ->first();
+
+        // dd($cust);
+
+        return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
     }
 }
