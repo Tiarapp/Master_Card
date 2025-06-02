@@ -79,6 +79,14 @@
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="{{ route('finance') }}" class="nav-link">
+                    <i class="fa-solid fa-map-location-dot nav-icon"></i>
+                      <p>Import JU</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
                   <a href="{{ route('acc.mod.index') }}" class="nav-link">
                     <i class="fa-solid fa-check-to-slot nav-icon"></i>
                       <p>Approve MOD</p>

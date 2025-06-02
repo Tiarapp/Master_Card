@@ -192,14 +192,9 @@ class FinanceController extends Controller
         return view('admin.acc.piutang', compact('piutang'));
     }
 
-    // public function piutang()
-    // {
-    //     return view('admin.acc.piutang');
-    // }
-
-    public function get_piutang_cust(Request $request, $cust)
+    public function get_piutang_cust($cust)
     {
-        // if ($request->ajax()) {
+
             $piutang = Piutang::select(
                 'NoBukti',
                 'NoRef',
@@ -218,27 +213,6 @@ class FinanceController extends Controller
             ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
             ->orderBy('Tanggal', 'Asc')
             ->get();
-
-            // dd($piutang);
-
-            // return DataTables::of($piutang)
-            //     ->addColumn('total', function($piutang){ 
-            //         return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('terima', function($piutang){ 
-            //         return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('totalrp', function($piutang){ 
-            //         return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('tanggal', function($piutang){ 
-            //         return date('d-m-Y', strtotime($piutang->Tanggal));
-            //     })
-            //     ->addColumn('tgljt', function($piutang){ 
-            //         return date('d-m-Y', strtotime($piutang->TglJT));
-            //     })
-            //     ->make(true);
-        // }
 
         $cust = DB::connection('firebird')->table('TCustomer')
             ->where('Kode', 'LIKE', '%'.trim($cust).'%')

@@ -47,9 +47,9 @@
                 <tbody>
                     @foreach ($piutang as $data)
                     <tr>
-                        <td>{{ date('d-m-Y', strtotime($data->Tanggal)) }}</td>
+                        <td>{{ date('Y-m-d', strtotime($data->Tanggal)) }}</td>
                         <td>{{ $data->NoBukti }}</td>
-                        <td>{{ date('d-m-Y', strtotime($data->TglJT)) }}</td>
+                        <td>{{ date('Y-m-d', strtotime($data->TglJT)) }}</td>
                         <td>{{ number_format($data->TotalRp, 2, '.', ',') }}</td>
                         <td>{{ number_format($data->TotalTerima, 2, '.', ',') }}</td>
                         <td>{{ number_format($data->sisa_piutang, 2, '.', ',') }}</td>
@@ -65,6 +65,45 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" style="text-align:left">TOTAL</th>
+                        <th>
+                            {{ number_format($piutang->sum('TotalRp'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->sum('TotalTerima'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari < 0)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 0 && $d->selisih_hari <= 15)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 16 && $d->selisih_hari <= 30)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 31 && $d->selisih_hari <= 45)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 46 && $d->selisih_hari <= 60)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 61 && $d->selisih_hari <= 90)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 91 && $d->selisih_hari <= 120)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th>
+                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 121)->sum('sisa_piutang'), 2, '.', ',') }}
+                        </th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -99,7 +138,7 @@
             ],
             "pageLength": 25,
             "lengthMenu": [ 25, 50, 75, 100 ],
-            "order": [ 0, "desc" ],
+            "order": [ 0, "asc" ],
             select: true
         });
     })
