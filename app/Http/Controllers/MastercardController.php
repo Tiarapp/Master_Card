@@ -709,10 +709,10 @@ class MastercardController extends Controller
         $mc->tipeMc = $request->tipeMc;
         $mc->substanceKontrak_id = $request->substanceKontrak_id;
         $mc->substanceProduksi_id = $request->substanceProduksi_id;
-        $mc->gramSheetBoxKontrak2 = $request->gramSheetBoxKontrak2;
-        $mc->gramSheetBoxProduksi2 = $request->gramSheetBoxProduksi2;
-        $mc->gramSheetCorrKontrak2 = $request->gramSheetCorrKontrak2;
-        $mc->gramSheetCorrProduksi2 = $request->gramSheetCorrProduksi2;
+        $mc->gramSheetBoxKontrak2 = $request->gramSheetBoxKontrak;
+        $mc->gramSheetBoxProduksi2 = $request->gramSheetBoxProduksi;
+        $mc->gramSheetCorrKontrak2 = $request->gramSheetCorrKontrak;
+        $mc->gramSheetCorrProduksi2 = $request->gramSheetCorrProduksi;
         $mc->gramSheetBoxKontrak = $request->gramSheetBoxKontrak;
         $mc->gramSheetBoxProduksi = $request->gramSheetBoxProduksi;
         $mc->gramSheetCorrKontrak = $request->gramSheetCorrKontrak;
@@ -721,7 +721,7 @@ class MastercardController extends Controller
         $mc->colorCombine_id = $request->colorCombine_id;
         $mc->lastUpdatedBy = Auth::user()->name;
         $mc->gambar = $nama_file;
-        
+
         $mc->save();
 
         Tracking::create([

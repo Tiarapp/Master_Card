@@ -146,6 +146,7 @@
                                                         <option value='10'>10 Koli</option>
                                                         <option value='20'>20 Koli</option>
                                                         <option value='25'>25 Koli</option>
+                                                        <option value='40'>40 Koli</option>
                                                         <option value='50'>50 Koli</option>
                                                         <option value='60'>60 Koli</option>
                                                         <option value='00'>100 Koli</option>

@@ -438,22 +438,26 @@ class Kontrak_DController extends Controller
             $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
-            // End tampilkan untuk edit
             
-            
-            // dd($kontrak_D);
-            // $count = count($kontrak_D);
-            
-            
-            // dd($kontrak_M);
-            return view('admin.kontrak.edit', compact(
-                'cust',
-                'mc',
-                'top',
-                'sales',
-                // 'count',
-                'kontrak_D'
-            ), ['kontrak_M' => $kontrak_M]);
+            if($kontrak_M->status == 2){
+                return view('admin.kontrak.edit', compact(
+                    'cust',
+                    'mc',
+                    'top',
+                    'sales',
+                    'kontrak_D'
+                ), ['kontrak_M' => $kontrak_M]);
+            } else if(Auth::user()->divisi_id == 2){
+                return view('admin.kontrak.edit', compact(
+                    'cust',
+                    'mc',
+                    'top',
+                    'sales',
+                    'kontrak_D'
+                ), ['kontrak_M' => $kontrak_M]);
+            } else {
+                return redirect('admin/kontrak');
+            } 
         }
         
         public function add_dt($id)
