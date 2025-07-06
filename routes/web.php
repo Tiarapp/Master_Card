@@ -460,6 +460,12 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/po', [BbmRollController::class, 'getPurchaseOrderAll'])->name('fb.get.poall');
         Route::get('admin/getSupp', [BbmRollController::class, 'getSupp'])->name('get.supp');
 
+        Route::get('admin/fb/bp', [BarangController::class, 'teknik'])->name('fb.list.bp');
+        Route::post('admin/fb/bp/mutasi/', [BarangController::class, 'get_mutasi_bp'])->name('fb.bp.mutasi');
+        Route::get('admin/fb/bp-lama', [BarangController::class, 'bp_lama'])->name('fb.list.bp_lama');
+        Route::post('admin/fb/bp/mutasi-lama/', [BarangController::class, 'get_mutasi_bp_lama'])->name('fb.bp_lama.mutasi');
+
+
     // Teknik
         Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
         Route::get('admin/fb/teknik', [BarangTeknikController::class, 'listBarang'])->name('fb.list.teknik');

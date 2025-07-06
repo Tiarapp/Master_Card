@@ -130,21 +130,16 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fa-solid fa-toilet-paper nav-icon"></i>
-                  <p>
-                    Sheet                    
-                  <i class="right fas fa-angle-left"></i>
-                  </p>
-                <i class="right fas fa-angle-left"></i>
-                </a><ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('sheet') }}" class="nav-link">
-                      <i class="fa-solid fa-layer-group nav-icon"></i>
-                      <p>Sheet</p>
-                    </a>
-                  </li>
-                </ul>
+                <a href="{{ route('fb.list.bp') }}" class="nav-link">
+                  <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                  <p>BP Baru</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('fb.list.bp_lama') }}" class="nav-link">
+                  <i class="fa-solid fa-boxes-stacked nav-icon"></i>
+                  <p>BP Lama</p>
+                </a>
               </li>
             </ul>
           </li>
