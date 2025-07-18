@@ -100,11 +100,11 @@ return [
 
         'fbbp-lama' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST3', '192.168.1.250'),
-            'port'     => env('DB_PORT3', '3050'),
-            'database' => env('DB_DATABASE3', 'D:\DB\Database\FBDB Lama\BP_CONVERTING_SPA-NEW.FDB'),
-            'username' => env('DB_USERNAME3', 'sysdba'),
-            'password' => env('DB_PASSWORD3', 'masterkey'),
+            'host'     => env('DB_HOST6', '192.168.1.250'),
+            'port'     => env('DB_PORT6', '3050'),
+            'database' => env('DB_DATABASE6', 'D:\DB\Database\FBDB Lama\BP_CONVERTING_SPA-NEW.FDB'),
+            'username' => env('DB_USERNAME6', 'sysdba'),
+            'password' => env('DB_PASSWORD6', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
@@ -235,8 +235,8 @@ return [
             'host' => env('DB_HOST6', '192.168.1.250'),
             'port' => env('DB_PORT6', '1433'),
             'database' => env('DB_DATABASE6', 'Lauta_be_SPA'),
-            'username' => env('DB_USERNAME6', 'itspa18'),
-            'password' => env('DB_PASSWORD6', 'spaAdmin'),
+            'username' => env('DB_USERNAME6', 'sa'),
+            'password' => env('DB_PASSWORD6', 'sps'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
