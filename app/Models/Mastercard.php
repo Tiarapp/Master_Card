@@ -61,5 +61,27 @@ class Mastercard extends Model
         'luasSheetProd',
         'luasSheetBoxProd'
     ];
+
+    public function colorcombine()
+    {
+        return $this->belongsTo(ColorCombine::class, 'colorCombine_id', 'id');
+    }
+
+    public function box()
+    {
+        return $this->belongsTo(Box::class, 'box_id', 'id');
+    }
+
+    public function substancekontrak()
+    {
+        return $this->belongsTo(Substance::class, 'substanceKontrak_id', 'id');
+    }
+
+    public function substanceproduksi()
+    {
+        return $this->belongsTo(Substance::class, 'substanceProduksi_id', 'id');
+    }
+
+
     
 }

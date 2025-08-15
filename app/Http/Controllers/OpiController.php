@@ -280,9 +280,27 @@ class OpiController extends Controller
     public function index_new(Request $request)
     {
         $productions = new Opi_M();
-        $productions = $productions->with('mc');
+        $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
+            // ->where('status_opi', '!=', 'closed')
+            // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
+            ->orderBy('id', 'desc');
 
-        return view('admin.kontrak.indexnew', compact('contracts'));
+        if($request->search) {
+            $productions = $productions->where(function($query) use ($request) {
+                $query->where('NoOPI', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('mc.namaBarang', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kontrak_m.customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kontrak_m.poCustomer', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        $productions = $productions->paginate(50);
+
+        $data = [
+            'productions' => $productions,
+        ];
+
+        return view('admin.opi.indexnew', $data);
     }
 
     /**

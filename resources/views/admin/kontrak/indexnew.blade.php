@@ -179,6 +179,12 @@
                                 <i class="fas fa-truck"></i>
                                 <span>Kirim</span>
                               </a>
+                              <a href="{{ route('kontrak.cancel', $contract->kontrak_m_id) }}"
+                                 class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"
+                                 title="Cancel Kontrak">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Cancel</span>
+                              </a>
                             @if ($contract->kontrakm->status == 2)
                               <a href="{{ route('kontrak.edit', $contract->kontrak_m_id) }}"
                                  class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"

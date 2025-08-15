@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\OpiExport;
 use App\Http\Controllers\Admin\Accounting\FinanceController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Converting\ConvertingController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Kontrak_DController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
+use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
@@ -24,6 +26,7 @@ use App\Models\RealisasiKirim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Row;
 
 /*
@@ -327,6 +330,15 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
     Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
+
+    Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
+    Route::get('/opi/export', function (Request $request) {
+        $page = $request->input('page', 1);
+        $opi = Opi_M::where('status_opi', '!=', 'CANCEL')
+            ->orderBy('id', 'desc')
+            ->paginate(50, ['*'], 'page', $page);
+        return Excel::download(new OpiExport($opi), 'opi.xlsx');
+    })->name('opi.export');
     
     Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
     Route::post('/approve', function (Request $request) {
