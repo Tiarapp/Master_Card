@@ -276,7 +276,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('kontrak') }}" class="nav-link">
+                  <a href="{{ route('kontraknew') }}" class="nav-link">
                     <i class="fa-solid fa-file-signature nav-icon"></i>
                     <p>Kontrak</p>
                   </a>

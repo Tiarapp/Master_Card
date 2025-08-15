@@ -141,7 +141,7 @@
                               $statusText = 'Opened';
                               break;
                             case 3:
-                              $colorClass = 'primary';
+                              $colorClass = 'info';
                               $statusText = 'Closed';
                               break;
                             case 4:
