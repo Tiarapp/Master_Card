@@ -235,12 +235,30 @@ class Kontrak_DController extends Controller
         }
         
         public function index(Request $request)
-        {            
-            
+        {
             return view('admin.kontrak.index');
             // $kontrak_m = Kontrak_M::get();
             
             // return view('admin.kontrak.index',compact('kontrak_m'));
+        }
+
+        public function index_new(Request $request)
+        {
+            $contractsQuery = new Kontrak_D;
+            
+            if ($request->search) {
+                $contractsQuery->where('kode', 'like', '%'.$request->search.'%');
+            }
+
+            $contracts = $contractsQuery->orderBy('id', 'desc')->paginate(20);
+
+            // dd($contracts);
+
+            $data = [
+                'contracts' => $contracts,
+            ];
+            
+            return view('admin.kontrak.indexnew', $data);
         }
         
         /**

@@ -1,0 +1,159 @@
+<!-- jQuery -->
+<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
+
+@extends('admin.templates.partials.default')
+
+
+<style>
+.label {
+  color: white;
+}
+
+.status {
+  width: auto;
+  height: auto;
+  margin-top: 20px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 10%;
+}
+
+.success {background-color: #04AA6D;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */
+</style>
+
+@section('content')
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Kontrak</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Kontrak</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>{{ $message }}</strong>
+        </div>
+      @endif
+      <!-- Small boxes (Stat box) -->
+
+      <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+
+      
+      <a href="{{ route('job.create') }}" class="btn btn-primary mx-4" style="margin-bottom: 20px;">
+        Request Buka Block
+      </a>
+
+      <div class="table-responsive">
+        <table class="table align-middle table-row-dashed table-striped table-row-bordered gy-5 gs-7 fs-6">
+            <thead>
+                <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                    <th class="min-w-125px">{{ __('ID') }}</th>
+                    <th class="min-w-125px">{{ __('Status') }}</th>
+                    <th class="min-w-125px">{{ __('Action') }}</th>
+                    <th class="min-w-150px">{{ __('Tanggal') }}</th>
+                    <th class="min-w-150px">{{ __('No MC') }}</th>
+                    <th class="min-w-100px">{{ __('Customer') }}</th>
+                    <th class="min-w-100px">{{ __('PO Customer') }}</th>
+                    <th class="min-w-100px">{{ __('No Kontrak') }}</th>
+                    <th class="min-w-100px">{{ __('Nama Barang') }}</th>
+                    <th class="min-w-100px">{{ __('Tipe Order') }}</th>
+                    <th class="min-w-100px">{{ __('Alamat') }}</th>
+                    <th class="min-w-100px">{{ __('Berat(KG)') }}</th>
+                    <th class="min-w-100px">{{ __('Harga / PCS') }}</th>
+                    <th class="min-w-100px">{{ __('Harga / Kg') }}</th>
+                    <th class="min-w-100px">{{ __('QTY Kontrak') }}</th>
+                    <th class="min-w-100px">{{ __('Kg Kontrak') }}</th>
+                    <th class="min-w-100px">{{ __('Realisasi Kirim') }}</th>
+                    <th class="min-w-100px">{{ __('Sisa Kontrak') }}</th>
+                    <th class="min-w-100px">{{ __('Sales') }}</th>
+                    <th class="min-w-100px">{{ __('Komisi') }}</th>
+                    <th class="min-w-100px">{{ __('B. Expedisi') }}</th>
+                    <th class="min-w-100px">{{ __('B. Glue Manual') }}</th>
+                    <th class="min-w-100px">{{ __('B. Wax') }}</th>
+                    <th class="min-w-100px">{{ __('Kode Barang') }}</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-900 fw-semibold">
+                @foreach ($contracts as $contract)
+                    <tr>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->id }}</td>
+                        <td class="fw-bold text-uppercase">{{ $contract->kontrakm->status }}</td>
+                        <td>
+                            <a href="{{ route('kontrak.pdfb1', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Print</a>
+                            <a href="{{ route('kontrak.dt', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>DT</a>
+                            <a href="{{ route('kontrak.realisasi', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Kirim</a>
+                            @if ($contract->kontrakm->status == 2)
+                                <a href="{{ route('kontrak.edit', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>Edit</a>
+                            @endif
+                        </td>
+                        <td class="text-gray-600 fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
+                        <td class="text-gray-800 fw-semibold">
+                          {{ $contract->mc->revisi == "R0" ? $contract->mc->kode : $contract->mc->kode .'-' . $contract->mc->revisi }}
+                        </td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->customer_name??'-' }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->poCustomer }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->kode }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->namaBarang }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->tipeOrder }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->harga_pcs }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->harga_kg }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->pcsKontrak }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kgKontrak }}</td>
+                        <td class="text-gray-800 fw-semibold">
+                          @if ($contract->kontrakm->realisasi)
+                            @foreach ($contract->kontrakm->realisasi as $data )
+                              <li>{{ $data->nomer_sj .' : '. $data->qty_kirim .' ('. $data->tanggal_kirim.')' }}</li>
+                            @endforeach
+                          @endif
+                        </td>
+                        <td class="text-gray-800 fw-semibold">
+                          {{ $contract->pcsKontrak - ($contract->kontrakm->realisasi ? $contract->kontrakm->realisasi->sum('qty_kirim') : 0) }}
+                        </td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->sales }}</td>
+                        <td class="text-gray-800 fw-semibold">
+                          @if (Auth::user()->divisi_id == 2)
+                            {{ $contract->kontrakm->komisi ?? '-' }}
+                          @endif
+                        </td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
+                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->kodeBarang }}</td>
+                        {{-- <td>
+                            <a href="{{ route('contract.show', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>View</a>
+                        </td> --}}
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    {{ $contracts->appends(request()->query())->links('pagination::bootstrap-4') }}
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+  @endsection

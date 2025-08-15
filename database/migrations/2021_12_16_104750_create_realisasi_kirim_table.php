@@ -18,6 +18,7 @@ class CreateRealisasiKirimTable extends Migration
             $table->foreignId("kontrak_m_id")->unsigned();
             $table->date('tanggal_kirim');
             $table->integer("qty_kirim");
+            $table->double('kg_kirim')->nullable();
             $table->string('createdBy');   
             
             $table->foreign('kontrak_m_id')->references('id')->on('kontrak_m')->cascadeOnDelete();

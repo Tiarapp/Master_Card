@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\Kontrak_DController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
@@ -305,6 +306,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
+
+    Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
