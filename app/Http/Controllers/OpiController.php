@@ -276,6 +276,14 @@ class OpiController extends Controller
         return view('admin.opi.index', compact('data'));
     }
 
+    public function index_new(Request $request)
+    {
+        $productions = new Opi_M();
+        $productions = $productions->with('mc');
+
+        return view('admin.kontrak.indexnew', compact('contracts'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

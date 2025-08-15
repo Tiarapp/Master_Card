@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <div class="table-responsive">
+      <div class="table-responsive shadow rounded-3">
         <table class="table align-middle table-row-dashed table-row-bordered gy-5 gs-7 fs-6" style="background-color: #fff;">
             <thead>
                 <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
@@ -161,28 +161,31 @@
                           <span class="label status {{ $colorClass }}">{{ $statusText }}</span>
                         </td>
                         <td>
-                            <div class="btn-group" role="group" aria-label="Aksi Kontrak">
-                              <a href="{{ route('kontrak.pdfb1', $contract->kontrak_m_id) }}" 
-                                 class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" 
+                              <a href="{{ route('kontrak.pdfb1', $contract->kontrak_m_id) }}"
+                                 class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"
                                  title="Cetak Kontrak">
                                 <i class="fas fa-print"></i>
                                 <span>Print</span>
                               </a>
-                              <a href="{{ route('kontrak.dt', $contract->kontrak_m_id) }}" 
-                                 class="btn btn-outline-info btn-sm d-flex align-items-center gap-1" 
+                              <a href="{{ route('kontrak.dt', $contract->kontrak_m_id) }}"
+                                 class="btn btn-outline-info btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"
                                  title="Detail DT">
                                 <i class="fas fa-file-alt"></i>
                                 <span>DT</span>
                               </a>
-                              <a href="{{ route('kontrak.realisasi', $contract->kontrak_m_id) }}" 
-                                 class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" 
+                              <a href="{{ route('kontrak.realisasi', $contract->kontrak_m_id) }}"
+                                 class="btn btn-outline-success btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"
                                  title="Realisasi Pengiriman">
                                 <i class="fas fa-truck"></i>
                                 <span>Kirim</span>
                               </a>
-                            </div>
                             @if ($contract->kontrakm->status == 2)
-                                <a href="{{ route('kontrak.edit', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>Edit</a>
+                              <a href="{{ route('kontrak.edit', $contract->kontrak_m_id) }}"
+                                 class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 shadow-sm mt-1"
+                                 title="Edit Kontrak">
+                                <i class="fas fa-edit"></i>
+                                <span>Edit</span>
+                              </a>
                             @endif
                         </td>
                         <td class="text-{{ $colorClass }} fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
