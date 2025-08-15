@@ -99,7 +99,7 @@
         <table class="table align-middle table-row-dashed table-row-bordered gy-5 gs-7 fs-6" style="background-color: #fff;">
             <thead>
                 <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                    <th class="min-w-125px">{{ __('ID') }}</th>
+                    <th class="min-w-125px">{{ __('Kode Barang') }}</th>
                     <th class="min-w-125px">{{ __('Status') }}</th>
                     <th class="min-w-125px">{{ __('Action') }}</th>
                     <th class="min-w-150px">{{ __('Tanggal') }}</th>
@@ -122,13 +122,13 @@
                     <th class="min-w-100px">{{ __('B. Expedisi') }}</th>
                     <th class="min-w-100px">{{ __('B. Glue Manual') }}</th>
                     <th class="min-w-100px">{{ __('B. Wax') }}</th>
-                    <th class="min-w-100px">{{ __('Kode Barang') }}</th>
+                    {{-- <th class="min-w-100px">{{ __('Kode Barang') }}</th> --}}
                 </tr>
             </thead>
             <tbody class="text-gray-900 fw-semibold">
                 @foreach ($contracts as $contract)
                     <tr>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->id }}</td>
+                        <td class="text-gray-800 bold">{{ $contract->mc->kodeBarang }}</td>
                         @php
                           $status = $contract->kontrakm->status;
                           switch ($status) {
@@ -157,52 +157,69 @@
                               $statusText = $status;
                           }
                         @endphp
-                        <td>
+                        <td class="p-10">
                           <span class="label status {{ $colorClass }}">{{ $statusText }}</span>
                         </td>
                         <td>
-                            <a href="{{ route('kontrak.pdfb1', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Print</a>
-                            <a href="{{ route('kontrak.dt', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>DT</a>
-                            <a href="{{ route('kontrak.realisasi', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Kirim</a>
+                            <div class="btn-group" role="group" aria-label="Aksi Kontrak">
+                              <a href="{{ route('kontrak.pdfb1', $contract->kontrak_m_id) }}" 
+                                 class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" 
+                                 title="Cetak Kontrak">
+                                <i class="fas fa-print"></i>
+                                <span>Print</span>
+                              </a>
+                              <a href="{{ route('kontrak.dt', $contract->kontrak_m_id) }}" 
+                                 class="btn btn-outline-info btn-sm d-flex align-items-center gap-1" 
+                                 title="Detail DT">
+                                <i class="fas fa-file-alt"></i>
+                                <span>DT</span>
+                              </a>
+                              <a href="{{ route('kontrak.realisasi', $contract->kontrak_m_id) }}" 
+                                 class="btn btn-outline-success btn-sm d-flex align-items-center gap-1" 
+                                 title="Realisasi Pengiriman">
+                                <i class="fas fa-truck"></i>
+                                <span>Kirim</span>
+                              </a>
+                            </div>
                             @if ($contract->kontrakm->status == 2)
                                 <a href="{{ route('kontrak.edit', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>Edit</a>
                             @endif
                         </td>
-                        <td class="text-gray-600 fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
-                        <td class="text-gray-800 fw-semibold">
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">
                           {{ $contract->mc->revisi == "R0" ? $contract->mc->kode : $contract->mc->kode .'-' . $contract->mc->revisi }}
                         </td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->customer_name??'-' }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->poCustomer }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->kode }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->namaBarang }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->tipeOrder }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->harga_pcs }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->harga_kg }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->pcsKontrak }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kgKontrak }}</td>
-                        <td class="text-gray-800 fw-semibold">
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->customer_name??'-' }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->poCustomer }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->kode }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->namaBarang }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->tipeOrder }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->harga_pcs }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->harga_kg }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->pcsKontrak }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kgKontrak }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">
                           @if ($contract->kontrakm->realisasi)
                             @foreach ($contract->kontrakm->realisasi as $data )
-                              <li>{{ $data->nomer_sj .' : '. $data->qty_kirim .' ('. $data->tanggal_kirim.')' }}</li>
+                              <li>{{ $data->qty_kirim .' ('. $data->tanggal_kirim.')' }}</li>
                             @endforeach
                           @endif
                         </td>
-                        <td class="text-gray-800 fw-semibold">
+                        <td class="text-{{ $colorClass }} fw-semibold">
                           {{ $contract->pcsKontrak - ($contract->kontrakm->realisasi ? $contract->kontrakm->realisasi->sum('qty_kirim') : 0) }}
                         </td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->sales }}</td>
-                        <td class="text-gray-800 fw-semibold">
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->sales }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">
                           @if (Auth::user()->divisi_id == 2)
                             {{ $contract->kontrakm->komisi ?? '-' }}
                           @endif
                         </td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $contract->mc->kodeBarang }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
+                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
+                        {{-- <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->kodeBarang }}</td> --}}
                         {{-- <td>
                             <a href="{{ route('contract.show', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>View</a>
                         </td> --}}
