@@ -286,11 +286,15 @@ class OpiController extends Controller
             ->orderBy('id', 'desc');
 
         if($request->search) {
-            $productions = $productions->where(function($query) use ($request) {
-                $query->where('NoOPI', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('mc.namaBarang', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('kontrak_m.customer_name', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('kontrak_m.poCustomer', 'LIKE', '%' . $request->search . '%');
+            $productions->whereHas('kontrakm', function($query) use ($request) {
+                $query->where('customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+            })
+            ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
+            ->orWhereHas('mc', function($query) use ($request) {
+                $query->where('kode', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
             });
         }
 

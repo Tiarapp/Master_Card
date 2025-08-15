@@ -65,7 +65,7 @@
     </a>
         </div>
         <div class="col text-end">
-          <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('kontraknew') }}" method="GET" style="margin-bottom: 20px;">
+          <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('opinew') }}" method="GET" style="margin-bottom: 20px;">
             <div class="input-group" style="max-width: 350px;">
               <span class="input-group-text bg-white border-end-0" style="border-radius: 20px 0 0 20px; border-right: none;">
                 <i class="fas fa-search text-muted"></i>
@@ -74,7 +74,7 @@
                 type="text" 
                 class="form-control border-start-0 shadow-none" 
                 name="search" 
-                placeholder="{{ __('Cari Kontrak...') }}" 
+                placeholder="{{ __('Cari OPI...') }}" 
                 value="{{ request('search') }}" 
                 style="border-radius: 0 20px 20px 0; border-left: none; min-width: 200px;"
                 autocomplete="off"
@@ -83,7 +83,7 @@
             <button type="submit" class="btn btn-primary px-4 shadow-sm">
               <i class="fas fa-search me-1"></i> {{ __('Cari') }}
             </button>
-            <a href="{{ route('kontraknew') }}" class="btn btn-outline-secondary px-4 shadow-sm">
+            <a href="{{ route('opinew') }}" class="btn btn-outline-secondary px-4 shadow-sm">
               <i class="fas fa-sync-alt me-1"></i> {{ __('Reset') }}
             </a>
           </form>
