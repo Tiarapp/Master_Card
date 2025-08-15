@@ -553,7 +553,7 @@ class BarangController extends Controller
     public function bp_lama(Request $request)
     {
         DB::connection('fbbp-lama')->beginTransaction();
-        $periode = date("m/Y");
+        $periode = "07/2025";
         $barang = DB::connection('fbbp-lama')->table('TPersediaanConv')
         ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
         ->select('TPersediaanConv.KodeBrg', 'TBarang.NamaBrg', 'TPersediaanConv.SaldoAkhirP as SaldoPrimer', 'TPersediaanConv.SaldoAkhirS as SaldoSekunder', 'TPersediaanConv.Periode', 'TBarang.NilaiKonversi', 'TBarang.SatuanP', 'TBarang.SatuanS')

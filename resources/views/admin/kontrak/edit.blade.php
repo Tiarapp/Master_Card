@@ -293,6 +293,9 @@
                                                         <option value="OUP Proses dan Joint">OUP Proses dan Joint</option>
                                                         <option value="OUP Proses, OUP Ukuran dan OUP Design">OUP Proses, OUP Ukuran dan OUP Design</option>
                                                         <option value="OUP Flute">OUP Flute</option>
+                                                        <option value="OUP Nama Item, OUP Design dan OUP Pisau">OUP Nama Item, OUP Design dan OUP Pisau</option>
+                                                        <option value="OUP Nama, Design, Warna dan Kwalitas">OUP Nama, Design, Warna dan Kwalitas</option>
+                                                        <option value="OUP Warna, Kualitas, dan Ukuran">OUP Warna, Kualitas, dan Ukuran</option>
                                                     </select>
                                                 </div>
                                             </div>
