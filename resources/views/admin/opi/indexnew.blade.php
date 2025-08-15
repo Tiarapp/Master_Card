@@ -167,10 +167,12 @@
                                 <i class="fas fa-print"></i>
                                 <span>Print</span>
                               </a>
-                              <a href="{{ route('opi.cancel', $production->id) }}" class="btn btn-outline-primary btn-sm" title="Edit">
-                                <i class="fas fa-edit"></i>
-                                <span>Cancel</span>
-                              </a>
+                              @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
+                                <a href="{{ route('opi.cancel', $production->id) }}" class="btn btn-outline-primary btn-sm" title="Edit">
+                                  <i class="fas fa-edit"></i>
+                                  <span>Cancel</span>
+                                </a>
+                              @endif
                             </div>
                         </td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->kode }}</td>
