@@ -58,15 +58,45 @@
       @endif
       <!-- Small boxes (Stat box) -->
 
-      <a href="{{ route('kontrak.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
-
-      
-      <a href="{{ route('job.create') }}" class="btn btn-primary mx-4" style="margin-bottom: 20px;">
-        Request Buka Block
-      </a>
+      <div class="row mb-4 align-items-center">
+        <div class="col-auto d-flex align-items-center gap-3">
+          <a href="{{ route('kontrak.create') }}" class="btn btn-success d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
+            <i class="fas fa-plus-circle me-2"></i>
+            <span>{{ __('Tambah Kontrak') }}</span>
+          </a>
+          <a href="{{ route('job.create') }}" class="btn btn-primary d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
+            <i class="fas fa-unlock-alt me-2"></i>
+            <span>{{ __('Request Buka Block') }}</span>
+          </a>
+        </div>
+        <div class="col text-end">
+          <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('kontraknew') }}" method="GET" style="margin-bottom: 20px;">
+            <div class="input-group" style="max-width: 350px;">
+              <span class="input-group-text bg-white border-end-0" style="border-radius: 20px 0 0 20px; border-right: none;">
+                <i class="fas fa-search text-muted"></i>
+              </span>
+              <input 
+                type="text" 
+                class="form-control border-start-0 shadow-none" 
+                name="search" 
+                placeholder="{{ __('Cari Kontrak...') }}" 
+                value="{{ request('search') }}" 
+                style="border-radius: 0 20px 20px 0; border-left: none; min-width: 200px;"
+                autocomplete="off"
+              >
+            </div>
+            <button type="submit" class="btn btn-primary px-4 shadow-sm">
+              <i class="fas fa-search me-1"></i> {{ __('Cari') }}
+            </button>
+            <a href="{{ route('kontraknew') }}" class="btn btn-outline-secondary px-4 shadow-sm">
+              <i class="fas fa-sync-alt me-1"></i> {{ __('Reset') }}
+            </a>
+          </form>
+        </div>
+      </div>
 
       <div class="table-responsive">
-        <table class="table align-middle table-row-dashed table-striped table-row-bordered gy-5 gs-7 fs-6">
+        <table class="table align-middle table-row-dashed table-row-bordered gy-5 gs-7 fs-6" style="background-color: #fff;">
             <thead>
                 <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
                     <th class="min-w-125px">{{ __('ID') }}</th>
@@ -99,7 +129,37 @@
                 @foreach ($contracts as $contract)
                     <tr>
                         <td class="text-gray-800 fw-semibold">{{ $contract->id }}</td>
-                        <td class="fw-bold text-uppercase">{{ $contract->kontrakm->status }}</td>
+                        @php
+                          $status = $contract->kontrakm->status;
+                          switch ($status) {
+                            case 1:
+                              $colorClass = 'success';
+                              $statusText = 'Aktif';
+                              break;
+                            case 2:
+                              $colorClass = 'warning';
+                              $statusText = 'Opened';
+                              break;
+                            case 3:
+                              $colorClass = 'primary';
+                              $statusText = 'Closed';
+                              break;
+                            case 4:
+                              $colorClass = 'success';
+                              $statusText = 'Processed';
+                              break;
+                            case 5:
+                              $colorClass = 'danger';
+                              $statusText = 'Canceled';
+                              break;
+                            default:
+                              $colorClass = 'other';
+                              $statusText = $status;
+                          }
+                        @endphp
+                        <td>
+                          <span class="label status {{ $colorClass }}">{{ $statusText }}</span>
+                        </td>
                         <td>
                             <a href="{{ route('kontrak.pdfb1', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Print</a>
                             <a href="{{ route('kontrak.dt', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>DT</a>

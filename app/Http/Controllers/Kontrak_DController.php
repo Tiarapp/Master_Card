@@ -245,9 +245,19 @@ class Kontrak_DController extends Controller
         public function index_new(Request $request)
         {
             $contractsQuery = new Kontrak_D;
+            $contractsQuery = $contractsQuery->with('kontrakm', 'mc');
             
             if ($request->search) {
-                $contractsQuery->where('kode', 'like', '%'.$request->search.'%');
+                $contractsQuery->WhereHas('kontrakm', function($query) use ($request) {
+                    $query->where('kode', 'like', '%'.$request->search.'%')
+                        ->orWhere('customer_name', 'like', '%'.$request->search.'%')
+                        ->orWhere('poCustomer', 'like', '%'.$request->search.'%')
+                        ->orWhere('sales', 'like', '%'.$request->search.'%');
+                })
+                ->orWhereHas('mc', function($query) use ($request) {
+                    $query->where('kode', 'like', '%'.$request->search.'%')
+                        ->orWhere('namaBarang', 'like', '%'.$request->search.'%');
+                });
             }
 
             $contracts = $contractsQuery->orderBy('id', 'desc')->paginate(20);
