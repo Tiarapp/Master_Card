@@ -288,7 +288,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('opi') }}" class="nav-link">
+                  <a href="{{ route('opinew') }}" class="nav-link">
                     <i class="fa-solid fa-clipboard-check nav-icon"></i>
                     <p>OPI</p>
                   </a>
@@ -422,7 +422,7 @@
                   </a>
                 </li> --}}
                 <li class="nav-item">
-                  <a href="{{ route('opi') }}" class="nav-link">
+                  <a href="{{ route('opinew') }}" class="nav-link">
                     <i class="fa-solid fa-clipboard-check nav-icon"></i>
                     <p>OPI</p>
                   </a>
@@ -535,7 +535,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('opi') }}" class="nav-link">
+                  <a href="{{ route('opinew') }}" class="nav-link">
                     <i class="fa-solid fa-clipboard-check nav-icon"></i>
                     <p>OPI</p>
                   </a>
