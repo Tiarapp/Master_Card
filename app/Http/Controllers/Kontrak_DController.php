@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KontrakExport;
 
 class Kontrak_DController extends Controller
 {
@@ -1167,4 +1169,9 @@ class Kontrak_DController extends Controller
             dd($data);
 
         }
+
+        // public function exportExcel(Request $request)
+        // {
+        //     return Excel::download(new KontrakExport($request->search), 'kontrak.xlsx');
+        // }
     }

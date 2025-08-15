@@ -161,11 +161,11 @@
                           <span class="label status {{ $colorClass }}">{{ $statusText }}</span>
                         </td>
                         <td>
-                            <a href="{{ route('kontrak.pdfb1', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Print</a>
-                            <a href="{{ route('kontrak.dt', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>DT</a>
-                            <a href="{{ route('kontrak.realisasi', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Kirim</a>
+                            <a href="{{ route('kontrak.pdfb1', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Print</a>
+                            <a href="{{ route('kontrak.dt', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>DT</a>
+                            <a href="{{ route('kontrak.realisasi', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>Kirim</a>
                             @if ($contract->kontrakm->status == 2)
-                                <a href="{{ route('kontrak.edit', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>Edit</a>
+                                <a href="{{ route('kontrak.edit', $contract->kontrak_m_id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-pencil"></i>Edit</a>
                             @endif
                         </td>
                         <td class="text-gray-600 fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
