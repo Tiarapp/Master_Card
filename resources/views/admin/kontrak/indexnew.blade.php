@@ -206,7 +206,7 @@
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->harga_pcs }}</td>
-                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->harga_kg }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ number_format($contract->harga_pcs / $contract->mc->gramSheetBoxKontrak, 2) }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->pcsKontrak }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kgKontrak }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">
