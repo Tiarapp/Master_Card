@@ -194,40 +194,40 @@
                               </a>
                             @endif
                         </td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ \Carbon\Carbon::parse($contract->kontrakm->tglKontrak)->format('d-m-Y') }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">
                           {{ $contract->mc->revisi == "R0" ? $contract->mc->kode : $contract->mc->kode .'-' . $contract->mc->revisi }}
                         </td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->customer_name??'-' }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->poCustomer }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->kode }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->namaBarang }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->tipeOrder }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->harga_pcs }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->harga_kg }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->pcsKontrak }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kgKontrak }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->customer_name??'-' }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->poCustomer }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->kode }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->mc->namaBarang }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->tipeOrder }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->alamatKirim }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->mc->gramSheetBoxKontrak }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->harga_pcs }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->harga_kg }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->pcsKontrak }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kgKontrak }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">
                           @if ($contract->kontrakm->realisasi)
                             @foreach ($contract->kontrakm->realisasi as $data )
                               <li>{{ $data->qty_kirim .' ('. $data->tanggal_kirim.')' }}</li>
                             @endforeach
                           @endif
                         </td>
-                        <td class="text-{{ $colorClass }} fw-semibold">
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">
                           {{ $contract->pcsKontrak - ($contract->kontrakm->realisasi ? $contract->kontrakm->realisasi->sum('qty_kirim') : 0) }}
                         </td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->sales }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->sales }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">
                           @if (Auth::user()->divisi_id == 2)
                             {{ $contract->kontrakm->komisi ?? '-' }}
                           @endif
                         </td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
-                        <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
                         {{-- <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->kodeBarang }}</td> --}}
                         {{-- <td>
                             <a href="{{ route('contract.show', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>View</a>
