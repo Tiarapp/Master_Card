@@ -417,7 +417,7 @@ class Kontrak_DController extends Controller
             
             $upMaster->save(); // simpan ke table
             
-            return redirect('admin/kontrak')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
+            return redirect('admin/kontraknew')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
         }
         
         /**
@@ -486,7 +486,7 @@ class Kontrak_DController extends Controller
                     'kontrak_D'
                 ), ['kontrak_M' => $kontrak_M]);
             } else {
-                return redirect('admin/kontrak');
+                return redirect('admin/kontraknew');
             } 
         }
         
@@ -892,7 +892,7 @@ class Kontrak_DController extends Controller
                 'event' => "Ubah Kontrak ".$kontrakm->kode
             ]);
             // dd($kontrakd);
-            return redirect('admin/kontrak');
+            return redirect('admin/kontraknew');
         }
         
         /**
@@ -1048,7 +1048,7 @@ class Kontrak_DController extends Controller
                 } 
             }
             
-            return redirect('admin/kontrak');
+            return redirect('admin/kontraknew');
         }
         
         public function edit_realisasi(Request $request, $id)
@@ -1102,7 +1102,7 @@ class Kontrak_DController extends Controller
             ]);
             
             $kontrak->save();
-            return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
+            return redirect('admin/kontraknew')->with('success', 'Kontrak Berhasil di Cancel');
         }
         
         public function open_kontrak($id)
