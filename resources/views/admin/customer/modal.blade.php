@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($cust as $customer)
+            @forelse ($cust as $customer)
                 <tr class="modal-customer-list fw-semibold">
                     <td class="fw-bold text-gray-800">{{ $customer->Kode }}</td>
                     <td class="fw-bold">{{ $customer->Nama??'-' }}</td>
@@ -25,7 +25,17 @@
                         <button class="btn btn-primary btn-insert-customer" type="button">Add</button>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        @if(request()->has('search'))
+                            Tidak ada customer yang ditemukan dengan kata kunci "{{ request()->search }}"
+                        @else
+                            Tidak ada data customer
+                        @endif
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

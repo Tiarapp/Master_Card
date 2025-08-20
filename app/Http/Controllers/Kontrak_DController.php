@@ -19,6 +19,7 @@ use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class Kontrak_DController extends Controller
 {
@@ -307,38 +308,61 @@ class Kontrak_DController extends Controller
 
         public function customer_select(Request $request)
         {
-            // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            $cust = new Customer();
+            try {
+                // Try using Customer model first
+                $query = Customer::query();
 
-            if ($request->search) {
-                $cust = $cust->where('Nama', 'like', '%'.$request->search.'%')
-                    ->orWhere('Kode', 'like', '%'.$request->search.'%')
-                    ->orWhere('AlamatKirim', 'like', '%'.$request->search.'%');
+                if ($request->has('search') && !empty($request->search)) {
+                    $search = trim($request->search);
+                    $query = $query->where(function($q) use ($search) {
+                        $q->where('Nama', 'LIKE', '%'.$search.'%')
+                          ->orWhere('Kode', 'LIKE', '%'.$search.'%')
+                          ->orWhere('AlamatKirim', 'LIKE', '%'.$search.'%');
+                    });
+                }
+
+                $cust = $query->orderBy('Nama', 'asc')->paginate(10);
+
+            } catch (\Exception $e) {
+                Log::error('Customer model error: ' . $e->getMessage());
+                
+                // Fallback to DB facade
+                try {
+                    $query = DB::connection('firebird')->table('TCustomer');
+                    
+                    if ($request->has('search') && !empty($request->search)) {
+                        $search = trim($request->search);
+                        $query = $query->where(function($q) use ($search) {
+                            $q->where('Nama', 'LIKE', '%'.$search.'%')
+                              ->orWhere('Kode', 'LIKE', '%'.$search.'%')
+                              ->orWhere('AlamatKirim', 'LIKE', '%'.$search.'%');
+                        });
+                    }
+
+                    $customers = $query->orderBy('Nama', 'asc')->paginate(10);
+                    
+                    // Convert to collection for consistency
+                    $cust = $customers;
+                    
+                } catch (\Exception $e2) {
+                    Log::error('Database connection error: ' . $e2->getMessage());
+                    
+                    // Return empty paginated collection
+                    $cust = new \Illuminate\Pagination\LengthAwarePaginator(
+                        collect([]),
+                        0,
+                        10,
+                        1,
+                        ['path' => request()->url(), 'pageName' => 'page']
+                    );
+                }
             }
-
-            $cust = $cust->orderBy('Nama', 'asc')->paginate(10);
 
             $data = [
                 'cust' => $cust,
             ];
             
             return view('admin.customer.modal', $data);
-        }
-
-        public function customer_search($search)
-        {
-            // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            $cust = new Customer();
-            $cust = $cust->where('Nama', 'like', '%'.$search.'%')
-                ->orWhere('Kode', 'like', '%'.$search.'%')
-                ->orWhere('AlamatKirim', 'like', '%'.$search.'%')
-                ->get();
-
-            $data = [
-                'cust' => $cust,
-            ];
-            
-            return view('admin.customer.searchmodal', compact('cust'));
         }
 
         

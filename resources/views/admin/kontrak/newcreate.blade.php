@@ -676,7 +676,7 @@
                                         <div class="col-6 mb-6">
                                             <form class="form-search-customer" action="">
                                                 <div class="input-group mb-3">
-                                                    <input type="text" class="form-control search-customer" id="search" name="search" value="" placeholder="Cari nama customer">
+                                                    <input type="text" class="form-control search-customer" id="search" name="search" value="" placeholder="Cari nama customer" style="text-transform: uppercase;">
                                                     <button type="submit" class="btn btn-light-primary keyword-search-customer-button">Search</button>
                                                 </div>
                                             </form>
@@ -757,24 +757,45 @@
     $(document).on("click", ".modal-customer", function(e) {
         e.preventDefault();
         $(".customer-list .content-body").html("Please wait...");
-            var url = "{{ route('kontrak.cust') }}";
+        var url = "{{ route('kontrak.cust') }}";
+        
+        console.log('Loading customer modal with URL:', url);
 
-            $('.form-search-customer').attr('action', url);
+        $('.form-search-customer').attr('action', url);
 
-            $.get(url, function(data) {
-                $(".customer-list .content-body").html(data);
-            });
+        $.get(url, function(data) {
+            console.log('Customer data loaded');
+            $(".customer-list .content-body").html(data);
+        }).fail(function(xhr, status, error) {
+            console.error('Failed to load customer data:', error);
+            $(".customer-list .content-body").html("Error loading customer data: " + error);
+        });
     });
 
     $(document).on("submit", ".form-search-customer", function(e) {
         e.preventDefault();
-        var search = $('.search-customer').val();
-        var url = "{{ route('kontrak.cust.search', ':search') }}";
-        url = url.replace(':search', search);
+        var submit = $(this).attr('action');
+        var search = $('.search-customer').val().toUpperCase();
+        
+        console.log('Searching for:', search);
+        console.log('URL:', submit);
 
-        $.get(url, function(data) {
+        $(".customer-list .content-body").html("Please wait...");
+        $.get(submit, { search: search }, function(data) {
+            console.log('Search completed');
             $(".customer-list .content-body").html(data);
+        }).fail(function(xhr, status, error) {
+            console.error('Search failed:', error);
+            $(".customer-list .content-body").html("Error loading data: " + error);
         });
+    });
+
+    // Handle Enter key press on search input
+    $(document).on("keypress", ".search-customer", function(e) {
+        if (e.which == 13) { // Enter key
+            e.preventDefault();
+            $('.form-search-customer').trigger('submit');
+        }
     });
 
     $(document).on("click", ".customer-list .pagination a", function(e) {
