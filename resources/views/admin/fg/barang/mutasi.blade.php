@@ -1,7 +1,4 @@
-<!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 @extends('admin.templates.partials.default')
-
 
 @section('content')
 <div class="content-wrapper">
@@ -35,68 +32,109 @@
         </div>
       @endif
       
-      <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Periode : {{ $persediaan->period }}</h2>
-                <h2>Kode Barang : {{ $barang->KodeBrg }}</h2>
-                <h2>Nama Barang : {{ $barang->NamaBrg }}</h2>
-            </div>
-            <div class="col-md-6">
-                <h2>Saldo Awal : {{ number_format((int)$persediaan->SaldoAwalCrt) }}</h2>
-            </div>
+      <!-- Info Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Informasi Barang</h3>
         </div>
-        <table class="table table-bordered" id="data_barang">
-          <thead>
-            <tr>
-              <th scope="col">Tanggal</th>
-              <th scope="col">No Bukti</th>
-              <th scope="col">Masuk</th>
-              <th scope="col">Keluar</th>
-              <th scope="col">Keterangan</th>
-              <th scope="col">OPI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $masuk = 0;
-            $keluar = 0;
-            // dd($result)
-            foreach ($result as $data) { ?>
-              <tr class="barang">
-                <td>{{ $data["tanggal"] }}</td>
-                <td>{{ trim($data["nobukti"]) }}</td>
-                <td>{{ number_format((int)$data["masuk"]) }}</td>
-                <td>{{ number_format((int)$data["keluar"]) }}</td>
-                <td>{{ trim($data["keterangan"]) }}</td>
-                <td>{{ trim($data["opi"]) }}</td>
-              </tr>
-            <?php
-            $masuk = $masuk + (int)$data["masuk"];
-            $keluar = $keluar + (int)$data["keluar"];
-            }
-            ?>
-          </tbody>
-        </table>
-        <div class="row">
-            <div class="col-md-3">
-
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-box">
+                <div class="info-box-content">
+                  <strong>Periode:</strong> {{ $persediaan->period }}<br>
+                  <strong>Kode Barang:</strong> {{ $barang->KodeBrg }}<br>
+                  <strong>Nama Barang:</strong> {{ $barang->NamaBrg }}
+                </div>
+              </div>
             </div>
             <div class="col-md-6">
-                <div class="row">
-                    <h3>Total Mutasi</h3>
-                    <div style="margin-left: 120px">
-                        <label for=""><h2>{{ number_format($masuk) }}  </h2></label>
-                    </div>
-                    <div style="margin-left: 220px">
-                        <label for=""><h2>{{ number_format($keluar) }}</h2></label>
-                    </div>
+              <div class="info-box">
+                <div class="info-box-content">
+                  <strong>Saldo Awal:</strong> {{ number_format((int)$persediaan->SaldoAwalCrt) }}
                 </div>
-                <div class="row">
-                    <h3>Sisa :</h3> 
-                    <label for="" style="margin-left: 500px"><h2>{{ number_format((int)$persediaan->SaldoAkhirCrt) }}</h2></label>
-                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Data Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Mutasi Barang</h3>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped" id="data_barang">
+            <thead class="bg-light">
+              <tr>
+                <th scope="col">Tanggal</th>
+                <th scope="col">No Bukti</th>
+                <th scope="col">Masuk</th>
+                <th scope="col">Keluar</th>
+                <th scope="col">Keterangan</th>
+                <th scope="col">OPI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $masuk = 0;
+              $keluar = 0;
+              // dd($result)
+              foreach ($result as $data) { ?>
+                <tr class="barang">
+                  <td>{{ $data["tanggal"] }}</td>
+                  <td>{{ trim($data["nobukti"]) }}</td>
+                  <td class="text-right">{{ number_format((int)$data["masuk"]) }}</td>
+                  <td class="text-right">{{ number_format((int)$data["keluar"]) }}</td>
+                  <td>{{ trim($data["keterangan"]) }}</td>
+                  <td>{{ trim($data["opi"]) }}</td>
+                </tr>
+              <?php
+              $masuk = $masuk + (int)$data["masuk"];
+              $keluar = $keluar + (int)$data["keluar"];
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Summary Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Ringkasan Mutasi</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="info-box bg-success">
+                <span class="info-box-icon"><i class="fas fa-arrow-up"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Total Masuk</span>
+                  <span class="info-box-number">{{ number_format($masuk) }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-box bg-danger">
+                <span class="info-box-icon"><i class="fas fa-arrow-down"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Total Keluar</span>
+                  <span class="info-box-number">{{ number_format($keluar) }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="info-box bg-info">
+                <span class="info-box-icon"><i class="fas fa-warehouse"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Saldo Akhir</span>
+                  <span class="info-box-number">{{ number_format((int)$persediaan->SaldoAkhirCrt) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
             
         </div>
       </div>
@@ -104,9 +142,12 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
-  @endsection
+</div>
+@endsection
 
 @section('javascripts')
+<!-- jQuery -->
+<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 <!-- DataTables -->
 <script> 
    $(document).ready(function(){
@@ -122,5 +163,4 @@
      });   
    });
 </script>
-
 @endsection
