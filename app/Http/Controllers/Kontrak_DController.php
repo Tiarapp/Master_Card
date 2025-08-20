@@ -284,13 +284,13 @@ class Kontrak_DController extends Controller
             
             // $cust = DB::connection('firebird')->table('TCustomer')->get();
             // $cust = DB::table('TCustomer')->get();
-            $mc = DB::table('mc')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
-            ->where('mc.status', '=', '1')
-            ->get();
+            // $mc = DB::table('mc')
+            // ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            // ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            // ->leftJoin('box', 'box_id', '=', 'box.id')
+            // ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
+            // ->where('mc.status', '=', '1')
+            // ->get();
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')
             ->where('aktif', '=', 1)
@@ -298,7 +298,10 @@ class Kontrak_DController extends Controller
             ->get();
             
             return view('admin.kontrak.newcreate', compact(
-                'mc', 'top', 'cust', 'sales'
+                // 'mc', 
+                'top', 
+                // 'cust', 
+                'sales'
             ));
         }
 
