@@ -146,8 +146,6 @@
 @endsection
 
 @section('javascripts')
-<!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 <!-- DataTables -->
 <script> 
    $(document).ready(function(){
