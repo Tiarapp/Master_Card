@@ -296,6 +296,7 @@
                                                         <option value="OUP Nama Item, OUP Design dan OUP Pisau">OUP Nama Item, OUP Design dan OUP Pisau</option>
                                                         <option value="OUP Nama, Design, Warna dan Kwalitas">OUP Nama, Design, Warna dan Kwalitas</option>
                                                         <option value="OUP Warna, Kualitas, dan Ukuran">OUP Warna, Kualitas, dan Ukuran</option>
+                                                        <option value="OUP Nama dan OUP Kupingan">OUP Nama dan OUP Kupingan</option>
                                                     </select>
                                                 </div>
                                             </div>
