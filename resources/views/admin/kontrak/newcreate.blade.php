@@ -776,9 +776,6 @@
         e.preventDefault();
         var submit = $(this).attr('action');
         var search = $('.search-customer').val().toUpperCase();
-        
-        console.log('Searching for:', search);
-        console.log('URL:', submit);
 
         $(".customer-list .content-body").html("Please wait...");
         $.get(submit, { search: search }, function(data) {
