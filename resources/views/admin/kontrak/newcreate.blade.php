@@ -868,7 +868,7 @@
 
         $.get(url, function(data) {
             document.getElementById('mcid').value = data.mc.id;
-            document.getElementById('namamc').value = data.mc.kode;
+            document.getElementById('namamc').value = data.mc.kode + '-' + data.mc.revisi;
             document.getElementById('namaBarang').value = data.mc.namaBarang;
             document.getElementById('tipeBox').value = data.mc.tipeBox;
             document.getElementById('flute').value = data.mc.flute;

@@ -15,7 +15,7 @@
         <tbody>
             @foreach ($mastercards as $mastercard)
                 <tr class="modal-mastercard-list fw-semibold">
-                    <td class="fw-bold text-gray-800">{{ $mastercard->kode }}</td>
+                    <td class="fw-bold text-gray-800">{{ $mastercard->kode }}{{ $mastercard->revisi == "R0" || $mastercard->revisi == '' ? '' : '-'.$mastercard->revisi }}</td>
                     <td class="fw-bold">{{ $mastercard->namaBarang??'-' }}</td>
                     <td class="fw-bold text-gray-600">{{ $mastercard->tipeBox??'-' }}</td>
                     <td class="text-gray-800">{{ $mastercard->flute??'-' }}</td>
