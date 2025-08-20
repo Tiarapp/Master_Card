@@ -25,23 +25,28 @@ class NavbarController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $notif = Notification::with('kontrak')->get();
-            return DataTables::of($notif)
-                ->addColumn('action', function($notif){
-                    if ($notif->status == 'Proses') {
-                        return "<button><a href='../admin/kontrak/open/" .trim($notif->kontrak_id). "' title='OPEN' ><span class='btn btn-success glyphicon glyphicon-list'>OPEN</span></a></button>";
-                    } else {
-                        return "<button disabled class='btn btn-success'>Done</button>";
-                    }
-                })
-                ->addColumn('kontrak', function($notif){
-                    return $notif->kontrak->kode;
-                })
-                ->make(true);
+        $notificationsQuery = Notification::with('kontrak');
+        
+        if ($request->search) {
+            $notificationsQuery->where(function($query) use ($request) {
+                $query->where('tanggal', 'like', '%'.$request->search.'%')
+                    ->orWhere('pemohon', 'like', '%'.$request->search.'%')
+                    ->orWhere('alasan', 'like', '%'.$request->search.'%')
+                    ->orWhere('status', 'like', '%'.$request->search.'%')
+                    ->orWhere('pic', 'like', '%'.$request->search.'%');
+            })
+            ->orWhereHas('kontrak', function($query) use ($request) {
+                $query->where('kode', 'like', '%'.$request->search.'%');
+            });
         }
 
-        return view('admin.notif.index');
+        $notifications = $notificationsQuery->orderBy('created_at', 'desc')->paginate(20);
+
+        $data = [
+            'notifications' => $notifications,
+        ];
+        
+        return view('admin.notif.index', $data);
     }
 
     public function create()
