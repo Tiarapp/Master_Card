@@ -60,9 +60,9 @@
 
       <div class="row mb-4 align-items-center">
         <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ url('/opi/export?page=' . request()->get('page', 1)) }}" class="btn btn-success mb-3">
+          <a href="{{ url('/opi/export?page=' . request()->get('page', 1) . (request()->has('search') ? '&search=' . urlencode(request('search')) : '')) }}" class="btn btn-success mb-3">
         Export Halaman Ini
-    </a>
+          </a>
         </div>
         <div class="col text-end">
           <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('opinew') }}" method="GET" style="margin-bottom: 20px;">
