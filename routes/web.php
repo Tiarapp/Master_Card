@@ -458,6 +458,7 @@ Route::middleware(['auth'])->group(function (){
         Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
 
         Route::get('customer/getdata', [Kontrak_DController::class, 'customer_select'])->name('kontrak.cust');
+        Route::get('customer/getdata/{search}', [Kontrak_DController::class, 'customer_search'])->name('kontrak.cust.search');
 
         Route::get('admin/periode', function () {
             $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))

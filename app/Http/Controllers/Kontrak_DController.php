@@ -322,7 +322,23 @@ class Kontrak_DController extends Controller
                 'cust' => $cust,
             ];
             
-            return view('admin.customer.modal', compact('cust'));
+            return view('admin.customer.modal', $data);
+        }
+
+        public function customer_search($search)
+        {
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
+            $cust = new Customer();
+            $cust = $cust->where('Nama', 'like', '%'.$search.'%')
+                ->orWhere('Kode', 'like', '%'.$search.'%')
+                ->orWhere('AlamatKirim', 'like', '%'.$search.'%')
+                ->get();
+
+            $data = [
+                'cust' => $cust,
+            ];
+            
+            return view('admin.customer.searchmodal', compact('cust'));
         }
 
         

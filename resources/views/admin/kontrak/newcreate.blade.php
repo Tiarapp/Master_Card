@@ -768,10 +768,11 @@
 
     $(document).on("submit", ".form-search-customer", function(e) {
         e.preventDefault();
-        var url = $(this).attr('action');
         var search = $('.search-customer').val();
+        var url = "{{ route('kontrak.cust.search', ':search') }}";
+        url = url.replace(':search', search);
 
-        $.get(url, { search: search }, function(data) {
+        $.get(url, function(data) {
             $(".customer-list .content-body").html(data);
         });
     });
