@@ -334,8 +334,24 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
-        $opi = Opi_M::where('status_opi', '!=', 'CANCEL')
-            ->orderBy('id', 'desc')
+        $opi = Opi_M::where('status_opi', '!=', 'CANCEL');
+
+        if($request->search) {
+            $opi->where(function($query) use ($request) {
+                $query->whereHas('kontrakm', function($q) use ($request) {
+                    $q->where('customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+                })
+                ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
+                ->orWhereHas('mc', function($q) use ($request) {
+                    $q->where('kode', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+                });
+            });
+        }
+
+        $opi = $opi->orderBy('id', 'desc')
             ->paginate(50, ['*'], 'page', $page);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
