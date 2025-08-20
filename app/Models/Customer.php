@@ -9,16 +9,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $table = 'f_tcustomer';
-    protected $fillable = [
-        'Kode', 
-        'Nama',
-        'NPWP',
-        'AlamatKantor',
-        'TelpKantor',
-        'PIC',
-        'AlamatKirim',
-        'plafond',
-        'top'
-    ];
+    // protected $connection = 'firebird';
+    protected $table = 'TCustomer';
 }

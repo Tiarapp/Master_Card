@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
+use App\Models\Customer;
 
 class Kontrak_DController extends Controller
 {
@@ -281,7 +282,8 @@ class Kontrak_DController extends Controller
         public function create()
         {
             
-            $cust = DB::connection('firebird')->table('TCustomer')->get();
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
+            $cust = DB::table('TCustomer')->get();
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -298,6 +300,26 @@ class Kontrak_DController extends Controller
             return view('admin.kontrak.newcreate', compact(
                 'mc', 'top', 'cust', 'sales'
             ));
+        }
+
+        public function customer_select(Request $request)
+        {
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
+            $cust = new Customer();
+
+            if ($request->search) {
+                $cust = $cust->where('Nama', 'like', '%'.$request->search.'%')
+                    ->orWhere('Kode', 'like', '%'.$request->search.'%')
+                    ->orWhere('AlamatKirim', 'like', '%'.$request->search.'%');
+            }
+
+            $cust = $cust->orderBy('Nama', 'asc')->paginate(10);
+
+            $data = [
+                'cust' => $cust,
+            ];
+            
+            return view('admin.customer.modal', compact('cust'));
         }
 
         

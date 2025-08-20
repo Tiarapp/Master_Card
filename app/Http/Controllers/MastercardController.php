@@ -792,4 +792,39 @@ class MastercardController extends Controller
         
         $mc->note ;
     }
+
+    public function select_view(Request $request)
+    {
+        $mastercards = new Mastercard();
+        
+        if($request->search)
+        {
+            $mastercards = $mastercards->where('kode', 'like', '%'.$request->search.'%')
+                ->orWhere('namaBarang', 'like', '%'.$request->search.'%')
+                ->orWhere('customer', 'like', '%'.$request->search.'%');
+        }
+
+        $mastercards = $mastercards->orderBy('id', 'desc')->paginate(10);
+
+        $data = [
+            'mastercards' => $mastercards,
+        ];
+
+        return view('admin.mastercard.modal', $data);
+    }
+
+    public function single($id)
+    {
+        $mc = new Mastercard();
+        $mc = $mc->with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine'])
+            ->where('id', $id)
+            ->first();
+        
+        $data = [
+            'mc' => $mc
+        ];
+        
+        return response()->json($data);
+    }
+
 }

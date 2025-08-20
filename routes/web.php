@@ -15,6 +15,7 @@ use App\Http\Controllers\Kontrak_DController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
+use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\SettingController;
@@ -276,7 +277,7 @@ Route::middleware(['auth'])->group(function (){
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
         Route::get('/json', 'MastercardController@json')->name('json');
-        Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
+        Route::get('/get_data', 'MastercardController@select_view')->name('get_data');
         Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
         Route::get('/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
         Route::get('/create', 'MastercardController@create')->name('create');
@@ -286,7 +287,10 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
         Route::post('/update', 'MastercardController@update')->name('update');
         Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
+        Route::get('/show/{id}', [MastercardController::class, 'single'])->name('show');
     });
+
+    Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');
 
     //Converting
     
@@ -452,6 +456,8 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/admin/data/sync_fa', [PaletController::class, 'sync_fa'])->name('sync_fa');
         Route::get('admin/cust/single/{id}', [CustomerController::class, 'single_cust'])->name('data.custsingle');
         Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
+
+        Route::get('customer/getdata', [Kontrak_DController::class, 'customer_select'])->name('kontrak.cust');
 
         Route::get('admin/periode', function () {
             $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))

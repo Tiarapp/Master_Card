@@ -8,14 +8,6 @@
     .select2 {
         width: 206px !important;
     }
-    
-    tr:nth-child(odd) {
-        background-color:#bab9b9 !important;
-        
-    }
-    .bg {
-        background-color: rgba(255, 255, 255, 0.733) !important; 
-    }
 </style>
 
 
@@ -53,56 +45,7 @@
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" readonly>
                                                 </div>
-                                                
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="Customer">
-                                                    <div class="modal-dialog modal-xl">
-                                                        
-                                                        <!-- Modal content-->
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">List Customer</h4>
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            </div>
-                                                            <div class="modal-body customer">
-                                                                <div class="card-body">
-                                                                    <table class="table table-bordered" id="data_customer">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th scope="col">Kode</th>
-                                                                                <th scope="col">Nama Customer</th>
-                                                                                <th scope="col">Alamat Kantor</th>
-                                                                                <th scope="col">Telp</th>
-                                                                                <th scope="col">Fax</th>
-                                                                                <th scope="col">Alamat Kirim</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <?php 
-                                                                            foreach ($cust as $data) { ?>
-                                                                                <tr>
-                                                                                    <td scope="row">{{ $data->Kode }}</td>
-                                                                                    <td>{{ $data->Nama }}</td>
-                                                                                    <td>{{ $data->AlamatKantor }}</td>
-                                                                                    <td>{{ $data->TelpKantor }}</td>
-                                                                                    <td>{{ $data->FaxKantor }}</td>
-                                                                                    <td>{{ $data->AlamatKirim }}</td>
-                                                                                </tr>
-                                                                                <?php
-                                                                            }
-                                                                            ?>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                                <button type="button" data-toggle="modal" data-target="#Customer">
+                                                <button type="button" class="modal-customer" data-toggle="modal" data-target="#modal-customer">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
@@ -449,67 +392,8 @@
                                                 <input type="text" class="form-control txt_line col-md-11" name="namamc" id="namamc" readonly>
                                                 <input type="hidden" class="form-control txt_line col-md-11" name="mcid" id="mcid" readonly>
                                             </div>
-                                            <div class="modal fade" id="Mastercard">
-                                                <div class="modal-dialog modal-xl">
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title mastercard">Mastercard</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body Mastercard">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_mc">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">ID</th>
-                                                                            <th scope="col">No MC</th>
-                                                                            <th scope="col">Nama Barang</th>
-                                                                            <th scope="col">Tipe Box</th>
-                                                                            <th scope="col">Flute</th>
-                                                                            <th scope="col">Kualitas</th>
-                                                                            <th scope="col">Gram</th>
-                                                                            <th scope="col">Warna</th>
-                                                                            <th scope="col">Keterangan</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $no = 1;
-                                                                        foreach ($mc as $data) { 
-                                                                            if ($data->revisi == 'R0' || $data->revisi == '') {
-                                                                                $result = $data->kode;
-                                                                            } else {
-                                                                                $result = $data->kode.'-'.$data->revisi;
-                                                                            }
-                                                                            ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->id }}</td>
-                                                                                <td>{{ $result }}</td>
-                                                                                <td>{{ $data->box }}</td>
-                                                                                <td>{{ $data->tipeBox }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->substance }}</td>
-                                                                                <td>{{ $data->gramSheetBoxKontrak2 }}</td>
-                                                                                <td>{{ $data->warna }}</td>
-                                                                                <td>{{ $data->keterangan }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            
-                                            <button type="button" data-toggle="modal" data-target="#Mastercard">
+
+                                            <button type="button" class="modal-mastercard" data-toggle="modal" data-target="#modal-mastercard">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>
@@ -776,6 +660,72 @@
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
+
+                    <div class="modal fade customer-list" tabindex="-1" id="modal-customer">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Cari Customer</h3>
+                                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                                    </div>
+                                </div>
+                    
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-6 mb-6">
+                                            <form class="form-search-customer" action="">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control search-customer" id="search" name="search" value="" placeholder="Cari nama customer">
+                                                    <button type="submit" class="btn btn-light-primary keyword-search-customer-button">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="content-body">
+                                        Please wait...
+                                    </div>
+                                </div>
+                    
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade mastercard-list" tabindex="-1" id="modal-mastercard">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Cari Mastercard</h3>
+                                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                                    </div>
+                                </div>
+                    
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-6 mb-6">
+                                            <form class="form-search-mastercard" action="">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control search-mastercard" id="search" name="search" value="" placeholder="Cari nama mastercard">
+                                                    <button type="submit" class="btn btn-light-primary keyword-search-mastercard-button">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="content-body">
+                                        Please wait...
+                                    </div>
+                                </div>
+                    
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>    
@@ -804,67 +754,114 @@
         select: true,
     });
 
-    $(".Customer").ready(function(){
-                
-        var table = $("#data_customer").DataTable({
-            select: true,
+    $(document).on("click", ".modal-customer", function(e) {
+        e.preventDefault();
+        $(".customer-list .content-body").html("Please wait...");
+            var url = "{{ route('kontrak.cust') }}";
+
+            $('.form-search-customer').attr('action', url);
+
+            $.get(url, function(data) {
+                $(".customer-list .content-body").html(data);
+            });
+    });
+
+    $(document).on("submit", ".form-search-customer", function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var search = $('.search-customer').val();
+
+        $.get(url, { search: search }, function(data) {
+            $(".customer-list .content-body").html(data);
+        });
+    });
+
+    $(document).on("click", ".customer-list .pagination a", function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $(".customer-list .content-body").html("Please wait...");
+        $.get(url, function(data) {
+            $(".customer-list .content-body").html(data);
+        });
+    });
+
+    $(document).on("click", ".btn-insert-customer", function(e) {
+        e.preventDefault();
+        var $row = $(this).closest('tr');
+        var customer_id = $row.find('.customer_id').val() || $row.find('input[type=hidden]').val();
+        var customer_name = $row.find('td').eq(1).text().trim();
+        var alamat_kirim = $row.find('td').eq(5).text().trim();
+        var telp = $row.find('td').eq(3).text().trim();
+
+        $('#namaCust').val(customer_name);
+        $('#alamatKirim').val(alamat_kirim);
+        $('#telp').val(telp);
+        if ($('#customer_id').length) {
+            $('#customer_id').val(customer_id);
+        }
+
+        $('#modal-customer').modal('hide');
+    });
+
+    $(document).on("click", ".modal-mastercard", function(e) {
+        console.log("test");
+        
+        e.preventDefault();
+        $(".mastercard-list .content-body").html("Please wait...");
+
+            var url = "{{ route('mastercard.select') }}";
+
+            console.log(url);
+            
+
+            $('.form-search-mastercard').attr('action', url);
+
+            $.get(url, function(data) {
+                $(".mastercard-list .content-body").html(data);
+            });
+    });
+
+    $(document).on("submit", ".form-search-mastercard", function(e) {
+        e.preventDefault();
+        var url = $(this).attr('action');
+        var search = $('.search-mastercard').val();
+
+        $.get(url, { search: search }, function(data) {
+            $(".mastercard-list .content-body").html(data);
+        });
+    });
+
+    $(document).on("click", ".mastercard-list .pagination a", function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $(".mastercard-list .content-body").html("Please wait...");
+        $.get(url, function(data) {
+            $(".mastercard-list .content-body").html(data);
+        });
+    });
+
+    $(document).on("click", ".btn-insert-mastercard", function(e) {
+        e.preventDefault();
+        mc_id = $(this).closest(".modal-mastercard-list").find('.mastercard_id').val();
+        
+        var url = "{{ route('mastercard.show', ':id') }}"
+        url = url.replace(':id', mc_id);
+
+        $.get(url, function(data) {
+            document.getElementById('mcid').value = data.mc.id;
+            document.getElementById('namamc').value = data.mc.kode;
+            document.getElementById('namaBarang').value = data.mc.namaBarang;
+            document.getElementById('tipeBox').value = data.mc.tipeBox;
+            document.getElementById('flute').value = data.mc.flute;
+            document.getElementById('kualitas').value = data.mc.substance_kontrak.kode;
+            document.getElementById('gram').value = data.mc.gramSheetBoxKontrak2;
+            document.getElementById('warna').value = data.mc.color_combine.kode;
+            document.getElementById('keterangan').value = data.mc.keterangan;
+
+            $('#modal-mastercard').modal('hide');
         });
         
-        $('#data_customer tbody').on( 'click', 'td', function () {
-            var cust = (table.row(this).data());
-
-            cust_name = cust[1]
-            name = cust_name.replace('&amp;', '&')
-
-            document.getElementById('namaCust').value = name;
-            document.getElementById('alamatKirim').value = cust[5];
-            document.getElementById('telp').value = cust[3];
-
-            $.get('../acc/get_piutang/' + cust[0], function(response) {
-                console.log(response);
-                let piutang = response[0].total_piutang - response[0].total_terima;
-                
-                document.getElementById('piutang').value = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(piutang);
-            }).fail(function(error) {
-                console.error('Error fetching data:', error);
-            });
-        } );
-    } );
-
-    $(".mastercard").ready(function(){
-                
-                var table = $("#data_mc").DataTable({
-                    select: true,
-                });
-                
-                $('#data_mc tbody').on( 'click', 'td', function () {
-                    var mc = (table.row(this).data());
-                    
-                    document.getElementById('mcid').value = mc[0];
-                    document.getElementById('namamc').value = mc[1];
-                    document.getElementById('namaBarang').value = mc[2];
-                    document.getElementById('tipeBox').value = mc[3];
-                    document.getElementById('flute').value = mc[4];
-                    document.getElementById('kualitas').value = mc[5];
-                    document.getElementById('gram').value = mc[6];
-                    document.getElementById('warna').value = mc[7];
-                    document.getElementById('keterangan').value = mc[8];
-                    document.getElementById('qtyPcs').value = 0;
-                    document.getElementById('qtyKg').value = 0;
-                    document.getElementById('hargakg').value = 0;
-                    document.getElementById('harga').value = 0;
-                    document.getElementById('toleransiLebih').value = 0;
-                    document.getElementById('toleransiKurang').value = 0;
-                    document.getElementById('toleransiLebihPcs').value = 0;
-                    document.getElementById('toleransiLebihKg').value = 0;
-                    document.getElementById('toleransiKurangPcs').value = 0;
-                    document.getElementById('toleransiKurangKg').value = 0;
-                    document.getElementById('hargappn').value = 0;
-                    document.getElementById('total').value = 0;
-                    
-                    // getGramKontrak();
-                } );
-            } );
+    });
 
     $(document).on("keyup", ".qty", function(e) {
         qty = $(this).val();
