@@ -265,6 +265,7 @@ Route::middleware(['auth'])->group(function (){
     
     //Barang Jadi
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
+    Route::get('/admin/barang/new', 'BarangController@indexnew')->name('barang.indexnew');
     Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
     Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
     Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');

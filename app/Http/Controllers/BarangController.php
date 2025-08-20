@@ -79,6 +79,30 @@ class BarangController extends Controller
         return view('admin.fg.barang.index');
     }
 
+    public function indexnew(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $periode = date("m/Y");
+        
+        $query = DB::connection('firebird2')->table('TPersediaan')
+            ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+            ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
+            ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%");
+
+        // Handle search
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+            });
+        }
+
+        $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);
+
+        return view('admin.fg.barang.indexnew', compact('barang'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

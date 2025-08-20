@@ -116,7 +116,7 @@
                 <i class="right fas fa-angle-left"></i>
                 </a><ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ route('barang') }}" class="nav-link">
+                    <a href="{{ route('barang.indexnew') }}" class="nav-link">
                       <i class="fa-solid fa-boxes-stacked nav-icon"></i>
                       <p>Barang Jadi</p>
                     </a>
@@ -157,7 +157,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('barang') }}" class="nav-link">
+                  <a href="{{ route('barang.indexnew') }}" class="nav-link">
                     <i class="fa-solid fa-boxes-stacked nav-icon"></i>
                     <p>Barang</p>
                   </a>
@@ -386,7 +386,7 @@
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('barang') }}" class="nav-link">
+                  <a href="{{ route('barang.indexnew') }}" class="nav-link">
                     <i class="fa-solid fa-boxes-stacked nav-icon"></i>
                     <p>Barang</p>
                   </a>
