@@ -283,7 +283,7 @@ class Kontrak_DController extends Controller
         {
             
             // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            $cust = DB::table('TCustomer')->get();
+            // $cust = DB::table('TCustomer')->get();
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
