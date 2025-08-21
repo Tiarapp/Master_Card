@@ -35,8 +35,14 @@
         </div>
       @endif
       
-      <a href={{ route('barang.create') }} style="margin-bottom: 20px;" > <i class="fas fa-plus-circle fa-2x"></i></a>
-      <div class="card-body">
+      <div class="mb-3">
+        <a href="{{ route('barang.create') }}" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Tambah Barang Baru
+        </a>
+      </div>
+      
+      <div class="card">
+        <div class="card-body">
         <table class="table table-bordered" id="data_barang">
           <thead>
             <tr>
@@ -52,6 +58,7 @@
             </tr>
           </thead>
         </table>
+      </div>
       </div>
       <!-- /.row -->
     </div><!-- /.container-fluid -->
