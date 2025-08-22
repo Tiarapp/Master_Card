@@ -68,9 +68,6 @@ code {
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Data Barang Jadi</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/admin">Home</a></li>
                         <li class="breadcrumb-item active">Data Barang</li>
@@ -95,7 +92,7 @@ code {
 
             <!-- Search Form -->
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="card">
                         <div class="card-body">
                             <form method="GET" action="{{ route('barang.indexnew') }}" class="form-inline" id="searchForm">
@@ -117,7 +114,7 @@ code {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="info-box">
                         <span class="info-box-icon bg-info"><i class="fas fa-boxes"></i></span>
                         <div class="info-box-content">
@@ -134,6 +131,13 @@ code {
                     <h3 class="card-title">
                         <i class="fas fa-list"></i> Daftar Barang Jadi - Periode {{ date("m/Y") }}
                     </h3>
+                    <div class="card-tools">
+                        <a href="{{ route('barang.create') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> 
+                            <span class="d-none d-sm-inline">Tambah Barang Baru</span>
+                            <span class="d-sm-none">Tambah</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if($barang->count() > 0)
@@ -148,7 +152,7 @@ code {
                                         <th class="text-center d-none d-md-table-cell">Saldo (Kg)</th>
                                         <th class="text-center d-none d-lg-table-cell">Berat Standart</th>
                                         <th class="text-center d-none d-xl-table-cell">Isi Karton</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="text-center action-column">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -188,14 +192,16 @@ code {
                                                 {{ number_format($item->IsiPerKarton, 0) }}
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-primary btn-sm mutasi" 
-                                                        data-toggle="modal" 
-                                                        data-target="#mutasiModal" 
-                                                        data-kode="{{ $item->KodeBrg }}"
-                                                        title="Cek Mutasi">
-                                                    <i class="fas fa-chart-line"></i>
-                                                    <span class="d-none d-sm-inline ml-1">Mutasi</span>
-                                                </button>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-primary btn-sm mutasi" 
+                                                            data-toggle="modal" 
+                                                            data-target="#mutasiModal" 
+                                                            data-kode="{{ $item->KodeBrg }}"
+                                                            title="Cek Mutasi">
+                                                        <i class="fas fa-chart-line"></i>
+                                                        <span class="d-none d-lg-inline ml-1">Mutasi</span>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -347,6 +353,71 @@ code {
     transition: all 0.2s ease-in-out;
 }
 
+/* Create button styling */
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #218838 0%, #17a085 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
+.btn-success:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+/* Mobile responsive for create button */
+@media (max-width: 768px) {
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .d-grid {
+        margin-top: 1rem;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 0.25rem;
+        border-radius: 0.25rem !important;
+    }
+}
+
+/* Button group styling */
+.btn-group .btn {
+    border-radius: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-right: none;
+}
+
+/* Action column width */
+@media (min-width: 992px) {
+    .action-column {
+        width: 120px;
+    }
+}
+
 /* Modal responsive */
 @media (max-width: 576px) {
     .modal-dialog {
@@ -443,6 +514,19 @@ $(document).ready(function() {
     // Loading state for search
     $('#searchForm').on('submit', function() {
         $('.btn-search').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Mencari...');
+    });
+    
+    // Loading state for create button
+    $('.btn-success').on('click', function(e) {
+        var $btn = $(this);
+        var originalText = $btn.html();
+        
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+        
+        // If navigation fails, restore button after 3 seconds
+        setTimeout(function() {
+            $btn.prop('disabled', false).html(originalText);
+        }, 3000);
     });
     
     // Show tooltip for truncated text on mobile
