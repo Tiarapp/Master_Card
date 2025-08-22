@@ -19,6 +19,30 @@
 .warning {background-color: #ff9800;} /* Orange */
 .danger {background-color: #f44336;} /* Red */
 .other {background-color: #e7e7e7; color: black;} /* Gray */
+
+/* Ensure sidebar is not hidden */
+.main-sidebar {
+  display: block !important;
+  visibility: visible !important;
+  z-index: 1050;
+}
+
+/* Fix content wrapper positioning */
+.content-wrapper {
+  margin-left: 250px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* When sidebar is collapsed */
+body.sidebar-collapse .content-wrapper {
+  margin-left: 0;
+}
+
+@media (max-width: 767.98px) {
+  .content-wrapper {
+    margin-left: 0;
+  }
+}
 </style>
 
 @section('content')
@@ -179,4 +203,83 @@
   </section>
   <!-- /.content -->
 </div>
+@endsection
+
+@section('javascripts')
+<script>
+$(document).ready(function() {
+    console.log('Notifikasi page loaded');
+    console.log('jQuery version:', $.fn.jquery);
+    console.log('Body classes:', $('body').attr('class'));
+    console.log('Sidebar exists:', $('.main-sidebar').length > 0);
+    console.log('Sidebar visible:', $('.main-sidebar').is(':visible'));
+    
+    // Debug sidebar state
+    function debugSidebar() {
+        console.log('=== SIDEBAR DEBUG ===');
+        console.log('Sidebar element:', $('.main-sidebar')[0]);
+        console.log('Sidebar CSS display:', $('.main-sidebar').css('display'));
+        console.log('Sidebar CSS visibility:', $('.main-sidebar').css('visibility'));
+        console.log('Body has sidebar-collapse:', $('body').hasClass('sidebar-collapse'));
+        console.log('Pushmenu button exists:', $('[data-widget="pushmenu"]').length > 0);
+    }
+    
+    // Ensure sidebar is visible and functional
+    function ensureSidebarWorks() {
+        // Debug first
+        debugSidebar();
+        
+        // Force show sidebar if hidden
+        $('.main-sidebar').show().css('visibility', 'visible');
+        
+        // Remove any inline styles that might hide it
+        $('.main-sidebar').attr('style', function(i, style) {
+            if (style) {
+                return style.replace(/display\s*:\s*none/g, 'display: block');
+            }
+            return style;
+        });
+        
+        // Ensure body has proper AdminLTE classes
+        if (!$('body').hasClass('hold-transition')) {
+            $('body').addClass('hold-transition sidebar-mini layout-fixed');
+        }
+        
+        // Re-initialize sidebar toggle functionality
+        $('[data-widget="pushmenu"]').off('click.notif').on('click.notif', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('body').toggleClass('sidebar-collapse');
+            console.log('Sidebar toggled from notifikasi page - collapsed:', $('body').hasClass('sidebar-collapse'));
+        });
+        
+        // Initialize AdminLTE sidebar functionality if available
+        if (typeof $.AdminLTE !== 'undefined' && $.AdminLTE.layout) {
+            $.AdminLTE.layout.activate();
+            console.log('AdminLTE layout activated');
+        }
+        
+        // Force sidebar to be visible
+        setTimeout(function() {
+            $('.main-sidebar').show();
+            debugSidebar();
+        }, 500);
+    }
+    
+    // Run on page load
+    ensureSidebarWorks();
+    
+    // Also run after a short delay to ensure DOM is fully loaded
+    setTimeout(ensureSidebarWorks, 100);
+    
+    // Add click handler to debug button if needed
+    if (window.location.search.includes('debug=1')) {
+        $('body').append('<button id="debugSidebar" style="position:fixed;top:10px;right:10px;z-index:9999;background:red;color:white;padding:10px;">Debug Sidebar</button>');
+        $('#debugSidebar').click(function() {
+            debugSidebar();
+            ensureSidebarWorks();
+        });
+    }
+});
+</script>
 @endsection
