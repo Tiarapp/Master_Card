@@ -370,6 +370,7 @@ class MastercardController extends Controller
     {
         // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = Customer::all();
         // dd($cust);
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -578,6 +579,7 @@ class MastercardController extends Controller
     {
         // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
         ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
