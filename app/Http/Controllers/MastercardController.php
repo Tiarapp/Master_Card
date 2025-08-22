@@ -189,7 +189,7 @@ class MastercardController extends Controller
     {
         $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
         $kode = 'MC'. $nomer->nomer;
-        // $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
