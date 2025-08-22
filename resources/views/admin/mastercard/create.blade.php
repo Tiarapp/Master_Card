@@ -1,11 +1,114 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<!-- Load jQuery first before any other scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
+
+<!-- DataTables and other scripts after jQuery -->
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<!-- Select2 after jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+// jQuery conflict resolution and validation
+(function() {
+    // Ensure jQuery is available
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery is not available!');
+        return;
+    }
+    
+    // Create a safe reference to jQuery
+    var $safe = jQuery.noConflict(true);
+    
+    // Make it available globally as $ and jQuery
+    window.$ = window.jQuery = $safe;
+    
+    
+})();
+</script>
+
+<style>
+/* Custom Select2 Styling */
+.select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.25rem + 2px) !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    line-height: 1.5 !important;
+    padding-left: 0 !important;
+    padding-right: 20px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px) !important;
+}
+
+.select2-container--bootstrap4 .select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+/* Focus states */
+.select2-container--bootstrap4.select2-container--focus .select2-selection--single {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+/* Search box styling */
+.select2-search--dropdown {
+    padding: 8px !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    width: 100% !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 14px !important;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    outline: none !important;
+}
+
+/* Results styling */
+.select2-results__option {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+}
+
+.select2-results__option--highlighted {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+/* Ensure dropdown is visible */
+.select2-dropdown {
+    z-index: 9999 !important;
+}
+
+/* Force search box to always show */
+.select2-search--dropdown {
+    display: block !important;
+}
+</style>
 
 {{-- <style>
     #data_barang_filter.dataTables_filter label, #data_box_filter.dataTables_filter label, #data_substanceKontrak_filter.dataTables_filter label, #data_substanceProduksi_filter.dataTables_filter label {
@@ -733,13 +836,223 @@
 @endsection
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-        if (document.getElementById('tipebox').value == 'SF') {
-            $('.berat-roll').show();
+    // Ensure jQuery is loaded before proceeding
+    function waitForJQuery(callback) {
+        if (typeof jQuery !== 'undefined') {
+            callback(jQuery);
         } else {
-            $('.berat-roll').hide();
+            setTimeout(function() {
+                waitForJQuery(callback);
+            }, 50);
         }
+    }
+
+    // Initialize everything after jQuery is ready
+    waitForJQuery(function($) {
+        
+        // Document ready handler
+        $(document).ready(function() {
+            
+            // Initialize immediately
+            initializeSelect2();
+            
+            // Fallback initialization after a delay
+            setTimeout(function() {
+                if (!$('.js-example-basic-single').hasClass('select2-hidden-accessible')) {
+                    initializeSelect2();
+                }
+            }, 1000);
+
+            // Handle tipebox visibility
+            var tipebox = document.getElementById('tipebox');
+            if (tipebox && tipebox.value == 'SF') {
+                $('.berat-roll').show();
+            } else {
+                $('.berat-roll').hide();
+            }
+        });
+
+        // Window load handler for final initialization
+        $(window).on('load', function() {
+            
+            
+            // Final initialization attempt
+            setTimeout(function() {
+                initializeSelect2();
+            }, 500);
+        });
+
+        function initializeSelect2() {
+            
+            
+            // Check if Select2 is available
+            if (typeof $.fn.select2 === 'undefined') {
+                console.error('Select2 plugin not available!');
+                return;
+            }
+            
+            // Find all select elements
+            var selectElements = $('.js-example-basic-single');
+            
+            
+            if (selectElements.length === 0) {
+                console.error('No select elements found with class js-example-basic-single');
+                return;
+            }
+            
+            // Destroy existing instances safely
+            selectElements.each(function() {
+                var $this = $(this);
+                if ($this.hasClass('select2-hidden-accessible')) {
+                    
+                    try {
+                        $this.select2('destroy');
+                    } catch (e) {
+                        console.warn('Error destroying Select2:', e);
+                    }
+                }
+            });
+            
+            // Initialize Select2 with error handling
+            try {
+                selectElements.select2({
+                    theme: 'bootstrap4',
+                    width: '100%',
+                    placeholder: function() {
+                        return $(this).data('placeholder') || 'Pilih opsi...';
+                    },
+                    allowClear: true,
+                    minimumResultsForSearch: 0, // Always show search box
+                    escapeMarkup: function(markup) {
+                        return markup;
+                    },
+                    language: {
+                        noResults: function() {
+                            return "Tidak ada hasil ditemukan";
+                        },
+                        searching: function() {
+                            return "Mencari...";
+                        },
+                        inputTooShort: function() {
+                            return "Masukkan minimal 1 karakter untuk mencari";
+                        }
+                    }
+                });
+                
+                // Verify initialization
+                var initializedCount = 0;
+                selectElements.each(function() {
+                    if ($(this).hasClass('select2-hidden-accessible')) {
+                        initializedCount++;
+                        
+                    } else {
+                        console.error('✗ Select2 failed for', $(this).attr('id'));
+                    }
+                });
+                
+                
+                
+            } catch (error) {
+                console.error('Error initializing Select2:', error);
+            }
+        }
+
+        // Reinitialize Select2 after any dynamic content changes
+        function reinitializeSelect2() {
+            
+            initializeSelect2();
+        }
+
+        // Handle form resets
+        $(document).on('reset', 'form', function() {
+            setTimeout(function() {
+                reinitializeSelect2();
+            }, 100);
+        });
+
+        // Add event listeners for select changes to maintain functionality
+        $(document).on('select2:select', '#golongan, #tujuan, #tipeMc, #koli', function (e) {
+            
+            if (typeof getKodeBarang === 'function') {
+                getKodeBarang();
+            }
+        });
+
+        $(document).on('select2:select', '#warna', function (e) {
+            
+            if (typeof getColor === 'function') {
+                getColor();
+            }
+        });
+
+        // Fix for Select2 inside modals
+        $('#List-Customer, #Box, #Substance').on('shown.bs.modal', function() {
+            var $modal = $(this);
+            setTimeout(function() {
+                $modal.find('.js-example-basic-single').select2({
+                    theme: 'bootstrap4',
+                    width: '100%',
+                    minimumResultsForSearch: 0,
+                    dropdownParent: $modal
+                });
+            }, 100);
+        });
+
+        // Test function to manually trigger Select2
+        window.testSelect2 = function() {
+            
+            
+            
+            
+            
+            $('.js-example-basic-single').each(function() {
+                var $this = $(this);
+                
+            });
+            
+            // Force reinitialize
+            
+            reinitializeSelect2();
+            
+            // Check again after reinit
+            setTimeout(function() {
+                
+                $('.js-example-basic-single').each(function() {
+                    var $this = $(this);
+                    
+                });
+            }, 500);
+        };
+
+        // Manual initialization function
+        window.forceSelect2 = function() {
+            
+            
+            // Try direct initialization without destroy
+            $('.js-example-basic-single').each(function() {
+                var $element = $(this);
+                var id = $element.attr('id');
+                
+                
+                
+                try {
+                    $element.select2({
+                        theme: 'bootstrap4',
+                        width: '100%',
+                        minimumResultsForSearch: 0,
+                        placeholder: 'Pilih opsi...',
+                        allowClear: true
+                    });
+                    
+                } catch (error) {
+                    console.error('✗ Error for', id, ':', error);
+                }
+            });
+        };
+
+        // Global scope assignment for backward compatibility
+        window.initializeSelect2 = initializeSelect2;
+        window.reinitializeSelect2 = reinitializeSelect2;
     });
     // Datatable Barang(Item)
 
@@ -790,7 +1103,7 @@
             // document.getElementById('telp').value = cust[3];
             // document.getElementById('fax').value = cust[4];
             
-            console.log(cust);
+            
         } );
     } );
 
@@ -854,7 +1167,7 @@
             kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
         }
 
-        // console.log(kodebarang);
+        // 
 
         document.getElementById("kodeBarang").value = kodebarang;
     }
@@ -944,7 +1257,7 @@
                 var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000;
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
 
-                // console.log(luas);
+                // 
                 document.getElementById("luasSheet").value = luasmkt.toFixed(3);
                 document.getElementById("luasSheetBox").value = luasmkt.toFixed(3);
                 document.getElementById("luasSheetProd").value = luasProd.toFixed(3);
@@ -1200,7 +1513,7 @@
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
-            console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
+            
             
         } else {
             
@@ -1392,7 +1705,7 @@
                 Pbawah = 0 ;
             }
 
-            console.log(Patas, Pbf, Ptengah, Pcf, Pbawah);
+            
             
             
             gramKualitas = (parseInt(Patas) + (parseInt(Pcf)*1.27) + parseInt(Ptengah) + (parseInt(Pbf)*1.36) + parseInt(Pbawah))/1000;
@@ -1412,7 +1725,7 @@
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
 
-            console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
+            
             
             
         } else {

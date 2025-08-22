@@ -9,6 +9,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $connection = 'firebird';
+    // protected $connection = 'firebird';
     protected $table = 'TCustomer';
 }
