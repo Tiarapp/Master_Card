@@ -1,12 +1,36 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<!-- jQuery 3.6.0 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 4.1.0-rc.0 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
 <style>
-    .select2 {
-        width: 206px !important;
+    .select2-container {
+        width: 100% !important;
+    }
+    
+    .select2-container--bootstrap4 .select2-selection--single {
+        height: calc(2.25rem + 2px) !important;
+        border: 1px solid #ced4da !important;
+    }
+    
+    .select2-container--bootstrap4 .select2-selection__rendered {
+        line-height: calc(2.25rem + 2px) !important;
+        padding-left: 12px !important;
+    }
+    
+    .select2-container--bootstrap4 .select2-selection__arrow {
+        height: calc(2.25rem + 2px) !important;
+        right: 12px !important;
     }
 </style>
 
@@ -736,22 +760,84 @@
 @section('javascripts')
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
+    // Debug functions
+    function testSelect2() {
+        console.log('jQuery version:', $.fn.jquery);
+        console.log('Select2 version:', $.fn.select2 ? 'Available' : 'Not available');
+        console.log('Select2 elements found:', $('.js-example-basic-single').length);
+    }
 
-    $("#detail_kontrak").DataTable({
-        "paging":   false,
-        "ordering": false,
-        "info":     false,
-        "searching": false,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        "initComplete": function (settings, json) {  
-            $("#detail_kontrak").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
-        },
-        // "scrollY": "400px",
-        select: true,
+    function forceSelect2() {
+        $('.js-example-basic-single').each(function() {
+            if (!$(this).hasClass('select2-hidden-accessible')) {
+                $(this).select2({
+                    theme: 'bootstrap4',
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: 'Pilih...'
+                });
+            }
+        });
+    }
+
+    function reinitializeSelect2() {
+        $('.js-example-basic-single').select2('destroy').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            allowClear: true,
+            placeholder: 'Pilih...'
+        });
+    }
+
+    // Wait for jQuery to be ready
+    function waitForJQuery() {
+        if (typeof $ !== 'undefined' && $.fn.select2) {
+            initializeComponents();
+        } else {
+            setTimeout(waitForJQuery, 100);
+        }
+    }
+
+    function initializeComponents() {
+        try {
+            // Initialize Select2
+            $('.js-example-basic-single').select2({
+                theme: 'bootstrap4',
+                width: '100%',
+                allowClear: true,
+                placeholder: 'Pilih...'
+            });
+
+            // Initialize DataTables
+            if (!$.fn.DataTable.isDataTable("#detail_kontrak")) {
+                $("#detail_kontrak").DataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "searching": false,
+                    "initComplete": function (settings, json) {  
+                        $("#detail_kontrak").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
+                    },
+                    select: true,
+                });
+            }
+
+            console.log('Select2 and DataTables initialized successfully');
+        } catch (error) {
+            console.error('Error initializing components:', error);
+            setTimeout(function() {
+                try {
+                    forceSelect2();
+                } catch (e) {
+                    console.error('Force initialization failed:', e);
+                }
+            }, 1000);
+        }
+    }
+
+    $(document).ready(function() {
+        waitForJQuery();
+        testSelect2();
     });
 
     $(document).on("click", ".modal-customer", function(e) {

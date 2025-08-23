@@ -1,10 +1,69 @@
-<!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 @extends('admin.templates.partials.default')
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<!-- Load jQuery first before any other scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
+
+<!-- Select2 after jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+// jQuery conflict resolution and validation
+(function() {
+    // Ensure jQuery is available
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery is not available!');
+        return;
+    }
+    
+    // Create a safe reference to jQuery
+    var $safe = jQuery.noConflict(true);
+    
+    // Make it available globally as $ and jQuery
+    window.$ = window.jQuery = $safe;
+    
+    console.log('jQuery loaded successfully:', $safe.fn.jquery);
+})();
+</script>
+
+<style>
+/* Custom Select2 Styling */
+.select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.25rem + 2px) !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    line-height: 1.5 !important;
+    padding-left: 0 !important;
+    padding-right: 20px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px) !important;
+    right: 10px !important;
+}
+
+.select2-container--bootstrap4 .select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--bootstrap4.select2-container--focus .select2-selection--single {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+</style>
 
 @section('content')
 
@@ -135,14 +194,197 @@
         </div>
     </div>
     
-    @endsection
-    
-    <script type="text/javascript">
+@endsection
+
+<script type="text/javascript">
+    // Ensure jQuery is loaded before proceeding
+    function waitForJQuery(callback) {
+        if (typeof jQuery !== 'undefined') {
+            callback(jQuery);
+        } else {
+            setTimeout(function() {
+                waitForJQuery(callback);
+            }, 50);
+        }
+    }
+
+    // Initialize everything after jQuery is ready
+    waitForJQuery(function($) {
+        console.log('jQuery is ready:', $.fn.jquery);
+        
+        // Document ready handler
         $(document).ready(function() {
-            $('.js-example-basic-single').select2();
+            console.log('Document ready, preparing Select2...');
+            
+            // Initialize immediately
+            initializeSelect2();
+            
+            // Fallback initialization after a delay
+            setTimeout(function() {
+                if (!$('.js-example-basic-single').hasClass('select2-hidden-accessible')) {
+                    console.log('Select2 not initialized yet, forcing initialization...');
+                    initializeSelect2();
+                }
+            }, 1000);
         });
 
-        function getFlute(){
+        // Window load handler for final initialization
+        $(window).on('load', function() {
+            console.log('Window loaded, final Select2 check...');
+            
+            // Final initialization attempt
+            setTimeout(function() {
+                initializeSelect2();
+            }, 500);
+        });
+
+        function initializeSelect2() {
+            console.log('Initializing Select2...');
+            
+            // Check if Select2 is available
+            if (typeof $.fn.select2 === 'undefined') {
+                console.error('Select2 plugin not available!');
+                return;
+            }
+            
+            // Find all select elements
+            var selectElements = $('.js-example-basic-single');
+            console.log('Found', selectElements.length, 'select elements');
+            
+            if (selectElements.length === 0) {
+                console.error('No select elements found with class js-example-basic-single');
+                return;
+            }
+            
+            // Destroy existing instances safely
+            selectElements.each(function() {
+                var $this = $(this);
+                if ($this.hasClass('select2-hidden-accessible')) {
+                    console.log('Destroying existing Select2 for', $this.attr('id'));
+                    try {
+                        $this.select2('destroy');
+                    } catch (e) {
+                        console.warn('Error destroying Select2:', e);
+                    }
+                }
+            });
+            
+            // Initialize Select2 with error handling
+            try {
+                selectElements.select2({
+                    theme: 'bootstrap4',
+                    width: '100%',
+                    placeholder: function() {
+                        return $(this).data('placeholder') || 'Pilih opsi...';
+                    },
+                    allowClear: true,
+                    minimumResultsForSearch: 0, // Always show search box
+                    escapeMarkup: function(markup) {
+                        return markup;
+                    },
+                    language: {
+                        noResults: function() {
+                            return "Tidak ada hasil ditemukan";
+                        },
+                        searching: function() {
+                            return "Mencari...";
+                        },
+                        inputTooShort: function() {
+                            return "Masukkan minimal 1 karakter untuk mencari";
+                        }
+                    }
+                });
+                
+                // Verify initialization
+                var initializedCount = 0;
+                selectElements.each(function() {
+                    if ($(this).hasClass('select2-hidden-accessible')) {
+                        initializedCount++;
+                        console.log('✓ Select2 initialized for', $(this).attr('id'));
+                    } else {
+                        console.error('✗ Select2 failed for', $(this).attr('id'));
+                    }
+                });
+                
+                console.log('Select2 initialized for', initializedCount, 'out of', selectElements.length, 'elements');
+                
+            } catch (error) {
+                console.error('Error initializing Select2:', error);
+            }
+        }
+
+        // Reinitialize Select2 after any dynamic content changes
+        function reinitializeSelect2() {
+            console.log('Reinitializing Select2...');
+            initializeSelect2();
+        }
+
+        // Add event listeners for select changes to maintain functionality
+        $(document).on('select2:select', '#flute', function (e) {
+            console.log('Flute selection changed');
+            if (typeof getFlute === 'function') {
+                getFlute();
+            }
+            // Reinitialize Select2 for elements that might have been enabled/disabled
+            setTimeout(function() {
+                reinitializeSelect2();
+            }, 100);
+        });
+
+        $(document).on('select2:select', '#atas, #flute1, #tengah, #flute2, #bawah', function (e) {
+            console.log('Substance selection changed for', $(this).attr('id'));
+            if (typeof getNamaSubstance === 'function') {
+                getNamaSubstance();
+            }
+        });
+
+        // Test function to manually trigger Select2
+        window.testSelect2 = function() {
+            console.log('=== Testing Select2 ===');
+            console.log('jQuery available:', typeof $ !== 'undefined');
+            console.log('jQuery version:', $.fn.jquery);
+            console.log('Select2 available:', typeof $.fn.select2 !== 'undefined');
+            
+            $('.js-example-basic-single').each(function() {
+                var $this = $(this);
+                console.log('Element:', $this.attr('id'), 'Has Select2:', $this.hasClass('select2-hidden-accessible'), 'Disabled:', $this.prop('disabled'));
+            });
+            
+            // Force reinitialize
+            console.log('Force reinitializing...');
+            reinitializeSelect2();
+        };
+
+        // Manual initialization function
+        window.forceSelect2 = function() {
+            console.log('=== Force Select2 Initialization ===');
+            
+            // Try direct initialization without destroy
+            $('.js-example-basic-single').each(function() {
+                var $element = $(this);
+                var id = $element.attr('id');
+                
+                console.log('Processing element:', id);
+                
+                try {
+                    $element.select2({
+                        theme: 'bootstrap4',
+                        width: '100%',
+                        minimumResultsForSearch: 0,
+                        placeholder: 'Pilih opsi...',
+                        allowClear: true
+                    });
+                    console.log('✓ Success for', id);
+                } catch (error) {
+                    console.error('✗ Error for', id, ':', error);
+                }
+            });
+        };
+
+        // Global scope assignment for backward compatibility
+        window.initializeSelect2 = initializeSelect2;
+        window.reinitializeSelect2 = reinitializeSelect2;
+    });        function getFlute(){
             var namaflute = document.getElementById('flute').value;
 
             // var namaflute = getNama(flute);
