@@ -790,10 +790,17 @@
             </div>
         </div>    
     </div>
+
     
-@endsection
+@endsection 
 
 @section('javascripts')
+<!-- Select2 4.1.0-rc.0 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -1010,14 +1017,4 @@
                             
                         
 </script>
-
-@endsection 
-
-@section('javascripts')
-<!-- Select2 4.1.0-rc.0 JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<!-- DataTables JavaScript -->
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 @endsection 
