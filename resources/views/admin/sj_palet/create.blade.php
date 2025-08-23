@@ -1,53 +1,52 @@
 @extends('admin.templates.partials.default')
 
-<!-- Load jQuery first before any other scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <!-- Select2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
 
-<!-- Select2 after jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<script>
-// jQuery conflict resolution and validation
-(function() {
-    // Ensure jQuery is available
-    if (typeof jQuery === 'undefined') {
-        console.error('jQuery is not available!');
-        return;
-    }
-    
-    // Create a safe reference to jQuery
-    var $safe = jQuery.noConflict(true);
-    
-    // Make it available globally as $ and jQuery
-    window.$ = window.jQuery = $safe;
-    
-    console.log('jQuery loaded successfully:', $safe.fn.jquery);
-})();
-</script>
-
 <style>
 /* Custom Select2 Styling */
+.select2-container {
+    width: 100% !important;
+}
+
 .select2-container--bootstrap4 .select2-selection--single {
-    height: calc(2.25rem + 2px) !important;
+    height: 38px !important;
     border: 1px solid #ced4da !important;
     border-radius: 0.25rem !important;
-    padding: 0.375rem 0.75rem !important;
+    padding: 0 !important;
 }
 
-.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
-    color: #495057 !important;
-    line-height: 1.5 !important;
-    padding-left: 0 !important;
+.select2-container--bootstrap4 .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
     padding-right: 20px !important;
+    color: #495057 !important;
+    font-size: 14px !important;
 }
 
-.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
-    height: calc(2.25rem + 2px) !important;
+.select2-container--bootstrap4 .select2-selection__arrow {
+    height: 36px !important;
     right: 10px !important;
+    top: 1px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection__arrow b {
+    border-color: #999 transparent transparent transparent !important;
+    border-style: solid !important;
+    border-width: 5px 4px 0 4px !important;
+    height: 0 !important;
+    left: 50% !important;
+    margin-left: -4px !important;
+    margin-top: -2px !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 0 !important;
+}
+
+.select2-container--bootstrap4.select2-container--open .select2-selection__arrow b {
+    border-color: transparent transparent #999 transparent !important;
+    border-width: 0 4px 5px 4px !important;
 }
 
 .select2-container--bootstrap4 .select2-dropdown {
@@ -55,8 +54,19 @@
     border-radius: 0.25rem !important;
 }
 
-.select2-container {
-    width: 100% !important;
+.select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 6px 12px !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option {
+    padding: 6px 12px !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted {
+    background-color: #007bff !important;
+    color: white !important;
 }
 
 .select2-container--bootstrap4.select2-container--focus .select2-selection--single {
@@ -245,213 +255,103 @@
             @endsection
             
 @section('javascripts')
+<!-- Select2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
-    // Ensure jQuery is loaded before proceeding
-    function waitForJQuery(callback) {
-        if (typeof jQuery !== 'undefined') {
-            callback(jQuery);
-        } else {
-            setTimeout(function() {
-                waitForJQuery(callback);
-            }, 50);
+    $(document).ready(function() {
+        // Initialize Select2
+        $('.js-example-basic-single').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            allowClear: false,
+            placeholder: 'Pilih...',
+            minimumResultsForSearch: 0
+        });
+    });
+
+    // Split data Customer
+    function getCatatan1() {
+        var jenis = document.getElementById("jenispalet").value;
+
+        if (jenis === "Kayu") {
+            document.getElementById("catatan1").value = "PALET KAYU UNTUK MENGANGKUT BOX SJ NO : ";
+        } else if (jenis == "Plastik") {
+            document.getElementById("catatan1").value = "PALET PLASTIK UNTUK MENGANGKUT BOX SJ NO : ";
         }
     }
-
-    // Initialize everything after jQuery is ready
-    waitForJQuery(function($) {
-        console.log('jQuery is ready:', $.fn.jquery);
+    
+    function getCustomer() {
+        var data = document.getElementById('listCust').value;
         
-        // Document ready handler
-        $(document).ready(function() {
-            console.log('Document ready, preparing Select2...');
-            
-            // Initialize immediately
-            initializeSelect2();
-            
-            // Fallback initialization after a delay
-            setTimeout(function() {
-                if (!$('.js-example-basic-single').hasClass('select2-hidden-accessible')) {
-                    console.log('Select2 not initialized yet, forcing initialization...');
-                    initializeSelect2();
-                }
-            }, 1000);
-        });
+        var cust = data.split('|');
+        var custNama = cust[0];
+        var custAlamat = cust[1];
+        
+        document.getElementById('namaCustomer').value = custNama;
+        document.getElementById('alamatCustomer').value = custAlamat;
+    }
 
-        // Window load handler for final initialization
-        $(window).on('load', function() {
-            console.log('Window loaded, final Select2 check...');
-            
-            // Final initialization attempt
-            setTimeout(function() {
-                initializeSelect2();
-            }, 500);
-        });
+    function getCatatan() {
+        var catatan1 = document.getElementById("catatan1").value;
+        var nosj = document.getElementById("nosj").value;
 
-        function initializeSelect2() {
-            console.log('Initializing Select2...');
-            
-            // Check if Select2 is available
-            if (typeof $.fn.select2 === 'undefined') {
-                console.error('Select2 plugin not available!');
-                return;
-            }
-            
-            // Find all select elements
-            var selectElements = $('.js-example-basic-single');
-            console.log('Found', selectElements.length, 'select elements');
-            
-            if (selectElements.length === 0) {
-                console.error('No select elements found with class js-example-basic-single');
-                return;
-            }
-            
-            // Destroy existing instances safely
-            selectElements.each(function() {
-                var $this = $(this);
-                if ($this.hasClass('select2-hidden-accessible')) {
-                    console.log('Destroying existing Select2 for', $this.attr('id'));
-                    try {
-                        $this.select2('destroy');
-                    } catch (e) {
-                        console.warn('Error destroying Select2:', e);
-                    }
-                }
-            });
-            
-            // Initialize Select2 with error handling
-            try {
-                selectElements.select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                    placeholder: function() {
-                        return $(this).data('placeholder') || 'Pilih opsi...';
-                    },
-                    allowClear: true,
-                    minimumResultsForSearch: 0, // Always show search box
-                    escapeMarkup: function(markup) {
-                        return markup;
-                    },
-                    language: {
-                        noResults: function() {
-                            return "Tidak ada hasil ditemukan";
-                        },
-                        searching: function() {
-                            return "Mencari...";
-                        },
-                        inputTooShort: function() {
-                            return "Masukkan minimal 1 karakter untuk mencari";
-                        }
-                    }
-                });
-                
-                // Verify initialization
-                var initializedCount = 0;
-                selectElements.each(function() {
-                    if ($(this).hasClass('select2-hidden-accessible')) {
-                        initializedCount++;
-                        console.log('✓ Select2 initialized for', $(this).attr('id'));
-                    } else {
-                        console.error('✗ Select2 failed for', $(this).attr('id'));
-                    }
-                });
-                
-                console.log('Select2 initialized for', initializedCount, 'out of', selectElements.length, 'elements');
-                
-            } catch (error) {
-                console.error('Error initializing Select2:', error);
-            }
+        document.getElementById("catatan").value = catatan1 + nosj;
+    }
+    
+    // fungsi untuk mengisi otomatis ke input
+    function getData() {
+        var data1 = document.getElementById("nama_1").value;
+        var data2 = document.getElementById("nama_2").value;
+        var data3 = document.getElementById("nama_3").value;
+        var data4 = document.getElementById("nama_4").value;
+        var data5 = document.getElementById("nama_5").value;
+        
+        if (data1 != '') {
+            var arr1 = data1.split('|');
+            var idpalet1 = arr1[0];
+            var nama1 = arr1[1];
+            var ukuran1 = arr1[2]; 
+            document.getElementById("idpalet[1]").value = idpalet1;
+            document.getElementById("nama[1]").value = nama1;
+            document.getElementById("ukuran[1]").value = ukuran1;
+        } 
+        if (data2 != '') {
+            var arr2 = data2.split('|');
+            var idpalet2 = arr2[0];
+            var nama2 = arr2[1];
+            var ukuran2 = arr2[2]; 
+            document.getElementById("idpalet[2]").value = idpalet2;
+            document.getElementById("nama[2]").value = nama2;
+            document.getElementById("ukuran[2]").value = ukuran2;
+        } 
+        if (data3 != '') {
+            var arr3 = data3.split('|');
+            var idpalet3 = arr3[0];
+            var nama3 = arr3[1];
+            var ukuran3 = arr3[2]; 
+            document.getElementById("idpalet[3]").value = idpalet3;
+            document.getElementById("nama[3]").value = nama3;
+            document.getElementById("ukuran[3]").value = ukuran3;
         }
-
-        // Global scope assignment for backward compatibility
-        window.initializeSelect2 = initializeSelect2;
-    });                // Split data Customer
-                function getCatatan1() {
-                    var jenis = document.getElementById("jenispalet").value;
-
-                    if (jenis === "Kayu") {
-                        document.getElementById("catatan1").value = "PALET KAYU UNTUK MENGANGKUT BOX SJ NO : ";
-                    } else if (jenis == "Plastik") {
-                        document.getElementById("catatan1").value = "PALET PLASTIK UNTUK MENGANGKUT BOX SJ NO : ";
-                    }
-
-                }
-                
-                function getCustomer() {
-                    var data = document.getElementById('listCust').value;
-                    
-                    var cust = data.split('|');
-                    var custNama = cust[0];
-                    var custAlamat = cust[1];
-                    
-                    document.getElementById('namaCustomer').value = custNama;
-                    document.getElementById('alamatCustomer').value = custAlamat;
-                }
-
-                function getCatatan() {
-                    var catatan1 = document.getElementById("catatan1").value;
-                    var nosj = document.getElementById("nosj").value;
-
-                    document.getElementById("catatan").value = catatan1 +nosj;
-                }
-                
-                // fungsi untuk mengisi otomatis ke input
-                function getData() {
-                    var data1 = document.getElementById("nama_1").value;
-                    var data2 = document.getElementById("nama_2").value;
-                    var data3 = document.getElementById("nama_3").value;
-                    var data4 = document.getElementById("nama_4").value;
-                    var data5 = document.getElementById("nama_5").value;
-                    
-                    if (data1 != '') {
-                        var arr1 = data1.split('|');
-                        var idpalet1 = arr1[0];
-                        var nama1 = arr1[1];
-                        var ukuran1 = arr1[2]; 
-                        document.getElementById("idpalet[1]").value = idpalet1;
-                        document.getElementById("nama[1]").value = nama1;
-                        document.getElementById("ukuran[1]").value = ukuran1;
-                    } 
-                    if (data2 != '') {
-                        var arr2 = data2.split('|');
-                        var idpalet2 = arr2[0];
-                        var nama2 = arr2[1];
-                        var ukuran2 = arr2[2]; 
-                        document.getElementById("idpalet[2]").value = idpalet2;
-                        document.getElementById("nama[2]").value = nama2;
-                        document.getElementById("ukuran[2]").value = ukuran2;
-                    } 
-                    if (data3 != '') {
-                        var arr3 = data3.split('|');
-                        var idpalet3 = arr3[0];
-                        var nama3 = arr3[1];
-                        var ukuran3 = arr3[2]; 
-                        document.getElementById("idpalet[3]").value = idpalet3;
-                        document.getElementById("nama[3]").value = nama3;
-                        document.getElementById("ukuran[3]").value = ukuran3;
-                    }
-                    if (data4 != '') {
-                        var arr4 = data4.split('|');
-                        var idpalet4 = arr4[0];
-                        var nama4 = arr4[1];
-                        var ukuran4 = arr4[2]; 
-                        document.getElementById("idpalet[4]").value = idpalet4;
-                        document.getElementById("nama[4]").value = nama4;
-                        document.getElementById("ukuran[4]").value = ukuran4;                        
-                    }
-                    if (data5 != '') {
-                        var arr5 = data5.split('|');
-                        var idpalet5 = arr5[0];
-                        var nama5 = arr5[1];
-                        var ukuran5 = arr5[2]; 
-                        document.getElementById("idpalet[5]").value = idpalet5;
-                        document.getElementById("nama[5]").value = nama5;
-                        document.getElementById("ukuran[5]").value = ukuran5;
-                    }
-                    
-                }
-                
-                
-            </script>
-            
-            @endsection
+        if (data4 != '') {
+            var arr4 = data4.split('|');
+            var idpalet4 = arr4[0];
+            var nama4 = arr4[1];
+            var ukuran4 = arr4[2]; 
+            document.getElementById("idpalet[4]").value = idpalet4;
+            document.getElementById("nama[4]").value = nama4;
+            document.getElementById("ukuran[4]").value = ukuran4;                        
+        }
+        if (data5 != '') {
+            var arr5 = data5.split('|');
+            var idpalet5 = arr5[0];
+            var nama5 = arr5[1];
+            var ukuran5 = arr5[2]; 
+            document.getElementById("idpalet[5]").value = idpalet5;
+            document.getElementById("nama[5]").value = nama5;
+            document.getElementById("ukuran[5]").value = ukuran5;
+        }
+    }
+</script>
+@endsection
