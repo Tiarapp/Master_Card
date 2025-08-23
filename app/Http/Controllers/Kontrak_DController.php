@@ -505,7 +505,7 @@ class Kontrak_DController extends Controller
         public function edit($id)
         {
             // menampilkan untuk dropdown
-            $cust = DB::connection('firebird')->table('TCustomer')->get();
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
             
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -536,7 +536,7 @@ class Kontrak_DController extends Controller
             
             if($kontrak_M->status == 2){
                 return view('admin.kontrak.edit', compact(
-                    'cust',
+                    // 'cust',
                     'mc',
                     'top',
                     'sales',
@@ -544,7 +544,7 @@ class Kontrak_DController extends Controller
                 ), ['kontrak_M' => $kontrak_M]);
             } else if(Auth::user()->divisi_id == 2){
                 return view('admin.kontrak.edit', compact(
-                    'cust',
+                    // 'cust',
                     'mc',
                     'top',
                     'sales',
