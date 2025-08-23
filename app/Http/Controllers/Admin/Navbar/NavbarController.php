@@ -71,7 +71,7 @@ class NavbarController extends Controller
 
         }
 
-        return redirect('admin/kontrak')->with('success', 'Berhasil melakukan request buka Blok, tunggu Respon dari IT');
+        return redirect('admin/kontraknew')->with('success', 'Berhasil melakukan request buka Blok, tunggu Respon dari IT');
     }
 
     public function update($id)
