@@ -28,7 +28,7 @@ class OpiExport implements FromCollection, WithHeadings
                 'action' => '',
                 'kontrak' => $item->kontrakm->kode,
                 'opi_ke' => $item->created_at,
-                'dt' => $item->dt->tglKirimDt,
+                'dt' => Carbon::parse($item->dt->tglKirimDt)->format('d/m/Y'),
                 'qty_kirim' => $item->jumlahOrder,
                 'customer' => $item->kontrakm->customer_name,
                 'namaBarang' => $item->mc->namaBarang,
@@ -48,7 +48,9 @@ class OpiExport implements FromCollection, WithHeadings
                 'tipeOrder' => $item->kontrakm->tipeOrder,
                 'warna' => $item->mc->colorcombine->nama,
                 'finishing' => $item->mc->joint,
-                'kualitasKontrakKMAtas' => $item->mc->substanceproduksi->lineratas->jenisKertasMc == "BK" ? "K" : $item->mc->substanceproduksi->lineratas->jenisKertasMc,
+                'kualitasKontrakKMAtas' => isset($item->mc->substanceproduksi->lineratas)
+                    ? ($item->mc->substanceproduksi->lineratas->jenisKertasMc == "BK" ? "K" : $item->mc->substanceproduksi->lineratas->jenisKertasMc)
+                    : '-',
                 'kualitasKontrakI1' => $item->mc->substanceproduksi->lineratas->gramKertas ?? '',
                 'kualitasKontrakI2' => $item->mc->substanceproduksi->flute1->gramKertas ?? '',
                 'kualitasKontrakI3' => $item->mc->substanceproduksi->linertengah->gramKertas ?? '',
@@ -64,14 +66,16 @@ class OpiExport implements FromCollection, WithHeadings
                 'boxL' => $item->mc->box->lebarDalamBox,
                 'boxT' => $item->mc->box->tinggiDalamBox,
                 'koli' => $item->mc->koli,
-                'dtPerubahan' => $item->dt->tglKirimDt,
+                'dtPerubahan' => Carbon::parse($item->dt->tglKirimDt)->format('d/m/Y'),
                 'hargaKg' => $item->kontrakd->hargaKg,
                 'realKirim' => '-',
                 'sisaDt' => '-',
                 'status' => '-',
                 'noKontrakUrut' => $item->kontrakm->kode,
                 'tglKontrak' => $item->kontrakm->tglKontrak,
-                'kualitasProduksiKMAtas' => $item->mc->substancekontrak->lineratas->jenisKertasMc == "BK" ? "K" : $item->mc->substancekontrak->lineratas->jenisKertasMc,
+                'kualitasProduksiKMAtas' => isset($item->mc->substancekontrak->lineratas)
+                    ? ($item->mc->substancekontrak->lineratas->jenisKertasMc == "BK" ? "K" : $item->mc->substancekontrak->lineratas->jenisKertasMc)
+                    : '-',
                 'kualitasProduksiI1' => $item->mc->substancekontrak->lineratas->gramKertas ?? '',
                 'kualitasProduksiI2' => $item->mc->substancekontrak->flute1->gramKertas ?? '',
                 'kualitasProduksiI3' => $item->mc->substancekontrak->linertengah->gramKertas ?? '',

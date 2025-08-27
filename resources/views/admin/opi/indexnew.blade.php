@@ -206,8 +206,13 @@
                         <td class="text-gray-800 bold">{{ $production->kontrakm->tipeOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->colorcombine->nama }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->joint }}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->lineratas->jenisKertasMc == "BK" ? "K" : $production->mc->substanceproduksi->lineratas->jenisKertasMc }}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->lineratas->gramKertas ?? '' }}</td>
+                        <td class="text-gray-800 bold">
+                          @if ($production->mc->substanceproduksi->lineratas)
+                            {{ $production->mc->substanceproduksi->lineratas->jenisKertasMc == "BK" ? "K" : $production->mc->substanceproduksi->lineratas->jenisKertasMc }}
+                          @else
+                            -
+                          @endif
+                        </td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->flute1->gramKertas ?? ''}}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->linertengah->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->flute2->gramKertas ?? '' }}</td>
@@ -237,7 +242,13 @@
                         </td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->kode }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->tglKontrak }}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->lineratas->jenisKertasMc == "BK" ? "K" : $production->mc->substancekontrak->lineratas->jenisKertasMc }}</td>
+                        <td class="text-gray-800 bold">
+                          @if ($production->mc->substancekontrak->lineratas)
+                            {{ $production->mc->substancekontrak->lineratas->jenisKertasMc == "BK" ? "K" : $production->mc->substancekontrak->lineratas->jenisKertasMc }}
+                          @else
+                            -
+                          @endif
+                        </td>
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->lineratas->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->flute1->gramKertas ?? ''}}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->linertengah->gramKertas ?? '' }}</td>
