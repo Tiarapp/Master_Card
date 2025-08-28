@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRollInventoriesTable extends Migration
+class CreateSupplierRollsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateRollInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roll_inventories', function (Blueprint $table) {
+        Schema::create('supplier_rolls', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('code')->nullable();
+            $table->integer('number_seq')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateRollInventoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roll_inventories');
+        Schema::dropIfExists('supplier_rolls');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMasterSuppTable extends Migration
+class CreateStatusRollsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateMasterSuppTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_supp', function (Blueprint $table) {
-            $table->id('id');
-            $table->string("kode_supp");
+        Schema::create('status_rolls', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->integer('numb_seq');
-            $table->string('created_by');
+            $table->string('warna')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateMasterSuppTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_supp');
+        Schema::dropIfExists('status_rolls');
     }
 }

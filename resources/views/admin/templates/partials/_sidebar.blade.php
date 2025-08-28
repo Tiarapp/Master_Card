@@ -160,6 +160,45 @@
           </li>
           @endif
 
+          {{-- Inventory Management --}}
+          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 6)
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="fa-solid fa-warehouse nav-icon"></i>
+                <p>
+                  Inventory Management
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('supplier-roll.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Supplier</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('inventory.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Inventory</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('bbk-roll.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>BBK Roll</p>
+                  </a>
+                </li>
+                {{-- <li class="nav-item">
+                  <a href="{{ route('potongan.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Potongan</p>
+                  </a>
+                </li> --}}
+              </ul>
+            </li>
+          @endif
+
           {{-- Marketing --}}
           @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 3 ||Auth::user()->divisi_id == 13)
             <li class="nav-item">
