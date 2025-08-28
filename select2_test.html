@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select2 Test</title>
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" />
+    
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container--bootstrap4 .select2-selection {
+            height: calc(2.25rem + 2px) !important;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+        .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+            line-height: calc(2.25rem + 2px);
+            padding-left: 0.75rem;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>🧪 Select2 Test</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="test_select">Test Select2</label>
+                    <select id="test_select" class="form-control select2" data-placeholder="-- Pilih Option --">
+                        <option value="">-- Pilih Option --</option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3 dengan text panjang untuk testing</option>
+                        <option value="4">Option 4</option>
+                        <option value="5">Option 5</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="jenis_test">Jenis Test</label>
+                    <select id="jenis_test" class="form-control select2" data-placeholder="-- Pilih Jenis --">
+                        <option value="">-- Pilih Jenis --</option>
+                        <option value="art_carton">Art Carton</option>
+                        <option value="art_paper">Art Paper</option>
+                        <option value="fancy_paper">Fancy Paper</option>
+                        <option value="kraft">Kraft</option>
+                        <option value="newsprint">Newsprint</option>
+                        <option value="woodfree">Woodfree</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <button type="button" id="clearAll" class="btn btn-warning">Clear All</button>
+                <button type="button" id="checkValues" class="btn btn-info">Check Values</button>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-12">
+                <div id="debug" class="alert alert-info">
+                    <h5>Debug Info:</h5>
+                    <div id="debugContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
+    <!-- Bootstrap 4 JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            console.log('🎯 Starting Select2 test...');
+            
+            function debugLog(message) {
+                console.log(message);
+                $('#debugContent').append('<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>');
+            }
+            
+            debugLog('jQuery version: ' + $.fn.jquery);
+            
+            // Check if Select2 is loaded
+            if (typeof $.fn.select2 === 'undefined') {
+                debugLog('❌ Select2 not loaded!');
+                return;
+            }
+            
+            debugLog('✅ Select2 library loaded successfully');
+            
+            // Initialize Select2
+            try {
+                $('.select2').select2({
+                    theme: 'bootstrap4',
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: function() {
+                        return $(this).data('placeholder');
+                    },
+                    language: {
+                        noResults: function() {
+                            return "Tidak ada hasil ditemukan";
+                        },
+                        searching: function() {
+                            return "Mencari...";
+                        }
+                    }
+                });
+                
+                debugLog('✅ Select2 initialized successfully');
+                
+                // Event handlers
+                $('.select2').on('change', function() {
+                    debugLog('🔄 Select changed: ' + $(this).attr('id') + ' = ' + $(this).val());
+                });
+                
+                $('#clearAll').on('click', function() {
+                    debugLog('🧹 Clearing all selections...');
+                    $('.select2').val(null).trigger('change');
+                });
+                
+                $('#checkValues').on('click', function() {
+                    debugLog('📊 Current values:');
+                    $('.select2').each(function() {
+                        debugLog('  - ' + $(this).attr('id') + ': ' + $(this).val());
+                    });
+                });
+                
+            } catch (error) {
+                debugLog('❌ Error initializing Select2: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

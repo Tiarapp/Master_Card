@@ -2,6 +2,66 @@
 
 @section('title', 'Inventory Summary by Jenis+GSM x Lebar')
 
+@push('styles')
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" />
+<style>
+.select2-container {
+    width: 100% !important;
+}
+.select2-container--bootstrap4 .select2-selection {
+    height: calc(2.25rem + 2px) !important;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    line-height: calc(2.25rem + 2px);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    color: #495057;
+}
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+    right: 3px;
+}
+.select2-container--bootstrap4.select2-container--focus .select2-selection {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.select2-dropdown {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+.select2-container--bootstrap4 .select2-results__option--highlighted {
+    background-color: #007bff;
+    color: white;
+}
+.select2-container--bootstrap4 .select2-results__option {
+    padding: 6px 12px;
+}
+.select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 4px 8px;
+}
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+/* Fix z-index issues */
+.select2-container--open {
+    z-index: 9999;
+}
+.select2-dropdown {
+    z-index: 9999;
+}
+</style>
+@endpush
+
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -91,7 +151,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="jenis_filter">Jenis</label>
-                                    <select name="jenis_filter" id="jenis_filter" class="form-control">
+                                    <select name="jenis_filter" id="jenis_filter" class="form-control select2" data-placeholder="-- Semua Jenis --">
                                         <option value="">-- Semua Jenis --</option>
                                         @foreach($jenisOptions as $jenis)
                                             <option value="{{ $jenis }}" {{ request('jenis_filter') == $jenis ? 'selected' : '' }}>
@@ -104,7 +164,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="gsm_filter">GSM</label>
-                                    <select name="gsm_filter" id="gsm_filter" class="form-control">
+                                    <select name="gsm_filter" id="gsm_filter" class="form-control select2" data-placeholder="-- Semua GSM --">
                                         <option value="">-- Semua GSM --</option>
                                         @foreach($gsmOptions as $gsm)
                                             <option value="{{ $gsm }}" {{ request('gsm_filter') == $gsm ? 'selected' : '' }}>
@@ -117,7 +177,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="lebar_filter">Lebar</label>
-                                    <select name="lebar_filter" id="lebar_filter" class="form-control">
+                                    <select name="lebar_filter" id="lebar_filter" class="form-control select2" data-placeholder="-- Semua Lebar --">
                                         <option value="">-- Semua Lebar --</option>
                                         @foreach($lebarOptions as $lebar)
                                             <option value="{{ $lebar }}" {{ request('lebar_filter') == $lebar ? 'selected' : '' }}>
@@ -130,7 +190,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="supplier_filter">Supplier</label>
-                                    <select name="supplier_filter" id="supplier_filter" class="form-control">
+                                    <select name="supplier_filter" id="supplier_filter" class="form-control select2" data-placeholder="-- Semua Supplier --">
                                         <option value="">-- Semua Supplier --</option>
                                         @foreach($supplierOptions as $supplier)
                                             <option value="{{ $supplier->id }}" {{ request('supplier_filter') == $supplier->id ? 'selected' : '' }}>
@@ -145,6 +205,9 @@
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-search"></i> Filter
+                                </button>
+                                <button type="button" id="clearFilters" class="btn btn-warning">
+                                    <i class="fas fa-eraser"></i> Clear Filter
                                 </button>
                                 <a href="{{ route('admin.inventory.summary') }}" class="btn btn-secondary">
                                     <i class="fas fa-undo"></i> Reset
@@ -263,29 +326,123 @@
 </div>
 
 @push('scripts')
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
+$(document).ready(function() {
+    console.log('🎯 Starting Select2 initialization...');
+    console.log('jQuery version:', $.fn.jquery);
+    
+    // Check if Select2 is loaded
+    if (typeof $.fn.select2 === 'undefined') {
+        console.error('❌ Select2 not loaded!');
+        alert('Select2 library gagal dimuat. Silakan refresh halaman.');
+        return;
+    }
+    
+    console.log('✅ Select2 library loaded successfully');
+    
+    // Wait a bit for DOM to be fully ready
+    setTimeout(function() {
+        try {
+            // Global Select2 configuration
+            const select2Config = {
+                theme: 'bootstrap4',
+                width: '100%',
+                allowClear: true,
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                language: {
+                    noResults: function() {
+                        return "Tidak ada hasil ditemukan";
+                    },
+                    searching: function() {
+                        return "Mencari...";
+                    },
+                    inputTooShort: function() {
+                        return "Ketik untuk mencari...";
+                    }
+                }
+            };
+
+            // Initialize each select individually
+            $('#jenis_filter').select2($.extend({}, select2Config, {
+                placeholder: '-- Pilih Jenis --',
+                minimumResultsForSearch: 0
+            }));
+            console.log('✅ Jenis filter initialized');
+
+            $('#gsm_filter').select2($.extend({}, select2Config, {
+                placeholder: '-- Pilih GSM --',
+                minimumResultsForSearch: 5
+            }));
+            console.log('✅ GSM filter initialized');
+
+            $('#lebar_filter').select2($.extend({}, select2Config, {
+                placeholder: '-- Pilih Lebar --',
+                minimumResultsForSearch: 5
+            }));
+            console.log('✅ Lebar filter initialized');
+
+            $('#supplier_filter').select2($.extend({}, select2Config, {
+                placeholder: '-- Pilih Supplier --',
+                minimumResultsForSearch: 0
+            }));
+            console.log('✅ Supplier filter initialized');
+
+            console.log('🎉 All Select2 filters initialized successfully!');
+
+            // Handle changes
+            $('.select2').on('change', function() {
+                const id = $(this).attr('id');
+                const value = $(this).val();
+                console.log('🔄 Filter changed:', id, '=', value);
+            });
+
+            // Clear all filters button
+            $('#clearFilters').on('click', function(e) {
+                e.preventDefault();
+                console.log('🧹 Clearing all filters...');
+                $('.select2').val(null).trigger('change');
+            });
+
+        } catch (error) {
+            console.error('❌ Error initializing Select2:', error);
+            alert('Terjadi error saat inisialisasi Select2: ' + error.message);
+        }
+    }, 500);
+});
+
 function exportToExcel() {
-    // Get table
-    const table = document.getElementById('summaryTable');
-    
-    // Create workbook
-    const wb = XLSX.utils.table_to_book(table, {sheet: "Inventory Summary"});
-    
-    // Generate filename with current date
-    const date = new Date().toISOString().slice(0, 10);
-    const filename = `inventory_summary_${date}.xlsx`;
-    
-    // Save file
-    XLSX.writeFile(wb, filename);
+    try {
+        // Get table
+        const table = document.getElementById('summaryTable');
+        
+        // Create workbook
+        const wb = XLSX.utils.table_to_book(table, {sheet: "Inventory Summary"});
+        
+        // Generate filename with current date
+        const date = new Date().toISOString().slice(0, 10);
+        const filename = `inventory_summary_${date}.xlsx`;
+        
+        // Save file
+        XLSX.writeFile(wb, filename);
+        
+        console.log('✅ Excel exported:', filename);
+    } catch (error) {
+        console.error('❌ Export error:', error);
+        alert('Gagal export Excel: ' + error.message);
+    }
 }
 
-// Auto refresh every 5 minutes
-setInterval(function() {
-    if (confirm('Refresh data untuk update terbaru?')) {
-        location.reload();
-    }
-}, 300000);
+// Auto refresh every 5 minutes (disabled for debugging)
+// setInterval(function() {
+//     if (confirm('Refresh data untuk update terbaru?')) {
+//         location.reload();
+//     }
+// }, 300000);
 </script>
 @endpush
 
