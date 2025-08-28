@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Wildside\Userstamps\Userstamps;
+use App\Traits\Userstamps;
 
 class Inventory extends Model
 {
@@ -32,7 +32,9 @@ class Inventory extends Model
         'cobsize_top',
         'cobsize_bottom',
         'rct_cd',
-        'rct_md'
+        'rct_md',
+        'created_by',
+        'updated_by'
     ];
 
     public function supplier()

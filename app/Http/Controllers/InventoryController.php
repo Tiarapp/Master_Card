@@ -50,7 +50,9 @@ class InventoryController extends Controller
             $inventories = $inventories->where('jenis', $request->jenis_filter);
         }
 
-        $inventories = $inventories->orderBy('tanggal_masuk', 'desc')->paginate(20);
+        $inventories = $inventories->orderBy('tanggal_masuk', 'desc')
+                       ->orderBy('kode_internal', 'desc')
+                       ->paginate(20);
         
         // Get data for filters
         $supplier = SupplierRoll::orderBy('name')->get();
