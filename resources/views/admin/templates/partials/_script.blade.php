@@ -31,6 +31,7 @@
 <script src="{{ asset('asset/dist/js/adminlte.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('asset/dist/js/demo.js') }}"></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('asset/dist/js/pages/dashboard.js') }}"></script>
 
@@ -259,4 +260,4 @@ $(document).ready(function() {
 <script href="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 
 <!-- Select2 -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>

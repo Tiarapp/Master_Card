@@ -369,84 +369,165 @@ window.select2CssLoaded = true;
 </div>
 
 @section('javascripts')
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- INLINE SELECT2 IMPLEMENTATION - GUARANTEED TO WORK -->
 <script>
-console.log('🚀 Starting Select2 initialization...');
+console.log('🚀 Loading INLINE Select2...');
+</script>
 
-$(document).ready(function() {
-    console.log('✅ jQuery ready, version:', $.fn.jquery);
+<!-- Load jQuery first if not already loaded -->
+<script>
+if (typeof window.jQuery === 'undefined') {
+    document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+}
+</script>
+
+<!-- Load Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- INLINE SELECT2 INITIALIZATION -->
+<script>
+// Force immediate execution
+(function() {
+    console.log('🎯 INLINE Select2 Starting...');
     
-    // Check if Select2 is available
-    if (typeof $.fn.select2 === 'undefined') {
-        console.error('❌ Select2 not available!');
-        return;
-    }
-    
-    console.log('✅ Select2 is available');
-    
-    // Find elements
-    const selectors = ['#gsm_filter', '#lebar_filter', '#jenis_filter', '#supplier_filter'];
-    let foundElements = 0;
-    
-    selectors.forEach(function(selector) {
-        const element = $(selector);
-        if (element.length > 0) {
-            foundElements++;
-            console.log('✅ Found:', selector);
-        } else {
-            console.warn('⚠️ Not found:', selector);
+    function forceInitSelect2() {
+        console.log('Attempting Select2 initialization...');
+        
+        // Check jQuery
+        if (typeof window.jQuery === 'undefined') {
+            console.error('❌ jQuery still not available');
+            return false;
         }
-    });
-    
-    console.log(`Found ${foundElements}/${selectors.length} elements`);
-    
-    if (foundElements === 0) {
-        console.error('❌ No select elements found!');
-        return;
-    }
-    
-    try {
-        // Initialize Select2 with exact same config as index.blade.php
-        $('#gsm_filter, #lebar_filter, #jenis_filter, #supplier_filter').select2({
-            theme: 'bootstrap4',
-            width: '100%',
-            allowClear: true
-        });
         
-        console.log('🎉 Select2 initialized successfully!');
+        const $ = window.jQuery;
+        console.log('✅ jQuery available:', $.fn.jquery);
         
-        // Test by checking if select2 is applied
-        selectors.forEach(function(selector) {
-            const element = $(selector);
-            if (element.length > 0 && element.hasClass('select2-hidden-accessible')) {
-                console.log('✅ Select2 applied to:', selector);
-            } else if (element.length > 0) {
-                console.warn('⚠️ Select2 NOT applied to:', selector);
+        // Check Select2
+        if (typeof $.fn.select2 === 'undefined') {
+            console.error('❌ Select2 still not available');
+            return false;
+        }
+        
+        console.log('✅ Select2 available');
+        
+        try {
+            // Simple configuration
+            const config = {
+                width: '100%',
+                allowClear: true,
+                placeholder: function() {
+                    return $(this).data('placeholder') || '-- Pilih --';
+                }
+            };
+            
+            // Force initialize each select
+            const selects = ['#jenis_filter', '#gsm_filter', '#lebar_filter', '#supplier_filter'];
+            let successCount = 0;
+            
+            selects.forEach(function(selector) {
+                try {
+                    const $element = $(selector);
+                    if ($element.length > 0) {
+                        $element.select2(config);
+                        console.log('✅ SUCCESS:', selector);
+                        successCount++;
+                    } else {
+                        console.warn('⚠️ Element not found:', selector);
+                    }
+                } catch (error) {
+                    console.error('❌ FAILED:', selector, error);
+                }
+            });
+            
+            if (successCount > 0) {
+                console.log(`🎉 Select2 WORKING! (${successCount}/${selects.length})`);
+                
+                // Add events
+                $('.select2').on('change', function() {
+                    console.log('Changed:', this.id, '=', $(this).val());
+                });
+                
+                $('#clearFilters').on('click', function(e) {
+                    e.preventDefault();
+                    $('.select2').val(null).trigger('change');
+                    console.log('All filters cleared');
+                });
+                
+                return true;
+            } else {
+                console.error('❌ No selects initialized');
+                return false;
             }
-        });
-        
-    } catch (error) {
-        console.error('❌ Error initializing Select2:', error);
+            
+        } catch (error) {
+            console.error('❌ Critical error:', error);
+            return false;
+        }
     }
     
-    // Clear filters button
-    $('#clearFilters').on('click', function(e) {
-        e.preventDefault();
-        console.log('🗑️ Clearing all filters...');
-        $('#gsm_filter, #lebar_filter, #jenis_filter, #supplier_filter').val(null).trigger('change');
-    });
-});
+    // Multiple initialization attempts
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    function tryInit() {
+        attempts++;
+        console.log(`🔄 Attempt ${attempts}/${maxAttempts}`);
+        
+        if (forceInitSelect2()) {
+            console.log('🎉 SUCCESS! Select2 is working!');
+            return;
+        }
+        
+        if (attempts < maxAttempts) {
+            setTimeout(tryInit, 1000);
+        } else {
+            console.error('❌ FAILED after', maxAttempts, 'attempts');
+            console.log('� Trying fallback...');
+            
+            // Last resort fallback
+            setTimeout(function() {
+                try {
+                    if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.select2 !== 'undefined') {
+                        window.jQuery('.select2').each(function() {
+                            try {
+                                window.jQuery(this).select2({ width: '100%' });
+                                console.log('✅ Fallback success:', this.id);
+                            } catch (e) {
+                                console.error('❌ Fallback failed:', this.id, e);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('❌ Fallback completely failed:', e);
+                }
+            }, 2000);
+        }
+    }
+    
+    // Start when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(tryInit, 500);
+        });
+    } else {
+        setTimeout(tryInit, 500);
+    }
+    
+})();
 
 // Export Excel function
 function exportToExcel() {
     try {
+        console.log('📊 Exporting Excel...');
         const table = document.getElementById('summaryTable');
         const wb = XLSX.utils.table_to_book(table, {sheet: "Inventory Summary"});
         const date = new Date().toISOString().slice(0, 10);
         const filename = `inventory_summary_${date}.xlsx`;
         XLSX.writeFile(wb, filename);
+        console.log('✅ Excel exported:', filename);
     } catch (error) {
-        console.error('Export error:', error);
+        console.error('❌ Export error:', error);
         alert('Gagal export Excel: ' + error.message);
     }
 }

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select2 Direct Test</title>
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Select2 CSS - FORCE LOAD -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" />
+    
+    <!-- INLINE CSS FOR SELECT2 -->
+    <style>
+    /* Force Select2 styling */
+    .select2-container {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection {
+        height: calc(2.25rem + 2px) !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 0.25rem !important;
+        font-size: 0.875rem !important;
+        background-color: #fff !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+        line-height: calc(2.25rem + 2px) !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        color: #495057 !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #ced4da !important;
+        border-radius: 0.25rem !important;
+        font-size: 0.875rem !important;
+        z-index: 9999 !important;
+    }
+
+    .select2-container--bootstrap4 .select2-results__option--highlighted {
+        background-color: #007bff !important;
+        color: white !important;
+    }
+
+    /* Debug styling to see if Select2 is applied */
+    .select2-container::after {
+        content: "✅ Select2 Applied" !important;
+        position: absolute !important;
+        top: -20px !important;
+        left: 0 !important;
+        font-size: 10px !important;
+        color: green !important;
+        background: white !important;
+        padding: 2px !important;
+        border: 1px solid green !important;
+        border-radius: 3px !important;
+        z-index: 99999 !important;
+    }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>🧪 Select2 Direct Test</h2>
+        <p class="text-muted">Testing Select2 implementation exactly like inventory summary</p>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="jenis_filter">Jenis</label>
+                    <select name="jenis_filter" id="jenis_filter" class="form-control select2" data-placeholder="-- Semua Jenis --">
+                        <option value="">-- Semua Jenis --</option>
+                        <option value="art_carton">Art Carton</option>
+                        <option value="art_paper">Art Paper</option>
+                        <option value="fancy_paper">Fancy Paper</option>
+                        <option value="kraft">Kraft</option>
+                        <option value="newsprint">Newsprint</option>
+                        <option value="woodfree">Woodfree</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="gsm_filter">GSM</label>
+                    <select name="gsm_filter" id="gsm_filter" class="form-control select2" data-placeholder="-- Semua GSM --">
+                        <option value="">-- Semua GSM --</option>
+                        <option value="80">80</option>
+                        <option value="100">100</option>
+                        <option value="120">120</option>
+                        <option value="150">150</option>
+                        <option value="200">200</option>
+                        <option value="250">250</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="lebar_filter">Lebar</label>
+                    <select name="lebar_filter" id="lebar_filter" class="form-control select2" data-placeholder="-- Semua Lebar --">
+                        <option value="">-- Semua Lebar --</option>
+                        <option value="61">61 cm</option>
+                        <option value="70">70 cm</option>
+                        <option value="78">78 cm</option>
+                        <option value="86">86 cm</option>
+                        <option value="100">100 cm</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="supplier_filter">Supplier</label>
+                    <select name="supplier_filter" id="supplier_filter" class="form-control select2" data-placeholder="-- Semua Supplier --">
+                        <option value="">-- Semua Supplier --</option>
+                        <option value="1">Supplier A</option>
+                        <option value="2">Supplier B Long Name</option>
+                        <option value="3">Supplier C</option>
+                        <option value="4">Supplier D</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <button type="button" id="clearFilters" class="btn btn-warning">
+                    <i class="fas fa-eraser"></i> Clear Filter
+                </button>
+                <button type="button" id="testValues" class="btn btn-info">
+                    <i class="fas fa-check"></i> Test Values
+                </button>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🔍 Debug Console</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="debugConsole" style="height: 400px; overflow-y: auto; background: #f8f9fa; padding: 15px; font-family: monospace; font-size: 12px; border: 1px solid #dee2e6; border-radius: 0.25rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load jQuery first -->
+    <script>
+    if (typeof window.jQuery === 'undefined') {
+        document.write('<script src="https://code.jquery.com/jquery-3.6.0.min.js"><\/script>');
+    }
+    </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    
+    <!-- INLINE SELECT2 INITIALIZATION - EXACT COPY -->
+    <script>
+    // Console logger for debugging
+    const debugDiv = document.getElementById('debugConsole');
+    const originalLog = console.log;
+    const originalError = console.error;
+    
+    function logToDiv(type, ...args) {
+        const timestamp = new Date().toLocaleTimeString();
+        const message = args.join(' ');
+        const div = document.createElement('div');
+        div.style.color = type === 'error' ? 'red' : type === 'warn' ? 'orange' : 'black';
+        div.style.marginBottom = '2px';
+        div.textContent = `[${timestamp}] ${message}`;
+        debugDiv.appendChild(div);
+        debugDiv.scrollTop = debugDiv.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+        originalLog.apply(console, args);
+        logToDiv('log', ...args);
+    };
+    
+    console.error = function(...args) {
+        originalError.apply(console, args);
+        logToDiv('error', ...args);
+    };
+    
+    console.warn = function(...args) {
+        console.warn.apply(console, args);
+        logToDiv('warn', ...args);
+    };
+    
+    // EXACT COPY OF INVENTORY SUMMARY IMPLEMENTATION
+    (function() {
+        console.log('🚀 Loading INLINE Select2...');
+        console.log('🎯 INLINE Select2 Starting...');
+        
+        function forceInitSelect2() {
+            console.log('Attempting Select2 initialization...');
+            
+            // Check jQuery
+            if (typeof window.jQuery === 'undefined') {
+                console.error('❌ jQuery still not available');
+                return false;
+            }
+            
+            const $ = window.jQuery;
+            console.log('✅ jQuery available:', $.fn.jquery);
+            
+            // Check Select2
+            if (typeof $.fn.select2 === 'undefined') {
+                console.error('❌ Select2 still not available');
+                return false;
+            }
+            
+            console.log('✅ Select2 available');
+            
+            try {
+                // Simple configuration
+                const config = {
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: function() {
+                        return $(this).data('placeholder') || '-- Pilih --';
+                    }
+                };
+                
+                // Force initialize each select
+                const selects = ['#jenis_filter', '#gsm_filter', '#lebar_filter', '#supplier_filter'];
+                let successCount = 0;
+                
+                selects.forEach(function(selector) {
+                    try {
+                        const $element = $(selector);
+                        if ($element.length > 0) {
+                            $element.select2(config);
+                            console.log('✅ SUCCESS:', selector);
+                            successCount++;
+                        } else {
+                            console.warn('⚠️ Element not found:', selector);
+                        }
+                    } catch (error) {
+                        console.error('❌ FAILED:', selector, error);
+                    }
+                });
+                
+                if (successCount > 0) {
+                    console.log(`🎉 Select2 WORKING! (${successCount}/${selects.length})`);
+                    
+                    // Add events
+                    $('.select2').on('change', function() {
+                        console.log('Changed:', this.id, '=', $(this).val());
+                    });
+                    
+                    $('#clearFilters').on('click', function(e) {
+                        e.preventDefault();
+                        $('.select2').val(null).trigger('change');
+                        console.log('All filters cleared');
+                    });
+                    
+                    $('#testValues').on('click', function() {
+                        console.log('📊 Current values:');
+                        $('.select2').each(function() {
+                            console.log(`  ${this.id}: ${$(this).val() || 'empty'}`);
+                        });
+                    });
+                    
+                    return true;
+                } else {
+                    console.error('❌ No selects initialized');
+                    return false;
+                }
+                
+            } catch (error) {
+                console.error('❌ Critical error:', error);
+                return false;
+            }
+        }
+        
+        // Multiple initialization attempts
+        let attempts = 0;
+        const maxAttempts = 10;
+        
+        function tryInit() {
+            attempts++;
+            console.log(`🔄 Attempt ${attempts}/${maxAttempts}`);
+            
+            if (forceInitSelect2()) {
+                console.log('🎉 SUCCESS! Select2 is working!');
+                return;
+            }
+            
+            if (attempts < maxAttempts) {
+                setTimeout(tryInit, 1000);
+            } else {
+                console.error('❌ FAILED after', maxAttempts, 'attempts');
+                console.log('🔧 Trying fallback...');
+                
+                // Last resort fallback
+                setTimeout(function() {
+                    try {
+                        if (typeof window.jQuery !== 'undefined' && typeof window.jQuery.fn.select2 !== 'undefined') {
+                            window.jQuery('.select2').each(function() {
+                                try {
+                                    window.jQuery(this).select2({ width: '100%' });
+                                    console.log('✅ Fallback success:', this.id);
+                                } catch (e) {
+                                    console.error('❌ Fallback failed:', this.id, e);
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        console.error('❌ Fallback completely failed:', e);
+                    }
+                }, 2000);
+            }
+        }
+        
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(tryInit, 500);
+            });
+        } else {
+            setTimeout(tryInit, 500);
+        }
+        
+    })();
+    </script>
+</body>
+</html>
