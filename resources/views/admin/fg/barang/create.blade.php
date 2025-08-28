@@ -201,6 +201,7 @@
                                                 <div class="col-md-4">
                                                     <select class="js-example-basic-single col-md-12" name="satuan" id="satuan">
                                                         <option value='PCS'>PCS</option>
+                                                        <option value='KG'>KG</option>
                                                         <option value='SET'>SET</option>
                                                         <option value='ROLL'>ROLL</option>
                                                         <option value='BDL'>BUNDEL</option>

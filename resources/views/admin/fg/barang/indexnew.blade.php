@@ -170,7 +170,7 @@ code {
                                                 <div class="text-wrap">{{ $item->NamaBrg ?? '-' }}</div>
                                             </td>
                                             <td class="text-center">
-                                                <span class="badge badge-success">
+                                                <span class="badge badge-success" style="font-size:1.25em;">
                                                     {{ number_format($item->SaldoPcs, 0) }}
                                                 </span>
                                                 <!-- Show saldo kg on mobile -->
