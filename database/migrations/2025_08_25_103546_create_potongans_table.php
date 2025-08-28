@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarnaRollsTable extends Migration
+class CreatePotongansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateWarnaRollsTable extends Migration
      */
     public function up()
     {
-        Schema::create('warna_rolls', function (Blueprint $table) {
+        Schema::create('potongans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
+            $table->unsignedBigInteger('inventory_id');
+            $table->integer('lebar_potongan');
+            $table->double('rasio')->nullable();
+            $table->string('keterangan')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ class CreateWarnaRollsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warna_rolls');
+        Schema::dropIfExists('potongans');
     }
 }

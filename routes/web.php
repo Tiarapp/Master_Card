@@ -556,6 +556,34 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 
         Route::get('/nomer_opi', [SettingController::class, 'get_opi'])->name('nomer_opi');
+
+
+        // Inventory Management
+        Route::get('/inventory/summary', 'InventoryController@summary')->name('admin.inventory.summary');
+        Route::get('/inventory/import/update', 'InventoryController@showImportUpdate')->name('inventory.import.update.form');
+        Route::post('/inventory/import/update-rgb', 'InventoryController@importUpdateWithRgb')->name('inventory.import.update.rgb');
+        Route::get('/inventory/import/template', 'InventoryController@downloadTemplate')->name('inventory.import.template');
+        Route::get('/inventory/import/inventory', 'InventoryController@showImportInventory')->name('inventory.import.inventory.form');
+        Route::post('/inventory/import/inventory', 'InventoryController@importInventory')->name('inventory.import.inventory');
+        Route::get('/inventory/import/inventory-template', 'InventoryController@downloadInventoryTemplate')->name('inventory.import.inventory.template');
+        Route::resource('/inventory', 'InventoryController');
+        Route::resource('/jenis-roll', 'JenisRollController');
+        Route::resource('/lebar-roll', 'LebarRollController');
+        Route::resource('/supplier-roll', 'SupplierRollController');
+        
+        // Potongan Management
+        Route::resource('/potongan', 'PotongController');
+        
+        // BBK Roll Management
+        Route::resource('/bbk-roll', 'BbkRollController');
+        Route::get('/api/bbk-roll/generate-number', 'BbkRollController@generateBbkNumber')->name('bbk-roll.generate-number');
+        Route::get('/api/bbk-roll/inventory/{id}/details', 'BbkRollController@getInventoryDetails')->name('bbk-roll.inventory.details');
+        
+        // BBK Roll Group Operations
+        Route::get('/bbk-roll/group/{bbkNumber}/show', 'BbkRollController@showGroup')->name('bbk-roll.show-group');
+        Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
+        Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
+        Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
 }); 
 
 
