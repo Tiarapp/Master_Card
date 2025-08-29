@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Kontrak_DController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
@@ -586,6 +587,20 @@ Route::middleware(['auth'])->group(function (){
         Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
 }); 
 
-
+// Feedback Routes
+Route::middleware(['auth'])->group(function () {
+    // Admin Feedback Management
+    Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
+        Route::get('/', [FeedbackController::class, 'index'])->name('index');
+        Route::get('/create', [FeedbackController::class, 'create'])->name('create');
+        Route::post('/store', [FeedbackController::class, 'store'])->name('store');
+        Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
+        Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
+        Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
+    });
+    
+    // Public feedback submission (can be accessed by any authenticated user)
+    Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
+});
 
 require __DIR__ . '/auth.php';
