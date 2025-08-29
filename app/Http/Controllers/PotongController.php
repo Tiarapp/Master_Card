@@ -71,6 +71,7 @@ class PotongController extends Controller
             $inventory = Inventory::findOrFail($request->inventory_id);
             $inventory->potongan_id = $potongan->id;
             $inventory->descoription = $request->keterangan;
+            $inventory->quantity = $inventory->quantity - ($inventory->quantity * $request->rasio / 100);
             $inventory->save();
 
             DB::commit();

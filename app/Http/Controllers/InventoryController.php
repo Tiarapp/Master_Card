@@ -25,6 +25,7 @@ class InventoryController extends Controller
                 ->orWhere('gsm', 'like', '%'.$request->search.'%')
                 ->orWhere('jenis', 'like', '%'.$request->search.'%')
                 ->orWhere('lebar', 'like', '%'.$request->search.'%')
+                ->orWhere('descoription', 'like', '%'.$request->search.'%')
                 ->orWhereHas('supplier', function ($query) use ($request) {
                     $query->where('name', 'like', '%'.$request->search.'%');
                 });

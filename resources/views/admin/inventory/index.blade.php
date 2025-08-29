@@ -110,6 +110,28 @@ td:last-child {
     background-color: #007bff !important;
     color: white !important;
 }
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+.btn-primary:focus, .btn-primary:active {
+    box-shadow: none !important;
+}
+.rounded-pill {
+    border-radius: 50rem !important;
+}
+@media (max-width: 576px) {
+    .ms-auto form {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .ms-auto input {
+        width: 100% !important;
+        margin-bottom: 8px;
+    }
+}
 </style>
 
 @section('content')
@@ -217,23 +239,38 @@ td:last-child {
       </div>
 
       <div class="row mb-4 align-items-center">
-        <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ route('inventory.create') }}" class="btn btn-primary d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-plus-circle me-2"></i>
-            <span>{{ __('Tambah Inventory Baru') }}</span>
-          </a>
-          <a href="{{ route('admin.inventory.summary') }}" class="btn btn-warning d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-chart-bar me-2"></i>
-            <span>{{ __('Summary (Jenis+GSM) x Lebar') }}</span>
-          </a>
-          <a href="{{ route('inventory.import.inventory.form') }}" class="btn btn-success d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-file-upload me-2"></i>
-            <span>{{ __('Import Inventory') }}</span>
-          </a>
-          <a href="{{ route('inventory.import.update.form') }}" class="btn btn-info d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-file-import me-2"></i>
-            <span>{{ __('Import Update') }}</span>
-          </a>
+        <div class="col-md-8 d-flex align-items-center gap-3">
+            <a href="{{ route('inventory.create') }}" class="btn btn-primary d-flex align-items-center shadow-sm mb-2">
+                <i class="fas fa-plus-circle me-2"></i>
+                <span>{{ __('Tambah Inventory Baru') }}</span>
+            </a>
+            <a href="{{ route('admin.inventory.summary') }}" class="btn btn-warning d-flex align-items-center shadow-sm mb-2">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>{{ __('Summary (Jenis+GSM) x Lebar') }}</span>
+            </a>
+            <a href="{{ route('inventory.import.inventory.form') }}" class="btn btn-success d-flex align-items-center shadow-sm mb-2">
+                <i class="fas fa-file-upload me-2"></i>
+                <span>{{ __('Import Inventory') }}</span>
+            </a>
+            <a href="{{ route('inventory.import.update.form') }}" class="btn btn-info d-flex align-items-center shadow-sm mb-2">
+                <i class="fas fa-file-import me-2"></i>
+                <span>{{ __('Import Update') }}</span>
+            </a>
+        </div>
+        <div class="col-md-4 ms-auto">
+            <form action="{{ route('inventory.index') }}" method="GET" class="d-flex align-items-center shadow-sm rounded-pill bg-white px-2 py-1 mb-2" style="max-width: 250px; margin-left: auto;">
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="form-control border-0 bg-transparent me-2 rounded-pill" 
+                    placeholder="Cari kode internal, kode roll, supplier..." 
+                    value="{{ request('search') }}" 
+                    style="width: 200px; font-size: 15px; box-shadow: none;"
+                >
+                <button type="submit" class="btn btn-primary rounded-pill px-3 d-flex align-items-center" style="box-shadow: none;">
+                    <i class="fas fa-search me-1"></i> Cari
+                </button>
+            </form>
         </div>
       </div>
 
@@ -271,7 +308,13 @@ td:last-child {
                 @forelse ($inventories as $inventory)
                     <tr>
                         <td class="text-gray-800 bold">{{ \Carbon\Carbon::parse($inventory->tanggal_masuk)->format('d-m-Y') }}</td>
-                        <td class="text-gray-800 bold">{{ $inventory->kode_internal }}</td>
+                        @if ($inventory->kw == 1)
+                            <td class="text-gray-800 fw-semibold">
+                                <span class="badge badge-danger">{{ $inventory->kode_internal }}</span>
+                            </td>
+                        @else
+                            <td class="text-gray-800 fw-semibold">{{ $inventory->kode_internal }}</td>
+                        @endif
                         <td class="text-gray-800 fw-semibold">{{ $inventory->jenis ?? '-' }}{{ $inventory->gsm }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->kode_roll }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->gsm ?? '-' }}</td>

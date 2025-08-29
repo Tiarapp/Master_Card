@@ -170,9 +170,7 @@ code {
                                                 <div class="text-wrap">{{ $item->NamaBrg ?? '-' }}</div>
                                             </td>
                                             <td class="text-center">
-                                                <span class="badge badge-success" style="font-size:1.25em;">
                                                     {{ number_format($item->SaldoPcs, 0) }}
-                                                </span>
                                                 <!-- Show saldo kg on mobile -->
                                                 <div class="d-md-none">
                                                     <small class="badge badge-warning mt-1">
@@ -181,9 +179,7 @@ code {
                                                 </div>
                                             </td>
                                             <td class="text-center d-none d-md-table-cell">
-                                                <span class="badge badge-warning">
                                                     {{ number_format($item->SaldoKg, 2) }}
-                                                </span>
                                             </td>
                                             <td class="text-center d-none d-lg-table-cell">
                                                 {{ number_format($item->BeratStandart, 2) }}

@@ -89,12 +89,22 @@ class BarangController extends Controller
             ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
             ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%");
 
-        // Handle search
+        // Handle search - support multiple words
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
-                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+            
+            // Split search into individual words
+            $searchWords = explode(' ', trim($search));
+            
+            $query->where(function($q) use ($searchWords) {
+                foreach ($searchWords as $word) {
+                    if (!empty(trim($word))) {
+                        $q->where(function($subQ) use ($word) {
+                            $subQ->where('TPersediaan.KodeBrg', 'LIKE', '%'.trim($word).'%')
+                                 ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.trim($word).'%');
+                        });
+                    }
+                }
             });
         }
 
