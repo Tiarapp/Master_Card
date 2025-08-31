@@ -557,45 +557,6 @@ class Kontrak_DController extends Controller
         
         public function add_dt($id)
         {
-            // menampilkan untuk dropdown
-            // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            
-            $date = date('Y-m-d');
-            // dd($date);
-            
-            $b1 = DB::table('opi_m')
-            ->join('dt', 'dt_id', 'dt.id')
-            ->join('mc', 'mc_id', 'mc.id')
-            ->select(DB::raw("SUM(opi_m.jumlahOrder) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-            ->where('mc.tipeBox', '=', 'B1')
-            ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status_opi', '=', 'Proses')
-            ->groupBy('opi_m.tglKirimDt')
-            ->get();
-            
-            $dc = DB::table('opi_m')
-            ->join('dt', 'dt_id', 'dt.id')
-            ->join('mc', 'mc_id', 'mc.id')
-            ->select(DB::raw("ROUND(SUM(opi_m.jumlahOrder / mc.outConv )) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-            ->where('mc.tipeBox', '=', 'DC')
-            ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status_opi', '=', 'Proses')
-            ->groupBy('opi_m.tglKirimDt')
-            ->get();
-            
-            // // dd($b1, $dc);
-            
-            $mc = DB::table('mc')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
-            ->get();
-            $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
-            // End Dropdown
-            
-            
             // tampilkan data yang akan di edit
             $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -610,21 +571,7 @@ class Kontrak_DController extends Controller
             
             $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
             ->get();
-            // End tampilkan untuk edit
-            
-            
-            // dd($opi);
-            // $count = count($kontrak_D);
-            
-            
-            // dd($kontrak_M);
             return view('admin.kontrak.data_dt', compact(
-                // 'cust',
-                'b1',
-                'dc',
-                'mc',
-                'top',
-                'sales',
                 'opi',
                 'kontrak_D'
             ), ['kontrak_M' => $kontrak_M]);
