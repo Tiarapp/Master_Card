@@ -65,8 +65,8 @@
                                                 <label>NO KONTRAK</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="kodekontrak" id="kodekontrak" value="{{ $kontrak_M->kode }}">
-                                                {{-- <input type="hidden" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak_M->id }}"> --}}
+                                                <input type="text" class="form-control txt_line" name="kodekontrak" id="kodekontrak" value="{{ $kontrak->kontrakm->kode }}" readonly>
+                                                {{-- <input type="hidden" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak->kontrakm->id }}"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                                 <label>Tanggal</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}" autofocus >
+                                                <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak->kontrakm->tglKontrak }}" autofocus >
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                                 <label>Pilih Customer</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak->kontrakm->customer_name }}" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak_M->alamatKirim }}</textarea>
+                                                <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak->kontrakm->alamatKirim }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                                 <label>Jumlah Order</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_D->pcsKontrak }}">
+                                                <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak->pcsKontrak }}">
                                             </div>
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                                 <label>Sisa Order</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="sisa" id="sisa" value="{{ $kontrak_D->pcsSisaKontrak }}">
+                                                <input type="text" class="form-control txt_line" name="sisa" id="sisa" value="{{ $kontrak->pcsSisaKontrak }}">
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                                 <label>Sisa Kirim</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="sisa_kirim" id="sisa_kirim" value="{{ $kontrak_D->pcsSisaKirim }}">
+                                                <input type="text" class="form-control txt_line" name="sisa_kirim" id="sisa_kirim" value="{{ $kontrak->pcsSisaKirim }}">
                                             </div>
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@
                                                 <label>Tipe Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak_D->tipebox }}">
+                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak->tipebox }}">
                                             </div>
                                         </div>
                                     </div>
@@ -180,8 +180,8 @@
                                                 <label>Berat Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak_D->berat }}">
-                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak->berat }}">
+                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak->outConv }}">
                                             </div>
                                         </div>
                                     </div>
@@ -247,7 +247,7 @@
                     </div>
                 </form>
                 <div class="col-md-6">
-                    <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                    <a href="{{ route('kontrak.recall',$kontrak->kontrakm->id) }}" type="button" class="btn btn-primary">Recall</a>
                 </div>
                 </div>
             </div>
@@ -257,69 +257,9 @@
 @endsection
 
 @section('javascripts')
-<!-- Load JavaScript secara async/defer untuk mengurangi blocking -->
-<script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
 $(document).ready(function() {
-    // Fungsi untuk lazy load DataTables hanya saat diperlukan
-    function initDataTables() {
-        const tableConfigs = {
-            '#detail_kontrak': {
-                paging: false,
-                ordering: false,
-                info: false,
-                searching: false,
-                select: true
-            },
-            '#data_b1': {
-                paging: true,
-                pageLength: 10,
-                ordering: true,
-                info: false,
-                searching: true,
-                select: true,
-                language: { search: "Cari B1:" }
-            },
-            '#data_dc': {
-                paging: true,
-                pageLength: 10,
-                ordering: true,
-                info: false,
-                searching: true,
-                select: true,
-                language: { search: "Cari DC:" }
-            }
-        };
-
-        // Initialize tables with delay untuk mengurangi beban CPU
-        Object.keys(tableConfigs).forEach((selector, index) => {
-            setTimeout(() => {
-                if ($(selector).length && !$.fn.DataTable.isDataTable(selector)) {
-                    $(selector).DataTable(tableConfigs[selector]);
-                }
-            }, index * 100); // Delay 100ms antar table
-        });
-    }
-
-    // Initialize Select2 dengan lazy loading
-    function initSelect2() {
-        if (typeof $.fn.select2 !== 'undefined') {
-            $('.js-example-basic-single').each(function() {
-                if (!$(this).hasClass('select2-hidden-accessible')) {
-                    $(this).select2({
-                        theme: 'bootstrap4',
-                        width: '100%',
-                        allowClear: true,
-                        placeholder: 'Pilih...'
-                    });
-                }
-            });
-        }
-    }
-
     // Event handler untuk modal OPI dengan optimasi
     $('.opi').on('click', function() {
         const btn = $(this);
@@ -333,8 +273,8 @@ $(document).ready(function() {
                 $('#nomer_opi').val(response.nomer);
                 
                 // Set data lain
-                $('#idkontrakm').val("{{ $kontrak_M->id }}");
-                $('#kode').val("{{ $kontrak_M->kode }}");
+                $('#idkontrakm').val("{{ $kontrak->kontrakm->id }}");
+                $('#kode').val("{{ $kontrak->kontrakm->kode }}");
                 $('#sisa').val($('#sisa').val());
                 $('#sisa_kirim').val($('#sisa_kirim').val());
             },

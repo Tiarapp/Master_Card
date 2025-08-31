@@ -557,6 +557,17 @@ class Kontrak_DController extends Controller
         
         public function add_dt($id)
         {
+
+            $kontrak = new Kontrak_D();
+            $kontrak = $kontrak->with([
+                'kontrakm',
+                'mc',
+                'mc.substancekontrak',
+                'mc.substanceproduksi',
+            ]);
+
+            $kontrak = $kontrak->where('kontrak_m_id', $id)->first();
+
             // tampilkan data yang akan di edit
             $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -571,10 +582,13 @@ class Kontrak_DController extends Controller
             
             $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
             ->get();
-            return view('admin.kontrak.data_dt', compact(
-                'opi',
-                'kontrak_D'
-            ), ['kontrak_M' => $kontrak_M]);
+
+            $data = [
+                'kontrak' => $kontrak,
+                'opi' => $opi,
+            ];
+            
+            return view('admin.kontrak.data_dt', $data);
         }
         
         public function store_dt(Request $request)
