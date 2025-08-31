@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Accounting;
 use App\Http\Controllers\Controller;
 use App\Imports\JurnalImport;
 use App\Models\Accounting\Piutang;
+use App\Models\Accounting\VendorTTDet;
 use DateTime;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
@@ -221,5 +222,41 @@ class FinanceController extends Controller
         // dd($cust);
 
         return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
+    }
+
+    public function vendor_tt(Request $request)
+    {
+        try {
+            $vendortt = VendorTTDet::with('master_vend');
+
+            if ($request->search) {
+                $vendortt = $vendortt->where(function($query) use ($request) {
+                    $query->where('NoTT', 'like', '%' . $request->search . '%')
+                          ->orWhere('BBMNo', 'like', '%' . $request->search . '%')
+                          ->orWhere('InvNumber', 'like', '%' . $request->search . '%')
+                          ->orWhere('PONumber', 'like', '%' . $request->search . '%');
+                });
+            }
+
+            // Try ordering by TglTerima from VendorTT using raw SQL
+            try {
+                $vendortt = $vendortt->orderByRaw('(SELECT Tglterima FROM VendorTT WHERE VendorTT.NoTT = VendTTDet.NoTT) DESC')
+                                   ->paginate(20);
+            } catch (\Exception $orderException) {
+                // Fallback to ordering by NoTT if TglTerima query fails
+                $vendortt = $vendortt->orderBy('NoTT', 'desc')->paginate(20);
+            }
+
+        } catch (\Exception $e) {
+            // If there's any error, return empty collection
+            $vendortt = new \Illuminate\Pagination\LengthAwarePaginator(
+                collect([]), 0, 20, 1, [
+                    'path' => request()->url(),
+                    'pageName' => 'page',
+                ]
+            );
+        }
+
+        return view('admin.acc.vendor_tt', compact('vendortt'));
     }
 }

@@ -84,6 +84,12 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="{{ route('acc.vendortt') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Data Vendor TT</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a href="{{ route('acc.piutang') }}" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Data Piutang</p>

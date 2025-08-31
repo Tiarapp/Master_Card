@@ -96,7 +96,7 @@
                     <th class="min-w-200px">{{ __('Kode') }}</th>
                     <th class="min-w-100px">{{ __('Nomer Terakhir') }}</th>
                     <th class="min-w-100px">{{ __('Tanggal Masuk') }}</th>
-                    <th class="min-w-125px">{{ __('Action') }}</th>
+                    <th class="min-w-200px">{{ __('Action') }}</th>
                 </tr>
             </thead>
             <tbody class="text-gray-900 fw-semibold">
@@ -108,20 +108,11 @@
                         <td class="text-gray-800 fw-semibold">{{ $item->number_seq ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') }}</td>
                         <td>
-                            <button type="button" class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 shadow-sm mt-1" 
-                                    onclick="editSupplier({{ $item->id }}, '{{ $item->name }}', '{{ $item->address }}', '{{ $item->phone }}', '{{ $item->email }}')" title="Edit Supplier">
-                                <i class="fas fa-edit"></i>
-                                <span>Edit</span>
-                            </button>
-                            <form action="{{ route('supplier-roll.destroy', $item->id) }}" method="POST" class="d-inline" 
-                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                            <button type="button" class="btn btn-outline-warning btn-sm d-inline-flex align-items-center gap-1 shadow-sm mt-1" onclick="editSupplier({{ $item->id }}, '{{ $item->name }}', '{{ $item->address }}', '{{ $item->phone }}', '{{ $item->email }}')" title="Edit Supplier"><i class="fas fa-edit"></i><span>Edit</span></button>
+                            <form action="{{ route('supplier-roll.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 shadow-sm mt-1" 
-                                        title="Hapus Supplier">
-                                    <i class="fas fa-trash"></i>
-                                    <span>Hapus</span>
-                                </button>
+                                <button type="submit" class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1 shadow-sm mt-1" title="Hapus Supplier"><i class="fas fa-trash"></i><span>Hapus</span></button>
                             </form>
                         </td>
                     </tr>

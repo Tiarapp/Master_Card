@@ -448,6 +448,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
         Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
         Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');

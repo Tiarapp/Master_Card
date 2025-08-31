@@ -1,40 +1,32 @@
 @extends('admin.templates.partials.default')
 
-<!-- Select2 4.1.0-rc.0 -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<!-- DataTables -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+@section('styles')
+<!-- Load CSS secara async untuk mengurangi blocking -->
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
 <style>
-    .select2-container {
-        width: 100% !important;
-    }
-    
+    .select2-container { width: 100% !important; }
     .select2-container--bootstrap4 .select2-selection--single {
         height: calc(2.25rem + 2px) !important;
         border: 1px solid #ced4da !important;
     }
-    
     .select2-container--bootstrap4 .select2-selection__rendered {
         line-height: calc(2.25rem + 2px) !important;
         padding-left: 12px !important;
     }
-    
     .select2-container--bootstrap4 .select2-selection__arrow {
         height: calc(2.25rem + 2px) !important;
         right: 12px !important;
     }
+    tr:nth-child(odd) { background-color:#bab9b9 !important; }
     
-    tr:nth-child(odd) {
-        background-color:#bab9b9 !important;
-        
-    }
+    /* Loading state untuk mengurangi FOUC */
+    .table-loading { opacity: 0.6; pointer-events: none; }
+    .btn-loading { opacity: 0.65; cursor: not-allowed; pointer-events: none; }
 </style>
+@endsection
 
 
 @section('content')
@@ -67,37 +59,28 @@
                         <div class="col-md-6">
                             <div class="card-body">
                                 <h3>Kapasitas B1 yang Sudah Ada</h3>
-                                <table class="table table-bordered" id="data_b1">
+                                <table class="table table-bordered table-sm" id="data_b1">
                                   <thead>
                                     <tr>
-                                      <th scope="col">Tanggal.</th>
-                                      <th scope="col">Qty</th>
-                                      <th scope="col">Sisa</th>
-                                      <th scope="col">Status</th>
+                                      <th>Tanggal</th>
+                                      <th>Qty</th>
+                                      <th>Sisa</th>
+                                      <th>Status</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     @foreach ($b1 as $data)
                                       <tr>
                                         <td>{{ $data->tglKirimDt }}</td>
-                                        <td>{{ $data->qty }}</td>
-                                        <td>
-                                            <?php 
-                                                $sisa = 150000 - $data->qty;
-                                                if ($sisa < 0) {
-                                                    echo 0;
-                                                } else {
-                                                    echo $sisa;
-                                                }
-                                            ?>
-                                        </td>
+                                        <td>{{ number_format($data->qty) }}</td>
+                                        <td>{{ number_format(max(0, 150000 - $data->qty)) }}</td>
                                         <td>
                                             @if ($data->qty <= 100000)
-                                                Tersedia
-                                            @elseif ($data->qty <=150000)
-                                                Hampir Penuh
+                                                <span class="badge badge-success">Tersedia</span>
+                                            @elseif ($data->qty <= 150000)
+                                                <span class="badge badge-warning">Hampir Penuh</span>
                                             @else
-                                                Melebihi Batas
+                                                <span class="badge badge-danger">Melebihi Batas</span>
                                             @endif
                                         </td>
                                       </tr>
@@ -109,37 +92,28 @@
                         <div class="col-md-6">
                             <div class="card-body">
                                 <h3>Kapasitas DC yang Sudah Ada</h3>
-                                <table class="table table-bordered" id="data_dc">
+                                <table class="table table-bordered table-sm" id="data_dc">
                                   <thead>
                                     <tr>
-                                      <th scope="col">Tanggal.</th>
-                                      <th scope="col">Qty</th>
-                                      <th scope="col">Sisa</th>
-                                      <th scope="col">Status</th>
+                                      <th>Tanggal</th>
+                                      <th>Qty</th>
+                                      <th>Sisa</th>
+                                      <th>Status</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     @foreach ($dc as $data)
                                       <tr>
                                         <td>{{ $data->tglKirimDt }}</td>
-                                        <td>{{ $data->qty }}</td>
-                                        <td>
-                                            <?php 
-                                                $sisa = 54000 - $data->qty;
-                                                if ($sisa < 0) {
-                                                    echo 0;
-                                                } else {
-                                                    echo $sisa;
-                                                }
-                                            ?>
-                                        </td>
+                                        <td>{{ number_format($data->qty) }}</td>
+                                        <td>{{ number_format(max(0, 54000 - $data->qty)) }}</td>
                                         <td>
                                             @if ($data->qty <= 40000)
-                                                Tersedia
+                                                <span class="badge badge-success">Tersedia</span>
                                             @elseif ($data->qty <= 54000)
-                                                Hampir Penuh
+                                                <span class="badge badge-warning">Hampir Penuh</span>
                                             @else
-                                                Melebihi Batas
+                                                <span class="badge badge-danger">Melebihi Batas</span>
                                             @endif
                                         </td>
                                       </tr>
@@ -294,32 +268,38 @@
                         </div>
                         <div class="col-md-6">
                             <h3>Tanggal Kirim DT dan OPI </h3>
-                            <table class="table table-bordered" id="detail_kontrak">
+                            <table class="table table-bordered table-sm" id="detail_kontrak">
                             <thead>
                                 <tr>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Jumlah</th>
-                                    <th scope="col">OPI</th>
-                                    <th scope="col">Running Meter</th>
-                                    <th scope="col">Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Jumlah</th>
+                                    <th>OPI</th>
+                                    <th>Running Meter</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($opi as $o)
-
                                 @php
                                     $qty = ($o->jumlahOrder) / $o->outConv ; 
                                     $outCorr = floor(2500/$o->lebarSheet);
                                     $cop = $qty / $outCorr;
-
                                     $rm = ($o->panjangSheet * $cop) / 1000;
                                 @endphp
                                 <tr>
-                                    <td scope="col">{{ $o->tglKirimDt }}</td>
-                                    <td scope="col">{{ $o->jumlahOrder }}</td>
-                                    <td scope="col">{{ $o->nama }}</td>
-                                    <td scope="col">{{ floor($rm) }}</td>
-                                    <td scope="col">{{ $o->status_opi }}</td>
+                                    <td>{{ $o->tglKirimDt }}</td>
+                                    <td>{{ number_format($o->jumlahOrder) }}</td>
+                                    <td>{{ $o->nama }}</td>
+                                    <td>{{ number_format(floor($rm)) }}</td>
+                                    <td>
+                                        @if($o->status_opi == 'Selesai')
+                                            <span class="badge badge-success">{{ $o->status_opi }}</span>
+                                        @elseif($o->status_opi == 'Proses')
+                                            <span class="badge badge-info">{{ $o->status_opi }}</span>
+                                        @else
+                                            <span class="badge badge-secondary">{{ $o->status_opi }}</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -345,152 +325,114 @@
 @endsection
 
 @section('javascripts')
+<!-- Load JavaScript secara async/defer untuk mengurangi blocking -->
+<script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-    // Debug functions
-    function testSelect2() {
-        console.log('jQuery version:', $.fn.jquery);
-        console.log('Select2 version:', $.fn.select2 ? 'Available' : 'Not available');
-        console.log('Select2 elements found:', $('.js-example-basic-single').length);
-    }
-
-    function forceSelect2() {
-        $('.js-example-basic-single').each(function() {
-            if (!$(this).hasClass('select2-hidden-accessible')) {
-                $(this).select2({
-                    theme: 'bootstrap4',
-                    width: '100%',
-                    allowClear: true,
-                    placeholder: 'Pilih...'
-                });
+<script>
+$(document).ready(function() {
+    // Fungsi untuk lazy load DataTables hanya saat diperlukan
+    function initDataTables() {
+        const tableConfigs = {
+            '#detail_kontrak': {
+                paging: false,
+                ordering: false,
+                info: false,
+                searching: false,
+                select: true
+            },
+            '#data_b1': {
+                paging: true,
+                pageLength: 10,
+                ordering: true,
+                info: false,
+                searching: true,
+                select: true,
+                language: { search: "Cari B1:" }
+            },
+            '#data_dc': {
+                paging: true,
+                pageLength: 10,
+                ordering: true,
+                info: false,
+                searching: true,
+                select: true,
+                language: { search: "Cari DC:" }
             }
-        });
-    }
+        };
 
-    function reinitializeSelect2() {
-        $('.js-example-basic-single').select2('destroy').select2({
-            theme: 'bootstrap4',
-            width: '100%',
-            allowClear: true,
-            placeholder: 'Pilih...'
-        });
-    }
-
-    // Wait for jQuery to be ready
-    function waitForJQuery() {
-        if (typeof $ !== 'undefined' && $.fn.select2) {
-            initializeComponents();
-        } else {
-            setTimeout(waitForJQuery, 100);
-        }
-    }
-
-    function initializeComponents() {
-        try {
-            // Initialize Select2
-            $('.js-example-basic-single').select2({
-                theme: 'bootstrap4',
-                width: '100%',
-                allowClear: true,
-                placeholder: 'Pilih...'
-            });
-
-            console.log('Select2 initialized successfully');
-        } catch (error) {
-            console.error('Error initializing Select2:', error);
-            setTimeout(function() {
-                try {
-                    forceSelect2();
-                } catch (e) {
-                    console.error('Force initialization failed:', e);
+        // Initialize tables with delay untuk mengurangi beban CPU
+        Object.keys(tableConfigs).forEach((selector, index) => {
+            setTimeout(() => {
+                if ($(selector).length && !$.fn.DataTable.isDataTable(selector)) {
+                    $(selector).DataTable(tableConfigs[selector]);
                 }
-            }, 1000);
+            }, index * 100); // Delay 100ms antar table
+        });
+    }
+
+    // Initialize Select2 dengan lazy loading
+    function initSelect2() {
+        if (typeof $.fn.select2 !== 'undefined') {
+            $('.js-example-basic-single').each(function() {
+                if (!$(this).hasClass('select2-hidden-accessible')) {
+                    $(this).select2({
+                        theme: 'bootstrap4',
+                        width: '100%',
+                        allowClear: true,
+                        placeholder: 'Pilih...'
+                    });
+                }
+            });
         }
     }
 
-    $(document).ready(function() {
-        waitForJQuery();
-        testSelect2();
-    });
-    });
-
-    $("#detail_kontrak").DataTable({
-        "paging":   false,
-        "ordering": false,
-        "info":     false,
-        "searching": false,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        "initComplete": function (settings, json) {  
-            $("#detail_kontrak").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
-        },
-        // "scrollY": "400px",
-        select: true,
-    });
-
-    // Ambil nomer OPI dari backend saat tombol diklik
+    // Event handler untuk modal OPI dengan optimasi
     $('.opi').on('click', function() {
-        var idkontrakm = "{{ $kontrak_M->id }}";
+        const btn = $(this);
+        btn.addClass('btn-loading');
+        
         $.ajax({
             url: "{{ route('nomer_opi') }}",
             type: "GET",
+            timeout: 5000, // 5 detik timeout
             success: function(response) {
-                // response.nomer_opi diasumsikan dikirim dari backend
-                console.log(response);
-                
                 $('#nomer_opi').val(response.nomer);
+                
+                // Set data lain
+                $('#idkontrakm').val("{{ $kontrak_M->id }}");
+                $('#kode').val("{{ $kontrak_M->kode }}");
+                $('#sisa').val($('#sisa').val());
+                $('#sisa_kirim').val($('#sisa_kirim').val());
             },
             error: function() {
-                alert('Gagal mengambil nomer OPI');
+                alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
+            },
+            complete: function() {
+                btn.removeClass('btn-loading');
             }
         });
-
-        // Set data lain jika diperlukan
-        var kode = "{{ $kontrak_M->kode }}";
-        var sisa = $('#sisa').val();
-        var sisa_kirim = $('#sisa_kirim').val();
-        $('#idkontrakm').val(idkontrakm);
-        $('#kode').val(kode);
-        $('#sisa').val(sisa);
-        $('#sisa_kirim').val(sisa_kirim);
     });
 
-    $("#data_b1").DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
-        "searching": true,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        // "scrollY": "400px",
-        select: true,
-    });
+    // Validation function yang dioptimasi
+    window.validateForm = function() {
+        const sisa = parseInt(document.getElementById("sisa").value) || 0;
+        const x = parseInt(document.getElementById("jumlahKirim").value) || 0;
+        const sisaKirim = parseInt(document.getElementById("sisa_kirim").value) || 0;
 
-    $("#data_dc").DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
-        "searching": true,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        // "scrollY": "400px",
-        select: true,
-    });
-    
-    function validateForm() {
-        sisa = document.getElementById("sisa").value;
-        x = document.getElementById("jumlahKirim").value;
-        sisa_kirim = document.getElementById("sisa_kirim").value;
+        if (x > sisa || x > sisaKirim) {
+            alert("Masukkan Jumlah dibawah : " + Math.min(sisa, sisaKirim));
+            return false;
+        }
+        return true;
+    };
 
-        if (x > parseInt(sisa)) {
-            if (x > parseInt(sisa_kirim)) {
-                alert("Masukkan Jumlah dibawah : "+sisa_kirim);
-                return false;
-            } 
-        } 
-    }
-                        
+    // Lazy initialization dengan timeout untuk memastikan semua library loaded
+    setTimeout(() => {
+        initSelect2();
+        initDataTables();
+    }, 300);
+});
 </script>
-
 @endsection 
