@@ -166,7 +166,7 @@
                                                 <label>Tipe Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak->tipebox }}">
+                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak->mc->tipeBox }}">
                                             </div>
                                         </div>
                                     </div>
@@ -180,8 +180,8 @@
                                                 <label>Berat Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak->berat }}">
-                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak->outConv }}">
+                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak->mc->gramSheetBoxKontrak2 }}">
+                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak->mc->outConv }}">
                                             </div>
                                         </div>
                                     </div>
