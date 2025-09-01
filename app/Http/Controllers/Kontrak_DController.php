@@ -588,7 +588,7 @@ class Kontrak_DController extends Controller
                 'opi' => $opi,
             ];
             
-            return view('admin.kontrak.data_dt', $data);
+            return view('admin.kontrak.data_dtnew', $data);
         }
         
         public function store_dt(Request $request)
