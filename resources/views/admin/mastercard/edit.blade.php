@@ -142,7 +142,7 @@
                                             <label class="control-label">Kode Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" placeholder="Kode Barang" autofocus onfocusout="getKodeBarang()">
+                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" placeholder="Kode Barang">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -848,6 +848,10 @@
 @endsection
 
 <script type="text/javascript">
+    $(document).ready(function() {
+        getKodeBarang();
+    });
+
     // Ensure jQuery is loaded before proceeding
     function waitForJQuery(callback) {
         if (typeof jQuery !== 'undefined') {
