@@ -142,7 +142,7 @@
                                             <label class="control-label">Kode Box</label>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" placeholder="Kode Barang">
+                                            <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" value="{{ $mc->kodeBarang }}" placeholder="Kode Barang" autofocus onfocusout="getKodeBarang()">
                                         </div>
                                     </div>
                                     <div class="row">

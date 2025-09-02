@@ -284,7 +284,7 @@
                         <i class="fas fa-cubes text-primary mr-2"></i>
                         <div>
                           <small class="text-muted">Quantity bisa di OPI kan</small>
-                          <div class="font-weight-bold">{{ $kontrak->pcsSisaKontrak }}</div>
+                          <div class="font-weight-bold">{{ number_format($kontrak->pcsSisaKontrak) }}</div>
                         </div>
                       </div>
                     </div>
