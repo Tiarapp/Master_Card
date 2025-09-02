@@ -417,11 +417,11 @@
                       <i class="fas fa-weight-hanging mr-1"></i>
                       Qty OPI (Kg)
                     </th>
-                    {{-- <th scope="col" class="text-center">
-                      <i class="fas fa-box-open mr-1"></i>
-                      Sisa (Pcs)
-                    </th>
                     <th scope="col" class="text-center">
+                      <i class="fas fa-box-open mr-1"></i>
+                      Running Meter
+                    </th>
+                    {{-- <th scope="col" class="text-center">
                       <i class="fas fa-balance-scale mr-1"></i>
                       Sisa (Kg)
                     </th> --}}
@@ -445,15 +445,27 @@
                         {{ date('d/m/Y', strtotime($data->dt->tglKirimDt)) }}
                       </span>
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                       <span class="badge badge-success badge-lg">
                         <i class="fas fa-arrow-up mr-1"></i>
                         {{ number_format((int)$data->jumlahOrder) }}
                       </span>
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                       <span class="text-success font-weight-bold">
                         {{ number_format((float)$data->jumlahOrder * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span class="text-success font-weight-bold">
+                        @php
+                          $qty = ($data->jumlahOrder) / $data->outConv ; 
+                          $outCorr = floor(2500/$data->lebarSheet);
+                          $cop = $qty / $outCorr;
+                          $rm = ($data->panjangSheet * $cop) / 1000;
+
+                          echo number_format((float)$rm, 2);
+                        @endphp
                       </span>
                     </td>
                     <td class="text-center">
@@ -493,12 +505,12 @@
                 <tfoot class="thead-light">
                   <tr>
                     <th colspan="2" class="text-center font-weight-bold">TOTAL</th>
-                    <th class="text-right">
+                    <th class="text-center">
                       <span class="badge badge-success badge-lg">
                         {{ number_format($opi->sum('jumlahOrder')) }}
                       </span>
                     </th>
-                    <th class="text-right">
+                    <th class="text-center">
                       <span class="text-success font-weight-bold">
                         {{ number_format($opi->sum('jumlahOrder') * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
                       </span>
