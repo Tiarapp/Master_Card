@@ -479,7 +479,7 @@
                         <form action="{{ route('opi.cancel', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
                           {{-- @method('PUT') --}}
-                          <button type="submit" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                          <button type="submit" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin cancel data ini?')">
                             <i class="fas fa-trash"></i>
                           </button>
                         </form>

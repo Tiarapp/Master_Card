@@ -31,7 +31,7 @@ class OpiExport implements FromCollection, WithHeadings
                 'dt' => Carbon::parse($item->dt->tglKirimDt)->format('d/m/Y'),
                 'qty_kirim' => $item->jumlahOrder,
                 'customer' => $item->kontrakm->customer_name,
-                'namaBarang' => $item->mc->namaBarang,
+                'namaBarang' => $item->kontrakd->mc->namaBarang,
                 'qtyOrder' => $item->kontrakd->jumlahOrder,
                 'sisaQtyOrder' => $item->jumlahOrder,
                 'keteranganOpi' => $item->kontrakm->keterangan,

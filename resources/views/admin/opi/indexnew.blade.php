@@ -180,7 +180,7 @@
                         <td class="text-gray-800 bold">{{ $production->dt->tglKirimDt }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->namaBarang }}</td>
+                        <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->keterangan }}</td>
