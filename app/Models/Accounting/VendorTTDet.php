@@ -16,7 +16,7 @@ class VendorTTDet extends Model
     protected $fillable = [
         'NoTT',
         'InvNumber',
-        'PONumber',
+        'PONumber', 
         'BBMNo',
         'Amount',
         'BBMAmount',
