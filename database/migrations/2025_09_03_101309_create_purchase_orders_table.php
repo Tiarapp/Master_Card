@@ -15,7 +15,8 @@ class CreatePurchaseOrdersTable extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            
+            $table->string('po_number')->unique();
+            $table->date('top');
             $table->timestamps();
         });
     }

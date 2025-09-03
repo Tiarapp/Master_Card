@@ -42,10 +42,10 @@
             <i class="fas fa-search mr-2"></i>Filter Data
           </h3>
         </div>
-        <form method="GET" action="{{ url()->current() }}">
+        <form method="GET" action="{{ url()->current() }}">          
           <div class="card-body">
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label for="search">Pencarian</label>
                   <input type="text" class="form-control" id="search" name="search" 
@@ -54,15 +54,32 @@
                   <small class="text-muted">Kosongkan untuk menampilkan semua data</small>
                 </div>
               </div>
-              <div class="col-md-4">
+            </div>
+            
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_start">Tanggal Mulai</label>
+                  <input type="date" class="form-control" id="date_start" name="date_start" 
+                         value="{{ request('date_start') }}">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="date_end">Tanggal Akhir</label>
+                  <input type="date" class="form-control" id="date_end" name="date_end" 
+                         value="{{ request('date_end') }}">
+                </div>
+              </div>
+              <div class="col-md-3">
                 <div class="form-group">
                   <label>&nbsp;</label>
                   <div class="d-block">
-                    <button type="submit" class="btn btn-primary">
-                      <i class="fas fa-search mr-1"></i>Cari
+                    <button type="submit" class="btn btn-primary btn-block">
+                      <i class="fas fa-search mr-1"></i>Filter Data
                     </button>
-                    <a href="{{ url()->current() }}" class="btn btn-secondary ml-2">
-                      <i class="fas fa-times mr-1"></i>Reset
+                    <a href="{{ url()->current() }}" class="btn btn-secondary btn-block mt-2">
+                      <i class="fas fa-times mr-1"></i>Reset Filter
                     </a>
                   </div>
                 </div>
@@ -77,9 +94,15 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-table mr-2"></i>Data Vendor Tanda Terima
-          </h3>
+          </h3>            
           <div class="card-tools">
+            <button type="button" class="btn btn-warning btn-sm mr-2" data-toggle="modal" data-target="#customFilterModal">
+              <i class="fas fa-cog mr-1"></i>Filter Custom
+            </button>            
             @if($vendortt->total() > 0)
+                <a href="{{ route('acc.vendor_tt.export', array_merge(request()->query(), ['page' => request()->get('page', 1)])) }}" class="btn btn-success mb-3">
+                  <i class="fas fa-file-excel mr-1"></i>Export Excel
+                </a>
               <span class="badge badge-success">
                 Total: {{ number_format($vendortt->total()) }} record
               </span>
@@ -87,9 +110,39 @@
               <span class="badge badge-secondary">
                 Tidak ada data
               </span>
-            @endif
+            @endif</div>
+        </div>
+
+        @if(request()->hasAny(['search', 'date_start', 'date_end', 'periode_manual', 'gudang_filter']))
+        <div class="card-body border-bottom bg-light">
+          <div class="alert alert-info mb-0">
+            <h6><i class="fas fa-info-circle mr-1"></i>Filter Aktif:</h6>
+            <div class="row">
+              @if(request('search'))
+                <div class="col-md-3">
+                  <small><strong>Pencarian:</strong> {{ request('search') }}</small>
+                </div>
+              @endif
+              @if(request('date_start') && request('date_end'))
+                <div class="col-md-3">
+                  <small><strong>Tanggal:</strong> {{ request('date_start') }} s/d {{ request('date_end') }}</small>
+                </div>
+              @endif
+              @if(request('periode_manual'))
+                <div class="col-md-3">
+                  <small><strong>Periode:</strong> {{ request('periode_manual') }}</small>
+                </div>
+              @endif
+              @if(request('gudang_filter'))
+                <div class="col-md-3">
+                  <small><strong>Gudang:</strong> {{ request('gudang_filter') }}</small>
+                </div>
+              @endif
+            </div>
           </div>
         </div>
+        @endif
+
         <div class="card-body table-responsive">
           <table class="table table-bordered table-striped" id="vendorTTTable">
             <thead class="bg-primary text-white">
@@ -99,6 +152,7 @@
                 <th style="width: 15%">No TT</th>
                 <th style="width: 15%">Invoice Number</th>
                 <th style="width: 15%">PO Number</th>
+                <th style="width: 15%">Waktu Bayar</th>
                 <th style="width: 12%">BBM No</th>
                 <th style="width: 13%">Amount</th>
                 <th style="width: 13%">BBM Amount</th>
@@ -113,10 +167,17 @@
                       @if($data->master_vend && $data->master_vend->Tglterima)
                         {{ \Carbon\Carbon::parse($data->master_vend->Tglterima)->format('d-m-Y') }}
                       @endif
-                    </td>
+                    </td>                      
                     <td>{{ $data->NoTT }}</td>
                     <td>{{ $data->InvNumber }}</td>
                     <td>{{ $data->PONumber }}</td>
+                    <td>
+                      @if($data->top)
+                        {{ $data->top }} hari
+                      @else
+                        -
+                      @endif
+                    </td>
                     <td>{{ $data->BBMNo }}</td>
                     <td class="text-right">{{ number_format($data->Amount, 2) }}</td>
                     <td class="text-right">{{ number_format($data->BBMAmount, 2) }}</td>
@@ -150,9 +211,70 @@
         @endif
       </div>
       <!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </section>
+    </div><!-- /.container-fluid -->  </section>
   <!-- /.content -->
+</div>
+
+<!-- Custom Filter Modal -->
+<div class="modal fade" id="customFilterModal" tabindex="-1" role="dialog" aria-labelledby="customFilterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="customFilterModalLabel">
+          <i class="fas fa-cog mr-2"></i>Filter Custom
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="GET" action="{{ url()->current() }}" id="customFilterForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="periode_manual">
+                  <i class="fas fa-keyboard mr-1"></i>Periode Manual
+                </label>
+                <input type="text" class="form-control" id="periode_manual" name="periode_manual" 
+                       placeholder="Masukkan periode (contoh: 09-2020, 09/20)" 
+                       value="{{ request('periode_manual') }}">
+                <small class="text-muted">Format: MM-YYYY, MM/YY</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="gudang_filter">
+                  <i class="fas fa-warehouse mr-1"></i>Pilihan Gudang
+                </label>
+                <select class="form-control" id="gudang_filter" name="gudang_filter">
+                  <option value="">-- Semua Gudang --</option>
+                  <option value="Teknik" {{ request('gudang_filter') == 'Teknik' ? 'selected' : '' }}>Teknik - Gudang Utama</option>
+                  <option value="BP" {{ request('gudang_filter') == 'BP' ? 'selected' : '' }}>BP - Gudang Jakarta</option>
+                  <option value="Stationary" {{ request('gudang_filter') == 'Stationary' ? 'selected' : '' }}>Stationary - Gudang Surabaya</option>
+                </select>
+                <small class="text-muted">Pilih gudang untuk filter data</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i>Tutup
+          </button>
+          <button type="button" class="btn btn-danger" id="resetCustomFilter">
+            <i class="fas fa-eraser mr-1"></i>Hapus Filter
+          </button>
+          <button type="submit" class="btn btn-warning">
+            <i class="fas fa-filter mr-1"></i>Terapkan Filter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 @endsection
 
@@ -162,11 +284,85 @@
 $(document).ready(function() {
     // Initialize tooltips
     $('[data-toggle="tooltip"]').tooltip();
-    
-    // Auto-focus search input if there's a search term
+      // Auto-focus search input if there's a search term
     @if(request('search'))
         $('#search').focus();
     @endif
+      // Clear periode when manual dates are entered
+    $('#date_start, #date_end').change(function() {
+        if ($('#date_start').val() !== '' || $('#date_end').val() !== '') {
+            $('#periode').val('');
+        }
+    });
+      // Handle reset custom filter
+    $('#resetCustomFilter').click(function() {
+        $('#periode_manual').val('');
+        $('#gudang_filter').val('');
+    });
+      // Handle export Excel
+    $('#exportExcel').click(function() {
+        var btn = $(this);
+        var originalText = btn.html();
+        
+        // Show loading state
+        btn.prop('disabled', true);
+        btn.html('<i class="fas fa-spinner fa-spin mr-1"></i>Exporting...');
+        
+        // Build export URL with current filters
+        var currentUrl = new URL(window.location.href);
+        var exportUrl = new URL('{{ route("acc.vendor_tt.export") }}');
+        
+        // Copy all current query parameters to export URL
+        currentUrl.searchParams.forEach(function(value, key) {
+            exportUrl.searchParams.set(key, value);
+        });
+        
+        // Add export parameter
+        exportUrl.searchParams.set('export', 'excel');
+        
+        // Create temporary link for download
+        var link = document.createElement('a');
+        link.href = exportUrl.toString();
+        link.download = 'vendor_tanda_terima_' + new Date().toISOString().slice(0,10) + '.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Reset button after delay
+        setTimeout(function() {
+            btn.prop('disabled', false);
+            btn.html(originalText);
+            
+            // Show success notification
+            toastr.success('Export berhasil dimulai!', 'Success');
+        }, 2000);
+    });
+    
+    // Add validation for periode manual format
+    $('#periode_manual').on('input', function() {
+        var value = $(this).val();
+        var isValid = true;
+        var message = '';
+        
+        if (value.length > 0) {
+            // Check for YYYYMM format (6 digits)
+            if (/^\d{6}$/.test(value)) {
+                message = 'Format: YYYYMM (contoh: 202409)';
+            }
+            // Check for YYYY-MM format
+            else if (/^\d{4}-\d{2}$/.test(value)) {
+                message = 'Format: YYYY-MM (contoh: 2024-09)';
+            }
+            // Free text format
+            else {
+                message = 'Format bebas diterima';
+            }
+        } else {
+            message = 'Format: YYYYMM, YYYY-MM, atau teks bebas';
+        }
+        
+        $(this).siblings('small').text(message);
+    });
     
     // Add hover effects to table rows
     $('.table tbody tr').hover(

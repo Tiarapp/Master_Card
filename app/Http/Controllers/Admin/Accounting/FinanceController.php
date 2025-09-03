@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin\Accounting;
 
 use App\Http\Controllers\Controller;
 use App\Imports\JurnalImport;
+use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
 use App\Models\Accounting\VendorTTDet;
+use App\Models\PurchaseOrder;
 use DateTime;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
@@ -222,21 +224,34 @@ class FinanceController extends Controller
         // dd($cust);
 
         return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
-    }
-
+    }    
+    
     public function vendor_tt(Request $request)
     {
         try {
             $vendortt = VendorTTDet::with('master_vend');
 
-            if ($request->search) {
-                $vendortt = $vendortt->where(function($query) use ($request) {
-                    $query->where('NoTT', 'like', '%' . $request->search . '%')
-                          ->orWhere('BBMNo', 'like', '%' . $request->search . '%')
-                          ->orWhere('InvNumber', 'like', '%' . $request->search . '%')
-                          ->orWhere('PONumber', 'like', '%' . $request->search . '%');
+            // Search filter - pencarian berdasarkan NoTT, BBMNo, InvNumber, PONumber
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $vendortt = $vendortt->where(function($query) use ($search) {
+                    $query->where('NoTT', 'LIKE', '%' . $search . '%')
+                          ->orWhere('BBMNo', 'LIKE', '%' . $search . '%')
+                          ->orWhere('InvNumber', 'LIKE', '%' . $search . '%')
+                          ->orWhere('PONumber', 'LIKE', '%' . $search . '%');
                 });
             }
+
+            // Date range filter
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $dateStart = $request->date_start;
+                $dateEnd = $request->date_end;
+                
+                // Filter berdasarkan Tglterima dari tabel VendorTT
+                $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
+                    $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
+                });
+            }           
 
             // Try ordering by TglTerima from VendorTT using raw SQL
             try {
@@ -255,8 +270,51 @@ class FinanceController extends Controller
                     'pageName' => 'page',
                 ]
             );
+        }        return view('admin.acc.vendor_tt', compact('vendortt'));
+    }    
+
+    public function update_po(Request $request)
+    {
+
+        if ($request->gudang_filter == 'Teknik') {
+            DB::connection('fbteknik')->beginTransaction();
+           $data = DB::connection('fbteknik')->table('TOPTK')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NoOP', 'WaktuBayar')
+            ->get();
+        } elseif ($request->gudang_filter == 'BP') {
+            DB::connection('fbbp')->beginTransaction();
+            $data = DB::connection('fbbp')->table('TOPConv')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NoOP', 'WaktuBayar')
+            ->get();
+        } elseif ($request->gudang_filter == 'Stationary') {
+            
+            DB::connection('stationary')->beginTransaction();
+            $data = DB::connection('stationary')->table('TOPStat')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NomerOP as NoOP', 'WaktuBayar')
+            ->get();
+        } else {
+            return redirect()->back()->with('error', 'Gudang filter tidak valid.');
         }
 
-        return view('admin.acc.vendor_tt', compact('vendortt'));
+        // dd($data);
+
+        foreach ($data as $item) {
+            $po = PurchaseOrder::where('po_number', trim($item->NoOP))->first();
+            
+            if ($po) {
+                $po->top = $item->WaktuBayar;
+                $po->save();
+            } else {
+                $new = new PurchaseOrder();
+                $new->po_number = trim($item->NoOP);
+                $new->top = $item->WaktuBayar;
+                $new->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Data PO Teknik berhasil Synchronize.');
     }
 }

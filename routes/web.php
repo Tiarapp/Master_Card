@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\OpiExport;
+use App\Exports\VendorTTExport;
 use App\Http\Controllers\Admin\Accounting\FinanceController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Converting\ConvertingController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
+use App\Models\Accounting\VendorTT;
+use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
@@ -338,6 +341,48 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
+    Route::get('/vendortt/export', function (Request $request){
+            $vendortt = VendorTTDet::with('master_vend');
+            // dd($request->all());
+            // Search filter - pencarian berdasarkan NoTT, BBMNo, InvNumber, PONumber
+            if ($request->search) {
+                $search = $request->search;
+                $vendortt = $vendortt->where(function($query) use ($search) {
+                    $query->where('NoTT', 'LIKE', '%' . $search . '%')
+                          ->orWhere('BBMNo', 'LIKE', '%' . $search . '%')
+                          ->orWhere('InvNumber', 'LIKE', '%' . $search . '%')
+                          ->orWhere('PONumber', 'LIKE', '%' . $search . '%');
+                });
+            }
+
+            // Date range filter
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $dateStart = $request->date_start;
+                $dateEnd = $request->date_end;
+                
+                // Filter berdasarkan Tglterima dari tabel VendorTT
+                $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
+                    $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
+                });
+            }
+            $fileName = 'VendorTT_';
+            
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $fileName .= date('Ymd', strtotime($request->date_start)) . '_to_' . date('Ymd', strtotime($request->date_end));
+            } elseif ($request->filled('periode_manual')) {
+                $fileName .= str_replace(['-', ' '], '_', $request->periode_manual);
+            } else {
+                $fileName .= date('Ymd');
+            }
+            
+            if ($request->filled('gudang_filter')) {
+                $fileName .= '_' . strtolower($request->gudang_filter);
+            }
+            
+            $fileName .= '_' . now()->format('His') . '.xlsx';
+            
+            return Excel::download(new VendorTTExport($vendortt), $fileName);
+    })->name('acc.vendor_tt.export');
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
         $opi = Opi_M::where('status_opi', '!=', 'CANCEL');
@@ -359,6 +404,7 @@ Route::middleware(['auth'])->group(function (){
 
         $opi = $opi->orderBy('id', 'desc')
             ->paginate(50, ['*'], 'page', $page);
+        dd($opi);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
     
@@ -446,9 +492,10 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
-        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
         Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
+        Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
+        
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
