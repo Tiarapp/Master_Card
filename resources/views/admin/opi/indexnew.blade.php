@@ -213,6 +213,7 @@
                             -
                           @endif
                         </td>
+                        <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->lineratas->gramKertas ?? ''}}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->flute1->gramKertas ?? ''}}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->linertengah->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->flute2->gramKertas ?? '' }}</td>
