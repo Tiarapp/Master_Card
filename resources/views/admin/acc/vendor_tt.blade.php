@@ -227,7 +227,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="GET" action="{{ url()->current() }}" id="customFilterForm">
+      <form method="GET" action="{{ route('acc.update_po') }}" id="customFilterForm">
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
