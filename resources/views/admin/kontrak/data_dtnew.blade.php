@@ -391,9 +391,11 @@
                 <i class="fas fa-plus mr-1"></i> Tambah DT & OPI
               </button>
                 
-              <button type="button" class="btn btn-info btn-sm ml-2" onclick="refreshTable()">
-                <i class="fas fa-sync-alt mr-1"></i> Refresh
-              </button>
+              <a href="{{ route('kontrak.recall', $kontrak->kontrak_m_id) }}">
+                <button type="button" class="btn btn-info btn-sm ml-2">
+                  <i class="fas fa-sync-alt mr-1"></i> Refresh
+                </button>
+              </a>
             </div>
           </div>
           <div class="card-body p-0">

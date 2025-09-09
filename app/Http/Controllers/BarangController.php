@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PersediaanBj;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
@@ -89,23 +90,37 @@ class BarangController extends Controller
             ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
             ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%");
 
-        // Handle search - support multiple words
+        // Handle search - support multiple words with OR logic
         if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
+            $search = strtoupper(trim($request->search));
             
             // Split search into individual words
-            $searchWords = explode(' ', trim($search));
+            $searchWords = explode(' ', $search);
             
-            $query->where(function($q) use ($searchWords) {
+            // Debug: Log the search parameters
+            Log::info('Search parameters:', [
+                'original_search' => $request->search,
+                'processed_search' => $search,
+                'search_words' => $searchWords
+            ]);
+            
+            $query->where(function($q) use ($searchWords, $search) {
+                // First, try to match the full search string
+                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+                
+                // Then, try to match individual words with OR logic
                 foreach ($searchWords as $word) {
-                    if (!empty(trim($word))) {
-                        $q->where(function($subQ) use ($word) {
-                            $subQ->where('TPersediaan.KodeBrg', 'LIKE', '%'.trim($word).'%')
-                                 ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.trim($word).'%');
-                        });
+                    $word = trim($word);
+                    if (!empty($word) && strlen($word) > 1) {
+                        $q->orWhere('TPersediaan.KodeBrg', 'LIKE', '%'.$word.'%')
+                          ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$word.'%');
                     }
                 }
             });
+            
+            // Debug: Log the final query
+            Log::info('Final query SQL:', ['query' => $query->toSql()]);
         }
 
         $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);

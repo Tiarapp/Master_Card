@@ -1177,12 +1177,12 @@ class Kontrak_DController extends Controller
                 $sisaopi = 0;
             }
 
-            $kontrak->pcsSisaKontrak = $sisaopi;
+            $kontrak->pcsSisaKontrak = $sisakirim;
             $kontrak->pcsSisaKirim = $sisakirim;
 
             $kontrak->save();
             
-            return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');
+            return redirect()->back()->with('success', 'Berhasil Recall QTY Kontrak');
         }
 
         public function empty_opi() {

@@ -121,7 +121,7 @@
                                                     <label class="control-label">Design</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="design" id="design" value="01" readonly>
+                                                    <input type="text" class="form-control txt_line" name="design" id="design" value="01" onchange="getKodeBarang()">
                                                 </div>
                                             </div>
                                             <div class="row">

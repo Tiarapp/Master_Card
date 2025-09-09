@@ -404,7 +404,7 @@ Route::middleware(['auth'])->group(function (){
 
         $opi = $opi->orderBy('id', 'desc')
             ->paginate(50, ['*'], 'page', $page);
-        dd($opi);
+        // dd($opi);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
     
