@@ -66,7 +66,9 @@ class NavbarController extends Controller
                 'alasan' => $request->alasan,
                 'tanggal' => $request->tanggal,
                 'status' => 'Proses',
-                'pemohon' => Auth::user()->name
+                'pemohon' => Auth::user()->name,
+                'created_at' => now(),
+                'updated_at' => null
             ]);
 
         }
@@ -79,6 +81,7 @@ class NavbarController extends Controller
         $notif = Notification::findOrFail($id);
         $notif->pic = Auth::user()->name;
         $notif->status = 'Done';
+        $notif->touch(); // Force update updated_at
 
         $notif->save();
 

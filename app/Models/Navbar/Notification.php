@@ -10,13 +10,16 @@ class Notification extends Model
 {
     use HasFactory;
     protected $table = 'notification';
+    public $timestamps = true; // Enable timestamps
     protected $fillable = [
         'kontrak_id',
         'alasan',
         'tanggal',
         'pemohon',
         'status',
-        'pic'
+        'pic',
+        'created_at',
+        'updated_at'
     ];
 
     public function kontrak()
