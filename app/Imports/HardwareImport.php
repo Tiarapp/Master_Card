@@ -6,11 +6,21 @@ use App\Models\Hardware;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class HardwareImport implements ToModel, WithHeadingRow, WithValidation
+class HardwareImport implements ToModel, WithHeadingRow, SkipsOnError
 {
+    use SkipsErrors;
+
+    private $importErrors = [];
+
+    public function getImportErrors()
+    {
+        return $this->importErrors;
+    }
     /**
     * @param array $row
     *
@@ -18,6 +28,26 @@ class HardwareImport implements ToModel, WithHeadingRow, WithValidation
     */
     public function model(array $row)
     {
+        // Manual validation
+        if (empty($row['kode_hardware']) || empty($row['nama_hardware']) || empty($row['kategori'])) {
+            $this->importErrors[] = "Row skipped: Missing required fields (kode_hardware, nama_hardware, or kategori)";
+            return null;
+        }
+
+        // Valid categories
+        $validCategories = ['Laptop','Desktop','Komputer','Printer','Server','Network','Monitor','Scanner','Proyektor','Storage','Others'];
+        if (!in_array($row['kategori'], $validCategories)) {
+            $this->importErrors[] = "Row skipped: Invalid kategori '{$row['kategori']}' for hardware {$row['kode_hardware']}";
+            return null;
+        }
+
+        // Check if hardware code already exists, skip if it does
+        $existingHardware = Hardware::where('kode_hardware', $row['kode_hardware'])->first();
+        if ($existingHardware) {
+            $this->importErrors[] = "Row skipped: Hardware code '{$row['kode_hardware']}' already exists";
+            return null;
+        }
+
         return new Hardware([
             'kode_hardware' => $row['kode_hardware'],
             'nama_hardware' => $row['nama_hardware'],
@@ -39,16 +69,6 @@ class HardwareImport implements ToModel, WithHeadingRow, WithValidation
             'no_invoice' => $row['no_invoice'] ?? null,
             'created_by' => Auth::user()->name ?? 'System',
         ]);
-    }
-
-    public function rules(): array
-    {
-        return [
-            '*.kode_hardware' => 'required|unique:hardware,kode_hardware',
-            '*.nama_hardware' => 'required|string|max:255',
-            '*.kategori' => 'required|in:Laptop,Desktop,Printer,Server,Network,Monitor,Scanner,Proyektor,Storage,Others',
-            '*.status' => 'nullable|in:Aktif,Tidak Aktif,Rusak,Maintenance',
-        ];
     }
 
     private function transformDate($value)
