@@ -123,6 +123,7 @@ body.sidebar-collapse .content-wrapper {
               <th class="min-w-200px">{{ __('Alasan') }}</th>
               <th class="min-w-100px">{{ __('Status') }}</th>
               <th class="min-w-100px">{{ __('PIC') }}</th>
+              <th class="min-w-100px">{{ __('Waktu Di Buka') }}</th>
               <th class="min-w-125px">{{ __('Action') }}</th>
             </tr>
           </thead>
@@ -163,6 +164,9 @@ body.sidebar-collapse .content-wrapper {
                 </td>
                 <td class="text-gray-800 fw-semibold">
                   {{ $notification->pic ?? '-' }}
+                </td>
+                <td class="text-gray-800 fw-semibold">
+                  {{ $notification->updated_at ? \Carbon\Carbon::parse($notification->updated_at)->format('d-m-Y H:i') : '-' }}
                 </td>
                 <td>
                   @if($notification->status == 'Proses')

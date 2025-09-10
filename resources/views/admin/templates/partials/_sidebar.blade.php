@@ -586,6 +586,16 @@
               @endif
             </ul>
           </li>
+          
+          {{-- Hardware Management - Only for IT Division (divisi_id = 2) --}}
+          @if (Auth::user()->divisi_id == 2)
+            <li class="nav-item">
+              <a href="{{ route('hardware.index') }}" class="nav-link">
+                <i class="fas fa-desktop nav-icon"></i>
+                <p>Hardware Management</p>
+              </a>
+            </li>
+          @endif
         </ul>
         
       </nav>

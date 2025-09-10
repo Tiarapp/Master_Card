@@ -20,6 +20,7 @@ use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
+use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Accounting\VendorTT;
@@ -29,6 +30,7 @@ use App\Models\Kontrak_M;
 use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -649,6 +651,22 @@ Route::middleware(['auth'])->group(function () {
     
     // Public feedback submission (can be accessed by any authenticated user)
     Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
+});
+
+// Hardware Template Download (Public access)
+Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
+
+// Artisan command for export (public access for simplicity)
+Route::get('artisan/hardware-export', function() {
+    Artisan::call('hardware:export');
+    return response()->json(['success' => true, 'message' => 'Export completed']);
+});
+
+// Hardware Management Routes (Divisi ID 2 only)
+Route::middleware(['auth'])->group(function () {
+    Route::resource('hardware', 'HardwareController');
+    Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
+    Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
 });
 
 require __DIR__ . '/auth.php';
