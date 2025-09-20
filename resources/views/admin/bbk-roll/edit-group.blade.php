@@ -915,7 +915,7 @@ $(document).ready(function() {
                             ${hasPotongan ? '<br><span class="potongan-indicator">ADA POTONGAN</span>' : ''}
                         </td>
                         <td><small>${inventory.kode_roll || '-'}</small></td>
-                        <td><small>${inventory.supplier ? inventory.supplier.name : '-'}</small></td>
+                        <td><small>${inventory.supplier_name || '-'}</small></td>
                         <td><small>${inventory.gsm || '-'}</small></td>
                         <td><small>${inventory.lebar || '-'}</small></td>
                         <td>
