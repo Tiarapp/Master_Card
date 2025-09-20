@@ -177,7 +177,7 @@
                         </td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->kode }}</td>
                         <td class="text-gray-800 bold">{{ $production->created_at }}</td>
-                        <td class="text-gray-800 bold">{{ $production->dt->tglKirimDt }}</td>
+                        <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
@@ -191,7 +191,7 @@
                         </td>
                         <td class="text-gray-800 bold">
                           @php
-                            $hari = $production->dt && $production->dt->tglKirimDt
+                            $hari = $production->dt_id && $production->dt->tglKirimDt
                               ? \Carbon\Carbon::parse($production->dt->tglKirimDt)->translatedFormat('l')
                               : '';
                           @endphp
@@ -234,7 +234,7 @@
                         <td class="text-gray-800 bold">{{ $production->mc->box->lebarDalamBox }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->box->tinggiDalamBox }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->koli }}</td>
-                        <td class="text-gray-800 bold">{{ $production->dt->tglKirimDt }}</td>
+                        <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakd->harga_kg }}</td>
                         <td class="text-gray-800 bold">-</td>
                         <td class="text-gray-800 bold">-</td>
