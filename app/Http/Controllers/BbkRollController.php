@@ -87,14 +87,9 @@ class BbkRollController extends Controller
 
     public function create()
     {
-        // Get inventories for dropdown - only show inventory with quantity > 0
-        $inventories = Inventory::with('supplier')
-                                ->where('quantity', '>', 0)
-                                ->orderBy('kode_internal')
-                                ->get();
-
+        // No need to load all inventories here anymore - they will be loaded via AJAX
         $data = [
-            'inventories' => $inventories
+            // Empty data - inventories will be loaded via pagination API
         ];
 
         return view('admin.bbk-roll.create', $data);

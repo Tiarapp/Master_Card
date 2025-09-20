@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function (){
     
     // API routes for BBK Roll functionality
     Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
+    Route::get('/api/inventories/paginated', [App\Http\Controllers\InventoryController::class, 'getPaginatedInventory'])->name('inventory.paginated');
     Route::get('/api/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'getInventoryDetails'])->name('api.inventories.details');
     
     //Satuan
