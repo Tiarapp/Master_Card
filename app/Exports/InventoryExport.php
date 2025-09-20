@@ -102,18 +102,12 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
             'Purchase Order',
             'Warna',
             'Deskripsi',
+            'Potongan',
+            'Rasio Potongan (%)',
             'Cobsize Top',
             'Cobsize Bottom',
             'RCT CD',
-            'RCT MD',
-            'Potongan',
-            'Rasio Potongan (%)',
-            'Status Roll',
-            'Dibuat Oleh',
-            'Diupdate Oleh',
-            'Tanggal Dibuat',
-            'Tanggal Diupdate',
-            'Tanggal Dihapus'
+            'RCT MD'
         ];
     }
 
@@ -139,18 +133,12 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
             $inventory->purchase_order ?? '-',
             $inventory->warna ? 'SAMA' : '-',
             $inventory->descoription ?? '-',
+            $inventory->potongan->lebar_potongan ?? '-',
+            $inventory->potongan ? number_format($inventory->potongan->rasio, 2) : '-',
             $inventory->cobsize_top ?? '-',
             $inventory->cobsize_bottom ?? '-',
             $inventory->rct_cd ?? '-',
             $inventory->rct_md ?? '-',
-            $inventory->potongan->nama ?? '-',
-            $inventory->potongan ? number_format($inventory->potongan->rasio, 2) : '-',
-            $inventory->status_roll->nama ?? '-',
-            $inventory->created_by ?? '-',
-            $inventory->updated_by ?? '-',
-            $inventory->created_at ? $inventory->created_at->format('Y-m-d H:i:s') : '-',
-            $inventory->updated_at ? $inventory->updated_at->format('Y-m-d H:i:s') : '-',
-            $inventory->deleted_at ? $inventory->deleted_at->format('Y-m-d H:i:s') : '-'
         ];
     }
 
@@ -181,12 +169,6 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
             'S' => 12, // RCT MD
             'T' => 20, // Potongan
             'U' => 18, // Rasio Potongan
-            'V' => 15, // Status Roll
-            'W' => 15, // Dibuat Oleh
-            'X' => 15, // Diupdate Oleh
-            'Y' => 20, // Tanggal Dibuat
-            'Z' => 20, // Tanggal Diupdate
-            'AA' => 20, // Tanggal Dihapus
         ];
     }
 
