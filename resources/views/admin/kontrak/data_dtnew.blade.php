@@ -444,7 +444,7 @@
                     <td class="text-center">
                       <span class="badge badge-outline-secondary">
                         <i class="fas fa-calendar mr-1"></i>
-                        {{ date('d/m/Y', strtotime($data->dt->tglKirimDt)) }}
+                        {{ $data->dt_id ? date('d/m/Y', strtotime($data->dt->tglKirimDt)) : '' }}
                       </span>
                     </td>
                     <td class="text-center">
