@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\BbkRoll;
 use App\Models\Inventory;
+use App\Exports\BbkRollExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BbkRollController extends Controller
 {
@@ -562,6 +564,49 @@ class BbkRollController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Export BBK Roll data to Excel
+     */
+    public function export(Request $request)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'tanggal_from' => 'nullable|date',
+                'tanggal_to' => 'nullable|date|after_or_equal:tanggal_from',
+                'search' => 'nullable|string|max:255',
+                'inventory_filter' => 'nullable|exists:inventory,id'
+            ]);
+
+            // Prepare filters
+            $filters = [
+                'search' => $request->search,
+                'inventory_filter' => $request->inventory_filter,
+                'tanggal_from' => $request->tanggal_from,
+                'tanggal_to' => $request->tanggal_to
+            ];
+
+            // Generate filename with timestamp
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $filename = "BBK_Roll_Export_{$timestamp}.xlsx";
+
+            // Return Excel download
+            return Excel::download(new BbkRollExport($filters), $filename);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Export failed: ' . $e->getMessage()
             ], 500);
         }
     }

@@ -7,6 +7,7 @@ use App\Models\Potongan;
 use App\Models\SupplierRoll;
 use App\Imports\InventoryUpdateWithRgbImport;
 use App\Imports\InventoryImport;
+use App\Exports\InventoryExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -624,5 +625,50 @@ class InventoryController extends Controller
             ],
             'suppliers' => $suppliers
         ]);
+    }
+
+    /**
+     * Export Inventory data to Excel
+     */
+    public function export(Request $request)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'tanggal_from' => 'nullable|date',
+                'tanggal_to' => 'nullable|date|after_or_equal:tanggal_from',
+                'search' => 'nullable|string|max:255',
+                'supplier_id' => 'nullable|exists:supplier_rolls,id',
+                'jenis' => 'nullable|string|max:255'
+            ]);
+
+            // Prepare filters
+            $filters = [
+                'search' => $request->search,
+                'supplier_id' => $request->supplier_id,
+                'jenis' => $request->jenis,
+                'tanggal_from' => $request->tanggal_from,
+                'tanggal_to' => $request->tanggal_to
+            ];
+
+            // Generate filename with timestamp
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $filename = "Inventory_Export_{$timestamp}.xlsx";
+
+            // Return Excel download
+            return Excel::download(new InventoryExport($filters), $filename);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Export failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -623,6 +623,10 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/inventory/import/inventory', 'InventoryController@importInventory')->name('inventory.import.inventory');
         Route::get('/inventory/import/inventory-template', 'InventoryController@downloadInventoryTemplate')->name('inventory.import.inventory.template');
         Route::resource('/inventory', 'InventoryController');
+        
+        // Inventory Export
+        Route::post('/inventory/export', 'InventoryController@export')->name('inventory.export');
+        
         Route::resource('/jenis-roll', 'JenisRollController');
         Route::resource('/lebar-roll', 'LebarRollController');
         Route::resource('/supplier-roll', 'SupplierRollController');
@@ -640,6 +644,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
         Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
         Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
+        
+        // BBK Roll Export
+        Route::post('/bbk-roll/export', 'BbkRollController@export')->name('bbk-roll.export');
         
         // BBK Roll Individual Item Operations
         Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');

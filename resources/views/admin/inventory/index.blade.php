@@ -256,6 +256,12 @@ td:last-child {
                 <i class="fas fa-file-import me-2"></i>
                 <span>{{ __('Import Update') }}</span>
             </a>
+            
+            <!-- Export Button -->
+            <button type="button" id="exportInventoryBtn" class="btn btn-dark d-flex align-items-center shadow-sm mb-2">
+                <i class="fas fa-file-excel me-2"></i>
+                <span>{{ __('Export Excel') }}</span>
+            </button>
         </div>
         <div class="col-md-4 ms-auto">
             <form action="{{ route('inventory.index') }}" method="GET" class="d-flex align-items-center shadow-sm rounded-pill bg-white px-2 py-1 mb-2" style="max-width: 250px; margin-left: auto;">
@@ -727,6 +733,72 @@ td:last-child {
                 submitBtn.prop('disabled', false);
             }
         });
+    });
+
+    // Export functionality
+    document.getElementById('exportInventoryBtn').addEventListener('click', function() {
+        const btn = this;
+        const originalContent = btn.innerHTML;
+        
+        // Show loading state
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i><span>Mengexport...</span>';
+        
+        // Get current filter values
+        const searchParam = '{{ request("search") }}';
+        const supplierParam = '{{ request("supplier") }}';
+        const jenisParam = '{{ request("jenis") }}';
+        
+        // Create form for export
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("inventory.export") }}';
+        form.style.display = 'none';
+        
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = '{{ csrf_token() }}';
+        form.appendChild(csrfInput);
+        
+        // Add search parameter
+        if (searchParam) {
+            const searchInput = document.createElement('input');
+            searchInput.type = 'hidden';
+            searchInput.name = 'search';
+            searchInput.value = searchParam;
+            form.appendChild(searchInput);
+        }
+        
+        // Add supplier filter
+        if (supplierParam) {
+            const supplierInput = document.createElement('input');
+            supplierInput.type = 'hidden';
+            supplierInput.name = 'supplier_id';
+            supplierInput.value = supplierParam;
+            form.appendChild(supplierInput);
+        }
+        
+        // Add jenis filter
+        if (jenisParam) {
+            const jenisInput = document.createElement('input');
+            jenisInput.type = 'hidden';
+            jenisInput.name = 'jenis';
+            jenisInput.value = jenisParam;
+            form.appendChild(jenisInput);
+        }
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+        
+        // Restore button state after a delay
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+            document.body.removeChild(form);
+        }, 3000);
     });
 </script>
 @endsection
