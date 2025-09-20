@@ -138,7 +138,8 @@ class BbkRollController extends Controller
                         'keluar' => $keluar,
                         'kembali' => 0, // Initial kembali for individual entries
                         'opi' => $opi,
-                        'keterangan' => $keterangan
+                        'keterangan' => $keterangan,
+                        'created_by' => auth()->user()->name ?? 'System'
                     ]);
                     
                     $createdBbkRolls[] = $bbkRoll;
@@ -228,7 +229,10 @@ class BbkRollController extends Controller
             'keterangan' => 'nullable|string|max:500'
         ]);
 
-        $bbkRoll->update($request->all());
+        $data = $request->all();
+        $data['updated_by'] = auth()->user()->name ?? 'System';
+        
+        $bbkRoll->update($data);
 
         return redirect()->route('bbk-roll.index')
             ->with('success', 'BBK Roll berhasil diperbarui.');
@@ -350,53 +354,99 @@ class BbkRollController extends Controller
     {
         $request->validate([
             'tanggal_bbk' => 'required|date',
-            'bbk_roll_ids' => 'required|array|min:1',
+            'bbk_roll_ids' => 'array',
             'bbk_roll_ids.*' => 'exists:bbk_rolls,id',
-            'inventory_kembali' => 'required|array',
+            'inventory_kembali' => 'array',
             'inventory_kembali.*' => 'nullable|numeric|min:0',
             'inventory_opi' => 'array',
             'inventory_opi.*' => 'nullable|string|max:255',
             'inventory_keterangan' => 'array',
-            'inventory_keterangan.*' => 'nullable|string|max:500'
+            'inventory_keterangan.*' => 'nullable|string|max:500',
+            // New inventory validation
+            'new_inventory_ids' => 'array',
+            'new_inventory_ids.*' => 'exists:inventories,id',
+            'new_inventory_keluar' => 'array',
+            'new_inventory_keluar.*' => 'required|numeric|min:0.01',
+            'new_inventory_kembali' => 'array',
+            'new_inventory_kembali.*' => 'nullable|numeric|min:0',
+            'new_inventory_opi' => 'array',
+            'new_inventory_opi.*' => 'nullable|string|max:255',
+            'new_inventory_keterangan' => 'array',
+            'new_inventory_keterangan.*' => 'nullable|string|max:500'
         ]);
 
         DB::beginTransaction();
 
         try {
-            // Update kembali, opi, and keterangan values for existing BBK Rolls
-            foreach ($request->bbk_roll_ids as $index => $bbkRollId) {
-                $kembali = $request->inventory_kembali[$index] ?? 0;
-                $opi = $request->inventory_opi[$index] ?? '';
-                $keterangan = $request->inventory_keterangan[$index] ?? '';
-                
-                $bbkRoll = BbkRoll::where('id', $bbkRollId)
-                                  ->where('bbk_number', $bbkNumber)
-                                  ->first();
-                
-                if ($bbkRoll) {
-                    // Get the old kembali value before updating
-                    $oldKembali = $bbkRoll->kembali;
+            // Update existing BBK Rolls
+            if ($request->bbk_roll_ids) {
+                foreach ($request->bbk_roll_ids as $index => $bbkRollId) {
+                    $kembali = $request->inventory_kembali_rasio[$index] != '-' ? $request->inventory_kembali_rasio[$index] : $request->inventory_kembali[$index];
+                    $opi = $request->inventory_opi[$index] ?? '';
+                    $keterangan = $request->inventory_keterangan[$index] ?? '';
                     
-                    // Update BBK Roll
-                    $bbkRoll->update([
-                        'tanggal_bbk' => $request->tanggal_bbk,
-                        'kembali' => $kembali,
-                        'opi' => $opi,
-                        'keterangan' => $keterangan
-                    ]);
+                    $bbkRoll = BbkRoll::where('id', $bbkRollId)
+                                      ->where('bbk_number', $bbkNumber)
+                                      ->first();
+                    
+                    if ($bbkRoll) {
+                        // Get the old kembali value before updating
+                        $oldKembali = $bbkRoll->kembali;
+                        
+                        // Update BBK Roll
+                        $bbkRoll->update([
+                            'tanggal_bbk' => $request->tanggal_bbk,
+                            'kembali' => $kembali,
+                            'opi' => $opi,
+                            'keterangan' => $keterangan,
+                            'updated_by' => auth()->user()->name ?? 'System'
+                        ]);
 
-                    // Only adjust inventory if kembali value has changed
-                    $kembaliDifference = $kembali - $oldKembali;
-                    if ($kembaliDifference != 0) {
-                        $inventory = Inventory::find($bbkRoll->inventory_id);
-                        if ($inventory) {
-                            // Add the difference to inventory quantity
-                            // Positive difference = more returned = more inventory
-                            // Negative difference = less returned = less inventory
-                            $inventory->quantity += $kembaliDifference;
-                            $inventory->save();
+                        // Only adjust inventory if kembali value has changed
+                        $kembaliDifference = $kembali - $oldKembali;
+                        if ($kembaliDifference != 0) {
+                            $inventory = Inventory::find($bbkRoll->inventory_id);
+                            if ($inventory) {
+                                // Add the difference to inventory quantity
+                                // Positive difference = more returned = more inventory
+                                // Negative difference = less returned = less inventory
+                                $inventory->quantity += $kembaliDifference;
+                                $inventory->save();
+                            }
                         }
                     }
+                }
+            }
+
+            // Add new inventories to BBK Roll
+            if ($request->new_inventory_ids) {
+                foreach ($request->new_inventory_ids as $index => $inventoryId) {
+                    $keluar = $request->new_inventory_keluar[$index] ?? 0;
+                    $kembali = $request->new_inventory_kembali[$index] ?? 0;
+                    $opi = $request->new_inventory_opi[$index] ?? '';
+                    $keterangan = $request->new_inventory_keterangan[$index] ?? '';
+
+                    // Check if inventory has enough quantity
+                    $inventory = Inventory::find($inventoryId);
+                    if (!$inventory || $inventory->quantity < $keluar) {
+                        throw new \Exception("Inventory {$inventory->kode_internal} tidak memiliki stok yang cukup. Stok tersedia: {$inventory->quantity}");
+                    }
+
+                    // Create new BBK Roll entry
+                    BbkRoll::create([
+                        'bbk_number' => $bbkNumber,
+                        'tanggal_bbk' => $request->tanggal_bbk,
+                        'inventory_id' => $inventoryId,
+                        'keluar' => $keluar,
+                        'kembali' => $kembali,
+                        'opi' => $opi,
+                        'keterangan' => $keterangan,
+                        'created_by' => auth()->user()->name ?? 'System'
+                    ]);
+
+                    // Reduce inventory quantity
+                    $inventory->quantity -= $keluar;
+                    $inventory->save();
                 }
             }
 
@@ -470,5 +520,54 @@ class BbkRollController extends Controller
             'quantity' => $inventory->quantity,
             'supplier' => $inventory->supplier ? $inventory->supplier->name : '-'
         ]);
+    }
+
+    // Delete individual BBK Roll item
+    public function deleteItem($bbkRollId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $bbkRoll = BbkRoll::find($bbkRollId);
+            
+            if (!$bbkRoll) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'BBK Roll item tidak ditemukan.'
+                ], 404);
+            }
+
+            // Check if user has permission (optional - you can add authorization here)
+            // $this->authorize('delete', $bbkRoll);
+
+            $inventoryName = $bbkRoll->inventory->kode_internal ?? 'Unknown';
+            
+            // Restore inventory quantity
+            $inventory = Inventory::find($bbkRoll->inventory_id);
+            if ($inventory) {
+                // Return the quantity that was taken out (keluar - kembali)
+                $returnQuantity = $bbkRoll->keluar - $bbkRoll->kembali;
+                $inventory->quantity += $returnQuantity;
+                $inventory->save();
+            }
+            
+            // Delete the BBK Roll record
+            $bbkRoll->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Inventory \"{$inventoryName}\" berhasil dihapus dari BBK Roll dan dikembalikan ke stok."
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

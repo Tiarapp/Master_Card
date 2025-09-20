@@ -17,7 +17,9 @@ class BbkRoll extends Model
         'keluar',
         'kembali',
         'opi',
-        'keterangan'
+        'keterangan',
+        'created_by',
+        'updated_by'
     ];
 
     public function inventory()

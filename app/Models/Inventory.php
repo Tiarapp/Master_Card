@@ -47,6 +47,11 @@ class Inventory extends Model
         return $this->belongsTo(Potongan::class);
     }
 
+    public function potongans()
+    {
+        return $this->hasMany(Potongan::class);
+    }
+
     public function status_roll()
     {
         return $this->belongsTo(StatusRoll::class);
