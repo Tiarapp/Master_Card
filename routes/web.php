@@ -109,6 +109,10 @@ Route::get('/admin', function () {
 
 Route::middleware(['auth'])->group(function (){
     
+    // API routes for BBK Roll functionality
+    Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
+    Route::get('/api/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'getInventoryDetails'])->name('api.inventories.details');
+    
     //Satuan
     Route::get('/admin/satuans', 'SatuansController@index')->name('satuan');
     Route::get('/admin/satuans/create', 'SatuansController@create')->name('satuan.create');
@@ -635,6 +639,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
         Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
         Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
+        
+        // BBK Roll Individual Item Operations
+        Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
 }); 
 
 // Feedback Routes

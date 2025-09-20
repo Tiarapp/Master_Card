@@ -272,7 +272,7 @@
 
                 <!-- Sisa (Auto calculated) -->
                 <div class="mb-3">
-                  <label class="form-label">Sisa</label>
+                  <label class="form-label text-black">Sisa</label>
                   <input type="text" class="form-control" id="sisa_display" readonly>
                   <small class="text-muted">Dihitung otomatis: Keluar - Kembali</small>
                 </div>

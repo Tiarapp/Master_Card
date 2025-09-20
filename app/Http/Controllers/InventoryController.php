@@ -483,4 +483,47 @@ class InventoryController extends Controller
 
         return view('admin.inventory.summary', $data);
     }
+
+    /**
+     * Get available inventories for BBK Roll (API)
+     */
+    public function getAvailableInventories(Request $request)
+    {
+        $inventories = Inventory::with(['supplier', 'potongan'])
+            ->select('id', 'kode_internal', 'kode_roll', 'supplier_id', 'gsm', 'lebar', 'quantity', 'potongan_id');
+
+        // Exclude already used inventories
+        if ($request->exclude && is_array($request->exclude)) {
+            $inventories->whereNotIn('id', $request->exclude);
+        }
+
+        // Apply search filter
+        if ($request->search) {
+            $search = $request->search;
+            $inventories->where(function($query) use ($search) {
+                $query->where('kode_internal', 'like', '%'.$search.'%')
+                    ->orWhere('kode_roll', 'like', '%'.$search.'%')
+                    ->orWhereHas('supplier', function ($q) use ($search) {
+                        $q->where('name', 'like', '%'.$search.'%');
+                    });
+            });
+        }
+
+        $inventories = $inventories->orderBy('kode_internal')
+            ->limit(50)
+            ->get();
+
+        return response()->json($inventories);
+    }
+
+    /**
+     * Get inventory details (API)
+     */
+    public function getInventoryDetails($id)
+    {
+        $inventory = Inventory::with('supplier')
+            ->findOrFail($id);
+
+        return response()->json($inventory);
+    }
 }
