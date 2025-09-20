@@ -535,9 +535,16 @@ class InventoryController extends Controller
         $perPage = $request->get('per_page', 20);
         $search = $request->get('search', '');
         $supplier = $request->get('supplier', '');
+        $exclude = $request->get('exclude', []);
 
-        $inventoriesQuery = Inventory::with(['supplier'])
+        $inventoriesQuery = Inventory::with(['supplier', 'potongan'])
             ->where('quantity', '>', 0); // Only show inventory with quantity > 0
+
+        // Exclude specific inventory IDs (for edit mode)
+        if (!empty($exclude)) {
+            $excludeIds = is_array($exclude) ? $exclude : [$exclude];
+            $inventoriesQuery->whereNotIn('id', $excludeIds);
+        }
 
         // Apply search filter
         if ($search) {
@@ -573,7 +580,13 @@ class InventoryController extends Controller
                 'jenis' => $inventory->jenis,
                 'gsm' => $inventory->gsm,
                 'lebar' => $inventory->lebar,
-                'quantity' => $inventory->quantity
+                'quantity' => $inventory->quantity,
+                'potongan_id' => $inventory->potongan_id,
+                'potongan' => $inventory->potongan ? [
+                    'id' => $inventory->potongan->id,
+                    'lebar_potongan' => $inventory->potongan->lebar_potongan,
+                    'rasio' => $inventory->potongan->rasio
+                ] : null
             ];
         });
 
@@ -583,6 +596,10 @@ class InventoryController extends Controller
             $suppliers = Inventory::with('supplier')
                 ->whereHas('supplier')
                 ->where('quantity', '>', 0)
+                ->when(!empty($exclude), function($query) use ($exclude) {
+                    $excludeIds = is_array($exclude) ? $exclude : [$exclude];
+                    return $query->whereNotIn('id', $excludeIds);
+                })
                 ->get()
                 ->pluck('supplier.name')
                 ->unique()
