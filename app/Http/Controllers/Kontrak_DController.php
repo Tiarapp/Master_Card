@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KontrakExport;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class Kontrak_DController extends Controller
 {
@@ -235,12 +239,40 @@ class Kontrak_DController extends Controller
         }
         
         public function index(Request $request)
-        {            
-            
+        {
             return view('admin.kontrak.index');
             // $kontrak_m = Kontrak_M::get();
             
             // return view('admin.kontrak.index',compact('kontrak_m'));
+        }
+
+        public function index_new(Request $request)
+        {
+            $contractsQuery = new Kontrak_D;
+            $contractsQuery = $contractsQuery->with('kontrakm', 'mc');
+            
+            if ($request->search) {
+                $contractsQuery->WhereHas('kontrakm', function($query) use ($request) {
+                    $query->where('kode', 'like', '%'.$request->search.'%')
+                        ->orWhere('customer_name', 'like', '%'.$request->search.'%')
+                        ->orWhere('poCustomer', 'like', '%'.$request->search.'%')
+                        ->orWhere('sales', 'like', '%'.$request->search.'%');
+                })
+                ->orWhereHas('mc', function($query) use ($request) {
+                    $query->where('kode', 'like', '%'.$request->search.'%')
+                        ->orWhere('namaBarang', 'like', '%'.$request->search.'%');
+                });
+            }
+
+            $contracts = $contractsQuery->orderBy('id', 'desc')->paginate(20);
+
+            // dd($contracts);
+
+            $data = [
+                'contracts' => $contracts,
+            ];
+            
+            return view('admin.kontrak.indexnew', $data);
         }
         
         /**
@@ -251,14 +283,15 @@ class Kontrak_DController extends Controller
         public function create()
         {
             
-            $cust = DB::connection('firebird')->table('TCustomer')->get();
-            $mc = DB::table('mc')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
-            ->where('mc.status', '=', '1')
-            ->get();
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
+            // $cust = DB::table('TCustomer')->get();
+            // $mc = DB::table('mc')
+            // ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
+            // ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
+            // ->leftJoin('box', 'box_id', '=', 'box.id')
+            // ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
+            // ->where('mc.status', '=', '1')
+            // ->get();
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')
             ->where('aktif', '=', 1)
@@ -266,8 +299,70 @@ class Kontrak_DController extends Controller
             ->get();
             
             return view('admin.kontrak.newcreate', compact(
-                'mc', 'top', 'cust', 'sales'
+                // 'mc', 
+                'top', 
+                // 'cust', 
+                'sales'
             ));
+        }
+
+        public function customer_select(Request $request)
+        {
+            try {
+                // Try using Customer model first
+                $query = Customer::query();
+
+                if ($request->has('search') && !empty($request->search)) {
+                    $search = trim($request->search);
+                    $query = $query->where(function($q) use ($search) {
+                        $q->where('Nama', 'LIKE', '%'.$search.'%')
+                          ->orWhere('Kode', 'LIKE', '%'.$search.'%')
+                          ->orWhere('AlamatKirim', 'LIKE', '%'.$search.'%');
+                    });
+                }
+
+                $cust = $query->orderBy('Nama', 'asc')->paginate(10);
+
+            } catch (\Exception $e) {
+                Log::error('Customer model error: ' . $e->getMessage());
+                
+                // Fallback to DB facade
+                try {
+                    $query = DB::connection('firebird')->table('TCustomer');
+                    
+                    if ($request->has('search') && !empty($request->search)) {
+                        $search = trim($request->search);
+                        $query = $query->where(function($q) use ($search) {
+                            $q->where('Nama', 'LIKE', '%'.$search.'%')
+                              ->orWhere('Kode', 'LIKE', '%'.$search.'%')
+                              ->orWhere('AlamatKirim', 'LIKE', '%'.$search.'%');
+                        });
+                    }
+
+                    $customers = $query->orderBy('Nama', 'asc')->paginate(10);
+                    
+                    // Convert to collection for consistency
+                    $cust = $customers;
+                    
+                } catch (\Exception $e2) {
+                    Log::error('Database connection error: ' . $e2->getMessage());
+                    
+                    // Return empty paginated collection
+                    $cust = new \Illuminate\Pagination\LengthAwarePaginator(
+                        collect([]),
+                        0,
+                        10,
+                        1,
+                        ['path' => request()->url(), 'pageName' => 'page']
+                    );
+                }
+            }
+
+            $data = [
+                'cust' => $cust,
+            ];
+            
+            return view('admin.customer.modal', $data);
         }
 
         
@@ -387,7 +482,7 @@ class Kontrak_DController extends Controller
             
             $upMaster->save(); // simpan ke table
             
-            return redirect('admin/kontrak')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
+            return redirect('admin/kontraknew')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
         }
         
         /**
@@ -410,7 +505,7 @@ class Kontrak_DController extends Controller
         public function edit($id)
         {
             // menampilkan untuk dropdown
-            $cust = DB::connection('firebird')->table('TCustomer')->get();
+            // $cust = DB::connection('firebird')->table('TCustomer')->get();
             
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
@@ -438,65 +533,41 @@ class Kontrak_DController extends Controller
             $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
-            // End tampilkan untuk edit
             
-            
-            // dd($kontrak_D);
-            // $count = count($kontrak_D);
-            
-            
-            // dd($kontrak_M);
-            return view('admin.kontrak.edit', compact(
-                'cust',
-                'mc',
-                'top',
-                'sales',
-                // 'count',
-                'kontrak_D'
-            ), ['kontrak_M' => $kontrak_M]);
+            if($kontrak_M->status == 2){
+                return view('admin.kontrak.edit', compact(
+                    // 'cust',
+                    'mc',
+                    'top',
+                    'sales',
+                    'kontrak_D'
+                ), ['kontrak_M' => $kontrak_M]);
+            } else if(Auth::user()->divisi_id == 2){
+                return view('admin.kontrak.edit', compact(
+                    // 'cust',
+                    'mc',
+                    'top',
+                    'sales',
+                    'kontrak_D'
+                ), ['kontrak_M' => $kontrak_M]);
+            } else {
+                return redirect('admin/kontraknew');
+            } 
         }
         
         public function add_dt($id)
         {
-            // menampilkan untuk dropdown
-            // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            
-            $date = date('Y-m-d');
-            // dd($date);
-            
-            $b1 = DB::table('opi_m')
-            ->join('dt', 'dt_id', 'dt.id')
-            ->join('mc', 'mc_id', 'mc.id')
-            ->select(DB::raw("SUM(opi_m.jumlahOrder) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-            ->where('mc.tipeBox', '=', 'B1')
-            ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status_opi', '=', 'Proses')
-            ->groupBy('opi_m.tglKirimDt')
-            ->get();
-            
-            $dc = DB::table('opi_m')
-            ->join('dt', 'dt_id', 'dt.id')
-            ->join('mc', 'mc_id', 'mc.id')
-            ->select(DB::raw("ROUND(SUM(opi_m.jumlahOrder / mc.outConv )) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-            ->where('mc.tipeBox', '=', 'DC')
-            ->where('opi_m.tglKirimDt', '>=', $date)
-            ->where('opi_m.status_opi', '=', 'Proses')
-            ->groupBy('opi_m.tglKirimDt')
-            ->get();
-            
-            // // dd($b1, $dc);
-            
-            $mc = DB::table('mc')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            ->leftJoin('box', 'box_id', '=', 'box.id')
-            ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease')
-            ->get();
-            $top = DB::table('top')->get();
-            $sales = DB::table('sales_m')->get();
-            // End Dropdown
-            
-            
+
+            $kontrak = new Kontrak_D();
+            $kontrak = $kontrak->with([
+                'kontrakm',
+                'mc',
+                'mc.substancekontrak',
+                'mc.substanceproduksi',
+            ]);
+
+            $kontrak = $kontrak->where('kontrak_m_id', $id)->first();
+
             // tampilkan data yang akan di edit
             $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -511,24 +582,13 @@ class Kontrak_DController extends Controller
             
             $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
             ->get();
-            // End tampilkan untuk edit
+
+            $data = [
+                'kontrak' => $kontrak,
+                'opi' => $opi,
+            ];
             
-            
-            // dd($opi);
-            // $count = count($kontrak_D);
-            
-            
-            // dd($kontrak_M);
-            return view('admin.kontrak.data_dt', compact(
-                // 'cust',
-                'b1',
-                'dc',
-                'mc',
-                'top',
-                'sales',
-                'opi',
-                'kontrak_D'
-            ), ['kontrak_M' => $kontrak_M]);
+            return view('admin.kontrak.data_dtnew', $data);
         }
         
         public function store_dt(Request $request)
@@ -858,7 +918,7 @@ class Kontrak_DController extends Controller
                 'event' => "Ubah Kontrak ".$kontrakm->kode
             ]);
             // dd($kontrakd);
-            return redirect('admin/kontrak');
+            return redirect('admin/kontraknew');
         }
         
         /**
@@ -1014,7 +1074,7 @@ class Kontrak_DController extends Controller
                 } 
             }
             
-            return redirect('admin/kontrak');
+            return redirect('admin/kontraknew');
         }
         
         public function edit_realisasi(Request $request, $id)
@@ -1068,7 +1128,7 @@ class Kontrak_DController extends Controller
             ]);
             
             $kontrak->save();
-            return redirect('admin/kontrak')->with('success', 'Kontrak Berhasil di Cancel');
+            return redirect('admin/kontraknew')->with('success', 'Kontrak Berhasil di Cancel');
         }
         
         public function open_kontrak($id)
@@ -1117,12 +1177,12 @@ class Kontrak_DController extends Controller
                 $sisaopi = 0;
             }
 
-            $kontrak->pcsSisaKontrak = $sisaopi;
+            $kontrak->pcsSisaKontrak = $sisakirim;
             $kontrak->pcsSisaKirim = $sisakirim;
 
             $kontrak->save();
             
-            return redirect()->to(url()->previous())->with('success', 'Berhasil Recall QTY Kontrak');
+            return redirect()->back()->with('success', 'Berhasil Recall QTY Kontrak');
         }
 
         public function empty_opi() {
@@ -1135,4 +1195,9 @@ class Kontrak_DController extends Controller
             dd($data);
 
         }
+
+        // public function exportExcel(Request $request)
+        // {
+        //     return Excel::download(new KontrakExport($request->search), 'kontrak.xlsx');
+        // }
     }

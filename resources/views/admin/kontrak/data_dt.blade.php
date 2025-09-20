@@ -1,19 +1,32 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+@section('styles')
+<!-- Load CSS secara async untuk mengurangi blocking -->
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
 <style>
-    .select2 {
-        width: 206px !important;
+    .select2-container { width: 100% !important; }
+    .select2-container--bootstrap4 .select2-selection--single {
+        height: calc(2.25rem + 2px) !important;
+        border: 1px solid #ced4da !important;
     }
+    .select2-container--bootstrap4 .select2-selection__rendered {
+        line-height: calc(2.25rem + 2px) !important;
+        padding-left: 12px !important;
+    }
+    .select2-container--bootstrap4 .select2-selection__arrow {
+        height: calc(2.25rem + 2px) !important;
+        right: 12px !important;
+    }
+    tr:nth-child(odd) { background-color:#bab9b9 !important; }
     
-    tr:nth-child(odd) {
-        background-color:#bab9b9 !important;
-        
-    }
+    /* Loading state untuk mengurangi FOUC */
+    .table-loading { opacity: 0.6; pointer-events: none; }
+    .btn-loading { opacity: 0.65; cursor: not-allowed; pointer-events: none; }
 </style>
+@endsection
 
 
 @section('content')
@@ -44,92 +57,6 @@
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="card-body">
-                                <h3>Kapasitas B1 yang Sudah Ada</h3>
-                                <table class="table table-bordered" id="data_b1">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">Tanggal.</th>
-                                      <th scope="col">Qty</th>
-                                      <th scope="col">Sisa</th>
-                                      <th scope="col">Status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    @foreach ($b1 as $data)
-                                      <tr>
-                                        <td>{{ $data->tglKirimDt }}</td>
-                                        <td>{{ $data->qty }}</td>
-                                        <td>
-                                            <?php 
-                                                $sisa = 150000 - $data->qty;
-                                                if ($sisa < 0) {
-                                                    echo 0;
-                                                } else {
-                                                    echo $sisa;
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            @if ($data->qty <= 100000)
-                                                Tersedia
-                                            @elseif ($data->qty <=150000)
-                                                Hampir Penuh
-                                            @else
-                                                Melebihi Batas
-                                            @endif
-                                        </td>
-                                      </tr>
-                                    @endforeach
-                                  </tbody>
-                                </table>
-                              </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <h3>Kapasitas DC yang Sudah Ada</h3>
-                                <table class="table table-bordered" id="data_dc">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">Tanggal.</th>
-                                      <th scope="col">Qty</th>
-                                      <th scope="col">Sisa</th>
-                                      <th scope="col">Status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    @foreach ($dc as $data)
-                                      <tr>
-                                        <td>{{ $data->tglKirimDt }}</td>
-                                        <td>{{ $data->qty }}</td>
-                                        <td>
-                                            <?php 
-                                                $sisa = 54000 - $data->qty;
-                                                if ($sisa < 0) {
-                                                    echo 0;
-                                                } else {
-                                                    echo $sisa;
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            @if ($data->qty <= 40000)
-                                                Tersedia
-                                            @elseif ($data->qty <= 54000)
-                                                Hampir Penuh
-                                            @else
-                                                Melebihi Batas
-                                            @endif
-                                        </td>
-                                      </tr>
-                                    @endforeach
-                                  </tbody>
-                                </table>
-                              </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -138,8 +65,8 @@
                                                 <label>NO KONTRAK</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="kodekontrak" id="kodekontrak" value="{{ $kontrak_M->kode }}">
-                                                {{-- <input type="hidden" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak_M->id }}"> --}}
+                                                <input type="text" class="form-control txt_line" name="kodekontrak" id="kodekontrak" value="{{ $kontrak->kontrakm->kode }}" readonly>
+                                                {{-- <input type="hidden" class="form-control txt_line" name="idkontrakm" id="idkontrakm" value="{{ $kontrak->kontrakm->id }}"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +80,7 @@
                                                 <label>Tanggal</label>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak_M->tglKontrak }}" autofocus >
+                                                <input type="date" class="form-control txt_line" name="tanggal" id="tanggal" value="{{ $kontrak->kontrakm->tglKontrak }}" autofocus >
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +94,7 @@
                                                 <label>Pilih Customer</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak_M->customer_name }}" readonly>
+                                                <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" value="{{ $kontrak->kontrakm->customer_name }}" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -183,7 +110,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 {{-- <input type="text" class="form-control txt_line" name="alamatKirim" id="alamatKirim"> --}}
-                                                <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak_M->alamatKirim }}</textarea>
+                                                <textarea name="alamatKirim" id="alamatKirim" cols="30" rows="4" value="">{{ $kontrak->kontrakm->alamatKirim }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -197,7 +124,7 @@
                                                 <label>Jumlah Order</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak_D->pcsKontrak }}">
+                                                <input type="text" class="form-control txt_line" name="telp" id="telp" value="{{ $kontrak->pcsKontrak }}">
                                             </div>
                                         </div>
                                     </div>
@@ -211,7 +138,7 @@
                                                 <label>Sisa Order</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="sisa" id="sisa" value="{{ $kontrak_D->pcsSisaKontrak }}">
+                                                <input type="text" class="form-control txt_line" name="sisa" id="sisa" value="{{ $kontrak->pcsSisaKontrak }}">
                                             </div>
                                         </div>
                                     </div>
@@ -225,7 +152,7 @@
                                                 <label>Sisa Kirim</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="sisa_kirim" id="sisa_kirim" value="{{ $kontrak_D->pcsSisaKirim }}">
+                                                <input type="text" class="form-control txt_line" name="sisa_kirim" id="sisa_kirim" value="{{ $kontrak->pcsSisaKirim }}">
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +166,7 @@
                                                 <label>Tipe Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak_D->tipebox }}">
+                                                <input type="text" class="form-control txt_line" name="tipebox" id="tipebox" value="{{ $kontrak->mc->tipeBox }}">
                                             </div>
                                         </div>
                                     </div>
@@ -253,8 +180,8 @@
                                                 <label>Berat Box</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak_D->berat }}">
-                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak_D->outConv }}">
+                                                <input type="text" class="form-control txt_line" name="berat" id="berat" value="{{ $kontrak->mc->gramSheetBoxKontrak2 }}">
+                                                <input type="hidden" class="form-control txt_line" name="outconv" id="outconv" value="{{ $kontrak->mc->outConv }}">
                                             </div>
                                         </div>
                                     </div>
@@ -273,32 +200,38 @@
                         </div>
                         <div class="col-md-6">
                             <h3>Tanggal Kirim DT dan OPI </h3>
-                            <table class="table table-bordered" id="detail_kontrak">
+                            <table class="table table-bordered table-sm" id="detail_kontrak">
                             <thead>
                                 <tr>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Jumlah</th>
-                                    <th scope="col">OPI</th>
-                                    <th scope="col">Running Meter</th>
-                                    <th scope="col">Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Jumlah</th>
+                                    <th>OPI</th>
+                                    <th>Running Meter</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($opi as $o)
-
                                 @php
                                     $qty = ($o->jumlahOrder) / $o->outConv ; 
                                     $outCorr = floor(2500/$o->lebarSheet);
                                     $cop = $qty / $outCorr;
-
                                     $rm = ($o->panjangSheet * $cop) / 1000;
                                 @endphp
                                 <tr>
-                                    <td scope="col">{{ $o->tglKirimDt }}</td>
-                                    <td scope="col">{{ $o->jumlahOrder }}</td>
-                                    <td scope="col">{{ $o->nama }}</td>
-                                    <td scope="col">{{ floor($rm) }}</td>
-                                    <td scope="col">{{ $o->status_opi }}</td>
+                                    <td>{{ $o->tglKirimDt }}</td>
+                                    <td>{{ number_format($o->jumlahOrder) }}</td>
+                                    <td>{{ $o->nama }}</td>
+                                    <td>{{ number_format(floor($rm)) }}</td>
+                                    <td>
+                                        @if($o->status_opi == 'Selesai')
+                                            <span class="badge badge-success">{{ $o->status_opi }}</span>
+                                        @elseif($o->status_opi == 'Proses')
+                                            <span class="badge badge-info">{{ $o->status_opi }}</span>
+                                        @else
+                                            <span class="badge badge-secondary">{{ $o->status_opi }}</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -314,7 +247,7 @@
                     </div>
                 </form>
                 <div class="col-md-6">
-                    <a href="{{ route('kontrak.recall',$kontrak_M->id) }}" type="button" class="btn btn-primary">Recall</a>
+                    <a href="{{ route('kontrak.recall',$kontrak->kontrakm->id) }}" type="button" class="btn btn-primary">Recall</a>
                 </div>
                 </div>
             </div>
@@ -325,87 +258,53 @@
 
 @section('javascripts')
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-
-    $("#detail_kontrak").DataTable({
-        "paging":   false,
-        "ordering": false,
-        "info":     false,
-        "searching": false,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        "initComplete": function (settings, json) {  
-            $("#detail_kontrak").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
-        },
-        // "scrollY": "400px",
-        select: true,
-    });
-
-    // Ambil nomer OPI dari backend saat tombol diklik
+<script>
+$(document).ready(function() {
+    // Event handler untuk modal OPI dengan optimasi
     $('.opi').on('click', function() {
-        var idkontrakm = "{{ $kontrak_M->id }}";
+        const btn = $(this);
+        btn.addClass('btn-loading');
+        
         $.ajax({
             url: "{{ route('nomer_opi') }}",
             type: "GET",
+            timeout: 5000, // 5 detik timeout
             success: function(response) {
-                // response.nomer_opi diasumsikan dikirim dari backend
-                console.log(response);
-                
                 $('#nomer_opi').val(response.nomer);
+                
+                // Set data lain
+                $('#idkontrakm').val("{{ $kontrak->kontrakm->id }}");
+                $('#kode').val("{{ $kontrak->kontrakm->kode }}");
+                $('#sisa').val($('#sisa').val());
+                $('#sisa_kirim').val($('#sisa_kirim').val());
             },
             error: function() {
-                alert('Gagal mengambil nomer OPI');
+                alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
+            },
+            complete: function() {
+                btn.removeClass('btn-loading');
             }
         });
-
-        // Set data lain jika diperlukan
-        var kode = "{{ $kontrak_M->kode }}";
-        var sisa = $('#sisa').val();
-        var sisa_kirim = $('#sisa_kirim').val();
-        $('#idkontrakm').val(idkontrakm);
-        $('#kode').val(kode);
-        $('#sisa').val(sisa);
-        $('#sisa_kirim').val(sisa_kirim);
     });
 
-    $("#data_b1").DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
-        "searching": true,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        // "scrollY": "400px",
-        select: true,
-    });
+    // Validation function yang dioptimasi
+    window.validateForm = function() {
+        const sisa = parseInt(document.getElementById("sisa").value) || 0;
+        const x = parseInt(document.getElementById("jumlahKirim").value) || 0;
+        const sisaKirim = parseInt(document.getElementById("sisa_kirim").value) || 0;
 
-    $("#data_dc").DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
-        "searching": true,
-        // "scrollX": true,
-        // "autoWidth": true, 
-        // "scrollY": "400px",
-        select: true,
-    });
-    
-    function validateForm() {
-        sisa = document.getElementById("sisa").value;
-        x = document.getElementById("jumlahKirim").value;
-        sisa_kirim = document.getElementById("sisa_kirim").value;
+        if (x > sisa || x > sisaKirim) {
+            alert("Masukkan Jumlah dibawah : " + Math.min(sisa, sisaKirim));
+            return false;
+        }
+        return true;
+    };
 
-        if (x > parseInt(sisa)) {
-            if (x > parseInt(sisa_kirim)) {
-                alert("Masukkan Jumlah dibawah : "+sisa_kirim);
-                return false;
-            } 
-        } 
-    }
-                        
+    // Lazy initialization dengan timeout untuk memastikan semua library loaded
+    setTimeout(() => {
+        initSelect2();
+        initDataTables();
+    }, 300);
+});
 </script>
-
 @endsection 

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin\Accounting;
 
 use App\Http\Controllers\Controller;
 use App\Imports\JurnalImport;
+use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
+use App\Models\Accounting\VendorTTDet;
+use App\Models\PurchaseOrder;
 use DateTime;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
@@ -192,14 +195,9 @@ class FinanceController extends Controller
         return view('admin.acc.piutang', compact('piutang'));
     }
 
-    // public function piutang()
-    // {
-    //     return view('admin.acc.piutang');
-    // }
-
-    public function get_piutang_cust(Request $request, $cust)
+    public function get_piutang_cust($cust)
     {
-        // if ($request->ajax()) {
+
             $piutang = Piutang::select(
                 'NoBukti',
                 'NoRef',
@@ -219,27 +217,6 @@ class FinanceController extends Controller
             ->orderBy('Tanggal', 'Asc')
             ->get();
 
-            // dd($piutang);
-
-            // return DataTables::of($piutang)
-            //     ->addColumn('total', function($piutang){ 
-            //         return number_format(round($piutang->sisa_piutang, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('terima', function($piutang){ 
-            //         return number_format(round($piutang->TotalTerima, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('totalrp', function($piutang){ 
-            //         return number_format(round($piutang->TotalRp, 2), 2, ',', '.');
-            //     })
-            //     ->addColumn('tanggal', function($piutang){ 
-            //         return date('d-m-Y', strtotime($piutang->Tanggal));
-            //     })
-            //     ->addColumn('tgljt', function($piutang){ 
-            //         return date('d-m-Y', strtotime($piutang->TglJT));
-            //     })
-            //     ->make(true);
-        // }
-
         $cust = DB::connection('firebird')->table('TCustomer')
             ->where('Kode', 'LIKE', '%'.trim($cust).'%')
             ->first();
@@ -247,5 +224,97 @@ class FinanceController extends Controller
         // dd($cust);
 
         return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
+    }    
+    
+    public function vendor_tt(Request $request)
+    {
+        try {
+            $vendortt = VendorTTDet::with('master_vend');
+
+            // Search filter - pencarian berdasarkan NoTT, BBMNo, InvNumber, PONumber
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $vendortt = $vendortt->where(function($query) use ($search) {
+                    $query->where('NoTT', 'LIKE', '%' . $search . '%')
+                          ->orWhere('BBMNo', 'LIKE', '%' . $search . '%')
+                          ->orWhere('InvNumber', 'LIKE', '%' . $search . '%')
+                          ->orWhere('PONumber', 'LIKE', '%' . $search . '%');
+                });
+            }
+
+            // Date range filter
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $dateStart = $request->date_start;
+                $dateEnd = $request->date_end;
+                
+                // Filter berdasarkan Tglterima dari tabel VendorTT
+                $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
+                    $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
+                });
+            }           
+
+            // Try ordering by TglTerima from VendorTT using raw SQL
+            try {
+                $vendortt = $vendortt->orderByRaw('(SELECT Tglterima FROM VendorTT WHERE VendorTT.NoTT = VendTTDet.NoTT) DESC')
+                                   ->paginate(20);
+            } catch (\Exception $orderException) {
+                // Fallback to ordering by NoTT if TglTerima query fails
+                $vendortt = $vendortt->orderBy('NoTT', 'desc')->paginate(20);
+            }
+
+        } catch (\Exception $e) {
+            // If there's any error, return empty collection
+            $vendortt = new \Illuminate\Pagination\LengthAwarePaginator(
+                collect([]), 0, 20, 1, [
+                    'path' => request()->url(),
+                    'pageName' => 'page',
+                ]
+            );
+        }        return view('admin.acc.vendor_tt', compact('vendortt'));
+    }    
+
+    public function update_po(Request $request)
+    {
+
+        if ($request->gudang_filter == 'Teknik') {
+            DB::connection('fbteknik')->beginTransaction();
+           $data = DB::connection('fbteknik')->table('TOPTK')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NoOP', 'WaktuBayar')
+            ->get();
+        } elseif ($request->gudang_filter == 'BP') {
+            DB::connection('fbbp')->beginTransaction();
+            $data = DB::connection('fbbp')->table('TOPConv')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NoOP', 'WaktuBayar')
+            ->get();
+        } elseif ($request->gudang_filter == 'Stationary') {
+            
+            DB::connection('stationary')->beginTransaction();
+            $data = DB::connection('stationary')->table('TOPStat')
+            ->where('Periode', 'LIKE', $request->periode_manual.'%')
+            ->select('NomerOP as NoOP', 'WaktuBayar')
+            ->get();
+        } else {
+            return redirect()->back()->with('error', 'Gudang filter tidak valid.');
+        }
+
+        // dd($data);
+
+        foreach ($data as $item) {
+            $po = PurchaseOrder::where('po_number', trim($item->NoOP))->first();
+            
+            if ($po) {
+                $po->top = $item->WaktuBayar;
+                $po->save();
+            } else {
+                $new = new PurchaseOrder();
+                $new->po_number = trim($item->NoOP);
+                $new->top = $item->WaktuBayar;
+                $new->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Data PO Teknik berhasil Synchronize.');
     }
 }

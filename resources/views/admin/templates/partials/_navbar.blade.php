@@ -6,7 +6,7 @@
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="index3.html" class="nav-link">Home</a>
+      <a href="/" class="nav-link">Home</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
       <a href="#" class="nav-link">Contact</a>
@@ -17,47 +17,39 @@
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
-    <div class="hidden sm:flex sm:items-center sm:ml-6">
-      <x-dropdown align="right" width="48">
-        <x-slot name="trigger">
-          <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-            <div>{{ Auth::user()->name }}</div>
-
-            <div class="ml-1">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </div>
-          </button>
-        </x-slot>
-
-        <x-slot name="content">
-          <!-- Authentication -->
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-              {{ __('Logout') }}
-            </x-dropdown-link>
-          </form>
-        </x-slot>
-      </x-dropdown>
-    </div>
+    <!-- User Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-user"></i> {{ Auth::user()->name }}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
+      </div>
+    </li>
+    
     @if (Auth::user()->divisi_id == 2)
+    <!-- Notifications Dropdown -->
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-          Notifications <span class="badge bg-danger" id="notificationCount">0</span>
+        <i class="fas fa-bell"></i> Notifications 
+        <span class="badge badge-danger" id="notificationCount">0</span>
       </a>
-      <ul class="dropdown-menu" aria-labelledby="notificationDropdown" id="notificationList">
-        <li>
-          <a href="{{ route('job.index') }}">See More</a>
-        </li>
-      </ul>
-      <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-      </ul>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notificationList">
+        <h6 class="dropdown-header">Notifications</h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ route('job.index') }}">
+          <i class="fas fa-eye"></i> See All Notifications
+        </a>
+      </div>
     </li>
     @endif
+    
+    <!-- Fullscreen Button -->
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
@@ -72,34 +64,49 @@
 </nav>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-        fetchNotifications();
+    fetchNotifications();
 
-        function fetchNotifications() {
-            fetch('/getnotif')
-                .then(response => response.json())
-                .then(data => {
-                    const notificationCount = document.getElementById('notificationCount');
-                    // const notificationList = document.getElementById('notificationList');
+    function fetchNotifications() {
+      fetch('/getnotif')
+        .then(response => response.json())
+        .then(data => {
+          const notificationCount = document.getElementById('notificationCount');
+          const notificationList = document.getElementById('notificationList');
 
-                    notificationCount.textContent = data.length;
-                    // notificationList.innerHTML = '';
+          notificationCount.textContent = data.length;
 
-                    if (data.length === 0) {
-                        notificationList.innerHTML = '<li><span class="dropdown-item">No new notifications</span></li>';
-                    } else {
-                        data.forEach(notif => {
-                            const item = document.createElement('li');
-                            item.innerHTML = `
-                                <a href="#" class="dropdown-item">
-                                    <strong>${notif.kode}</strong><br>
-                                    <small>${notif.pemohon}</small>
-                                </a>
-                            `;
-                            notificationList.appendChild(item);
-                        });
-                    }
-                });
-        }
-    });
+          // Clear existing notifications except header and see all link
+          const existingItems = notificationList.querySelectorAll('.notification-item');
+          existingItems.forEach(item => item.remove());
+
+          if (data.length === 0) {
+            const noNotifItem = document.createElement('span');
+            noNotifItem.className = 'dropdown-item-text notification-item';
+            noNotifItem.textContent = 'No new notifications';
+            // Insert before the divider
+            const divider = notificationList.querySelector('.dropdown-divider');
+            notificationList.insertBefore(noNotifItem, divider);
+          } else {
+            const divider = notificationList.querySelector('.dropdown-divider');
+            data.forEach(notif => {
+              const item = document.createElement('a');
+              item.className = 'dropdown-item notification-item';
+              item.href = '#';
+              item.innerHTML = `
+                <strong>${notif.kode}</strong><br>
+                <small class="text-muted">${notif.pemohon}</small>
+              `;
+              notificationList.insertBefore(item, divider);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching notifications:', error);
+        });
+    }
+
+    // Refresh notifications every 30 seconds
+    setInterval(fetchNotifications, 30000);
+  });
 </script>
 <!-- /.navbar -->

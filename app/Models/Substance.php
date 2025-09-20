@@ -27,4 +27,30 @@ class Substance extends Model
         'deletedAt',
         'deletedBy',
     ];
+
+    public function lineratas()
+    {
+        return $this->belongsTo(JenisGram::class, 'jenisGramLinerAtas_id', 'id');
+    }
+
+    public function flute1()
+    {
+        return $this->belongsTo(JenisGram::class, 'jenisGramFlute1_id', 'id');
+    }
+
+    public function linertengah()
+    {
+        return $this->belongsTo(JenisGram::class, 'jenisGramLinerTengah_id', 'id');
+    }
+
+    public function flute2()
+    {
+        return $this->belongsTo(JenisGram::class, 'jenisGramFlute2_id', 'id');
+    }
+
+    public function linerbawah()
+    {
+        return $this->belongsTo(JenisGram::class, 'jenisGramLinerBawah_id', 'id');
+    }
+
 }

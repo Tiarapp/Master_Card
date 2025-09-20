@@ -121,7 +121,7 @@
                                                     <label class="control-label">Design</label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input type="text" class="form-control txt_line" name="design" id="design" value="01" readonly>
+                                                    <input type="text" class="form-control txt_line" name="design" id="design" value="01" onchange="getKodeBarang()">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -146,6 +146,7 @@
                                                         <option value='10'>10 Koli</option>
                                                         <option value='20'>20 Koli</option>
                                                         <option value='25'>25 Koli</option>
+                                                        <option value='40'>40 Koli</option>
                                                         <option value='50'>50 Koli</option>
                                                         <option value='60'>60 Koli</option>
                                                         <option value='00'>100 Koli</option>
@@ -200,6 +201,7 @@
                                                 <div class="col-md-4">
                                                     <select class="js-example-basic-single col-md-12" name="satuan" id="satuan">
                                                         <option value='PCS'>PCS</option>
+                                                        <option value='KG'>KG</option>
                                                         <option value='SET'>SET</option>
                                                         <option value='ROLL'>ROLL</option>
                                                         <option value='BDL'>BUNDEL</option>

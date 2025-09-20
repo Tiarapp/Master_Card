@@ -52,7 +52,7 @@ class SuppliersController extends Controller
     {
         $supplier = Supplier::find($id);
 
-        return view('/admin/supplier/show',['supplier' => $supplier ]);
+        return response()->json($supplier);
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\BBM_Roll;
 use App\Models\Retur_BBK_Roll;
 use App\Models\Roll_D;
 use App\Models\Roll_M;
+use App\Models\RollInventory;
 use App\Models\SuppRoll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,18 +22,18 @@ class RollController extends Controller
      */
     public function index()
     {
-        $rolld = Roll_D::all();
+        $rollinventories = RollInventory::all();
 
         // dd($rolld->bbk);
 
-        return view('admin.roll.index', compact('rolld'));
+        return view('admin.roll.index', compact('rollinventories'));
     }
 
     public function indexBbm()
     {
-        $bbm = BBM_Roll::all();
+        // $bbm = BBM_Roll::all();
 
-        return view('admin.roll.indexbbm', compact('bbm'));
+        return view('admin.roll.indexbbm');
     }
 
     public function bbmRoll()

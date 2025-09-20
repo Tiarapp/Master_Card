@@ -1,13 +1,78 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
 
 <style>
-    .select2 {
-        width: 206px !important;
-    }
+/* Custom Select2 Styling */
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--bootstrap4 .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 0 !important;
+}
+
+.select2-container--bootstrap4 .select2-selection__rendered {
+    line-height: 36px !important;
+    padding-left: 12px !important;
+    padding-right: 20px !important;
+    color: #495057 !important;
+    font-size: 14px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection__arrow {
+    height: 36px !important;
+    right: 10px !important;
+    top: 1px !important;
+}
+
+.select2-container--bootstrap4 .select2-selection__arrow b {
+    border-color: #999 transparent transparent transparent !important;
+    border-style: solid !important;
+    border-width: 5px 4px 0 4px !important;
+    height: 0 !important;
+    left: 50% !important;
+    margin-left: -4px !important;
+    margin-top: -2px !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 0 !important;
+}
+
+.select2-container--bootstrap4.select2-container--open .select2-selection__arrow b {
+    border-color: transparent transparent #999 transparent !important;
+    border-width: 0 4px 5px 4px !important;
+}
+
+.select2-container--bootstrap4 .select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+}
+
+.select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    padding: 6px 12px !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option {
+    padding: 6px 12px !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.select2-container--bootstrap4.select2-container--focus .select2-selection--single {
+    border-color: #80bdff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
 </style>
 
 
@@ -189,100 +254,104 @@
             
             @endsection
             
-            @section('javascripts')
-            
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.js-example-basic-single').select2();
-                });
-                
-                // Split data Customer
-                function getCatatan1() {
-                    var jenis = document.getElementById("jenispalet").value;
+@section('javascripts')
+<!-- Select2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-                    if (jenis === "Kayu") {
-                        document.getElementById("catatan1").value = "PALET KAYU UNTUK MENGANGKUT BOX SJ NO : ";
-                    } else if (jenis == "Plastik") {
-                        document.getElementById("catatan1").value = "PALET PLASTIK UNTUK MENGANGKUT BOX SJ NO : ";
-                    }
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Initialize Select2
+        $('.js-example-basic-single').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            allowClear: false,
+            placeholder: 'Pilih...',
+            minimumResultsForSearch: 0
+        });
+    });
 
-                }
-                
-                function getCustomer() {
-                    var data = document.getElementById('listCust').value;
-                    
-                    var cust = data.split('|');
-                    var custNama = cust[0];
-                    var custAlamat = cust[1];
-                    
-                    document.getElementById('namaCustomer').value = custNama;
-                    document.getElementById('alamatCustomer').value = custAlamat;
-                }
+    // Split data Customer
+    function getCatatan1() {
+        var jenis = document.getElementById("jenispalet").value;
 
-                function getCatatan() {
-                    var catatan1 = document.getElementById("catatan1").value;
-                    var nosj = document.getElementById("nosj").value;
+        if (jenis === "Kayu") {
+            document.getElementById("catatan1").value = "PALET KAYU UNTUK MENGANGKUT BOX SJ NO : ";
+        } else if (jenis == "Plastik") {
+            document.getElementById("catatan1").value = "PALET PLASTIK UNTUK MENGANGKUT BOX SJ NO : ";
+        }
+    }
+    
+    function getCustomer() {
+        var data = document.getElementById('listCust').value;
+        
+        var cust = data.split('|');
+        var custNama = cust[0];
+        var custAlamat = cust[1];
+        
+        document.getElementById('namaCustomer').value = custNama;
+        document.getElementById('alamatCustomer').value = custAlamat;
+    }
 
-                    document.getElementById("catatan").value = catatan1 +nosj;
-                }
-                
-                // fungsi untuk mengisi otomatis ke input
-                function getData() {
-                    var data1 = document.getElementById("nama_1").value;
-                    var data2 = document.getElementById("nama_2").value;
-                    var data3 = document.getElementById("nama_3").value;
-                    var data4 = document.getElementById("nama_4").value;
-                    var data5 = document.getElementById("nama_5").value;
-                    
-                    if (data1 != '') {
-                        var arr1 = data1.split('|');
-                        var idpalet1 = arr1[0];
-                        var nama1 = arr1[1];
-                        var ukuran1 = arr1[2]; 
-                        document.getElementById("idpalet[1]").value = idpalet1;
-                        document.getElementById("nama[1]").value = nama1;
-                        document.getElementById("ukuran[1]").value = ukuran1;
-                    } 
-                    if (data2 != '') {
-                        var arr2 = data2.split('|');
-                        var idpalet2 = arr2[0];
-                        var nama2 = arr2[1];
-                        var ukuran2 = arr2[2]; 
-                        document.getElementById("idpalet[2]").value = idpalet2;
-                        document.getElementById("nama[2]").value = nama2;
-                        document.getElementById("ukuran[2]").value = ukuran2;
-                    } 
-                    if (data3 != '') {
-                        var arr3 = data3.split('|');
-                        var idpalet3 = arr3[0];
-                        var nama3 = arr3[1];
-                        var ukuran3 = arr3[2]; 
-                        document.getElementById("idpalet[3]").value = idpalet3;
-                        document.getElementById("nama[3]").value = nama3;
-                        document.getElementById("ukuran[3]").value = ukuran3;
-                    }
-                    if (data4 != '') {
-                        var arr4 = data4.split('|');
-                        var idpalet4 = arr4[0];
-                        var nama4 = arr4[1];
-                        var ukuran4 = arr4[2]; 
-                        document.getElementById("idpalet[4]").value = idpalet4;
-                        document.getElementById("nama[4]").value = nama4;
-                        document.getElementById("ukuran[4]").value = ukuran4;                        
-                    }
-                    if (data5 != '') {
-                        var arr5 = data5.split('|');
-                        var idpalet5 = arr5[0];
-                        var nama5 = arr5[1];
-                        var ukuran5 = arr5[2]; 
-                        document.getElementById("idpalet[5]").value = idpalet5;
-                        document.getElementById("nama[5]").value = nama5;
-                        document.getElementById("ukuran[5]").value = ukuran5;
-                    }
-                    
-                }
-                
-                
-            </script>
-            
-            @endsection
+    function getCatatan() {
+        var catatan1 = document.getElementById("catatan1").value;
+        var nosj = document.getElementById("nosj").value;
+
+        document.getElementById("catatan").value = catatan1 + nosj;
+    }
+    
+    // fungsi untuk mengisi otomatis ke input
+    function getData() {
+        var data1 = document.getElementById("nama_1").value;
+        var data2 = document.getElementById("nama_2").value;
+        var data3 = document.getElementById("nama_3").value;
+        var data4 = document.getElementById("nama_4").value;
+        var data5 = document.getElementById("nama_5").value;
+        
+        if (data1 != '') {
+            var arr1 = data1.split('|');
+            var idpalet1 = arr1[0];
+            var nama1 = arr1[1];
+            var ukuran1 = arr1[2]; 
+            document.getElementById("idpalet[1]").value = idpalet1;
+            document.getElementById("nama[1]").value = nama1;
+            document.getElementById("ukuran[1]").value = ukuran1;
+        } 
+        if (data2 != '') {
+            var arr2 = data2.split('|');
+            var idpalet2 = arr2[0];
+            var nama2 = arr2[1];
+            var ukuran2 = arr2[2]; 
+            document.getElementById("idpalet[2]").value = idpalet2;
+            document.getElementById("nama[2]").value = nama2;
+            document.getElementById("ukuran[2]").value = ukuran2;
+        } 
+        if (data3 != '') {
+            var arr3 = data3.split('|');
+            var idpalet3 = arr3[0];
+            var nama3 = arr3[1];
+            var ukuran3 = arr3[2]; 
+            document.getElementById("idpalet[3]").value = idpalet3;
+            document.getElementById("nama[3]").value = nama3;
+            document.getElementById("ukuran[3]").value = ukuran3;
+        }
+        if (data4 != '') {
+            var arr4 = data4.split('|');
+            var idpalet4 = arr4[0];
+            var nama4 = arr4[1];
+            var ukuran4 = arr4[2]; 
+            document.getElementById("idpalet[4]").value = idpalet4;
+            document.getElementById("nama[4]").value = nama4;
+            document.getElementById("ukuran[4]").value = ukuran4;                        
+        }
+        if (data5 != '') {
+            var arr5 = data5.split('|');
+            var idpalet5 = arr5[0];
+            var nama5 = arr5[1];
+            var ukuran5 = arr5[2]; 
+            document.getElementById("idpalet[5]").value = idpalet5;
+            document.getElementById("nama[5]").value = nama5;
+            document.getElementById("ukuran[5]").value = ukuran5;
+        }
+    }
+</script>
+@endsection

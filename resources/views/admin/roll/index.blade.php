@@ -42,61 +42,67 @@
     @endif
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
-      
-      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">
-        <a href="{{ route('roll.bbm') }}" style="margin-bottom: 20px; color:white;" >BBM Roll</a>
-      </button>
       <div class="card-body">
         <table class="table table-bordered" id="data_planconv">
           <thead>
             <tr>
               {{-- <th scope="col">No.</th> --}}
-              <th scope="col">Kode Roll</th>
+              <th scope="col">Tanggal</th>
               <th scope="col">Kode Internal</th>
-              <th scope="col">Nama Roll</th>
-              <th scope="col">Gram</th>
+              <th scope="col">Jenis</th>
+              <th scope="col">Kode Roll</th>
+              <th scope="col">Gsm</th>
               <th scope="col">Lebar</th>
-              <th scope="col" style="width: 100px">BBM (Kg)</th>
-              <th scope="col" style="width: 100px">BBK (Kg)</th>
-              <th scope="col" style="width: 100px">Retur BBK (Kg)</th>
+              <th scope="col">Berat SJ</th>
+              <th scope="col">Berat Timbang</th>
               <th scope="col">Stok (Kg)</th>
               <th scope="col">Supplier</th>
+              <th scope="col">No PO</th>
+              <th scope="col">Warna</th>
+              <th scope="col">Keterangan</th>
+              <th scope="col">Kolom</th>
+              <th scope="col">Gsm Act</th>
+              <th scope="col">Persent Gsm</th>
+              <th scope="col">Cobsize Top</th>
+              <th scope="col">Cobsize Back</th>
+              <th scope="col">RCT CD</th>
+              <th scope="col">RCT MD</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-              <?php foreach ($rolld as $data) { ?>
-            <tr>
-                <td scope="col">{{ $data->kode_roll }}</td>
-                <td scope="col">{{ $data->kode_internal }}</td>
-                <td scope="col">{{ $data->rollMaster->nama }}</td>
-                <td scope="col">{{ $data->rollMaster->gram }}</td>
-                <td scope="col">{{ $data->rollMaster->lebar }}</td>
-                <td scope="col" style="width: 100px"><li>{{ $data->bbm->berat_timbang }} <br> ({{ $data->bbm->tgl_bbm }}) </li></td>
-                <td scope="col" style="width: 100px">
-                  <?php foreach ($data->bbk as $bbk) { ?>
-                    <li>{{ $bbk->bbk }} <br> ({{ $bbk->tgl_bbk }}) </li>
-                  <?php } ?>
-                </td>
-                <td scope="col" style="width: 100px">
-                  <?php foreach ($data->returbbk as $retur) { ?>
-                    <li>{{ $retur->qty_retur }} <br> ({{ $retur->tgl_retur }}) </li>
-                  <?php } ?>
-                </td>
-                <td scope="col">{{ $data->stok }}</td>
-                <td scope="col">{{ $data->supp->name }}</td>
-                <td scope="col">
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                        <a href="../admin/roll/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                        <a href="../admin/roll/bbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">BBK</a>
-                        <a href="../admin/roll/returbbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Retur</a>
-                      {{-- <a href="../opname/sheet/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
-                    </div>
-                  </div>
-                </td>
-            </tr>
-              <?php } ?>
+              @foreach ($rollinventories as $rollinventory )
+                <tr>
+                  <td>{{ $rollinventroy->tanggal }}</td>
+                  <td>{{ $rollinventory->kode_internal }}</td>
+                  <td>{{ $rollinventory->jenis }}</td>
+                  <td>{{ $rollinventory->kode_roll }}</td>
+                  <td>{{ $rollinventory->gsm }}</td>
+                  <td>{{ $rollinventory->lebar }}</td>
+                  <td>{{ $rollinventory->berat_sj }}</td>
+                  <td>{{ $rollinventory->berat_timbang }}</td>
+                  <td>{{ $rollinventory->stok }}</td>
+                  <td>{{ $rollinventory->supplier->nama }}</td>
+                  <td>{{ $rollinventory->no_po }}</td>
+                  <td>{{ $rollinventory->warna }}</td>
+                  <td>{{ $rollinventory->keterangan }}</td>
+                  <td>{{ $rollinventory->kolom }}</td>
+                  <td>{{ $rollinventory->gsm_act }}</td>
+                  <td>{{ $rollinventory->persent_gsm }}</td>
+                  <td>{{ $rollinventory->cobsize_top }}</td>
+                  <td>{{ $rollinventory->cobsize_back }}</td>
+                  <td>{{ $rollinventory->rct_cd }}</td>
+                  <td>{{ $rollinventory->rct_md }}</td>
+                  <td>
+                    <a href="{{ route('roll.edit', $rollinventory->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    <form action="{{ route('roll.destroy', $rollinventory->id) }}" method="POST" style="display:inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              @endforeach
           </tbody>
         </table>
       </div>
@@ -116,7 +122,7 @@
     };
     $(function(){
       $('#data_planconv').DataTable({
-        // "scrollY": "auto",
+        "scrollY": "true",
       })
     });
   </script>

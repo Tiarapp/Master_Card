@@ -21,7 +21,7 @@ class CreateKontrakmTable extends Migration
             $table->string('customer_name')->index();            //Ambil dari TBLCustomer
             $table->string('custTelp')->index()->nullable();     //Input Marketing
             $table->string('poCustomer')->index()->nullable();               //Input Marketing
-            $table->text('top')->index();                //Input Marketing
+            $table->string('top')->index();                //Input Marketing
             $table->enum('caraKirim',['Kirim','Ambil Sendiri'])->nullable();    //Input Marketing
             $table->text('alamatKirim');                         //Input Marketing
             $table->text('alamatKantor')->nullable();            //Input Marketing
@@ -37,11 +37,12 @@ class CreateKontrakmTable extends Migration
             // $table->integer('sisaPlafon')->nullable();              //Next Auto Sisa Plafon per customer - amount
             // $table->string('status')->nullable()->index();          //Auto (Finish/Kurang xxx pcs)
             $table->boolean('lock')->default(FALSE);                //AUTO
-            $table->text('sales')->nullable()->index();   //INPUT MARKETING
+            $table->string('sales')->nullable()->index();   //INPUT MARKETING
             $table->foreignId('mataUang')->nullable();                          //INPUT MARKETING
             $table->enum('tipe_harga',['PCS','KG'])->default('PCS')->index()->comment('PCS/KG');
             $table->enum('inExTax',['Include','Exclude'])->index()->nullable(); //Input Marketing
             $table->enum('tipeOrder',['Order Baru','Order Ulang','Order Ulang Perubahan'])->index();
+            $table->string('status')->nullable();              //Input Marketing
 
             //RELATION
             $table->foreign('mataUang')->references('id')->on('mata_uang')->cascadeOnDelete();

@@ -21,6 +21,7 @@ class BoxController extends Controller
     // Tampilkan Halaman Awal
     public function index(Request $request)
     {
+        // dd(phpinfo());
         if ($request->ajax()) {
             $box = Box::query();
             return DataTables::of($box)

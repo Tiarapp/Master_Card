@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\OpiExport;
+use App\Exports\VendorTTExport;
 use App\Http\Controllers\Admin\Accounting\FinanceController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Converting\ConvertingController;
@@ -10,19 +12,28 @@ use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Kontrak_DController;
 use App\Http\Controllers\Marketing\FormMc;
 use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
+use App\Http\Controllers\MastercardController;
+use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
+use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
+use App\Models\Accounting\VendorTT;
+use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
 use App\Models\Kontrak_M;
 use App\Models\Opi_M;
 use App\Models\RealisasiKirim;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Row;
 
 /*
@@ -97,6 +108,10 @@ Route::get('/admin', function () {
 
 
 Route::middleware(['auth'])->group(function (){
+    
+    // API routes for BBK Roll functionality
+    Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
+    Route::get('/api/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'getInventoryDetails'])->name('api.inventories.details');
     
     //Satuan
     Route::get('/admin/satuans', 'SatuansController@index')->name('satuan');
@@ -260,6 +275,7 @@ Route::middleware(['auth'])->group(function (){
     
     //Barang Jadi
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
+    Route::get('/admin/barang/new', 'BarangController@indexnew')->name('barang.indexnew');
     Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
     Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
     Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
@@ -272,7 +288,7 @@ Route::middleware(['auth'])->group(function (){
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
         Route::get('/json', 'MastercardController@json')->name('json');
-        Route::get('/get_data', 'MastercardController@get_mc_all')->name('get_data');
+        Route::get('/get_data', 'MastercardController@select_view')->name('get_data');
         Route::get('/', 'MastercardController@indexb1')->middleware(['auth'])->name('b1');
         Route::get('/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
         Route::get('/create', 'MastercardController@create')->name('create');
@@ -282,7 +298,10 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
         Route::post('/update', 'MastercardController@update')->name('update');
         Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
+        Route::get('/show/{id}', [MastercardController::class, 'single'])->name('show');
     });
+
+    Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');
 
     //Converting
     
@@ -306,6 +325,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
 
+    Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
+
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
     Route::get('/admin/dt/edit/{id}', 'DTController@edit')->name('dt.edit');
@@ -324,6 +345,74 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/cancel/{id}', 'OpiController@cancel')->name('opi.cancel');
     Route::get('/admin/opi/closed/{id}', 'OpiController@closed')->name('opi.closed');
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
+
+    Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
+    Route::get('/vendortt/export', function (Request $request){
+            $vendortt = VendorTTDet::with('master_vend');
+            // dd($request->all());
+            // Search filter - pencarian berdasarkan NoTT, BBMNo, InvNumber, PONumber
+            if ($request->search) {
+                $search = $request->search;
+                $vendortt = $vendortt->where(function($query) use ($search) {
+                    $query->where('NoTT', 'LIKE', '%' . $search . '%')
+                          ->orWhere('BBMNo', 'LIKE', '%' . $search . '%')
+                          ->orWhere('InvNumber', 'LIKE', '%' . $search . '%')
+                          ->orWhere('PONumber', 'LIKE', '%' . $search . '%');
+                });
+            }
+
+            // Date range filter
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $dateStart = $request->date_start;
+                $dateEnd = $request->date_end;
+                
+                // Filter berdasarkan Tglterima dari tabel VendorTT
+                $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
+                    $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
+                });
+            }
+            $fileName = 'VendorTT_';
+            
+            if ($request->filled('date_start') && $request->filled('date_end')) {
+                $fileName .= date('Ymd', strtotime($request->date_start)) . '_to_' . date('Ymd', strtotime($request->date_end));
+            } elseif ($request->filled('periode_manual')) {
+                $fileName .= str_replace(['-', ' '], '_', $request->periode_manual);
+            } else {
+                $fileName .= date('Ymd');
+            }
+            
+            if ($request->filled('gudang_filter')) {
+                $fileName .= '_' . strtolower($request->gudang_filter);
+            }
+            
+            $fileName .= '_' . now()->format('His') . '.xlsx';
+            
+            return Excel::download(new VendorTTExport($vendortt), $fileName);
+    })->name('acc.vendor_tt.export');
+    Route::get('/opi/export', function (Request $request) {
+        $page = $request->input('page', 1);
+        $opi = Opi_M::where('status_opi', '!=', 'CANCEL');
+
+        if($request->search) {
+            $opi->where(function($query) use ($request) {
+                $query->whereHas('kontrakm', function($q) use ($request) {
+                    $q->where('customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+                })
+                ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
+                ->orWhereHas('mc', function($q) use ($request) {
+                    $q->where('kode', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+                });
+            });
+        }
+
+        $opi = $opi->orderBy('id', 'desc')
+            ->paginate(50, ['*'], 'page', $page);
+        // dd($opi);
+        return Excel::download(new OpiExport($opi), 'opi.xlsx');
+    })->name('opi.export');
     
     Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
     Route::post('/approve', function (Request $request) {
@@ -409,8 +498,10 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
-        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
+        Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
+        
         
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -421,6 +512,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/admin/data/sync_fa', [PaletController::class, 'sync_fa'])->name('sync_fa');
         Route::get('admin/cust/single/{id}', [CustomerController::class, 'single_cust'])->name('data.custsingle');
         Route::post('admin/cust/print', [CustomerController::class, 'print_cust'])->name('cust.print');
+
+        Route::get('customer/getdata', [Kontrak_DController::class, 'customer_select'])->name('kontrak.cust');
+        Route::get('customer/getdata/{search}', [Kontrak_DController::class, 'customer_search'])->name('kontrak.cust.search');
 
         Route::get('admin/periode', function () {
             $kirim = RealisasiKirim::select('realisasi_kirim.tanggal_kirim', 'realisasi_kirim.id', DB::raw('DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
@@ -459,6 +553,12 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/po/id/{id}', [BbmRollController::class, 'getDetPoById'])->name('fb.get.byid');
         Route::get('admin/po', [BbmRollController::class, 'getPurchaseOrderAll'])->name('fb.get.poall');
         Route::get('admin/getSupp', [BbmRollController::class, 'getSupp'])->name('get.supp');
+
+        Route::get('admin/fb/bp', [BarangController::class, 'teknik'])->name('fb.list.bp');
+        Route::post('admin/fb/bp/mutasi/', [BarangController::class, 'get_mutasi_bp'])->name('fb.bp.mutasi');
+        Route::get('admin/fb/bp-lama', [BarangController::class, 'bp_lama'])->name('fb.list.bp_lama');
+        Route::post('admin/fb/bp/mutasi-lama/', [BarangController::class, 'get_mutasi_bp_lama'])->name('fb.bp_lama.mutasi');
+
 
     // Teknik
         Route::get('admin/fb/getbarang', [BarangTeknikController::class, 'getBarang'])->name('fb.get.teknik');
@@ -511,8 +611,69 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 
         Route::get('/nomer_opi', [SettingController::class, 'get_opi'])->name('nomer_opi');
+
+
+        // Inventory Management
+        Route::get('/inventory/summary', 'InventoryController@summary')->name('admin.inventory.summary');
+        Route::get('/inventory/import/update', 'InventoryController@showImportUpdate')->name('inventory.import.update.form');
+        Route::post('/inventory/import/update-rgb', 'InventoryController@importUpdateWithRgb')->name('inventory.import.update.rgb');
+        Route::get('/inventory/import/template', 'InventoryController@downloadTemplate')->name('inventory.import.template');
+        Route::get('/inventory/import/inventory', 'InventoryController@showImportInventory')->name('inventory.import.inventory.form');
+        Route::post('/inventory/import/inventory', 'InventoryController@importInventory')->name('inventory.import.inventory');
+        Route::get('/inventory/import/inventory-template', 'InventoryController@downloadInventoryTemplate')->name('inventory.import.inventory.template');
+        Route::resource('/inventory', 'InventoryController');
+        Route::resource('/jenis-roll', 'JenisRollController');
+        Route::resource('/lebar-roll', 'LebarRollController');
+        Route::resource('/supplier-roll', 'SupplierRollController');
+        
+        // Potongan Management
+        Route::resource('/potongan', 'PotongController');
+        
+        // BBK Roll Management
+        Route::resource('/bbk-roll', 'BbkRollController');
+        Route::get('/api/bbk-roll/generate-number', 'BbkRollController@generateBbkNumber')->name('bbk-roll.generate-number');
+        Route::get('/api/bbk-roll/inventory/{id}/details', 'BbkRollController@getInventoryDetails')->name('bbk-roll.inventory.details');
+        
+        // BBK Roll Group Operations
+        Route::get('/bbk-roll/group/{bbkNumber}/show', 'BbkRollController@showGroup')->name('bbk-roll.show-group');
+        Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
+        Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
+        Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
+        
+        // BBK Roll Individual Item Operations
+        Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
 }); 
 
+// Feedback Routes
+Route::middleware(['auth'])->group(function () {
+    // Admin Feedback Management
+    Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
+        Route::get('/', [FeedbackController::class, 'index'])->name('index');
+        Route::get('/create', [FeedbackController::class, 'create'])->name('create');
+        Route::post('/store', [FeedbackController::class, 'store'])->name('store');
+        Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
+        Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
+        Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
+    });
+    
+    // Public feedback submission (can be accessed by any authenticated user)
+    Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
+});
 
+// Hardware Template Download (Public access)
+Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
+
+// Artisan command for export (public access for simplicity)
+Route::get('artisan/hardware-export', function() {
+    Artisan::call('hardware:export');
+    return response()->json(['success' => true, 'message' => 'Export completed']);
+});
+
+// Hardware Management Routes (Divisi ID 2 only)
+Route::middleware(['auth'])->group(function () {
+    Route::resource('hardware', 'HardwareController');
+    Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
+    Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
+});
 
 require __DIR__ . '/auth.php';

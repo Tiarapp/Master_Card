@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PersediaanBj;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class BarangController extends Controller
@@ -77,6 +78,54 @@ class BarangController extends Controller
             }
 
         return view('admin.fg.barang.index');
+    }
+
+    public function indexnew(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+        $periode = date("m/Y");
+        
+        $query = DB::connection('firebird2')->table('TPersediaan')
+            ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+            ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
+            ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%");
+
+        // Handle search - support multiple words with OR logic
+        if ($request->has('search') && !empty($request->search)) {
+            $search = strtoupper(trim($request->search));
+            
+            // Split search into individual words
+            $searchWords = explode(' ', $search);
+            
+            // Debug: Log the search parameters
+            Log::info('Search parameters:', [
+                'original_search' => $request->search,
+                'processed_search' => $search,
+                'search_words' => $searchWords
+            ]);
+            
+            $query->where(function($q) use ($searchWords, $search) {
+                // First, try to match the full search string
+                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+                
+                // Then, try to match individual words with OR logic
+                foreach ($searchWords as $word) {
+                    $word = trim($word);
+                    if (!empty($word) && strlen($word) > 1) {
+                        $q->orWhere('TPersediaan.KodeBrg', 'LIKE', '%'.$word.'%')
+                          ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$word.'%');
+                    }
+                }
+            });
+            
+            // Debug: Log the final query
+            Log::info('Final query SQL:', ['query' => $query->toSql()]);
+        }
+
+        $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);
+
+        return view('admin.fg.barang.indexnew', compact('barang'));
     }
 
     /**
@@ -362,5 +411,375 @@ class BarangController extends Controller
 
         dd($data);
         
+    }
+
+    // Barang BP
+
+    public function teknik(Request $request)
+    {
+        DB::connection('fbbp')->beginTransaction();
+        $periode = date("m/Y");
+        $barang = DB::connection('fbbp')->table('TPersediaanConv')
+        ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
+        ->select('TPersediaanConv.KodeBrg', 'TBarang.NamaBrg', 'TPersediaanConv.SaldoAkhirP as SaldoPrimer', 'TPersediaanConv.SaldoAkhirS as SaldoSekunder', 'TPersediaanConv.Periode', 'TBarang.NilaiKonversi', 'TBarang.SatuanP', 'TBarang.SatuanS')
+        ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
+        ->orderBy('TPersediaanConv.KodeBrg', 'asc')->get();
+
+        if ($request->ajax()) {
+                return DataTables::of($barang)
+                        ->addColumn('action', function($barang) {
+                            return '<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="'.$barang->KodeBrg.'">Cek Mutasi</button>
+                            
+                            <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <form action="'.route('fb.bp.mutasi').'" method="POST">'.
+                                        csrf_field().'
+                                        <div class="modal-body">
+                                            <label for="">Periode</label>
+                                            <input type="text" name="periode" id="periode" >
+                                            <input type="hidden" name="kodebarang" id="kodebarang">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>';
+                        })
+                        ->addColumn('saldo_pcs', function($barang) {
+                            return number_format($barang->SaldoPrimer, 0);
+                        })
+                        ->addColumn('saldo_kg', function($barang) {
+                            return number_format($barang->SaldoSekunder, 2);
+                        })
+                        ->addColumn('berat', function($barang) {
+                            return number_format($barang->NilaiKonversi, 2);
+                        })
+                        ->make(true);
+            }
+
+        return view('admin.barangpembantu.index');
+    }
+
+    public function get_mutasi_bp(Request $request)
+    {
+        DB::connection('fbbp')->beginTransaction();
+        $result = [];
+        $supplier = [];
+
+        $barang = DB::connection('fbbp')->table('TBarang')->where('KodeBrg', '=', $request->kodebarang)->first();
+        $persediaan = DB::connection('fbbp')->table('TPersediaanConv')->where('KodeBrg', '=', $request->kodebarang)
+        ->where('TPersediaanConv.Periode', 'LIKE', "%".$request->periode."%")
+        ->select('SaldoAwalP', 'SaldoAwalS', 'Periode as period', 'SaldoAkhirP', 'SaldoAkhirS')
+        ->first();
+
+        $bbm = DB::connection('fbbp')->table('TDetBBMConv')
+            ->leftJoin('TBBMConv', 'TDetBBMConv.NoBBM', '=', 'TBBMConv.NoBukti')
+            ->leftJoin('TOPConv', 'TDetBBMConv.NoOP', '=', 'TOPConv.NoOP')
+            ->select(
+                'TDetBBMConv.*',
+                'TBBMConv.Periode',
+                'TBBMConv.TglMasuk',
+                'TBBMConv.Keterangan',
+                'TOPConv.KodeSupp'
+            )
+            ->where('TDetBBMConv.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+            ->where('TBBMConv.Periode', 'LIKE', "%".$request->periode."%")
+            ->get();
+
+        foreach ($bbm as $data) {
+            $searchsupp = '';
+            $searchsupp = DB::connection('firebird')->table('TSupplier')
+            ->where('Kode', '=', $data->KodeSupp)->first();
+
+            $supplier[] = $searchsupp->Nama;
+        }
+            
+        $returbbk = DB::connection('fbbp')->table('TDetReturProd')
+        ->leftJoin('TReturProd', 'TDetReturProd.NoBBK', '=', 'TReturProd.NoBukti')
+        ->select('TDetReturProd.*', 'TReturProd.Periode', 'TReturProd.TglRetur', 'TReturProd.Keterangan')
+        ->where('TDetReturProd.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TReturProd.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        $bbk = DB::connection('fbbp')->table('TDetBBKConv')
+        ->leftJoin('TBBKConv', 'TDetBBKConv.NoBukti', '=', 'TBBKConv.NoBukti')
+        ->select('TDetBBKConv.*', 'TBBKConv.Periode', 'TBBKConv.TglKeluar', 'TBBKConv.Keterangan')
+        ->where('TDetBBKConv.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TBBKConv.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        $returbbm = DB::connection('fbbp')->table('TDetReturBBM')
+        ->leftJoin('TReturBBM', 'TDetReturBBM.NoRetur', '=', 'TReturBBM.NoBukti')
+        ->select('TDetReturBBM.*', 'TReturBBM.Periode', 'TReturBBM.TglRetur', 'TReturBBM.Keterangan', 'TReturBBM.KodeSupp')
+        ->where('TDetReturBBM.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TReturBBM.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        // dd($php);
+
+        if ($bbm) {
+            foreach ($bbm as $data) {
+
+                $searchsupp = DB::connection('firebird')->table('TSupplier')
+                    ->where('Kode', '=', $data->KodeSupp)->first();
+                
+                $nestedData["tanggal"] = $data->TglMasuk;
+                $nestedData["nobukti"] = $data->NoBBM;
+                $nestedData["masukp"] =$data->QtyP;
+                $nestedData["masuks"] =$data->QtyS;
+                $nestedData["keluarp"] = 0;
+                $nestedData["keluars"] = 0;
+                $nestedData["keterangan"] = trim($data->Keterangan). " - ".$searchsupp->Nama;
+
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($returbbk) {
+            foreach ($returbbk as $data) {
+                
+                $nestedData["tanggal"] = $data->TglRetur;
+                $nestedData["nobukti"] = $data->NoBukti;
+                $nestedData["masukp"] =$data->QtyP;
+                $nestedData["masuks"] =$data->QtyS;
+                $nestedData["keluarp"] = 0;
+                $nestedData["keluars"] = 0;
+                $nestedData["keterangan"] = $data->Keterangan." - ".$data->NoBBK;
+
+                $result[] = $nestedData;
+            }
+        } 
+
+
+        if ($bbk) {
+            foreach ($bbk as $data) {
+                $nestedData["tanggal"] = $data->TglKeluar;
+                $nestedData["nobukti"] = $data->NoBukti;
+                $nestedData["keluarp"] = $data->QtyP;
+                $nestedData["keluars"] = $data->QtyS;
+                $nestedData["masukp"] = 0;
+                $nestedData["masuks"] = 0;
+                $nestedData["keterangan"] = $data->Keperluan ." - ". $data->Keterangan;
+                
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($returbbm) {
+            foreach ($returbbm as $data) {
+                $searchsupp = DB::connection('firebird')->table('TSupplier')
+                    ->where('Kode', '=', $data->KodeSupp)->first();
+
+                    $nestedData["tanggal"] = $data->TglRetur;
+                    $nestedData["nobukti"] = $data->NoBukti;
+                    $nestedData["masukp"] = 0;
+                    $nestedData["masuks"] = 0;
+                    $nestedData["keluarp"] =$data->QtyP;
+                    $nestedData["keluars"] =$data->QtyS;
+                    $nestedData["keterangan"] = $data->Keterangan." - ".$searchsupp->Nama ." - ".$data->NoBBM;
+    
+                    
+                $result[] = $nestedData;
+
+            }
+        }
+
+        return view('admin.barangpembantu.mutasi', compact('result', 'barang', 'persediaan'));
+
+    }
+
+    public function bp_lama(Request $request)
+    {
+        DB::connection('fbbp-lama')->beginTransaction();
+        $periode = "07/2025";
+        $barang = DB::connection('fbbp-lama')->table('TPersediaanConv')
+        ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
+        ->select('TPersediaanConv.KodeBrg', 'TBarang.NamaBrg', 'TPersediaanConv.SaldoAkhirP as SaldoPrimer', 'TPersediaanConv.SaldoAkhirS as SaldoSekunder', 'TPersediaanConv.Periode', 'TBarang.NilaiKonversi', 'TBarang.SatuanP', 'TBarang.SatuanS')
+        ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
+        ->orderBy('TPersediaanConv.KodeBrg', 'asc')->get();
+
+        if ($request->ajax()) {
+                return DataTables::of($barang)
+                        ->addColumn('action', function($barang) {
+                            return '<button type="button" class="btn btn-primary mutasi" data-toggle="modal" data-target="#exampleModalCenter" value="'.$barang->KodeBrg.'">Cek Mutasi</button>
+                            
+                            <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <form action="'.route('fb.bp_lama.mutasi').'" method="POST">'.
+                                        csrf_field().'
+                                        <div class="modal-body">
+                                            <label for="">Periode</label>
+                                            <input type="text" name="periode" id="periode" >
+                                            <input type="hidden" name="kodebarang" id="kodebarang">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>';
+                        })
+                        ->addColumn('saldo_pcs', function($barang) {
+                            return number_format($barang->SaldoPrimer, 0);
+                        })
+                        ->addColumn('saldo_kg', function($barang) {
+                            return number_format($barang->SaldoSekunder, 2);
+                        })
+                        ->addColumn('berat', function($barang) {
+                            return number_format($barang->NilaiKonversi, 2);
+                        })
+                        ->make(true);
+            }
+
+        return view('admin.barangpembantu.indexlama');
+    }
+
+    public function get_mutasi_bp_lama(Request $request)
+    {
+        DB::connection('fbbp-lama')->beginTransaction();
+        $result = [];
+        $supplier = [];
+
+        $barang = DB::connection('fbbp-lama')->table('TBarang')->where('KodeBrg', '=', $request->kodebarang)->first();
+        $persediaan = DB::connection('fbbp-lama')->table('TPersediaanConv')->where('KodeBrg', '=', $request->kodebarang)
+        ->where('TPersediaanConv.Periode', 'LIKE', "%".$request->periode."%")
+        ->select('SaldoAwalP', 'SaldoAwalS', 'Periode as period', 'SaldoAkhirP', 'SaldoAkhirS')
+        ->first();
+
+        $bbm = DB::connection('fbbp-lama')->table('TDetBBMConv')
+            ->leftJoin('TBBMConv', 'TDetBBMConv.NoBBM', '=', 'TBBMConv.NoBukti')
+            ->leftJoin('TOPConv', 'TDetBBMConv.NoOP', '=', 'TOPConv.NoOP')
+            ->select(
+                'TDetBBMConv.*',
+                'TBBMConv.Periode',
+                'TBBMConv.TglMasuk',
+                'TBBMConv.Keterangan',
+                'TOPConv.KodeSupp'
+            )
+            ->where('TDetBBMConv.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+            ->where('TBBMConv.Periode', 'LIKE', "%".$request->periode."%")
+            ->get();
+
+        foreach ($bbm as $data) {
+            $searchsupp = '';
+            $searchsupp = DB::connection('firebird')->table('TSupplier')
+            ->where('Kode', '=', $data->KodeSupp)->first();
+
+            $supplier[] = $searchsupp->Nama;
+        }
+            
+        $returbbk = DB::connection('fbbp-lama')->table('TDetReturProd')
+        ->leftJoin('TReturProd', 'TDetReturProd.NoBBK', '=', 'TReturProd.NoBukti')
+        ->select('TDetReturProd.*', 'TReturProd.Periode', 'TReturProd.TglRetur', 'TReturProd.Keterangan')
+        ->where('TDetReturProd.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TReturProd.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        $bbk = DB::connection('fbbp-lama')->table('TDetBBKConv')
+        ->leftJoin('TBBKConv', 'TDetBBKConv.NoBukti', '=', 'TBBKConv.NoBukti')
+        ->select('TDetBBKConv.*', 'TBBKConv.Periode', 'TBBKConv.TglKeluar', 'TBBKConv.Keterangan')
+        ->where('TDetBBKConv.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TBBKConv.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        $returbbm = DB::connection('fbbp-lama')->table('TDetReturBBM')
+        ->leftJoin('TReturBBM', 'TDetReturBBM.NoRetur', '=', 'TReturBBM.NoBukti')
+        ->select('TDetReturBBM.*', 'TReturBBM.Periode', 'TReturBBM.TglRetur', 'TReturBBM.Keterangan', 'TReturBBM.KodeSupp')
+        ->where('TDetReturBBM.KodeBrg', 'LIKE', "%".$request->kodebarang."%")
+        ->where('TReturBBM.Periode', 'LIKE', "%".$request->periode."%")
+        ->get();
+
+        // dd($php);
+
+        if ($bbm) {
+            foreach ($bbm as $data) {
+
+                $searchsupp = DB::connection('firebird')->table('TSupplier')
+                    ->where('Kode', '=', $data->KodeSupp)->first();
+                
+                $nestedData["tanggal"] = $data->TglMasuk;
+                $nestedData["nobukti"] = $data->NoBBM;
+                $nestedData["masukp"] =$data->QtyP;
+                $nestedData["masuks"] =$data->QtyS;
+                $nestedData["keluarp"] = 0;
+                $nestedData["keluars"] = 0;
+                $nestedData["keterangan"] = trim($data->Keterangan). " - ".$searchsupp->Nama;
+
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($returbbk) {
+            foreach ($returbbk as $data) {
+                
+                $nestedData["tanggal"] = $data->TglRetur;
+                $nestedData["nobukti"] = $data->NoBukti;
+                $nestedData["masukp"] =$data->QtyP;
+                $nestedData["masuks"] =$data->QtyS;
+                $nestedData["keluarp"] = 0;
+                $nestedData["keluars"] = 0;
+                $nestedData["keterangan"] = $data->Keterangan." - ".$data->NoBBK;
+
+                $result[] = $nestedData;
+            }
+        } 
+
+
+        if ($bbk) {
+            foreach ($bbk as $data) {
+                $nestedData["tanggal"] = $data->TglKeluar;
+                $nestedData["nobukti"] = $data->NoBukti;
+                $nestedData["keluarp"] = $data->QtyP;
+                $nestedData["keluars"] = $data->QtyS;
+                $nestedData["masukp"] = 0;
+                $nestedData["masuks"] = 0;
+                $nestedData["keterangan"] = $data->Keperluan ." - ". $data->Keterangan;
+                
+                $result[] = $nestedData;
+            }
+        }
+
+        if ($returbbm) {
+            foreach ($returbbm as $data) {
+                $searchsupp = DB::connection('firebird')->table('TSupplier')
+                    ->where('Kode', '=', $data->KodeSupp)->first();
+
+                    $nestedData["tanggal"] = $data->TglRetur;
+                    $nestedData["nobukti"] = $data->NoBukti;
+                    $nestedData["masukp"] = 0;
+                    $nestedData["masuks"] = 0;
+                    $nestedData["keluarp"] =$data->QtyP;
+                    $nestedData["keluars"] =$data->QtyS;
+                    $nestedData["keterangan"] = $data->Keterangan." - ".$searchsupp->Nama ." - ".$data->NoBBM;
+    
+                    
+                $result[] = $nestedData;
+
+            }
+        }
+
+        return view('admin.barangpembantu.mutasilama', compact('result', 'barang', 'persediaan'));
+
     }
 }

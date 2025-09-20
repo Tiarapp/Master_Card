@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b244f6125eb13b36ab1d38f4077bf89",
+    "content-hash": "5d78a6203bf08a45a7ea814984169842",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6574,6 +6574,60 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wildside/userstamps",
+            "version": "2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mattiverse/Laravel-Userstamps.git",
+                "reference": "d27f5bfa6188445b00f20760f43516d3b7e879a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mattiverse/Laravel-Userstamps/zipball/d27f5bfa6188445b00f20760f43516d3b7e879a0",
+                "reference": "d27f5bfa6188445b00f20760f43516d3b7e879a0",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.2|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "illuminate/database": "^5.2|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "orchestra/testbench": "^3.1|^4.0|^5.0|^6.0|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^5.0|^6.0|^7.0|^8.4|^9.0|^10.0|^11.0|^12.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wildside\\Userstamps\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt McDonald",
+                    "email": "matt.mcdonald@outlook.com"
+                }
+            ],
+            "description": "Laravel Userstamps provides an Eloquent trait which automatically maintains `created_by` and `updated_by` columns on your model, populated by the currently authenticated user in your application.",
+            "keywords": [
+                "created_by",
+                "deleted_by",
+                "eloquent",
+                "laravel",
+                "updated_by",
+                "userstamps"
+            ],
+            "support": {
+                "issues": "https://github.com/mattiverse/Laravel-Userstamps/issues",
+                "source": "https://github.com/mattiverse/Laravel-Userstamps/tree/2.5.0"
+            },
+            "time": "2025-02-22T12:51:48+00:00"
         },
         {
             "name": "yajra/laravel-datatables",

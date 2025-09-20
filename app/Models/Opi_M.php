@@ -34,16 +34,6 @@ class Opi_M extends Model
         'tol_corr'
     ];
 
-    public function kontrak()
-    {
-        return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id', 'id');
-    }
-
-    public function dt()
-    {
-        return $this->belongsTo(DeliveryTime::class, 'dt_id', 'id');
-    }
-
     public function scopeOpi2($query)
     {
         $query->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
@@ -180,5 +170,25 @@ class Opi_M extends Model
         ->leftJoin('dt', 'dt_id', 'dt.id')
         ->leftJoin('mc', 'mc_id', 'mc.id')
         ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id');
+    }
+
+    public function kontrakm()
+    {
+        return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id', 'id');
+    }
+
+    public function mc()
+    {
+        return $this->belongsTo(Mastercard::class, 'mc_id', 'id');
+    }
+
+    public function kontrakd()
+    {
+        return $this->belongsTo(Kontrak_D::class, 'kontrak_d_id', 'id');
+    }
+
+    public function dt()
+    {
+        return $this->belongsTo(DeliveryTime::class, 'dt_id', 'id');
     }
 }

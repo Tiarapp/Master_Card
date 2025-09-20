@@ -38,6 +38,7 @@ class OpiController extends Controller
            if (Auth::user()->divisi_id == 5) {
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
                 ->where('status_opi', '=', "Proses")
+                ->where('periode', '=', '2025')
                 ->offset($start)
                 ->limit(50)
                 ->orderBy('NoOPI')
@@ -276,6 +277,36 @@ class OpiController extends Controller
         return view('admin.opi.index', compact('data'));
     }
 
+    public function index_new(Request $request)
+    {
+        $productions = new Opi_M();
+        $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
+            // ->where('status_opi', '!=', 'closed')
+            // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
+            ->orderBy('id', 'desc');
+
+        if($request->search) {
+            $productions->whereHas('kontrakm', function($query) use ($request) {
+                $query->where('customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+            })
+            ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
+            ->orWhereHas('mc', function($query) use ($request) {
+                $query->where('kode', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        $productions = $productions->paginate(50);
+
+        $data = [
+            'productions' => $productions,
+        ];
+
+        return view('admin.opi.indexnew', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -341,7 +372,7 @@ class OpiController extends Controller
         $opi->save();
         $kontrakd->save();
 
-        return redirect('admin/opi');
+        return redirect()->back()->with('success', 'OPI '.$opi->NoOPI.' sudah di cancel!!');
     }
 
     public function closed($id)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Mastercard;
 use App\Models\Number_Sequence;
 use App\Models\Tracking;
@@ -189,6 +190,7 @@ class MastercardController extends Controller
         $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
         $kode = 'MC'. $nomer->nomer;
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
         ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -368,6 +370,7 @@ class MastercardController extends Controller
     {
         // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = Customer::all();
         // dd($cust);
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -576,6 +579,7 @@ class MastercardController extends Controller
     {
         // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
+        // $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
         ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -709,10 +713,10 @@ class MastercardController extends Controller
         $mc->tipeMc = $request->tipeMc;
         $mc->substanceKontrak_id = $request->substanceKontrak_id;
         $mc->substanceProduksi_id = $request->substanceProduksi_id;
-        $mc->gramSheetBoxKontrak2 = $request->gramSheetBoxKontrak2;
-        $mc->gramSheetBoxProduksi2 = $request->gramSheetBoxProduksi2;
-        $mc->gramSheetCorrKontrak2 = $request->gramSheetCorrKontrak2;
-        $mc->gramSheetCorrProduksi2 = $request->gramSheetCorrProduksi2;
+        $mc->gramSheetBoxKontrak2 = $request->gramSheetBoxKontrak;
+        $mc->gramSheetBoxProduksi2 = $request->gramSheetBoxProduksi;
+        $mc->gramSheetCorrKontrak2 = $request->gramSheetCorrKontrak;
+        $mc->gramSheetCorrProduksi2 = $request->gramSheetCorrProduksi;
         $mc->gramSheetBoxKontrak = $request->gramSheetBoxKontrak;
         $mc->gramSheetBoxProduksi = $request->gramSheetBoxProduksi;
         $mc->gramSheetCorrKontrak = $request->gramSheetCorrKontrak;
@@ -721,7 +725,7 @@ class MastercardController extends Controller
         $mc->colorCombine_id = $request->colorCombine_id;
         $mc->lastUpdatedBy = Auth::user()->name;
         $mc->gambar = $nama_file;
-        
+
         $mc->save();
 
         Tracking::create([
@@ -792,4 +796,39 @@ class MastercardController extends Controller
         
         $mc->note ;
     }
+
+    public function select_view(Request $request)
+    {
+        $mastercards = new Mastercard();
+        
+        if($request->search)
+        {
+            $mastercards = $mastercards->where('kode', 'like', '%'.$request->search.'%')
+                ->orWhere('namaBarang', 'like', '%'.$request->search.'%')
+                ->orWhere('customer', 'like', '%'.$request->search.'%');
+        }
+
+        $mastercards = $mastercards->orderBy('id', 'desc')->paginate(10);
+
+        $data = [
+            'mastercards' => $mastercards,
+        ];
+
+        return view('admin.mastercard.modal', $data);
+    }
+
+    public function single($id)
+    {
+        $mc = new Mastercard();
+        $mc = $mc->with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine'])
+            ->where('id', $id)
+            ->first();
+        
+        $data = [
+            'mc' => $mc
+        ];
+        
+        return response()->json($data);
+    }
+
 }

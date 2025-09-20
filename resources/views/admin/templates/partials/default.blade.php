@@ -3,7 +3,7 @@
 
 @include('admin.templates.partials._head')
 
-<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   @include('admin.templates.partials._navbar')
@@ -25,6 +25,9 @@
 @include('admin.templates.partials._script')
 
 @yield('javascripts')
+
+<!-- Include Floating Feedback Button -->
+@include('admin.feedback.floating-button')
 
 </body>
 </html>

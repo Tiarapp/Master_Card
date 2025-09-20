@@ -67,29 +67,7 @@
             </tr>
           </thead>
           <tbody>
-              <?php foreach ($bbm as $data) { ?>
-            <tr>
-                <td scope="col">{{ $data->tgl_bbm }}</td>
-                <td scope="col">{{ $data->rolld->kode_internal }}</td>
-                <td scope="col">{{ $data->rolld->rollMaster->nama }}</td>
-                <td scope="col">{{ $data->rolld->rollMaster->gram }}</td>
-                <td scope="col">{{ $data->rolld->rollMaster->lebar }}</td>
-                <td scope="col" style="width: 100px">{{ $data->berat_sj }}</td>
-                <td scope="col" style="width: 100px">{{ $data->berat_timbang }}</td>
-                <td scope="col">{{ $data->no_po }}</td>
-                <td scope="col">{{ $data->rolld->supp->name }}</td>
-                <td scope="col">
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                        <a href="../roll/edit/{{ $data->rolld->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                        {{-- <a href="../admin/roll/bbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">BBK</a>
-                        <a href="../admin/roll/returbbk/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Retur</a> --}}
-                      {{-- <a href="../opname/sheet/delete/{{ $data->KodeBrg }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
-                    </div>
-                  </div>
-                </td>
-            </tr>
-              <?php } ?>
+              
           </tbody>
         </table>
       </div>
