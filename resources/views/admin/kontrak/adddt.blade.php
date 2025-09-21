@@ -1,9 +1,14 @@
-<div class="modal fade" id="add_dt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="add_dt" tabindex="-1" role="dialog" aria-labelledby="addDtModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tambah DT & OPI</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="addDtModalLabel">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Tambah DT & OPI
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <form id="jquery-val-form" action="{{ route('kontrak.store_dt') }}" onsubmit="return validateForm()" method="post">
         {{csrf_field()}}
@@ -30,8 +35,14 @@
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" >Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i>
+            Batal
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save mr-1"></i>
+            Simpan
+          </button>
         </div>
       </form>
     </div>

@@ -557,38 +557,75 @@ class Kontrak_DController extends Controller
         
         public function add_dt($id)
         {
+            try {
+                // Optimized query loading - load only what's needed for the view
+                $kontrak = Kontrak_D::select([
+                    'id', 'kontrak_m_id', 'mc_id', 'pcsKontrak', 'pcsSisaKontrak', 'kgKontrak'
+                ])
+                ->with([
+                    'kontrakm:id,kode,customer_name,poCustomer,alamatKirim,tipeOrder',
+                    'kontrakm.realisasi:id,kontrak_m_id,qty_kirim,kg_kirim',
+                    'mc:id,kode,revisi,namaBarang,gramSheetBoxKontrak2,substanceKontrak_id,substanceProduksi_id,outConv,lebarSheet,panjangSheet',
+                    'mc.substancekontrak:id,kode',
+                    'mc.substanceproduksi:id,kode'
+                ])
+                ->where('kontrak_m_id', $id)
+                ->first();
 
-            $kontrak = new Kontrak_D();
-            $kontrak = $kontrak->with([
-                'kontrakm',
-                'mc',
-                'mc.substancekontrak',
-                'mc.substanceproduksi',
-            ]);
+                if (!$kontrak) {
+                    return redirect()->back()->with('error', 'Kontrak tidak ditemukan');
+                }
 
-            $kontrak = $kontrak->where('kontrak_m_id', $id)->first();
+                // Ensure critical fields have default values to prevent division by zero
+                if (!$kontrak->pcsKontrak || $kontrak->pcsKontrak <= 0) {
+                    $kontrak->pcsKontrak = 1; // Set minimum value to prevent division by zero
+                }
 
-            // tampilkan data yang akan di edit
-            $kontrak_D = DB::table('kontrak_d')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.tipeBox as tipebox', 'mc.gramSheetCorrKontrak as berat', 'mc.outConv as outConv')
-            ->first();
-            
-            $kontrak_M = DB::table('kontrak_m')
-            ->where('kontrak_m.id', '=', $id)
-            ->first();
-            
-            $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
-            ->get();
+                // Optimized OPI query - only essential fields
+                $opi = Opi_M::select([
+                    'id', 'NoOPI', 'jumlahOrder', 'dt_id', 'mc_id'
+                ])
+                ->with([
+                    'dt:id,tglKirimDt',
+                    'mc:id,gramSheetBoxKontrak2,outConv,lebarSheet,panjangSheet'
+                ])
+                ->where('kontrak_m_id', $id)
+                ->orderBy('id', 'desc')
+                ->get();
 
-            $data = [
-                'kontrak' => $kontrak,
-                'opi' => $opi,
-            ];
-            
-            return view('admin.kontrak.data_dtnew', $data);
+                // Ensure MC data has safe default values
+                if ($kontrak->mc) {
+                    $kontrak->mc->outConv = $kontrak->mc->outConv ?: 1;
+                    $kontrak->mc->lebarSheet = $kontrak->mc->lebarSheet ?: 1;
+                    $kontrak->mc->gramSheetBoxKontrak2 = $kontrak->mc->gramSheetBoxKontrak2 ?: 0;
+                }
+
+                // Apply safe defaults to OPI data
+                foreach ($opi as $item) {
+                    if ($item->mc) {
+                        $item->mc->outConv = $item->mc->outConv ?: 1;
+                        $item->mc->lebarSheet = $item->mc->lebarSheet ?: 1;
+                        $item->mc->gramSheetBoxKontrak2 = $item->mc->gramSheetBoxKontrak2 ?: 0;
+                        $item->mc->panjangSheet = $item->mc->panjangSheet ?: 0;
+                    }
+                    
+                    // Set default values for calculation
+                    $item->outConv = $item->mc->outConv ?? 1;
+                    $item->lebarSheet = $item->mc->lebarSheet ?? 1;
+                    $item->panjangSheet = $item->mc->panjangSheet ?? 0;
+                }
+
+                $data = [
+                    'kontrak' => $kontrak,
+                    'opi' => $opi,
+                ];
+                
+                return view('admin.kontrak.data_dtnew', $data);
+                
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error in add_dt method: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data kontrak.');
+            }
         }
         
         public function store_dt(Request $request)

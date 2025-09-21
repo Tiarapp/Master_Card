@@ -1,165 +1,11 @@
 @extends('admin.templates.partials.default')
 
+@push('styles')
+<!-- Optimized CSS for data_dtnew page -->
+<link rel="stylesheet" href="{{ asset('css/data-dtnew.css') }}">
+@endpush
+
 @section('content')
-<!-- Preload Critical CSS -->
-<style>
-/* Critical CSS for preventing FOUC */
-.content-wrapper {
-  min-height: 100vh;
-}
-
-.info-item {
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  transition: all 0.3s ease;
-}
-
-.card-outline {
-  border-top: 3px solid;
-}
-
-.card-primary.card-outline {
-  border-top-color: #007bff;
-}
-
-.card-info.card-outline {
-  border-top-color: #17a2b8;
-}
-
-.card-success.card-outline {
-  border-top-color: #28a745;
-}
-
-.badge-lg {
-  font-size: 0.875rem;
-  padding: 0.375rem 0.75rem;
-}
-
-.progress-sm {
-  height: 0.5rem;
-}
-
-/* Enhanced UI Styles - Loaded after content for better performance */
-.info-item:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.badge-outline-secondary {
-  color: #6c757d;
-  border: 1px solid #6c757d;
-  background-color: transparent;
-}
-
-.animate-row {
-  transition: all 0.3s ease;
-}
-
-.animate-row:hover {
-  background-color: #f1f3f4;
-  transform: scale(1.01);
-}
-
-.empty-state {
-  padding: 2rem;
-  color: #6c757d;
-}
-
-.thead-light th {
-  background-color: #f8f9fa;
-  border-color: #dee2e6;
-  font-weight: 600;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(0,123,255,0.05);
-}
-
-.loading-spinner {
-  display: none;
-  text-align: center;
-  padding: 2rem;
-}
-
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-}
-
-.card {
-  transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-}
-
-.card:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
-  transform: translateY(-2px);
-}
-
-.btn-group .btn {
-  margin: 0 1px;
-}
-
-.btn-sm {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.badge {
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.progress-bar {
-  transition: width 1s ease-in-out;
-}
-
-/* Responsive Enhancements */
-@media (max-width: 768px) {
-  .card-tools {
-    margin-top: 0.5rem;
-  }
-  
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .btn-group .btn {
-    margin: 1px 0;
-  }
-  
-  .table-responsive {
-    font-size: 0.875rem;
-  }
-}
-
-/* Smooth Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-row {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.fas, .far {
-  width: 1rem;
-  text-align: center;
-}
-
-.alert {
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-}
-</style>
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -315,8 +161,12 @@
               <div class="card-body p-0">
                 <!-- Progress Bar -->
                 @php
-                  $progress = $kontrak->kontrakm->realisasi ? number_format((int)$kontrak->kontrakm->realisasi->sum('qty_kirim') / $kontrak->pcsKontrak * 100, 2) : 0;
-                //   var_dump($progress);
+                  $progress = 0;
+                  if ($kontrak->kontrakm->realisasi && $kontrak->pcsKontrak > 0) {
+                    $progress = number_format((int)$kontrak->kontrakm->realisasi->sum('qty_kirim') / $kontrak->pcsKontrak * 100, 2);
+                  }
+                  // Ensure progress doesn't exceed 100%
+                  $progress = min($progress, 100);
                 @endphp
                 <div class="p-3 border-bottom">
                   <div class="d-flex justify-content-between align-items-center mb-2">
@@ -387,10 +237,12 @@
               Data DT & OPI
             </h3>
             <div class="card-tools">
-              <button type="button" class="btn btn-primary btn-sm opi" data-toggle="modal" data-target="#add_dt">
+              <!-- Primary Button untuk Tambah DT & OPI -->
+              <button type="button" class="btn btn-primary btn-sm opi" data-toggle="modal" data-target="#add_dt" id="btnTambahDT">
                 <i class="fas fa-plus mr-1"></i> Tambah DT & OPI
               </button>
                 
+              <!-- Button untuk refresh -->
               <a href="{{ route('kontrak.recall', $kontrak->kontrak_m_id) }}">
                 <button type="button" class="btn btn-info btn-sm ml-2">
                   <i class="fas fa-sync-alt mr-1"></i> Refresh
@@ -455,17 +307,25 @@
                     </td>
                     <td class="text-center">
                       <span class="text-success font-weight-bold">
-                        {{ number_format((float)$data->jumlahOrder * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
+                        {{ number_format((float)$data->jumlahOrder * (float)($kontrak->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg
                       </span>
                     </td>
                     <td class="text-center">
                       <span class="text-success font-weight-bold">
                         @php
-                          $qty = ($data->jumlahOrder) / $data->outConv ; 
-                          $outCorr = floor(2500/$data->lebarSheet);
-                          $cop = $qty / $outCorr;
-                          $rm = ($data->panjangSheet * $cop) / 1000;
-
+                          $rm = 0;
+                          
+                          // Check for valid data before calculations
+                          if ($data->outConv > 0 && $data->lebarSheet > 0) {
+                            $qty = ($data->jumlahOrder) / $data->outConv;
+                            $outCorr = floor(2500 / $data->lebarSheet);
+                            
+                            if ($outCorr > 0) {
+                              $cop = $qty / $outCorr;
+                              $rm = ($data->panjangSheet * $cop) / 1000;
+                            }
+                          }
+                          
                           echo number_format((float)$rm, 2);
                         @endphp
                       </span>
@@ -495,7 +355,7 @@
                         <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">Belum Ada Data DT & OPI</h5>
                         <p class="text-muted">Klik tombol "Tambah DT & OPI" untuk menambahkan data baru.</p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_dt">
+                        <button type="button" class="btn btn-primary opi" data-toggle="modal" data-target="#add_dt">
                           <i class="fas fa-plus mr-1"></i> Tambah Data Pertama
                         </button>
                       </div>
@@ -514,7 +374,7 @@
                     </th>
                     <th class="text-center">
                       <span class="text-success font-weight-bold">
-                        {{ number_format($opi->sum('jumlahOrder') * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
+                        {{ number_format($opi->sum('jumlahOrder') * (float)($kontrak->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg
                       </span>
                     </th>
                     <th colspan="3"></th>
@@ -551,28 +411,180 @@
 @endsection
 
 @section('javascripts')
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script>
+// Optimized JavaScript for data_dtnew page
 $(document).ready(function() {
+    // Performance optimization: Debounce AJAX calls
+    let ajaxTimeout;
+    
     // Event handler untuk modal OPI dengan optimasi
-    $('.opi').on('click', function() {
-        const btn = $(this);
-        btn.addClass('btn-loading');
+    $('.opi').on('click', function(e) {
+        e.preventDefault();
         
-        $.ajax({
-            url: "{{ route('nomer_opi') }}",
-            type: "GET",
-            success: function(response) {
-                $('#nomer_opi').val(response.nomer);
-            },
-            error: function() {
-                alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
-            },
-            complete: function() {
-                btn.removeClass('btn-loading');
-            }
-        });
+        const btn = $(this);
+        const originalText = btn.html();
+        
+        // Add loading state
+        btn.prop('disabled', true)
+           .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+        
+        // Clear previous timeout
+        if (ajaxTimeout) {
+            clearTimeout(ajaxTimeout);
+        }
+        
+        // Always get OPI number from database sequence
+        ajaxTimeout = setTimeout(function() {
+            $.ajax({
+                url: "{{ route('nomer_opi') }}",
+                type: "GET",
+                timeout: 15000,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                success: function(response) {
+                    console.log('OPI Number Response:', response);
+                    
+                    if (response && response.status && response.nomer) {
+                        $('#nomer_opi').val(response.nomer);
+                    } else if (response && response.nomer) {
+                        // Fallback if status is false but nomer exists
+                        $('#nomer_opi').val(response.nomer);
+                    } else {
+                        // Last resort fallback
+                        const fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+                        $('#nomer_opi').val(fallbackNumber);
+                        console.warn('Using fallback OPI number:', fallbackNumber);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error getting OPI number:', error, xhr.responseText);
+                    
+                    // Parse error response for better fallback
+                    let fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+                    
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.nomer) {
+                            fallbackNumber = errorResponse.nomer;
+                        }
+                    } catch (e) {
+                        // Use default fallback
+                    }
+                    
+                    $('#nomer_opi').val(fallbackNumber);
+                },
+                complete: function() {
+                    btn.prop('disabled', false).html(originalText);
+                    $('#add_dt').modal('show');
+                }
+            });
+        }, 300);
     });
+
+    // Alternative event handler menggunakan data attributes
+    $('[data-target="#add_dt"]').on('click', function(e) {
+        if (!$(this).hasClass('opi')) {
+            e.preventDefault();
+            
+            const btn = $(this);
+            const originalText = btn.html();
+            
+            // Add loading state
+            btn.prop('disabled', true)
+               .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+            
+            // Get OPI number from database
+            $.ajax({
+                url: "{{ route('nomer_opi') }}",
+                type: "GET",
+                timeout: 15000,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                success: function(response) {
+                    if (response && response.status && response.nomer) {
+                        $('#nomer_opi').val(response.nomer);
+                    } else if (response && response.nomer) {
+                        $('#nomer_opi').val(response.nomer);
+                    } else {
+                        const fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+                        $('#nomer_opi').val(fallbackNumber);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    let fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse && errorResponse.nomer) {
+                            fallbackNumber = errorResponse.nomer;
+                        }
+                    } catch (e) {
+                        // Use default fallback
+                    }
+                    $('#nomer_opi').val(fallbackNumber);
+                },
+                complete: function() {
+                    btn.prop('disabled', false).html(originalText);
+                    $('#add_dt').modal('show');
+                }
+            });
+        }
+    });
+
+    // Modal events
+    $('#add_dt').on('shown.bs.modal', function(e) {
+        $('#tglKirim').focus();
+    });
+    
+    $('#add_dt').on('hidden.bs.modal', function(e) {
+        $('#jquery-val-form')[0].reset();
+    });
+
+    // Performance: Initialize tooltips only when needed
+    if (window.innerWidth > 768) {
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover',
+            delay: { show: 500, hide: 100 }
+        });
+    }
+});
+
+// Form validation function
+function validateForm() {
+    const jumlahKirim = parseInt($('#jumlahKirim').val()) || 0;
+    const sisaKontrak = parseInt($('#sisaKontrak').val()) || 0;
+    
+    if (jumlahKirim > sisaKontrak) {
+        alert('Jumlah kirim tidak boleh melebihi sisa kontrak (' + sisaKontrak.toLocaleString() + ')!');
+        return false;
+    }
+    
+    if (jumlahKirim <= 0) {
+        alert('Jumlah kirim harus lebih dari 0!');
+        return false;
+    }
+    
+    const tglKirim = $('#tglKirim').val();
+    if (!tglKirim) {
+        alert('Tanggal kirim harus diisi!');
+        return false;
+    }
+    
+    return true;
+}
+
+// Memory cleanup on page unload
+$(window).on('beforeunload', function() {
+    if (typeof ajaxTimeout !== 'undefined') {
+        clearTimeout(ajaxTimeout);
+    }
+    $('.opi').off('click');
+    $('[data-toggle="tooltip"]').tooltip('dispose');
 });
 </script>
+@endsection

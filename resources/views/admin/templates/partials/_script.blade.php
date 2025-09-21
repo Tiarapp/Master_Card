@@ -32,14 +32,14 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('asset/dist/js/demo.js') }}"></script>
 
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- AdminLTE dashboard demo (Only load on dashboard page) -->
+@if(request()->routeIs('admin.dashboard') || request()->is('admin') || request()->is('admin/dashboard'))
 <script src="{{ asset('asset/dist/js/pages/dashboard.js') }}"></script>
+@endif
 
 <!-- Sidebar Fix Script -->
 <script>
 $(document).ready(function() {
-    console.log('Initializing sidebar...');
-    
     // Initialize sidebar
     initSidebar();
     setActiveMenu();
@@ -50,7 +50,6 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
             $('body').toggleClass('sidebar-collapse');
-            console.log('Sidebar toggled');
         });
         
         // Handle treeview menu
@@ -120,8 +119,6 @@ $(document).ready(function() {
         var currentUrl = window.location.pathname;
         var found = false;
         
-        console.log('Current URL:', currentUrl);
-        
         // Remove all active classes first
         $('.nav-sidebar .nav-link').removeClass('active current-page');
         $('.nav-item').removeClass('menu-open');
@@ -149,8 +146,6 @@ $(document).ready(function() {
             
             // Check for exact match or partial match
             if (currentUrl === linkPath || (linkPath !== '/' && currentUrl.startsWith(linkPath))) {
-                console.log('Found matching menu:', linkPath);
-                
                 // Mark as current page
                 $link.addClass('current-page');
                 found = true;
@@ -197,8 +192,6 @@ $(document).ready(function() {
                 
                 // Check if current URL contains the link path
                 if (linkPath !== '/' && currentUrl.includes(linkPath.split('/').pop())) {
-                    console.log('Found partial matching menu:', linkPath);
-                    
                     $link.addClass('active');
                     
                     // Open parent menus
@@ -237,8 +230,6 @@ $(document).ready(function() {
             document.documentElement.requestFullscreen();
         }
     });
-    
-    console.log('Sidebar initialized successfully');
 });
 </script>
 
