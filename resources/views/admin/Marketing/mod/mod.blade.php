@@ -1,7 +1,4 @@
-<!-- jQuery -->
-<script src="{{ asset('asset/plugins/jquery/jquery.min.js') }}"></script>
 @extends('admin.templates.partials.default')
-
 
 @section('content')
 <div class="content-wrapper">
@@ -40,6 +37,7 @@
                 <th scope="col">MOD</th>
                 <th scope="col">Nama Item</th>
                 <th scope="col">Quantity</th>
+                <th scope="col">TOP</th>
             </tr>
           </thead>
           <tbody>
@@ -62,44 +60,65 @@
     console.log(tanggal);
     
     if (tanggal) {
-        $("#data_barang").DataTable({
-            dom: 'Bfrtip',
-            pageLength: 100,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: 'mod_by_tanggal/'+tanggal,
-                // dataSrc: ''
-            },
-            columns: [{
-                data: 'TglOrder',
-                name: 'TglOrder',
-            },
-            {
-                data: 'NamaCust',
-                name: 'NamaCust',
-            },
-            {
-                data: 'NomerSC',
-                name: 'NomerSC',
-            },
-            {
-                data: 'NoMOD',
-                name: 'NoMOD',
-            },
-            {
-                data: 'NamaBrg',
-                name: 'NamaBrg',
-            },
-            {
-                data: 'Quantity',
-                name: 'Quantity',
-            },
-        
-        ],
-        order: ['3', 'asc'],
-        select: true,
-        })
+        try {
+            // Check if DataTable is already initialized and destroy it
+            if ($.fn.DataTable.isDataTable('#data_barang')) {
+                $('#data_barang').DataTable().destroy();
+            }
+            
+            // Clear the table body
+            $('#data_barang tbody').empty();
+            
+            // Initialize new DataTable
+            $("#data_barang").DataTable({
+                dom: 'Bfrtip',
+                pageLength: 100,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: 'mod_by_tanggal/'+tanggal,
+                    error: function(xhr, error, code) {
+                        console.log('DataTable Ajax Error:', error);
+                        alert('Error loading data: ' + error);
+                    }
+                },
+                columns: [{
+                    data: 'TglOrder',
+                    name: 'TglOrder',
+                },
+                {
+                    data: 'NamaCust',
+                    name: 'NamaCust',
+                },
+                {
+                    data: 'NomerSC',
+                    name: 'NomerSC',
+                },
+                {
+                    data: 'NoMOD',
+                    name: 'NoMOD',
+                },
+                {
+                    data: 'NamaBrg',
+                    name: 'NamaBrg',
+                },
+                {
+                    data: 'Quantity',
+                    name: 'Quantity',
+                },
+                {
+                    data: 'WaktuBayar',
+                    name: 'WaktuBayar',
+                },
+            
+            ],
+            order: ['3', 'asc'],
+            select: true,
+            });
+        } catch (error) {
+            console.error('DataTable initialization error:', error);
+            alert('Error initializing table: ' + error.message);
+        }
     }
    }
 </script>

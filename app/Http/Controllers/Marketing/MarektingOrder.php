@@ -25,7 +25,7 @@ class MarektingOrder extends Controller
         $mod = DB::connection('firebird2')->table('TDetMOD')
             ->leftJoin('TMOD', 'TDetMOD.NoMOD', '=', 'TMOD.NoBukti')
             ->leftJoin('TBarangConv', 'TDetMOD.KodeBrg', '=', 'TBarangConv.KodeBrg')
-            ->select('TDetMOD.*', 'TMOD.TglOrder', 'TMOD.NamaCust', 'TMOD.NomerSC', 'TBarangConv.NamaBrg')
+            ->select('TDetMOD.*', 'TMOD.TglOrder', 'TMOD.NamaCust', 'TMOD.NomerSC', 'TBarangConv.NamaBrg', 'TMOD.WaktuBayar')
             ->where('TMOD.TglOrder', 'LIKE', $tanggal)
             ->get();
 
