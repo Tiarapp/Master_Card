@@ -49,8 +49,7 @@ class ProfileController extends Controller
                         ->mixedCase()
                         ->numbers()
                         ->symbols()
-                        // Comment out uncompromised for better UX, but keep other security rules
-                        // ->uncompromised()
+                        ->uncompromised()
                 ],
                 'new_password_confirmation' => ['required', 'string']
             ], [
@@ -75,23 +74,6 @@ class ProfileController extends Controller
                 return back()->withErrors([
                     'new_password' => 'Password baru harus berbeda dari password saat ini'
                 ])->withInput();
-            }
-
-            // Additional security check for compromised passwords (with user warning)
-            $compromiseCheck = $this->checkPasswordCompromise($request->new_password);
-            if ($compromiseCheck['is_compromised']) {
-                Log::warning('User attempted to use compromised password', [
-                    'user_id' => $user->id,
-                    'user_name' => $user->name,
-                    'compromise_count' => $compromiseCheck['count']
-                ]);
-                
-                // Add warning to session but allow password change
-                session()->flash('password_warning', 
-                    'Peringatan: Password yang Anda pilih telah ditemukan dalam ' . 
-                    number_format($compromiseCheck['count']) . ' data breach. ' .
-                    'Disarankan menggunakan password yang lebih unik untuk keamanan optimal.'
-                );
             }
 
             // Update password
@@ -179,51 +161,6 @@ class ProfileController extends Controller
             return back()->withErrors([
                 'general' => 'Terjadi kesalahan saat memperbarui profile.'
             ])->withInput();
-        }
-    }
-
-    /**
-     * Check if password has been compromised in data breaches
-     */
-    private function checkPasswordCompromise($password)
-    {
-        try {
-            // Hash the password using SHA-1
-            $sha1 = strtoupper(sha1($password));
-            $prefix = substr($sha1, 0, 5);
-            $suffix = substr($sha1, 5);
-            
-            // Query HaveIBeenPwned API
-            $client = new \GuzzleHttp\Client();
-            $response = $client->get("https://api.pwnedpasswords.com/range/{$prefix}", [
-                'timeout' => 5,
-                'headers' => [
-                    'User-Agent' => 'Laravel-Password-Check'
-                ]
-            ]);
-            
-            $body = $response->getBody()->getContents();
-            $lines = explode("\n", $body);
-            
-            foreach ($lines as $line) {
-                $parts = explode(':', trim($line));
-                if (count($parts) === 2 && $parts[0] === $suffix) {
-                    return [
-                        'is_compromised' => true,
-                        'count' => (int)$parts[1]
-                    ];
-                }
-            }
-            
-            return ['is_compromised' => false, 'count' => 0];
-            
-        } catch (\Exception $e) {
-            // If API check fails, log but don't block password change
-            Log::warning('Password compromise check failed', [
-                'error' => $e->getMessage()
-            ]);
-            
-            return ['is_compromised' => false, 'count' => 0];
         }
     }
 

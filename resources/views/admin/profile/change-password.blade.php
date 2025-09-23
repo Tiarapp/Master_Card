@@ -37,37 +37,29 @@
                         @csrf
                         <div class="card-body">
                             
-            {{-- Success Message --}}
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="icon fas fa-check"></i>
-                    {{ session('success') }}
-                </div>
-            @endif
+                            {{-- Success Message --}}
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <i class="icon fas fa-check"></i>
+                                    {{ session('success') }}
+                                </div>
+                            @endif
 
-            {{-- Password Compromise Warning --}}
-            @if(session('password_warning'))
-                <div class="alert alert-warning alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="icon fas fa-exclamation-triangle"></i>
-                    <strong>Peringatan Keamanan:</strong><br>
-                    {{ session('password_warning') }}
-                </div>
-            @endif
+                            {{-- Error Messages --}}
+                            @if($errors->any())
+                                <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <i class="icon fas fa-ban"></i>
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-            {{-- Error Messages --}}
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <i class="icon fas fa-ban"></i>
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif                            {{-- Password Requirements Info --}}
+                            {{-- Password Requirements Info --}}
                             <div class="alert alert-info">
                                 <h5><i class="icon fas fa-info"></i> Persyaratan Password:</h5>
                                 <ul class="mb-0" id="passwordRequirements">
@@ -76,14 +68,7 @@
                                     <li>Mengandung angka</li>
                                     <li>Mengandung simbol (!@#$%^&*)</li>
                                     <li>Tidak menggunakan password yang mudah ditebak</li>
-                                    <li><strong>Tidak menggunakan password yang pernah bocor dalam data breach</strong></li>
                                 </ul>
-                                <div class="mt-2">
-                                    <small class="text-muted">
-                                        <i class="fas fa-lightbulb"></i>
-                                        <strong>Contoh password kuat:</strong> MyStr0ng$P@ssw0rd2025! atau TiGA#Kata7Aman$
-                                    </small>
-                                </div>
                             </div>
 
                             {{-- Current Password --}}
@@ -200,13 +185,169 @@
 @endsection
 
 @section('javascripts')
+<script>
+$(document).ready(function() {
+    // Toggle password visibility
+    $('#toggleCurrentPassword').on('click', function(e) {
+        e.preventDefault();
+        togglePasswordVisibility('current_password', this);
+    });
+
+    $('#toggleNewPassword').on('click', function(e) {
+        e.preventDefault();
+        togglePasswordVisibility('new_password', this);
+    });
+
+    $('#toggleConfirmPassword').on('click', function(e) {
+        e.preventDefault();
+        togglePasswordVisibility('new_password_confirmation', this);
+    });
+
+    // Password strength monitoring
+    $('#new_password').on('input', function() {
+        checkPasswordStrength($(this).val());
+    });
+
+    // Password match monitoring
+    $('#new_password_confirmation').on('input', function() {
+        checkPasswordMatch();
+    });
+
+    // Form validation
+    $('#changePasswordForm').on('submit', function(e) {
+        const currentPassword = $('#current_password').val();
+        const newPassword = $('#new_password').val();
+        const confirmPassword = $('#new_password_confirmation').val();
+        
+        let isValid = true;
+        
+        $('.form-control').removeClass('is-invalid');
+
+        if (currentPassword === '') {
+            $('#current_password').addClass('is-invalid');
+            isValid = false;
+        }
+
+        if (newPassword === '' || newPassword.length < 8) {
+            $('#new_password').addClass('is-invalid');
+            isValid = false;
+        }
+
+        if (confirmPassword === '' || newPassword !== confirmPassword) {
+            $('#new_password_confirmation').addClass('is-invalid');
+            isValid = false;
+        }
+
+        if (currentPassword === newPassword && newPassword !== '') {
+            $('#new_password').addClass('is-invalid');
+            alert('Password baru harus berbeda dari password saat ini');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
+
+        $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
+    });
+
+    function togglePasswordVisibility(inputId, button) {
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector('i');
+        
+        if (!input || !icon) return;
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    }
+
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        let text = '';
+        let colorClass = '';
+
+        if (password.length === 0) {
+            text = 'Kekuatan password akan ditampilkan di sini';
+            strength = 0;
+            colorClass = '';
+        } else {
+            if (password.length >= 8) strength += 20;
+            if (/[a-z]/.test(password)) strength += 20;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/\d/.test(password)) strength += 20;
+            if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 20;
+
+            if (strength < 40) {
+                text = 'Kekuatan password: Lemah';
+                colorClass = 'bg-danger';
+            } else if (strength < 60) {
+                text = 'Kekuatan password: Sedang';
+                colorClass = 'bg-warning';
+            } else if (strength < 80) {
+                text = 'Kekuatan password: Kuat';
+                colorClass = 'bg-info';
+            } else {
+                text = 'Kekuatan password: Sangat Kuat';
+                colorClass = 'bg-success';
+            }
+        }
+
+        const $bar = $('#passwordStrength');
+        const $text = $('#passwordStrengthText');
+        
+        if ($bar.length && $text.length) {
+            $bar.css('width', strength + '%')
+                .removeClass('bg-danger bg-warning bg-info bg-success')
+                .addClass(colorClass);
+            $text.text(text);
+        }
+    }
+
+    function checkPasswordMatch() {
+        const newPassword = $('#new_password').val();
+        const confirmPassword = $('#new_password_confirmation').val();
+        const $matchText = $('#passwordMatchText');
+
+        if ($matchText.length === 0) return;
+
+        if (confirmPassword === '') {
+            $matchText.text('').removeClass('text-success text-danger');
+        } else if (newPassword === confirmPassword) {
+            $matchText.text('✓ Password cocok').removeClass('text-danger').addClass('text-success');
+        } else {
+            $matchText.text('✗ Password tidak cocok').removeClass('text-success').addClass('text-danger');
+        }
+    }
+});
+</script>
+@endsection
+
+@push('styles')
 <style>
 .progress {
     background-color: #e9ecef;
+    height: 8px !important;
+    border-radius: 4px;
+}
+
+.progress-bar {
+    transition: width 0.3s ease;
+    border-radius: 4px;
 }
 
 .input-group-append .btn {
     border-left: 0;
+    z-index: 3;
+}
+
+.input-group-append .btn:hover {
+    background-color: #e9ecef;
 }
 
 .alert ul {
@@ -222,319 +363,86 @@
 }
 
 .form-control.is-invalid {
-    border-color: #dc3545;
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 
 .text-success {
     color: #28a745 !important;
+    font-weight: 500;
 }
 
 .text-danger {
     color: #dc3545 !important;
+    font-weight: 500;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Password strength indicator improvements */
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+/* Toggle button styling */
+.input-group-append .btn-outline-secondary {
+    border-color: #ced4da;
+    color: #6c757d;
+}
+
+.input-group-append .btn-outline-secondary:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    color: #495057;
+}
+
+.input-group-append .btn-outline-secondary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+/* Form spacing */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Password match indicator */
+#passwordMatchText {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Progress text styling */
+#passwordStrengthText {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    min-height: 1.2rem;
+}
+
+/* Alert styling improvements */
+.alert-info {
+    border-left: 4px solid #17a2b8;
+}
+
+.alert-success {
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    border-left: 4px solid #dc3545;
 }
 </style>
-
-<!-- Test Script for Debugging -->
-<script src="{{ asset('js/test-password-features.js') }}"></script>
-
-<script>
-// Use vanilla JavaScript and jQuery together for better compatibility
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded');
-    
-    // Wait for jQuery to be available
-    function initPasswordFeatures() {
-        if (typeof $ === 'undefined') {
-            console.log('jQuery not ready, waiting...');
-            setTimeout(initPasswordFeatures, 100);
-            return;
-        }
-        
-        console.log('jQuery ready, initializing password features');
-        
-        // Toggle password visibility with vanilla JS
-        document.getElementById('toggleCurrentPassword')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            togglePasswordVisibility('current_password', this);
-        });
-
-        document.getElementById('toggleNewPassword')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            togglePasswordVisibility('new_password', this);
-        });
-
-        document.getElementById('toggleConfirmPassword')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            togglePasswordVisibility('new_password_confirmation', this);
-        });
-
-        // Password strength checker
-        const newPasswordInput = document.getElementById('new_password');
-        if (newPasswordInput) {
-            newPasswordInput.addEventListener('input', function() {
-                checkPasswordStrength(this.value);
-            });
-            newPasswordInput.addEventListener('keyup', function() {
-                checkPasswordStrength(this.value);
-            });
-        }
-
-        // Password match checker
-        const confirmPasswordInput = document.getElementById('new_password_confirmation');
-        if (confirmPasswordInput) {
-            confirmPasswordInput.addEventListener('input', function() {
-                checkPasswordMatch();
-            });
-            confirmPasswordInput.addEventListener('keyup', function() {
-                checkPasswordMatch();
-            });
-        }
-
-        // Form validation
-        const form = document.getElementById('changePasswordForm');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                if (!validateForm()) {
-                    e.preventDefault();
-                    return false;
-                }
-                
-                // Disable submit button to prevent double submission
-                const submitBtn = document.getElementById('submitBtn');
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
-                }
-            });
-        }
-        
-        console.log('Password features initialized');
-    }
-    
-    initPasswordFeatures();
-
-    // Form validation
-    $('#changePasswordForm').on('submit', function(e) {
-        if (!validateForm()) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Disable submit button to prevent double submission
-        $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
-    });
-
-    function togglePasswordVisibility(inputId, button) {
-        console.log('togglePasswordVisibility called for:', inputId);
-        const input = document.getElementById(inputId);
-        const icon = button.querySelector('i');
-        
-        if (!input) {
-            console.error('Input not found:', inputId);
-            return;
-        }
-        
-        if (!icon) {
-            console.error('Icon not found in button');
-            return;
-        }
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-            console.log('Password shown for:', inputId);
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-            console.log('Password hidden for:', inputId);
-        }
-    }
-
-    function checkPasswordStrength(password) {
-        console.log('Checking password strength for:', password ? password.length : 0, 'characters');
-        let strength = 0;
-        let text = '';
-        let colorClass = '';
-
-        // Get elements
-        const progressBar = document.getElementById('passwordStrength');
-        const progressText = document.getElementById('passwordStrengthText');
-        
-        if (!progressBar) {
-            console.error('Password strength progress bar not found');
-            return;
-        }
-        
-        if (!progressText) {
-            console.error('Password strength text not found');
-            return;
-        }
-
-        // Reset if empty
-        if (!password || password.length === 0) {
-            progressBar.style.width = '0%';
-            progressBar.className = 'progress-bar';
-            progressText.textContent = 'Kekuatan password akan ditampilkan di sini';
-            return;
-        }
-
-        // Calculate strength
-        if (password.length >= 8) strength += 20;
-        if (/[a-z]/.test(password)) strength += 20;
-        if (/[A-Z]/.test(password)) strength += 20;
-        if (/\d/.test(password)) strength += 20;
-        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 20;
-
-        if (strength < 40) {
-            text = 'Lemah';
-            colorClass = 'bg-danger';
-        } else if (strength < 60) {
-            text = 'Sedang';
-            colorClass = 'bg-warning';
-        } else if (strength < 80) {
-            text = 'Kuat';
-            colorClass = 'bg-info';
-        } else {
-            text = 'Sangat Kuat';
-            colorClass = 'bg-success';
-        }
-
-        console.log('Password strength:', strength, text);
-        
-        progressBar.style.width = strength + '%';
-        progressBar.className = 'progress-bar ' + colorClass;
-        progressText.textContent = 'Kekuatan password: ' + text;
-    }
-
-    function checkPasswordMatch() {
-        const newPasswordInput = document.getElementById('new_password');
-        const confirmPasswordInput = document.getElementById('new_password_confirmation');
-        const matchText = document.getElementById('passwordMatchText');
-        
-        console.log('Checking password match');
-        
-        if (!newPasswordInput || !confirmPasswordInput || !matchText) {
-            console.error('Password match elements not found');
-            return;
-        }
-
-        const newPassword = newPasswordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-
-        if (confirmPassword === '') {
-            matchText.textContent = '';
-            matchText.className = '';
-            return;
-        }
-
-        if (newPassword === confirmPassword) {
-            matchText.textContent = '✓ Password cocok';
-            matchText.className = 'text-success';
-            console.log('Passwords match');
-        } else {
-            matchText.textContent = '✗ Password tidak cocok';
-            matchText.className = 'text-danger';
-            console.log('Passwords do not match');
-        }
-    }
-
-    function validateForm() {
-        let isValid = true;
-        const currentPasswordInput = document.getElementById('current_password');
-        const newPasswordInput = document.getElementById('new_password');
-        const confirmPasswordInput = document.getElementById('new_password_confirmation');
-        
-        if (!currentPasswordInput || !newPasswordInput || !confirmPasswordInput) {
-            console.error('Form inputs not found');
-            return false;
-        }
-        
-        const currentPassword = currentPasswordInput.value;
-        const newPassword = newPasswordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-
-        // Reset validation states
-        document.querySelectorAll('.form-control').forEach(function(el) {
-            el.classList.remove('is-invalid');
-        });
-
-        // Validate current password
-        if (currentPassword === '') {
-            currentPasswordInput.classList.add('is-invalid');
-            isValid = false;
-        }
-
-        // Validate new password
-        if (newPassword === '') {
-            newPasswordInput.classList.add('is-invalid');
-            isValid = false;
-        } else if (newPassword.length < 8) {
-            newPasswordInput.classList.add('is-invalid');
-            showToast('Password baru minimal 8 karakter', 'error');
-            isValid = false;
-        }
-
-        // Validate password confirmation
-        if (confirmPassword === '') {
-            confirmPasswordInput.classList.add('is-invalid');
-            isValid = false;
-        } else if (newPassword !== confirmPassword) {
-            confirmPasswordInput.classList.add('is-invalid');
-            showToast('Konfirmasi password tidak cocok', 'error');
-            isValid = false;
-        }
-
-        // Check if new password is same as current
-        if (currentPassword === newPassword && newPassword !== '') {
-            newPasswordInput.classList.add('is-invalid');
-            showToast('Password baru harus berbeda dari password saat ini', 'error');
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-    function showToast(message, type) {
-        // Fallback to alert if AdminLTE toast is not available
-        if (typeof $ !== 'undefined' && $.fn.Toasts) {
-            const toastClass = type === 'success' ? 'bg-success' : 'bg-danger';
-            
-            $(document).Toasts('create', {
-                class: toastClass,
-                title: type === 'success' ? 'Berhasil' : 'Error',
-                autohide: true,
-                delay: 5000,
-                body: message
-            });
-        } else {
-            // Fallback to simple alert
-            alert((type === 'success' ? 'Berhasil: ' : 'Error: ') + message);
-        }
-    }
-
-    // Test function to verify all elements are working
-    function testElements() {
-        const elements = [
-            'current_password',
-            'new_password', 
-            'new_password_confirmation',
-            'toggleCurrentPassword',
-            'toggleNewPassword',
-            'toggleConfirmPassword',
-            'passwordStrength',
-            'passwordStrengthText',
-            'passwordMatchText'
-        ];
-        
-        console.log('Testing elements...');
-        elements.forEach(function(id) {
-            const el = document.getElementById(id);
-            console.log(id + ':', el ? 'Found' : 'NOT FOUND');
-        });
-    }
-    
-<!-- Test Script for Debugging -->
-<script src="{{ asset('js/test-password-features.js') }}"></script>
-@endsection
+@endpush
