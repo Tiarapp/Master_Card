@@ -14,7 +14,12 @@
         <img src="{{ asset('asset/dist/img/profile.png') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+        <a href="{{ route('profile.index') }}" class="d-block">{{ Auth::user()->name }}</a>
+        <small class="text-muted">
+          <a href="{{ route('profile.change-password') }}" class="text-sm">
+            <i class="fas fa-key fa-xs"></i> Ubah Password
+          </a>
+        </small>
       </div>
     </div>
     

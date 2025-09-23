@@ -21,6 +21,7 @@ use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Accounting\VendorTT;
@@ -108,6 +109,13 @@ Route::get('/admin', function () {
 
 
 Route::middleware(['auth'])->group(function (){
+    
+    // Profile Management Routes
+    Route::get('/profile', 'ProfileController@index')->name('profile.index');
+    Route::put('/profile/update', 'ProfileController@updateProfile')->name('profile.update');
+    Route::get('/profile/change-password', 'ProfileController@showChangePasswordForm')->name('profile.change-password');
+    Route::post('/profile/change-password', 'ProfileController@updatePassword')->name('profile.update-password');
+    Route::get('/profile/password-requirements', 'ProfileController@getPasswordRequirements')->name('profile.password-requirements');
     
     // API routes for BBK Roll functionality
     Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
