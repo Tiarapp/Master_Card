@@ -87,15 +87,15 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
     public function headings(): array
     {
         return [
-            'Kode Internal',
+            'Tanggal Masuk',
             'Kode Roll',
-            'Supplier',
             'Jenis',
             'GSM',
-            'GSM Actual',
             'Lebar (cm)',
+            'Kode Internal',
+            'Supplier',
+            'GSM Actual',
             'KW',
-            'Tanggal Masuk',
             'Berat SJ (kg)',
             'Berat Timbang (kg)',
             'Quantity',
@@ -118,15 +118,15 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
     public function map($inventory): array
     {
         return [
-            $inventory->kode_internal ?? '-',
+            $inventory->tanggal_masuk ? \Carbon\Carbon::parse($inventory->tanggal_masuk)->format('Y-m-d') : '-',
             $inventory->kode_roll ?? '-',
-            $inventory->supplier->name ?? '-',
             $inventory->jenis ?? '-',
             $inventory->gsm ?? '-',
-            $inventory->gsm_actual ?? '-',
             $inventory->lebar ?? '-',
+            $inventory->kode_internal ?? '-',
+            $inventory->supplier->name ?? '-',
+            $inventory->gsm_actual ?? '-',
             $inventory->kw ?? '-',
-            $inventory->tanggal_masuk ? \Carbon\Carbon::parse($inventory->tanggal_masuk)->format('Y-m-d') : '-',
             $inventory->berat_sj ? number_format($inventory->berat_sj, 2) : '-',
             $inventory->berat_timbang ? number_format($inventory->berat_timbang, 2) : '-',
             $inventory->quantity == 0 ? '0' : $inventory->quantity,
@@ -148,7 +148,7 @@ class InventoryExport implements FromCollection, WithHeadings, WithMapping, With
     public function columnWidths(): array
     {
         return [
-            'A' => 20, // Kode Internal
+            'A' => 20, // Tanggal Masuk
             'B' => 20, // Kode Roll
             'C' => 25, // Supplier
             'D' => 20, // Jenis
