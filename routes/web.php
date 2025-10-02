@@ -334,6 +334,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
+    Route::get('/admin/kontrak/export', 'Kontrak_DController@exportExcel')->name('kontrak.export');
 
     Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
 

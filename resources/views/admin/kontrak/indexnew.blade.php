@@ -58,40 +58,147 @@
       @endif
       <!-- Small boxes (Stat box) -->
 
-      <div class="row mb-4 align-items-center">
-        <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ route('kontrak.create') }}" class="btn btn-success d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-plus-circle me-2"></i>
-            <span>{{ __('Tambah Kontrak') }}</span>
-          </a>
-          <a href="{{ route('job.create') }}" class="btn btn-primary d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
-            <i class="fas fa-unlock-alt me-2"></i>
-            <span>{{ __('Request Buka Block') }}</span>
-          </a>
-        </div>
-        <div class="col text-end">
-          <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('kontraknew') }}" method="GET" style="margin-bottom: 20px;">
-            <div class="input-group" style="max-width: 350px;">
-              <span class="input-group-text bg-white border-end-0" style="border-radius: 20px 0 0 20px; border-right: none;">
-                <i class="fas fa-search text-muted"></i>
-              </span>
-              <input 
-                type="text" 
-                class="form-control border-start-0 shadow-none" 
-                name="search" 
-                placeholder="{{ __('Cari Kontrak...') }}" 
-                value="{{ request('search') }}" 
-                style="border-radius: 0 20px 20px 0; border-left: none; min-width: 200px;"
-                autocomplete="off"
-              >
+      <!-- Control Panel -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <!-- Header Actions Row -->
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <!-- Action Buttons -->
+                <div class="d-flex flex-wrap gap-2">
+                  <a href="{{ route('kontrak.create') }}" class="btn btn-success d-flex align-items-center shadow-sm">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    <span>{{ __('Tambah Kontrak') }}</span>
+                  </a>
+                  <a href="{{ route('job.create') }}" class="btn btn-primary d-flex align-items-center shadow-sm">
+                    <i class="fas fa-unlock-alt me-2"></i>
+                    <span>{{ __('Request Buka Block') }}</span>
+                  </a>
+                </div>
+                
+                <!-- Status Indicators -->
+                <div class="d-flex align-items-center gap-2">
+                  @if(request('search'))
+                    <span class="badge bg-primary">
+                      <i class="fas fa-filter me-1"></i>
+                      Filter Aktif
+                    </span>
+                  @endif
+                </div>
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary px-4 shadow-sm">
-              <i class="fas fa-search me-1"></i> {{ __('Cari') }}
-            </button>
-            <a href="{{ route('kontraknew') }}" class="btn btn-outline-secondary px-4 shadow-sm">
-              <i class="fas fa-sync-alt me-1"></i> {{ __('Reset') }}
-            </a>
-          </form>
+          </div>
+
+          <!-- Search & Export Controls Row -->
+          <div class="row g-3">
+            <!-- Search Section -->
+            <div class="col-lg-6">
+              <div class="border rounded p-3 h-100" style="background-color: #f8f9fa;">
+                <div class="d-flex align-items-center mb-3">
+                  <i class="fas fa-search text-primary me-2"></i>
+                  <h6 class="mb-0 fw-bold text-dark">Pencarian Data</h6>
+                </div>
+                
+                <form action="{{ route('kontraknew') }}" method="GET" class="row g-2">
+                  <div class="col-md-8">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                      </span>
+                      <input type="text" class="form-control border-start-0" name="search" 
+                             placeholder="{{ __('Cari kontrak, customer, PO, sales...') }}" 
+                             value="{{ request('search') }}" autocomplete="off"
+                             title="Ketik untuk mencari data kontrak">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm">
+                      <i class="fas fa-search me-1"></i>
+                      <span class="d-none d-lg-inline">Cari</span>
+                    </button>
+                  </div>
+                  
+                  <div class="col-md-2">
+                    <a href="{{ route('kontraknew') }}" class="btn btn-outline-secondary btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm">
+                      <i class="fas fa-sync-alt me-1"></i>
+                      <span class="d-none d-lg-inline">Reset</span>
+                    </a>
+                  </div>
+                </form>
+                
+                @if(request('search'))
+                  <div class="mt-2">
+                    <small class="text-muted">
+                      <i class="fas fa-filter me-1"></i>
+                      Menampilkan hasil untuk: <strong>"{{ request('search') }}"</strong>
+                    </small>
+                  </div>
+                @endif
+              </div>
+            </div>
+
+            <!-- Export Section -->
+            <div class="col-lg-6">
+              <div class="border rounded p-3 h-100" style="background-color: #f0f8f0;">
+                <div class="d-flex align-items-center mb-3">
+                  <i class="fas fa-file-excel text-success me-2"></i>
+                  <h6 class="mb-0 fw-bold text-dark">Export Data</h6>
+                </div>
+                
+                <form action="{{ route('kontrak.export') }}" method="GET" class="row g-2">
+                  <!-- Hidden search parameter untuk export dengan filter yang sama -->
+                  @if(request('search'))
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                  @endif
+                  
+                  <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-calendar-alt text-muted"></i>
+                      </span>
+                      <input type="date" name="start_date" class="form-control border-start-0" 
+                             placeholder="Dari Tanggal" value="{{ request('start_date') }}" 
+                             title="Tanggal Mulai">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-5">
+                    <div class="input-group input-group-sm">
+                      <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-calendar-alt text-muted"></i>
+                      </span>
+                      <input type="date" name="end_date" class="form-control border-start-0" 
+                             placeholder="Sampai Tanggal" value="{{ request('end_date') }}"
+                             title="Tanggal Akhir">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-2">
+                    <button type="submit" class="btn btn-success btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm"
+                            title="{{ request('search') ? 'Export data yang sudah difilter' : 'Export semua data' }}">
+                      <i class="fas fa-download me-1"></i>
+                      @if(request('search'))
+                        <span class="d-none d-lg-inline">Filtered</span>
+                      @else
+                        <span class="d-none d-lg-inline">Excel</span>
+                      @endif
+                    </button>
+                  </div>
+                </form>
+                
+                @if(request('search'))
+                  <div class="mt-2">
+                    <small class="text-muted">
+                      <i class="fas fa-info-circle me-1"></i>
+                      Export akan menggunakan filter: <strong>"{{ request('search') }}"</strong>
+                    </small>
+                  </div>
+                @endif
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

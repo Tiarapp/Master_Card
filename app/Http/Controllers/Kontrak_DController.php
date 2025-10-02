@@ -1118,4 +1118,37 @@ class Kontrak_DController extends Controller
         // {
         //     return Excel::download(new KontrakExport($request->search), 'kontrak.xlsx');
         // }
+
+        /**
+         * Export kontrak data to Excel
+         *
+         * @param Request $request
+         * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+         */
+        public function exportExcel(Request $request)
+        {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $search = $request->input('search');
+            
+            // Validasi tanggal jika ada
+            if ($startDate && $endDate) {
+                if (strtotime($startDate) > strtotime($endDate)) {
+                    return redirect()->back()->with('error', 'Tanggal mulai tidak boleh lebih besar dari tanggal akhir');
+                }
+            }
+            
+            // Generate filename dengan timestamp dan parameter
+            $filename = 'export_kontrak_';
+            if ($search) {
+                $filename .= 'search_' . str_replace(' ', '_', $search) . '_';
+            }
+            if ($startDate && $endDate) {
+                $filename .= $startDate . '_to_' . $endDate . '_';
+            }
+            $filename .= date('Y-m-d_H-i-s') . '.xlsx';
+            
+            // Download Excel file
+            return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
+        }
     }
