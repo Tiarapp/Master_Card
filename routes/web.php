@@ -289,6 +289,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
     Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
     Route::get('/returjual/{tanggal}', 'BarangController@get_kode_retur')->name('barang.retur.get_kode');
+    Route::get('/get_sj/{no_sj}', 'BarangController@get_sj')->name('barang.get_sj');
     Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
     Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');
