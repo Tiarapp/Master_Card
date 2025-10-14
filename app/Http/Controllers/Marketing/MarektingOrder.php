@@ -73,10 +73,7 @@ class MarektingOrder extends Controller
             $mod = DB::connection('firebird2')->table('TMOD')
             ->where('APPROVE', '!=', 'Y                   ')
             ->orWhere('APPROVE', '=', NULL)
-            // ->take(2)
             ->get();
-            
-            // dd($mod);
 
             return DataTables::of($mod)
                 ->addColumn('action', function($mod) {

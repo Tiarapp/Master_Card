@@ -390,6 +390,10 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize DataTable for customer selection
+    if ($.fn.DataTable.isDataTable('#data_customer')) {
+        $('#data_customer').DataTable().destroy();
+    }
+    
     $('#data_customer').DataTable({
         "responsive": true,
         "lengthChange": false,
@@ -399,6 +403,10 @@ document.addEventListener('DOMContentLoaded', function() {
         "info": true,
         "paging": true,
         "pageLength": 10,
+        "drawCallback": function() {
+            // Re-initialize any tooltips or other elements after table redraw
+            $('[data-toggle="tooltip"]').tooltip();
+        },
         "language": {
             "search": "Cari Customer:",
             "lengthMenu": "Tampilkan _MENU_ data per halaman",
@@ -415,20 +423,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Customer selection functionality
-    $('.select-customer').on('click', function() {
-        const kode = $(this).data('kode');
-        const nama = $(this).data('nama');
+    // Customer selection functionality - using event delegation
+    $(document).on('click', '.select-customer', function(e) {
+        e.preventDefault(); // Prevent any default behavior
+        
+        const button = $(this);
+        const kode = button.data('kode');
+        const nama = button.data('nama');
+        const alamatKantor = button.data('alamat-kantor');
+        const kotaKantor = button.data('kota-kantor');
+        const alamatKirim = button.data('alamat-kirim');
+        const kotaKirim = button.data('kota-kirim');
+        const top = button.data('top');
+
+        // Validate that we have the required data
+        if (!kode || !nama) {
+            alert('Data customer tidak lengkap. Silakan coba lagi.');
+            return;
+        }
 
         // Fill customer fields
         $('#KodeCust').val(kode);
         $('#NamaCust').val(nama);
 
+        // Trigger change events to ensure any other listeners are notified
+        $('#KodeCust').trigger('change');
+        $('#NamaCust').trigger('change');
+
+        // Visual feedback
+        $('#KodeCust').removeClass('is-invalid').addClass('is-valid');
+        $('#NamaCust').removeClass('is-invalid').addClass('is-valid');
+
         // Close modal
         $('#CustomerModal').modal('hide');
         
         // Show success message
-        toastr.success('Customer berhasil dipilih: ' + nama);
+        if (typeof toastr !== 'undefined') {
+            toastr.success('Customer berhasil dipilih: ' + nama);
+        } else {
+            alert('Customer berhasil dipilih: ' + nama);
+        }
     });
 
     // Auto generate kode saat tanggal berubah
@@ -450,7 +484,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('kode').value = data['kode'];
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     alert('Terjadi kesalahan saat membuat nomor bukti');
                 });
         }
@@ -483,7 +516,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Debug: Show the URL being called
         const url = "{{ route('barang.get_sj', ['no_sj' => ':no_sj']) }}".replace(':no_sj', noSJ);
-        console.log('Calling URL:', url);
 
         // Make AJAX call to get SJ details
         $.ajax({
@@ -491,7 +523,6 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'GET',
             success: function(response) {
                 $('#sjLoadingMessage').hide();
-                console.log('Response received:', response);
                 
                 if (response && response.length > 0) {
                     // Clear previous data
@@ -533,7 +564,6 @@ document.addEventListener('DOMContentLoaded', function() {
             error: function(xhr, status, error) {
                 $('#sjLoadingMessage').hide();
                 $('#sjErrorMessage').show();
-                console.error('AJAX Error:', xhr.responseText);
                 
                 // Try to get error message from response
                 let errorMsg = 'Terjadi kesalahan saat memuat data: ' + error;
@@ -587,6 +617,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>
                         ${noSJ}
                         <input type="hidden" name="sj_details[${sjDetailCounter}][noSJ]" value="${noSJ}">
+                        <input type="hidden" name="sj_details[${sjDetailCounter}][noUrut]" value="${noUrut}">
+                        <input type="hidden" name="sj_details[${sjDetailCounter}][reffNoUrut]" value="${reffNoUrut}">
                     </td>
                     <td>
                         ${kodeBrg}
@@ -722,7 +754,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to validate all SJ detail data
     function validateSJDetailData() {
         const sjDetailRows = $('#sjDetailTableBody tr:not(:has(td[colspan]))');
-        console.log('Validating SJ Detail Data for', sjDetailRows.length, 'rows...');
         
         if (sjDetailRows.length === 0) {
             return { valid: false, message: 'Silakan tambahkan minimal satu detail surat jalan!' };
@@ -774,14 +805,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('form').addEventListener('submit', function(e) {
         // Always prevent default submission first
         e.preventDefault();
-        console.log('Form submission started...');
         
         const tanggal = document.getElementById('tanggal').value;
         const kode = document.getElementById('kode').value;
         const kodeCust = document.getElementById('KodeCust').value;
         const namaCust = document.getElementById('NamaCust').value;
-
-        console.log('Basic form fields:', { tanggal, kode, kodeCust, namaCust });
 
         // Validate basic fields
         if (!tanggal || !kode || !kodeCust || !namaCust) {
@@ -796,17 +824,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Debug: Log all form data before submission
-        const form = document.querySelector('form');
-        const formData = new FormData(form);
-        console.log('=== FORM DATA BEFORE SUBMIT ===');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-        console.log('=== END FORM DATA ===');
-        
-        console.log('All validation passed, submitting form...');
         // Now submit the form
+        const form = document.querySelector('form');
         form.submit();
     });
 

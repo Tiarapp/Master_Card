@@ -135,12 +135,13 @@
             <thead class="bg-info text-white">
               <tr>
                 <th style="width: 5%">No</th>
-                <th style="width: 15%">Tanggal Retur</th>
-                <th style="width: 20%">No Bukti</th>
-                <th style="width: 15%">Kode Customer</th>
-                <th style="width: 25%">Nama Customer</th>
-                <th style="width: 10%">Total Crt</th>
-                <th style="width: 10%">Total Ecr</th>
+                <th style="width: 12%">Tanggal Retur</th>
+                <th style="width: 18%">No Bukti</th>
+                <th style="width: 12%">Kode Customer</th>
+                <th style="width: 20%">Nama Customer</th>
+                <th style="width: 8%">Total Crt</th>
+                <th style="width: 8%">Total Ecr</th>
+                <th style="width: 7%">Status</th>
                 <th style="width: 10%">Action</th>
               </tr>
             </thead>
@@ -161,21 +162,50 @@
                   <td class="text-right">{{ number_format($data->TotReturCrt ?? 0, 0) }}</td>
                   <td class="text-right">{{ number_format($data->TotReturEcr ?? 0, 0) }}</td>
                   <td class="text-center">
+                    @if(str_contains($data->Blocked, 'Y'))
+                      <span class="badge badge-success">Blocked</span>
+                    @else
+                      <span class="badge badge-secondary">Open</span>
+                    @endif
+                    <small class="d-block text-muted">{{ $data->Aktif }}</small>
+                  </td>
+                  <td class="text-center">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-info btn-sm" 
-                              data-toggle="tooltip" title="Lihat Detail">
+                      <a href="{{ route('barang.retur.show', $data->NoBukti) }}" 
+                         class="btn btn-info btn-sm" 
+                         data-toggle="tooltip" title="Lihat Detail">
                         <i class="fas fa-eye"></i>
-                      </button>
-                      <button type="button" class="btn btn-warning btn-sm" 
-                              data-toggle="tooltip" title="Edit">
-                        <i class="fas fa-edit"></i>
-                      </button>
+                      </a>
+                      @if(str_contains($data->Blocked, 'Y'))
+                      
+                        <button type="button" 
+                                class="btn btn-secondary btn-sm disabled" 
+                                data-toggle="tooltip" title="Tidak dapat diedit (Blocked ≠ Y)">
+                          <i class="fas fa-lock"></i>
+                        </button>
+                      @else
+                      
+                        <a href="{{ route('barang.retur.edit', $data->NoBukti) }}" 
+                           class="btn btn-warning btn-sm" 
+                           data-toggle="tooltip" title="Edit (Blocked = N)">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                      @endif
                     </div>
+                    @if(str_contains($data->Blocked, 'Y'))
+                      <small class="text-muted d-block mt-1">
+                        <i class="fas fa-lock"></i> Locked
+                      </small>
+                    @else
+                      <small class="text-success d-block mt-1">
+                        <i class="fas fa-check-circle"></i> Editable
+                      </small>
+                    @endif
                   </td>
                 </tr>
               @empty
                 <tr>
-                  <td colspan="8" class="text-center text-muted">
+                  <td colspan="9" class="text-center text-muted">
                     <i class="fas fa-inbox fa-3x mb-3"></i><br>
                     Tidak ada data retur penjualan
                     @if(request()->hasAny(['search', 'date_start', 'date_end']))
