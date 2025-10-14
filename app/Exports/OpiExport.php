@@ -86,6 +86,7 @@ class OpiExport implements FromCollection, WithHeadings
                 'tipeCrease' => $item->kontrakd->mc->box->tipeCreaseCorr,
                 'bungkus' => $item->kontrakd->mc->bungkus,
                 'lainLain' => $item->kontrakd->mc->lain,
+                'blok' => $item->kontrakd->mc->text,
             ];
         });
     }
@@ -151,7 +152,8 @@ class OpiExport implements FromCollection, WithHeadings
             'Kode Barang', 
             "Tipe Crease", 
             "Bungkus", 
-            "Lain-Lain"
+            "Lain-Lain",
+            "Blok"
         ]; 
     }
 }
