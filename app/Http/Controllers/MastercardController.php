@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\DetPHP;
 use App\Models\Mastercard;
 use App\Models\Number_Sequence;
 use App\Models\Tracking;
+use App\Services\CrossDatabaseRelationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -829,6 +831,270 @@ class MastercardController extends Controller
         ];
         
         return response()->json($data);
+    }
+
+    public function get_mc_php(Request $request)
+    {
+        // SOLUSI LINTAS DATABASE: Simpan data PHP ke storage sementara lalu relasi dengan MC
+        try {
+            // STEP 1: Ambil semua data PHP dari Firebird dengan transaction handling
+            DB::connection('firebird2')->beginTransaction();
+            $phpDataRaw = DB::connection('firebird2')
+                ->select('SELECT TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
+                         FROM "TDetPHP" 
+                         GROUP BY TRIM("KodeBrg")');
+            DB::connection('firebird2')->commit();
+
+            // STEP 2: Convert ke Collection dan trim whitespace untuk key lookup
+            $phpData = collect($phpDataRaw)->map(function($item) {
+                // Trim semua string fields untuk menghilangkan whitespace
+                $item->KODEBRG = trim($item->KODEBRG ?? '');
+                return $item;
+            })->keyBy('KODEBRG'); // Key by KODEBRG yang sudah di-trim
+            
+            // Debug: Lihat struktur data PHP setelah trim
+            // Uncomment baris berikut untuk debugging:
+            // dd([
+            //     'raw_sample' => collect($phpDataRaw)->take(2),
+            //     'processed_sample' => $phpData->take(2),
+            //     'keys_sample' => $phpData->keys()->take(5)
+            // ]);
+
+            // STEP 3: Ambil semua data Mastercard untuk statistik
+            $allMastercards = Mastercard::
+                    select('kode','revisi','namaBarang', 'kodeBarang', 'created_at')->orderBy('created_at', 'desc')->get();
+            
+            // STEP 4: Loop through semua MC untuk statistik
+            $allMcWithPhp = $allMastercards->map(function($mc) use ($phpData) {
+                // Trim kodeBarang dari MC untuk memastikan match
+                $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
+                
+                // Cari data PHP berdasarkan kodeBarang yang sudah di-trim
+                $phpRecord = $phpData->get($trimmedKodeBarang);
+                
+                // Tambahkan data PHP ke MC
+                $mc->php_data = [
+                    'total_quantity' => $phpRecord ? (
+                        property_exists($phpRecord, 'TOTALBBM') ? $phpRecord->TOTALBBM : 0
+                    ) : 0,
+                    'total_records' => $phpRecord ? (
+                        property_exists($phpRecord, 'TOTAL_RECORDS') ? $phpRecord->TOTAL_RECORDS : 0
+                    ) : 0,
+                    'has_data' => $phpRecord !== null,
+                    'kode_brg' => $phpRecord ? (
+                        property_exists($phpRecord, 'KODEBRG') ? $phpRecord->KODEBRG : $trimmedKodeBarang
+                    ) : $trimmedKodeBarang,
+                    'original_kode' => $mc->kodeBarang, // Keep original untuk debugging
+                ];
+                
+                return $mc;
+            });
+
+            // STEP 5: Ambil semua data Mastercard yang sesuai kriteria search
+            $query = Mastercard::select('kode','revisi','namaBarang', 'kodeBarang', 'customer', 'created_at');
+            
+            // Tambahkan search jika ada
+            if ($request->has('search') && !empty($request->search)) {
+                $searchTerm = $request->search;
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('kode', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('namaBarang', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('kodeBarang', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('customer', 'LIKE', "%{$searchTerm}%");
+                });
+            }
+            
+            $allFilteredMc = $query->orderBy('created_at', 'desc')->get();
+            
+            // STEP 6: Loop through semua MC dan cari relasi di data PHP
+            $allMcWithPhpData = $allFilteredMc->map(function($mc) use ($phpData) {
+                // Trim kodeBarang dari MC untuk memastikan match
+                $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
+                
+                // Cari data PHP berdasarkan kodeBarang yang sudah di-trim
+                $phpRecord = $phpData->get($trimmedKodeBarang);
+                
+                // Tambahkan data PHP ke MC
+                $mc->php_data = [
+                    'total_quantity' => $phpRecord ? (
+                        property_exists($phpRecord, 'TOTALBBM') ? $phpRecord->TOTALBBM : 0
+                    ) : 0,
+                    'total_records' => $phpRecord ? (
+                        property_exists($phpRecord, 'TOTAL_RECORDS') ? $phpRecord->TOTAL_RECORDS : 0
+                    ) : 0,
+                    'has_data' => $phpRecord !== null,
+                    'kode_brg' => $phpRecord ? (
+                        property_exists($phpRecord, 'KODEBRG') ? $phpRecord->KODEBRG : $trimmedKodeBarang
+                    ) : $trimmedKodeBarang,
+                    'original_kode' => $mc->kodeBarang, // Keep original untuk debugging
+                ];
+                
+                return $mc;
+            });
+            
+            // STEP 7: Apply filter berdasarkan PHP data relationship
+            if ($request->has('filter') && !empty($request->filter)) {
+                if ($request->filter === 'with_php') {
+                    $allMcWithPhpData = $allMcWithPhpData->filter(function($mc) {
+                        return $mc->php_data['has_data'] === true;
+                    });
+                } elseif ($request->filter === 'without_php') {
+                    $allMcWithPhpData = $allMcWithPhpData->filter(function($mc) {
+                        return $mc->php_data['has_data'] === false;
+                    });
+                }
+            }
+            
+            // STEP 8: Manual pagination
+            $perPage = 20;
+            $currentPage = request()->get('page', 1);
+            $offset = ($currentPage - 1) * $perPage;
+            
+            $mcWithPhp = new \Illuminate\Pagination\LengthAwarePaginator(
+                $allMcWithPhpData->slice($offset, $perPage)->values(),
+                $allMcWithPhpData->count(),
+                $perPage,
+                $currentPage,
+                [
+                    'path' => request()->url(),
+                    'pageName' => 'page',
+                ]
+            );
+            
+            // Preserve search and filter parameters in pagination
+            $mcWithPhp->appends($request->query());
+
+            // STEP 7: Hanya MC yang punya data PHP untuk statistik
+            $mcWithPhpOnly = $allMcWithPhp->filter(function($mc) {
+                return $mc->php_data['has_data'] === true;
+            });
+
+            // STEP 8: Statistik summary
+            $summary = [
+                'total_mc' => $allMastercards->count(),
+                'mc_with_php' => $mcWithPhpOnly->count(),
+                'total_php_records' => $phpData->count(),
+                'total_php_quantity' => $phpData->sum('TOTALBBM') // Gunakan field name yang benar
+            ];
+
+            // STEP 9: Alternative - Data PHP dengan info MC (sample)
+            $phpWithMcInfo = $phpData->take(10)->map(function($php) use ($allMastercards) {
+                // Gunakan KODEBRG yang sudah di-trim dari collection
+                $trimmedKodeBrg = $php->KODEBRG;
+                
+                // Cari MC dengan kodeBarang yang di-trim juga
+                $relatedMc = $allMastercards->first(function($mc) use ($trimmedKodeBrg) {
+                    return trim($mc->kodeBarang ?? '') === $trimmedKodeBrg;
+                });
+                
+                return [
+                    'kode_brg' => $trimmedKodeBrg,
+                    'total_quantity' => $php->TOTALBBM,
+                    'total_records' => $php->TOTAL_RECORDS,
+                    'mc_info' => $relatedMc ? [
+                        'id' => $relatedMc->id,
+                        'kode' => $relatedMc->kode,
+                        'nama_barang' => $relatedMc->namaBarang,
+                        'customer' => $relatedMc->customer
+                    ] : null,
+                    'has_mc' => $relatedMc !== null
+                ];
+            });
+
+            return view('admin.ppic.mc.mc_bbm', [
+                'mcWithPhp' => $mcWithPhp,
+                'mcWithPhpOnly' => $mcWithPhpOnly,
+                'phpWithMcInfo' => $phpWithMcInfo,
+                'summary' => $summary,
+                'phpData' => $phpData->take(5), // Raw data untuk debugging
+                'allMastercards' => $allMastercards
+            ]);
+
+        } catch (\Exception $e) {
+            // Rollback transaction if it's still active
+            if (DB::connection('firebird2')->transactionLevel() > 0) {
+                DB::connection('firebird2')->rollback();
+            }
+            
+            // Log error untuk debugging
+            \Illuminate\Support\Facades\Log::error('Cross-database relation error: ' . $e->getMessage());
+            
+            return back()->with('error', 'Error loading cross-database data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Method alternatif untuk test relasi dengan cara berbeda
+     */
+    public function test_php_relation()
+    {
+        try {
+            // Test 1: Raw SQL langsung
+            $phpTest = DB::connection('firebird2')
+                ->select('SELECT FIRST 3 TRIM(KodeBrg) as KodeBrg, Quantity FROM TDetPHP');
+            
+            // Test 2: Menggunakan Service
+            $cachedPhp = CrossDatabaseRelationService::getAllPhpDataCached();
+            
+            // Test 3: Single record test
+            $singleTest = CrossDatabaseRelationService::findMastercardWithPhp('TEST001');
+
+            return response()->json([
+                'status' => 'success',
+                'tests' => [
+                    'raw_sql_sample' => $phpTest,
+                    'cached_count' => $cachedPhp->count(),
+                    'single_test' => $singleTest,
+                    'firebird_connection' => 'OK'
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
+        }
+    }
+
+    /**
+     * Sync PHP data ke tabel sementara MySQL (optional untuk performa)
+     */
+    public function sync_php_to_mysql()
+    {
+        try {
+            // Ambil semua data PHP
+            $phpDataRaw = DB::connection('firebird2')
+                ->select('SELECT TRIM(KodeBrg) as KodeBrg, SUM(Quantity) as totalBbm, COUNT(*) as total_records 
+                         FROM TDetPHP 
+                         GROUP BY TRIM(KodeBrg)');
+
+            // Simpan ke tabel sementara di MySQL (jika diperlukan)
+            foreach($phpDataRaw as $php) {
+                DB::table('temp_php_data')->updateOrInsert(
+                    ['kode_brg' => $php->KODEBRG],
+                    [
+                        'total_quantity' => $php->TOTALBBM,
+                        'total_records' => $php->TOTAL_RECORDS,
+                        'last_sync' => now()
+                    ]
+                );
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'PHP data synced successfully',
+                'synced_records' => count($phpDataRaw)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
 }

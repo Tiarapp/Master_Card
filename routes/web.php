@@ -429,6 +429,9 @@ Route::middleware(['auth'])->group(function (){
     })->name('opi.export');
     
     Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
+    Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
+    Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
+    Route::post('/admin/ppic/sync-php', [MastercardController::class, 'sync_php_to_mysql'])->name('ppic.sync_php');
     Route::post('/approve', function (Request $request) {
         $ids = $request->input('ids');
         Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
