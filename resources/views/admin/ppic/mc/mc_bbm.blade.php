@@ -164,7 +164,7 @@
                             <tbody>
                                 @forelse($mcWithPhp as $mc)
                                 <tr class="{{ $mc->php_data['has_data'] ? 'table-success' : 'table-light' }}">
-                                    <td><strong>{{ $mc->kode }}</strong></td>
+                                    <td><strong>{{ ($mc->revisi === 'R0' || $mc->revisi === null) ? $mc->kode : $mc->kode.'-'.$mc->revisi }}</strong></td>
                                     <td>{{ $mc->kodeBarang }}</td>
                                     <td>{{ $mc->namaBarang }}</td>
                                     <td>{{ $mc->customer }}</td>
@@ -205,21 +205,60 @@
                         <div class="pagination-info">
                             <small class="text-muted">
                                 @if($mcWithPhp->total() > 0)
-                                    Menampilkan {{ number_format($mcWithPhp->firstItem()) }} sampai {{ number_format($mcWithPhp->lastItem()) }} 
-                                    dari {{ number_format($mcWithPhp->total()) }} data
-                                    @if(request('search'))
-                                        (hasil pencarian)
-                                    @endif
-                                    <br>
-                                    <i class="fas fa-info-circle mr-1"></i>
-                                    {{ $mcWithPhp->where('php_data.has_data', true)->count() }} data memiliki relasi PHP
+                                    <div class="d-flex flex-column">
+                                        <div class="mb-1">
+                                            <i class="fas fa-list mr-1 text-primary"></i>
+                                            Menampilkan {{ number_format($mcWithPhp->firstItem()) }} sampai {{ number_format($mcWithPhp->lastItem()) }} 
+                                            dari {{ number_format($mcWithPhp->total()) }} data
+                                            @if(request('search'))
+                                                <span class="badge badge-info badge-sm ml-1">pencarian</span>
+                                            @endif
+                                        </div>
+                                        <div class="mb-1">
+                                            <i class="fas fa-bookmark mr-1 text-success"></i>
+                                            Halaman <strong class="text-primary">{{ $mcWithPhp->currentPage() }}</strong> 
+                                            dari <strong>{{ $mcWithPhp->lastPage() }}</strong> halaman
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-link mr-1 text-success"></i>
+                                            {{ $mcWithPhp->where('php_data.has_data', true)->count() }} data memiliki relasi PHP
+                                        </div>
+                                    </div>
                                 @else
-                                    Tidak ada data yang ditemukan
+                                    <div class="text-center">
+                                        <i class="fas fa-search mr-1"></i>
+                                        Tidak ada data yang ditemukan
+                                    </div>
                                 @endif
                             </small>
                         </div>
-                        <div class="pagination-links">
-                            {{ $mcWithPhp->links() }}
+                        <div class="pagination-links d-flex align-items-center flex-wrap">
+                            {{ $mcWithPhp->links('custom.pagination') }}
+                            
+                            @if($mcWithPhp->lastPage() > 1)
+                            <div class="pagination-quick-jump ml-3">
+                                <span class="text-muted">Langsung ke:</span>
+                                <form method="GET" class="d-inline-flex align-items-center" id="quickJumpForm">
+                                    @if(request('search'))
+                                        <input type="hidden" name="search" value="{{ request('search') }}">
+                                    @endif
+                                    @if(request('filter'))
+                                        <input type="hidden" name="filter" value="{{ request('filter') }}">
+                                    @endif
+                                    <input type="number" 
+                                           name="page" 
+                                           min="1" 
+                                           max="{{ $mcWithPhp->lastPage() }}" 
+                                           placeholder="{{ $mcWithPhp->currentPage() }}"
+                                           class="form-control form-control-sm"
+                                           style="width: 60px;"
+                                           title="Masukkan nomor halaman (1-{{ $mcWithPhp->lastPage() }})">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary ml-1" title="Pergi ke halaman">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -310,11 +349,38 @@ $(document).ready(function() {
     // Styling untuk pagination Laravel
     $('.pagination').addClass('pagination-sm justify-content-center');
     
-    // Smooth scrolling untuk pagination
+    // Smooth scrolling untuk pagination dengan loading effect
     $(document).on('click', '.pagination a', function(e) {
+        // Add loading state to clicked pagination link
+        var $clickedLink = $(this);
+        var originalText = $clickedLink.html();
+        
+        $clickedLink.html('<i class="fas fa-spinner fa-spin"></i>');
+        
+        // Smooth scroll to top
         $('html, body').animate({
             scrollTop: $('.card').first().offset().top - 100
         }, 500);
+        
+        // Add a small delay to show loading effect
+        setTimeout(function() {
+            // The page will navigate, so this might not execute
+            $clickedLink.html(originalText);
+        }, 300);
+    });
+    
+    // Highlight active page with pulse effect
+    $('.pagination .page-item.active .page-link').addClass('pulse-active');
+    
+    // Add hover effects to pagination
+    $('.pagination .page-link').on('mouseenter', function() {
+        if (!$(this).closest('.page-item').hasClass('active') && !$(this).closest('.page-item').hasClass('disabled')) {
+            $(this).css('transform', 'translateY(-2px) scale(1.05)');
+        }
+    }).on('mouseleave', function() {
+        if (!$(this).closest('.page-item').hasClass('active')) {
+            $(this).css('transform', '');
+        }
     });
     
     // Highlight baris dengan data PHP
@@ -348,6 +414,54 @@ $(document).ready(function() {
     
     // Tooltip for badges
     $('.badge').tooltip();
+    
+    // Initialize tooltips for pagination
+    $('.pagination .page-link').tooltip();
+    
+    // Add page indicator on load
+    if ($('.pagination .page-item.active').length > 0) {
+        var currentPage = $('.pagination .page-item.active .page-link strong').text();
+        var totalPages = $('.pagination .page-item:not(.disabled)').last().prev().find('a').text() || currentPage;
+        
+        // Add subtle animation to show current page loaded
+        $('.pagination .page-item.active').addClass('page-loaded');
+        setTimeout(function() {
+            $('.pagination .page-item.active').removeClass('page-loaded');
+        }, 1000);
+    }
+    
+    // Quick jump form validation
+    $('#quickJumpForm').on('submit', function(e) {
+        var pageInput = $(this).find('input[name="page"]');
+        var page = parseInt(pageInput.val());
+        var maxPage = parseInt(pageInput.attr('max'));
+        
+        if (!page || page < 1 || page > maxPage) {
+            e.preventDefault();
+            pageInput.focus();
+            alert('Masukkan nomor halaman yang valid (1-' + maxPage + ')');
+            return false;
+        }
+        
+        // Show loading state
+        $(this).find('button').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+    });
+    
+    // Quick jump input enhancement
+    $('.pagination-quick-jump input[type="number"]').on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            $(this).closest('form').submit();
+        }
+    }).on('input', function() {
+        var page = parseInt($(this).val());
+        var maxPage = parseInt($(this).attr('max'));
+        
+        if (page && (page < 1 || page > maxPage)) {
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
 });
 </script>
 
@@ -362,14 +476,115 @@ $(document).ready(function() {
 }
 
 .pagination .page-link {
-    border-radius: 0.375rem;
-    margin: 0 2px;
+    border-radius: 0.5rem;
+    margin: 0 3px;
     border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     border-color: #007bff;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link.page-active-highlight {
+    position: relative;
+    overflow: hidden;
+}
+
+.pagination .page-item.active .page-link.page-active-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+@keyframes pulseActive {
+    0% { box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3); }
+    50% { box-shadow: 0 3px 12px rgba(0, 123, 255, 0.5), 0 0 0 3px rgba(0, 123, 255, 0.1); }
+    100% { box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3); }
+}
+
+.pulse-active {
+    animation: pulseActive 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pagination {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes pageLoaded {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); background-color: #28a745; }
+    100% { transform: scale(1); }
+}
+
+.page-loaded {
+    animation: pageLoaded 0.6s ease-in-out;
+}
+
+/* Quick jump to page feature */
+.pagination-quick-jump {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 15px;
+    font-size: 0.875rem;
+}
+
+.pagination-quick-jump input {
+    width: 50px;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    background-color: #f8f9fa;
+    color: #007bff;
+    font-size: 0.9rem;
+}
+
+.pagination .page-item:first-child .page-link:hover,
+.pagination .page-item:last-child .page-link:hover {
+    background-color: #007bff;
+    color: white;
 }
 
 .bg-success-hover {
@@ -378,6 +593,78 @@ $(document).ready(function() {
 
 .table tbody tr {
     transition: background-color 0.15s ease-in-out;
+}
+
+/* Additional pagination enhancements */
+.pagination-links {
+    position: relative;
+}
+
+.pagination-links::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #dee2e6, transparent);
+}
+
+/* Quick Jump Styling */
+.pagination-quick-jump {
+    border-left: 1px solid #dee2e6;
+    padding-left: 15px;
+    margin-left: 15px !important;
+}
+
+.pagination-quick-jump input[type="number"] {
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.pagination-quick-jump input[type="number"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    outline: none;
+}
+
+.pagination-quick-jump .btn {
+    height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-quick-jump input[type="number"].is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220,53,69,0.25);
+}
+
+/* Mobile responsive pagination */
+@media (max-width: 576px) {
+    .pagination .page-link {
+        padding: 6px 10px;
+        font-size: 0.875rem;
+        margin: 0 1px;
+    }
+    
+    .pagination-links::before {
+        display: none;
+    }
+    
+    .pagination-quick-jump {
+        border-left: none;
+        padding-left: 0;
+        margin-left: 0 !important;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #dee2e6;
+        width: 100%;
+        justify-content: center;
+    }
 }
 </style>
 @endsection
