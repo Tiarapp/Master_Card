@@ -835,68 +835,40 @@ class MastercardController extends Controller
 
     public function get_mc_php(Request $request)
     {
-        // SOLUSI LINTAS DATABASE: Simpan data PHP ke storage sementara lalu relasi dengan MC
+        // OPTIMIZED PERFORMANCE: Cache-first approach dengan lazy loading
         try {
-            // STEP 1: Ambil semua data PHP dari Firebird dengan transaction handling
-            DB::connection('firebird2')->beginTransaction();
-            $phpDataRaw = DB::connection('firebird2')
-                ->select('SELECT TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
-                         FROM "TDetPHP" 
-                         GROUP BY TRIM("KodeBrg")');
-            DB::connection('firebird2')->commit();
-
-            // STEP 2: Convert ke Collection dan trim whitespace untuk key lookup
-            $phpData = collect($phpDataRaw)->map(function($item) {
-                // Trim semua string fields untuk menghilangkan whitespace
-                $item->KODEBRG = trim($item->KODEBRG ?? '');
-                return $item;
-            })->keyBy('KODEBRG'); // Key by KODEBRG yang sudah di-trim
+            $cacheKey = 'php_data_summary_' . md5(json_encode($request->only(['search', 'filter'])));
             
-            // Debug: Lihat struktur data PHP setelah trim
-            // Uncomment baris berikut untuk debugging:
-            // dd([
-            //     'raw_sample' => collect($phpDataRaw)->take(2),
-            //     'processed_sample' => $phpData->take(2),
-            //     'keys_sample' => $phpData->keys()->take(5)
-            // ]);
-
-            // STEP 3: Ambil semua data Mastercard untuk statistik
-            $allMastercards = Mastercard::
-                    select('kode','revisi','namaBarang', 'kodeBarang', 'created_at')->orderBy('created_at', 'desc')->get();
-            
-            // STEP 4: Loop through semua MC untuk statistik
-            $allMcWithPhp = $allMastercards->map(function($mc) use ($phpData) {
-                // Trim kodeBarang dari MC untuk memastikan match
-                $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
+            // STEP 1: Coba ambil dari cache dulu (5 menit cache)
+            $phpData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 300, function() {
+                DB::connection('firebird2')->beginTransaction();
+                // LIMIT data untuk performa - hanya ambil 1000 records teratas
+                $phpDataRaw = DB::connection('firebird2')
+                    ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
+                             FROM "TDetPHP" 
+                             GROUP BY TRIM("KodeBrg")
+                             ORDER BY SUM("Quantity") DESC');
+                DB::connection('firebird2')->commit();
                 
-                // Cari data PHP berdasarkan kodeBarang yang sudah di-trim
-                $phpRecord = $phpData->get($trimmedKodeBarang);
-                
-                // Tambahkan data PHP ke MC
-                $mc->php_data = [
-                    'total_quantity' => $phpRecord ? (
-                        property_exists($phpRecord, 'TOTALBBM') ? $phpRecord->TOTALBBM : 0
-                    ) : 0,
-                    'total_records' => $phpRecord ? (
-                        property_exists($phpRecord, 'TOTAL_RECORDS') ? $phpRecord->TOTAL_RECORDS : 0
-                    ) : 0,
-                    'has_data' => $phpRecord !== null,
-                    'kode_brg' => $phpRecord ? (
-                        property_exists($phpRecord, 'KODEBRG') ? $phpRecord->KODEBRG : $trimmedKodeBarang
-                    ) : $trimmedKodeBarang,
-                    'original_kode' => $mc->kodeBarang, // Keep original untuk debugging
-                ];
-                
-                return $mc;
+                return collect($phpDataRaw)->map(function($item) {
+                    $item->KODEBRG = trim($item->KODEBRG ?? '');
+                    return $item;
+                })->keyBy('KODEBRG');
             });
 
-            // STEP 5: Ambil semua data Mastercard yang sesuai kriteria search
-            $query = Mastercard::select('kode','revisi','namaBarang', 'kodeBarang', 'customer', 'created_at');
+            
+            // STEP 2: Optimized Mastercard query dengan pagination-first approach
+            $perPage = 20;
+            $currentPage = request()->get('page', 1);
+            
+            
+            // STEP 3: Query MC dengan pagination langsung - TIDAK ambil semua data dulu
+            $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'customer', 'created_at');
             
             // Tambahkan search jika ada
             if ($request->has('search') && !empty($request->search)) {
                 $searchTerm = $request->search;
-                $query->where(function($q) use ($searchTerm) {
+                $mcQuery->where(function($q) use ($searchTerm) {
                     $q->where('kode', 'LIKE', "%{$searchTerm}%")
                       ->orWhere('namaBarang', 'LIKE', "%{$searchTerm}%")
                       ->orWhere('kodeBarang', 'LIKE', "%{$searchTerm}%")
@@ -904,110 +876,55 @@ class MastercardController extends Controller
                 });
             }
             
-            $allFilteredMc = $query->orderBy('created_at', 'desc')->get();
+            // Pre-filter berdasarkan PHP data jika diperlukan
+            if ($request->has('filter') && !empty($request->filter)) {
+                if ($request->filter === 'with_php') {
+                    $mcQuery->whereIn('kodeBarang', $phpData->keys()->toArray());
+                } elseif ($request->filter === 'without_php') {
+                    $mcQuery->whereNotIn('kodeBarang', $phpData->keys()->toArray());
+                }
+            }
             
-            // STEP 6: Loop through semua MC dan cari relasi di data PHP
-            $allMcWithPhpData = $allFilteredMc->map(function($mc) use ($phpData) {
-                // Trim kodeBarang dari MC untuk memastikan match
+            // LANGSUNG PAGINATE - tidak load semua data
+            $mcWithPhp = $mcQuery->orderBy('created_at', 'desc')
+                ->paginate($perPage, ['*'], 'page', $currentPage)
+                ->appends($request->query());
+            
+            
+            // STEP 4: Hanya proses data yang ada di halaman aktif - TIDAK semua data
+            $mcWithPhp->getCollection()->transform(function($mc) use ($phpData) {
                 $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
-                
-                // Cari data PHP berdasarkan kodeBarang yang sudah di-trim
                 $phpRecord = $phpData->get($trimmedKodeBarang);
                 
-                // Tambahkan data PHP ke MC
                 $mc->php_data = [
-                    'total_quantity' => $phpRecord ? (
-                        property_exists($phpRecord, 'TOTALBBM') ? $phpRecord->TOTALBBM : 0
-                    ) : 0,
-                    'total_records' => $phpRecord ? (
-                        property_exists($phpRecord, 'TOTAL_RECORDS') ? $phpRecord->TOTAL_RECORDS : 0
-                    ) : 0,
+                    'total_quantity' => $phpRecord ? ($phpRecord->TOTALBBM ?? 0) : 0,
+                    'total_records' => $phpRecord ? ($phpRecord->TOTAL_RECORDS ?? 0) : 0,
                     'has_data' => $phpRecord !== null,
-                    'kode_brg' => $phpRecord ? (
-                        property_exists($phpRecord, 'KODEBRG') ? $phpRecord->KODEBRG : $trimmedKodeBarang
-                    ) : $trimmedKodeBarang,
-                    'original_kode' => $mc->kodeBarang, // Keep original untuk debugging
+                    'kode_brg' => $phpRecord ? ($phpRecord->KODEBRG ?? $trimmedKodeBarang) : $trimmedKodeBarang,
+                    'original_kode' => $mc->kodeBarang,
                 ];
                 
                 return $mc;
             });
-            
-            // STEP 7: Apply filter berdasarkan PHP data relationship
-            if ($request->has('filter') && !empty($request->filter)) {
-                if ($request->filter === 'with_php') {
-                    $allMcWithPhpData = $allMcWithPhpData->filter(function($mc) {
-                        return $mc->php_data['has_data'] === true;
-                    });
-                } elseif ($request->filter === 'without_php') {
-                    $allMcWithPhpData = $allMcWithPhpData->filter(function($mc) {
-                        return $mc->php_data['has_data'] === false;
-                    });
-                }
-            }
-            
-            // STEP 8: Manual pagination
-            $perPage = 20;
-            $currentPage = request()->get('page', 1);
-            $offset = ($currentPage - 1) * $perPage;
-            
-            $mcWithPhp = new \Illuminate\Pagination\LengthAwarePaginator(
-                $allMcWithPhpData->slice($offset, $perPage)->values(),
-                $allMcWithPhpData->count(),
-                $perPage,
-                $currentPage,
-                [
-                    'path' => request()->url(),
-                    'pageName' => 'page',
-                ]
-            );
-            
-            // Preserve search and filter parameters in pagination
-            $mcWithPhp->appends($request->query());
 
-            // STEP 7: Hanya MC yang punya data PHP untuk statistik
-            $mcWithPhpOnly = $allMcWithPhp->filter(function($mc) {
-                return $mc->php_data['has_data'] === true;
-            });
-
-            // STEP 8: Statistik summary
-            $summary = [
-                'total_mc' => $allMastercards->count(),
-                'mc_with_php' => $mcWithPhpOnly->count(),
-                'total_php_records' => $phpData->count(),
-                'total_php_quantity' => $phpData->sum('TOTALBBM') // Gunakan field name yang benar
-            ];
-
-            // STEP 9: Alternative - Data PHP dengan info MC (sample)
-            $phpWithMcInfo = $phpData->take(10)->map(function($php) use ($allMastercards) {
-                // Gunakan KODEBRG yang sudah di-trim dari collection
-                $trimmedKodeBrg = $php->KODEBRG;
-                
-                // Cari MC dengan kodeBarang yang di-trim juga
-                $relatedMc = $allMastercards->first(function($mc) use ($trimmedKodeBrg) {
-                    return trim($mc->kodeBarang ?? '') === $trimmedKodeBrg;
-                });
+            // STEP 5: Quick summary dengan cached counts - tidak query semua data
+            $summary = \Illuminate\Support\Facades\Cache::remember('mc_summary_stats', 600, function() use ($phpData) {
+                $totalMc = Mastercard::count();
+                $mcWithPhpCount = Mastercard::whereIn('kodeBarang', $phpData->keys()->toArray())->count();
                 
                 return [
-                    'kode_brg' => $trimmedKodeBrg,
-                    'total_quantity' => $php->TOTALBBM,
-                    'total_records' => $php->TOTAL_RECORDS,
-                    'mc_info' => $relatedMc ? [
-                        'id' => $relatedMc->id,
-                        'kode' => $relatedMc->kode,
-                        'nama_barang' => $relatedMc->namaBarang,
-                        'customer' => $relatedMc->customer
-                    ] : null,
-                    'has_mc' => $relatedMc !== null
+                    'total_mc' => $totalMc,
+                    'mc_with_php' => $mcWithPhpCount,
+                    'total_php_records' => $phpData->count(),
+                    'total_php_quantity' => $phpData->sum('TOTALBBM')
                 ];
             });
 
+            // STEP 6: Simplified return - minimal data untuk performa
             return view('admin.ppic.mc.mc_bbm', [
                 'mcWithPhp' => $mcWithPhp,
-                'mcWithPhpOnly' => $mcWithPhpOnly,
-                'phpWithMcInfo' => $phpWithMcInfo,
                 'summary' => $summary,
-                'phpData' => $phpData->take(5), // Raw data untuk debugging
-                'allMastercards' => $allMastercards
+                'phpData' => $phpData->take(5), // Raw data untuk debugging (minimal)
             ]);
 
         } catch (\Exception $e) {

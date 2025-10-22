@@ -148,45 +148,47 @@
                     </div>
                     @endif
                     
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                    <div class="table-responsive" id="mc-table-container" style="min-height: 400px;">
+                        <div id="table-loading" class="text-center py-5" style="display: none;">
+                            <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+                            <p class="mt-2">Memuat data...</p>
+                        </div>
+                        <table class="table table-bordered table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>Kode MC</th>
-                                    <th>Kode Barang</th>
-                                    <th>Nama Barang</th>
-                                    <th>Customer</th>
-                                    <th>Status PHP</th>
-                                    <th>Total Quantity</th>
-                                    <th>Total Records</th>
+                                    <th style="width: 15%;">Kode MC</th>
+                                    <th style="width: 15%;">Kode Barang</th>
+                                    <th style="width: 25%;">Nama Barang</th>
+                                    <th style="width: 15%;">Customer</th>
+                                    <th style="width: 10%;">Status PHP</th>
+                                    <th style="width: 10%;">Total Quantity</th>
+                                    <th style="width: 10%;">Total Records</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($mcWithPhp as $mc)
-                                <tr class="{{ $mc->php_data['has_data'] ? 'table-success' : 'table-light' }}">
+                                <tr class="{{ ($mc->php_data['has_data'] ?? false) ? 'table-success' : 'table-light' }}">
                                     <td><strong>{{ ($mc->revisi === 'R0' || $mc->revisi === null) ? $mc->kode : $mc->kode.'-'.$mc->revisi }}</strong></td>
                                     <td>{{ $mc->kodeBarang }}</td>
-                                    <td>{{ $mc->namaBarang }}</td>
-                                    <td>{{ $mc->customer }}</td>
+                                    <td>{{ Str::limit($mc->namaBarang, 40) }}</td>
+                                    <td>{{ Str::limit($mc->customer, 25) }}</td>
                                     <td>
-                                        @if($mc->php_data['has_data'])
-                                            <span class="badge badge-success" 
-                                                  title="Ditemukan {{ $mc->php_data['total_records'] }} record di database PHP"
-                                                  data-toggle="tooltip">
-                                                <i class="fas fa-check mr-1"></i>Ada Data
+                                        @if(($mc->php_data['has_data'] ?? false))
+                                            <span class="badge badge-success badge-sm" 
+                                                  title="Ditemukan {{ $mc->php_data['total_records'] ?? 0 }} record">
+                                                <i class="fas fa-check"></i> Ada
                                             </span>
                                         @else
-                                            <span class="badge badge-secondary" 
-                                                  title="Tidak ditemukan data matching di database PHP"
-                                                  data-toggle="tooltip">
-                                                <i class="fas fa-times mr-1"></i>Tidak Ada
+                                            <span class="badge badge-secondary badge-sm" 
+                                                  title="Tidak ada data PHP">
+                                                <i class="fas fa-times"></i> Tidak Ada
                                             </span>
                                         @endif
                                     </td>
                                     <td class="text-right">
-                                        <strong>{{ number_format($mc->php_data['total_quantity']) }}</strong>
+                                        <strong>{{ number_format($mc->php_data['total_quantity'] ?? 0) }}</strong>
                                     </td>
-                                    <td class="text-right">{{ $mc->php_data['total_records'] }}</td>
+                                    <td class="text-right">{{ $mc->php_data['total_records'] ?? 0 }}</td>
                                 </tr>
                                 @empty
                                 <tr>
@@ -263,81 +265,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- <!-- PHP Data dengan Info MC -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-database mr-1"></i>
-                        Data PHP dengan Informasi Mastercard
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Kode Barang</th>
-                                    <th>Total Quantity PHP</th>
-                                    <th>Status MC</th>
-                                    <th>Kode MC</th>
-                                    <th>Nama Barang</th>
-                                    <th>Customer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($phpWithMcInfo as $php)
-                                <tr class="{{ $php['has_mc'] ? 'table-info' : 'table-warning' }}">
-                                    <td><strong>{{ $php['kode_brg'] }}</strong></td>
-                                    <td class="text-right">
-                                        <strong>{{ number_format($php['total_quantity']) }}</strong>
-                                    </td>
-                                    <td>
-                                        @if($php['has_mc'])
-                                            <span class="badge badge-info">
-                                                <i class="fas fa-link mr-1"></i>Ada MC
-                                            </span>
-                                        @else
-                                            <span class="badge badge-warning">
-                                                <i class="fas fa-unlink mr-1"></i>Tanpa MC
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $php['mc_info']['kode'] ?? '-' }}</td>
-                                    <td>{{ $php['mc_info']['nama_barang'] ?? '-' }}</td>
-                                    <td>{{ $php['mc_info']['customer'] ?? '-' }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Debug Info (Optional - bisa dihapus di production) -->
-            @if(config('app.debug'))
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-bug mr-1"></i>
-                        Debug Information
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Sample PHP Raw Data:</h5>
-                            <pre>{{ json_encode($phpData->take(3), JSON_PRETTY_PRINT) }}</pre>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>Sample MC Data:</h5>
-                            <pre>{{ json_encode($mastercards->take(2)->toArray(), JSON_PRETTY_PRINT) }}</pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif --}}
-
         </div>
     </section>
 </div>
@@ -346,26 +273,34 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
-    // Styling untuk pagination Laravel
-    $('.pagination').addClass('pagination-sm justify-content-center');
+    // PERFORMANCE: Show loading state on page transitions
+    function showTableLoading() {
+        $('#table-loading').show();
+        $('.table').hide();
+    }
     
-    // Smooth scrolling untuk pagination dengan loading effect
+    function hideTableLoading() {
+        $('#table-loading').hide();
+        $('.table').show();
+    }
+    
+    // Initial page load animation
+    $('.table').css('opacity', '0').animate({'opacity': '1'}, 300);
+    
+    // PERFORMANCE: Defer heavy operations
+    setTimeout(function() {
+        // Styling untuk pagination Laravel
+        $('.pagination').addClass('pagination-sm justify-content-center');
+    
+    // Optimized pagination loading
     $(document).on('click', '.pagination a', function(e) {
-        // Add loading state to clicked pagination link
+        showTableLoading();
         var $clickedLink = $(this);
-        var originalText = $clickedLink.html();
-        
         $clickedLink.html('<i class="fas fa-spinner fa-spin"></i>');
         
-        // Smooth scroll to top
+        // Reduced scroll animation time for better performance
         $('html, body').animate({
-            scrollTop: $('.card').first().offset().top - 100
-        }, 500);
-        
-        // Add a small delay to show loading effect
-        setTimeout(function() {
-            // The page will navigate, so this might not execute
-            $clickedLink.html(originalText);
+            scrollTop: $('.card').first().offset().top - 80
         }, 300);
     });
     
@@ -383,15 +318,12 @@ $(document).ready(function() {
         }
     });
     
-    // Highlight baris dengan data PHP
-    $('.table tbody tr.table-success').hover(
-        function() {
-            $(this).addClass('bg-success-hover');
-        },
-        function() {
-            $(this).removeClass('bg-success-hover');
-        }
-    );
+    // PERFORMANCE: Use event delegation untuk large tables
+    $('.table tbody').on('mouseenter', 'tr.table-success', function() {
+        $(this).addClass('bg-success-hover');
+    }).on('mouseleave', 'tr.table-success', function() {
+        $(this).removeClass('bg-success-hover');
+    });
     
     // Auto submit search form on Enter
     $('input[name="search"]').on('keypress', function(e) {
@@ -400,15 +332,17 @@ $(document).ready(function() {
         }
     });
     
-    // Loading state for filter buttons
+    // Optimized loading states
     $('.btn-group a').on('click', function() {
         if (!$(this).hasClass('btn-primary') && !$(this).hasClass('btn-success') && !$(this).hasClass('btn-secondary')) {
-            $(this).html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+            showTableLoading();
+            $(this).prepend('<i class="fas fa-spinner fa-spin mr-1"></i>');
         }
     });
     
-    // Show loading indicator on form submit
+    // Form submit loading
     $('form').on('submit', function() {
+        showTableLoading();
         $(this).find('button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i>');
     });
     
@@ -462,6 +396,8 @@ $(document).ready(function() {
             $(this).removeClass('is-invalid');
         }
     });
+    
+    }, 100); // Defer untuk performa
 });
 </script>
 
@@ -480,8 +416,9 @@ $(document).ready(function() {
     margin: 0 3px;
     border: 1px solid #dee2e6;
     padding: 8px 12px;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Reduced transitions */
     font-weight: 500;
+    will-change: transform; /* Optimize for animations */
 }
 
 .pagination .page-link:hover {
@@ -592,7 +529,27 @@ $(document).ready(function() {
 }
 
 .table tbody tr {
-    transition: background-color 0.15s ease-in-out;
+    transition: background-color 0.1s ease-in-out; /* Faster transition */
+}
+
+/* Performance optimizations */
+.table {
+    table-layout: fixed; /* Improve rendering performance */
+}
+
+.table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 /* Additional pagination enhancements */
