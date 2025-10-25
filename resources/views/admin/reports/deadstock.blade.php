@@ -207,13 +207,11 @@
                                 <th>No</th>
                                 <th>Kode Barang</th>
                                 <th>Nama Barang</th>
-                                <th>Customer</th>
                                 <th>Qty (CRT)</th>
                                 <th>Satuan</th>
                                 <th>Tanggal Keluar Terakhir</th>
                                 <th>Umur (hari)</th>
                                 <th>Kategori Umur</th>
-                                <th>Gudang</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -224,7 +222,6 @@
                                     <strong>{{ $item->KodeBrg ?? 'N/A' }}</strong>
                                 </td>
                                 <td>{{ $item->NamaBrg ?? 'N/A' }}</td>
-                                <td>{{ 'N/A' }}</td>
                                 <td class="text-right">
                                     <strong>{{ number_format($item->SaldoAkhirCrt ?? 0, 2) }}</strong>
                                 </td>
@@ -237,7 +234,7 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if($item->DaysSinceLastSJ && $item->DaysSinceLastSJ < 9999)
+                                    @if($item->DaysSinceLastSJ !== null && $item->DaysSinceLastSJ < 9999)
                                         @php
                                             $daysDiff = $item->DaysSinceLastSJ;
                                         @endphp
@@ -254,7 +251,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($item->DaysSinceLastSJ && $item->DaysSinceLastSJ < 9999)
+                                    @if($item->DaysSinceLastSJ !== null && $item->DaysSinceLastSJ < 9999)
                                         @php
                                             $daysDiff = $item->DaysSinceLastSJ;
                                         @endphp
@@ -271,7 +268,6 @@
                                         <span class="badge badge-secondary">Tidak ada data</span>
                                     @endif
                                 </td>
-                                <td>{{ 'N/A' }}</td>
                             </tr>
                             @empty
                             <tr>

@@ -408,9 +408,10 @@ class ReportController extends Controller
                     
                     $daysSinceLastSJ = \Carbon\Carbon::parse($latestSJ->LATESTTGLPHP)->diffInDays($endDate);
                 } else {
-                    $tglKeluar = \Carbon\Carbon::parse('2025-05-31')->toDateString();
+                    // No SJ data available - use default date 31/05/2025
+                    $tglKeluar = '2025-05-31';
                     
-                    // Same smart calculation for default date
+                    // Calculate days from default date to end of period
                     $currentPeriod = date('m/Y');
                     if ($currentPeriod === $periode) {
                         $endDate = \Carbon\Carbon::now();
