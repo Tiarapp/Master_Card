@@ -698,6 +698,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('hardware', 'HardwareController');
     Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
     Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
+
+    Route::prefix('admin/report')->name('admin.report.')->group(function () {
+        Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
+        Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
+    });
 });
 
 require __DIR__ . '/auth.php';
