@@ -516,6 +516,36 @@ class ReportController extends Controller
             $avgDeadstockDays = $stockWithSJ->count() > 0 ? 
                 $stockWithSJ->map(fn($item) => \Carbon\Carbon::parse($item->TglKeluar)->diffInDays(\Carbon\Carbon::now()))->avg() : 0;
             
+            // Calculate warehouse capacity utilization
+            $maxKapasitasTon = 1000; // Maximum warehouse capacity: 1000 tons
+            
+            // Get total weight from all items with BeratStandart
+            $totalBeratKg = DB::connection('firebird2')->selectOne('
+                SELECT 
+                    SUM(p."SaldoAkhirCrt" * COALESCE(b."BeratStandart", 0)) as TotalBeratKg,
+                    COUNT(*) as TotalItems,
+                    COUNT(CASE WHEN b."BeratStandart" > 0 THEN 1 END) as ItemsWithWeight
+                FROM "TPersediaan" p
+                LEFT JOIN "TBarangConv" b ON p."KodeBrg" = b."KodeBrg"
+                WHERE p."Periode" LIKE ?
+                    AND p."SaldoAkhirCrt" > 0
+            ', ['%' . $periode . '%']);
+            
+            $totalBeratKg = $totalBeratKg->TOTALBERATKG ?? 0;
+            $totalTon = $totalBeratKg / 1000;
+            $sisaKapasitasTon = $maxKapasitasTon - $totalTon;
+            $persentasePenggunaan = ($totalTon / $maxKapasitasTon) * 100;
+            
+            // Capacity data for chart (in tons)
+            $capacityData = [
+                'terpakai' => round($totalTon, 2),
+                'tersisa' => round($sisaKapasitasTon, 2),
+                'persentase' => round($persentasePenggunaan, 2),
+                'max_kapasitas' => $maxKapasitasTon,
+                'total_kg' => round($totalBeratKg, 2),
+                'items_with_weight' => $totalBeratKg->ITEMSWITHWEIGHT ?? 0
+            ];
+            
             // Pagination data
             $pagination = [
                 'current_page' => $page,
@@ -531,7 +561,7 @@ class ReportController extends Controller
             return view('admin.reports.deadstock', compact(
                 'stock', 'periode', 'totalItems', 'totalCrt', 'totalKg',
                 'deadstockCategories', 'stockWithSJ', 'stockWithoutSJ', 
-                'avgDeadstockDays', 'pagination', 'ageFilter', 'chartData'
+                'avgDeadstockDays', 'pagination', 'ageFilter', 'chartData', 'capacityData'
             ));
             
         } catch (\Exception $e) {
@@ -666,5 +696,300 @@ class ReportController extends Controller
         } else {
             return 'Active Stock (<30 days)';
         }
+    }
+
+    public function kapasitasGudang(Request $request)
+    {
+        $periode = $request->periode ?? date_format(now(), 'm/Y');
+
+        DB::connection('firebird2')->beginTransaction();
+
+        $gudangData = DB::connection('firebird2')->select('
+            SELECT 
+                p."KodeBrg",
+                p."SaldoAkhirKg",
+                p."SaldoAkhirCrt",
+                p."Periode",
+                b."NamaBrg",
+                b."JenisProd",
+                pc."Nama"
+            FROM "TPersediaan" p
+            LEFT JOIN "TBarangConv" b ON p."KodeBrg" = b."KodeBrg"
+            LEFT JOIN "TProdConv" pc ON b."JenisProd" = pc."Kode"
+            WHERE "Periode" LIKE ?
+            AND "SaldoAkhirCrt" > 0
+            ORDER BY "SaldoAkhirKg" DESC
+        ', ['%'.$periode.'%']);
+
+        // dd($gudangData);
+
+        DB::connection('firebird2')->commit();
+
+        return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode'));
+    }
+
+    public function in_out_bound(Request $request)
+    {
+        $periode = $request->periode ?? date_format(now(), 'm/Y');
+        
+        try {
+            \Illuminate\Support\Facades\Log::info("Starting in_out_bound report for periode: {$periode}");
+            
+            DB::connection('firebird2')->beginTransaction();
+            
+            // Parse periode
+            $periodeParts = explode('/', $periode);
+            $month = intval($periodeParts[0] ?? 0);
+            $year = intval($periodeParts[1] ?? 0);
+            
+            if ($month == 0 || $year == 0) {
+                throw new \Exception("Invalid periode format: {$periode}");
+            }
+            
+            \Illuminate\Support\Facades\Log::info("Parsed periode: Month={$month}, Year={$year}");
+            
+            // Jika ada parameter test, gunakan data sample kecil
+            if ($request->has('test')) {
+                return $this->in_out_bound_test($request, $month, $year);
+            }
+            
+            // DEBUG: Check available tables and their structure
+            try {
+                $sjTables = DB::connection('firebird2')->select('
+                    SELECT RDB$RELATION_NAME 
+                    FROM RDB$RELATIONS 
+                    WHERE RDB$RELATION_NAME LIKE \'%SJ%\' OR RDB$RELATION_NAME LIKE \'%SURAT%\'
+                    ORDER BY RDB$RELATION_NAME
+                ');
+                \Illuminate\Support\Facades\Log::info("Available SJ tables: " . json_encode($sjTables));
+                
+                $phpTables = DB::connection('firebird2')->select('
+                    SELECT RDB$RELATION_NAME 
+                    FROM RDB$RELATIONS 
+                    WHERE RDB$RELATION_NAME LIKE \'%PHP%\'
+                    ORDER BY RDB$RELATION_NAME
+                ');
+                \Illuminate\Support\Facades\Log::info("Available PHP tables: " . json_encode($phpTables));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning("Could not query table structure: " . $e->getMessage());
+            }
+            
+            // Query untuk mendapatkan data SJ (Outbound) - LIMIT untuk testing
+            \Illuminate\Support\Facades\Log::info("Executing SJ query for month={$month}, year={$year}");
+            $sjData = DB::connection('firebird2')->select('
+                SELECT 
+                    CAST(sj."TglSJ" AS DATE) as tanggal,
+                    det."KodeBrg",
+                    b."NamaBrg",
+                    b."BeratStandart",
+                    SUM(det."Quantity" * COALESCE(b."BeratStandart", 0)) as total_berat,
+                    COUNT(DISTINCT sj."NomerSJ") as total_dokumen,
+                    \'SJ\' as jenis_transaksi
+                FROM "TDetSJ" det
+                LEFT JOIN "TSuratJalan" sj ON det."NomerSJ" = sj."NomerSJ"
+                LEFT JOIN "TBarangConv" b ON det."KodeBrg" = b."KodeBrg"
+                WHERE EXTRACT(MONTH FROM sj."TglSJ") = ? 
+                    AND EXTRACT(YEAR FROM sj."TglSJ") = ?
+                    AND det."Quantity" > 0
+                    AND sj."TglSJ" IS NOT NULL
+                GROUP BY 
+                    CAST(sj."TglSJ" AS DATE),
+                    det."KodeBrg", 
+                    b."NamaBrg",
+                    b."BeratStandart"
+                ORDER BY tanggal DESC, det."KodeBrg"
+            ', [$month, $year]);
+
+            // dd($sjData);
+            
+            // Query untuk mendapatkan data PHP (Inbound) - LIMIT untuk testing
+            \Illuminate\Support\Facades\Log::info("Executing PHP query for month={$month}, year={$year}");
+            $phpData = DB::connection('firebird2')->select('
+                SELECT 
+                    CAST(php."TglPHP" AS DATE) as tanggal,
+                    det."KodeBrg",
+                    b."NamaBrg",
+                    b."BeratStandart",
+                    SUM(det."Berat") as total_berat,
+                    COUNT(DISTINCT php."NoBukti") as total_dokumen,
+                    \'PHP\' as jenis_transaksi
+                FROM "TDetPHP" det
+                LEFT JOIN "TPHP" php ON det."NoPHP" = php."NoBukti"
+                LEFT JOIN "TBarangConv" b ON det."KodeBrg" = b."KodeBrg"
+                WHERE EXTRACT(MONTH FROM php."TglPHP") = ? 
+                    AND EXTRACT(YEAR FROM php."TglPHP") = ?
+                    AND det."Berat" > 0
+                    AND php."TglPHP" IS NOT NULL
+                GROUP BY 
+                    CAST(php."TglPHP" AS DATE),
+                    det."KodeBrg", 
+                    b."NamaBrg",
+                    b."BeratStandart"
+                ORDER BY tanggal DESC, det."KodeBrg"
+            ', [$month, $year]);
+            
+            DB::connection('firebird2')->commit();
+            
+            \Illuminate\Support\Facades\Log::info("Query completed. SJ count: " . count($sjData) . ", PHP count: " . count($phpData));
+            
+            // Gabungkan dan olah data
+            $combinedData = collect($sjData)->merge(collect($phpData));
+            
+            \Illuminate\Support\Facades\Log::info("Combined data count: " . $combinedData->count());
+            
+            // Group by tanggal saja untuk menggabungkan semua transaksi per hari
+            // Note: Field names in Firebird are typically uppercase
+            $groupedData = $combinedData->groupBy(function($item) {
+                // Try multiple possible field names for tanggal
+                if (property_exists($item, 'TANGGAL')) {
+                    return $item->TANGGAL;
+                } elseif (property_exists($item, 'tanggal')) {
+                    return $item->tanggal;
+                } elseif (property_exists($item, 'TGL')) {
+                    return $item->TGL;
+                } else {
+                    // Fallback - use the first property that looks like a date
+                    $props = get_object_vars($item);
+                    foreach ($props as $key => $value) {
+                        if (stripos($key, 'tanggal') !== false || stripos($key, 'tgl') !== false) {
+                            return $value;
+                        }
+                    }
+                    return 'unknown_date';
+                }
+            })->map(function($group, $tanggal) {
+                // Filter dengan trim untuk mengatasi whitespace di JENIS_TRANSAKSI
+                $sjItems = $group->filter(function($item) {
+                    $jenisTransaksi = trim($item->JENIS_TRANSAKSI ?? '');
+                    return $jenisTransaksi === 'SJ';
+                });
+                
+                $phpItems = $group->filter(function($item) {
+                    $jenisTransaksi = trim($item->JENIS_TRANSAKSI ?? '');
+                    return $jenisTransaksi === 'PHP';
+                });
+
+                // dd($tanggal, $sjItems->sum('TOTAL_BERAT'), $phpItems);
+                
+                $totalQtySJ = $sjItems->sum('TOTAL_BERAT') ?? 0;
+                $totalQtyPHP = $phpItems->sum('TOTAL_BERAT') ?? 0;
+                $totalSJDokumen = $sjItems->sum('TOTAL_DOKUMEN') ?? 0;
+                $totalPHPDokumen = $phpItems->sum('TOTAL_DOKUMEN') ?? 0;
+                
+                // Ambil daftar barang yang terlibat
+                $kodeBarangField = null;
+                if ($group->count() > 0) {
+                    $firstItem = $group->first();
+                    if (property_exists($firstItem, 'KodeBrg')) {
+                        $kodeBarangField = 'KodeBrg';
+                    } elseif (property_exists($firstItem, 'KODEBRG')) {
+                        $kodeBarangField = 'KODEBRG';
+                    }
+                }
+                
+                $totalItemTypes = 0;
+                
+                if ($kodeBarangField) {
+                    $uniqueCodes = $group->pluck($kodeBarangField)->unique();
+                    $totalItemTypes = $uniqueCodes->count();
+                }
+                
+                return (object)[
+                    'tanggal' => $tanggal,
+                    'total_item_types' => $totalItemTypes,
+                    'qtySJ' => $totalQtySJ,
+                    'qtyPHP' => $totalQtyPHP,
+                    'total_sj' => $totalSJDokumen,
+                    'total_php' => $totalPHPDokumen
+                ];
+            })->sortByDesc('tanggal')->values();
+            
+            $inOutData = $groupedData;
+            
+            \Illuminate\Support\Facades\Log::info("Data processing completed. Final count: " . $inOutData->count());
+            
+        } catch (\Exception $e) {
+            if (DB::connection('firebird2')->transactionLevel() > 0) {
+                DB::connection('firebird2')->rollback();
+            }
+            
+            \Illuminate\Support\Facades\Log::error('In/Out Bound Report Error: ' . $e->getMessage());
+            
+            // Return empty collection on error
+            $inOutData = collect();
+        }
+
+        return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
+    }
+    
+    public function in_out_bound_test(Request $request, $month, $year)
+    {
+        // Test dengan data statis untuk debug
+        $testData = collect([
+            (object)[
+                'tanggal' => '2025-10-01', 
+                'jenis_transaksi' => 'SJ',
+                'total_berat' => 100,
+                'total_dokumen' => 5,
+                'KodeBrg' => 'TEST001',
+                'NamaBrg' => 'Test Barang SJ'
+            ],
+            (object)[
+                'tanggal' => '2025-10-01', 
+                'jenis_transaksi' => 'PHP',
+                'total_berat' => 150,
+                'total_dokumen' => 3,
+                'KodeBrg' => 'TEST002',
+                'NamaBrg' => 'Test Barang PHP'
+            ],
+            (object)[
+                'tanggal' => '2025-10-02', 
+                'jenis_transaksi' => 'SJ ',  // dengan whitespace
+                'total_berat' => 80,
+                'total_dokumen' => 2,
+                'KodeBrg' => 'TEST003',
+                'NamaBrg' => 'Test Barang SJ 2'
+            ]
+        ]);
+        
+        \Illuminate\Support\Facades\Log::info("Using test data count: " . $testData->count());
+        
+        // Group by tanggal
+        $groupedData = $testData->groupBy('tanggal')->map(function($group, $tanggal) {
+            // Debug: Check jenis_transaksi values
+            $jenisValues = $group->map(function($item) {
+                return "'" . $item->jenis_transaksi . "' (length:" . strlen($item->jenis_transaksi) . ")";
+            })->unique()->values()->toArray();
+            
+            \Illuminate\Support\Facades\Log::info("Date {$tanggal} - All JENIS_TRANSAKSI values: " . json_encode($jenisValues));
+            
+            // Filter dengan trim
+            $sjItems = $group->filter(function($item) {
+                $jenisTransaksi = trim($item->jenis_transaksi ?? '');
+                return $jenisTransaksi === 'SJ';
+            });
+            
+            $phpItems = $group->filter(function($item) {
+                $jenisTransaksi = trim($item->jenis_transaksi ?? '');
+                return $jenisTransaksi === 'PHP';
+            });
+            
+            \Illuminate\Support\Facades\Log::info("Date {$tanggal}: Total items: {$group->count()}, SJ items: {$sjItems->count()}, PHP items: {$phpItems->count()}");
+            
+            return (object)[
+                'tanggal' => $tanggal,
+                'daftar_barang' => 'TEST_ITEMS',
+                'total_item_types' => $group->count(),
+                'qtySJ' => $sjItems->sum('total_berat'),
+                'qtyPHP' => $phpItems->sum('total_berat'),
+                'total_sj' => $sjItems->sum('total_dokumen'),
+                'total_php' => $phpItems->sum('total_dokumen')
+            ];
+        })->sortByDesc('tanggal')->values();
+        
+        $inOutData = $groupedData;
+        $periode = $month . '/' . $year;
+        
+        return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
     }
 }

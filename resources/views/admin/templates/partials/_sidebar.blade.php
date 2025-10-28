@@ -613,6 +613,18 @@
                   <p>Deadstock Report</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.report.kapasitas') }}" class="nav-link">
+                  <i class="fas fa-warehouse nav-icon"></i>
+                  <p>Kapasitas Gudang</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.report.in_out_bound') }}" class="nav-link">
+                  <i class="fas fa-exchange-alt nav-icon"></i>
+                  <p>In/Out Bound</p>
+                </a>
+              </li>
             </ul>
           </li>
           

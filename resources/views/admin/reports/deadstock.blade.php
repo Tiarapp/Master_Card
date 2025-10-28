@@ -77,7 +77,7 @@
 
             <!-- Chart Section -->
             <div class="row mb-4">
-                <div class="col-12">
+                <div class="col-6">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
@@ -90,11 +90,8 @@
                             <div class="row mb-4">
                                 <div class="col-md-2 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-success">
-                                            <i class="fas fa-clock"></i>
-                                        </span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">1-3 Bulan</span>
+                                            <span class="info-box-text bg-success p-2">1-3 Bulan</span>
                                             <span class="info-box-number" id="count-1-3">-</span>
                                             <div class="progress">
                                                 <div class="progress-bar bg-success" style="width: 0%" id="progress-1-3"></div>
@@ -105,11 +102,8 @@
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-warning">
-                                            <i class="fas fa-hourglass-half"></i>
-                                        </span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">4-6 Bulan</span>
+                                            <span class="info-box-text bg-warning p-2">4-6 Bulan</span>
                                             <span class="info-box-number" id="count-4-6">-</span>
                                             <div class="progress">
                                                 <div class="progress-bar bg-warning" style="width: 0%" id="progress-4-6"></div>
@@ -120,11 +114,8 @@
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-danger">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">6-1 Tahun</span>
+                                            <span class="info-box-text bg-danger p-2">6-1 Tahun</span>
                                             <span class="info-box-number" id="count-6-12">-</span>
                                             <div class="progress">
                                                 <div class="progress-bar bg-danger" style="width: 0%" id="progress-6-12"></div>
@@ -135,11 +126,8 @@
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-dark">
-                                            <i class="fas fa-skull-crossbones"></i>
-                                        </span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">1 Tahun ++</span>
+                                            <span class="info-box-text bg-dark p-2">1 Tahun ++</span>
                                             <span class="info-box-number" id="count-12+">-</span>
                                             <div class="progress">
                                                 <div class="progress-bar bg-dark" style="width: 0%" id="progress-12+"></div>
@@ -150,11 +138,8 @@
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-12">
                                     <div class="info-box">
-                                        <span class="info-box-icon bg-secondary">
-                                            <i class="fas fa-question"></i>
-                                        </span>
                                         <div class="info-box-content">
-                                            <span class="info-box-text">No Data</span>
+                                            <span class="info-box-text bg-secondary p-2">No Data</span>
                                             <span class="info-box-number" id="count-no-data">-</span>
                                             <div class="progress">
                                                 <div class="progress-bar bg-secondary" style="width: 0%" id="progress-no-data"></div>
