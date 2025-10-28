@@ -61,7 +61,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>{{ number_format(collect($gudangData)->sum('SaldoAkhirKg'), 2) }}</h3>
+                            <h3>{{ number_format($totals['totalKg'], 2) }}</h3>
                             <p>Total Berat (Kg)</p>
                         </div>
                         <div class="icon">
@@ -72,7 +72,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ number_format(collect($gudangData)->sum('SaldoAkhirCrt'), 2) }}</h3>
+                            <h3>{{ number_format($totals['totalCrt'], 2) }}</h3>
                             <p>Total Kuantitas (CRT)</p>
                         </div>
                         <div class="icon">
@@ -83,7 +83,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ number_format(collect($gudangData)->count()) }}</h3>
+                            <h3>{{ number_format($totals['totalItems']) }}</h3>
                             <p>Total Item</p>
                         </div>
                         <div class="icon">
@@ -94,12 +94,8 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            @php
-                                $totalKg = collect($gudangData)->sum('SaldoAkhirKg');
-                                $percentage = $totalKg > 0 ? ($totalKg / 1000000) * 100 : 0; // Assuming max capacity 1M kg
-                            @endphp
-                            <h3>{{ number_format($percentage, 1) }}%</h3>
-                            <p>Kapasitas Terpakai dari 1000 Kg</p>
+                            <h3>{{ number_format($totals['percentage'], 1) }}%</h3>
+                            <p>Kapasitas Terpakai dari 1M Kg</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-chart-pie"></i>
@@ -147,11 +143,17 @@
                         Data Kapasitas Gudang - {{ $periode }}
                     </h3>
                     <div class="card-tools">
-                        <span class="badge badge-primary">Total: {{ number_format(count($gudangData)) }} items</span>
+                        <span class="badge badge-primary">Total: {{ number_format($totals['totalItems']) }} items</span>
                     </div>
                 </div>
                 <div class="card-body table-responsive">
-                    <table class="table table-hover table-striped" id="kapasitasTable">
+                    <!-- Loading indicator -->
+                    <div id="table-loading" class="text-center py-4">
+                        <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+                        <p class="mt-2">Memuat data kapasitas gudang...</p>
+                    </div>
+                    
+                    <table class="table table-hover table-striped" id="kapasitasTable" style="display: none;">
                         <thead class="thead-dark">
                             <tr>
                                 <th>No</th>
@@ -166,8 +168,7 @@
                         <tbody>
                             @forelse($gudangData as $index => $item)
                             @php
-                                $totalKg = collect($gudangData)->sum('SaldoAkhirKg');
-                                $kontribusi = $totalKg > 0 ? (($item->SaldoAkhirKg ?? 0) / $totalKg) * 100 : 0;
+                                $kontribusi = $totals['totalKg'] > 0 ? (($item->SaldoAkhirKg ?? 0) / $totals['totalKg']) * 100 : 0;
                             @endphp
                             <tr>
                                 <td>{{ $index + 1 }}</td>
@@ -226,34 +227,68 @@
 
 <script>
 $(document).ready(function() {
-    // Initialize DataTable
-    $('#kapasitasTable').DataTable({
-        "pageLength": 25,
+    // Show loading indicator
+    $('#table-loading').show();
+    $('#kapasitasTable').hide();
+    
+    // Initialize DataTable with optimized settings
+    const table = $('#kapasitasTable').DataTable({
+        "pageLength": 50,
         "ordering": true,
         "searching": true,
         "responsive": true,
+        "deferRender": true,        // Render rows only when needed
+        "processing": true,         // Show processing indicator
+        "stateSave": true,          // Save user state
         "order": [[ 5, "desc" ]], // Order by Berat (Kg) descending
         "columnDefs": [
             { "orderable": false, "targets": [6] } // Disable ordering on % Kontribusi column
-        ]
+        ],
+        "language": {
+            "processing": "Memproses data...",
+            "search": "Cari:",
+            "lengthMenu": "Tampilkan _MENU_ data",
+            "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            "paginate": {
+                "first": "Pertama",
+                "last": "Terakhir", 
+                "next": "Selanjutnya",
+                "previous": "Sebelumnya"
+            }
+        },
+        "initComplete": function() {
+            // Hide loading indicator and show table
+            $('#table-loading').fadeOut();
+            $('#kapasitasTable').fadeIn();
+        }
     });
     
-    // Prepare chart data
+    // Prepare chart data with optimization
     const gudangData = @json($gudangData);
     
-    // Group by Jenis Produk
-    const groupedData = {};
-    gudangData.forEach(item => {
-        const jenis = item.Nama || 'Unknown';
-        if (!groupedData[jenis]) {
-            groupedData[jenis] = { totalKg: 0, totalCrt: 0, count: 0 };
-        }
-        groupedData[jenis].totalKg += parseFloat(item.SaldoAkhirKg || 0);
-        groupedData[jenis].totalCrt += parseFloat(item.SaldoAkhirCrt || 0);
-        groupedData[jenis].count += 1;
-    });
+    // Optimize chart processing for large datasets
+    const processChartData = () => {
+        // Group by Jenis Produk with efficient aggregation
+        const groupedData = {};
+        
+        // Single pass through data
+        gudangData.forEach(item => {
+            const jenis = item.Nama || 'Unknown';
+            if (!groupedData[jenis]) {
+                groupedData[jenis] = { totalKg: 0, totalCrt: 0, count: 0 };
+            }
+            groupedData[jenis].totalKg += parseFloat(item.SaldoAkhirKg || 0);
+            groupedData[jenis].totalCrt += parseFloat(item.SaldoAkhirCrt || 0);
+            groupedData[jenis].count += 1;
+        });
+        
+        return groupedData;
+    };
     
-    // Sort and get top 10
+    // Process data efficiently
+    const groupedData = processChartData();
+    
+    // Sort and get top 10 for chart (keep manageable)
     const sortedData = Object.entries(groupedData)
         .sort((a, b) => b[1].totalKg - a[1].totalKg)
         .slice(0, 10);
@@ -341,6 +376,32 @@ $(document).ready(function() {
     background-color: #f5f5f5;
 }
 
+/* Loading animation */
+#table-loading {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Optimize table rendering */
+#kapasitasTable {
+    table-layout: auto;
+}
+
+#kapasitasTable tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* DataTables processing overlay */
+.dataTables_processing {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
 @media (max-width: 768px) {
     .small-box h3 {
         font-size: 1.5rem;
@@ -348,6 +409,10 @@ $(document).ready(function() {
     
     .table-responsive {
         font-size: 0.875rem;
+    }
+    
+    #table-loading {
+        min-height: 150px;
     }
 }
 </style>

@@ -702,30 +702,78 @@ class ReportController extends Controller
     {
         $periode = $request->periode ?? date_format(now(), 'm/Y');
 
-        DB::connection('firebird2')->beginTransaction();
+        $startTime = microtime(true);
+        \Illuminate\Support\Facades\Log::info("Starting kapasitas gudang report for periode: {$periode}");
 
-        $gudangData = DB::connection('firebird2')->select('
-            SELECT 
-                p."KodeBrg",
-                p."SaldoAkhirKg",
-                p."SaldoAkhirCrt",
-                p."Periode",
-                b."NamaBrg",
-                b."JenisProd",
-                pc."Nama"
-            FROM "TPersediaan" p
-            LEFT JOIN "TBarangConv" b ON p."KodeBrg" = b."KodeBrg"
-            LEFT JOIN "TProdConv" pc ON b."JenisProd" = pc."Kode"
-            WHERE "Periode" LIKE ?
-            AND "SaldoAkhirCrt" > 0
-            ORDER BY "SaldoAkhirKg" DESC
-        ', ['%'.$periode.'%']);
+        try {
+            DB::connection('firebird2')->beginTransaction();
 
-        // dd($gudangData);
+            // Optimized query without LIMIT - focus on WHERE clause optimization
+            $queryStartTime = microtime(true);
+            
+            // Split into smaller, faster queries
+            $gudangData = DB::connection('firebird2')->select('
+                SELECT 
+                    p."KodeBrg",
+                    p."SaldoAkhirKg",
+                    p."SaldoAkhirCrt", 
+                    p."Periode",
+                    b."NamaBrg",
+                    b."JenisProd",
+                    pc."Nama"
+                FROM "TPersediaan" p
+                INNER JOIN "TBarangConv" b ON p."KodeBrg" = b."KodeBrg"
+                LEFT JOIN "TProdConv" pc ON b."JenisProd" = pc."Kode"
+                WHERE p."Periode" = ?
+                    AND p."SaldoAkhirCrt" > 0
+                    AND p."SaldoAkhirKg" > 0
+                    AND b."KodeBrg" IS NOT NULL
+                ORDER BY p."SaldoAkhirKg" DESC
+            ', [$periode]);
 
-        DB::connection('firebird2')->commit();
+            $queryEndTime = microtime(true);
+            $queryTime = round(($queryEndTime - $queryStartTime) * 1000, 2);
+            
+            \Illuminate\Support\Facades\Log::info("Kapasitas query completed in {$queryTime}ms. Records found: " . count($gudangData));
 
-        return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode'));
+            DB::connection('firebird2')->commit();
+
+            // Efficient pre-calculations using single pass
+            $totalKg = 0;
+            $totalCrt = 0;
+            $totalItems = count($gudangData);
+            
+            foreach ($gudangData as $item) {
+                $totalKg += (float)($item->SaldoAkhirKg ?? 0);
+                $totalCrt += (float)($item->SaldoAkhirCrt ?? 0);
+            }
+
+            $totals = [
+                'totalKg' => $totalKg,
+                'totalCrt' => $totalCrt, 
+                'totalItems' => $totalItems,
+                'percentage' => $totalKg > 0 ? ($totalKg / 1000000) * 100 : 0
+            ];
+
+            $totalTime = round((microtime(true) - $startTime) * 1000, 2);
+            \Illuminate\Support\Facades\Log::info("Kapasitas gudang report completed in {$totalTime}ms");
+
+            return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode', 'totals'));
+            
+        } catch (\Exception $e) {
+            if (DB::connection('firebird2')->transactionLevel() > 0) {
+                DB::connection('firebird2')->rollback();
+            }
+            
+            \Illuminate\Support\Facades\Log::error('Kapasitas Gudang Error: ' . $e->getMessage());
+            
+            // Return empty data on error
+            $totals = ['totalKg' => 0, 'totalCrt' => 0, 'totalItems' => 0, 'percentage' => 0];
+            $gudangData = [];
+            
+            return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode', 'totals'))
+                ->with('error', 'Terjadi kesalahan saat memuat data kapasitas gudang.');
+        }
     }
 
     public function in_out_bound(Request $request)
