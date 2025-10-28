@@ -218,7 +218,18 @@
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->linertengah->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->flute2->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->linerbawah->gramKertas ?? ''}}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->substanceproduksi->linerbawah->jenisKertasMc == "BK" ? "K" : $production->mc->substanceproduksi->linerbawah->jenisKertasMc }} </td>
+                        <?php
+                          if ($production->mc->substanceproduksi->linerbawah) {
+                            if ($production->mc->substanceproduksi->linerbawah->jenisKertasMc == "BK") {
+                              $jenisKertas = "K";
+                            } else {
+                              $jenisKertas = $production->mc->substanceproduksi->linerbawah->jenisKertasMc;
+                            }
+                          } else {
+                            $jenisKertas = '';
+                          }
+                        ?>
+                        <td class="text-gray-800 bold">{{ $jenisKertas }} </td>
                         <td class="text-gray-800 bold">{{ $production->mc->wax ?? '' }}</td>
                         <td class="text-gray-800 bold">
                           @if (Auth::user()->divisi_id == 3)
@@ -255,7 +266,18 @@
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->linertengah->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->flute2->gramKertas ?? '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->linerbawah->gramKertas ?? ''}}</td>
-                        <td class="text-gray-800 bold">{{ $production->mc->substancekontrak->linerbawah->jenisKertasMc == "BK" ? "K" : $production->mc->substancekontrak->linerbawah->jenisKertasMc }} </td>
+                         <?php
+                          if ($production->mc->substancekontrak->linerbawah) {
+                            if ($production->mc->substancekontrak->linerbawah->jenisKertasMc == "BK") {
+                              $jenisKertasKontrak = "K";
+                            } else {
+                              $jenisKertasKontrak = $production->mc->substancekontrak->linerbawah->jenisKertasMc;
+                            }
+                          } else {
+                            $jenisKertasKontrak = '';
+                          }
+                        ?>
+                        <td class="text-gray-800 bold">{{ $jenisKertasKontrak }} </td>
                         <td></td>
                         <td class="text-gray-800 bold">{{ $production->mc->kodeBarang }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->box->tipeCreasCorr }}</td>
