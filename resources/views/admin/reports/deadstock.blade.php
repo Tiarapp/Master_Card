@@ -316,7 +316,7 @@
 
 @section('javascripts')
 <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
 <script>
 // Isolated scope to prevent conflicts with app.js
@@ -329,9 +329,9 @@
     const chartData = @json($chartData ?? []);
     console.log('Server chart data:', chartData);
     
-    // Wait for DOM ready
-    $(document).ready(function() {
-        console.log('DOM ready, initializing chart...');
+    // Wait for window load to ensure Chart.js is fully loaded
+    $(window).on('load', function() {
+        console.log('Window loaded, initializing chart...');
         
         // Check if Chart.js is loaded
         if (typeof Chart === 'undefined') {
