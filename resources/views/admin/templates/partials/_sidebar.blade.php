@@ -570,35 +570,8 @@
               </ul>
             </li>
           @endif
-
-          {{-- Feedback Menu - accessible by all users --}}
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="fas fa-comment-dots nav-icon"></i>
-              <p>
-                Feedback
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.feedback.create') }}" class="nav-link">
-                  <i class="fas fa-plus nav-icon"></i>
-                  <p>Kirim Feedback</p>
-                </a>
-              </li>
-              @if (Auth::user()->divisi_id == 2) {{-- Admin/IT only --}}
-                <li class="nav-item">
-                  <a href="{{ route('admin.feedback.index') }}" class="nav-link">
-                    <i class="fas fa-list nav-icon"></i>
-                    <p>Kelola Feedback</p>
-                  </a>
-                </li>
-              @endif
-            </ul>
-          </li>
-
-          <li class="nav-item">
+          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 14 )
+            <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-chart-bar nav-icon"></i>
               <p>
@@ -627,7 +600,34 @@
               </li>
             </ul>
           </li>
-          
+          @endif
+
+          {{-- Feedback Menu - accessible by all users --}}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-comment-dots nav-icon"></i>
+              <p>
+                Feedback
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.feedback.create') }}" class="nav-link">
+                  <i class="fas fa-plus nav-icon"></i>
+                  <p>Kirim Feedback</p>
+                </a>
+              </li>
+              @if (Auth::user()->divisi_id == 2) {{-- Admin/IT only --}}
+                <li class="nav-item">
+                  <a href="{{ route('admin.feedback.index') }}" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>Kelola Feedback</p>
+                  </a>
+                </li>
+              @endif
+            </ul>
+          </li>
           {{-- Hardware Management - Only for IT Division (divisi_id = 2) --}}
           @if (Auth::user()->divisi_id == 2)
             <li class="nav-item">
