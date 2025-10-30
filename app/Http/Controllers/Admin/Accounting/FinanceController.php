@@ -205,8 +205,9 @@ class FinanceController extends Controller
                 'TotalRp',
                 'TotalTerima',
                 'TglJT',
+                'Note',
                 DB::raw("CASE 
-                    WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
+                    WHEN Note = 'RETUR' THEN ((0 - TotalRp) + TotalTerima)
                     ELSE (TotalRp - TotalTerima)
                     END as sisa_piutang"),
                 DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
@@ -215,7 +216,10 @@ class FinanceController extends Controller
             ->whereIn('Note', ['JUAL', 'RETUR'])
             ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
             ->orderBy('Tanggal', 'Asc')
+            // ->take(5)
             ->get();
+
+            // dd($piutang);
 
         $cust = DB::connection('firebird')->table('TCustomer')
             ->where('Kode', 'LIKE', '%'.trim($cust).'%')

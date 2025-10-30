@@ -28,6 +28,7 @@
                 <thead>
                     <tr>
                         <th>Tanggal</th>
+                        <th>No. Ref</th>
                         <th>No. Faktur</th>
                         <th>Jatuh Tempo</th>
                         <th>Total Bayar</th>
@@ -48,6 +49,7 @@
                     @foreach ($piutang as $data)
                     <tr>
                         <td>{{ date('Y-m-d', strtotime($data->Tanggal)) }}</td>
+                        <td>{{ $data->NoRef }}</td>
                         <td>{{ $data->NoBukti }}</td>
                         <td>{{ date('Y-m-d', strtotime($data->TglJT)) }}</td>
                         <td>{{ number_format($data->TotalRp, 2, '.', ',') }}</td>
@@ -67,7 +69,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="3" style="text-align:left">TOTAL</th>
+                        <th colspan="4" style="text-align:left">TOTAL</th>
                         <th>
                             {{ number_format($piutang->sum('TotalRp'), 2, '.', ',') }}
                         </th>
