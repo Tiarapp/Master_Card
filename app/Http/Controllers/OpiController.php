@@ -281,7 +281,7 @@ class OpiController extends Controller
     {
         $productions = new Opi_M();
         $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
-            // ->where('status_opi', '!=', 'closed')
+            ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('id', 'desc');
 
@@ -442,5 +442,84 @@ class OpiController extends Controller
         // dd($opi2);
 
         return view('admin.opi.pdf', compact('opi2'));
+    }
+
+    public function plan_kirim(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+        // Jika tidak ada parameter tanggal, hanya tampilkan form
+        if (!$request->has('start') || !$request->has('end')) {
+            return view('admin.opi.plan_kirim', [
+                'data' => collect(), // Empty collection
+                'start_date' => null,
+                'end_date' => null
+            ]);
+        }
+
+        // Validasi input tanggal
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start'
+        ]);
+
+        // Alternatif 1: Menggunakan subquery untuk ORDER BY
+        $data = Opi_M::with([
+                'mc', 
+                'kontrakm', 
+                'kontrakd', 
+                'dt'
+            ])
+            ->whereBetween('tglKirimDt', [$request->start, $request->end])
+            ->where('status_opi', 'Proses')
+            ->orderByRaw('(SELECT kodeBarang FROM mc 
+                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id 
+                          WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
+            ->get();
+
+        $stock = DB::connection('firebird2')->table('TPersediaan')
+            ->select('KodeBrg', 'SaldoAkhirCrt as quantity')
+            ->where('Periode', 'LIKE', '%' . date('Y-m', strtotime($request->start)) . '%')
+            ->take(5)
+            ->get();
+            
+        dd($stock);
+
+        // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
+        $stockMap = $stock->pluck('quantity', 'KodeBrg');
+
+        // Map quantity dari stock ke data OPI berdasarkan kodeBarang
+        $data = $data->map(function ($item) use ($stockMap) {
+            // Ambil kode barang dari relasi mc
+            $kodeBarang = $item->mc->kodeBarang ?? null;
+            
+            // Cari quantity di stock berdasarkan kode barang
+            $quantity = $stockMap->get($kodeBarang, 0); // Default 0 jika tidak ditemukan
+            
+            // Tambahkan property stock_quantity ke item
+            $item->stock_quantity = $quantity;
+            
+            // Hitung stock status (aman, kurang, habis)
+            $needed = $item->jumlahOrder ?? 0;
+            if ($quantity >= $needed) {
+                $item->stock_status = 'aman';
+                $item->stock_indicator = 'success';
+            } elseif ($quantity > 0 && $quantity < $needed) {
+                $item->stock_status = 'kurang';
+                $item->stock_indicator = 'warning';
+            } else {
+                $item->stock_status = 'habis';
+                $item->stock_indicator = 'danger';
+            }
+            
+            // Hitung selisih stock vs kebutuhan
+            $item->stock_difference = $quantity - $needed;
+            
+            return $item;
+        });
+
+        $start_date = date('d M Y', strtotime($request->start));
+        $end_date = date('d M Y', strtotime($request->end));
+
+        return view('admin.opi.plan_kirim', compact('data', 'start_date', 'end_date', 'stockMap'));
     }
 }

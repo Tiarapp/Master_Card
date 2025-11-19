@@ -361,6 +361,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
+    Route::get('/admin/opi/plan_kirim', [OpiController::class, 'plan_kirim'])->name('opi.plan_kirim');
     Route::get('/vendortt/export', function (Request $request){
             $vendortt = VendorTTDet::with('master_vend');
             // dd($request->all());
@@ -515,11 +516,13 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        
+        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
         Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
         Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
-        
-        
+        Route::get('admin/acc/opi', [FinanceController::class, 'approve_opi'])->name('acc.opi');
+        Route::post('admin/acc/opi/approve/{id}', [FinanceController::class, 'approve_opi_action'])->name('acc.opi.approve');
+
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
         Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
@@ -589,6 +592,8 @@ Route::middleware(['auth'])->group(function (){
         Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
         Route::get('admin/marketing/formpermintaan/edit/{id}', [FormPermintaan::class, 'edit'])->name('mkt.edit.formpermintaan');
         Route::put('admin/marketing/formpermintaan/update/{id}', [FormPermintaan::class, 'update'])->name('mkt.update.formpermintaan');
+
+        Route::get('admin/marketing/plan_kirim', [OpiController::class, 'plan_kirim'])->name('mkt.plan.kirim');
         
         Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
         Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');

@@ -16,10 +16,7 @@
           
             <input type="hidden" class="form-control" name="idkontrakm" id="idkontrakm" value="{{ $kontrak->kontrak_m_id }}">
             <input type="hidden" class="form-control" name="kode" id="kode" value="{{ $kontrak->kontrakm->kode }}">
-            <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">No OPI</label>
-              <input type="text" class="form-control" name="nomer_opi" id="nomer_opi" readonly required>
-            </div>
+            <input type="text" class="form-control" name="cust" id="cust" value="{{ $kontrak->kontrakm->customer_name }}" readonly>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Sisa Kontrak :</label>
               <input type="text" class="form-control" name="sisa" id="sisa" value="{{ $kontrak->pcsSisaKontrak }}" readonly>

@@ -262,29 +262,29 @@
 $(document).ready(function() {
     // Event handler untuk modal OPI dengan optimasi
     $('.opi').on('click', function() {
-        const btn = $(this);
-        btn.addClass('btn-loading');
+        // const btn = $(this);
+        // btn.addClass('btn-loading');
         
-        $.ajax({
-            url: "{{ route('nomer_opi') }}",
-            type: "GET",
-            timeout: 5000, // 5 detik timeout
-            success: function(response) {
-                $('#nomer_opi').val(response.nomer);
+        // // $.ajax({
+        // //     url: "{{ route('nomer_opi') }}",
+        // //     type: "GET",
+        // //     timeout: 5000, // 5 detik timeout
+        // //     success: function(response) {
+        // //         $('#nomer_opi').val(response.nomer);
                 
-                // Set data lain
-                $('#idkontrakm').val("{{ $kontrak->kontrakm->id }}");
-                $('#kode').val("{{ $kontrak->kontrakm->kode }}");
-                $('#sisa').val($('#sisa').val());
-                $('#sisa_kirim').val($('#sisa_kirim').val());
-            },
-            error: function() {
-                alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
-            },
-            complete: function() {
-                btn.removeClass('btn-loading');
-            }
-        });
+        //         // Set data lain
+        //         $('#idkontrakm').val("{{ $kontrak->kontrakm->id }}");
+        //         $('#kode').val("{{ $kontrak->kontrakm->kode }}");
+        //         $('#sisa').val($('#sisa').val());
+        //         $('#sisa_kirim').val($('#sisa_kirim').val());
+        //     // },
+        //     // error: function() {
+        //     //     alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
+        //     // },
+        //     complete: function() {
+        //         btn.removeClass('btn-loading');
+        //     }
+        // });
     });
 
     // Validation function yang dioptimasi

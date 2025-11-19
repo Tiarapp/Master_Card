@@ -78,10 +78,12 @@
                         <div>
                           <small class="text-muted">Master Card</small>
                           <div class="font-weight-bold">
-                            @if ($kontrak->mc->revisi == "R0" || $kontrak->mc->revisi == null)
-                                {{ $kontrak->mc->kode }}
+                            @if ($kontrak->mc && ($kontrak->mc->revisi == "R0" || $kontrak->mc->revisi == null))
+                                {{ $kontrak->mc->kode ?? 'N/A' }}
+                            @elseif ($kontrak->mc)
+                                {{ $kontrak->mc->kode ?? 'N/A' }}-{{ $kontrak->mc->revisi ?? '' }}
                             @else
-                                {{ $kontrak->mc->kode }}-{{ $kontrak->mc->revisi }}
+                                N/A
                             @endif
                           </div>
                         </div>
@@ -92,7 +94,7 @@
                         <i class="fas fa-layer-group text-success mr-2"></i>
                         <div>
                           <small class="text-muted">Substance Kontrak</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->substancekontrak->kode }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->substancekontrak->kode ?? 'N/A' }}</div>
                         </div>
                       </div>
                     </div>
@@ -101,7 +103,7 @@
                         <i class="fas fa-industry text-warning mr-2"></i>
                         <div>
                           <small class="text-muted">Substance Produksi</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->substanceproduksi->kode }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->substanceproduksi->kode ?? 'N/A' }}</div>
                         </div>
                       </div>
                     </div>
@@ -112,7 +114,7 @@
                         <i class="fas fa-weight text-secondary mr-2"></i>
                         <div>
                           <small class="text-muted">Gram Sheet Box Kontrak</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxKontrak2 }} gr</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxKontrak2 ?? 0 }} gr</div>
                         </div>
                       </div>
                     </div>
@@ -121,7 +123,7 @@
                         <i class="fas fa-weight text-secondary mr-2"></i>
                         <div>
                           <small class="text-muted">Gram Sheet Box Produksi</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxProduksi2 }} gr</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxProduksi2 ?? 0 }} gr</div>
                         </div>
                       </div>
                     </div>
@@ -139,7 +141,7 @@
                         <i class="fas fa-exchange-alt text-danger mr-2"></i>
                         <div>
                           <small class="text-muted">Out Conv</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->outConv }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->outConv ?? 1 }}</div>
                         </div>
                       </div>
                     </div>
@@ -275,6 +277,10 @@
                       <i class="fas fa-box-open mr-1"></i>
                       Running Meter
                     </th>
+                    <th scope="col" class="text-center">
+                      <i class="fas fa-box-open mr-1"></i>
+                      Status
+                    </th>
                     {{-- <th scope="col" class="text-center">
                       <i class="fas fa-balance-scale mr-1"></i>
                       Sisa (Kg)
@@ -328,6 +334,11 @@
                           
                           echo number_format((float)$rm, 2);
                         @endphp
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge {{ $data->status_opi == 'Pending' ? 'badge-warning' : ($data->status_opi == 'Proses' ? 'badge-success' : 'badge-secondary') }} font-weight-bold">
+                        {{ $data->status_opi == 'Pending' ? 'Tunggu Approve' : $data->status_opi }}
                       </span>
                     </td>
                     <td class="text-center">

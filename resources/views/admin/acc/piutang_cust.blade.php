@@ -10,12 +10,12 @@
             <strong>Informasi Customer</strong>
         </div>
         <div class="card-body">
-            <p><strong>Nama:</strong> {{ $cust->Nama }}</p>
-            <p id="kode"><strong>Kode Customer:</strong> {{ $cust->Kode }}  </p>
-            <p><strong>Alamat:</strong> {{ $cust->AlamatKantor }} </p>
-            <p><strong>No. Telepon:</strong> {{ $cust->TelpKantor }} </p>
-            <p><strong>Term of Payment:</strong> {{ $cust->WAKTUBAYAR }} </p>
-            <p><strong>Limit Piutang:</strong> {{ number_format($cust->Plafond, 2, '.', ',') }} </p>
+            <p><strong>Nama:</strong> {{ $customer->Nama }}</p>
+            <p id="kode"><strong>Kode Customer:</strong> {{ $customer->Kode }}  </p>
+            <p><strong>Alamat:</strong> {{ $customer->AlamatKantor }} </p>
+            {{-- <p><strong>No. Telepon:</strong> {{ $customer->TelpKantor }} </p> --}}
+            <p><strong>Term of Payment:</strong> {{ $customer->WAKTUBAYAR }} </p>
+            <p><strong>Limit Piutang:</strong> {{ number_format($customer->Plafond, 2, '.', ',') }} </p>
         </div>
     </div>
 
@@ -121,7 +121,7 @@
                 {
                     extend: 'excelHtml5',
                     text: 'Excel',
-                    title: 'Daftar Piutang Customer - {{ $cust->Nama }}',
+                    title: 'Daftar Piutang Customer - {{ $customer->Nama }}',
                     exportOptions: {
                         columns: ':visible'
                     }
