@@ -318,6 +318,7 @@
                                                         <option value="OUP Nama, Kupingan dan Desain">OUP Nama, Kupingan dan Desain</option>
                                                         <option value="OUP Nama, Kupingan, Ukuran dan Desain">OUP Nama, Kupingan, Ukuran dan Desain</option>
                                                         <option value="OUP Proses, Kualitas, dan Ukuran">OUP Proses, Kualitas, dan Ukuran</option>
+                                                        <option value="OUP Flute, Kualitas, dan Ukuran">OUP Flute, Kualitas, dan Ukuran</option>
                                                     </select>
                                                 </div>
                                             </div>  

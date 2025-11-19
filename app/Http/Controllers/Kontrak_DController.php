@@ -697,13 +697,13 @@ class Kontrak_DController extends Controller
                 
                 // OPTIMIZED: Determine OPI status based on customer conditions
                 $opiStatus = 'Proses'; // Default status
-                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
-                    $opiStatus = 'Pending';
-                } elseif ($piutangTotal > $customerData->Plafond) {
-                    $opiStatus = 'Pending';
-                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
-                    $opiStatus = 'Pending';
-                }
+                // if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                //     $opiStatus = 'Pending';
+                // } elseif ($piutangTotal > $customerData->Plafond) {
+                //     $opiStatus = 'Pending';
+                // } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                //     $opiStatus = 'Pending';
+                // }
                 
 
                 // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
