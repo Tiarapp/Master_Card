@@ -582,7 +582,7 @@ class Kontrak_DController extends Controller
 
                 // OPTIMIZED: Get OPI data with minimal fields
                 $opi = Opi_M::select(['id', 'NoOPI', 'jumlahOrder', 'dt_id', 'status_opi'])
-                    ->with('dt:id,tglKirimDt')
+                    ->with('dt:id,tglKirimDt,keterangan')
                     ->where('kontrak_m_id', $id)
                     ->orderBy('id', 'desc')
                     ->get();
@@ -691,6 +691,7 @@ class Kontrak_DController extends Controller
                     'tglKirimDt' => $tglKirim,
                     'pcsDt' => $jumlahKirim,
                     'createdBy' => $userName,
+                    'keterangan' => $request->keterangan,
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);

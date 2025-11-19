@@ -125,9 +125,12 @@
       <!-- Export dan Filter -->
       <div class="row mb-4 align-items-center">
         <div class="col-auto d-flex align-items-center gap-3">
-          <button onclick="window.print()" class="btn btn-primary mb-3">
+          {{-- <button onclick="window.print()" class="btn btn-primary mb-3">
             <i class="fas fa-print me-2"></i>Print Rencana Kirim
-          </button>
+          </button> --}}
+          <a href="{{ route('opi.plan_kirim.export', ['start' => request('start'), 'end' => request('end')]) }}" class="btn btn-success mb-3">
+            <i class="fas fa-file-excel me-2"></i>Export to Excel
+          </a>
           <a href="{{ route('opinew') }}" class="btn btn-outline-secondary mb-3">
             <i class="fas fa-arrow-left me-2"></i>Kembali ke OPI
           </a>
@@ -140,15 +143,18 @@
             <thead class="table-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">No OPI</th>
                     <th scope="col">Tanggal Kirim</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">PO Customer</th>
+                    <th scope="col">No. Kontrak</th>
+                    <th scope="col">No OPI</th>
                     <th scope="col">Kode Barang</th>
                     <th scope="col">Nama Barang</th>
-                    <th scope="col">Customer</th>
                     <th scope="col">Qty Order</th>
                     <th scope="col">Stock</th>
+                    <th scope="col">Gram</th>
+                    <th scope="col">Ton</th>
                     <th scope="col">Status Stock</th>
-                    <th scope="col">PO Customer</th>
                     <th scope="col">Keterangan</th>
                 </tr>
             </thead>
@@ -156,7 +162,6 @@
                 @forelse ($data as $index => $item)
                     <tr>
                         <td class="fw-bold">{{ $index + 1 }}</td>
-                        <td class="text-primary fw-bold">{{ $item->NoOPI }}</td>
                         <td>
                             @if($item->dt_perubahan !== '' && $item->approve_mkt == 1 && $item->approve_ppic == 1)
                                 <span class="badge bg-warning text-dark">{{ date('d M Y', strtotime($item->dt_perubahan)) }}</span>
@@ -165,9 +170,12 @@
                                 <span class="badge bg-info">{{ date('d M Y', strtotime($item->tglKirimDt)) }}</span>
                             @endif
                         </td>
+                        <td>{{ $item->kontrakm->customer_name ?? '-' }}</td>
+                        <td>{{ $item->kontrakm->poCustomer ?? '-' }}</td>
+                        <td>{{ $item->kontrakm->kode ?? '-' }}</td>
+                        <td class="text-primary fw-bold">{{ $item->NoOPI }}</td>
                         <td class="fw-bold text-success">{{ $item->mc->kodeBarang ?? '-' }}</td>
                         <td>{{ $item->mc->namaBarang ?? '-' }}</td>
-                        <td>{{ $item->kontrakm->customer_name ?? '-' }}</td>
                         <td class="text-end">
                             <span class="badge bg-primary">{{ number_format($item->jumlahOrder) }} pcs</span>
                         </td>
@@ -180,6 +188,16 @@
                                     {{ $item->stock_difference >= 0 ? '+' : '' }}{{ number_format($item->stock_difference) }}
                                 </small>
                             @endif
+                        </td>
+                        <td class="text-end">
+                            <span class="badge bg-secondary">{{ number_format($item->mc->gramSheetBoxKontrak2 ?? 0, 2) }} kg/pcs</span>
+                        </td>
+                        <td class="text-end">
+                            @php
+                                $totalKg = ($item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0)) / 1000; // Convert to tons
+                            @endphp
+                            <span class="fw-bold text-warning">{{ number_format($totalKg, 3) }} ton</span>
+                            <br><small class="text-muted">{{ number_format($item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg</small>
                         </td>
                         <td class="text-center">
                             @if(isset($item->stock_status))
@@ -196,14 +214,13 @@
                                 <span class="badge bg-secondary">-</span>
                             @endif
                         </td>
-                        <td>{{ $item->kontrakm->poCustomer ?? '-' }}</td>
                         <td>
-                            <small>{{ Str::limit($item->kontrakm->keterangan ?? '-', 30) }}</small>
+                            <small>{{ Str::limit($item->dt->keterangan ?? '-', 500) }}</small>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="text-center py-5">
+                        <td colspan="14" class="text-center py-5">
                             <div class="text-muted">
                                 <i class="fas fa-inbox fa-3x mb-3"></i>
                                 <h5>Tidak ada data OPI</h5>
@@ -241,8 +258,20 @@
             </div>
             <div class="col-md-2">
               <div class="text-center">
-                <h4 class="text-success">{{ $data->sum('jumlahOrder') }}</h4>
+                <h4 class="text-success">{{ number_format($data->sum('jumlahOrder')) }}</h4>
                 <small class="text-muted">Total Quantity (pcs)</small>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="text-center">
+                @php
+                    $totalKg = $data->sum(function($item) {
+                        return $item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0);
+                    });
+                    $totalTon = $totalKg / 1000;
+                @endphp
+                <h4 class="text-warning">{{ number_format($totalTon, 3) }}</h4>
+                <small class="text-muted">Total Tonnage (ton)</small>
               </div>
             </div>
             <div class="col-md-2">
@@ -273,6 +302,42 @@
                 @endphp
                 <h4 class="text-danger">{{ $stockKurang }}</h4>
                 <small class="text-muted">Stock Kurang/Habis</small>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Tonnage Detail Summary -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="alert alert-info">
+                <div class="row text-center">
+                  <div class="col-md-3">
+                    <h3 class="text-primary mb-1">{{ number_format($totalTon, 3) }}</h3>
+                    <strong>Total Tonnage</strong>
+                    <small class="d-block text-muted">{{ number_format($totalKg, 2) }} kg</small>
+                  </div>
+                  <div class="col-md-3">
+                    <h3 class="text-success mb-1">{{ number_format($data->sum('jumlahOrder')) }}</h3>
+                    <strong>Total Pieces</strong>
+                    <small class="d-block text-muted">Semua OPI</small>
+                  </div>
+                  <div class="col-md-3">
+                    @php
+                        $avgWeight = $data->count() > 0 ? $totalKg / $data->sum('jumlahOrder') : 0;
+                    @endphp
+                    <h3 class="text-warning mb-1">{{ number_format($avgWeight, 3) }}</h3>
+                    <strong>Avg Weight/pcs</strong>
+                    <small class="d-block text-muted">kg per pieces</small>
+                  </div>
+                  <div class="col-md-3">
+                    @php
+                        $avgTonnagePerOPI = count($data) > 0 ? $totalTon / count($data) : 0;
+                    @endphp
+                    <h3 class="text-info mb-1">{{ number_format($avgTonnagePerOPI, 3) }}</h3>
+                    <strong>Avg Tonnage/OPI</strong>
+                    <small class="d-block text-muted">ton per OPI</small>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

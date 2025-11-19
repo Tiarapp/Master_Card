@@ -49,6 +49,7 @@
           </div>
         @endif
         @include('admin.kontrak.adddt')
+        @include('admin.kontrak.edit_opi')
         <!-- Info Cards Row -->
         <div class="row mb-4">
           <!-- Contract Information Card -->
@@ -281,6 +282,10 @@
                       <i class="fas fa-box-open mr-1"></i>
                       Status
                     </th>
+                    <th scope="col" class="text-center">
+                      <i class="fas fa-box-open mr-1"></i>
+                      Keterangan Kirim
+                    </th>
                     {{-- <th scope="col" class="text-center">
                       <i class="fas fa-balance-scale mr-1"></i>
                       Sisa (Kg)
@@ -342,18 +347,22 @@
                       </span>
                     </td>
                     <td class="text-center">
+                      <span class="text-success font-weight-bold">
+                        {{ $data->dt ? $data->dt->keterangan : '' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
                       <div class="btn-group" role="group">
-                        {{-- <button type="button" class="btn btn-info btn-sm" title="Lihat Detail">
+                        <button type="button" class="btn btn-info btn-sm" title="Lihat Detail" onclick="viewOpiDetail({{ $data->id }})">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" title="Edit">
+                        <button type="button" class="btn btn-warning btn-sm" title="Edit" onclick="editOpi({{ $data->id }})" data-toggle="modal" data-target="#edit_opi">
                           <i class="fas fa-edit"></i>
-                        </button> --}}
+                        </button>
                         <form action="{{ route('opi.cancel', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
-                          {{-- @method('PUT') --}}
-                          <button type="submit" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin cancel data ini?')">
-                            <i class="fas fa-trash"></i>
+                          <button type="submit" class="btn btn-danger btn-sm" title="Cancel" onclick="return confirm('Yakin ingin cancel data ini?')">
+                            <i class="fas fa-ban"></i>
                           </button>
                         </form>
                       </div>
@@ -388,7 +397,7 @@
                         {{ number_format($opi->sum('jumlahOrder') * (float)($kontrak->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg
                       </span>
                     </th>
-                    <th colspan="3"></th>
+                    <th colspan="4"></th>
                   </tr>
                 </tfoot>
                 @endif
@@ -432,119 +441,28 @@ $(document).ready(function() {
     $('.opi').on('click', function(e) {
         e.preventDefault();
         
-        const btn = $(this);
-        const originalText = btn.html();
+        $('#add_dt').modal('show');
         
-        // Add loading state
-        btn.prop('disabled', true)
-           .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+        // const btn = $(this);
+        // const originalText = btn.html();
         
-        // Clear previous timeout
-        if (ajaxTimeout) {
-            clearTimeout(ajaxTimeout);
-        }
+        // // Add loading state
+        // btn.prop('disabled', true)
+        //    .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
         
-        // Always get OPI number from database sequence
-        ajaxTimeout = setTimeout(function() {
-            $.ajax({
-                url: "{{ route('nomer_opi') }}",
-                type: "GET",
-                timeout: 15000,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                success: function(response) {
-                    console.log('OPI Number Response:', response);
-                    
-                    if (response && response.status && response.nomer) {
-                        $('#nomer_opi').val(response.nomer);
-                    } else if (response && response.nomer) {
-                        // Fallback if status is false but nomer exists
-                        $('#nomer_opi').val(response.nomer);
-                    } else {
-                        // Last resort fallback
-                        const fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
-                        $('#nomer_opi').val(fallbackNumber);
-                        console.warn('Using fallback OPI number:', fallbackNumber);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error getting OPI number:', error, xhr.responseText);
-                    
-                    // Parse error response for better fallback
-                    let fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
-                    
-                    try {
-                        const errorResponse = JSON.parse(xhr.responseText);
-                        if (errorResponse && errorResponse.nomer) {
-                            fallbackNumber = errorResponse.nomer;
-                        }
-                    } catch (e) {
-                        // Use default fallback
-                    }
-                    
-                    $('#nomer_opi').val(fallbackNumber);
-                },
-                complete: function() {
-                    btn.prop('disabled', false).html(originalText);
-                    $('#add_dt').modal('show');
-                }
-            });
-        }, 300);
-    });
-
-    // Alternative event handler menggunakan data attributes
-    $('[data-target="#add_dt"]').on('click', function(e) {
-        if (!$(this).hasClass('opi')) {
-            e.preventDefault();
-            
-            const btn = $(this);
-            const originalText = btn.html();
-            
-            // Add loading state
-            btn.prop('disabled', true)
-               .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-            
-            // Get OPI number from database
-            $.ajax({
-                url: "{{ route('nomer_opi') }}",
-                type: "GET",
-                timeout: 15000,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                success: function(response) {
-                    if (response && response.status && response.nomer) {
-                        $('#nomer_opi').val(response.nomer);
-                    } else if (response && response.nomer) {
-                        $('#nomer_opi').val(response.nomer);
-                    } else {
-                        const fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
-                        $('#nomer_opi').val(fallbackNumber);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    let fallbackNumber = 'OPI-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
-                    try {
-                        const errorResponse = JSON.parse(xhr.responseText);
-                        if (errorResponse && errorResponse.nomer) {
-                            fallbackNumber = errorResponse.nomer;
-                        }
-                    } catch (e) {
-                        // Use default fallback
-                    }
-                    $('#nomer_opi').val(fallbackNumber);
-                },
-                complete: function() {
-                    btn.prop('disabled', false).html(originalText);
-                    $('#add_dt').modal('show');
-                }
-            });
-        }
+        // // Clear previous timeout
+        // if (ajaxTimeout) {
+        //     clearTimeout(ajaxTimeout);
+        // }
+        
+        // // Always get OPI number from database sequence
+        // ajaxTimeout = setTimeout(function() {
+        //       complete: function() {
+        //           btn.prop('disabled', false).html(originalText);
+        //           $('#add_dt').modal('show');
+        //       }
+        //   });
+        // }, 300);
     });
 
     // Modal events
@@ -564,6 +482,169 @@ $(document).ready(function() {
         });
     }
 });
+
+// Edit OPI function
+function editOpi(opiId) {
+    // Fetch OPI data
+    $.ajax({
+        url: '/admin/opi/edit/' + opiId,
+        type: 'GET',
+        beforeSend: function() {
+            // Show loading state
+            $('#edit_opi .modal-body').addClass('text-center').html('<i class="fas fa-spinner fa-spin fa-2x text-primary"></i><br><br>Memuat data...');
+        },
+        success: function(response) {
+            if (response.success) {
+                const data = response.data;
+                
+                // Restore modal content and remove loading class
+                $('#edit_opi .modal-body').removeClass('text-center').html(`
+                    <div class="row">
+                        <!-- OPI Information -->
+                        <div class="col-md-6">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-file-alt mr-1"></i>
+                                        Informasi OPI
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="edit_noopi" class="form-label">
+                                            <i class="fas fa-hashtag mr-1"></i>
+                                            No OPI
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_noopi" name="NoOPI" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_customer" class="form-label">
+                                            <i class="fas fa-building mr-1"></i>
+                                            Customer
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_customer" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_namabarang" class="form-label">
+                                            <i class="fas fa-box mr-1"></i>
+                                            Nama Barang
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_namabarang" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_jumlahorder" class="form-label">
+                                            <i class="fas fa-sort-numeric-up mr-1"></i>
+                                            Jumlah Order (Pcs) <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" class="form-control" id="edit_jumlahorder" name="jumlahOrder" required min="1" readonly>
+                                        <small class="form-text text-muted">Masukkan jumlah order dalam pieces</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DT Information -->
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-truck mr-1"></i>
+                                        Informasi Delivery Time
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="edit_tglkirim" class="form-label">
+                                            <i class="fas fa-calendar-alt mr-1"></i>
+                                            Tanggal Kirim <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="edit_tglkirim" name="tglKirimDt" required>
+                                        <small class="form-text text-muted">Pilih tanggal pengiriman yang diinginkan</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_pcsdt" class="form-label">
+                                            <i class="fas fa-boxes mr-1"></i>
+                                            Quantity DT (Pcs) <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" class="form-control" id="edit_pcsdt" name="pcsDt" required min="1" readonly>
+                                        <small class="form-text text-muted">Biasanya sama dengan jumlah order OPI</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="fas fa-info-circle mr-1"></i>
+                                            Status OPI
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_status" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_keterangan_opi" class="form-label">
+                                            <i class="fas fa-comment mr-1"></i>
+                                            Keterangan OPI
+                                        </label>
+                                        <textarea class="form-control" id="edit_keterangan_opi" name="keterangan" rows="3" placeholder="Tambahkan keterangan untuk OPI ini..."></textarea>
+                                    </div>
+                                    
+                                    <!-- Info Display -->
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        <strong>Data berhasil dimuat</strong>
+                                        <div class="mt-2">
+                                            <small>Silakan edit data sesuai kebutuhan.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Warning Alert -->
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <strong>Perhatian:</strong> 
+                        Pastikan data yang Anda ubah sudah benar. Perubahan akan mempengaruhi laporan dan kalkulasi terkait.
+                    </div>
+                `);
+                
+                // Fill form with data
+                $('#edit_noopi').val(data.NoOPI);
+                $('#edit_customer').val(data.customer_name);
+                $('#edit_namabarang').val(data.namaBarang);
+                $('#edit_jumlahorder').val(data.jumlahOrder);
+                $('#edit_keterangan_opi').val(data.keterangan);
+                $('#edit_tglkirim').val(data.tglKirimDt);
+                $('#edit_pcsdt').val(data.pcsDt);
+                $('#edit_status').val(data.status_opi);
+                
+                // Set form action
+                $('#edit-opi-form').attr('action', '/admin/opi/update/' + opiId);
+                
+                // Auto-sync quantity fields
+                $('#edit_jumlahorder').on('input', function() {
+                    $('#edit_pcsdt').val(this.value);
+                });
+                
+            } else {
+                $('#edit_opi .modal-body').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Gagal memuat data: ' + response.message + '</div>');
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#edit_opi .modal-body').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Terjadi kesalahan saat memuat data OPI</div>');
+            console.error('Error:', error);
+        }
+    });
+}
+
+// View OPI Detail function
+function viewOpiDetail(opiId) {
+    // Redirect to OPI print/detail page
+    window.open('/admin/opi/print/' + opiId, '_blank');
+}
 
 // Form validation function
 function validateForm() {

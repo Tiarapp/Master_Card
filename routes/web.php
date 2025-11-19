@@ -362,6 +362,7 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
     Route::get('/admin/opi/plan_kirim', [OpiController::class, 'plan_kirim'])->name('opi.plan_kirim');
+    Route::get('/admin/opi/plan_kirim/export', [OpiController::class, 'plan_kirim_export'])->name('opi.plan_kirim.export');
     Route::get('/vendortt/export', function (Request $request){
             $vendortt = VendorTTDet::with('master_vend');
             // dd($request->all());

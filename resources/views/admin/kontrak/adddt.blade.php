@@ -30,6 +30,10 @@
               <input type="hidden" class="form-control" name="sisaKontrak" id="sisaKontrak" value="{{ $kontrak->pcsSisaKontrak }}">
               <input type="number" class="form-control" name="jumlahKirim" id="jumlahKirim" required>
             </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Keterangan</label>
+              <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+            </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
