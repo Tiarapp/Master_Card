@@ -364,6 +364,7 @@ class OpiController extends Controller
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
         $opi->lastUpdatedBy = Auth::user()->name;
+        $opi->status_opi = "Cancel";
         
         $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
@@ -476,35 +477,21 @@ class OpiController extends Controller
             ->get();
 
         // Ambil data stock dari Firebird database
-        try {
+        DB::connection('firebird2')->beginTransaction(); // Enable query log for debugging
             $stock = DB::connection('firebird2')->table('TPersediaan')
                 ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
                 ->where('Periode', '=', date('m/Y')) // Current month/year
                 ->get();
-                
-        } catch (\Exception $e) {
-            // Jika error dengan periode current month, coba ambil data terbaru
-            try {
-                $stock = DB::connection('firebird2')->table('TPersediaan')
-                    ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
-                    ->orderBy('Periode', 'desc')
-                    ->get();
-                    
-            } catch (\Exception $e2) {
-                // Jika masih error, buat collection kosong
-                $stock = collect();
-                // Log error untuk debugging (commented out untuk avoid import issue)
-                // \Log::error('Firebird TPersediaan access error: ' . $e2->getMessage());
-            }
-        }
+
 
         // Clean up data: trim spaces dan convert ke numeric
         $stock = $stock->map(function($item) {
             return (object) [
-                'KodeBrg' => trim($item->KODEBRG), // Hapus spasi trailing
-                'quantity' => floatval($item->SALDOAKHIRCRT) // Convert to numeric
+                'KodeBrg' => trim($item->KodeBrg), // Hapus spasi trailing
+                'quantity' => floatval($item->stock_quantity) // Convert to numeric
             ];
         });
+
 
         // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
         $stockMap = $stock->pluck('quantity', 'KodeBrg');
