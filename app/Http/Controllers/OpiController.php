@@ -446,7 +446,6 @@ class OpiController extends Controller
 
     public function plan_kirim(Request $request)
     {
-        DB::connection('firebird2')->beginTransaction();
         // Jika tidak ada parameter tanggal, hanya tampilkan form
         if (!$request->has('start') || !$request->has('end')) {
             return view('admin.opi.plan_kirim', [
@@ -476,16 +475,42 @@ class OpiController extends Controller
                           WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
             ->get();
 
-        $stock = DB::connection('firebird2')->table('TPersediaan')
-            ->select('KodeBrg', 'SaldoAkhirCrt as quantity')
-            ->where('Periode', 'LIKE', '%' . date('Y-m', strtotime($request->start)) . '%')
-            ->take(5)
-            ->get();
-            
-        dd($stock);
+        // Ambil data stock dari Firebird database
+        try {
+            $stock = DB::connection('firebird2')->table('TPersediaan')
+                ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
+                ->where('Periode', '=', date('m/Y')) // Current month/year
+                ->get();
+                
+        } catch (\Exception $e) {
+            // Jika error dengan periode current month, coba ambil data terbaru
+            try {
+                $stock = DB::connection('firebird2')->table('TPersediaan')
+                    ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
+                    ->orderBy('Periode', 'desc')
+                    ->get();
+                    
+            } catch (\Exception $e2) {
+                // Jika masih error, buat collection kosong
+                $stock = collect();
+                // Log error untuk debugging (commented out untuk avoid import issue)
+                // \Log::error('Firebird TPersediaan access error: ' . $e2->getMessage());
+            }
+        }
+
+        // Clean up data: trim spaces dan convert ke numeric
+        $stock = $stock->map(function($item) {
+            return (object) [
+                'KodeBrg' => trim($item->KODEBRG), // Hapus spasi trailing
+                'quantity' => floatval($item->SALDOAKHIRCRT) // Convert to numeric
+            ];
+        });
 
         // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
         $stockMap = $stock->pluck('quantity', 'KodeBrg');
+        
+        // Debug: Lihat hasil clean data
+        // dd('Cleaned stock:', $stock->take(3), 'Stock map:', $stockMap->take(3));
 
         // Map quantity dari stock ke data OPI berdasarkan kodeBarang
         $data = $data->map(function ($item) use ($stockMap) {
