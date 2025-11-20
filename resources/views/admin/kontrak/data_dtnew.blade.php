@@ -587,7 +587,7 @@ function editOpi(opiId) {
                                             <i class="fas fa-comment mr-1"></i>
                                             Keterangan OPI
                                         </label>
-                                        <textarea class="form-control" id="edit_keterangan_opi" name="keterangan" rows="3" placeholder="Tambahkan keterangan untuk OPI ini..."></textarea>
+                                        <textarea class="form-control" id="keterangan_kirim" name="keterangan" rows="3" placeholder="Tambahkan keterangan untuk OPI ini..."></textarea>
                                     </div>
                                     
                                     <!-- Info Display -->
@@ -620,6 +620,7 @@ function editOpi(opiId) {
                 $('#edit_tglkirim').val(data.tglKirimDt);
                 $('#edit_pcsdt').val(data.pcsDt);
                 $('#edit_status').val(data.status_opi);
+                $('#keterangan_kirim').val(data.keterangan);
                 
                 // Set form action
                 $('#edit-opi-form').attr('action', '/admin/opi/update/' + opiId);

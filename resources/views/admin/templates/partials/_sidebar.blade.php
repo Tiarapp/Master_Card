@@ -340,12 +340,12 @@
                     <p>Delivery Time</p>
                   </a>
                 </li>
-                {{-- <li class="nav-item">
-                  <a href="{{ route('ppic.opi.approve') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Rekap OPI</p>
+                <li class="nav-item">
+                  <a href="{{ route('opi.plan_kirim') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Plan Kirim</p>
                   </a>
-                </li> --}}
+                </li>
               </ul>
             </li>
             <li class="nav-item">

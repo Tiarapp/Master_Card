@@ -422,7 +422,8 @@ class OpiController extends Controller
                     'dt_id' => $opi->dt_id,
                     'status_opi' => $opi->status_opi,
                     'customer_name' => $opi->kontrakm ? $opi->kontrakm->customer_name : null,
-                    'namaBarang' => $opi->mc ? $opi->mc->namaBarang : null
+                    'namaBarang' => $opi->mc ? $opi->mc->namaBarang : null,
+                    'keterangan' => $opi->dt ? $opi->dt->keterangan : null,
                 ]
             ]);
         } catch (\Exception $e) {
