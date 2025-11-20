@@ -25,16 +25,21 @@ class VendorTTExport implements WithHeadings, FromCollection
         
         return $data->map(function ($item, $index) {
             return [
+                'bbm_no' => $item->BBMNo ?? '',
                 'tanggal_tt' => $item->master_vend && $item->master_vend->Tglterima 
                     ? Carbon::parse($item->master_vend->Tglterima)->format('d-m-Y') 
                     : '',
                 'no_tt' => $item->NoTT ?? '',
-                'invoice_number' => $item->InvNumber ?? '',
+                'bbm_no2' => $item->BBMNo ?? '',
+                'supplier' => $item->master_vend->SupplierName ?? '',
                 'po_number' => $item->PONumber ?? '',
-                'waktu_bayar' => $item->top ? $item->top . ' hari' : '-',
-                'bbm_no' => $item->BBMNo ?? '',
-                'amount' => $item->Amount ? number_format((float) $item->Amount, 2) : '0.00',
-                'bbm_amount' => $item->BBMAmount ? number_format((float) $item->BBMAmount, 2) : '0.00',
+                'amount' => $item->Amount ?? '0.00',
+                'bbm_amount' => $item->BBMAmount ?? '0.00',
+                'invoice_number' => $item->InvNumber ?? '',
+                'ref_ppn' => $item->RefPPN ?? '',
+                'tanggal_ppn' => $item->tglPPN 
+                    ? Carbon::parse($item->tglPPN)->format('d-m-Y') 
+                    : '',
             ];
         });
     }
@@ -42,14 +47,17 @@ class VendorTTExport implements WithHeadings, FromCollection
     public function headings(): array
     {
         return [
+            'BBM No',
             'Tanggal TT',
             'No TT',
-            'Invoice Number',
-            'PO Number',
-            'Waktu Bayar (Hari)',
             'BBM No',
+            'Supplier',
+            'PO Number',
             'Amount',
             'BBM Amount',
+            'Invoice Number',
+            'Ref PPN',
+            'Tanggal PPN',
         ];
     }
 }
