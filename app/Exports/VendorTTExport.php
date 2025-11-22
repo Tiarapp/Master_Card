@@ -14,7 +14,9 @@ class VendorTTExport implements WithHeadings, FromCollection
     public function __construct($vendortt)
     {
         $this->vendortt = $vendortt;
-    }    public function collection()
+    }    
+    
+    public function collection()
     {   
         // Jika $vendortt adalah query builder, ambil datanya dulu
         if (method_exists($this->vendortt, 'get')) {
@@ -27,8 +29,8 @@ class VendorTTExport implements WithHeadings, FromCollection
             return [
                 'bbm_no' => $item->BBMNo ?? '',
                 'tanggal_tt' => $item->master_vend && $item->master_vend->Tglterima 
-                    ? Carbon::parse($item->master_vend->Tglterima)->format('d-m-Y') 
-                    : '',
+                    ? \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(Carbon::parse($item->master_vend->Tglterima)) 
+                    : null,
                 'no_tt' => $item->NoTT ?? '',
                 'bbm_no2' => $item->BBMNo ?? '',
                 'supplier' => $item->master_vend->SupplierName ?? '',
@@ -38,8 +40,8 @@ class VendorTTExport implements WithHeadings, FromCollection
                 'invoice_number' => $item->InvNumber ?? '',
                 'ref_ppn' => $item->RefPPN ?? '',
                 'tanggal_ppn' => $item->tglPPN 
-                    ? Carbon::parse($item->tglPPN)->format('d-m-Y') 
-                    : '',
+                    ? \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(Carbon::parse($item->tglPPN)) 
+                    : null,
             ];
         });
     }

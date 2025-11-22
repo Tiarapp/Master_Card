@@ -863,7 +863,7 @@ class MastercardController extends Controller
             
             
             // STEP 3: Query MC dengan pagination langsung - TIDAK ambil semua data dulu
-            $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'customer', 'created_at');
+            $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'tipeBox', 'customer', 'created_at');
             
             // Tambahkan search jika ada
             if ($request->has('search') && !empty($request->search)) {
