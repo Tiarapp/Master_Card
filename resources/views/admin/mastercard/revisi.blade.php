@@ -1678,8 +1678,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1897,6 +1897,9 @@
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
+
+            console.log(result, result2);
+            
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
