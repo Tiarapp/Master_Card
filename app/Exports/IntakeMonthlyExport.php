@@ -62,7 +62,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             ->where('opi_m.status_opi', '!=', 'Cancel')
             ->whereYear('opi_m.created_at', $this->year)
             ->whereMonth('opi_m.created_at', $this->month)
-            ->orderBy('opi_m.created_at', 'desc');
+            ->orderBy('dt.tglKirimDt', 'asc');
 
         return $query->get();
     }
