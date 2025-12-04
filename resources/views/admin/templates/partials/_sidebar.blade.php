@@ -346,6 +346,12 @@
                     <p>Plan Kirim</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('opi.intake') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Export Intake</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item">

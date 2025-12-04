@@ -6,6 +6,7 @@ use App\Models\Kontrak_D;
 use App\Models\Opi_M;
 use App\Models\Tracking;
 use App\Exports\PlanKirimExport;
+use App\Exports\IntakeMonthlyExport;
 use App\Models\DeliveryTime;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
@@ -667,5 +668,37 @@ class OpiController extends Controller
 
         // Export to Excel
         return Excel::download(new PlanKirimExport($data, $start_date, $end_date), $filename);
+    }
+
+    /**
+     * Show intake monthly export page
+     */
+    public function intakeMonthly()
+    {
+        return view('admin.opi.intake_monthly');
+    }
+
+    /**
+     * Export intake data per month
+     */
+    public function exportIntakeMonthly(Request $request)
+    {
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
+
+        // Validate month and year
+        if (!is_numeric($month) || $month < 1 || $month > 12) {
+            $month = date('m');
+        }
+        if (!is_numeric($year) || $year < 2020 || $year > date('Y') + 1) {
+            $year = date('Y');
+        }
+
+        // Generate filename
+        $monthName = date('F_Y', mktime(0, 0, 0, $month, 1, $year));
+        $filename = "Intake_Data_{$monthName}.xlsx";
+
+        // Export to Excel
+        return Excel::download(new IntakeMonthlyExport($month, $year), $filename);
     }
 }
