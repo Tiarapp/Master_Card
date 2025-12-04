@@ -86,7 +86,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
         $tanggalKirim = $hasilProduksi->tanggal_kirim_terakhir ?? '-';
 
         // Calculations
-        $beratKg = ($opi->gramSheetBoxKontrak ?? 0) / 1000; // Convert gram to kg
+        $beratKg = ($opi->gramSheetBoxKontrak ?? 0); // Convert gram to kg
         $tonase = ($opi->jumlahOrder ?? 0) * $beratKg; // Qty * berat in tons
         
         $kurangKirim = ($opi->jumlahOrder ?? 0) - $qtyKirim;
@@ -105,7 +105,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             $opi->namaBarang ?? '-',                    // Nama Barang
             $opi->jumlahOrder ?? 0, // Qty OPI Pcs
             $opi->gramSheetBoxKontrak ?? 0, // Gram Kontrak
-            $tonase,        // Tonase (qty * berat)
+            number_format($tonase, 3),        // Tonase (qty * berat)
             $qtyKirim,      // Qty Kirim
             $tonKirim,      // Ton Kirim
             $tanggalKirim ? date('d/m/Y', strtotime($tanggalKirim)) : '-', // Tanggal Kirim
