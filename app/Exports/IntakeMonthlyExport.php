@@ -103,14 +103,14 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             $opi->wax ?? '-',                           // Wax
             $opi->tipeOrder ?? '-',                     // Tipe Order
             $opi->namaBarang ?? '-',                    // Nama Barang
-            number_format($opi->jumlahOrder ?? 0, 0, ',', '.'), // Qty OPI Pcs
-            number_format($opi->gramSheetBoxKontrak ?? 0, 2, ',', '.'), // Gram Kontrak
-            number_format($tonase, 3, ',', '.'),        // Tonase (qty * berat)
-            number_format($qtyKirim, 0, ',', '.'),      // Qty Kirim
-            number_format($tonKirim, 3, ',', '.'),      // Ton Kirim
+            $opi->jumlahOrder ?? 0, // Qty OPI Pcs
+            $opi->gramSheetBoxKontrak ?? 0, // Gram Kontrak
+            $tonase,        // Tonase (qty * berat)
+            $qtyKirim,      // Qty Kirim
+            $tonKirim,      // Ton Kirim
             $tanggalKirim ? date('d/m/Y', strtotime($tanggalKirim)) : '-', // Tanggal Kirim
-            number_format($kurangKirim, 0, ',', '.'),   // Kurang Kirim
-            number_format($tonKurangKirim, 3, ',', '.'),// Ton Kurang Kirim
+            $kurangKirim,   // Kurang Kirim
+            $tonKurangKirim,// Ton Kurang Kirim
             $opi->opi_keterangan ?? '-',                // Keterangan
         ];
     }
