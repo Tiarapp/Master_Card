@@ -21,6 +21,20 @@
     <section class="content">
         <div class="container-fluid">
             
+            @if(isset($firebird_error))
+            <!-- Firebird Error Alert -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Peringatan!</h5>
+                        {{ $firebird_error }}
+                        <br><small class="text-muted">Menampilkan data Mastercard tanpa integrasi PHP database.</small>
+                    </div>
+                </div>
+            </div>
+            @endif
+            
             <!-- Summary Statistics -->
             <div class="row">
                 <div class="col-lg-3 col-6">

@@ -837,23 +837,34 @@ class MastercardController extends Controller
     {
         // OPTIMIZED PERFORMANCE: Cache-first approach dengan lazy loading
         try {
+            // Check if Firebird driver is available
+            if (!extension_loaded('pdo_firebird') && !extension_loaded('interbase')) {
+                return $this->showFirebirdUnavailableMessage();
+            }
+
             $cacheKey = 'php_data_summary_' . md5(json_encode($request->only(['search', 'filter'])));
             
             // STEP 1: Coba ambil dari cache dulu (5 menit cache)
             $phpData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 300, function() {
-                DB::connection('firebird2')->beginTransaction();
-                // LIMIT data untuk performa - hanya ambil 1000 records teratas
-                $phpDataRaw = DB::connection('firebird2')
-                    ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
-                             FROM "TDetPHP" 
-                             GROUP BY TRIM("KodeBrg")
-                             ORDER BY SUM("Quantity") DESC');
-                DB::connection('firebird2')->commit();
-                
-                return collect($phpDataRaw)->map(function($item) {
-                    $item->KODEBRG = trim($item->KODEBRG ?? '');
-                    return $item;
-                })->keyBy('KODEBRG');
+                try {
+                    DB::connection('firebird2')->beginTransaction();
+                    // LIMIT data untuk performa - hanya ambil 1000 records teratas
+                    $phpDataRaw = DB::connection('firebird2')
+                        ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
+                                 FROM "TDetPHP" 
+                                 GROUP BY TRIM("KodeBrg")
+                                 ORDER BY SUM("Quantity") DESC');
+                    DB::connection('firebird2')->commit();
+                    
+                    return collect($phpDataRaw)->map(function($item) {
+                        $item->KODEBRG = trim($item->KODEBRG ?? '');
+                        return $item;
+                    })->keyBy('KODEBRG');
+                } catch (\Exception $e) {
+                    // Jika Firebird error, return empty collection
+                    \Illuminate\Support\Facades\Log::warning('Firebird connection failed: ' . $e->getMessage());
+                    return collect();
+                }
             });
 
             
@@ -929,15 +940,76 @@ class MastercardController extends Controller
 
         } catch (\Exception $e) {
             // Rollback transaction if it's still active
-            if (DB::connection('firebird2')->transactionLevel() > 0) {
-                DB::connection('firebird2')->rollback();
+            try {
+                if (DB::connection('firebird2')->transactionLevel() > 0) {
+                    DB::connection('firebird2')->rollback();
+                }
+            } catch (\Exception $rollbackError) {
+                // Ignore rollback errors if connection is already broken
             }
             
             // Log error untuk debugging
             \Illuminate\Support\Facades\Log::error('Cross-database relation error: ' . $e->getMessage());
             
-            return back()->with('error', 'Error loading cross-database data: ' . $e->getMessage());
+            return $this->showFirebirdUnavailableMessage($e->getMessage());
         }
+    }
+
+    /**
+     * Show message when Firebird is unavailable
+     */
+    private function showFirebirdUnavailableMessage($errorMessage = null)
+    {
+        // Get basic Mastercard data without Firebird integration
+        $perPage = 20;
+        $currentPage = request()->get('page', 1);
+        
+        $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'tipeBox', 'customer', 'created_at');
+        
+        // Tambahkan search jika ada
+        if (request()->has('search') && !empty(request('search'))) {
+            $searchTerm = request('search');
+            $mcQuery->where(function($q) use ($searchTerm) {
+                $q->where('kode', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('namaBarang', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('kodeBarang', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('customer', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        $mcWithPhp = $mcQuery->orderBy('created_at', 'desc')
+            ->paginate($perPage, ['*'], 'page', $currentPage)
+            ->appends(request()->query());
+        
+        // Add empty PHP data for all records
+        $mcWithPhp->getCollection()->transform(function($mc) {
+            $mc->php_data = [
+                'total_quantity' => 0,
+                'total_records' => 0,
+                'has_data' => false,
+                'kode_brg' => $mc->kodeBarang,
+                'original_kode' => $mc->kodeBarang,
+            ];
+            return $mc;
+        });
+
+        $summary = [
+            'total_mc' => Mastercard::count(),
+            'mc_with_php' => 0,
+            'total_php_records' => 0,
+            'total_php_quantity' => 0
+        ];
+
+        $errorMsg = $errorMessage ? 
+            "Firebird database tidak tersedia: " . $errorMessage : 
+            "Firebird database tidak tersedia. Extension pdo_firebird belum terinstall.";
+
+        return view('admin.ppic.mc.mc_bbm', [
+            'mcWithPhp' => $mcWithPhp,
+            'summary' => $summary,
+            'phpData' => collect(), // Empty collection
+            'firebird_error' => $errorMsg
+        ]);
     }
 
     /**
