@@ -963,7 +963,8 @@ class Kontrak_DController extends Controller
         }
         
         public function store_realisasi(Request $request)
-        {
+        {   
+            $opi = OPI_M::where('nama', '=', $request->opi)->first();
             $id = array_merge($request->idkontrak);
             for ($i=0; $i < count($id); $i++) { 
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
@@ -972,6 +973,7 @@ class Kontrak_DController extends Controller
                 $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
                 RealisasiKirim::create([
                     'kontrak_m_id'  => $id[$i],
+                    'opi_id'        => $opi->id,
                     'tanggal_kirim' => $request->tglKirim,
                     'nomer_sj'      => $request->sj,
                     'mod'           => $request->mod,
