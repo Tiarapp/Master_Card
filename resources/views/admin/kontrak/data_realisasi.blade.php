@@ -307,7 +307,7 @@
                             <td scope="col">{{ $data->tanggal_kirim }}</td>
                             <td scope="col">{{ $data->nomer_sj }}</td>
                             <td scope="col">{{ $data->qty_kirim }}</td>
-                            <td scope="col">{{ $data->opi->nama }}</td>
+                            <td scope="col">{{ $data->opi_id ? $data->opi->nama : '' }}</td>
                             <td>
                                 <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $data->id }}">Edit</button>
                             </td>
