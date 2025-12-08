@@ -607,6 +607,7 @@ class Kontrak_DController extends Controller
         
         public function store_dt(Request $request)
         {
+
             // Validate required fields first
             if (empty($request->tglKirim)) {
                 return redirect()->back()->with('error', 'Tanggal kirim harus diisi');
@@ -686,7 +687,7 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Insert DeliveryTime
                 $dtId = DB::table('dt')->insertGetId([
                     'kontrak_m_id' => $request->idkontrakm,
-                    'opi' => $request->nomer_opi,
+                    'opi' => $numb_opi,
                     'kodeKontrak' => $request->kode,
                     'tglKirimDt' => $tglKirim,
                     'pcsDt' => $jumlahKirim,
@@ -750,7 +751,7 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Simple tracking insert
                 DB::table('tracking')->insert([
                     'user' => $userName,
-                    'event' => "Tambah OPI " . $request->nomer_opi,
+                    'event' => "Tambah OPI " . $numb_opi,
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
@@ -758,7 +759,7 @@ class Kontrak_DController extends Controller
                 DB::commit();
                 
                 return redirect()->back()
-                    ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $request->nomer_opi);
+                    ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
                 
             } catch (\Exception $e) {
                 DB::rollBack();
