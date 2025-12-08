@@ -627,41 +627,43 @@ class Kontrak_DController extends Controller
             }
 
             DB::beginTransaction();
-            try {
+            // try {
                 // OPTIMIZED: Get all required data in fewer queries
                 $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
                 $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
                 $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
 
+                // dd($numb_opi);
+
                 // OPTIMIZED: Single query for customer data
-                $customerData = DB::connection('firebird')->table('TCustomer')
-                    ->select('WAKTUBAYAR', 'Plafond', 'Kode')
-                    ->where('Nama', $request->cust)
-                    ->first();
+                // $customerData = DB::connection('firebird')->table('TCustomer')
+                //     ->select('WAKTUBAYAR', 'Plafond', 'Kode')
+                //     ->where('Nama', $request->cust)
+                //     ->first();
 
                 // OPTIMIZED: Calculate piutang total correctly with cross-database relation
-                $piutang = Piutang::where('KodeCust', $customerData->Kode)
-                    ->where('Note', 'JUAL')  // Hanya Note JUAL
-                    ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
-                    ->selectRaw("
-                        SUM(TotalRp - TotalTerima) as total_piutang,
-                        SUM(TotalTerima) as total_terima,
-                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max,
-                        COUNT(*) as total_records
-                    ")
-                    ->first();
+                // $piutang = Piutang::where('KodeCust', $customerData->Kode)
+                //     ->where('Note', 'JUAL')  // Hanya Note JUAL
+                //     ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+                //     ->selectRaw("
+                //         SUM(TotalRp - TotalTerima) as total_piutang,
+                //         SUM(TotalTerima) as total_terima,
+                //         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max,
+                //         COUNT(*) as total_records
+                //     ")
+                //     ->first();
                 
-                $piutangData = Piutang::where('KodeCust', $customerData->Kode)
-                    // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
-                    ->selectRaw("
-                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
-                        SUM(TotalTerima) as total_terima,
-                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
-                    ")
-                    ->first();
+                // $piutangData = Piutang::where('KodeCust', $customerData->Kode)
+                //     // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
+                //     ->selectRaw("
+                //         SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
+                //         SUM(TotalTerima) as total_terima,
+                //         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
+                //     ")
+                //     ->first();
 
                     
-                    $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
+                    // $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
                     // dd($piutangTotal, $request->all());
 
                 // OPTIMIZED: Get kontrak data in single query
@@ -697,8 +699,10 @@ class Kontrak_DController extends Controller
                     'updated_at' => $currentTimestamp
                 ]);
                 
+                // dd($dtId);
                 // OPTIMIZED: Determine OPI status based on customer conditions
                 $opiStatus = 'Proses'; // Default status
+
                 // if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
                 //     $opiStatus = 'Pending';
                 // } elseif ($piutangTotal > $customerData->Plafond) {
@@ -761,12 +765,13 @@ class Kontrak_DController extends Controller
                 return redirect()->back()
                     ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
                 
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Error in store_dt: ' . $e->getMessage());
-                return redirect()->back()
-                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-            }
+            // } 
+            // catch (\Exception $e) {
+            //     DB::rollBack();
+            //     Log::error('Error in store_dt: ' . $e->getMessage());
+            //     return redirect()->back()
+            //         ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            // }
         }
         
         /**
