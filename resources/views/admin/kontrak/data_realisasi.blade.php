@@ -295,17 +295,21 @@
                     <thead>
                         <tr>
                             <th scope="col">Tanggal Kirim</th>
+                            <th scope="col">Surat Jalan</th>
                             <th scope="col">Jumlah Kirim</th>
+                            <th scope="col">OPI</th>
                             <th scope="col">action</th>
                         </tr>
                     </thead>
                     <tbody>   
-                        @foreach ($kontrak_M->realisasi as $o)
+                        @foreach ($kontrak_M->realisasi as $data)
                         <tr>
-                            <td scope="col">{{ $o->tanggal_kirim }}</td>
-                            <td scope="col">{{ $o->qty_kirim }}</td>
+                            <td scope="col">{{ $data->tanggal_kirim }}</td>
+                            <td scope="col">{{ $data->nomer_sj }}</td>
+                            <td scope="col">{{ $data->qty_kirim }}</td>
+                            <td scope="col">{{ $data->opi->nama }}</td>
                             <td>
-                                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $o->id }}">Edit</button>
+                                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $data->id }}">Edit</button>
                             </td>
                         </tr>
                         @include('admin.kontrak.edit_kirim')
