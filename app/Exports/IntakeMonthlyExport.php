@@ -108,7 +108,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             number_format($tonase, 3),                  // Tonase (qty * berat)
             number_format($qtyKirim, 0),                // Qty Kirim
             number_format($tonKirim, 3),                // Ton Kirim
-            $tanggalKirim ? date('d/m/Y', strtotime($tanggalKirim)) : '-', // Tanggal Kirim
+            $tanggalKirim ? date('d/m/Y', strtotime($tanggalKirim)) : "Belum Kirim", // Tanggal Kirim
             number_format($kurangKirim, 0),             // Kurang Kirim
             number_format($tonKurangKirim, 3),          // Ton Kurang Kirim
             $opi->opi_keterangan ?? '-',                // Keterangan

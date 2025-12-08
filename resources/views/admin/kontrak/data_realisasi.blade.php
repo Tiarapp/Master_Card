@@ -136,6 +136,7 @@
                                                             <th scope="col">Customer</th>
                                                             <th scope="col">MOD</th>
                                                             <th scope="col">Qty</th>
+                                                            <th scope="col">OPI</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -149,6 +150,7 @@
                                                                 <td>{{ $data->NamaCust }}</td>
                                                                 <td>{{ trim($data->NomerMOD) }}</td>
                                                                 <td>{{ number_format($data->Quantity) }}</td>
+                                                                <td>{{ $data->NoSeal }}</td>
                                                             </tr>
                                                             <?php
                                                         }
@@ -258,6 +260,20 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="jumlahKirim" id="jumlahKirim" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="message-text" class="col-form-label">OPI:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="opi" id="opi" required>
                                             </div>
                                         </div>
                                     </div>
@@ -443,6 +459,7 @@
             document.getElementById("jumlahKirim").value = kontrak[4]
             document.getElementById("sj").value = kontrak[0]
             document.getElementById("mod").value = kontrak[3]
+            document.getElementById("opi").value = kontrak[5]
 
             $("#modal-sj").modal("hide")
         });
