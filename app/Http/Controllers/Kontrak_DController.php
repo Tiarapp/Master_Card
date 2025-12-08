@@ -621,19 +621,19 @@ class Kontrak_DController extends Controller
             $jumlahKirim = (int) $request->jumlahKirim;
             $berat = (float) ($request->berat ?? 1);
             
-            // OPTIMIZED: Check OPI existence early
-            if (Opi_M::where('nama', $request->nomer_opi)->exists()) {
-                return redirect()->back()->with('error', 'OPI ' . $request->nomer_opi . ' sudah ada');
-            }
+            
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
             // try {
                 // OPTIMIZED: Get all required data in fewer queries
                 $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
                 $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
                 $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
 
-                // dd($numb_opi);
+                // OPTIMIZED: Check OPI existence early
+                if (Opi_M::where('nama', $numb_opi)->exists()) {
+                    return redirect()->back()->with('error', 'OPI ' . $numb_opi . ' sudah ada');
+                }
 
                 // OPTIMIZED: Single query for customer data
                 // $customerData = DB::connection('firebird')->table('TCustomer')
@@ -760,7 +760,7 @@ class Kontrak_DController extends Controller
                     'updated_at' => $currentTimestamp
                 ]);
                 
-                DB::commit();
+                // DB::commit();
                 
                 return redirect()->back()
                     ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
@@ -964,6 +964,9 @@ class Kontrak_DController extends Controller
         
         public function store_realisasi(Request $request)
         {   
+            if(strlen($request->opi) > 6){
+                explode(',', $request->opi);
+            }
             $opi = Opi_M::where('nama', '=', $request->opi)->first();
             $id = array_merge($request->idkontrak);
             for ($i=0; $i < count($id); $i++) { 
