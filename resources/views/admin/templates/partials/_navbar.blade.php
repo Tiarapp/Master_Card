@@ -23,6 +23,15 @@
         <i class="fas fa-user"></i> {{ Auth::user()->name }}
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+        <h6 class="dropdown-header">{{ Auth::user()->name }}</h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ route('profile.index') }}">
+          <i class="fas fa-user-circle"></i> Profile
+        </a>
+        <a class="dropdown-item" href="{{ route('profile.change-password') }}">
+          <i class="fas fa-key"></i> Ubah Password
+        </a>
+        <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt"></i> Logout
         </a>

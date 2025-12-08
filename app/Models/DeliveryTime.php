@@ -21,6 +21,7 @@ class DeliveryTime extends Model
         'kgDt',
         'locked',
         'createdBy',
+        'keterangan',
         'lastUpdatedBy',
     ];
 

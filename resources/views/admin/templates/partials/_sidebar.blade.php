@@ -14,7 +14,12 @@
         <img src="{{ asset('asset/dist/img/profile.png') }}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+        <a href="{{ route('profile.index') }}" class="d-block">{{ Auth::user()->name }}</a>
+        <small class="text-muted">
+          <a href="{{ route('profile.change-password') }}" class="text-sm">
+            <i class="fas fa-key fa-xs"></i> Ubah Password
+          </a>
+        </small>
       </div>
     </div>
     
@@ -335,12 +340,18 @@
                     <p>Delivery Time</p>
                   </a>
                 </li>
-                {{-- <li class="nav-item">
-                  <a href="{{ route('ppic.opi.approve') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Rekap OPI</p>
+                <li class="nav-item">
+                  <a href="{{ route('opi.plan_kirim') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Plan Kirim</p>
                   </a>
-                </li> --}}
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('opi.intake') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Export Intake</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item">
@@ -447,6 +458,12 @@
                   <a href="{{ route('hasilcorr') }}" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Control</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('ppic.karet') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Karet</p>
                   </a>
                 </li>
               </ul>
@@ -559,6 +576,37 @@
               </ul>
             </li>
           @endif
+          @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 14 )
+            <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-chart-bar nav-icon"></i>
+              <p>
+                Reports
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.report.deadstock') }}" class="nav-link">
+                  <i class="fas fa-warehouse nav-icon"></i>
+                  <p>Deadstock Report</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.report.kapasitas') }}" class="nav-link">
+                  <i class="fas fa-warehouse nav-icon"></i>
+                  <p>Kapasitas Gudang</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.report.in_out_bound') }}" class="nav-link">
+                  <i class="fas fa-exchange-alt nav-icon"></i>
+                  <p>In/Out Bound</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
 
           {{-- Feedback Menu - accessible by all users --}}
           <li class="nav-item">
@@ -586,7 +634,6 @@
               @endif
             </ul>
           </li>
-          
           {{-- Hardware Management - Only for IT Division (divisi_id = 2) --}}
           @if (Auth::user()->divisi_id == 2)
             <li class="nav-item">

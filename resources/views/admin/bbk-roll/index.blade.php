@@ -297,6 +297,12 @@
             <i class="fas fa-plus-circle me-2"></i>
             <span>{{ __('Tambah BBK Roll Baru') }}</span>
           </a>
+          
+          <!-- Export Button -->
+          <button type="button" id="exportBtn" class="btn btn-success d-flex align-items-center shadow-sm" style="margin-bottom: 20px;">
+            <i class="fas fa-file-excel me-2"></i>
+            <span>{{ __('Export Excel') }}</span>
+          </button>
         </div>
         <div class="col text-end">
           <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('bbk-roll.index') }}" method="GET" style="margin-bottom: 20px;">
@@ -443,6 +449,81 @@
             allowClear: true,
             placeholder: 'Pilih Inventory...'
         });
+    });
+
+    // Export functionality
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        const btn = this;
+        const originalContent = btn.innerHTML;
+        
+        // Show loading state
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i><span>Mengexport...</span>';
+        
+        // Get current filter values
+        const searchParam = '{{ request("search") }}';
+        const inventoryFilter = '{{ request("inventory_filter") }}';
+        const tanggalFrom = '{{ request("tanggal_from") }}';
+        const tanggalTo = '{{ request("tanggal_to") }}';
+        
+        // Create form for export
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("bbk-roll.export") }}';
+        form.style.display = 'none';
+        
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = '{{ csrf_token() }}';
+        form.appendChild(csrfInput);
+        
+        // Add search parameter
+        if (searchParam) {
+            const searchInput = document.createElement('input');
+            searchInput.type = 'hidden';
+            searchInput.name = 'search';
+            searchInput.value = searchParam;
+            form.appendChild(searchInput);
+        }
+        
+        // Add inventory filter
+        if (inventoryFilter) {
+            const inventoryInput = document.createElement('input');
+            inventoryInput.type = 'hidden';
+            inventoryInput.name = 'inventory_filter';
+            inventoryInput.value = inventoryFilter;
+            form.appendChild(inventoryInput);
+        }
+        
+        // Add date filters
+        if (tanggalFrom) {
+            const fromInput = document.createElement('input');
+            fromInput.type = 'hidden';
+            fromInput.name = 'tanggal_from';
+            fromInput.value = tanggalFrom;
+            form.appendChild(fromInput);
+        }
+        
+        if (tanggalTo) {
+            const toInput = document.createElement('input');
+            toInput.type = 'hidden';
+            toInput.name = 'tanggal_to';
+            toInput.value = tanggalTo;
+            form.appendChild(toInput);
+        }
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+        
+        // Restore button state after a delay
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+            document.body.removeChild(form);
+        }, 3000);
     });
 
     function viewBbkRollDetails(bbkNumber) {

@@ -21,6 +21,7 @@ use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Models\Accounting\VendorTT;
@@ -109,8 +110,16 @@ Route::get('/admin', function () {
 
 Route::middleware(['auth'])->group(function (){
     
+    // Profile Management Routes
+    Route::get('/profile', 'ProfileController@index')->name('profile.index');
+    Route::put('/profile/update', 'ProfileController@updateProfile')->name('profile.update');
+    Route::get('/profile/change-password', 'ProfileController@showChangePasswordForm')->name('profile.change-password');
+    Route::post('/profile/change-password', 'ProfileController@updatePassword')->name('profile.update-password');
+    Route::get('/profile/password-requirements', 'ProfileController@getPasswordRequirements')->name('profile.password-requirements');
+    
     // API routes for BBK Roll functionality
     Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
+    Route::get('/api/inventories/paginated', [App\Http\Controllers\InventoryController::class, 'getPaginatedInventory'])->name('inventory.paginated');
     Route::get('/api/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'getInventoryDetails'])->name('api.inventories.details');
     
     //Satuan
@@ -279,7 +288,11 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
     Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
     Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
+    Route::get('/admin/fg/returjual/{nobukti}/edit', 'BarangController@edit_retur')->name('barang.retur.edit');
+    Route::put('/admin/fg/returjual/{nobukti}', 'BarangController@update_retur')->name('barang.retur.update');
+    Route::get('/admin/fg/returjual/{nobukti}', 'BarangController@show_retur')->name('barang.retur.show');
     Route::get('/returjual/{tanggal}', 'BarangController@get_kode_retur')->name('barang.retur.get_kode');
+    Route::get('/get_sj/{no_sj}', 'BarangController@get_sj')->name('barang.get_sj');
     Route::get('/admin/barang/create', 'BarangController@create')->name('barang.create');
     Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');
@@ -324,6 +337,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/recall/{id}', 'Kontrak_DController@recall')->name('kontrak.recall');
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
+    Route::get('/admin/kontrak/export', 'Kontrak_DController@exportExcel')->name('kontrak.export');
 
     Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
 
@@ -347,6 +361,10 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/single/{id}', 'OpiController@single')->name('opi.single');
 
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
+    Route::get('/admin/opi/plan_kirim', [OpiController::class, 'plan_kirim'])->name('opi.plan_kirim');
+    Route::get('/admin/opi/plan_kirim/export', [OpiController::class, 'plan_kirim_export'])->name('opi.plan_kirim.export');
+    Route::get('/admin/opi/intake', [OpiController::class, 'intakeMonthly'])->name('opi.intake');
+    Route::get('/admin/opi/intake/export', [OpiController::class, 'exportIntakeMonthly'])->name('opi.intake.export');
     Route::get('/vendortt/export', function (Request $request){
             $vendortt = VendorTTDet::with('master_vend');
             // dd($request->all());
@@ -415,6 +433,9 @@ Route::middleware(['auth'])->group(function (){
     })->name('opi.export');
     
     Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
+    Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
+    Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
+    Route::post('/admin/ppic/sync-php', [MastercardController::class, 'sync_php_to_mysql'])->name('ppic.sync_php');
     Route::post('/approve', function (Request $request) {
         $ids = $request->input('ids');
         Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
@@ -498,11 +519,13 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        
+        Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
         Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
         Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
-        
-        
+        Route::get('admin/acc/opi', [FinanceController::class, 'approve_opi'])->name('acc.opi');
+        Route::post('admin/acc/opi/approve/{id}', [FinanceController::class, 'approve_opi_action'])->name('acc.opi.approve');
+
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
         Route::get('admin/data/cust', [CustomerController::class, 'index'])->name('data.cust');
@@ -572,6 +595,8 @@ Route::middleware(['auth'])->group(function (){
         Route::post('admin/marketing/formpermintaan/store', [FormPermintaan::class, 'store'])->name('mkt.store.formpermintaan');
         Route::get('admin/marketing/formpermintaan/edit/{id}', [FormPermintaan::class, 'edit'])->name('mkt.edit.formpermintaan');
         Route::put('admin/marketing/formpermintaan/update/{id}', [FormPermintaan::class, 'update'])->name('mkt.update.formpermintaan');
+
+        Route::get('admin/marketing/plan_kirim', [OpiController::class, 'plan_kirim'])->name('mkt.plan.kirim');
         
         Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
         Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
@@ -622,6 +647,10 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/inventory/import/inventory', 'InventoryController@importInventory')->name('inventory.import.inventory');
         Route::get('/inventory/import/inventory-template', 'InventoryController@downloadInventoryTemplate')->name('inventory.import.inventory.template');
         Route::resource('/inventory', 'InventoryController');
+        
+        // Inventory Export
+        Route::post('/inventory/export', 'InventoryController@export')->name('inventory.export');
+        
         Route::resource('/jenis-roll', 'JenisRollController');
         Route::resource('/lebar-roll', 'LebarRollController');
         Route::resource('/supplier-roll', 'SupplierRollController');
@@ -639,6 +668,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
         Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
         Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
+        
+        // BBK Roll Export
+        Route::post('/bbk-roll/export', 'BbkRollController@export')->name('bbk-roll.export');
         
         // BBK Roll Individual Item Operations
         Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
@@ -674,6 +706,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('hardware', 'HardwareController');
     Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
     Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
+
+    Route::prefix('admin/report')->name('admin.report.')->group(function () {
+        Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
+        Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
+        Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
+        Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
+    });
 });
 
 require __DIR__ . '/auth.php';

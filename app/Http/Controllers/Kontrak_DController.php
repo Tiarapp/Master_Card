@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
+use App\Models\Accounting\Piutang;
 use App\Models\Customer;
+use App\Models\Number_Sequence;
 use Illuminate\Support\Facades\Log;
 
 class Kontrak_DController extends Controller
@@ -557,296 +559,213 @@ class Kontrak_DController extends Controller
         
         public function add_dt($id)
         {
+            try {
+                // OPTIMIZED: Load only essential data with required relations for view
+                $kontrak = Kontrak_D::select(['id', 'kontrak_m_id', 'mc_id', 'pcsKontrak', 'pcsSisaKontrak', 'kgKontrak'])
+                    ->with([
+                        'kontrakm:id,kode,customer_name,poCustomer,alamatKirim,tipeOrder',
+                        'mc:id,kode,revisi,namaBarang,gramSheetBoxKontrak2,gramSheetBoxProduksi2,substanceKontrak_id,substanceProduksi_id,outConv,lebarSheet,panjangSheet',
+                        'mc.substancekontrak:id,kode',
+                        'mc.substanceproduksi:id,kode'
+                    ])
+                    ->where('kontrak_m_id', $id)
+                    ->first();
 
-            $kontrak = new Kontrak_D();
-            $kontrak = $kontrak->with([
-                'kontrakm',
-                'mc',
-                'mc.substancekontrak',
-                'mc.substanceproduksi',
-            ]);
+                if (!$kontrak) {
+                    return redirect()->back()->with('error', 'Kontrak tidak ditemukan');
+                }
 
-            $kontrak = $kontrak->where('kontrak_m_id', $id)->first();
+                // Ensure MC data exists
+                if (!$kontrak->mc) {
+                    return redirect()->back()->with('error', 'Data Mastercard tidak ditemukan untuk kontrak ini');
+                }
 
-            // tampilkan data yang akan di edit
-            $kontrak_D = DB::table('kontrak_d')
-            ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-            ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            ->where('kontrak_m_id', '=', $id)
-            ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.tipeBox as tipebox', 'mc.gramSheetCorrKontrak as berat', 'mc.outConv as outConv')
-            ->first();
-            
-            $kontrak_M = DB::table('kontrak_m')
-            ->where('kontrak_m.id', '=', $id)
-            ->first();
-            
-            $opi = Opi_M::opidt()->where('opi_m.kontrak_m_id', '=', $id)
-            ->get();
+                // OPTIMIZED: Get OPI data with minimal fields
+                $opi = Opi_M::select(['id', 'NoOPI', 'jumlahOrder', 'dt_id', 'status_opi'])
+                    ->with('dt:id,tglKirimDt,keterangan')
+                    ->where('kontrak_m_id', $id)
+                    ->orderBy('id', 'desc')
+                    ->get();
 
-            $data = [
-                'kontrak' => $kontrak,
-                'opi' => $opi,
-            ];
-            
-            return view('admin.kontrak.data_dtnew', $data);
+                // Set safe defaults to prevent division by zero
+                if ($kontrak->mc) {
+                    $kontrak->mc->outConv = $kontrak->mc->outConv ?: 1;
+                    $kontrak->mc->lebarSheet = $kontrak->mc->lebarSheet ?: 1;
+                    $kontrak->mc->gramSheetBoxKontrak2 = $kontrak->mc->gramSheetBoxKontrak2 ?: 0;
+                }
+
+                return view('admin.kontrak.data_dtnew', [
+                    'kontrak' => $kontrak,
+                    'opi' => $opi,
+                ]);
+                
+            } catch (\Exception $e) {
+                Log::error('Error in add_dt: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data kontrak.');
+            }
         }
         
         public function store_dt(Request $request)
         {
-            $date = date_create($request->tglKirim);
-            $day = date_format($date, "D");
-            $alphabet = 'E';
-            $tahun = '2025';
+            // Validate required fields first
+            if (empty($request->tglKirim)) {
+                return redirect()->back()->with('error', 'Tanggal kirim harus diisi');
+            }
+
+            // OPTIMIZED: Cache commonly used values and reduce date operations
+            $tglKirim = $request->tglKirim;
+            $day = date("D", strtotime($tglKirim));
+            $tahun = date('Y', strtotime($tglKirim));
+            $userName = Auth::user()->name;
+            $jumlahKirim = (int) $request->jumlahKirim;
+            $berat = (float) ($request->berat ?? 1);
             
-            if ($request->tglKirim != null) {
-                
-                $checkMesin = Opi_M::opi()->where('dt.tglKirimDt', '=', $request->tglKirim)->get();
-                
-                $totalB1 = 0;
-                $totaldc = 0;
-                $lain = 0;
-                
-                if ($request->tipebox == 'B1') {
-                    $b1 = DB::table('opi_m')
-                    ->join('dt', 'dt_id', 'dt.id')
-                    ->join('mc', 'mc_id', 'mc.id')
-                    ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-                    ->where('mc.tipeBox', '=', 'B1')
-                    ->where('status_opi', '=', 'Proses')
-                    ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
-                    ->groupBy('opi_m.tglKirimDt')
+            // OPTIMIZED: Check OPI existence early
+            if (Opi_M::where('nama', $request->nomer_opi)->exists()) {
+                return redirect()->back()->with('error', 'OPI ' . $request->nomer_opi . ' sudah ada');
+            }
+
+            DB::beginTransaction();
+            try {
+                // OPTIMIZED: Get all required data in fewer queries
+                $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
+                $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
+                $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
+
+                // OPTIMIZED: Single query for customer data
+                $customerData = DB::connection('firebird')->table('TCustomer')
+                    ->select('WAKTUBAYAR', 'Plafond', 'Kode')
+                    ->where('Nama', $request->cust)
                     ->first();
-                    if ($b1 != null) {
-                        $totalB1 = $b1->qty;
-                    } else {
-                        $totalB1 = 0;
-                    }
-                } elseif ($request->tipebox == 'DC') {
-                    $dc = DB::table('opi_m')
-                    ->join('dt', 'dt_id', 'dt.id')
-                    ->join('mc', 'mc_id', 'mc.id')
-                    ->select(DB::raw("SUM(opi_m.jumlahOrder / mc.outConv) as qty"), 'opi_m.tglKirimDt', 'mc.tipeBox')
-                    ->where('mc.tipeBox', '=', 'DC')
-                    ->where('status_opi', '=', 'Proses')
-                    ->where('opi_m.tglKirimDt', '>=', $request->tglKirim)
-                    ->groupBy('opi_m.tglKirimDt')
+
+                // OPTIMIZED: Calculate piutang total correctly with cross-database relation
+                $piutang = Piutang::where('KodeCust', $customerData->Kode)
+                    ->where('Note', 'JUAL')  // Hanya Note JUAL
+                    ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+                    ->selectRaw("
+                        SUM(TotalRp - TotalTerima) as total_piutang,
+                        SUM(TotalTerima) as total_terima,
+                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max,
+                        COUNT(*) as total_records
+                    ")
                     ->first();
+                
+                $piutangData = Piutang::where('KodeCust', $customerData->Kode)
+                    // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
+                    ->selectRaw("
+                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
+                        SUM(TotalTerima) as total_terima,
+                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
+                    ")
+                    ->first();
+
                     
-                    if ($dc != null) {
-                        $totaldc = $dc->qty;
-                    } else {
-                        $totaldc = 0;
-                    }
+                    $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
+                    // dd($piutangTotal, $request->all());
+
+                // OPTIMIZED: Get kontrak data in single query
+                // $kontrakData = DB::table('kontrak_d as kd')
+                //     ->join('kontrak_m as km', 'kd.kontrak_m_id', '=', 'km.id')
+                //     ->select('kd.id as kontrak_d_id', 'kd.mc_id', 'kd.pcsSisaKontrak', 'kd.kgSisaKontrak', 'km.keterangan')
+                //     ->where('kd.kontrak_m_id', $request->idkontrakm)
+                //     ->first();
+
+                $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak')
+                    ->where('kontrak_m_id', $request->idkontrakm)
+                    ->first();
+                
+                // dd($kontrakData);
+                
+                if (!$kontrakData) {
+                    throw new \Exception('Data kontrak tidak ditemukan');
                 }
                 
-                $checkOpi = Opi_M::where('nama', '=', $request->nomer_opi )->first();
+                // OPTIMIZED: Prepare data for batch insert
+                $currentTimestamp = now();
                 
-                if ($checkOpi == null) {
-                    $kontrakd = Kontrak_D::where('kontrak_m_id', '=', $request->idkontrakm)->first();
-                    $kontrakm = Kontrak_M::where('id', '=', $request->idkontrakm)->first();
-                    
-                    if ($request->jumlahKirim > $kontrakd->pcsSisaKontrak && $request->jumlahKirim > $kontrakd->pcsSisaKirim) {
-                        return redirect()->to(url()->previous())->with('success', 'Sisa kontrak tidak mencukupi, maksimal '.$kontrakd->pcsSisaKontrak.' atau '.$kontrakd->pcsSisaKirim);
-                    } else {
-                        if ($request->tipebox == 'B1') {
-                            if (($request->jumlahKirim/$request->outconv) + $totalB1 > 150000) {
-                                
-                                $dt = DeliveryTime::create([
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $request->nomer_opi,
-                                    'kodeKontrak' => $request->kode,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'locked' => 1,
-                                    'pcsDt' => $request->jumlahKirim,
-                                    'createdBy' => Auth::user()->name,
-                                ]);
-                                
-                                $opim = Opi_M::create([   
-                                    'nama' => $request->nomer_opi,
-                                    'periode' => $tahun,
-                                    'NoOPI' => $request->nomer_opi,
-                                    'dt_id' => $dt->id,
-                                    'mc_id' => $kontrakd->mc_id,
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'kontrak_d_id' => $kontrakd->id,
-                                    'keterangan' => $kontrakm->keterangan,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'jumlahOrder' => $request->jumlahKirim,
-                                    'sisa_order' => $request->jumlahKirim,
-                                    'hariKirimDt' => $day,
-                                    'status_opi' => 'Proses',
-                                    'createdBy' => Auth::user()->name,
-                                    'os_corr' => $request->jumlahKirim,
-                                    'os_flx' => $request->jumlahKirim,
-                                    'os_fin' => $request->jumlahKirim,
-                                ]);
-                                
-                                Tracking::create([
-                                    'user' => Auth::user()->name,
-                                    'event' => "Tambah OPI ".$opim->nama
-                                ]);
-                                
-                                return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI B1 pada tanggal '.$request->tglKirim.' sudah maksimal silahkan Kontak pihak PPIC untuk approve DT');
-                            } else {
-                                $dt = DeliveryTime::create([
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $request->nomer_opi,
-                                    'kodeKontrak' => $request->kode,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'pcsDt' => $request->jumlahKirim,
-                                    'createdBy' => Auth::user()->name,
-                                ]);
-                                
-                                $opim = Opi_M::create([   
-                                    'nama' => $request->nomer_opi,
-                                    'periode' => $tahun,
-                                    'NoOPI' => $request->nomer_opi,
-                                    'dt_id' => $dt->id,
-                                    'mc_id' => $kontrakd->mc_id,
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'kontrak_d_id' => $kontrakd->id,
-                                    'keterangan' => $kontrakm->keterangan,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'jumlahOrder' => $request->jumlahKirim,
-                                    'sisa_order' => $request->jumlahKirim,
-                                    'hariKirimDt' => $day,
-                                    'createdBy' => Auth::user()->name,
-                                    'os_corr' => $request->jumlahKirim,
-                                    'os_flx' => $request->jumlahKirim,
-                                    'os_fin' => $request->jumlahKirim,
-                                ]);
-                                
-                                Tracking::create([
-                                    'user' => Auth::user()->name,
-                                    'event' => "Tambah OPI ".$opim->nama
-                                ]);
-                                
-                                $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
-                                // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
-                                $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
-                                $kontrakd->save();
-                            }
-                        } elseif($request->tipebox == 'DC') {
-                            // dd($request->outconv);
-                            if (($request->jumlahKirim/$request->outconv) + $totaldc > 54000) {
-                                $dt = DeliveryTime::create([
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $request->nomer_opi,
-                                    'kodeKontrak' => $request->kode,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'locked' => 1,
-                                    'pcsDt' => $request->jumlahKirim,
-                                    'createdBy' => Auth::user()->name,
-                                ]);
-                                
-                                $opim = Opi_M::create([   
-                                    'nama' => $request->nomer_opi,
-                                    'periode' => $tahun,
-                                    'NoOPI' => $request->nomer_opi,
-                                    'dt_id' => $dt->id,
-                                    'mc_id' => $kontrakd->mc_id,
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'kontrak_d_id' => $kontrakd->id,
-                                    'keterangan' => $kontrakm->keterangan,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'jumlahOrder' => $request->jumlahKirim,
-                                    'sisa_order' => $request->jumlahKirim,
-                                    'hariKirimDt' => $day,
-                                    'status_opi' => 'Proses',
-                                    'createdBy' => Auth::user()->name,
-                                ]);
-                                
-                                Tracking::create([
-                                    'user' => Auth::user()->name,
-                                    'event' => "Tambah OPI ".$opim->nama
-                                ]);
-                                
-                                return redirect()->to(url()->previous())->with('success', 'Kapasitas OPI DC pada tanggal '.$request->tglKirim.' sudah maksimal silahkan Kontak pihak PPIC untuk approve DT');
-                            } else {
-                                $dt = DeliveryTime::create([
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'opi' => $request->nomer_opi,
-                                    'kodeKontrak' => $request->kode,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'pcsDt' => $request->jumlahKirim,
-                                    'createdBy' => Auth::user()->name,
-                                ]);
-                                
-                                $opim = Opi_M::create([   
-                                    'nama' => $request->nomer_opi,
-                                    'periode' => $tahun,
-                                    'NoOPI' => $request->nomer_opi,
-                                    'dt_id' => $dt->id,
-                                    'mc_id' => $kontrakd->mc_id,
-                                    'kontrak_m_id' => $request->idkontrakm,
-                                    'kontrak_d_id' => $kontrakd->id,
-                                    'keterangan' => $kontrakm->keterangan,
-                                    'tglKirimDt' => $request->tglKirim,
-                                    'jumlahOrder' => $request->jumlahKirim,
-                                    'sisa_order' => $request->jumlahKirim,
-                                    'hariKirimDt' => $day,
-                                    'createdBy' => Auth::user()->name,
-                                    'os_corr' => $request->jumlahKirim,
-                                    'os_flx' => $request->jumlahKirim,
-                                    'os_fin' => $request->jumlahKirim,
-                                ]);
-                                
-                                Tracking::create([
-                                    'user' => Auth::user()->name,
-                                    'event' => "Tambah OPI ".$opim->nama
-                                ]);
-                                
-                                $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
-                                // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
-                                $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
-                                $kontrakd->save();
-                            }
-                        } else {
-                            $dt = DeliveryTime::create([
-                                'kontrak_m_id' => $request->idkontrakm,
-                                'opi' => $request->nomer_opi,
-                                'kodeKontrak' => $request->kode,
-                                'tglKirimDt' => $request->tglKirim,
-                                'pcsDt' => $request->jumlahKirim,
-                                'createdBy' => Auth::user()->name,
-                            ]);
-                            
-                            $opim = Opi_M::create([   
-                                'nama' => $request->nomer_opi,
-                                'periode' => $tahun,
-                                'NoOPI' => $request->nomer_opi,
-                                'dt_id' => $dt->id,
-                                'mc_id' => $kontrakd->mc_id,
-                                'kontrak_m_id' => $request->idkontrakm,
-                                'kontrak_d_id' => $kontrakd->id,
-                                'keterangan' => $kontrakm->keterangan,
-                                'tglKirimDt' => $request->tglKirim,
-                                'jumlahOrder' => $request->jumlahKirim,
-                                'sisa_order' => $request->jumlahKirim,
-                                'hariKirimDt' => $day,
-                                'createdBy' => Auth::user()->name,
-                                'os_corr' => $request->jumlahKirim,
-                                'os_flx' => $request->jumlahKirim,
-                                'os_fin' => $request->jumlahKirim,
-                            ]);
-                            
-                            Tracking::create([
-                                'user' => Auth::user()->name,
-                                'event' => "Tambah Box ".$opim->nama
-                            ]);
-                            
-                            $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak - $request->jumlahKirim;
-                            // $kontrakd->pcsSisaKirim = $kontrakd->pcsSisaKirim - $request->jumlahKirim;
-                            $kontrakd->kgSisaKontrak = ($kontrakd->kgSisaKontrak*$request->berat) - ($request->jumlahOrder*$request->berat);
-                            $kontrakd->save();
-                        }
-                    }
-                } else {
-                    return redirect()->to(url()->previous())->with('error', 'OPI ini '. $request->nomer_opi. ' sudah dibuat oleh '. $checkOpi->createdBy);
-                } 
+                // OPTIMIZED: Insert DeliveryTime
+                $dtId = DB::table('dt')->insertGetId([
+                    'kontrak_m_id' => $request->idkontrakm,
+                    'opi' => $request->nomer_opi,
+                    'kodeKontrak' => $request->kode,
+                    'tglKirimDt' => $tglKirim,
+                    'pcsDt' => $jumlahKirim,
+                    'createdBy' => $userName,
+                    'keterangan' => $request->keterangan,
+                    'created_at' => $currentTimestamp,
+                    'updated_at' => $currentTimestamp
+                ]);
+                
+                // OPTIMIZED: Determine OPI status based on customer conditions
+                $opiStatus = 'Proses'; // Default status
+                // if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                //     $opiStatus = 'Pending';
+                // } elseif ($piutangTotal > $customerData->Plafond) {
+                //     $opiStatus = 'Pending';
+                // } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                //     $opiStatus = 'Pending';
+                // }
+                
 
+                // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
+                DB::table('opi_m')->insert([
+                    'nama' => $numb_opi,
+                    'periode' => $tahun,
+                    'NoOPI' => $numb_opi,
+                    'dt_id' => $dtId,
+                    'mc_id' => $kontrakData->mc_id,
+                    'kontrak_m_id' => $request->idkontrakm,
+                    'kontrak_d_id' => $kontrakData->kontrak_d_id,
+                    'keterangan' => $kontrakData->keterangan,
+                    'tglKirimDt' => $tglKirim,
+                    'jumlahOrder' => $jumlahKirim,
+                    'sisa_order' => $jumlahKirim,
+                    'hariKirimDt' => $day,
+                    'status_opi' => $opiStatus,
+                    'createdBy' => $userName,
+                    'os_corr' => $jumlahKirim,
+                    'os_flx' => $jumlahKirim,
+                    'os_fin' => $jumlahKirim,
+                    'created_at' => $currentTimestamp,
+                    'updated_at' => $currentTimestamp
+                ]);
+                
+                // OPTIMIZED: Calculate new values safely
+                $newPcsSisa = max(0, $kontrakData->pcsSisaKontrak - $jumlahKirim);
+                $newKgSisa = max(0, $kontrakData->kgSisaKontrak - ($jumlahKirim * $berat));
+
+                // Update number sequence and kontrak
+                $nomer_opi->nomer += 1;
+                $nomer_opi->save();
+                
+                // OPTIMIZED: Batch updates
+                DB::table('kontrak_d')
+                    ->where('id', $kontrakData->kontrak_d_id)
+                    ->update([
+                        'pcsSisaKontrak' => $newPcsSisa,
+                        'kgSisaKontrak' => $newKgSisa,
+                        'updated_at' => $currentTimestamp
+                    ]);
+                
+                // OPTIMIZED: Simple tracking insert
+                DB::table('tracking')->insert([
+                    'user' => $userName,
+                    'event' => "Tambah OPI " . $request->nomer_opi,
+                    'created_at' => $currentTimestamp,
+                    'updated_at' => $currentTimestamp
+                ]);
+                
+                DB::commit();
+                
+                return redirect()->back()
+                    ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $request->nomer_opi);
+                
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error in store_dt: ' . $e->getMessage());
+                return redirect()->back()
+                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
             }
-            return redirect()->to(url()->previous())->with('success', 'Data DT dan OPI Berhasi disimpan dengan Nomor OPI '.$request->nomer_opi, );
         }
         
         /**
@@ -1200,4 +1119,37 @@ class Kontrak_DController extends Controller
         // {
         //     return Excel::download(new KontrakExport($request->search), 'kontrak.xlsx');
         // }
+
+        /**
+         * Export kontrak data to Excel
+         *
+         * @param Request $request
+         * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+         */
+        public function exportExcel(Request $request)
+        {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $search = $request->input('search');
+            
+            // Validasi tanggal jika ada
+            if ($startDate && $endDate) {
+                if (strtotime($startDate) > strtotime($endDate)) {
+                    return redirect()->back()->with('error', 'Tanggal mulai tidak boleh lebih besar dari tanggal akhir');
+                }
+            }
+            
+            // Generate filename dengan timestamp dan parameter
+            $filename = 'export_kontrak_';
+            if ($search) {
+                $filename .= 'search_' . str_replace(' ', '_', $search) . '_';
+            }
+            if ($startDate && $endDate) {
+                $filename .= $startDate . '_to_' . $endDate . '_';
+            }
+            $filename .= date('Y-m-d_H-i-s') . '.xlsx';
+            
+            // Download Excel file
+            return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
+        }
     }

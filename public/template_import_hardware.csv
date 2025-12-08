@@ -1,3 +1,0 @@
-kode_hardware,nama_hardware,merk,model,serial_number,spesifikasi,kategori,status,tanggal_pembelian,harga_pembelian,lokasi,pic_pengguna,divisi,keterangan,tanggal_garansi_mulai,tanggal_garansi_selesai,vendor,no_invoice
-TEMPLATE001,Dell Inspiron 15 3000,Dell,Inspiron 15 3000,DL001234567,"Intel Core i5-1135G7, 8GB RAM, 256GB SSD, 15.6"" HD Display",Laptop,Aktif,2024-01-14,8500000,IT Office - Room 101,John Doe,IT,Laptop untuk staff IT,2024-01-14,2026-01-14,PT. Dell Indonesia,INV-DELL-2024-001
-TEMPLATE002,HP LaserJet Pro M404dn,HP,LaserJet Pro M404dn,HP002345678,"Printer Laser Monochrome, 38 ppm, Duplex, Network",Printer,Aktif,2024-02-10,3200000,Admin Office - Floor 2,Jane Smith,Admin,Printer untuk keperluan administrasi,2024-02-10,2026-02-10,PT. HP Indonesia,INV-HP-2024-002

@@ -82,6 +82,43 @@ class Mastercard extends Model
         return $this->belongsTo(Substance::class, 'substanceProduksi_id', 'id');
     }
 
-
+    /**
+     * CATATAN: Relasi ke DetPHP tidak bisa menggunakan Eloquent relationship 
+     * karena berada di database yang berbeda (firebird2 vs default)
+     * Gunakan method manual untuk mendapatkan data PHP
+     */
     
+    /**
+     * Mendapatkan data PHP dari database firebird2 berdasarkan kodeBarang
+     */
+    public function getPhpData()
+    {
+        return DB::connection('firebird2')
+            ->table('TDetPHP')
+            ->where('KodeBrg', $this->kodeBarang)
+            ->get();
+    }
+
+    /**
+     * Mendapatkan total quantity PHP untuk mastercard ini
+     */
+    public function getTotalPhpQuantityAttribute()
+    {
+        return DB::connection('firebird2')
+            ->table('TDetPHP')
+            ->where('KodeBrg', $this->kodeBarang)
+            ->sum(DB::raw('"Quantity"'));
+    }
+
+    /**
+     * Scope untuk load mastercard dengan data PHP
+     */
+    public function scopeWithPhpData($query)
+    {
+        return $query->get()->map(function($mc) {
+            $mc->php_data = $mc->getPhpData();
+            $mc->total_php_quantity = $mc->total_php_quantity;
+            return $mc;
+        });
+    }
 }

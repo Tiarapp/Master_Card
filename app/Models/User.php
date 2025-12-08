@@ -21,6 +21,7 @@ class User extends Authenticatable
         'divisi_id',
         'email',
         'password',
+        'password_changed_at',
     ];
 
     /**
@@ -40,5 +41,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password_changed_at' => 'datetime',
     ];
 }

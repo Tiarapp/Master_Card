@@ -1,9 +1,14 @@
-<div class="modal fade" id="add_dt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="add_dt" tabindex="-1" role="dialog" aria-labelledby="addDtModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Tambah DT & OPI</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="addDtModalLabel">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Tambah DT & OPI
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <form id="jquery-val-form" action="{{ route('kontrak.store_dt') }}" onsubmit="return validateForm()" method="post">
         {{csrf_field()}}
@@ -11,10 +16,7 @@
           
             <input type="hidden" class="form-control" name="idkontrakm" id="idkontrakm" value="{{ $kontrak->kontrak_m_id }}">
             <input type="hidden" class="form-control" name="kode" id="kode" value="{{ $kontrak->kontrakm->kode }}">
-            <div class="mb-3">
-              <label for="recipient-name" class="col-form-label">No OPI</label>
-              <input type="text" class="form-control" name="nomer_opi" id="nomer_opi" readonly required>
-            </div>
+            <input type="text" class="form-control" name="cust" id="cust" value="{{ $kontrak->kontrakm->customer_name }}" readonly>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Sisa Kontrak :</label>
               <input type="text" class="form-control" name="sisa" id="sisa" value="{{ $kontrak->pcsSisaKontrak }}" readonly>
@@ -28,10 +30,20 @@
               <input type="hidden" class="form-control" name="sisaKontrak" id="sisaKontrak" value="{{ $kontrak->pcsSisaKontrak }}">
               <input type="number" class="form-control" name="jumlahKirim" id="jumlahKirim" required>
             </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Keterangan</label>
+              <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+            </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" >Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i>
+            Batal
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save mr-1"></i>
+            Simpan
+          </button>
         </div>
       </form>
     </div>

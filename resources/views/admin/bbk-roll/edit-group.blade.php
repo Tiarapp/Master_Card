@@ -426,10 +426,27 @@ strong.inventory-with-potongan {
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Search Section -->
-                <div class="form-group mb-3">
-                    <label for="inventorySearch" class="form-label">Cari Inventory</label>
-                    <input type="text" class="form-control" id="inventorySearch" placeholder="Ketik kode internal, kode roll, atau supplier...">
+                <!-- Search and Filter Section -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="inventorySearch" placeholder="Cari inventory...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-control" id="supplierFilter">
+                            <option value="">Semua Supplier</option>
+                            <!-- Options will be loaded via AJAX -->
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-secondary" id="clearFilters">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Inventory Selection Table -->
@@ -449,9 +466,28 @@ strong.inventory-with-potongan {
                             </tr>
                         </thead>
                         <tbody id="inventoryList">
-                            <!-- Inventory items will be loaded here -->
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div class="spinner-border spinner-border-sm" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <span class="ml-2">Loading inventory...</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                </div>
+                
+                <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <small class="text-muted" id="inventoryInfo">Loading...</small>
+                    </div>
+                    <nav aria-label="Inventory pagination">
+                        <ul class="pagination pagination-sm mb-0" id="inventoryPagination">
+                            <!-- Pagination links will be loaded here -->
+                        </ul>
+                    </nav>
                 </div>
                 
                 <!-- Selected Items Summary -->
@@ -503,6 +539,158 @@ $(document).ready(function() {
     
     let selectedInventories = [];
     let rowCounter = {{ count($bbkRolls) }};
+    let currentPage = 1;
+    let lastPage = 1;
+    let isLoading = false;
+    
+    // Function to load inventory with pagination
+    function loadInventoryWithPagination(page = 1, search = '', supplier = '') {
+        if (isLoading) return;
+        
+        isLoading = true;
+        currentPage = page;
+        
+        // Show loading state
+        if (page === 1) {
+            $('#inventoryList').html(`
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span class="ml-2">Loading inventory...</span>
+                    </td>
+                </tr>
+            `);
+        }
+        
+        // Get currently used inventory IDs to exclude them
+        const usedInventoryIds = [];
+        $('#inventoryTableBody tr').each(function() {
+            const inventoryId = $(this).data('inventory-id');
+            if (inventoryId) {
+                usedInventoryIds.push(inventoryId);
+            }
+        });
+        
+        $.ajax({
+            url: '{{ route("inventory.paginated") }}',
+            method: 'GET',
+            data: {
+                page: page,
+                search: search,
+                supplier: supplier,
+                per_page: 20,
+                exclude: usedInventoryIds
+            },
+            success: function(response) {
+                if (response.success) {
+                    displayInventoriesForMultipleSelection(response.data);
+                    updatePaginationInfo(response.pagination);
+                    renderPagination(response.pagination);
+                    
+                    // Load suppliers for filter on first load
+                    if (page === 1 && !search && !supplier) {
+                        loadSuppliers(response.suppliers);
+                    }
+                }
+            },
+            error: function(xhr) {
+                console.error('Error loading inventory:', xhr);
+                $('#inventoryList').html(`
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Error loading inventory. Please try again.
+                        </td>
+                    </tr>
+                `);
+            },
+            complete: function() {
+                isLoading = false;
+            }
+        });
+    }
+    
+    function updatePaginationInfo(pagination) {
+        const info = `Showing ${pagination.from || 0} to ${pagination.to || 0} of ${pagination.total} entries`;
+        $('#inventoryInfo').text(info);
+        lastPage = pagination.last_page;
+    }
+    
+    function renderPagination(pagination) {
+        const paginationEl = $('#inventoryPagination');
+        paginationEl.empty();
+        
+        if (pagination.last_page <= 1) return;
+        
+        // Previous button
+        const prevDisabled = pagination.current_page <= 1 ? 'disabled' : '';
+        paginationEl.append(`
+            <li class="page-item ${prevDisabled}">
+                <a class="page-link" href="#" data-page="${pagination.current_page - 1}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        `);
+        
+        // Page numbers
+        const startPage = Math.max(1, pagination.current_page - 2);
+        const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
+        
+        if (startPage > 1) {
+            paginationEl.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`);
+            if (startPage > 2) {
+                paginationEl.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const active = i === pagination.current_page ? 'active' : '';
+            paginationEl.append(`
+                <li class="page-item ${active}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `);
+        }
+        
+        if (endPage < pagination.last_page) {
+            if (endPage < pagination.last_page - 1) {
+                paginationEl.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+            paginationEl.append(`<li class="page-item"><a class="page-link" href="#" data-page="${pagination.last_page}">${pagination.last_page}</a></li>`);
+        }
+        
+        // Next button
+        const nextDisabled = pagination.current_page >= pagination.last_page ? 'disabled' : '';
+        paginationEl.append(`
+            <li class="page-item ${nextDisabled}">
+                <a class="page-link" href="#" data-page="${pagination.current_page + 1}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        `);
+    }
+    
+    function loadSuppliers(suppliers) {
+        const select = $('#supplierFilter');
+        select.find('option:not(:first)').remove();
+        
+        suppliers.forEach(function(supplier) {
+            select.append(`<option value="${supplier.name}">${supplier.name}</option>`);
+        });
+    }
+    
+    // Pagination click handler
+    $(document).on('click', '#inventoryPagination .page-link', function(e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        if (page && page !== currentPage && !isLoading) {
+            const search = $('#inventorySearch').val();
+            const supplier = $('#supplierFilter').val();
+            loadInventoryWithPagination(page, search, supplier);
+        }
+    });
     
     // Calculate sisa and kembali + rasio for existing rows
     function calculateSisa(row) {
@@ -697,37 +885,15 @@ $(document).ready(function() {
         loadAvailableInventories();
     });
     
-    // Load available inventories
+    // Load available inventories with pagination
     function loadAvailableInventories() {
-        // Get currently used inventory IDs to exclude them
-        const usedInventoryIds = [];
-        $('#inventoryTableBody tr').each(function() {
-            const inventoryId = $(this).data('inventory-id');
-            if (inventoryId) {
-                usedInventoryIds.push(inventoryId);
-            }
-        });
-        
-        $.ajax({
-            url: '{{ route("api.inventories.available") }}',
-            method: 'GET',
-            data: {
-                exclude: usedInventoryIds,
-                search: $('#inventorySearch').val()
-            },
-            success: function(data) {
-                displayInventoriesForMultipleSelection(data);
-            },
-            error: function() {
-                $('#inventoryList').html('<tr><td colspan="7" class="text-center text-muted">Error loading inventories</td></tr>');
-            }
-        });
+        loadInventoryWithPagination(1, '', '');
     }
     
     // Display inventories with multiple selection
     function displayInventoriesForMultipleSelection(inventories) {
         // Store inventories data globally for selection
-        window.availableInventories = inventories;
+        window.currentPageInventories = inventories;
         
         let html = '';
         if (inventories.length === 0) {
@@ -749,7 +915,7 @@ $(document).ready(function() {
                             ${hasPotongan ? '<br><span class="potongan-indicator">ADA POTONGAN</span>' : ''}
                         </td>
                         <td><small>${inventory.kode_roll || '-'}</small></td>
-                        <td><small>${inventory.supplier ? inventory.supplier.name : '-'}</small></td>
+                        <td><small>${inventory.supplier_name || '-'}</small></td>
                         <td><small>${inventory.gsm || '-'}</small></td>
                         <td><small>${inventory.lebar || '-'}</small></td>
                         <td>
@@ -764,12 +930,28 @@ $(document).ready(function() {
         $('#inventoryList').html(html);
     }
     
-    // Inventory search
+    // Inventory search with debouncing
+    let searchTimeout;
     $('#inventorySearch').on('input', function() {
-        clearTimeout(window.searchTimeout);
-        window.searchTimeout = setTimeout(function() {
-            loadAvailableInventories();
-        }, 300);
+        clearTimeout(searchTimeout);
+        const searchTerm = $(this).val();
+        
+        searchTimeout = setTimeout(function() {
+            const supplier = $('#supplierFilter').val();
+            loadInventoryWithPagination(1, searchTerm, supplier);
+        }, 500); // Debounce 500ms
+    });
+    
+    $('#supplierFilter').on('change', function() {
+        const supplier = $(this).val();
+        const search = $('#inventorySearch').val();
+        loadInventoryWithPagination(1, search, supplier);
+    });
+    
+    $('#clearFilters').on('click', function() {
+        $('#inventorySearch').val('');
+        $('#supplierFilter').val('');
+        loadInventoryWithPagination(1, '', '');
     });
     
     // Select All functionality
@@ -811,12 +993,22 @@ $(document).ready(function() {
     function addInventoryToSelection(inventoryId, row) {
         const existingIndex = selectedInventories.findIndex(inv => inv.id == inventoryId);
         if (existingIndex === -1) {
-            // Get full inventory data from stored array
-            const fullInventoryData = window.availableInventories ? 
-                window.availableInventories.find(inv => inv.id == inventoryId) : null;
+            // Get full inventory data from current page data
+            const fullInventoryData = window.currentPageInventories ? 
+                window.currentPageInventories.find(inv => inv.id == inventoryId) : null;
             
             if (fullInventoryData) {
-                selectedInventories.push(fullInventoryData);
+                selectedInventories.push({
+                    id: fullInventoryData.id,
+                    kode_internal: fullInventoryData.kode_internal,
+                    kode_roll: fullInventoryData.kode_roll,
+                    supplier_name: fullInventoryData.supplier_name,
+                    gsm: fullInventoryData.gsm,
+                    lebar: fullInventoryData.lebar,
+                    quantity: fullInventoryData.quantity,
+                    potongan_id: fullInventoryData.potongan_id,
+                    potongan: fullInventoryData.potongan
+                });
             } else {
                 // Fallback to DOM extraction if data not found
                 const inventoryData = {

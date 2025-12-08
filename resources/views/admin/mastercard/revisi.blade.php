@@ -1555,8 +1555,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1589,8 +1589,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.21) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1624,8 +1624,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
             
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1678,8 +1678,8 @@
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1761,8 +1761,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1795,8 +1795,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.21) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1830,8 +1830,8 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
             
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
@@ -1891,12 +1891,15 @@
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
-                result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
-                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
+                result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
+                result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
             } else {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
+
+            console.log(result, result2);
+            
 
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);

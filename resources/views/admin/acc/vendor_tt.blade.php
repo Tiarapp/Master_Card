@@ -150,12 +150,14 @@
                 <th style="width: 5%">No</th>
                 <th style="width: 10%">Tanggal TT</th>
                 <th style="width: 15%">No TT</th>
-                <th style="width: 15%">Invoice Number</th>
-                <th style="width: 15%">PO Number</th>
-                <th style="width: 15%">Waktu Bayar</th>
                 <th style="width: 12%">BBM No</th>
+                <th style="width: 12%">Supplier</th>
+                <th style="width: 15%">PO Number</th>
                 <th style="width: 13%">Amount</th>
                 <th style="width: 13%">BBM Amount</th>
+                <th style="width: 15%">Invoice Number</th>
+                <th style="width: 13%">Reff PPN</th>
+                <th style="width: 15%">PPN</th>
                 <th style="width: 7%">Action</th>
               </tr>
             </thead>
@@ -169,18 +171,14 @@
                       @endif
                     </td>                      
                     <td>{{ $data->NoTT }}</td>
-                    <td>{{ $data->InvNumber }}</td>
-                    <td>{{ $data->PONumber }}</td>
-                    <td>
-                      @if($data->top)
-                        {{ $data->top }} hari
-                      @else
-                        -
-                      @endif
-                    </td>
                     <td>{{ $data->BBMNo }}</td>
+                    <td>{{ $data->master_vend->SupplierName }}</td>
+                    <td>{{ $data->PONumber }}</td>
                     <td class="text-right">{{ number_format($data->Amount, 2) }}</td>
                     <td class="text-right">{{ number_format($data->BBMAmount, 2) }}</td>
+                    <td>{{ $data->InvNumber }}</td>
+                    <td>{{ $data->RefPPN }}</td>
+                    <td>{{ $data->tglPPN }}</td>
                     <td class="text-center">
                       <a href="#" 
                          class="btn btn-info btn-sm" 

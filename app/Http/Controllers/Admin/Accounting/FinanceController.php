@@ -7,6 +7,7 @@ use App\Imports\JurnalImport;
 use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
 use App\Models\Accounting\VendorTTDet;
+use App\Models\Opi_M;
 use App\Models\PurchaseOrder;
 use DateTime;
 use Faker\Core\Number;
@@ -179,51 +180,188 @@ class FinanceController extends Controller
 
     public function get_piutang()
     {
+        // STEP 1: Get piutang data from SQL Server
         $piutang = Piutang::select(
             'KodeCust', 
             'NamaCust', 
-            // 'Note', 
             DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
             DB::raw('SUM(TotalTerima) as total_terima')
-            )
-            ->whereIn('Note', ['JUAL', 'RETUR']) // Ensure only valid values are queried
-            // ->where('TotalTerima', 0)
-            ->groupBy('KodeCust', 'NamaCust')
-            ->orderBy('KodeCust', 'Asc')
-            ->get();
+        )
+        ->whereIn('Note', ['JUAL', 'RETUR'])
+        ->groupBy('KodeCust', 'NamaCust')
+        ->orderBy('KodeCust', 'Asc')
+        ->get();
 
-        return view('admin.acc.piutang', compact('piutang'));
+        // STEP 2: Get customer data from Firebird
+        $customers = DB::connection('firebird')->table('TCustomer')
+            ->select('Kode', 'Nama', 'AlamatKantor', 'KotaKantor', 'Plafond', 'WAKTUBAYAR')
+            ->get()
+            ->keyBy('Kode'); // Index by Kode for faster lookup
+
+        // STEP 3: Manual join - merge data based on KodeCust = Kode
+        $piutangWithCustomer = $piutang->map(function($item) use ($customers) {
+            $kodeCust = trim($item->KodeCust); // Clean whitespace
+            
+            // Find matching customer by Kode
+            $customer = $customers->get($kodeCust);
+            
+            // Add customer data to piutang item
+            $item->customer_alamat = $customer->AlamatKantor ?? 'N/A';
+            $item->customer_kota = $customer->KotaKantor ?? 'N/A';
+            $item->customer_plafond = $customer->Plafond ?? 0;
+            $item->customer_waktu_bayar = $customer->WAKTUBAYAR ?? 0;
+            $item->customer_found = $customer !== null;
+            
+            // Calculate sisa piutang
+            $item->sisa_piutang = $item->total_piutang - $item->total_terima;
+            
+            return $item;
+        });
+
+        // Send both variables for backward compatibility
+        return view('admin.acc.piutang', compact('piutang', 'piutangWithCustomer', 'customers'));
     }
 
+    /**
+     * Helper method untuk join data customer dari Firebird dengan data piutang dari SQL Server
+     * @param string $kodeCust
+     * @return object|null
+     */
+    private function getCustomerByKode($kodeCust)
+    {
+        static $customerCache = null;
+        
+        // Cache customers untuk menghindari query berulang
+        if ($customerCache === null) {
+            $customerCache = DB::connection('firebird')->table('TCustomer')
+                ->select('Kode', 'Nama', 'AlamatKantor', 'KotaKantor', 'Plafond', 'WAKTUBAYAR')
+                ->get()
+                ->keyBy(function($item) {
+                    return trim($item->Kode); // Normalize whitespace
+                });
+        }
+        
+        return $customerCache->get(trim($kodeCust));
+    }
+
+    /**
+     * Enhanced method untuk mendapatkan data piutang customer tertentu dengan relasi cross-database
+     */
     public function get_piutang_cust($cust)
     {
+        // Get piutang data from SQL Server
+        $piutang = Piutang::select(
+            'NoBukti',
+            'NoRef', 
+            'Tanggal',
+            'TotalRp',
+            'TotalTerima',
+            'TglJT',
+            'Note',
+            DB::raw("CASE 
+                WHEN Note = 'RETUR' THEN ((0 - TotalRp) + TotalTerima)
+                ELSE (TotalRp - TotalTerima)
+                END as sisa_piutang"),
+            DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
+        )
+        ->where('KodeCust', $cust)
+        ->whereIn('Note', ['JUAL', 'RETUR'])
+        ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+        ->orderBy('Tanggal', 'Asc')
+        ->get();
 
-            $piutang = Piutang::select(
-                'NoBukti',
-                'NoRef',
-                'Tanggal',
-                'TotalRp',
-                'TotalTerima',
-                'TglJT',
-                DB::raw("CASE 
-                    WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
-                    ELSE (TotalRp - TotalTerima)
-                    END as sisa_piutang"),
-                DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
-            )
-            ->where('KodeCust', $cust)
-            ->whereIn('Note', ['JUAL', 'RETUR'])
-            ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
-            ->orderBy('Tanggal', 'Asc')
-            ->get();
+        // Get customer data from Firebird using helper method
+        $customer = $this->getCustomerByKode($cust);
+        
+        if (!$customer) {
+            // Fallback jika customer tidak ditemukan
+            $customer = (object) [
+                'Kode' => $cust,
+                'Nama' => 'Customer tidak ditemukan',
+                'AlamatKantor' => 'N/A',
+                'KotaKantor' => 'N/A',
+                'Plafond' => 0,
+                'WAKTUBAYAR' => 0
+            ];
+        }
 
-        $cust = DB::connection('firebird')->table('TCustomer')
-            ->where('Kode', 'LIKE', '%'.trim($cust).'%')
-            ->first();
+        // dd($customer);
 
-        // dd($cust);
+        // Calculate additional metrics
+        $totalPiutang = $piutang->sum('sisa_piutang');
+        $sisaLimit = $customer->Plafond - $totalPiutang;
+        $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
 
-        return view('admin.acc.piutang_cust', compact('cust', 'piutang'));
+        return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
+    }
+
+    /**
+     * Advanced method: Cross-database join menggunakan Raw SQL (jika memungkinkan)
+     * Hanya bisa digunakan jika SQL Server dan Firebird ada di server yang sama
+     */
+    public function get_piutang_advanced()
+    {
+        try {
+            // Attempt cross-database query (hanya jika konfigurasi mendukung)
+            $piutangWithCustomer = DB::select("
+                SELECT 
+                    p.KodeCust,
+                    p.NamaCust,
+                    SUM(CASE WHEN p.Note = 'RETUR' THEN p.TotalRp * -1 ELSE p.TotalRp END) as total_piutang,
+                    SUM(p.TotalTerima) as total_terima,
+                    c.AlamatKantor,
+                    c.KotaKantor,
+                    c.Plafond,
+                    c.WAKTUBAYAR
+                FROM Piutang p
+                LEFT JOIN OPENQUERY(FIREBIRD_LINKED_SERVER, 
+                    'SELECT Kode, Nama, AlamatKantor, KotaKantor, Plafond, WAKTUBAYAR FROM TCustomer'
+                ) c ON TRIM(p.KodeCust) = TRIM(c.Kode)
+                WHERE p.Note IN ('JUAL', 'RETUR')
+                GROUP BY p.KodeCust, p.NamaCust, c.AlamatKantor, c.KotaKantor, c.Plafond, c.WAKTUBAYAR
+                ORDER BY p.KodeCust ASC
+            ");
+            
+            return view('admin.acc.piutang_advanced', compact('piutangWithCustomer'));
+            
+        } catch (\Exception $e) {
+            // Fallback to manual join method
+            return $this->get_piutang();
+        }
+    }
+
+    /**
+     * Method untuk sinkronisasi data customer secara berkala
+     * Bisa dijadwalkan dengan Laravel Scheduler
+     */
+    public function syncCustomerData()
+    {
+        try {
+            // Get all customers from Firebird
+            $customers = DB::connection('firebird')->table('TCustomer')
+                ->select('Kode', 'Nama', 'AlamatKantor', 'KotaKantor', 'Plafond', 'WAKTUBAYAR')
+                ->get();
+            
+            // Create/update customer cache table di SQL Server (optional)
+            foreach ($customers as $customer) {
+                DB::table('customer_cache')->updateOrInsert(
+                    ['kode' => trim($customer->Kode)],
+                    [
+                        'nama' => $customer->Nama,
+                        'alamat' => $customer->AlamatKantor,
+                        'kota' => $customer->KotaKantor,
+                        'plafond' => $customer->Plafond,
+                        'waktu_bayar' => $customer->WAKTUBAYAR,
+                        'updated_at' => now()
+                    ]
+                );
+            }
+            
+            return response()->json(['success' => 'Customer data synchronized successfully']);
+            
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Sync failed: ' . $e->getMessage()], 500);
+        }
     }    
     
     public function vendor_tt(Request $request)
@@ -316,5 +454,29 @@ class FinanceController extends Controller
         }
 
         return redirect()->back()->with('success', 'Data PO Teknik berhasil Synchronize.');
+    }
+
+    public function approve_opi(Request $request)
+    {
+        $search = $request->input('search') ? $request->input('search') : '';
+
+        $opi = Opi_M::where('status_opi', 'Pending')
+            ->when($search, function($query, $search) {
+                return $query->where('NoOPI', 'LIKE', '%' . $search . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(20);
+
+        return view('admin.acc.approve_opi', compact('opi', 'search'));
+    }
+
+    public function approve_opi_action(Request $request, $id)
+    {
+        $opi = Opi_M::findOrFail($id);
+        $opi->status_opi = 'Proses';
+        $opi->lastUpdatedBy = auth()->user()->name;
+        $opi->save();
+
+        return redirect()->back()->with('success', 'OPI No: ' . $opi->NoOPI . ' telah disetujui.');
     }
 }

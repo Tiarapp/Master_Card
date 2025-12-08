@@ -346,16 +346,28 @@ class BarangController extends Controller
     public function returjual(Request $request)
     {
         DB::connection('firebird2')->beginTransaction();
-
-        if ($request->ajax()) {
-            $retur = DB::connection('firebird2')->table('TReturJual')
-                ->get();
-
-            return DataTables::of($retur)
-                ->make(true);
+        
+        $query = DB::connection('firebird2')->table('TReturJual');
+        
+        // Handle search filter if needed
+        if ($request->filled('search')) {
+            $search = strtoupper(trim($request->search));
+            $query->where(function($q) use ($search) {
+                $q->where('NoBukti', 'LIKE', '%'.$search.'%')
+                  ->orWhere('KodeCust', 'LIKE', '%'.$search.'%')
+                  ->orWhere('NamaCust', 'LIKE', '%'.$search.'%');
+            });
         }
-
-        return view('admin.fg.barang.retur.index');
+        
+        // Handle date filter if needed
+        if ($request->filled('date_start') && $request->filled('date_end')) {
+            $query->whereBetween('TglRetur', [$request->date_start, $request->date_end]);
+        }
+        
+        $retur = $query->orderBy('TglRetur', 'desc')->paginate(20);
+        // dd($retur);
+        
+        return view('admin.fg.barang.retur.index', compact('retur'));
     }
 
     public function create_retur()
@@ -380,7 +392,7 @@ class BarangController extends Controller
         $key = DB::connection('firebird2')->table('TKeyfield')
                     ->where('Nama', 'LIKE', $kode."%")->first();
         if ($key) {
-            $nurut = str_pad($key->NoUrut + 1, 3, '0', STR_PAD_LEFT);
+            $nurut = str_pad($key->NoUrut + 1, 4, '0', STR_PAD_LEFT);
         } else {
             DB::connection('firebird2')->table('TKeyfield')->insert([
                 'Nama' => $kode,
@@ -397,6 +409,96 @@ class BarangController extends Controller
         ];
         
         return response()->json($data);
+    }
+
+    public function store_retur(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'tanggal' => 'required|date',
+            'kode' => 'required',
+            // 'keterangan' => 'required',
+            'KodeCust' => 'required',
+            'NamaCust' => 'required',
+            // 'sj_details' => 'required|array|min:1',
+            // 'sj_details.*.kodeBrg' => 'required',
+            // 'sj_details.*.noSJ' => 'required',
+            // 'sj_details.*.quantity' => 'required|integer|min:1',
+            // 'sj_details.*.keterangan' => 'required'
+        ]);
+
+        try {
+            DB::connection('firebird2')->beginTransaction();
+
+            $periode = date("m/Y", strtotime($request->tanggal));
+            
+            // Calculate totals from SJ details
+            $totalReturCrt = 0;
+            $totalReturEcr = 0;
+            
+            foreach ($request->sj_details as $detail) {
+                $totalReturCrt += $detail['quantity'];
+                // You might need to calculate totalReturEcr based on price if available
+            }
+            
+            // Insert ke TReturJual (Master)
+            DB::connection('firebird2')->table('TReturJual')->insert([
+                'NoBukti' => $request->kode,
+                'Periode' => $periode,
+                'TglRetur' => $request->tanggal,
+                'KodeCust' => $request->KodeCust,
+                'NamaCust' => $request->NamaCust,
+                'TotReturCrt' => 0,
+                'TotReturEcr' => $totalReturEcr,
+                'Aktif' => 'Y',
+                'Print' => 0,
+                'Blocked' => '',
+                'Tujuan' => 'LOKAL'
+            ]);
+
+            // Insert multiple detail records
+            foreach ($request->sj_details as $index => $detail) {
+                // Get barang details for additional info if needed
+                $barangInfo = DB::connection('firebird2')->table('TBarangConv')
+                    ->where('KodeBrg', $detail['kodeBrg'])
+                    ->first();
+                
+                DB::connection('firebird2')->table('TDetReturJual')->insert([
+                    'NoRetur' => $request->kode,
+                    'KodeBrg' => $detail['kodeBrg'],
+                    'Quantity' => $detail['quantity'],
+                    'NomerSJ' => $detail['noSJ'], // Add NoSJ reference
+                    'Keterangan' => strtoupper($detail['keterangan']),
+                    'ReffNoUrut' => $detail['reffNoUrut'],
+                    'ReffNoSJ' => $detail['noUrut'],
+                ]);
+            }
+
+            // Update TKeyfield untuk nomor urut selanjutnya
+            $year = date('y', strtotime($request->tanggal));
+            $month = date('m', strtotime($request->tanggal));
+            $concat = $year . $month;
+            $kode_prefix = "RA-2".$concat;
+
+            $key = DB::connection('firebird2')->table('TKeyfield')
+                        ->where('Nama', 'LIKE', $kode_prefix."%")->first();
+                        
+            if ($key) {
+                DB::connection('firebird2')->table('TKeyfield')
+                    ->where('Nama', 'LIKE', $kode_prefix.'%')
+                    ->update([
+                        'NoUrut' => $key->NoUrut + 1
+                    ]);
+            }
+
+            DB::connection('firebird2')->commit();
+
+            return redirect()->route('barang.retur')->with('success', 'Retur penjualan berhasil disimpan dengan nomor: ' . $request->kode . ' (' . count($request->sj_details) . ' detail barang)');
+
+        } catch (\Exception $e) {
+            DB::connection('firebird2')->rollback();
+            return redirect()->back()->with('error', 'Gagal menyimpan retur penjualan: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function getPersediaan()
@@ -781,5 +883,205 @@ class BarangController extends Controller
 
         return view('admin.barangpembantu.mutasilama', compact('result', 'barang', 'persediaan'));
 
+    }
+
+    public function get_sj($sj)
+    {
+        try {
+            // Start transaction for Firebird
+            DB::connection('firebird2')->beginTransaction();
+            
+            // Test basic connection first
+            $connectionTest = DB::connection('firebird2')->table('TSuratJalan')->limit(1)->get();
+            
+            $data = DB::connection('firebird2')->table('TDetSJ')
+                    ->where('TDetSJ.NomerSJ', '=', $sj)
+                    ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
+                    ->leftJoin('TBarangConv', 'TDetSJ.KodeBrg', '=', 'TBarangConv.KodeBrg')
+                    ->select('TDetSJ.KodeBrg', 'TBarangConv.NamaBrg', 'TDetSJ.Quantity', 'TDetSJ.NomerSJ', 'TDetSJ.NoUrut', 'TDetSJ.ReffNoUrut')
+                    ->get();
+
+            // Commit transaction
+            DB::connection('firebird2')->commit();
+
+            if ($data && $data->count() > 0) {
+                $result = [];
+                foreach ($data as $item) {
+                    $result[] = [
+                        'KodeBrg' => $item->KodeBrg,
+                        'NamaBrg' => $item->NamaBrg ?? 'Nama barang tidak ditemukan',
+                        'Quantity' => number_format($item->Quantity, '0', ',', ''),
+                        'NoUrut' => $item->NoUrut,
+                        'ReffNoUrut' => $item->ReffNoUrut,
+                        'NomerSJ' => $item->NomerSJ
+                    ];
+                }
+                return response()->json($result);
+            } else {
+                // Return debugging info if no data found
+                return response()->json([
+                    'message' => 'No data found for SJ: ' . $sj,
+                    'connection_test' => $connectionTest->count() . ' records in TSuratJalan table'
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            DB::connection('firebird2')->rollback();
+            return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function edit_retur($id)
+    {
+        try {
+            DB::connection('firebird2')->beginTransaction();
+
+            // Get retur master data
+            $retur = DB::connection('firebird2')->table('TReturJual')
+                ->where('NoBukti', $id)
+                ->first();
+
+            if (!$retur) {
+                return redirect()->route('barang.retur')->with('error', 'Data retur tidak ditemukan');
+            }
+
+            // Check if retur is blocked (Y = allowed to edit)
+            if ($retur->Blocked !== 'Y') {
+                return redirect()->route('barang.retur')->with('error', 'Retur ini tidak dapat diedit karena status Blocked bukan Y');
+            }
+
+            // Get retur detail data
+            $returDetails = DB::connection('firebird2')->table('TDetReturJual')
+                ->leftJoin('TBarangConv', 'TDetReturJual.KodeBrg', '=', 'TBarangConv.KodeBrg')
+                ->where('TDetReturJual.NoRetur', $id)
+                ->select(
+                    'TDetReturJual.*',
+                    'TBarangConv.NamaBrg'
+                )
+                ->get();
+
+            // Get customer data for modal
+            DB::connection('firebird')->beginTransaction();
+            $cust = DB::connection('firebird')->table('TCustomer')->get();
+
+            return view('admin.fg.barang.retur.edit', compact('retur', 'returDetails', 'cust'));
+
+        } catch (\Exception $e) {
+            DB::connection('firebird2')->rollback();
+            return redirect()->route('barang.retur')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function update_retur(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'KodeCust' => 'required',
+            'NamaCust' => 'required',
+            'sj_details' => 'required|array|min:1',
+            'sj_details.*.kodeBrg' => 'required',
+            'sj_details.*.quantity' => 'required|numeric|min:0.01',
+            'sj_details.*.keterangan' => 'required'
+        ]);
+
+        try {
+            DB::connection('firebird2')->beginTransaction();
+
+            // Get existing retur data
+            $existingRetur = DB::connection('firebird2')->table('TReturJual')
+                ->where('NoBukti', $id)
+                ->first();
+
+            if (!$existingRetur) {
+                return redirect()->route('barang.retur')->with('error', 'Data retur tidak ditemukan');
+            }
+
+            // Check if retur is blocked (Y = allowed to edit)
+            if ($existingRetur->Blocked !== 'Y') {
+                return redirect()->route('barang.retur')->with('error', 'Retur ini tidak dapat diedit karena status Blocked bukan Y');
+            }
+
+            $periode = date("m/Y", strtotime($request->tanggal));
+            
+            // Calculate totals from SJ details
+            $totalReturCrt = 0;
+            $totalReturEcr = 0;
+            
+            foreach ($request->sj_details as $detail) {
+                $totalReturCrt += $detail['quantity'];
+            }
+            
+            // Update TReturJual (Master)
+            DB::connection('firebird2')->table('TReturJual')
+                ->where('NoBukti', $id)
+                ->update([
+                    'Periode' => $periode,
+                    'TglRetur' => $request->tanggal,
+                    'KodeCust' => $request->KodeCust,
+                    'NamaCust' => $request->NamaCust,
+                    'TotReturCrt' => $totalReturCrt,
+                    'TotReturEcr' => $totalReturEcr,
+                    // Keep original Blocked status as Y for editing
+                    'Blocked' => 'Y'
+                ]);
+
+            // Delete existing detail records
+            DB::connection('firebird2')->table('TDetReturJual')
+                ->where('NoRetur', $id)
+                ->delete();
+
+            // Insert updated detail records
+            foreach ($request->sj_details as $index => $detail) {
+                DB::connection('firebird2')->table('TDetReturJual')->insert([
+                    'NoRetur' => $id,
+                    'KodeBrg' => $detail['kodeBrg'],
+                    'Quantity' => $detail['quantity'],
+                    'NomerSJ' => $detail['noSJ'] ?? '',
+                    'Keterangan' => strtoupper($detail['keterangan']),
+                    'ReffNoUrut' => $detail['reffNoUrut'] ?? null,
+                    'ReffNoSJ' => $detail['noUrut'] ?? null,
+                ]);
+            }
+
+            DB::connection('firebird2')->commit();
+
+            return redirect()->route('barang.retur')->with('success', 'Retur penjualan berhasil diupdate: ' . $id . ' (' . count($request->sj_details) . ' detail barang)');
+
+        } catch (\Exception $e) {
+            DB::connection('firebird2')->rollback();
+            return redirect()->back()->with('error', 'Gagal mengupdate retur penjualan: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function show_retur($id)
+    {
+        try {
+            DB::connection('firebird2')->beginTransaction();
+
+            // Get retur master data
+            $retur = DB::connection('firebird2')->table('TReturJual')
+                ->where('NoBukti', $id)
+                ->first();
+
+            if (!$retur) {
+                return redirect()->route('barang.retur')->with('error', 'Data retur tidak ditemukan');
+            }
+
+            // Get retur detail data
+            $returDetails = DB::connection('firebird2')->table('TDetReturJual')
+                ->leftJoin('TBarangConv', 'TDetReturJual.KodeBrg', '=', 'TBarangConv.KodeBrg')
+                ->where('TDetReturJual.NoRetur', $id)
+                ->select(
+                    'TDetReturJual.*',
+                    'TBarangConv.NamaBrg'
+                )
+                ->get();
+
+            return view('admin.fg.barang.retur.show', compact('retur', 'returDetails'));
+
+        } catch (\Exception $e) {
+            DB::connection('firebird2')->rollback();
+            return redirect()->route('barang.retur')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

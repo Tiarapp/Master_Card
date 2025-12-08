@@ -1,165 +1,11 @@
 @extends('admin.templates.partials.default')
 
+@push('styles')
+<!-- Optimized CSS for data_dtnew page -->
+<link rel="stylesheet" href="{{ asset('css/data-dtnew.css') }}">
+@endpush
+
 @section('content')
-<!-- Preload Critical CSS -->
-<style>
-/* Critical CSS for preventing FOUC */
-.content-wrapper {
-  min-height: 100vh;
-}
-
-.info-item {
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  transition: all 0.3s ease;
-}
-
-.card-outline {
-  border-top: 3px solid;
-}
-
-.card-primary.card-outline {
-  border-top-color: #007bff;
-}
-
-.card-info.card-outline {
-  border-top-color: #17a2b8;
-}
-
-.card-success.card-outline {
-  border-top-color: #28a745;
-}
-
-.badge-lg {
-  font-size: 0.875rem;
-  padding: 0.375rem 0.75rem;
-}
-
-.progress-sm {
-  height: 0.5rem;
-}
-
-/* Enhanced UI Styles - Loaded after content for better performance */
-.info-item:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.badge-outline-secondary {
-  color: #6c757d;
-  border: 1px solid #6c757d;
-  background-color: transparent;
-}
-
-.animate-row {
-  transition: all 0.3s ease;
-}
-
-.animate-row:hover {
-  background-color: #f1f3f4;
-  transform: scale(1.01);
-}
-
-.empty-state {
-  padding: 2rem;
-  color: #6c757d;
-}
-
-.thead-light th {
-  background-color: #f8f9fa;
-  border-color: #dee2e6;
-  font-weight: 600;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(0,123,255,0.05);
-}
-
-.loading-spinner {
-  display: none;
-  text-align: center;
-  padding: 2rem;
-}
-
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-}
-
-.card {
-  transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-}
-
-.card:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
-  transform: translateY(-2px);
-}
-
-.btn-group .btn {
-  margin: 0 1px;
-}
-
-.btn-sm {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.badge {
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.progress-bar {
-  transition: width 1s ease-in-out;
-}
-
-/* Responsive Enhancements */
-@media (max-width: 768px) {
-  .card-tools {
-    margin-top: 0.5rem;
-  }
-  
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .btn-group .btn {
-    margin: 1px 0;
-  }
-  
-  .table-responsive {
-    font-size: 0.875rem;
-  }
-}
-
-/* Smooth Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-row {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.fas, .far {
-  width: 1rem;
-  text-align: center;
-}
-
-.alert {
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-}
-</style>
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -203,6 +49,7 @@
           </div>
         @endif
         @include('admin.kontrak.adddt')
+        @include('admin.kontrak.edit_opi')
         <!-- Info Cards Row -->
         <div class="row mb-4">
           <!-- Contract Information Card -->
@@ -232,10 +79,12 @@
                         <div>
                           <small class="text-muted">Master Card</small>
                           <div class="font-weight-bold">
-                            @if ($kontrak->mc->revisi == "R0" || $kontrak->mc->revisi == null)
-                                {{ $kontrak->mc->kode }}
+                            @if ($kontrak->mc && ($kontrak->mc->revisi == "R0" || $kontrak->mc->revisi == null))
+                                {{ $kontrak->mc->kode ?? 'N/A' }}
+                            @elseif ($kontrak->mc)
+                                {{ $kontrak->mc->kode ?? 'N/A' }}-{{ $kontrak->mc->revisi ?? '' }}
                             @else
-                                {{ $kontrak->mc->kode }}-{{ $kontrak->mc->revisi }}
+                                N/A
                             @endif
                           </div>
                         </div>
@@ -246,7 +95,7 @@
                         <i class="fas fa-layer-group text-success mr-2"></i>
                         <div>
                           <small class="text-muted">Substance Kontrak</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->substancekontrak->kode }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->substancekontrak->kode ?? 'N/A' }}</div>
                         </div>
                       </div>
                     </div>
@@ -255,7 +104,7 @@
                         <i class="fas fa-industry text-warning mr-2"></i>
                         <div>
                           <small class="text-muted">Substance Produksi</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->substanceproduksi->kode }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->substanceproduksi->kode ?? 'N/A' }}</div>
                         </div>
                       </div>
                     </div>
@@ -266,7 +115,7 @@
                         <i class="fas fa-weight text-secondary mr-2"></i>
                         <div>
                           <small class="text-muted">Gram Sheet Box Kontrak</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxKontrak2 }} gr</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxKontrak2 ?? 0 }} gr</div>
                         </div>
                       </div>
                     </div>
@@ -275,7 +124,7 @@
                         <i class="fas fa-weight text-secondary mr-2"></i>
                         <div>
                           <small class="text-muted">Gram Sheet Box Produksi</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxProduksi2 }} gr</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->gramSheetBoxProduksi2 ?? 0 }} gr</div>
                         </div>
                       </div>
                     </div>
@@ -293,7 +142,7 @@
                         <i class="fas fa-exchange-alt text-danger mr-2"></i>
                         <div>
                           <small class="text-muted">Out Conv</small>
-                          <div class="font-weight-bold">{{ $kontrak->mc->outConv }}</div>
+                          <div class="font-weight-bold">{{ $kontrak->mc->outConv ?? 1 }}</div>
                         </div>
                       </div>
                     </div>
@@ -315,8 +164,12 @@
               <div class="card-body p-0">
                 <!-- Progress Bar -->
                 @php
-                  $progress = $kontrak->kontrakm->realisasi ? number_format((int)$kontrak->kontrakm->realisasi->sum('qty_kirim') / $kontrak->pcsKontrak * 100, 2) : 0;
-                //   var_dump($progress);
+                  $progress = 0;
+                  if ($kontrak->kontrakm->realisasi && $kontrak->pcsKontrak > 0) {
+                    $progress = number_format((int)$kontrak->kontrakm->realisasi->sum('qty_kirim') / $kontrak->pcsKontrak * 100, 2);
+                  }
+                  // Ensure progress doesn't exceed 100%
+                  $progress = min($progress, 100);
                 @endphp
                 <div class="p-3 border-bottom">
                   <div class="d-flex justify-content-between align-items-center mb-2">
@@ -387,10 +240,12 @@
               Data DT & OPI
             </h3>
             <div class="card-tools">
-              <button type="button" class="btn btn-primary btn-sm opi" data-toggle="modal" data-target="#add_dt">
+              <!-- Primary Button untuk Tambah DT & OPI -->
+              <button type="button" class="btn btn-primary btn-sm opi" data-toggle="modal" data-target="#add_dt" id="btnTambahDT">
                 <i class="fas fa-plus mr-1"></i> Tambah DT & OPI
               </button>
                 
+              <!-- Button untuk refresh -->
               <a href="{{ route('kontrak.recall', $kontrak->kontrak_m_id) }}">
                 <button type="button" class="btn btn-info btn-sm ml-2">
                   <i class="fas fa-sync-alt mr-1"></i> Refresh
@@ -422,6 +277,14 @@
                     <th scope="col" class="text-center">
                       <i class="fas fa-box-open mr-1"></i>
                       Running Meter
+                    </th>
+                    <th scope="col" class="text-center">
+                      <i class="fas fa-box-open mr-1"></i>
+                      Status
+                    </th>
+                    <th scope="col" class="text-center">
+                      <i class="fas fa-box-open mr-1"></i>
+                      Keterangan Kirim
                     </th>
                     {{-- <th scope="col" class="text-center">
                       <i class="fas fa-balance-scale mr-1"></i>
@@ -455,34 +318,51 @@
                     </td>
                     <td class="text-center">
                       <span class="text-success font-weight-bold">
-                        {{ number_format((float)$data->jumlahOrder * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
+                        {{ number_format((float)$data->jumlahOrder * (float)($kontrak->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg
                       </span>
                     </td>
                     <td class="text-center">
                       <span class="text-success font-weight-bold">
                         @php
-                          $qty = ($data->jumlahOrder) / $data->outConv ; 
-                          $outCorr = floor(2500/$data->lebarSheet);
-                          $cop = $qty / $outCorr;
-                          $rm = ($data->panjangSheet * $cop) / 1000;
-
+                          $rm = 0;
+                          
+                          // Check for valid data before calculations
+                          if ($data->outConv > 0 && $data->lebarSheet > 0) {
+                            $qty = ($data->jumlahOrder) / $data->outConv;
+                            $outCorr = floor(2500 / $data->lebarSheet);
+                            
+                            if ($outCorr > 0) {
+                              $cop = $qty / $outCorr;
+                              $rm = ($data->panjangSheet * $cop) / 1000;
+                            }
+                          }
+                          
                           echo number_format((float)$rm, 2);
                         @endphp
                       </span>
                     </td>
                     <td class="text-center">
+                      <span class="badge {{ $data->status_opi == 'Pending' ? 'badge-warning' : ($data->status_opi == 'Proses' ? 'badge-success' : 'badge-secondary') }} font-weight-bold">
+                        {{ $data->status_opi == 'Pending' ? 'Tunggu Approve' : $data->status_opi }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span class="text-success font-weight-bold">
+                        {{ $data->dt ? $data->dt->keterangan : '' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
                       <div class="btn-group" role="group">
-                        {{-- <button type="button" class="btn btn-info btn-sm" title="Lihat Detail">
+                        <button type="button" class="btn btn-info btn-sm" title="Lihat Detail" onclick="viewOpiDetail({{ $data->id }})">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" title="Edit">
+                        <button type="button" class="btn btn-warning btn-sm" title="Edit" onclick="editOpi({{ $data->id }})" data-toggle="modal" data-target="#edit_opi">
                           <i class="fas fa-edit"></i>
-                        </button> --}}
+                        </button>
                         <form action="{{ route('opi.cancel', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
-                          {{-- @method('PUT') --}}
-                          <button type="submit" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin cancel data ini?')">
-                            <i class="fas fa-trash"></i>
+                          <button type="submit" class="btn btn-danger btn-sm" title="Cancel" onclick="return confirm('Yakin ingin cancel data ini?')">
+                            <i class="fas fa-ban"></i>
                           </button>
                         </form>
                       </div>
@@ -495,7 +375,7 @@
                         <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">Belum Ada Data DT & OPI</h5>
                         <p class="text-muted">Klik tombol "Tambah DT & OPI" untuk menambahkan data baru.</p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_dt">
+                        <button type="button" class="btn btn-primary opi" data-toggle="modal" data-target="#add_dt">
                           <i class="fas fa-plus mr-1"></i> Tambah Data Pertama
                         </button>
                       </div>
@@ -514,10 +394,10 @@
                     </th>
                     <th class="text-center">
                       <span class="text-success font-weight-bold">
-                        {{ number_format($opi->sum('jumlahOrder') * (float)$kontrak->mc->gramSheetBoxKontrak2, 2) }} kg
+                        {{ number_format($opi->sum('jumlahOrder') * (float)($kontrak->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg
                       </span>
                     </th>
-                    <th colspan="3"></th>
+                    <th colspan="4"></th>
                   </tr>
                 </tfoot>
                 @endif
@@ -551,28 +431,253 @@
 @endsection
 
 @section('javascripts')
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script>
+// Optimized JavaScript for data_dtnew page
 $(document).ready(function() {
+    // Performance optimization: Debounce AJAX calls
+    let ajaxTimeout;
+    
     // Event handler untuk modal OPI dengan optimasi
-    $('.opi').on('click', function() {
-        const btn = $(this);
-        btn.addClass('btn-loading');
+    $('.opi').on('click', function(e) {
+        e.preventDefault();
         
-        $.ajax({
-            url: "{{ route('nomer_opi') }}",
-            type: "GET",
-            success: function(response) {
-                $('#nomer_opi').val(response.nomer);
-            },
-            error: function() {
-                alert('Gagal mengambil nomer OPI. Silakan coba lagi.');
-            },
-            complete: function() {
-                btn.removeClass('btn-loading');
-            }
-        });
+        $('#add_dt').modal('show');
+        
+        // const btn = $(this);
+        // const originalText = btn.html();
+        
+        // // Add loading state
+        // btn.prop('disabled', true)
+        //    .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+        
+        // // Clear previous timeout
+        // if (ajaxTimeout) {
+        //     clearTimeout(ajaxTimeout);
+        // }
+        
+        // // Always get OPI number from database sequence
+        // ajaxTimeout = setTimeout(function() {
+        //       complete: function() {
+        //           btn.prop('disabled', false).html(originalText);
+        //           $('#add_dt').modal('show');
+        //       }
+        //   });
+        // }, 300);
     });
+
+    // Modal events
+    $('#add_dt').on('shown.bs.modal', function(e) {
+        $('#tglKirim').focus();
+    });
+    
+    $('#add_dt').on('hidden.bs.modal', function(e) {
+        $('#jquery-val-form')[0].reset();
+    });
+
+    // Performance: Initialize tooltips only when needed
+    if (window.innerWidth > 768) {
+        $('[data-toggle="tooltip"]').tooltip({
+            trigger: 'hover',
+            delay: { show: 500, hide: 100 }
+        });
+    }
+});
+
+// Edit OPI function
+function editOpi(opiId) {
+    // Fetch OPI data
+    $.ajax({
+        url: '/admin/opi/edit/' + opiId,
+        type: 'GET',
+        beforeSend: function() {
+            // Show loading state
+            $('#edit_opi .modal-body').addClass('text-center').html('<i class="fas fa-spinner fa-spin fa-2x text-primary"></i><br><br>Memuat data...');
+        },
+        success: function(response) {
+            if (response.success) {
+                const data = response.data;
+                
+                // Restore modal content and remove loading class
+                $('#edit_opi .modal-body').removeClass('text-center').html(`
+                    <div class="row">
+                        <!-- OPI Information -->
+                        <div class="col-md-6">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-file-alt mr-1"></i>
+                                        Informasi OPI
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="edit_noopi" class="form-label">
+                                            <i class="fas fa-hashtag mr-1"></i>
+                                            No OPI
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_noopi" name="NoOPI" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_customer" class="form-label">
+                                            <i class="fas fa-building mr-1"></i>
+                                            Customer
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_customer" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_namabarang" class="form-label">
+                                            <i class="fas fa-box mr-1"></i>
+                                            Nama Barang
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_namabarang" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_jumlahorder" class="form-label">
+                                            <i class="fas fa-sort-numeric-up mr-1"></i>
+                                            Jumlah Order (Pcs) <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" class="form-control" id="edit_jumlahorder" name="jumlahOrder" required min="1" readonly>
+                                        <small class="form-text text-muted">Masukkan jumlah order dalam pieces</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DT Information -->
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-truck mr-1"></i>
+                                        Informasi Delivery Time
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="edit_tglkirim" class="form-label">
+                                            <i class="fas fa-calendar-alt mr-1"></i>
+                                            Tanggal Kirim <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control" id="edit_tglkirim" name="tglKirimDt" required>
+                                        <small class="form-text text-muted">Pilih tanggal pengiriman yang diinginkan</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_pcsdt" class="form-label">
+                                            <i class="fas fa-boxes mr-1"></i>
+                                            Quantity DT (Pcs) <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" class="form-control" id="edit_pcsdt" name="pcsDt" required min="1" readonly>
+                                        <small class="form-text text-muted">Biasanya sama dengan jumlah order OPI</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <i class="fas fa-info-circle mr-1"></i>
+                                            Status OPI
+                                        </label>
+                                        <input type="text" class="form-control" id="edit_status" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="edit_keterangan_opi" class="form-label">
+                                            <i class="fas fa-comment mr-1"></i>
+                                            Keterangan OPI
+                                        </label>
+                                        <textarea class="form-control" id="keterangan_kirim" name="keterangan" rows="3" placeholder="Tambahkan keterangan untuk OPI ini..."></textarea>
+                                    </div>
+                                    
+                                    <!-- Info Display -->
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        <strong>Data berhasil dimuat</strong>
+                                        <div class="mt-2">
+                                            <small>Silakan edit data sesuai kebutuhan.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Warning Alert -->
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <strong>Perhatian:</strong> 
+                        Pastikan data yang Anda ubah sudah benar. Perubahan akan mempengaruhi laporan dan kalkulasi terkait.
+                    </div>
+                `);
+                
+                // Fill form with data
+                $('#edit_noopi').val(data.NoOPI);
+                $('#edit_customer').val(data.customer_name);
+                $('#edit_namabarang').val(data.namaBarang);
+                $('#edit_jumlahorder').val(data.jumlahOrder);
+                $('#edit_keterangan_opi').val(data.keterangan);
+                $('#edit_tglkirim').val(data.tglKirimDt);
+                $('#edit_pcsdt').val(data.pcsDt);
+                $('#edit_status').val(data.status_opi);
+                $('#keterangan_kirim').val(data.keterangan);
+                
+                // Set form action
+                $('#edit-opi-form').attr('action', '/admin/opi/update/' + opiId);
+                
+                // Auto-sync quantity fields
+                $('#edit_jumlahorder').on('input', function() {
+                    $('#edit_pcsdt').val(this.value);
+                });
+                
+            } else {
+                $('#edit_opi .modal-body').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Gagal memuat data: ' + response.message + '</div>');
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#edit_opi .modal-body').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Terjadi kesalahan saat memuat data OPI</div>');
+            console.error('Error:', error);
+        }
+    });
+}
+
+// View OPI Detail function
+function viewOpiDetail(opiId) {
+    // Redirect to OPI print/detail page
+    window.open('/admin/opi/print/' + opiId, '_blank');
+}
+
+// Form validation function
+function validateForm() {
+    const jumlahKirim = parseInt($('#jumlahKirim').val()) || 0;
+    const sisaKontrak = parseInt($('#sisaKontrak').val()) || 0;
+    
+    if (jumlahKirim > sisaKontrak) {
+        alert('Jumlah kirim tidak boleh melebihi sisa kontrak (' + sisaKontrak.toLocaleString() + ')!');
+        return false;
+    }
+    
+    if (jumlahKirim <= 0) {
+        alert('Jumlah kirim harus lebih dari 0!');
+        return false;
+    }
+    
+    const tglKirim = $('#tglKirim').val();
+    if (!tglKirim) {
+        alert('Tanggal kirim harus diisi!');
+        return false;
+    }
+    
+    return true;
+}
+
+// Memory cleanup on page unload
+$(window).on('beforeunload', function() {
+    if (typeof ajaxTimeout !== 'undefined') {
+        clearTimeout(ajaxTimeout);
+    }
+    $('.opi').off('click');
+    $('[data-toggle="tooltip"]').tooltip('dispose');
 });
 </script>
+@endsection

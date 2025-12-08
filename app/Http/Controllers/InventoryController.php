@@ -7,6 +7,7 @@ use App\Models\Potongan;
 use App\Models\SupplierRoll;
 use App\Imports\InventoryUpdateWithRgbImport;
 use App\Imports\InventoryImport;
+use App\Exports\InventoryExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -525,5 +526,149 @@ class InventoryController extends Controller
             ->findOrFail($id);
 
         return response()->json($inventory);
+    }
+
+    /**
+     * Get paginated inventory for BBK Roll creation
+     */
+    public function getPaginatedInventory(Request $request)
+    {
+        $perPage = $request->get('per_page', 20);
+        $search = $request->get('search', '');
+        $supplier = $request->get('supplier', '');
+        $exclude = $request->get('exclude', []);
+
+        $inventoriesQuery = Inventory::with(['supplier', 'potongan'])
+            ->where('quantity', '>', 0); // Only show inventory with quantity > 0
+
+        // Exclude specific inventory IDs (for edit mode)
+        if (!empty($exclude)) {
+            $excludeIds = is_array($exclude) ? $exclude : [$exclude];
+            $inventoriesQuery->whereNotIn('id', $excludeIds);
+        }
+
+        // Apply search filter
+        if ($search) {
+            $inventoriesQuery->where(function($query) use ($search) {
+                $query->where('kode_internal', 'like', '%'.$search.'%')
+                    ->orWhere('kode_roll', 'like', '%'.$search.'%')
+                    ->orWhere('gsm', 'like', '%'.$search.'%')
+                    ->orWhere('jenis', 'like', '%'.$search.'%')
+                    ->orWhere('lebar', 'like', '%'.$search.'%')
+                    ->orWhereHas('supplier', function ($q) use ($search) {
+                        $q->where('name', 'like', '%'.$search.'%');
+                    });
+            });
+        }
+
+        // Apply supplier filter
+        if ($supplier) {
+            $inventoriesQuery->whereHas('supplier', function ($q) use ($supplier) {
+                $q->where('name', $supplier);
+            });
+        }
+
+        $inventories = $inventoriesQuery->orderBy('kode_internal')
+            ->paginate($perPage);
+
+        // Transform data for frontend
+        $transformedData = $inventories->map(function($inventory) {
+            return [
+                'id' => $inventory->id,
+                'kode_internal' => $inventory->kode_internal,
+                'kode_roll' => $inventory->kode_roll,
+                'supplier_name' => $inventory->supplier->name ?? null,
+                'jenis' => $inventory->jenis,
+                'gsm' => $inventory->gsm,
+                'lebar' => $inventory->lebar,
+                'quantity' => $inventory->quantity,
+                'potongan_id' => $inventory->potongan_id,
+                'potongan' => $inventory->potongan ? [
+                    'id' => $inventory->potongan->id,
+                    'lebar_potongan' => $inventory->potongan->lebar_potongan,
+                    'rasio' => $inventory->potongan->rasio
+                ] : null
+            ];
+        });
+
+        // Get unique suppliers for filter dropdown
+        $suppliers = [];
+        if (!$search && !$supplier) {
+            $suppliers = Inventory::with('supplier')
+                ->whereHas('supplier')
+                ->where('quantity', '>', 0)
+                ->when(!empty($exclude), function($query) use ($exclude) {
+                    $excludeIds = is_array($exclude) ? $exclude : [$exclude];
+                    return $query->whereNotIn('id', $excludeIds);
+                })
+                ->get()
+                ->pluck('supplier.name')
+                ->unique()
+                ->filter()
+                ->map(function($name) {
+                    return ['name' => $name];
+                })
+                ->values()
+                ->toArray();
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $transformedData,
+            'pagination' => [
+                'current_page' => $inventories->currentPage(),
+                'last_page' => $inventories->lastPage(),
+                'per_page' => $inventories->perPage(),
+                'total' => $inventories->total(),
+                'from' => $inventories->firstItem(),
+                'to' => $inventories->lastItem()
+            ],
+            'suppliers' => $suppliers
+        ]);
+    }
+
+    /**
+     * Export Inventory data to Excel
+     */
+    public function export(Request $request)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'tanggal_from' => 'nullable|date',
+                'tanggal_to' => 'nullable|date|after_or_equal:tanggal_from',
+                'search' => 'nullable|string|max:255',
+                'supplier_id' => 'nullable|exists:supplier_rolls,id',
+                'jenis' => 'nullable|string|max:255'
+            ]);
+
+            // Prepare filters
+            $filters = [
+                'search' => $request->search,
+                'supplier_id' => $request->supplier_id,
+                'jenis' => $request->jenis,
+                'tanggal_from' => $request->tanggal_from,
+                'tanggal_to' => $request->tanggal_to
+            ];
+
+            // Generate filename with timestamp
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $filename = "Inventory_Export_{$timestamp}.xlsx";
+
+            // Return Excel download
+            return Excel::download(new InventoryExport($filters), $filename);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Export failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

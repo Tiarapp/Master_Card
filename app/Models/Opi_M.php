@@ -121,6 +121,27 @@ class Opi_M extends Model
         return $query;
     }
 
+    // Optimized version for data_dtnew page - only essential data
+    public function scopeOpidtOptimized($query)
+    {
+        return $query->leftJoin('dt', 'dt_id', 'dt.id')
+            ->leftJoin('mc', function($join) {
+                $join->on('opi_m.mc_id', '=', 'mc.id');
+            })
+            ->select([
+                'opi_m.id',
+                'opi_m.NoOPI',
+                'opi_m.jumlahOrder',
+                'opi_m.dt_id',
+                'dt.tglKirimDt',
+                'mc.gramSheetBoxKontrak2',
+                'mc.lebarSheet',
+                'mc.panjangSheet',
+                'mc.outConv'
+            ])
+            ->orderBy('opi_m.id', 'desc');
+    }
+
     public function scopeControl($query)
     {
         $query->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')

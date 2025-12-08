@@ -397,9 +397,7 @@
           <div class="col-md-4">
             <select class="form-control" id="supplierFilter">
               <option value="">Semua Supplier</option>
-              @foreach($inventories->unique('supplier.name')->filter(function($item) { return $item->supplier; }) as $inventory)
-                <option value="{{ $inventory->supplier->name }}">{{ $inventory->supplier->name }}</option>
-              @endforeach
+              <!-- Options will be loaded via AJAX -->
             </select>
           </div>
           <div class="col-md-4">
@@ -410,7 +408,7 @@
         </div>
         
         <!-- Inventory Table -->
-        <!-- Note: Hanya menampilkan inventory dengan quantity > 0 -->
+        <!-- Note: Inventory akan di-load via AJAX dengan pagination -->
         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
           <table class="table table-bordered table-sm table-striped" id="inventoryTable">
             <thead class="sticky-top">
@@ -427,34 +425,28 @@
               </tr>
             </thead>
             <tbody id="inventoryTableBody">
-              @foreach($inventories as $inventory)
-              <tr data-inventory-id="{{ $inventory->id }}" 
-                  data-kode-internal="{{ $inventory->kode_internal }}"
-                  data-kode-roll="{{ $inventory->kode_roll }}"
-                  data-supplier="{{ $inventory->supplier->name ?? '' }}"
-                  data-gsm="{{ $inventory->gsm }}"
-                  data-lebar="{{ $inventory->lebar }}"
-                  data-quantity="{{ $inventory->quantity ?? 0 }}">
-                <td>{{ $inventory->kode_internal }}</td>
-                <td>{{ $inventory->kode_roll }}</td>
-                <td>{{ $inventory->supplier->name ?? '-' }}</td>
-                <td>{{ $inventory->jenis }}</td>
-                <td>{{ $inventory->gsm }}</td>
-                <td>{{ $inventory->lebar }}</td>
-                <td>{{ $inventory->quantity ?? 0 }}</td>
-                <td>
-                  <span class="badge badge-success">Available</span>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm add-inventory-btn" 
-                          data-inventory-id="{{ $inventory->id }}">
-                    <i class="fas fa-plus"></i> Add
-                  </button>
+              <tr>
+                <td colspan="9" class="text-center">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <span class="ml-2">Loading inventory...</span>
                 </td>
               </tr>
-              @endforeach
             </tbody>
           </table>
+        </div>
+        
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <small class="text-muted" id="inventoryInfo">Loading...</small>
+          </div>
+          <nav aria-label="Inventory pagination">
+            <ul class="pagination pagination-sm mb-0" id="inventoryPagination">
+              <!-- Pagination links will be loaded here -->
+            </ul>
+          </nav>
         </div>
         
         <!-- Selected Count -->
@@ -486,6 +478,198 @@
 $(document).ready(function() {
     // Global variables
     let selectedInventories = [];
+    let currentPage = 1;
+    let lastPage = 1;
+    let isLoading = false;
+    
+    // Function to load inventory with pagination
+    function loadInventory(page = 1, search = '', supplier = '') {
+        if (isLoading) return;
+        
+        isLoading = true;
+        currentPage = page;
+        
+        // Show loading state
+        if (page === 1) {
+            $('#inventoryTableBody').html(`
+                <tr>
+                    <td colspan="9" class="text-center">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span class="ml-2">Loading inventory...</span>
+                    </td>
+                </tr>
+            `);
+        }
+        
+        $.ajax({
+            url: '{{ route("inventory.paginated") }}',
+            method: 'GET',
+            data: {
+                page: page,
+                search: search,
+                supplier: supplier,
+                per_page: 20
+            },
+            success: function(response) {
+                if (response.success) {
+                    renderInventoryTable(response.data);
+                    updatePaginationInfo(response.pagination);
+                    renderPagination(response.pagination);
+                    
+                    // Load suppliers for filter on first load
+                    if (page === 1 && !search && !supplier) {
+                        loadSuppliers(response.suppliers);
+                    }
+                }
+            },
+            error: function(xhr) {
+                console.error('Error loading inventory:', xhr);
+                $('#inventoryTableBody').html(`
+                    <tr>
+                        <td colspan="9" class="text-center text-danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Error loading inventory. Please try again.
+                        </td>
+                    </tr>
+                `);
+            },
+            complete: function() {
+                isLoading = false;
+            }
+        });
+    }
+    
+    function renderInventoryTable(inventories) {
+        const tbody = $('#inventoryTableBody');
+        tbody.empty();
+        
+        if (inventories.length === 0) {
+            tbody.html(`
+                <tr>
+                    <td colspan="9" class="text-center text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Tidak ada inventory yang ditemukan
+                    </td>
+                </tr>
+            `);
+            return;
+        }
+        
+        inventories.forEach(function(inventory) {
+            const row = `
+                <tr data-inventory-id="${inventory.id}" 
+                    data-kode-internal="${inventory.kode_internal}"
+                    data-kode-roll="${inventory.kode_roll}"
+                    data-supplier="${inventory.supplier_name || ''}"
+                    data-gsm="${inventory.gsm}"
+                    data-lebar="${inventory.lebar}"
+                    data-quantity="${inventory.quantity || 0}">
+                    <td>${inventory.kode_internal}</td>
+                    <td>${inventory.kode_roll}</td>
+                    <td>${inventory.supplier_name || '-'}</td>
+                    <td>${inventory.jenis}</td>
+                    <td>${inventory.gsm}</td>
+                    <td>${inventory.lebar}</td>
+                    <td>${inventory.quantity || 0}</td>
+                    <td>
+                        <span class="badge badge-success">Available</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm add-inventory-btn" 
+                                data-inventory-id="${inventory.id}">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+        
+        // Update visual indicators for selected items
+        updateModalInventoryRows();
+    }
+    
+    function updatePaginationInfo(pagination) {
+        const info = `Showing ${pagination.from || 0} to ${pagination.to || 0} of ${pagination.total} entries`;
+        $('#inventoryInfo').text(info);
+        lastPage = pagination.last_page;
+    }
+    
+    function renderPagination(pagination) {
+        const paginationEl = $('#inventoryPagination');
+        paginationEl.empty();
+        
+        if (pagination.last_page <= 1) return;
+        
+        // Previous button
+        const prevDisabled = pagination.current_page <= 1 ? 'disabled' : '';
+        paginationEl.append(`
+            <li class="page-item ${prevDisabled}">
+                <a class="page-link" href="#" data-page="${pagination.current_page - 1}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        `);
+        
+        // Page numbers
+        const startPage = Math.max(1, pagination.current_page - 2);
+        const endPage = Math.min(pagination.last_page, pagination.current_page + 2);
+        
+        if (startPage > 1) {
+            paginationEl.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`);
+            if (startPage > 2) {
+                paginationEl.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const active = i === pagination.current_page ? 'active' : '';
+            paginationEl.append(`
+                <li class="page-item ${active}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `);
+        }
+        
+        if (endPage < pagination.last_page) {
+            if (endPage < pagination.last_page - 1) {
+                paginationEl.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+            paginationEl.append(`<li class="page-item"><a class="page-link" href="#" data-page="${pagination.last_page}">${pagination.last_page}</a></li>`);
+        }
+        
+        // Next button
+        const nextDisabled = pagination.current_page >= pagination.last_page ? 'disabled' : '';
+        paginationEl.append(`
+            <li class="page-item ${nextDisabled}">
+                <a class="page-link" href="#" data-page="${pagination.current_page + 1}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        `);
+    }
+    
+    function loadSuppliers(suppliers) {
+        const select = $('#supplierFilter');
+        select.find('option:not(:first)').remove();
+        
+        suppliers.forEach(function(supplier) {
+            select.append(`<option value="${supplier.name}">${supplier.name}</option>`);
+        });
+    }
+    
+    // Pagination click handler
+    $(document).on('click', '#inventoryPagination .page-link', function(e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        if (page && page !== currentPage && !isLoading) {
+            const search = $('#inventorySearch').val();
+            const supplier = $('#supplierFilter').val();
+            loadInventory(page, search, supplier);
+        }
+    });
     
     // Function to generate BBK number
     function generateBbkNumber() {
@@ -578,59 +762,186 @@ $(document).ready(function() {
         updateSelectedCount();
     });
 
-    // Modal search functionality
+    // Modal search functionality with debouncing
+    let searchTimeout;
     $('#inventorySearch').on('keyup', function() {
-        const searchTerm = $(this).val().toLowerCase();
-        filterInventoryTable();
+        clearTimeout(searchTimeout);
+        const searchTerm = $(this).val();
+        
+        searchTimeout = setTimeout(function() {
+            const supplier = $('#supplierFilter').val();
+            loadInventory(1, searchTerm, supplier);
+        }, 500); // Debounce 500ms
     });
 
     $('#supplierFilter').on('change', function() {
-        filterInventoryTable();
+        const supplier = $(this).val();
+        const search = $('#inventorySearch').val();
+        loadInventory(1, search, supplier);
     });
 
     $('#clearFilters').on('click', function() {
         $('#inventorySearch').val('');
         $('#supplierFilter').val('');
-        filterInventoryTable();
+        loadInventory(1, '', '');
     });
 
-    function filterInventoryTable() {
-        const searchTerm = $('#inventorySearch').val().toLowerCase();
-        const supplierFilter = $('#supplierFilter').val();
+    // Confirm selection and close modal
+    $('#confirmSelection').on('click', function() {
+        addNewSelectedInventories();
+        $('#inventoryModal').modal('hide');
+    });
+
+    // Function to add only new inventories without affecting existing ones
+    function addNewSelectedInventories() {
+        const tbody = $('#selectedInventoryBody');
+        const existingIds = [];
         
-        $('#inventoryTableBody tr').each(function() {
-            const row = $(this);
-            const kodeInternal = row.data('kode-internal').toString().toLowerCase();
-            const kodeRoll = row.data('kode-roll').toString().toLowerCase();
-            const supplier = row.data('supplier').toString().toLowerCase();
-            const gsm = row.data('gsm').toString().toLowerCase();
-            const lebar = row.data('lebar').toString().toLowerCase();
+        // Get list of existing inventory IDs in the table
+        tbody.find('tr').each(function() {
+            const id = $(this).data('inventory-id');
+            if (id) {
+                existingIds.push(parseInt(id));
+            }
+        });
+        
+        // Show the card if it's hidden and we have selections
+        if (selectedInventories.length > 0) {
+            $('#inventory_details_card').show();
+        }
+        
+        // Add only new inventories that aren't already in the table
+        selectedInventories.forEach(function(inventory) {
+            if (!existingIds.includes(inventory.id)) {
+                const row = `
+                    <tr data-inventory-id="${inventory.id}">
+                        <td>${inventory.kode_internal}</td>
+                        <td>${inventory.kode_roll}</td>
+                        <td>${inventory.supplier}</td>
+                        <td>${inventory.gsm}</td>
+                        <td>${inventory.lebar}</td>
+                        <td>${inventory.quantity}</td>
+                        <td>
+                            <input type="number" 
+                                   class="form-control form-control-sm keluar-input" 
+                                   name="inventory_keluar[${inventory.id}]" 
+                                   value="${inventory.quantity}" 
+                                   min="0" 
+                                   max="${inventory.quantity}"
+                                   step="0.01"
+                                   data-max="${inventory.quantity}">
+                            <input type="hidden" name="inventory_id[]" value="${inventory.id}">
+                            <small class="text-muted">Max: ${inventory.quantity}</small>
+                        </td>
+                        <td>
+                            <input type="text" 
+                                   class="form-control form-control-sm" 
+                                   name="inventory_opi[${inventory.id}]" 
+                                   placeholder="OPI..." 
+                                   maxlength="100">
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm" 
+                                      name="inventory_keterangan[${inventory.id}]" 
+                                      placeholder="Keterangan..." 
+                                      rows="2" 
+                                      maxlength="255"></textarea>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-inventory" data-inventory-id="${inventory.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
+            }
+        });
+
+        // Add event listeners for new keluar inputs
+        $('.keluar-input').off('input').on('input', function() {
+            const max = parseFloat($(this).data('max'));
+            const value = parseFloat($(this).val()) || 0;
             
-            const matchesSearch = !searchTerm || 
-                kodeInternal.includes(searchTerm) ||
-                kodeRoll.includes(searchTerm) ||
-                supplier.includes(searchTerm) ||
-                gsm.includes(searchTerm) ||
-                lebar.includes(searchTerm);
+            if (value > max) {
+                $(this).val(max);
+            }
+        });
+
+        // Add event listeners for new remove buttons
+        $('.remove-inventory').off('click').on('click', function() {
+            const inventoryId = $(this).data('inventory-id');
             
-            const matchesSupplier = !supplierFilter || supplier === supplierFilter.toLowerCase();
+            // Remove from selected inventories array
+            selectedInventories = selectedInventories.filter(inv => inv.id != inventoryId);
             
-            if (matchesSearch && matchesSupplier) {
-                row.show();
-            } else {
-                row.hide();
+            // Remove the row from table
+            $(this).closest('tr').remove();
+            
+            // Hide card if no more inventories
+            if (selectedInventories.length === 0) {
+                $('#inventory_details_card').hide();
+            }
+            
+            // Update count display
+            updateSelectedCount();
+        });
+        
+        // Hide card if no inventories selected
+        if (selectedInventories.length === 0) {
+            $('#inventory_details_card').hide();
+        }
+    }
+
+    // Function to save current form values before re-rendering
+    function saveCurrentFormValues() {
+        const savedValues = {};
+        
+        $('#selectedInventoryBody tr').each(function() {
+            const inventoryId = $(this).data('inventory-id');
+            if (inventoryId) {
+                savedValues[inventoryId] = {
+                    keluar: $(this).find(`input[name="inventory_keluar[${inventoryId}]"]`).val(),
+                    opi: $(this).find(`input[name="inventory_opi[${inventoryId}]"]`).val(),
+                    keterangan: $(this).find(`textarea[name="inventory_keterangan[${inventoryId}]"]`).val()
+                };
+            }
+        });
+        
+        return savedValues;
+    }
+    
+    // Function to restore saved form values after re-rendering
+    function restoreFormValues(savedValues) {
+        $('#selectedInventoryBody tr').each(function() {
+            const inventoryId = $(this).data('inventory-id');
+            if (inventoryId && savedValues[inventoryId]) {
+                const values = savedValues[inventoryId];
+                
+                // Restore keluar value
+                if (values.keluar !== undefined && values.keluar !== '') {
+                    $(this).find(`input[name="inventory_keluar[${inventoryId}]"]`).val(values.keluar);
+                }
+                
+                // Restore OPI value
+                if (values.opi !== undefined && values.opi !== '') {
+                    $(this).find(`input[name="inventory_opi[${inventoryId}]"]`).val(values.opi);
+                }
+                
+                // Restore keterangan value
+                if (values.keterangan !== undefined && values.keterangan !== '') {
+                    $(this).find(`textarea[name="inventory_keterangan[${inventoryId}]"]`).val(values.keterangan);
+                }
             }
         });
     }
 
-    // Confirm selection and close modal
-    $('#confirmSelection').on('click', function() {
-        updateSelectedInventoryTable();
-        $('#inventoryModal').modal('hide');
-    });
-
+    // Function to update selected inventory table
     // Function to update selected inventory table
     function updateSelectedInventoryTable() {
+        // Save current form values before re-rendering
+        const savedValues = saveCurrentFormValues();
+        
         const tbody = $('#selectedInventoryBody');
         tbody.empty();
         
@@ -686,6 +997,9 @@ $(document).ready(function() {
             tbody.append(row);
         });
 
+        // Restore previously saved form values
+        restoreFormValues(savedValues);
+
         // Add event listeners for keluar inputs
         $('.keluar-input').on('input', function() {
             const max = parseFloat($(this).data('max'));
@@ -711,7 +1025,8 @@ $(document).ready(function() {
 
     // Initialize modal when it's shown
     $('#inventoryModal').on('shown.bs.modal', function() {
-        updateModalInventoryRows();
+        // Load inventory on first show
+        loadInventory(1, '', '');
         $('#inventorySearch').focus();
     });
 

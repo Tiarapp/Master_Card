@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Kontrak_D;
 use App\Models\Opi_M;
 use App\Models\Tracking;
+use App\Exports\PlanKirimExport;
+use App\Exports\IntakeMonthlyExport;
+use App\Models\DeliveryTime;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Expr\FuncCall;
 
 class OpiController extends Controller
@@ -281,7 +285,7 @@ class OpiController extends Controller
     {
         $productions = new Opi_M();
         $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
-            // ->where('status_opi', '!=', 'closed')
+            ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('id', 'desc');
 
@@ -364,6 +368,7 @@ class OpiController extends Controller
         $opi->nama = $opi->nama."(CANCEL)";
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
         $opi->lastUpdatedBy = Auth::user()->name;
+        $opi->status_opi = "Cancel";
         
         $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
@@ -398,24 +403,83 @@ class OpiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Opi  $opi
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Opi_M $opi)
+    public function edit($id)
     {
-        //
+        try {
+            $opi = Opi_M::with(['kontrakm', 'kontrakd', 'mc', 'dt'])->findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $opi->id,
+                    'NoOPI' => $opi->NoOPI,
+                    'jumlahOrder' => $opi->jumlahOrder,
+                    'keterangan' => $opi->keterangan,
+                    'tglKirimDt' => $opi->dt ? $opi->dt->tglKirimDt : null,
+                    'pcsDt' => $opi->dt ? $opi->dt->pcsDt : null,
+                    'dt_id' => $opi->dt_id,
+                    'status_opi' => $opi->status_opi,
+                    'customer_name' => $opi->kontrakm ? $opi->kontrakm->customer_name : null,
+                    'namaBarang' => $opi->mc ? $opi->mc->namaBarang : null,
+                    'keterangan' => $opi->dt ? $opi->dt->keterangan : null,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data OPI tidak ditemukan'
+            ], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Opi  $opi
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Opi_M $opi)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            // Validasi input
+            $request->validate([
+                'jumlahOrder' => 'required|numeric|min:1',
+                'keterangan' => 'nullable|string|max:255',
+                'tglKirimDt' => 'required|date',
+                'pcsDt' => 'required|numeric|min:1'
+            ]);
+
+            $opi = Opi_M::findOrFail($id);
+            
+            // Update OPI data
+            $opi->jumlahOrder = $request->jumlahOrder;
+            $opi->lastUpdatedBy = Auth::user()->name;
+            $opi->save();
+
+            // Update DT data if exists
+            if ($opi->dt_id && $opi->dt) {
+                $dt = $opi->dt;
+                $dt->tglKirimDt = $request->tglKirimDt;
+                $dt->keterangan = $request->keterangan;
+                $dt->lastUpdatedBy = Auth::user()->name;
+                $dt->save();
+            }
+
+            // Track the change
+            Tracking::create([
+                'user' => Auth::user()->name,
+                'event' => "Update OPI " . $opi->NoOPI
+            ]);
+
+            return redirect()->back()->with('success', 'Data OPI ' . $opi->NoOPI . ' berhasil diupdate!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengupdate data OPI: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -442,5 +506,199 @@ class OpiController extends Controller
         // dd($opi2);
 
         return view('admin.opi.pdf', compact('opi2'));
+    }
+
+    public function plan_kirim(Request $request)
+    {
+        // Jika tidak ada parameter tanggal, hanya tampilkan form
+        if (!$request->has('start') || !$request->has('end')) {
+            return view('admin.opi.plan_kirim', [
+                'data' => collect(), // Empty collection
+                'start_date' => null,
+                'end_date' => null
+            ]);
+        }
+
+        // Validasi input tanggal
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start'
+        ]);
+
+        // Alternatif 1: Menggunakan subquery untuk ORDER BY
+        $data = Opi_M::with([
+                'mc', 
+                'kontrakm', 
+                'kontrakd', 
+                'dt'
+            ])
+            ->whereBetween('tglKirimDt', [$request->start, $request->end])
+            ->where('status_opi', 'Proses')
+            ->orderByRaw('(SELECT kodeBarang FROM mc 
+                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id 
+                          WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
+            ->get();
+
+        // Ambil data stock dari Firebird database
+        DB::connection('firebird2')->beginTransaction(); // Enable query log for debugging
+            $stock = DB::connection('firebird2')->table('TPersediaan')
+                ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
+                ->where('Periode', '=', date('m/Y')) // Current month/year
+                ->get();
+
+
+        // Clean up data: trim spaces dan convert ke numeric
+        $stock = $stock->map(function($item) {
+            return (object) [
+                'KodeBrg' => trim($item->KodeBrg), // Hapus spasi trailing
+                'quantity' => floatval($item->stock_quantity) // Convert to numeric
+            ];
+        });
+
+
+        // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
+        $stockMap = $stock->pluck('quantity', 'KodeBrg');
+        
+        // Debug: Lihat hasil clean data
+        // dd('Cleaned stock:', $stock->take(3), 'Stock map:', $stockMap->take(3));
+
+        // Map quantity dari stock ke data OPI berdasarkan kodeBarang
+        $data = $data->map(function ($item) use ($stockMap) {
+            // Ambil kode barang dari relasi mc
+            $kodeBarang = $item->mc->kodeBarang ?? null;
+            
+            // Cari quantity di stock berdasarkan kode barang
+            $quantity = $stockMap->get($kodeBarang, 0); // Default 0 jika tidak ditemukan
+            
+            // Tambahkan property stock_quantity ke item
+            $item->stock_quantity = $quantity;
+            
+            // Hitung stock status (aman, kurang, habis)
+            $needed = $item->jumlahOrder ?? 0;
+            if ($quantity >= $needed) {
+                $item->stock_status = 'aman';
+                $item->stock_indicator = 'success';
+            } elseif ($quantity > 0 && $quantity < $needed) {
+                $item->stock_status = 'kurang';
+                $item->stock_indicator = 'warning';
+            } else {
+                $item->stock_status = 'habis';
+                $item->stock_indicator = 'danger';
+            }
+            
+            // Hitung selisih stock vs kebutuhan
+            $item->stock_difference = $quantity - $needed;
+            
+            return $item;
+        });
+
+        $start_date = date('d M Y', strtotime($request->start));
+        $end_date = date('d M Y', strtotime($request->end));
+
+        return view('admin.opi.plan_kirim', compact('data', 'start_date', 'end_date', 'stockMap'));
+    }
+
+    public function plan_kirim_export(Request $request)
+    {
+        // Validasi input tanggal
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'required|date|after_or_equal:start'
+        ]);
+
+        // Ambil data OPI sesuai periode (sama seperti plan_kirim method)
+        $data = Opi_M::with([
+                'mc', 
+                'kontrakm', 
+                'kontrakd', 
+                'dt'
+            ])
+            ->whereBetween('tglKirimDt', [$request->start, $request->end])
+            ->where('status_opi', 'Proses')
+            ->orderByRaw('(SELECT kodeBarang FROM mc 
+                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id 
+                          WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
+            ->get();
+
+        // Ambil data stock dari Firebird database
+        DB::connection('firebird2')->beginTransaction(); // Enable query log for debugging
+        $stock = DB::connection('firebird2')->table('TPersediaan')
+            ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
+            ->where('Periode', '=', date('m/Y'))
+            ->get();
+
+        // Clean up data dan mapping stock
+        $stock = $stock->map(function($item) {
+            return (object) [
+                'KodeBrg' => trim($item->KodeBrg),
+                'quantity' => floatval($item->stock_quantity)
+            ];
+        });
+
+        $stockMap = $stock->pluck('quantity', 'KodeBrg');
+        
+        // Map quantity dari stock ke data OPI
+        $data = $data->map(function ($item) use ($stockMap) {
+            $kodeBarang = $item->mc->kodeBarang ?? null;
+            $quantity = $stockMap->get($kodeBarang, 0);
+            
+            $item->stock_quantity = $quantity;
+            
+            $needed = $item->jumlahOrder ?? 0;
+            if ($quantity >= $needed) {
+                $item->stock_status = 'aman';
+                $item->stock_indicator = 'success';
+            } elseif ($quantity > 0 && $quantity < $needed) {
+                $item->stock_status = 'kurang';
+                $item->stock_indicator = 'warning';
+            } else {
+                $item->stock_status = 'habis';
+                $item->stock_indicator = 'danger';
+            }
+            
+            $item->stock_difference = $quantity - $needed;
+            
+            return $item;
+        });
+
+        // Format tanggal untuk filename dan display
+        $start_date = date('d-M-Y', strtotime($request->start));
+        $end_date = date('d-M-Y', strtotime($request->end));
+        $filename = "Plan_Kirim_OPI_{$start_date}_to_{$end_date}.xlsx";
+
+        // Export to Excel
+        return Excel::download(new PlanKirimExport($data, $start_date, $end_date), $filename);
+    }
+
+    /**
+     * Show intake monthly export page
+     */
+    public function intakeMonthly()
+    {
+        return view('admin.opi.intake_monthly');
+    }
+
+    /**
+     * Export intake data per month
+     */
+    public function exportIntakeMonthly(Request $request)
+    {
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
+
+        // Validate month and year
+        if (!is_numeric($month) || $month < 1 || $month > 12) {
+            $month = date('m');
+        }
+        if (!is_numeric($year) || $year < 2020 || $year > date('Y') + 1) {
+            $year = date('Y');
+        }
+
+        // Generate filename
+        $monthName = date('F_Y', mktime(0, 0, 0, $month, 1, $year));
+        $filename = "Intake_Data_{$monthName}.xlsx";
+
+        // Export to Excel
+        return Excel::download(new IntakeMonthlyExport($month, $year), $filename);
     }
 }

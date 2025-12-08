@@ -56,7 +56,9 @@ class OpiExport implements FromCollection, WithHeadings
                 'kualitasKontrakI3' => $item->kontrakd->mc->substanceproduksi->linertengah->gramKertas ?? '',
                 'kualitasKontrakI4' => $item->kontrakd->mc->substanceproduksi->flute2->gramKertas ?? '',
                 'kualitasKontrakI5' => $item->kontrakd->mc->substanceproduksi->linerbawah->gramKertas ?? '',
-                'kualitasKontrakKMBawah' => $item->kontrakd->mc->substanceproduksi->linerbawah->jenisKertasMc == "BK" ? "K" : $item->kontrakd->mc->substanceproduksi->linerbawah->jenisKertasMc,
+                'kualitasKontrakKMBawah' => isset($item->kontrakd->mc->substanceproduksi->linerbawah)
+                    ? ($item->kontrakd->mc->substanceproduksi->linerbawah->jenisKertasMc == "BK" ? "K" : $item->kontrakd->mc->substanceproduksi->linerbawah->jenisKertasMc)
+                    : '-',
                 'wax' => $item->kontrakd->mc->wax,
                 'gram' => $item->kontrakd->mc->gramSheetBoxProduksi,
                 'tanggalOrder' => $item->kontrakm->tglKontrak,
@@ -81,11 +83,14 @@ class OpiExport implements FromCollection, WithHeadings
                 'kualitasProduksiI3' => $item->kontrakd->mc->substancekontrak->linertengah->gramKertas ?? '',
                 'kualitasProduksiI4' => $item->kontrakd->mc->substancekontrak->flute2->gramKertas ?? '',
                 'kualitasProduksiI5' => $item->kontrakd->mc->substancekontrak->linerbawah->gramKertas ?? '',
-                'kualitasProduksiKMBawah' => $item->kontrakd->mc->substancekontrak->linerbawah->jenisKertasMc == "BK" ? "K" : $item->kontrakd->mc->substancekontrak->linerbawah->jenisKertasMc,
+                'kualitasProduksiKMBawah' => isset($item->kontrakd->mc->substancekontrak->linerbawah)
+                    ? ($item->kontrakd->mc->substancekontrak->linerbawah->jenisKertasMc == "BK" ? "K" : $item->kontrakd->mc->substancekontrak->linerbawah->jenisKertasMc)
+                    : '-',
                 'kodeBarang' => $item->kontrakd->mc->kodeBarang,
                 'tipeCrease' => $item->kontrakd->mc->box->tipeCreaseCorr,
                 'bungkus' => $item->kontrakd->mc->bungkus,
                 'lainLain' => $item->kontrakd->mc->lain,
+                'blok' => $item->kontrakd->mc->text,
             ];
         });
     }
@@ -151,7 +156,8 @@ class OpiExport implements FromCollection, WithHeadings
             'Kode Barang', 
             "Tipe Crease", 
             "Bungkus", 
-            "Lain-Lain"
+            "Lain-Lain",
+            "Blok"
         ]; 
     }
 }

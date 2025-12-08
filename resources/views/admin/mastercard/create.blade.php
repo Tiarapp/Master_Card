@@ -704,6 +704,7 @@
                                                 <option value='LAYER'>LAYER</option>
                                                 <option value='SHEET'>SHEET</option>
                                                 <option value='ROLL'>ROLL</option>
+                                                <option value='PALET'>PALET</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1142,6 +1143,8 @@
             tipemc = 'X';
         } else if (tipemc == 'RMG') {
             tipemc = 'Z';
+        } else if (tipemc == 'PALET') {
+            tipemc = 'P';
         }
         
 
@@ -1161,7 +1164,7 @@
             flute = '06';
         }
 
-        if (tipemc == 'F' || tipebox == 'R') {  
+        if (tipemc == 'F' || tipebox == 'R' || tipemc == 'P') {  
             kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
             kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;

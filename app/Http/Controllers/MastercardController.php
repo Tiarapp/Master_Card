@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\DetPHP;
 use App\Models\Mastercard;
 use App\Models\Number_Sequence;
 use App\Models\Tracking;
+use App\Services\CrossDatabaseRelationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -829,6 +831,187 @@ class MastercardController extends Controller
         ];
         
         return response()->json($data);
+    }
+
+    public function get_mc_php(Request $request)
+    {
+        // OPTIMIZED PERFORMANCE: Cache-first approach dengan lazy loading
+        try {
+            $cacheKey = 'php_data_summary_' . md5(json_encode($request->only(['search', 'filter'])));
+            
+            // STEP 1: Coba ambil dari cache dulu (5 menit cache)
+            $phpData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 300, function() {
+                DB::connection('firebird2')->beginTransaction();
+                // LIMIT data untuk performa - hanya ambil 1000 records teratas
+                $phpDataRaw = DB::connection('firebird2')
+                    ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
+                             FROM "TDetPHP" 
+                             GROUP BY TRIM("KodeBrg")
+                             ORDER BY SUM("Quantity") DESC');
+                DB::connection('firebird2')->commit();
+                
+                return collect($phpDataRaw)->map(function($item) {
+                    $item->KODEBRG = trim($item->KODEBRG ?? '');
+                    return $item;
+                })->keyBy('KODEBRG');
+            });
+
+            
+            // STEP 2: Optimized Mastercard query dengan pagination-first approach
+            $perPage = 20;
+            $currentPage = request()->get('page', 1);
+            
+            
+            // STEP 3: Query MC dengan pagination langsung - TIDAK ambil semua data dulu
+            $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'tipeBox', 'customer', 'created_at');
+            
+            // Tambahkan search jika ada
+            if ($request->has('search') && !empty($request->search)) {
+                $searchTerm = $request->search;
+                $mcQuery->where(function($q) use ($searchTerm) {
+                    $q->where('kode', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('namaBarang', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('kodeBarang', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('customer', 'LIKE', "%{$searchTerm}%");
+                });
+            }
+            
+            // Pre-filter berdasarkan PHP data jika diperlukan
+            if ($request->has('filter') && !empty($request->filter)) {
+                if ($request->filter === 'with_php') {
+                    $mcQuery->whereIn('kodeBarang', $phpData->keys()->toArray());
+                } elseif ($request->filter === 'without_php') {
+                    $mcQuery->whereNotIn('kodeBarang', $phpData->keys()->toArray());
+                }
+            }
+            
+            // LANGSUNG PAGINATE - tidak load semua data
+            $mcWithPhp = $mcQuery->orderBy('created_at', 'desc')
+                ->paginate($perPage, ['*'], 'page', $currentPage)
+                ->appends($request->query());
+            
+            
+            // STEP 4: Hanya proses data yang ada di halaman aktif - TIDAK semua data
+            $mcWithPhp->getCollection()->transform(function($mc) use ($phpData) {
+                $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
+                $phpRecord = $phpData->get($trimmedKodeBarang);
+                
+                $mc->php_data = [
+                    'total_quantity' => $phpRecord ? ($phpRecord->TOTALBBM ?? 0) : 0,
+                    'total_records' => $phpRecord ? ($phpRecord->TOTAL_RECORDS ?? 0) : 0,
+                    'has_data' => $phpRecord !== null,
+                    'kode_brg' => $phpRecord ? ($phpRecord->KODEBRG ?? $trimmedKodeBarang) : $trimmedKodeBarang,
+                    'original_kode' => $mc->kodeBarang,
+                ];
+                
+                return $mc;
+            });
+
+            // STEP 5: Quick summary dengan cached counts - tidak query semua data
+            $summary = \Illuminate\Support\Facades\Cache::remember('mc_summary_stats', 600, function() use ($phpData) {
+                $totalMc = Mastercard::count();
+                $mcWithPhpCount = Mastercard::whereIn('kodeBarang', $phpData->keys()->toArray())->count();
+                
+                return [
+                    'total_mc' => $totalMc,
+                    'mc_with_php' => $mcWithPhpCount,
+                    'total_php_records' => $phpData->count(),
+                    'total_php_quantity' => $phpData->sum('TOTALBBM')
+                ];
+            });
+
+            // STEP 6: Simplified return - minimal data untuk performa
+            return view('admin.ppic.mc.mc_bbm', [
+                'mcWithPhp' => $mcWithPhp,
+                'summary' => $summary,
+                'phpData' => $phpData->take(5), // Raw data untuk debugging (minimal)
+            ]);
+
+        } catch (\Exception $e) {
+            // Rollback transaction if it's still active
+            if (DB::connection('firebird2')->transactionLevel() > 0) {
+                DB::connection('firebird2')->rollback();
+            }
+            
+            // Log error untuk debugging
+            \Illuminate\Support\Facades\Log::error('Cross-database relation error: ' . $e->getMessage());
+            
+            return back()->with('error', 'Error loading cross-database data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Method alternatif untuk test relasi dengan cara berbeda
+     */
+    public function test_php_relation()
+    {
+        try {
+            // Test 1: Raw SQL langsung
+            $phpTest = DB::connection('firebird2')
+                ->select('SELECT FIRST 3 TRIM(KodeBrg) as KodeBrg, Quantity FROM TDetPHP');
+            
+            // Test 2: Menggunakan Service
+            $cachedPhp = CrossDatabaseRelationService::getAllPhpDataCached();
+            
+            // Test 3: Single record test
+            $singleTest = CrossDatabaseRelationService::findMastercardWithPhp('TEST001');
+
+            return response()->json([
+                'status' => 'success',
+                'tests' => [
+                    'raw_sql_sample' => $phpTest,
+                    'cached_count' => $cachedPhp->count(),
+                    'single_test' => $singleTest,
+                    'firebird_connection' => 'OK'
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
+        }
+    }
+
+    /**
+     * Sync PHP data ke tabel sementara MySQL (optional untuk performa)
+     */
+    public function sync_php_to_mysql()
+    {
+        try {
+            // Ambil semua data PHP
+            $phpDataRaw = DB::connection('firebird2')
+                ->select('SELECT TRIM(KodeBrg) as KodeBrg, SUM(Quantity) as totalBbm, COUNT(*) as total_records 
+                         FROM TDetPHP 
+                         GROUP BY TRIM(KodeBrg)');
+
+            // Simpan ke tabel sementara di MySQL (jika diperlukan)
+            foreach($phpDataRaw as $php) {
+                DB::table('temp_php_data')->updateOrInsert(
+                    ['kode_brg' => $php->KODEBRG],
+                    [
+                        'total_quantity' => $php->TOTALBBM,
+                        'total_records' => $php->TOTAL_RECORDS,
+                        'last_sync' => now()
+                    ]
+                );
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'PHP data synced successfully',
+                'synced_records' => count($phpDataRaw)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
 }
