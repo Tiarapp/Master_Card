@@ -457,13 +457,13 @@
         });
         
         $('#data_sj tbody').on( 'click', 'td', function () {
-            var kontrak = (table.row(this).data());
+            var surat_jalan = (table.row(this).data());
 
-            document.getElementById("tglKirim").value = kontrak[1]
-            document.getElementById("jumlahKirim").value = kontrak[4]
-            document.getElementById("sj").value = kontrak[0]
-            document.getElementById("mod").value = kontrak[3]
-            document.getElementById("opi").value = kontrak[5]
+            document.getElementById("tglKirim").value = surat_jalan[1]
+            document.getElementById("jumlahKirim").value = surat_jalan[4]
+            document.getElementById("sj").value = surat_jalan[0]
+            document.getElementById("mod").value = surat_jalan[3]
+            document.getElementById("opi").value = surat_jalan[5]
 
             $("#modal-sj").modal("hide")
         });

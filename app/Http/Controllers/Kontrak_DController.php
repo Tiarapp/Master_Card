@@ -964,16 +964,21 @@ class Kontrak_DController extends Controller
         
         public function store_realisasi(Request $request)
         {   
-            if(strlen($request->opi) > 6){
-                explode(',', $request->opi);
-            }
-            $opi = Opi_M::where('nama', '=', $request->opi)->first();
+            
             $id = array_merge($request->idkontrak);
             for ($i=0; $i < count($id); $i++) { 
+                
+                if(strlen($request->opi) > 6){
+                    $opis = explode(',', $request->opi);
+                    $opi = Opi_M::where('nama', '=', $opis[$i])->first();
+                } else {
+                    $opi = Opi_M::where('kontrak_m_id', '=', $id[$i])->first();
+                }
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
                 $kontrakm = Kontrak_M::where('id', '=', $id)->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
-                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
+                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
+
                 RealisasiKirim::create([
                     'kontrak_m_id'  => $id[$i],
                     'opi_id'        => $opi->id,
