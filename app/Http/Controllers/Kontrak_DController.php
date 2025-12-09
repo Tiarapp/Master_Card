@@ -981,7 +981,7 @@ class Kontrak_DController extends Controller
 
                 RealisasiKirim::create([
                     'kontrak_m_id'  => $id[$i],
-                    'opi_id'        => $opi->id,
+                    'opi_id'        => $opi ? $opi->id : '',
                     'tanggal_kirim' => $request->tglKirim,
                     'nomer_sj'      => $request->sj,
                     'mod'           => $request->mod,

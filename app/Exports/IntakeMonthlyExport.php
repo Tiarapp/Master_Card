@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Opi_M;
 use App\Models\HasilProduksi;
+use App\Models\RealisasiKirim;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -53,6 +54,8 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
                 'kontrak_m.poCustomer',
                 'kontrak_m.kode as noKontrak',
                 'kontrak_m.tipeOrder',
+                'kontrak_d.harga_pcs',
+                'kontrak_d.harga_kg',
                 'mc.namaBarang',
                 'mc.tipeBox',
                 'mc.wax',
@@ -73,17 +76,17 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
     public function map($opi): array
     {
         // Get hasil produksi (qty kirim) untuk OPI ini
-        $hasilProduksi = HasilProduksi::where('opi_id', $opi->id)
+        $realisasi = RealisasiKirim::where('opi_id', $opi->id)
             ->select([
-                DB::raw('SUM(hasil_baik) as total_qty_kirim'),
-                DB::raw('SUM(tonase_baik) as total_ton_kirim'),
+                DB::raw('SUM(qty_kirim) as total_qty_kirim'),
+                DB::raw('SUM(kg_kirim) as total_ton_kirim'),
                 DB::raw('MAX(end_date) as tanggal_kirim_terakhir')
             ])
             ->first();
 
-        $qtyKirim = $hasilProduksi->total_qty_kirim ?? 0;
-        $tonKirim = $hasilProduksi->total_ton_kirim ?? 0;
-        $tanggalKirim = $hasilProduksi->tanggal_kirim_terakhir ?? '-';
+        $qtyKirim = $realisasi->total_qty_kirim ?? 0;
+        $tonKirim = $realisasi->total_ton_kirim ?? 0;
+        $tanggalKirim = $realisasi->tanggal_kirim_terakhir ?? '-';
 
         // Calculations
         $beratKg = ($opi->gramSheetBoxKontrak ?? 0) / 1000; // Convert gram to kg
@@ -105,6 +108,8 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             $opi->namaBarang ?? '-',                    // Nama Barang
             $opi->jumlahOrder ?? 0,                     // Qty OPI Pcs
             number_format($opi->gramSheetBoxKontrak ?? 0, 2),             // Gram Kontrak
+            number_format($opi->harga_pcs ?? 0, 2),     // Harga Pcs
+            number_format($opi->harga_kg ?? 0, 2),      // Harga Kg
             number_format($tonase, 3),                  // Tonase (qty * berat)
             number_format($qtyKirim, 0),                // Qty Kirim
             number_format($tonKirim, 3),                // Ton Kirim
@@ -130,6 +135,8 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             'Nama Barang',
             'Qty OPI Pcs',
             'Gram Kontrak',
+            'Harga Pcs',
+            'Harga Kg',
             'Tonase (Ton)',
             'Qty Kirim',
             'Ton Kirim',
