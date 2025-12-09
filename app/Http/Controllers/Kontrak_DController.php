@@ -972,7 +972,7 @@ class Kontrak_DController extends Controller
                     $opis = explode(',', $request->opi);
                     $opi = Opi_M::where('nama', '=', $opis[$i])->first();
                 } else {
-                    $opi = Opi_M::where('kontrak_m_id', '=', $id[$i])->first();
+                    $opi = Opi_M::where('nama', '=', $request->opi)->first();
                 }
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
                 $kontrakm = Kontrak_M::where('id', '=', $id)->first();
