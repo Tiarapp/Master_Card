@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\CommonMark\Node\Block\TightBlockInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -457,6 +458,7 @@ class OpiController extends Controller
             
             // Update OPI data
             $opi->jumlahOrder = $request->jumlahOrder;
+            $opi->tglKirimDt = $request->tglKirimDt;
             $opi->lastUpdatedBy = Auth::user()->name;
             $opi->save();
 
