@@ -193,6 +193,28 @@ class Opi_M extends Model
         ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id');
     }
 
+    // Optimized scope for CorrController - only essential fields
+    public function scopeOpi2Optimized($query)
+    {
+        return $query->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
+            ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
+            ->leftJoin('dt', 'dt_id', 'dt.id')
+            ->leftJoin('mc', 'kontrak_d.mc_id', 'mc.id')
+            ->select([
+                'opi_m.id',
+                'opi_m.NoOPI as noopi', 
+                'opi_m.jumlahOrder',
+                'opi_m.os_corr',
+                'opi_m.created_at',
+                'kontrak_m.customer_name as Cust',
+                'mc.namaBarang',
+                'mc.kode as mcKode'
+            ])
+            ->where('opi_m.status_opi', '!=', 'Cancel')
+            ->where('opi_m.status_opi', '!=', 'closed')
+            ->orderBy('opi_m.created_at', 'desc');
+    }
+
     public function kontrakm()
     {
         return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id', 'id');

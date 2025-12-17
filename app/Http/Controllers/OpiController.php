@@ -269,11 +269,92 @@ class OpiController extends Controller
 
     public function single($id)
     {
-        $data = Opi_M::opi2()
-            ->where('opi_m.id', '=', $id)
-            ->first();
+        $opis = Opi_M::with([
+            'kontrakm', 
+            'kontrakd', 
+            'mc.substanceproduksi.lineratas',
+            'mc.substanceproduksi.flute1', 
+            'mc.substanceproduksi.linertengah',
+            'mc.substanceproduksi.flute2',
+            'mc.substanceproduksi.linerbawah',
+            'dt'
+        ])->findOrFail($id);
         
-        echo (json_encode($data));
+        return response()->json($opis);
+    }
+
+    public function jsonPaginated(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $perPage = 20;
+        $search = $request->input('search', '');
+        
+        $query = Opi_M::opi()
+            ->where('NoOPI', 'NOT LIKE', "%CANCEL%")
+            ->where('status_opi', '=', "Proses")
+            ->where('periode', '=', '2025');
+        
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('kontrak_m.customer_name', 'LIKE', "%{$search}%")
+                  ->orWhere('kontrak_m.poCustomer', 'LIKE', "%{$search}%")
+                  ->orWhere('kontrak_m.kode', 'LIKE', "%{$search}%")
+                  ->orWhere('NoOPI', 'LIKE', "%{$search}%")
+                  ->orWhere('mc.kode', 'LIKE', "%{$search}%")
+                  ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        // Get total count for pagination
+        $totalRecords = $query->count();
+        
+        // Get paginated data
+        $opis = $query->offset(($page - 1) * $perPage)
+                     ->limit($perPage)
+                     ->orderBy('NoOPI', 'desc')
+                     ->get();
+        
+        // Format data for response
+        $data = [];
+        foreach ($opis as $opi) {
+            $nestedData = [];
+            $nestedData['id'] = $opi->id;
+            $nestedData['NoOPI'] = $opi->NoOPI;
+            $nestedData['Cust'] = $opi->Cust;
+            $nestedData['namaBarang'] = $opi->namaBarang;
+            $nestedData['jumlahOrder'] = $opi->jumlahOrder;
+            $nestedData['tipeBox'] = $opi->tipeBox;
+            $nestedData['flute'] = $opi->flute;
+            $nestedData['panjangSheet'] = $opi->panjangSheet;
+            $nestedData['lebarSheet'] = $opi->lebarSheet;
+            $nestedData['outConv'] = $opi->outConv;
+            $nestedData['gram'] = $opi->gramProd;
+            $nestedData['status_opi'] = $opi->status_opi;
+            $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+            
+            // Handle MC code with revision
+            if ($opi->revisimc == '' || $opi->revisimc == "R0") {
+                $nestedData['kode'] = $opi->mcKode;
+            } else {
+                $nestedData['kode'] = $opi->mcKode . '-' . $opi->revisimc;
+            }
+            
+            $data[] = $nestedData;
+        }
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+            'pagination' => [
+                'current_page' => (int)$page,
+                'per_page' => $perPage,
+                'total' => $totalRecords,
+                'total_pages' => ceil($totalRecords / $perPage),
+                'from' => (($page - 1) * $perPage) + 1,
+                'to' => min($page * $perPage, $totalRecords)
+            ]
+        ]);
     }
     
     public function index(Request $request)
