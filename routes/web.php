@@ -52,6 +52,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+// Test route for OPI without auth middleware
+Route::get('/test-opi-data', 'OpiController@jsonPaginated');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -353,6 +356,9 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
     Route::post('opijson', 'OpiController@json')->name('opi.json');
     Route::get('/admin/opi/json-paginated', 'OpiController@jsonPaginated')->name('opi.json.paginated');
+    Route::get('/test-opi', function() {
+        return response()->json(['status' => 'OPI test route working', 'timestamp' => now()]);
+    });
     Route::post('/admin/opi/store', 'OpiController@store')->name('opi.store');
     Route::get('/admin/opi/edit/{id}', 'OpiController@edit')->name('opi.edit');
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');

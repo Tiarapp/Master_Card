@@ -158,14 +158,14 @@ class OpiController extends Controller
                 $nestedData['NoOPI'] = $opi->NoOPI;
                 $nestedData['poCustomer'] = $opi->poCustomer;
 
-                if ($opi->revisimc == '') {
+                if ($opi->revisi == '') {
                     $mc = $opi->mcKode;
-                } else if ($opi->revisimc == "R0") {
+                } else if ($opi->revisi == "R0") {
                     $mc = $opi->mcKode;
                 } else {
-                    $mc = $opi->mcKode.'-'.$opi->revisimc;
+                    $mc = $opi->mcKode.'-'.$opi->revisi;
                 }
-                // $mc = ($opi->revisimc != '' ? $opi->mcKode.'-'.$opi->revisimc : $opi->mcKode );
+                // $mc = ($opi->revisi != '' ? $opi->mcKode.'-'.$opi->revisi : $opi->mcKode );
 
                 $nestedData['nomc'] = $mc;
 
@@ -285,76 +285,116 @@ class OpiController extends Controller
 
     public function jsonPaginated(Request $request)
     {
-        $page = $request->input('page', 1);
-        $perPage = 20;
-        $search = $request->input('search', '');
-        
-        $query = Opi_M::opi()
-            ->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-            ->where('status_opi', '=', "Proses")
-            ->where('periode', '=', '2025');
-        
-        // Apply search filter if provided
-        if (!empty($search)) {
-            $query->where(function($q) use ($search) {
-                $q->where('kontrak_m.customer_name', 'LIKE', "%{$search}%")
-                  ->orWhere('kontrak_m.poCustomer', 'LIKE', "%{$search}%")
-                  ->orWhere('kontrak_m.kode', 'LIKE', "%{$search}%")
-                  ->orWhere('NoOPI', 'LIKE', "%{$search}%")
-                  ->orWhere('mc.kode', 'LIKE', "%{$search}%")
-                  ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
-            });
-        }
-        
-        // Get total count for pagination
-        $totalRecords = $query->count();
-        
-        // Get paginated data
-        $opis = $query->offset(($page - 1) * $perPage)
-                     ->limit($perPage)
-                     ->orderBy('NoOPI', 'desc')
-                     ->get();
-        
-        // Format data for response
-        $data = [];
-        foreach ($opis as $opi) {
-            $nestedData = [];
-            $nestedData['id'] = $opi->id;
-            $nestedData['NoOPI'] = $opi->NoOPI;
-            $nestedData['Cust'] = $opi->Cust;
-            $nestedData['namaBarang'] = $opi->namaBarang;
-            $nestedData['jumlahOrder'] = $opi->jumlahOrder;
-            $nestedData['tipeBox'] = $opi->tipeBox;
-            $nestedData['flute'] = $opi->flute;
-            $nestedData['panjangSheet'] = $opi->panjangSheet;
-            $nestedData['lebarSheet'] = $opi->lebarSheet;
-            $nestedData['outConv'] = $opi->outConv;
-            $nestedData['gram'] = $opi->gramProd;
-            $nestedData['status_opi'] = $opi->status_opi;
-            $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+        try {
+            $page = $request->input('page', 1);
+            $perPage = 20;
+            $search = $request->input('search', '');
             
-            // Handle MC code with revision
-            if ($opi->revisimc == '' || $opi->revisimc == "R0") {
-                $nestedData['kode'] = $opi->mcKode;
-            } else {
-                $nestedData['kode'] = $opi->mcKode . '-' . $opi->revisimc;
+            // Use simple query instead of heavy opi() scope to avoid connection reset
+            $query = Opi_M::select([
+                    'opi_m.id',
+                    'opi_m.NoOPI', 
+                    'opi_m.jumlahOrder',
+                    'opi_m.status_opi',
+                    'opi_m.tglKirimDt',
+                    'kontrak_m.customer_name as Cust',
+                    'kontrak_m.poCustomer',
+                    'kontrak_m.kode as kontrakKode',
+                    'mc.kode as mcKode',
+                    'mc.namaBarang',
+                    'mc.tipeBox',
+                    'mc.flute',
+                    'mc.panjangSheet',
+                    'mc.lebarSheet', 
+                    'mc.outConv',
+                    'mc.gramSheetCorrProduksi as gramProd',
+                    'mc.revisi'
+                ])
+                ->leftJoin('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
+                ->leftJoin('kontrak_m', 'opi_m.kontrak_m_id', '=', 'kontrak_m.id')
+                ->leftJoin('mc', 'kontrak_d.mc_id', '=', 'mc.id')
+                ->where('opi_m.NoOPI', 'NOT LIKE', "%CANCEL%")
+                ->where('opi_m.status_opi', '=', "Proses");
+        
+            // Apply search filter if provided
+            if (!empty($search)) {
+                $query->where(function($q) use ($search) {
+                    $q->where('kontrak_m.customer_name', 'LIKE', "%{$search}%")
+                      ->orWhere('kontrak_m.poCustomer', 'LIKE', "%{$search}%")
+                      ->orWhere('kontrak_m.kode', 'LIKE', "%{$search}%")
+                      ->orWhere('opi_m.NoOPI', 'LIKE', "%{$search}%")
+                      ->orWhere('mc.kode', 'LIKE', "%{$search}%")
+                      ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
+                });
             }
             
-            $data[] = $nestedData;
+            // Get total count for pagination
+            $totalRecords = $query->count();
+            
+            // Get paginated data
+            $opis = $query->offset(($page - 1) * $perPage)
+                         ->limit($perPage)
+                         ->orderBy('opi_m.id', 'desc')
+                         ->get();
+            
+            // Format data for response
+            $data = [];
+            foreach ($opis as $opi) {
+                $nestedData = [];
+                $nestedData['id'] = $opi->id;
+                $nestedData['NoOPI'] = $opi->NoOPI;
+                $nestedData['Cust'] = $opi->Cust;
+                $nestedData['namaBarang'] = $opi->namaBarang;
+                $nestedData['jumlahOrder'] = $opi->jumlahOrder;
+                $nestedData['tipeBox'] = $opi->tipeBox;
+                $nestedData['flute'] = $opi->flute;
+                $nestedData['panjangSheet'] = $opi->panjangSheet;
+                $nestedData['lebarSheet'] = $opi->lebarSheet;
+                $nestedData['outConv'] = $opi->outConv;
+                $nestedData['gram'] = $opi->gramProd;
+                $nestedData['status_opi'] = $opi->status_opi;
+                $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+                
+                // Handle MC code with revision
+                if ($opi->revisi == '' || $opi->revisi == "R0") {
+                    $nestedData['kode'] = $opi->mcKode ?? 'N/A';
+                } else {
+                    $nestedData['kode'] = ($opi->mcKode ?? 'N/A') . '-' . $opi->revisi;
+                }
+                
+                $data[] = $nestedData;
+            }
+            
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'pagination' => [
+                    'current_page' => (int)$page,
+                    'per_page' => $perPage,
+                    'total' => $totalRecords,
+                    'total_pages' => ceil($totalRecords / $perPage),
+                    'from' => (($page - 1) * $perPage) + 1,
+                    'to' => min($page * $perPage, $totalRecords)
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in OPI jsonPaginated: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memuat data OPI: ' . $e->getMessage(),
+                'data' => [],
+                'pagination' => [
+                    'current_page' => 1,
+                    'per_page' => 20,
+                    'total' => 0,
+                    'total_pages' => 0,
+                    'from' => 0,
+                    'to' => 0
+                ]
+            ], 500);
         }
-        
-        return response()->json([
-            'success' => true,
-            'data' => $data,
-            'pagination' => [
-                'current_page' => (int)$page,
-                'per_page' => $perPage,
-                'total' => $totalRecords,
-                'total_pages' => ceil($totalRecords / $perPage),
-                'from' => (($page - 1) * $perPage) + 1,
-                'to' => min($page * $perPage, $totalRecords)
-            ]
-        ]);
     }
     
     public function index(Request $request)
