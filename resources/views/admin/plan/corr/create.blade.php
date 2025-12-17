@@ -40,15 +40,12 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .selected-opis-table {
-        overflow-x: scroll !important;
-        overflow-y: hidden;
+        overflow-x: auto;
         min-width: 100%;
         border: 1px solid #dee2e6;
         border-radius: 0.25rem;
         margin-top: 15px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        scrollbar-width: thin;
-        scrollbar-color: #007bff #f1f1f1;
     }
     .selected-opis-table table {
         min-width: 3600px;
@@ -187,107 +184,20 @@
         }
     }
     
-    /* Scrollbar styling untuk Webkit browsers (Chrome, Safari, Edge) */
+    /* Scrollbar styling */
     .selected-opis-table::-webkit-scrollbar {
-        height: 12px;
-        width: 12px;
+        height: 8px;
     }
     .selected-opis-table::-webkit-scrollbar-track {
-        background: #f8f9fa;
-        border-radius: 6px;
-        border: 1px solid #e9ecef;
+        background: #f1f1f1;
+        border-radius: 4px;
     }
     .selected-opis-table::-webkit-scrollbar-thumb {
         background: linear-gradient(45deg, #007bff, #0056b3);
-        border-radius: 6px;
-        border: 2px solid #f8f9fa;
-        min-height: 20px;
+        border-radius: 4px;
     }
     .selected-opis-table::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(45deg, #0056b3, #004085);
-        cursor: pointer;
-    }
-    .selected-opis-table::-webkit-scrollbar-corner {
-        background: #f8f9fa;
-    }
-    
-    /* Fallback untuk Firefox */
-    @-moz-document url-prefix() {
-        .selected-opis-table {
-            scrollbar-width: thick;
-            scrollbar-color: #007bff #f8f9fa;
-        }
-    }
-    
-    /* Tambahan styling untuk memastikan scrollbar terlihat */
-    .table-scroll-container {
-        position: relative;
-        padding-bottom: 15px;
-    }
-    
-    /* Indikator scroll untuk user */
-    .selected-opis-table::after {
-        content: "↔ Scroll horizontal untuk melihat semua kolom (Shift + Mouse Wheel)";
-        position: absolute;
-        bottom: -30px;
-        right: 0;
-        font-size: 11px;
-        color: #6c757d;
-        font-style: italic;
-        pointer-events: none;
-    }
-    
-    /* Visual indicators untuk scroll position */
-    .selected-opis-table.scroll-start::before {
-        content: "→";
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        font-size: 20px;
-        color: #007bff;
-        font-weight: bold;
-        z-index: 1000;
-        animation: pulseRight 2s infinite;
-        pointer-events: none;
-    }
-    
-    .selected-opis-table.scroll-end::before {
-        content: "←";
-        position: absolute;
-        top: 50%;
-        left: 10px;
-        transform: translateY(-50%);
-        font-size: 20px;
-        color: #007bff;
-        font-weight: bold;
-        z-index: 1000;
-        animation: pulseLeft 2s infinite;
-        pointer-events: none;
-    }
-    
-    .selected-opis-table.scroll-middle::before {
-        content: "↔";
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        font-size: 16px;
-        color: #28a745;
-        font-weight: bold;
-        z-index: 1000;
-        opacity: 0.7;
-        pointer-events: none;
-    }
-    
-    @keyframes pulseRight {
-        0%, 100% { opacity: 0.5; transform: translateY(-50%) translateX(0); }
-        50% { opacity: 1; transform: translateY(-50%) translateX(5px); }
-    }
-    
-    @keyframes pulseLeft {
-        0%, 100% { opacity: 0.5; transform: translateY(-50%) translateX(0); }
-        50% { opacity: 1; transform: translateY(-50%) translateX(-5px); }
     }
 </style>
 
@@ -395,9 +305,8 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <h5><i class="fas fa-list"></i> Daftar Item Planning</h5>
-                                <div class="table-scroll-container">
-                                    <div class="selected-opis-table">
-                                        <table class="table table-bordered table-striped table-nowrap" id="planningTable" style="display: none;">
+                                <div class="table-responsive mt-3" style="overflow-x: auto;">
+                                    <table class="table table-bordered table-striped table-nowrap" id="planningTable" style="display: none; min-width: 2000px;">
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th style="min-width: 80px;">No</th>
@@ -441,8 +350,7 @@
                                         <tbody id="planningTableBody">
                                             <!-- Planning items will be added here -->
                                         </tbody>
-                                        </table>
-                                    </div>
+                                    </table>
                                 </div>
                                 <div id="noPlanningMessage" class="text-center py-4">
                                     <i class="fas fa-inbox fa-3x text-muted"></i>
@@ -1240,9 +1148,6 @@ $(document).ready(function(){
         $('#noPlanningMessage').hide();
         $('#planningTable').show();
         
-        // Initialize scroll indicators
-        initializeScrollIndicators();
-        
         // Auto calculate if basic data exists
         setTimeout(function() {
             const outCorr = parseFloat($(`input[name="outCorr[${itemCounter}]"]`).val());
@@ -1462,73 +1367,6 @@ function removePlanItem(itemId) {
         
         if (typeof toastr !== 'undefined') {
             toastr.info('Item planning dihapus. OPI dapat dipilih kembali.');
-        }
-    }
-
-    // Function to initialize scroll indicators
-    function initializeScrollIndicators() {
-        const scrollContainer = $('.selected-opis-table');
-        
-        if (scrollContainer.length) {
-            // Check if content is wider than container
-            const table = scrollContainer.find('table');
-            const containerWidth = scrollContainer.width();
-            const tableWidth = table.outerWidth();
-            
-            if (tableWidth > containerWidth) {
-                // Add scroll event handlers
-                scrollContainer.off('scroll.scrollIndicator').on('scroll.scrollIndicator', function() {
-                    const scrollLeft = $(this).scrollLeft();
-                    const maxScroll = tableWidth - containerWidth;
-                    const scrollPercentage = (scrollLeft / maxScroll) * 100;
-                    
-                    // Update scroll position indicator if exists
-                    updateScrollPosition(scrollPercentage, scrollLeft, maxScroll);
-                });
-                
-                // Add mouse wheel support for horizontal scroll
-                scrollContainer.off('wheel.horizontalScroll').on('wheel.horizontalScroll', function(e) {
-                    if (e.shiftKey || Math.abs(e.originalEvent.deltaX) > Math.abs(e.originalEvent.deltaY)) {
-                        e.preventDefault();
-                        const delta = e.originalEvent.deltaX || e.originalEvent.deltaY;
-                        $(this).scrollLeft($(this).scrollLeft() + delta);
-                    }
-                });
-                
-                // Show initial scroll hint
-                showScrollHint();
-            }
-        }
-    }
-    
-    // Function to show scroll hint for first-time users
-    function showScrollHint() {
-        const hintShown = localStorage.getItem('planningTableScrollHintShown');
-        if (!hintShown) {
-            setTimeout(function() {
-                if (typeof toastr !== 'undefined') {
-                    toastr.info('💡 Gunakan Shift + Mouse Wheel atau drag scrollbar untuk scroll horizontal', 'Tips Navigasi', {
-                        timeOut: 5000,
-                        positionClass: 'toast-bottom-right'
-                    });
-                }
-                localStorage.setItem('planningTableScrollHintShown', 'true');
-            }, 1000);
-        }
-    }
-    
-    // Function to update scroll position
-    function updateScrollPosition(percentage, scrollLeft, maxScroll) {
-        // This can be enhanced with visual indicators if needed
-        const scrollContainer = $('.selected-opis-table');
-        
-        // Add visual feedback for scroll position
-        if (scrollLeft === 0) {
-            scrollContainer.addClass('scroll-start').removeClass('scroll-middle scroll-end');
-        } else if (scrollLeft >= maxScroll - 10) {
-            scrollContainer.addClass('scroll-end').removeClass('scroll-start scroll-middle');
-        } else {
-            scrollContainer.addClass('scroll-middle').removeClass('scroll-start scroll-end');
         }
     }
 }
