@@ -1236,7 +1236,7 @@ $(document).ready(function(){
             flute2 = 0;
         } else if(flute == 'CF'){
             flute1 = 0;
-            flute2 = 1.36;
+            flute2 = 1.46;
         } else if (flute == 'BCF') {
             flute1 = 1.36;
             flute2 = 1.46;  
