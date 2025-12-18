@@ -838,8 +838,11 @@ $(document).ready(function(){
         
         // Calculate toleransi based on tipe box
         let toleransi = 0;
-        if (opiData.mc?.tipeBox === 'DC') toleransi = 2;
-        else if (opiData.mc?.tipeBox === 'B1') toleransi = 5;
+        if (opiData.mc?.tipeBox === 'B1') {
+            toleransi = 1;
+        } else {
+            toleransi = 0;
+        }
         
         // Get paper data from OPI using eager loaded relations
         const kertasAtas = opiData.mc?.substanceproduksi?.lineratas?.jenisKertasMc || '';
