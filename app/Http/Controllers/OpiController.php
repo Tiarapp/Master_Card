@@ -289,6 +289,12 @@ class OpiController extends Controller
             $page = $request->input('page', 1);
             $perPage = 20;
             $search = $request->input('search', '');
+            $plan_corr = $request->input('plan_corr', null);
+            
+            // Convert string "0" to integer 0
+            if ($plan_corr === "0") {
+                $plan_corr = 0;
+            }
             
             // Use simple query instead of heavy opi() scope to avoid connection reset
             $query = Opi_M::select([
@@ -315,6 +321,13 @@ class OpiController extends Controller
                 ->leftJoin('mc', 'kontrak_d.mc_id', '=', 'mc.id')
                 ->where('opi_m.NoOPI', 'NOT LIKE', "%CANCEL%")
                 ->where('opi_m.status_opi', '=', "Proses");
+                
+            // Add plan_corr filter conditionally
+            if ($plan_corr !== null) {
+                $query->where('opi_m.plan_corr', '=', $plan_corr);
+            } else {
+                $query->whereNull('opi_m.plan_corr');
+            }
         
             // Apply search filter if provided
             if (!empty($search)) {

@@ -443,7 +443,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('indexcorr') }}" class="nav-link">
+                  <a href="{{ route('admin.corrplan.index') }}" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Plan Corrugating</p>
                   </a>
@@ -454,11 +454,11 @@
                     <p>Plan Converting</p>
                   </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                   <a href="{{ route('hasilcorr') }}" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Control</p>
-                  </a>
+                  </a> --}}
                 </li>
                 <li class="nav-item">
                   <a href="{{ route('ppic.karet') }}" class="nav-link">

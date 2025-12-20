@@ -36,4 +36,9 @@ class CorrMaster extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function details()
+    {
+        return $this->hasMany(CorrDetail::class, 'corr_master_id');
+    }
 }

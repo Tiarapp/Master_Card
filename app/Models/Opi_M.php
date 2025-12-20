@@ -31,7 +31,8 @@ class Opi_M extends Model
         'os_fin',
         'sisa_order',
         'status_opi',
-        'tol_corr'
+        'tol_corr',
+        'plan_corr'
     ];
 
     public function scopeOpi2($query)

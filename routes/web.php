@@ -19,6 +19,7 @@ use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
+use App\Http\Controllers\CorrugatedController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\ProfileController;
@@ -341,6 +342,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
     Route::get('/admin/kontrak/export', 'Kontrak_DController@exportExcel')->name('kontrak.export');
+    Route::get('/admin/kontrakall', 'Kontrak_DController@get_all_kontrak')->name('kontrak.all');
+    Route::get('/admin/single/{id}', 'Kontrak_DController@single')->name('kontrak.single');
 
     Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
 
@@ -451,21 +454,11 @@ Route::middleware(['auth'])->group(function (){
     });
 
     //PLAN
-    Route::get('/admin/plan/corr', 'CorrugatedController@index')->middleware(['auth'])->name('indexcorr');
-    Route::get('/admin/plan/create', 'CorrugatedController@create')->middleware(['auth'])->name('createcorr');
-    // Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
-    // Route::get('/admin/plan/corrmhasil', 'CorrController@corrm_hasil')->middleware(['auth'])->name('corrm.hasil');
-    // // Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
-    // Route::get('/admin/plan/corr/newcreate', 'CorrController@create2')->name('corr.create2');
-    // Route::post('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
-    // // Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
-    // Route::post('/admin/plan/corr/newstore', 'CorrController@new_store')->name('corr.newstore');
-    // // Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
-    // Route::get('/admin/plan/corr/newedit/{id}', 'CorrController@new_edit')->name('corr.edit');
-    // Route::put('/admin/plan/corr/newupdate/{id}', 'CorrController@new_update')->name('corr.newupdate');
-    // // Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
-    // Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
-    // Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
+    Route::get('/admin/plan/corr', 'CorrugatedController@index')->middleware(['auth'])->name('admin.corrplan.index');
+    Route::get('/admin/plan/create', 'CorrugatedController@create')->middleware(['auth'])->name('admin.corrplan.create');
+    Route::post('/admin/plan/corr/store', 'CorrugatedController@store')->middleware(['auth'])->name('admin.corrplan.store');
+    Route::get('/admin/plan/corr/{id}/edit', 'CorrugatedController@edit')->middleware(['auth'])->name('admin.corrplan.edit');
+    Route::put('/admin/plan/corr/{id}', 'CorrugatedController@update')->middleware(['auth'])->name('admin.corrplan.update');
 
     
     Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');
@@ -482,7 +475,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
 
     //Hasil Produksi
-    Route::get('/admin/plan/control', 'CorrController@control')->middleware(['auth'])->name('hasilcorr');
+    // Route::get('/admin/plan/control', 'CorrController@control')->middleware(['auth'])->name('hasilcorr');
     Route::get('/admin/produksi/datacorr', 'HasilProduksiController@plan_corr')->middleware(['auth'])->name('plan_corr');
     Route::get('/admin/produksi/hasilcorr', 'HasilProduksiController@index_corr')->middleware(['auth'])->name('index_corr');
     Route::get('/admin/produksi/convd_flexo', 'HasilProduksiController@convd_flexo')->middleware(['auth'])->name('convd.flexo');
@@ -492,7 +485,7 @@ Route::middleware(['auth'])->group(function (){
     // Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
     // Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
     Route::post('/admin/produksi/hasil', 'HasilProduksiController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
-    Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
+    // Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
 
     //Produksi
     Route::get('/admin/produksi/index',     'LaporanProduksiController@index')->name('lap.produksi');

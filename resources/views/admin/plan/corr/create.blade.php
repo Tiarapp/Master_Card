@@ -211,7 +211,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('indexcorr') }}">Plan Corrugating</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.corrplan.index') }}">Plan Corrugating</a></li>
                         <li class="breadcrumb-item active">Create</li>
                     </ol>
                 </div>
@@ -227,7 +227,7 @@
                         <i class="fas fa-plus"></i> Buat Planning Corrugating Baru
                     </h3>
                 </div>
-                <form action="#" method="POST" id="corrugatingForm">
+                <form action="{{ route('admin.corrplan.store') }}" method="POST" id="corrugatingForm">
                     @csrf
                     <div class="card-body">
                         @if ($errors->any())
@@ -260,9 +260,9 @@
                                     <label>Shift</label>
                                     <select class="form-control" name="shift" id="shift" required>
                                         <option value="">Pilih Shift</option>
-                                        <option value="1">Shift 1</option>
-                                        <option value="2">Shift 2</option>
-                                        <option value="3">Shift 3</option>
+                                        <option value="A">Shift A</option>
+                                        <option value="B">Shift B</option>
+                                        <option value="C">Shift C</option>
                                     </select>
                                 </div>
                             </div>
@@ -370,7 +370,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Simpan Planning
                                 </button>
-                                <a href="{{ route('indexcorr') }}" class="btn btn-secondary">
+                                <a href="{{ route('admin.corrplan.index') }}" class="btn btn-secondary">
                                     <i class="fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
@@ -627,7 +627,8 @@ $(document).ready(function(){
             method: 'GET',
             data: {
                 page: page,
-                search: search
+                search: search,
+                plan_corr: 0  // Only show OPI that haven't been planned for corrugated
             },
             dataType: 'json',
             success: function(response) {
@@ -862,105 +863,107 @@ $(document).ready(function(){
         const tableRow = `
             <tr id="planRow${itemCounter}" data-opi-id="${opiData.id}">
                 <td>
-                    <input type="number" class="form-control form-control-sm" name="urutan[${itemCounter}]" value="${itemCounter}" required>
+                    <input type="hidden" name="opi_id[]" value="${opiData.id}">
+                    <input type="hidden" name="mc_id[]" value="${opiData.mc?.id || ''}">
+                    <input type="number" class="form-control form-control-sm" name="urutan[]" value="${itemCounter}" required>
                 </td>
                 <td>${opiData.NoOPI || '-'}</td>
                 <td>
-                    <input type="date" class="form-control form-control-sm" name="dt[${itemCounter}]" value="${opiData.dt?.tglKirimDt || ''}">
+                    <input type="date" class="form-control form-control-sm" name="dt[]" value="${opiData.dt?.tglKirimDt || ''}">
                 </td>
                 <td>
-                    <input type="date" class="form-control form-control-sm" name="dtperubahan[${itemCounter}]">
+                    <input type="date" class="form-control form-control-sm" name="dtperubahan[]">
                 </td>
                 <td title="${opiData.kontrakm?.customer_name || '-'}">${opiData.kontrakm?.customer_name || '-'}</td>
                 <td title="${opiData.mc?.namaBarang || '-'}">${opiData.mc?.namaBarang || '-'}</td>
                 <td>${opiData.mc?.kode || '-'}</td>
                 <td>
-                    <input type="number" class="form-control form-control-sm" name="sheetp[${itemCounter}]" value="${opiData.mc?.panjangSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
+                    <input type="number" class="form-control form-control-sm" name="sheetp[]" value="${opiData.mc?.panjangSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
                     <span class="mx-1">×</span>
-                    <input type="number" class="form-control form-control-sm" name="sheetl[${itemCounter}]" value="${opiData.mc?.lebarSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
+                    <input type="number" class="form-control form-control-sm" name="sheetl[]" value="${opiData.mc?.lebarSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="tipebox[${itemCounter}]" value="${opiData.mc?.tipeBox || ''}" style="width:60px;display:inline-block;">
+                    <input type="text" class="form-control form-control-sm" name="tipebox[]" value="${opiData.mc?.tipeBox || ''}" style="width:60px;display:inline-block;">
                     <span class="mx-1">/</span>
-                    <input type="text" class="form-control form-control-sm" name="flute[${itemCounter}]" value="${opiData.mc?.flute || ''}" style="width:60px;display:inline-block;">
+                    <input type="text" class="form-control form-control-sm" name="flute[]" value="${opiData.mc?.flute || ''}" style="width:60px;display:inline-block;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm order-input" name="order[${itemCounter}]" value="${opiData.jumlahOrder || ''}">
+                    <input type="number" class="form-control form-control-sm order-input" name="order[]" value="${opiData.jumlahOrder || ''}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm outcorr-input" name="outCorr[${itemCounter}]" required>
+                    <input type="number" class="form-control form-control-sm outcorr-input" name="outCorr[]" required>
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm outflexo-input" name="outFlexo[${itemCounter}]" value="${opiData.mc?.outConv || ''}" required>
+                    <input type="number" class="form-control form-control-sm outflexo-input" name="outFlexo[]" value="${opiData.mc?.outConv || ''}" required>
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[${itemCounter}]" value="${toleransi}" step="0.1">
+                    <input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[]" value="${toleransi}" step="0.1">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm beratsheet-input" name="beratSheet[${itemCounter}]" value="${opiData.mc?.gramSheetBoxProduksi || ''}" step="0.01">
+                    <input type="number" class="form-control form-control-sm beratsheet-input" name="beratSheet[]" value="${opiData.mc?.gramSheetBoxProduksi || ''}" step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm roll-result" name="roll[${itemCounter}]" readonly>
+                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]" readonly>
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm plan-result" name="plan[${itemCounter}]" readonly step="0.01">
+                    <input type="number" class="form-control form-control-sm plan-result" name="plan[]" readonly step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm trim-result" name="trim[${itemCounter}]" readonly step="0.01">
+                    <input type="number" class="form-control form-control-sm trim-result" name="trim[]" readonly step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm cop-result" name="cop[${itemCounter}]" readonly step="0.01">
+                    <input type="number" class="form-control form-control-sm cop-result" name="cop[]" readonly step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm rmorder-result" name="rmorder[${itemCounter}]" readonly>
+                    <input type="number" class="form-control form-control-sm rmorder-result" name="rmorder[]" readonly>
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="jenisAtas[${itemCounter}]" value="${getJenisKertas(opiData, 'lineratas')}" readonly style="background: #d4edda; border-color: #28a745; font-size: 10px;" title="${getJenisKertas(opiData, 'lineratas')}">
+                    <input type="text" class="form-control form-control-sm" name="jenisAtas[]" value="${getJenisKertas(opiData, 'lineratas')}" readonly style="background: #d4edda; border-color: #28a745; font-size: 10px;" title="${getJenisKertas(opiData, 'lineratas')}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm gramatas-input" name="gramAtas[${itemCounter}]" value="${getGramKertas(opiData, 'lineratas')}" step="1" style="width: 60px; background: #d4edda; border-color: #28a745;">
+                    <input type="number" class="form-control form-control-sm gramatas-input" name="gramAtas[]" value="${getGramKertas(opiData, 'lineratas')}" step="1" style="width: 60px; background: #d4edda; border-color: #28a745;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanAtas[${itemCounter}]" readonly style="background: #d4edda; border-color: #28a745; font-weight: bold;">
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanAtas[]" readonly style="background: #d4edda; border-color: #28a745; font-weight: bold;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="jenisFlute1[${itemCounter}]" value="${getJenisKertas(opiData, 'flute1')}" readonly style="background: #ffeaa7; border-color: #fd7e14; font-size: 10px;" title="${getJenisKertas(opiData, 'flute1')}">
+                    <input type="text" class="form-control form-control-sm" name="jenisFlute1[]" value="${getJenisKertas(opiData, 'flute1')}" readonly style="background: #ffeaa7; border-color: #fd7e14; font-size: 10px;" title="${getJenisKertas(opiData, 'flute1')}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm gramflute1-input" name="gramFlute1[${itemCounter}]" value="${getGramKertas(opiData, 'flute1')}" step="1" style="width: 60px; background: #ffeaa7; border-color: #fd7e14;">
+                    <input type="number" class="form-control form-control-sm gramflute1-input" name="gramFlute1[]" value="${getGramKertas(opiData, 'flute1')}" step="1" style="width: 60px; background: #ffeaa7; border-color: #fd7e14;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute1[${itemCounter}]" readonly style="background: #ffeaa7; border-color: #fd7e14; font-weight: bold;">
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute1[]" readonly style="background: #ffeaa7; border-color: #fd7e14; font-weight: bold;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="jenisTengah[${itemCounter}]" value="${getJenisKertas(opiData, 'linertengah')}" readonly style="background: #d1ecf1; border-color: #20c997; font-size: 10px;" title="${getJenisKertas(opiData, 'linertengah')}">
+                    <input type="text" class="form-control form-control-sm" name="jenisTengah[]" value="${getJenisKertas(opiData, 'linertengah')}" readonly style="background: #d1ecf1; border-color: #20c997; font-size: 10px;" title="${getJenisKertas(opiData, 'linertengah')}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm gramtengah-input" name="gramTengah[${itemCounter}]" value="${getGramKertas(opiData, 'linertengah')}" step="1" style="width: 60px; background: #d1ecf1; border-color: #20c997;">
+                    <input type="number" class="form-control form-control-sm gramtengah-input" name="gramTengah[]" value="${getGramKertas(opiData, 'linertengah')}" step="1" style="width: 60px; background: #d1ecf1; border-color: #20c997;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanTengah[${itemCounter}]" readonly style="background: #d1ecf1; border-color: #20c997; font-weight: bold;">
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanTengah[]" readonly style="background: #d1ecf1; border-color: #20c997; font-weight: bold;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="jenisFlute2[${itemCounter}]" value="${getJenisKertas(opiData, 'flute2')}" readonly style="background: #f3e2f3; border-color: #e83e8c; font-size: 10px;" title="${getJenisKertas(opiData, 'flute2')}">
+                    <input type="text" class="form-control form-control-sm" name="jenisFlute2[]" value="${getJenisKertas(opiData, 'flute2')}" readonly style="background: #f3e2f3; border-color: #e83e8c; font-size: 10px;" title="${getJenisKertas(opiData, 'flute2')}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm gramflute2-input" name="gramFlute2[${itemCounter}]" value="${getGramKertas(opiData, 'flute2')}" step="1" style="width: 60px; background: #f3e2f3; border-color: #e83e8c;">
+                    <input type="number" class="form-control form-control-sm gramflute2-input" name="gramFlute2[]" value="${getGramKertas(opiData, 'flute2')}" step="1" style="width: 60px; background: #f3e2f3; border-color: #e83e8c;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute2[${itemCounter}]" readonly style="background: #f3e2f3; border-color: #e83e8c; font-weight: bold;">
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute2[]" readonly style="background: #f3e2f3; border-color: #e83e8c; font-weight: bold;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="jenisBawah[${itemCounter}]" value="${getJenisKertas(opiData, 'linerbawah')}" readonly style="background: #e2d9f3; border-color: #6f42c1; font-size: 10px;" title="${getJenisKertas(opiData, 'linerbawah')}">
+                    <input type="text" class="form-control form-control-sm" name="jenisBawah[]" value="${getJenisKertas(opiData, 'linerbawah')}" readonly style="background: #e2d9f3; border-color: #6f42c1; font-size: 10px;" title="${getJenisKertas(opiData, 'linerbawah')}">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm grambawah-input" name="gramBawah[${itemCounter}]" value="${getGramKertas(opiData, 'linerbawah')}" step="1" style="width: 60px; background: #e2d9f3; border-color: #6f42c1;">
+                    <input type="number" class="form-control form-control-sm grambawah-input" name="gramBawah[]" value="${getGramKertas(opiData, 'linerbawah')}" step="1" style="width: 60px; background: #e2d9f3; border-color: #6f42c1;">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanBawah[${itemCounter}]" readonly style="background: #e2d9f3; border-color: #6f42c1; font-weight: bold;">
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanBawah[]" readonly style="background: #e2d9f3; border-color: #6f42c1; font-weight: bold;">
                 </td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" name="keterangan[${itemCounter}]" placeholder="Catatan">
+                    <input type="text" class="form-control form-control-sm" name="keterangan[]" placeholder="Catatan">
                 </td>
                 <td>
                     <div class="btn-group">
@@ -980,14 +983,7 @@ $(document).ready(function(){
             <div id="planDetail${itemCounter}" style="display: none;" class="mt-3 border p-3">
                 <h6><i class="fas fa-cog"></i> Detail & Kalkulasi - ${opiData.NoOPI}</h6>
                 
-                <!-- Hidden fields for form submission -->
-                <input type="hidden" name="urutan[${itemCounter}]" value="${itemCounter}">
-                <input type="hidden" name="noOpi[${itemCounter}]" value="${opiData.NoOPI || ''}">
-                <input type="hidden" name="opi_id[${itemCounter}]" value="${opiData.id || ''}">
-                <input type="hidden" name="dt[${itemCounter}]" value="${opiData.dt?.tglKirimDt || ''}">
-                <input type="hidden" name="customer[${itemCounter}]" value="${opiData.kontrakm?.customer_name || ''}">
-                <input type="hidden" name="item[${itemCounter}]" value="${opiData.mc?.namaBarang || ''}">
-                <input type="hidden" name="mc[${itemCounter}]" value="${opiData.mc?.kode || ''}">
+                <!-- Info fields - no longer needed as hidden fields since they're in table row -->
                 
                 <!-- Info Summary -->
                 <div class="row mb-3">
@@ -998,142 +994,11 @@ $(document).ready(function(){
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>DT Perubahan</label>
-                            <input type="date" class="form-control" name="dtperubahan[${itemCounter}]">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Berat/Pcs (g)</label>
-                            <input type="number" class="form-control beratsheet-input" name="beratSheet[${itemCounter}]" value="${opiData.mc?.gramSheetBoxProduksi || ''}" step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Keterangan</label>
-                            <input type="text" class="form-control" name="keterangan[${itemCounter}]" placeholder="Catatan tambahan">
-                        </div>
-                    </div>
-                </div>
+                <!-- Note: DT Perubahan, Berat Sheet, and Keterangan fields are managed in the main table -->
                 
-                <!-- Jenis Kertas dan Gram -->
-                <h6 class="text-primary mt-3"><i class="fas fa-layer-group"></i> Jenis Kertas & Gramasi</h6>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>K. Atas</label>
-                            <input type="text" class="form-control form-control-sm" name="kertasAtas[${itemCounter}]" value="${kertasAtas}" placeholder="Jenis kertas">
-                            <input type="number" class="form-control form-control-sm mt-1" name="gramAtas[${itemCounter}]" value="${gramAtas}" placeholder="Gram" step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>K. Flute1</label>
-                            <input type="text" class="form-control form-control-sm" name="kertasFlute1[${itemCounter}]" value="${kertasFlute1}" placeholder="Jenis kertas">
-                            <input type="number" class="form-control form-control-sm mt-1" name="gramFlute1[${itemCounter}]" value="${gramFlute1}" placeholder="Gram" step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>K. Tengah</label>
-                            <input type="text" class="form-control form-control-sm" name="kertasTengah[${itemCounter}]" value="${kertasTengah}" placeholder="Jenis kertas">
-                            <input type="number" class="form-control form-control-sm mt-1" name="gramTengah[${itemCounter}]" value="${gramTengah}" placeholder="Gram" step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>K. Flute2</label>
-                            <input type="text" class="form-control form-control-sm" name="kertasFlute2[${itemCounter}]" value="${kertasFlute2}" placeholder="Jenis kertas">
-                            <input type="number" class="form-control form-control-sm mt-1" name="gramFlute2[${itemCounter}]" value="${gramFlute2}" placeholder="Gram" step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>K. Bawah</label>
-                            <input type="text" class="form-control form-control-sm" name="kertasBawah[${itemCounter}]" value="${kertasBawah}" placeholder="Jenis kertas">
-                            <input type="number" class="form-control form-control-sm mt-1" name="gramBawah[${itemCounter}]" value="${gramBawah}" placeholder="Gram" step="0.01">
-                        </div>
-                    </div>
-                </div>
+                <!-- Note: Jenis Kertas, Gram, dan Kebutuhan Kertas data dikelola di tabel utama -->
                 
-                <!-- Kebutuhan Kertas -->
-                <h6 class="text-success mt-3"><i class="fas fa-calculator"></i> Kebutuhan Kertas (kg)</h6>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Kebutuhan Atas</label>
-                            <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanAtas[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Kebutuhan Flute1</label>
-                            <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute1[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Kebutuhan Tengah</label>
-                            <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanTengah[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Kebutuhan Flute2</label>
-                            <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute2[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Kebutuhan Bawah</label>
-                            <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanBawah[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Hasil Kalkulasi -->
-                <h6 class="text-info mt-3"><i class="fas fa-chart-line"></i> Hasil Kalkulasi</h6>
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Lebar Roll</label>
-                            <input type="number" class="form-control form-control-sm roll-result" name="roll[${itemCounter}]" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Plan</label>
-                            <input type="number" class="form-control form-control-sm plan-result" name="plan[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Trim</label>
-                            <input type="number" class="form-control form-control-sm trim-result" name="trim[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Cop</label>
-                            <input type="number" class="form-control form-control-sm cop-result" name="cop[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>RM Order</label>
-                            <input type="number" class="form-control form-control-sm rmorder-result" name="rmorder[${itemCounter}]" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Berat Order (kg)</label>
-                            <input type="number" class="form-control form-control-sm beratorder-result" name="beratOrder[${itemCounter}]" readonly step="0.01">
-                        </div>
-                    </div>
-                </div>
+                <!-- Note: Hasil Kalkulasi data dikelola di tabel utama -->
                 
                 <div class="mt-3">
                     <button type="button" class="btn btn-sm btn-secondary" onclick="hideDetails(${itemCounter})">
@@ -1153,7 +1018,8 @@ $(document).ready(function(){
         
         // Auto calculate if basic data exists
         setTimeout(function() {
-            const outCorr = parseFloat($(`input[name="outCorr[${itemCounter}]"]`).val());
+            const row = $(`#planRow${itemCounter}`);
+            const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
             if (outCorr && outCorr > 0) {
                 calculateItemRequirements(itemCounter);
             }
@@ -1162,25 +1028,25 @@ $(document).ready(function(){
 
     // Auto calculate when Out Corr or other key fields change
     $(document).on('input change', '.outcorr-input, .order-input, .toleransi-input, .outflexo-input, .beratsheet-input', function() {
-        // Get the item ID from the input name
-        const inputName = $(this).attr('name');
-        const itemId = inputName.match(/\[(\d+)\]/)[1];
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
         
         // Only calculate if Out Corr has value
-        const outCorr = parseFloat($(`input[name="outCorr[${itemId}]"]`).val());
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
             calculateItemRequirements(itemId);
         }
     });
 
     // Auto calculate when sheet dimensions change
-    $(document).on('input change', 'input[name^="sheetp["], input[name^="sheetl["], input[name^="tipebox["]', function() {
-        // Get the item ID from the input name
-        const inputName = $(this).attr('name');
-        const itemId = inputName.match(/\[(\d+)\]/)[1];
+    $(document).on('input change', 'input[name="sheetp[]"], input[name="sheetl[]"], input[name="tipebox[]"]', function() {
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
         
         // Only calculate if Out Corr has value
-        const outCorr = parseFloat($(`input[name="outCorr[${itemId}]"]`).val());
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
             calculateItemRequirements(itemId);
         }
@@ -1188,38 +1054,39 @@ $(document).ready(function(){
 
     // Auto calculate when gram inputs change (affects paper requirements)
     $(document).on('input change', '.gramatas-input, .gramflute1-input, .gramtengah-input, .gramflute2-input, .grambawah-input', function() {
-        // Get the item ID from the input name
-        const inputName = $(this).attr('name');
-        const itemId = inputName.match(/\[(\d+)\]/)[1];
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
         
         // Only calculate if Out Corr has value
-        const outCorr = parseFloat($(`input[name="outCorr[${itemId}]"]`).val());
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
             calculateItemRequirements(itemId);
         }
     });
 
     // Calculate requirements
-    $('#calculateBtn').on('click', function() {
-        $('.card[id^="planItem"]').each(function() {
-            const itemId = $(this).attr('id').replace('planItem', '');
-            calculateItemRequirements(itemId);
-        });
+    // $('#calculateBtn').on('click', function() {
+    //     $('.card[id^="planItem"]').each(function() {
+    //         const itemId = $(this).attr('id').replace('planItem', '');
+    //         calculateItemRequirements(itemId);
+    //     });
         
-        alert('Perhitungan selesai! Silakan periksa hasil perhitungan.');
-    });
+    //     alert('Perhitungan selesai! Silakan periksa hasil perhitungan.');
+    // });
 
     // Calculate individual item requirements
     function calculateItemRequirements(itemId) {
-        const outCorr = parseFloat($(`input[name="outCorr[${itemId}]"]`).val()) || 0;
-        const sheetl = parseFloat($(`input[name="sheetl[${itemId}]"]`).val()) || 0;
-        const sheetp = parseFloat($(`input[name="sheetp[${itemId}]"]`).val()) || 0;
-        const outFlexo = parseFloat($(`input[name="outFlexo[${itemId}]"]`).val()) || 0;
-        const order = parseFloat($(`input[name="order[${itemId}]"]`).val()) || 0;
-        const toleransi = parseFloat($(`input[name="toleransi[${itemId}]"]`).val()) || 0;
-        const beratSheet = parseFloat($(`input[name="beratSheet[${itemId}]"]`).val()) || 0;
-        const tipebox = $(`input[name="tipebox[${itemId}]"]`).val();
-        const flute = $(`input[name="flute[${itemId}]"]`).val();
+        const row = $(`#planRow${itemId}`);
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val()) || 0;
+        const sheetl = parseFloat(row.find('input[name="sheetl[]"]').val()) || 0;
+        const sheetp = parseFloat(row.find('input[name="sheetp[]"]').val()) || 0;
+        const outFlexo = parseFloat(row.find('input[name="outFlexo[]"]').val()) || 0;
+        const order = parseFloat(row.find('input[name="order[]"]').val()) || 0;
+        const toleransi = parseFloat(row.find('input[name="toleransi[]"]').val()) || 0;
+        const beratSheet = parseFloat(row.find('input[name="beratSheet[]"]').val()) || 0;
+        const tipebox = row.find('input[name="tipebox[]"]').val();
+        const flute = row.find('input[name="flute[]"]').val();
 
         // Calculate UkRoll
         let UkRoll;
@@ -1259,11 +1126,11 @@ $(document).ready(function(){
         const tonase = qtyPlan * beratSheet / 1000; // Convert to kg
 
         // Calculate paper requirements
-        const gramAtas = parseFloat($(`input[name="gramAtas[${itemId}]"]`).val()) || 0;
-        const gramFlute1 = parseFloat($(`input[name="gramFlute1[${itemId}]"]`).val()) || 0;
-        const gramTengah = parseFloat($(`input[name="gramTengah[${itemId}]"]`).val()) || 0;
-        const gramFlute2 = parseFloat($(`input[name="gramFlute2[${itemId}]"]`).val()) || 0;
-        const gramBawah = parseFloat($(`input[name="gramBawah[${itemId}]"]`).val()) || 0;
+        const gramAtas = parseFloat(row.find('input[name="gramAtas[]"]').val()) || 0;
+        const gramFlute1 = parseFloat(row.find('input[name="gramFlute1[]"]').val()) || 0;
+        const gramTengah = parseFloat(row.find('input[name="gramTengah[]"]').val()) || 0;
+        const gramFlute2 = parseFloat(row.find('input[name="gramFlute2[]"]').val()) || 0;
+        const gramBawah = parseFloat(row.find('input[name="gramBawah[]"]').val()) || 0;
 
         // Calculate kebutuhan kertas (paper requirements in kg)
         let kebutuhanAtas = 0, kebutuhanFlute1 = 0, kebutuhanTengah = 0, kebutuhanFlute2 = 0, kebutuhanBawah = 0;
@@ -1285,21 +1152,20 @@ $(document).ready(function(){
         }
 
         // Update calculated fields in table
-        $(`input[name="roll[${itemId}]"]`).val(UkRoll);
-        $(`input[name="plan[${itemId}]"]`).val(qtyPlan.toFixed(0));
-        $(`input[name="cop[${itemId}]"]`).val(cop.toFixed(0));
-        $(`input[name="rmorder[${itemId}]"]`).val(Math.round(rmorder));
+        row.find('input[name="roll[]"]').val(UkRoll);
+        row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
+        row.find('input[name="cop[]"]').val(cop.toFixed(0));
+        row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
         
         // Also update detail fields if they exist
-        $(`input[name="trim[${itemId}]"]`).val(trim.toFixed(0));
-        $(`input[name="beratOrder[${itemId}]"]`).val(tonase.toFixed(2));
+        row.find('input[name="trim[]"]').val(trim.toFixed(0));
         
         // Update paper requirements
-        $(`input[name="kebutuhanAtas[${itemId}]"]`).val(Math.round(kebutuhanAtas));
-        $(`input[name="kebutuhanFlute1[${itemId}]"]`).val(Math.round(kebutuhanFlute1));
-        $(`input[name="kebutuhanTengah[${itemId}]"]`).val(Math.round(kebutuhanTengah));
-        $(`input[name="kebutuhanFlute2[${itemId}]"]`).val(Math.round(kebutuhanFlute2));
-        $(`input[name="kebutuhanBawah[${itemId}]"]`).val(Math.round(kebutuhanBawah));
+        row.find('input[name="kebutuhanAtas[]"]').val(Math.round(kebutuhanAtas));
+        row.find('input[name="kebutuhanFlute1[]"]').val(Math.round(kebutuhanFlute1));
+        row.find('input[name="kebutuhanTengah[]"]').val(Math.round(kebutuhanTengah));
+        row.find('input[name="kebutuhanFlute2[]"]').val(Math.round(kebutuhanFlute2));
+        row.find('input[name="kebutuhanBawah[]"]').val(Math.round(kebutuhanBawah));
     }
 
     // Form validation
@@ -1316,14 +1182,54 @@ $(document).ready(function(){
             return;
         }
         
-        if ($('.card[id^="planItem"]').length === 0) {
+        if ($('#planningTableBody tr').length === 0) {
             alert('Minimal harus ada 1 item planning');
             return;
         }
         
-        // If validation passes, submit the form
-        // this.submit(); // Uncomment when ready to implement backend
-        alert('Form valid! Ready to implement backend submission.');
+        // If validation passes, submit via AJAX
+        const formData = new FormData(this);
+        
+        // Debug: Log form data
+        console.log('Form data being submitted:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
+        // Show loading
+        $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert('Planning corrugating berhasil disimpan dengan kode: ' + response.data.kode_corr);
+                    // Redirect to index page
+                    window.location.href = '{{ route("admin.corrplan.index") }}';
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr) {
+                let message = 'Terjadi kesalahan saat menyimpan data';
+                console.log('AJAX Error Response:', xhr.responseJSON);
+                
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    message = xhr.responseJSON.message;
+                } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    message = Object.values(xhr.responseJSON.errors).flat().join('\\n');
+                }
+                alert('Error: ' + message);
+            },
+            complete: function() {
+                // Reset button
+                $('button[type="submit"]').prop('disabled', false).html('<i class="fas fa-save"></i> Simpan Planning');
+            }
+        });
     });
 });
 
@@ -1341,8 +1247,8 @@ function hideDetails(itemId) {
 // Remove planning item
 function removePlanItem(itemId) {
     if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-        // Get OPI ID from the item
-        const opiId = parseInt($(`#planDetail${itemId} input[name="opi_id[${itemId}]"]`).val());
+        // Get OPI ID from the table row
+        const opiId = parseInt($(`#planRow${itemId}`).data('opi-id'));
         
         // Remove from selected list
         const index = selectedOpis.indexOf(opiId);

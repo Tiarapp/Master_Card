@@ -41,7 +41,7 @@
           <h5 class="card-title mb-0">Filter & Search</h5>
         </div>
         <div class="card-body">
-          <form method="GET" action="{{ route('indexcorr') }}">
+          <form method="GET" action="{{ route('admin.corrplan.index') }}">
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
@@ -75,10 +75,10 @@
                   <button type="submit" class="btn btn-primary">
                     <i class="fas fa-search"></i> Cari
                   </button>
-                  <a href="{{ route('indexcorr') }}" class="btn btn-secondary">
+                  <a href="{{ route('admin.corrplan.index') }}" class="btn btn-secondary">
                     <i class="fas fa-refresh"></i> Reset
                   </a>
-                  <a href="{{ route('createcorr') }}" class="btn btn-success">
+                  <a href="{{ route('admin.corrplan.create') }}" class="btn btn-success">
                     <i class="fas fa-plus"></i> Tambah Baru
                   </a>
                 </div>
@@ -149,7 +149,7 @@
                         <a href="#" class="btn btn-sm btn-info" title="View">
                           <i class="fas fa-eye"></i>
                         </a>
-                        <a href="#" class="btn btn-sm btn-primary" title="Edit">
+                        <a href="{{ route('admin.corrplan.edit', $plan->id) }}" class="btn btn-sm btn-primary" title="Edit">
                           <i class="fas fa-edit"></i>
                         </a>
                         <a href="#" class="btn btn-sm btn-success" title="Print">

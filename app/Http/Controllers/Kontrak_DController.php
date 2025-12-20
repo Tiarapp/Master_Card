@@ -1168,4 +1168,32 @@ class Kontrak_DController extends Controller
             // Download Excel file
             return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
         }
+
+        public function get_all_kontrak(Request $request)
+        {
+            $search = $request->search ?? $request->search;
+
+            $contracts = new Kontrak_M();
+
+            if ($search) {
+                $contracts = $contracts->where(function($q) use ($search) {
+                    $q->where('kode', 'LIKE', "%{$search}%")
+                      ->orWhere('customer_name', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $contracts = $contracts->orderBy('id', 'desc')->paginate();
+
+            $data = [
+                'contracts' => $contracts,
+            ];
+
+            return view('admin.notif.kontrak_modal', $data);
+        }
+
+        public function single($id)
+        {
+            $contracts = Kontrak_M::find($id);
+            return response()->json($contracts);
+        }
     }
