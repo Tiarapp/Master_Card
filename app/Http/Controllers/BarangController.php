@@ -83,9 +83,17 @@ class BarangController extends Controller
     public function indexnew(Request $request)
     {
         DB::connection('firebird2')->beginTransaction();
-        $periode = DB::connection('firebird2')->table('TClosing')->get();
-
-        // dd($request->all());
+        $periode = DB::connection('firebird2')->table('TClosing')
+            ->get()
+            ->sortByDesc(function($item) {
+                // Convert MM/YYYY to YYYY-MM format for proper sorting
+                $parts = explode('/', $item->Periode);
+                if (count($parts) == 2) {
+                    return $parts[1] . '-' . str_pad($parts[0], 2, '0', STR_PAD_LEFT);
+                }
+                return $item->Periode;
+            })
+            ->values(); // Reset array keys
 
         $month = date("m/Y");
         $query = DB::connection('firebird2')->table('TPersediaan')
