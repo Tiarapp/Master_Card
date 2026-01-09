@@ -83,14 +83,23 @@ class BarangController extends Controller
     public function indexnew(Request $request)
     {
         DB::connection('firebird2')->beginTransaction();
-        $periode = date("m/Y");
-        
+        $periode = DB::connection('firebird2')->table('TClosing')->get();
+
+        // dd($request->all());
+
+        $month = date("m/Y");
         $query = DB::connection('firebird2')->table('TPersediaan')
-            ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
-            ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue')
-            ->where('TPersediaan.Periode', 'LIKE', "%".$periode."%");
+        ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
+        ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue');
 
         // Handle search - support multiple words with OR logic
+        if (!$request->month) {
+            $query->where('TPersediaan.Periode', 'LIKE', "%".$month."%");
+        } else {
+            $query->where('TPersediaan.Periode', 'LIKE', "%".$request->month."%");
+            $month = $request->month;
+        }
+
         if ($request->has('search') && !empty($request->search)) {
             $search = strtoupper(trim($request->search));
             
@@ -125,7 +134,7 @@ class BarangController extends Controller
 
         $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);
 
-        return view('admin.fg.barang.indexnew', compact('barang'));
+        return view('admin.fg.barang.indexnew', compact('barang', 'periode', 'month'));
     }
 
     /**
