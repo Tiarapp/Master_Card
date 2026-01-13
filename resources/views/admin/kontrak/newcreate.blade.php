@@ -231,7 +231,7 @@
                                                     <label>Tipe Order</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <select class='js-example-basic-single col-md-12' name='tipeOrder' id='tipeOrder' onchange>
+                                                    <select class='js-example-basic-single col-md-12 jenis-order' name='tipeOrder' id='tipeOrder' onchange>
                                                         <option value="Order Baru">Order Baru</option>
                                                         <option value="Order Ulang">Order Ulang</option>
                                                         <option value="OUP Design">OUP Design</option>
@@ -444,10 +444,54 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 asumsi-exp">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Asumsi Harga Expedisi</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="number" name="asumsi_exp" id="asumsi_exp">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 asumsi-karet">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Asumsi Harga Karet</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="asumsi_harga_karet" id="asumsi_harga_karet">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 asumsi-pisau">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label>Asumsi Harga Pisau</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="asumsi_harga_pisau" id="asumsi_harga_pisau">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <h4 class="modal-title" style="margin-top: 20px;"><b>Mastercard</b></h4>
-                    <hr>
                     <div class="row" style="margin-top: 20px; border-bottom: 2px solid black">
                         <div class="col-md-4">
                             <div class="row">
@@ -857,6 +901,21 @@
         if (e.which == 13) { // Enter key
             e.preventDefault();
             $('.form-search-customer').trigger('submit');
+        }
+    });
+
+    $(document).on("change", '.jenis-order', function(e) {
+        e.preventDefault();
+        var jenisOrder = $(this).val();
+        
+        if (jenisOrder === 'Order Baru') {
+            $('.asumsi-exp').show();
+            $('.asumsi-karet').show();
+            $('.asumsi-pisau').show();
+        } else {
+            $('.asumsi-exp').hide();
+            $('.asumsi-karet').hide();
+            $('.asumsi-pisau').hide();
         }
     });
 

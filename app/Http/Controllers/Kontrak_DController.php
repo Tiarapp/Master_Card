@@ -439,7 +439,10 @@ class Kontrak_DController extends Controller
                 'biaya_exp' => $request->biaya_exp,
                 'biaya_glue' => $request->biaya_glue,
                 'biaya_wax' => $request->biaya_wax,
-                'min_tgl_kirim' => $request->tglkirim
+                'min_tgl_kirim' => $request->tglkirim,
+                'harga_expedisi' => $request->asumsi_exp ?? 0,
+                'harga_karet' => $request->asumsi_harga_karet ?? 0,
+                'harga_pisau' => $request->asumsi_harga_pisau ?? 0
             ]);
             // End Insert Into
             
@@ -801,6 +804,9 @@ class Kontrak_DController extends Controller
             $kontrakm->biaya_exp = $request->biaya_exp;
             $kontrakm->biaya_glue = $request->biaya_glue;
             $kontrakm->biaya_wax = $request->biaya_wax;
+            $kontrakm->harga_expedisi = $request->asumsi_exp ?? 0;
+            $kontrakm->harga_karet = $request->asumsi_harga_karet ?? 0;
+            $kontrakm->harga_pisau = $request->asumsi_harga_pisau ?? 0;
             $kontrakm->status = 4;
             $kontrakm->lastUpdatedBy = Auth::user()->name;
             // End untuk set value yang di update

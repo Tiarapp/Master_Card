@@ -52,7 +52,10 @@ class Kontrak_M extends Model
         'biaya_wax',
         'harga',
         'keterangan',
-        'createdBy'
+        'createdBy',
+        'harga_expedisi',
+        'harga_karet',
+        'harga_pisau'
     ];
 
     // Relasi one to Many
