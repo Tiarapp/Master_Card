@@ -18,6 +18,8 @@ class ForecastCustController extends Controller
         $startTime = microtime(true);
         
         $currentYear = $request->get('year', date('Y'));
+        $searchCustomer = $request->get('search_customer', '');
+        $searchSales = $request->get('search_sales', '');
         
         // Get available years from database
         $availableYears = ForecastCust::selectRaw('DISTINCT tahun')
@@ -31,10 +33,22 @@ class ForecastCustController extends Controller
             rsort($availableYears);
         }
         
-        // Optimized single query approach for better performance
-        $allForecasts = ForecastCust::with('sales')
-            ->where('tahun', $currentYear)
-            ->orderBy('customer_name')
+        // Optimized single query approach for better performance with search
+        $query = ForecastCust::with('sales')
+            ->where('tahun', $currentYear);
+            
+        // Apply search filters
+        if ($searchCustomer) {
+            $query->where('customer_name', 'LIKE', '%' . $searchCustomer . '%');
+        }
+        
+        if ($searchSales) {
+            $query->whereHas('sales', function($q) use ($searchSales) {
+                $q->where('nama', 'LIKE', '%' . $searchSales . '%');
+            });
+        }
+        
+        $allForecasts = $query->orderBy('customer_name')
             ->get()
             ->groupBy(function($item) {
                 return $item->customer_name . '|' . ($item->sales->nama ?? 'No Sales');
@@ -67,7 +81,7 @@ class ForecastCustController extends Controller
             'query_count' => 2 // 1 for years + 1 for forecasts
         ];
 
-        return view('admin.marketing.forecast_cust.index', compact('paginatedForecasts', 'currentYear', 'availableYears', 'customerSalesCombinations', 'timingInfo'));
+        return view('admin.marketing.forecast_cust.index', compact('paginatedForecasts', 'currentYear', 'availableYears', 'customerSalesCombinations', 'timingInfo', 'searchCustomer', 'searchSales'));
     }
 
     public function create(Request $request)

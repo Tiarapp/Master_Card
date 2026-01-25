@@ -77,7 +77,7 @@
       @endif
       
       <div class="row mb-3">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <a href="{{ route('forecast.tonase.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Tambah Forecast
           </a>
@@ -88,7 +88,7 @@
             <i class="fas fa-download"></i> Download Template
           </a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div class="form-group mb-0">
             <label for="year-selector" class="mb-1">Pilih Tahun:</label>
             <select id="year-selector" class="form-control" onchange="changeYear(this.value)">
@@ -98,6 +98,37 @@
                 </option>
               @endforeach
             </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Search Form -->
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body py-2">
+              <form method="GET" action="{{ route('forecast.tonase.index') }}" class="form-inline">
+                <input type="hidden" name="year" value="{{ $currentYear }}">
+                <div class="form-group mr-3">
+                  <label for="search_customer" class="mr-2">Customer:</label>
+                  <input type="text" class="form-control" id="search_customer" name="search_customer" 
+                         value="{{ $searchCustomer ?? '' }}" placeholder="Cari customer...">
+                </div>
+                <div class="form-group mr-3">
+                  <label for="search_sales" class="mr-2">Sales:</label>
+                  <input type="text" class="form-control" id="search_sales" name="search_sales" 
+                         value="{{ $searchSales ?? '' }}" placeholder="Cari sales...">
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">
+                  <i class="fas fa-search"></i> Search
+                </button>
+                @if($searchCustomer || $searchSales)
+                <a href="{{ route('forecast.tonase.index', ['year' => $currentYear]) }}" class="btn btn-secondary">
+                  <i class="fas fa-times"></i> Clear
+                </a>
+                @endif
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -230,7 +261,7 @@
           
           <!-- Pagination -->
           <div class="d-flex justify-content-center mt-4">
-            {{ $customerSalesCombinations->appends(request()->query())->links() }}
+            {{ $customerSalesCombinations->appends(request()->only(['year', 'search_customer', 'search_sales']))->links() }}
           </div>
         </div>
       </div>
@@ -252,7 +283,7 @@ function addMonthlyForecast(customerName, salesName) {
 }
 
 function changeYear(selectedYear) {
-    // Redirect to same page with selected year parameter
+    // Redirect to same page with selected year parameter and preserve search
     let currentUrl = new URL(window.location.href);
     currentUrl.searchParams.set('year', selectedYear);
     window.location.href = currentUrl.toString();
