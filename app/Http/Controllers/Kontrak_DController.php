@@ -19,7 +19,9 @@ use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
 use App\Models\Accounting\Piutang;
+use App\Models\AlokasiKaret;
 use App\Models\Customer;
+use App\Models\Karet;
 use App\Models\Number_Sequence;
 use Illuminate\Support\Facades\Log;
 
@@ -639,35 +641,35 @@ class Kontrak_DController extends Controller
                 }
 
                 // OPTIMIZED: Single query for customer data
-                // $customerData = DB::connection('firebird')->table('TCustomer')
-                //     ->select('WAKTUBAYAR', 'Plafond', 'Kode')
-                //     ->where('Nama', $request->cust)
-                //     ->first();
+                $customerData = DB::connection('firebird')->table('TCustomer')
+                    ->select('WAKTUBAYAR', 'Plafond', 'Kode')
+                    ->where('Nama', $request->cust)
+                    ->first();
 
                 // OPTIMIZED: Calculate piutang total correctly with cross-database relation
-                // $piutang = Piutang::where('KodeCust', $customerData->Kode)
-                //     ->where('Note', 'JUAL')  // Hanya Note JUAL
-                //     ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
-                //     ->selectRaw("
-                //         SUM(TotalRp - TotalTerima) as total_piutang,
-                //         SUM(TotalTerima) as total_terima,
-                //         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max,
-                //         COUNT(*) as total_records
-                //     ")
-                //     ->first();
+                $piutang = Piutang::where('KodeCust', $customerData->Kode)
+                    ->where('Note', 'JUAL')  // Hanya Note JUAL
+                    ->whereRaw("(CASE WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima) ELSE (TotalRp - TotalTerima) END) != 0")
+                    ->selectRaw("
+                        SUM(TotalRp - TotalTerima) as total_piutang,
+                        SUM(TotalTerima) as total_terima,
+                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max,
+                        COUNT(*) as total_records
+                    ")
+                    ->first();
                 
-                // $piutangData = Piutang::where('KodeCust', $customerData->Kode)
-                //     // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
-                //     ->selectRaw("
-                //         SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
-                //         SUM(TotalTerima) as total_terima,
-                //         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
-                //     ")
-                //     ->first();
+                $piutangData = Piutang::where('KodeCust', $customerData->Kode)
+                    // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
+                    ->selectRaw("
+                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
+                        SUM(TotalTerima) as total_terima,
+                        MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
+                    ")
+                    ->first();
 
                     
-                    // $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
-                    // dd($piutangTotal, $request->all());
+                    $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
+                    // dd($piutangTotal, $piutang);
 
                 // OPTIMIZED: Get kontrak data in single query
                 // $kontrakData = DB::table('kontrak_d as kd')
@@ -706,13 +708,13 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Determine OPI status based on customer conditions
                 $opiStatus = 'Proses'; // Default status
 
-                // if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
-                //     $opiStatus = 'Pending';
-                // } elseif ($piutangTotal > $customerData->Plafond) {
-                //     $opiStatus = 'Pending';
-                // } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
-                //     $opiStatus = 'Pending';
-                // }
+                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                    $opiStatus = 'Pending';
+                } elseif ($piutangTotal > $customerData->Plafond) {
+                    $opiStatus = 'Pending';
+                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                    $opiStatus = 'Pending';
+                }
                 
 
                 // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
@@ -983,7 +985,11 @@ class Kontrak_DController extends Controller
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
                 $kontrakm = Kontrak_M::where('id', '=', $id)->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
-                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
+                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();
+
+                $karet = Karet::where('mc_id', '=', $kontrak->mc_id)
+                                ->orderBy('id', 'desc')
+                                ->first();
 
                 RealisasiKirim::create([
                     'kontrak_m_id'  => $id[$i],
@@ -995,6 +1001,21 @@ class Kontrak_DController extends Controller
                     'kg_kirim'      => $qty * $mc->gramSheetBoxKontrak,
                     'createdBy'     => Auth::user()->name
                 ]);
+
+                if ($karet) {
+                    $alokasi_karet = new AlokasiKaret();
+
+                    $alokasi_karet->karet_id = $karet->id;
+                    $alokasi_karet->mc_id = $kontrak->mc_id;
+                    $alokasi_karet->tanggal_kirim = $request->tglKirim;
+                    $alokasi_karet->pcs = $qty;
+                    $alokasi_karet->alokasi_harga = $karet->gsm * $karet->alokasi * $qty;
+
+                    $alokasi_karet->save();
+
+                    $karet->sisa = $karet->sisa - $alokasi_karet->alokasi_harga;
+                    $karet->save();
+                }
 
                 $kontrak->pcsSisaKirim = $kontrak->pcsSisaKontrak - $qty ;
                 $kontrak->save();

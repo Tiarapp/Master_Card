@@ -19,6 +19,7 @@ use Yajra\DataTables\DataTables;
 
 use function Ramsey\Uuid\v1;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -460,12 +461,19 @@ class FinanceController extends Controller
     {
         $search = $request->input('search') ? $request->input('search') : '';
 
-        $opi = Opi_M::where('status_opi', 'Pending')
-            ->when($search, function($query, $search) {
-                return $query->where('NoOPI', 'LIKE', '%' . $search . '%');
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(20);
+        $opi = Opi_M::with('kontrakm');
+
+        if ($search) {
+            $opi = $opi->where('NoOPI', 'like', '%' . $search . '%')
+                ->orWhereHas('kontrakm', function ($query) use ($search) {
+                    $query->where('customer_name', 'like', '%' . $search . '%');
+                });
+        }
+
+        $opi = $opi->where('status_opi', 'Pending')
+                    ->orderBy('created_at', 'desc');
+
+        $opi = $opi->paginate(10);
 
         return view('admin.acc.approve_opi', compact('opi', 'search'));
     }
@@ -478,5 +486,39 @@ class FinanceController extends Controller
         $opi->save();
 
         return redirect()->back()->with('success', 'OPI No: ' . $opi->NoOPI . ' telah disetujui.');
+    }
+
+    public function approve_opi_bulk(Request $request)
+    {
+        // Debug: Log the incoming request data
+        Log::info('Bulk Approve Request Data:', $request->all());
+        
+        $request->validate([
+            'selected_opi' => 'required|array|min:1',
+            'selected_opi.*' => 'exists:opi_m,id'
+        ]);
+
+        $selectedIds = $request->input('selected_opi');
+        $approvedCount = 0;
+        $approvedNumbers = [];
+
+        foreach ($selectedIds as $id) {
+            $opi = Opi_M::find($id);
+            if ($opi && $opi->status_opi == 'Pending') {
+                $opi->status_opi = 'Proses';
+                $opi->lastUpdatedBy = auth()->user()->name;
+                $opi->save();
+                
+                $approvedCount++;
+                $approvedNumbers[] = $opi->NoOPI;
+            }
+        }
+
+        if ($approvedCount > 0) {
+            $message = "Berhasil approve {$approvedCount} OPI: " . implode(', ', $approvedNumbers);
+            return redirect()->back()->with('success', $message);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada OPI yang berhasil di-approve.');
+        }
     }
 }

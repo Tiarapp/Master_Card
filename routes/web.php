@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\AlokasiKaretController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Kontrak_DController;
@@ -442,16 +443,9 @@ Route::middleware(['auth'])->group(function (){
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
     
-    Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
     Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
     Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
     Route::post('/admin/ppic/sync-php', [MastercardController::class, 'sync_php_to_mysql'])->name('ppic.sync_php');
-    Route::post('/approve', function (Request $request) {
-        $ids = $request->input('ids');
-        Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
-        
-        return response()->json(['message' => 'Status OPI berhasil diperbarui!']);
-    });
 
     //PLAN
     Route::get('/admin/plan/corr', 'CorrugatedController@index')->middleware(['auth'])->name('admin.corrplan.index');
@@ -526,6 +520,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
         Route::get('admin/acc/opi', [FinanceController::class, 'approve_opi'])->name('acc.opi');
         Route::post('admin/acc/opi/approve/{id}', [FinanceController::class, 'approve_opi_action'])->name('acc.opi.approve');
+        Route::post('admin/acc/opi/approve-bulk', [FinanceController::class, 'approve_opi_bulk'])->name('acc.opi.approve.bulk');
 
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -618,6 +613,15 @@ Route::middleware(['auth'])->group(function (){
         Route::delete('/mod/delete/{id}', [MarektingOrder::class, 'delete'])->name('mod.delete');
         Route::get('admin/marketing/mod/edit/{id}', [MarektingOrder::class, 'edit'])->name('mkt.edit.mod');
         Route::get('admin/marketing/mod/print/{id}', [MarektingOrder::class, 'print_mod'])->name('mkt.print.mod');
+
+        // Report Marketing
+        Route::get('admin/marketing/karet_report', [AlokasiKaretController::class, 'index'])->name('karet.index');
+        Route::get('admin/marketing/karet_report/create', [AlokasiKaretController::class, 'create'])->name('karet.create');
+        Route::get('admin/marketing/karet_report/{id}', [AlokasiKaretController::class, 'show'])->name('karet.show');
+        Route::get('admin/marketing/karet_report/export/excel', [AlokasiKaretController::class, 'export'])->name('karet.export');
+        Route::post('admin/marketing/karet_report/store', [AlokasiKaretController::class, 'store'])->name('karet.store');
+
+
 
         Route::get('finance', [FinanceController::class, 'index'])->name('finance');
         Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');

@@ -73,8 +73,8 @@
           
           {{-- Accounting --}}
           @if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 1)
-            <li class="nav-item">
-              <a href="#" class="nav-link">
+            <li class="nav-item {{ request()->routeIs('acc.*') ? 'menu-open' : '' }}">
+              <a href="#" class="nav-link {{ request()->routeIs('acc.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-calculator nav-icon"></i>
                 <p>
                   Accounting
@@ -83,45 +83,51 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('acc.cust') }}" class="nav-link">
+                  <a href="{{ route('acc.cust') }}" class="nav-link {{ request()->routeIs('acc.cust') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Data Customer</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('acc.vendortt') }}" class="nav-link">
+                  <a href="{{ route('acc.vendortt') }}" class="nav-link {{ request()->routeIs('acc.vendortt') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Data Vendor TT</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('acc.piutang') }}" class="nav-link">
+                  <a href="{{ route('acc.piutang') }}" class="nav-link {{ request()->routeIs('acc.piutang') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Data Piutang</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('acc.kontrak.index') }}" class="nav-link">
+                  <a href="{{ route('acc.kontrak.index') }}" class="nav-link {{ request()->routeIs('acc.kontrak.*') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Export Kontrak</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('data.alamat') }}" class="nav-link">
+                  <a href="{{ route('data.alamat') }}" class="nav-link {{ request()->routeIs('data.alamat') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Print Alamat</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('finance') }}" class="nav-link">
+                  <a href="{{ route('finance') }}" class="nav-link {{ request()->routeIs('finance') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Import JU</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('acc.mod.index') }}" class="nav-link">
+                  <a href="{{ route('acc.mod.index') }}" class="nav-link {{ request()->routeIs('acc.mod.*') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Approve MOD</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('acc.opi') }}" class="nav-link {{ request()->routeIs('acc.opi*') ? 'active' : '' }}">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Approve OPI</p>
                   </a>
                 </li>
               </ul>

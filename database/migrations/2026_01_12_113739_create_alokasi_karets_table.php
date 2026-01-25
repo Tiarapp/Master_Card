@@ -16,7 +16,7 @@ class CreateAlokasiKaretsTable extends Migration
         Schema::create('alokasi_karets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('karet_id');
-            $table->unsignedBigInteger('mc_id');
+            $table->unsignedBigInteger('mc_id')->nullable();
             $table->date('tanggal_kirim');
             $table->integer('pcs');
             $table->double('alokasi_harga');

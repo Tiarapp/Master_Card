@@ -119,12 +119,38 @@ $(document).ready(function() {
         var currentUrl = window.location.pathname;
         var found = false;
         
+        // First, check if any menu item already has 'active' class from Laravel
+        var $existingActive = $('.nav-sidebar .nav-link.active');
+        if ($existingActive.length > 0) {
+            // Laravel has already set the active menu, respect it
+            $existingActive.each(function() {
+                var $link = $(this);
+                var $parent = $link.closest('.nav-item');
+                var $parentTreeview = $parent.closest('.nav-treeview');
+                
+                // If this is a submenu item, open its parent
+                if ($parentTreeview.length > 0) {
+                    $parentTreeview.show();
+                    $parentTreeview.closest('.nav-item').addClass('menu-open');
+                    
+                    // If this is a nested submenu, open grandparent too
+                    var $grandParentTreeview = $parentTreeview.closest('.nav-item').closest('.nav-treeview');
+                    if ($grandParentTreeview.length > 0) {
+                        $grandParentTreeview.show();
+                        $grandParentTreeview.closest('.nav-item').addClass('menu-open');
+                    }
+                }
+            });
+            return; // Exit early, Laravel has handled the active state
+        }
+        
+        // Only if Laravel hasn't set active class, then do JavaScript matching
         // Remove all active classes first
         $('.nav-sidebar .nav-link').removeClass('active current-page');
         $('.nav-item').removeClass('menu-open');
         $('.nav-treeview').hide();
         
-        // Check each menu link
+        // Check each menu link for exact match first
         $('.nav-sidebar a[href]').each(function() {
             var $link = $(this);
             var href = $link.attr('href');
@@ -144,10 +170,10 @@ $(document).ready(function() {
                 linkPath = href;
             }
             
-            // Check for exact match or partial match
-            if (currentUrl === linkPath || (linkPath !== '/' && currentUrl.startsWith(linkPath))) {
+            // Check for exact match
+            if (currentUrl === linkPath) {
                 // Mark as current page
-                $link.addClass('current-page');
+                $link.addClass('active current-page');
                 found = true;
                 
                 // Open parent menus
@@ -171,8 +197,11 @@ $(document).ready(function() {
             }
         });
         
-        // If no exact match found, try to match by partial URL
+        // If no exact match found, try partial matching with better logic
         if (!found) {
+            var bestMatch = null;
+            var bestMatchLength = 0;
+            
             $('.nav-sidebar a[href]').each(function() {
                 var $link = $(this);
                 var href = $link.attr('href');
@@ -190,28 +219,31 @@ $(document).ready(function() {
                     linkPath = href;
                 }
                 
-                // Check if current URL contains the link path
-                if (linkPath !== '/' && currentUrl.includes(linkPath.split('/').pop())) {
-                    $link.addClass('active');
-                    
-                    // Open parent menus
-                    var $parent = $link.closest('.nav-item');
-                    var $parentTreeview = $parent.closest('.nav-treeview');
-                    
-                    if ($parentTreeview.length > 0) {
-                        $parentTreeview.show();
-                        $parentTreeview.closest('.nav-item').addClass('menu-open');
-                        
-                        var $grandParentTreeview = $parentTreeview.closest('.nav-item').closest('.nav-treeview');
-                        if ($grandParentTreeview.length > 0) {
-                            $grandParentTreeview.show();
-                            $grandParentTreeview.closest('.nav-item').addClass('menu-open');
-                        }
-                    }
-                    
-                    return false;
+                // Check if current URL starts with link path and is longer than previous matches
+                if (linkPath !== '/' && currentUrl.startsWith(linkPath) && linkPath.length > bestMatchLength) {
+                    bestMatch = $link;
+                    bestMatchLength = linkPath.length;
                 }
             });
+            
+            if (bestMatch) {
+                bestMatch.addClass('active');
+                
+                // Open parent menus
+                var $parent = bestMatch.closest('.nav-item');
+                var $parentTreeview = $parent.closest('.nav-treeview');
+                
+                if ($parentTreeview.length > 0) {
+                    $parentTreeview.show();
+                    $parentTreeview.closest('.nav-item').addClass('menu-open');
+                    
+                    var $grandParentTreeview = $parentTreeview.closest('.nav-item').closest('.nav-treeview');
+                    if ($grandParentTreeview.length > 0) {
+                        $grandParentTreeview.show();
+                        $grandParentTreeview.closest('.nav-item').addClass('menu-open');
+                    }
+                }
+            }
         }
     }
     
@@ -252,3 +284,6 @@ $(document).ready(function() {
 
 <!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
+<!-- Custom Scripts Stack -->
+@stack('scripts')

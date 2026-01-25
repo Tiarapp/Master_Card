@@ -209,10 +209,12 @@
     }
     
     /* Active menu states */
-    .nav-sidebar .nav-item .nav-link.active {
+    .nav-sidebar .nav-item .nav-link.active,
+    .nav-sidebar .nav-item .nav-link.current-page {
       background-color: #007bff !important;
       color: #fff !important;
       box-shadow: 0 2px 4px rgba(0,123,255,.3);
+      font-weight: 600;
     }
     
     /* Parent menu open indicator */
@@ -264,12 +266,7 @@
       color: #6c757d;
     }
     
-    /* Current page indicator */
-    .nav-link.current-page {
-      background-color: #28a745 !important;
-      color: #fff !important;
-      font-weight: 600;
-    }
+    /* Current page indicator - removed separate styling, will use same as active */
     
     .nav-link.current-page::after {
       content: "";

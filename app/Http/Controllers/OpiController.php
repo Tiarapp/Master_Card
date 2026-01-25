@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use League\CommonMark\Node\Block\TightBlockInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Expr\FuncCall;
@@ -392,7 +393,7 @@ class OpiController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            \Log::error('Error in OPI jsonPaginated: ' . $e->getMessage());
+            Log::error('Error in OPI jsonPaginated: ' . $e->getMessage());
             
             return response()->json([
                 'success' => false,

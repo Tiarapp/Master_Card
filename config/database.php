@@ -57,8 +57,10 @@ return [
         'fbteknik' => [
             'driver'   => 'firebird',
             'host'     => env('DB_HOST1', '192.168.1.250'),
+            // 'host'     => env('DB_HOST1', 'localhost'),
             'port'     => env('DB_PORT1', '3050'),
             'database' => env('DB_DATABASE1', 'D:\DB\Database\FBDB\TEKNIK_INDUK_SPA.FDB'),
+            // 'database' => env('DB_DATABASE1', 'D:\SPA\FBDB\TEKNIK_INDUK_SPA.FDB'),
             'username' => env('DB_USERNAME1', 'sysdba'),
             'password' => env('DB_PASSWORD1', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
