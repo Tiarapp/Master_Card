@@ -358,6 +358,12 @@
                     <p>Alokasi Karet</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{ route('forecast.tonase.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Target Customer</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item">

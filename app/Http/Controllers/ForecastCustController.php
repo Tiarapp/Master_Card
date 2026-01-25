@@ -55,7 +55,7 @@ class ForecastCustController extends Controller
             });
             
         // Simple pagination by chunking the grouped data
-        $perPage = 20;
+        $perPage = 10;
         $currentPage = $request->get('page', 1);
         $offset = ($currentPage - 1) * $perPage;
         
