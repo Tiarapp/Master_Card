@@ -130,6 +130,8 @@
             var contract_id = $(this).closest('tr').find('.contract_id').val();
             var url = "{{ route('kontrak.single', ['id' => ':id']) }}";
             url = url.replace(':id', contract_id);
+
+            $(this).closest(".modal-kontrak-list").find('.btn-insert-contract').attr('disabled', 'disabled');
             $.get(url, function(data) {
 
                 kontrakHTML = 
@@ -139,7 +141,6 @@
                     '</div>';
 
                 $('#listKontrak .detail-kontrak').append(kontrakHTML);
-                $('#modal-kontrak').modal('hide');
             });
         });
     });

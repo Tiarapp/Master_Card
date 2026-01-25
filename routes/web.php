@@ -21,6 +21,7 @@ use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
 use App\Http\Controllers\CorrugatedController;
+use App\Http\Controllers\ForecastCustController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\ProfileController;
@@ -621,7 +622,18 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/karet_report/export/excel', [AlokasiKaretController::class, 'export'])->name('karet.export');
         Route::post('admin/marketing/karet_report/store', [AlokasiKaretController::class, 'store'])->name('karet.store');
 
-
+        // Forecast Tonase Customer
+        Route::get('admin/marketing/forecast_tonase', [ForecastCustController::class, 'index'])->name('forecast.tonase.index');
+        Route::get('admin/marketing/forecast_tonase/create', [ForecastCustController::class, 'create'])->name('forecast.tonase.create');
+        Route::post('admin/marketing/forecast_tonase/store', [ForecastCustController::class, 'store'])->name('forecast.tonase.store');
+        Route::get('admin/marketing/forecast_tonase/edit/{id}', [ForecastCustController::class, 'edit'])->name('forecast.tonase.edit');
+        Route::put('admin/marketing/forecast_tonase/update/{id}', [ForecastCustController::class, 'update'])->name('forecast.tonase.update');
+        Route::delete('admin/marketing/forecast_tonase/delete/{id}', [ForecastCustController::class, 'destroy'])->name('forecast.tonase.destroy');
+        
+        // Import & Template
+        Route::get('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'showImport'])->name('forecast.tonase.import.form');
+        Route::post('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'import'])->name('forecast.tonase.import');
+        Route::get('admin/marketing/forecast_tonase/template', [ForecastCustController::class, 'downloadTemplate'])->name('forecast.tonase.template');
 
         Route::get('finance', [FinanceController::class, 'index'])->name('finance');
         Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');
