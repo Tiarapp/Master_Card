@@ -206,6 +206,7 @@
                                 <tr>
                                     <th>No Kontrak</th>
                                     <th>Customer</th>
+                                    <th>Nama Item</th>
                                     <th>Tanggal</th>
                                     <th>Harga Karet</th>
                                     <th>Harga Pisau</th>
@@ -252,7 +253,7 @@
                 <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-md-8">
-                            <input type="text" id="bbmSearch" class="form-control" placeholder="Cari data BBM...">
+                            <input type="text" id="bbmSearch" class="form-control" placeholder="Cari data BBM..." style="text-transform: uppercase;">
                         </div>
                         <div class="col-md-4">
                             <button type="button" id="searchBbmBtn" class="btn btn-primary">
@@ -373,6 +374,11 @@ $(document).ready(function() {
         }
     });
 
+    // Auto uppercase for BBM search
+    $('#bbmSearch').on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
     // Function to load Kontraks from API
     function loadKontraks(search = '', page = 1) {
         var tipe = $('#tipe').val();
@@ -410,6 +416,7 @@ $(document).ready(function() {
                         var row = '<tr>' +
                             '<td>' + (kontrak.NoKontrak || '-') + '</td>' +
                             '<td>' + (kontrak.Customer || '-') + '</td>' +
+                            '<td>' + (kontrak.namaBarang || '-') + '</td>' +
                             '<td>' + (kontrak.TglKontrak || '-') + '</td>' +
                             '<td class="text-right">' + formatNumber(kontrak.HargaKaret || 0) + '</td>' +
                             '<td class="text-right">' + formatNumber(kontrak.HargaPisau || 0) + '</td>' +

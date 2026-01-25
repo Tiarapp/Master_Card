@@ -287,12 +287,6 @@
                     <p>Supplier</p>
                   </a>
                 </li>
-                {{-- <li class="nav-item">
-                  <a href="{{ route('data.cust') }}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Customer</p>
-                  </a>
-                </li> --}}
               </ul>
             </li>
             <li class="nav-item">
@@ -356,6 +350,12 @@
                   <a href="{{ route('opi.intake') }}" class="nav-link">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Export Intake</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('karet.index') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Alokasi Karet</p>
                   </a>
                 </li>
               </ul>
