@@ -151,25 +151,32 @@
             <table class="table table-bordered table-striped">
               <thead class="thead-light">
                 <tr>
-                  <th rowspan="2" class="align-middle">No</th>
-                  <th rowspan="2" class="align-middle">Customer</th>
-                  <th rowspan="2" class="align-middle">Sales</th>
-                  <th colspan="12" class="text-center">Target Tonase {{ $currentYear ?? date('Y') }}</th>
-                  <th rowspan="2" class="align-middle">Action</th>
+                  <th rowspan="3" class="align-middle">No</th>
+                  <th rowspan="3" class="align-middle">Customer</th>
+                  <th rowspan="3" class="align-middle">Sales</th>
+                  <th colspan="36" class="text-center">Data Tonase {{ $currentYear ?? date('Y') }}</th>
+                  <th rowspan="3" class="align-middle">Action</th>
                 </tr>
                 <tr>
-                  <th class="text-center">Jan</th>
-                  <th class="text-center">Feb</th>
-                  <th class="text-center">Mar</th>
-                  <th class="text-center">Apr</th>
-                  <th class="text-center">May</th>
-                  <th class="text-center">Jun</th>
-                  <th class="text-center">Jul</th>
-                  <th class="text-center">Aug</th>
-                  <th class="text-center">Sep</th>
-                  <th class="text-center">Oct</th>
-                  <th class="text-center">Nov</th>
-                  <th class="text-center">Dec</th>
+                  <th colspan="3" class="text-center">Januari</th>
+                  <th colspan="3" class="text-center">Februari</th>
+                  <th colspan="3" class="text-center">Maret</th>
+                  <th colspan="3" class="text-center">April</th>
+                  <th colspan="3" class="text-center">Mei</th>
+                  <th colspan="3" class="text-center">Juni</th>
+                  <th colspan="3" class="text-center">Juli</th>
+                  <th colspan="3" class="text-center">Agustus</th>
+                  <th colspan="3" class="text-center">September</th>
+                  <th colspan="3" class="text-center">Oktober</th>
+                  <th colspan="3" class="text-center">November</th>
+                  <th colspan="3" class="text-center">Desember</th>
+                </tr>
+                <tr>
+                  @for($i = 1; $i <= 12; $i++)
+                    <th class="text-center">Target</th>
+                    <th class="text-center">Intake</th>
+                    <th class="text-center">Realisasi</th>
+                  @endfor
                 </tr>
               </thead>
               <tbody>
@@ -191,52 +198,58 @@
                   <td>{{ $salesName != 'No Sales' ? $salesName : '-' }}</td>
                   
                   @for($month = 1; $month <= 12; $month++)
-                    <td class="text-center">
-                      @if(isset($monthlyData[$month]))
-                        @php 
-                          $forecast = $monthlyData[$month];
-                          $realisasi = $forecast->realisasi;
-                          $intake = $forecast->intake;
-                          $percentage = $forecast->target_tonase > 0 ? ($realisasi / $forecast->target_tonase) * 100 : 0;
-                          $intakePercentage = $forecast->target_tonase > 0 ? ($intake / $forecast->target_tonase) * 100 : 0;
-                        @endphp
-                        <div class="text-center">
-                          <strong class="d-block">{{ number_format($forecast->target_tonase, 1) }}</strong>
-                          <small class="text-muted d-block">Target</small>
-                          
-                          <small class="d-block font-weight-bold {{ $intake > 0 ? 'text-info' : 'text-muted' }}">
-                            {{ number_format($intake, 1) }}
-                          </small>
-                          <small class="text-muted d-block">Intake</small>
-                          
-                          <small class="d-block font-weight-bold {{ $realisasi > 0 ? 'text-success' : 'text-muted' }}">
-                            {{ number_format($realisasi, 1) }}
-                          </small>
-                          <small class="text-muted d-block">Realisasi</small>
-                          
-                          <div class="d-flex justify-content-center">
-                            <span class="badge badge-sm mr-1
-                              @if($intakePercentage >= 100) badge-info
-                              @elseif($intakePercentage >= 75) badge-secondary  
-                              @else badge-light
-                              @endif
-                            " title="Intake vs Target">
-                              {{ number_format($intakePercentage, 0) }}%
-                            </span>
-                            <span class="badge badge-sm 
-                              @if($percentage >= 100) badge-success
-                              @elseif($percentage >= 75) badge-warning  
-                              @else badge-danger
-                              @endif
-                            " title="Realisasi vs Target">
-                              {{ number_format($percentage, 0) }}%
-                            </span>
-                          </div>
-                        </div>
-                      @else
-                        <span class="text-muted">-</span>
-                      @endif
-                    </td>
+                    @if(isset($monthlyData[$month]))
+                      @php 
+                        $forecast = $monthlyData[$month];
+                        $realisasi = $forecast->realisasi;
+                        $intake = $forecast->intake;
+                        $percentage = $forecast->target_tonase > 0 ? ($realisasi / $forecast->target_tonase) * 100 : 0;
+                        $intakePercentage = $forecast->target_tonase > 0 ? ($intake / $forecast->target_tonase) * 100 : 0;
+                      @endphp
+                      <!-- Target -->
+                      <td class="text-center">
+                        <strong class="text-primary">{{ number_format($forecast->target_tonase, 1) }}</strong>
+                      </td>
+                      <!-- Intake -->
+                      <td class="text-center">
+                        <span class="font-weight-bold {{ $intake > 0 ? 'text-info' : 'text-muted' }}">
+                          {{ number_format($intake, 1) }}
+                        </span>
+                        @if($forecast->target_tonase > 0)
+                        <br>
+                        <span class="badge badge-sm
+                          @if($intakePercentage >= 100) badge-info
+                          @elseif($intakePercentage >= 75) badge-secondary  
+                          @else badge-light
+                          @endif
+                        " title="Intake vs Target">
+                          {{ number_format($intakePercentage, 0) }}%
+                        </span>
+                        @endif
+                      </td>
+                      <!-- Realisasi -->
+                      <td class="text-center">
+                        <span class="font-weight-bold {{ $realisasi > 0 ? 'text-success' : 'text-muted' }}">
+                          {{ number_format($realisasi, 1) }}
+                        </span>
+                        @if($forecast->target_tonase > 0)
+                        <br>
+                        <span class="badge badge-sm 
+                          @if($percentage >= 100) badge-success
+                          @elseif($percentage >= 75) badge-warning  
+                          @else badge-danger
+                          @endif
+                        " title="Realisasi vs Target">
+                          {{ number_format($percentage, 0) }}%
+                        </span>
+                        @endif
+                      </td>
+                    @else
+                      <!-- No data for this month -->
+                      <td class="text-center"><span class="text-muted">-</span></td>
+                      <td class="text-center"><span class="text-muted">-</span></td>
+                      <td class="text-center"><span class="text-muted">-</span></td>
+                    @endif
                   @endfor
                   
                   <td class="text-center">
@@ -252,7 +265,7 @@
                 </tr>
                 @empty
                 <tr>
-                  <td colspan="16" class="text-center">Tidak ada data forecast tonase</td>
+                  <td colspan="40" class="text-center">Tidak ada data forecast tonase</td>
                 </tr>
                 @endforelse
               </tbody>
