@@ -201,8 +201,8 @@
                     @if(isset($monthlyData[$month]))
                       @php 
                         $forecast = $monthlyData[$month];
-                        $realisasi = $forecast->realisasi;
-                        $intake = $forecast->intake;
+                        $realisasi = $forecast->realisasi_calculated ?? 0;  // Use pre-calculated data
+                        $intake = $forecast->intake_calculated ?? 0;        // Use pre-calculated data
                         $percentage = $forecast->target_tonase > 0 ? ($realisasi / $forecast->target_tonase) * 100 : 0;
                         $intakePercentage = $forecast->target_tonase > 0 ? ($intake / $forecast->target_tonase) * 100 : 0;
                       @endphp
@@ -269,6 +269,79 @@
                 </tr>
                 @endforelse
               </tbody>
+
+              <tfoot class="thead-dark">
+                <tr>
+                  <th colspan="3" class="text-center align-middle">
+                    <strong>TOTAL</strong>
+                  </th>
+                  
+                  @php
+                    $monthlyTotals = [];
+                    $grandTotals = ['target' => 0, 'intake' => 0, 'realisasi' => 0];
+                    
+                    // Initialize monthly totals
+                    for($month = 1; $month <= 12; $month++) {
+                      $monthlyTotals[$month] = ['target' => 0, 'intake' => 0, 'realisasi' => 0];
+                    }
+                    
+                    // Calculate totals from ALL forecasts (not just current page)
+                    // Check if allForecastsFlat variable exists, if not try to get all data
+                    $allData = [];
+                    
+                    if(isset($allForecastsFlat)) {
+                      $allData = $allForecastsFlat;
+                    } elseif(isset($allForecasts)) {
+                      $allData = $allForecasts;
+                    } elseif(isset($totalForecasts)) {
+                      $allData = $totalForecasts;  
+                    } else {
+                      // Fallback: if controller doesn't provide all data, show message
+                      // Controller needs to provide $allForecastsFlat variable
+                      // containing all forecast data without pagination
+                    }
+                    
+                    // Calculate totals from all data
+                    if(!empty($allData)) {
+                      foreach($allData as $forecast) {
+                        if(isset($forecast->bulan) && isset($forecast->target_tonase)) {
+                          $monthlyTotals[$forecast->bulan]['target'] += $forecast->target_tonase ?? 0;
+                          $monthlyTotals[$forecast->bulan]['intake'] += $forecast->intake_calculated ?? 0;  // Use pre-calculated data
+                          $monthlyTotals[$forecast->bulan]['realisasi'] += $forecast->realisasi_calculated ?? 0;  // Use pre-calculated data
+                          
+                          $grandTotals['target'] += $forecast->target_tonase ?? 0;
+                          $grandTotals['intake'] += $forecast->intake_calculated ?? 0;  // Use pre-calculated data
+                          $grandTotals['realisasi'] += $forecast->realisasi_calculated ?? 0;  // Use pre-calculated data
+                        }
+                      }
+                    }
+                  @endphp
+                  
+                  @for($month = 1; $month <= 12; $month++)
+                    <!-- Target Total -->
+                    <th class="text-center">
+                      <strong class="text-white">{{ number_format($monthlyTotals[$month]['target'], 1) }}</strong>
+                    </th>
+                    <!-- Intake Total -->
+                    <th class="text-center">
+                      <strong class="text-info">{{ number_format($monthlyTotals[$month]['intake'], 1) }}</strong>
+                    </th>
+                    <!-- Realisasi Total -->
+                    <th class="text-center">
+                      <strong class="text-success">{{ number_format($monthlyTotals[$month]['realisasi'], 1) }}</strong>
+                    </th>
+                  @endfor
+                  
+                  <th class="text-center align-middle">
+                    <div class="text-white">
+                      <small>Target: <strong>{{ number_format($grandTotals['target'], 1) }}</strong></small><br>
+                      <small>Intake: <strong class="text-info">{{ number_format($grandTotals['intake'], 1) }}</strong></small><br>
+                      <small>Real: <strong class="text-success">{{ number_format($grandTotals['realisasi'], 1) }}</strong></small>
+                    </div>
+                  </th>
+                </tr>
+              </tfoot>
+              
             </table>
           </div>
           

@@ -6,6 +6,7 @@ use App\Models\ForecastCust;
 use App\Models\Sales;
 use App\Imports\ForecastCustImport;
 use App\Exports\ForecastCustTemplateExport;
+use App\Services\ForecastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -33,8 +34,8 @@ class ForecastCustController extends Controller
             rsort($availableYears);
         }
         
-        // Optimized single query approach for better performance with search
-        $query = ForecastCust::with('sales')
+        // Optimized query with eager loading - using * to get all fields including computed attributes
+        $query = ForecastCust::with(['sales:id,nama'])
             ->where('tahun', $currentYear);
             
         // Apply search filters
@@ -48,11 +49,25 @@ class ForecastCustController extends Controller
             });
         }
         
-        $allForecasts = $query->orderBy('customer_name')
-            ->get()
-            ->groupBy(function($item) {
-                return $item->customer_name . '|' . ($item->sales->nama ?? 'No Sales');
-            });
+        // Execute query ONLY ONCE and store result
+        $allForecastsFlat = $query->orderBy('customer_name')
+            ->limit(1000) // Add limit to prevent memory issues
+            ->get();
+            
+        // Pre-calculate intake and realisasi data for all customers and months
+        $calculatedData = ForecastService::calculateMonthlyIntakeRealisasi($currentYear);
+        
+        // Attach calculated data to forecasts
+        $allForecastsFlat = ForecastService::attachIntakeRealisasiData(
+            $allForecastsFlat, 
+            $calculatedData['intake'], 
+            $calculatedData['realisasi']
+        );
+        
+        // Group the same data for pagination
+        $allForecasts = $allForecastsFlat->groupBy(function($item) {
+            return $item->customer_name . '|' . ($item->sales->nama ?? 'No Sales');
+        });
             
         // Simple pagination by chunking the grouped data
         $perPage = 10;
@@ -81,7 +96,16 @@ class ForecastCustController extends Controller
             'query_count' => 2 // 1 for years + 1 for forecasts
         ];
 
-        return view('admin.marketing.forecast_cust.index', compact('paginatedForecasts', 'currentYear', 'availableYears', 'customerSalesCombinations', 'timingInfo', 'searchCustomer', 'searchSales'));
+        return view('admin.marketing.forecast_cust.index', compact(
+            'paginatedForecasts', 
+            'currentYear', 
+            'availableYears', 
+            'customerSalesCombinations', 
+            'timingInfo', 
+            'searchCustomer', 
+            'searchSales',
+            'allForecastsFlat'
+        ));
     }
 
     public function create(Request $request)

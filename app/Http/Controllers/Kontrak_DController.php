@@ -669,7 +669,7 @@ class Kontrak_DController extends Controller
 
                     
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
-                    // dd($piutangTotal, $piutang);
+                    // dd($customerData, $piutangTotal, $piutang);
 
                 // OPTIMIZED: Get kontrak data in single query
                 // $kontrakData = DB::table('kontrak_d as kd')
@@ -715,6 +715,8 @@ class Kontrak_DController extends Controller
                 } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
                     $opiStatus = 'Pending';
                 }
+
+                // dd($opiStatus, $customerData, $piutangTotal, $piutang);
                 
 
                 // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
