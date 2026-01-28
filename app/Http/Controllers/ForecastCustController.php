@@ -51,8 +51,11 @@ class ForecastCustController extends Controller
         
         // Execute query ONLY ONCE and store result
         $allForecastsFlat = $query->orderBy('customer_name')
-            ->limit(1000) // Add limit to prevent memory issues
             ->get();
+            
+        // Log for debugging
+        $totalRecords = $allForecastsFlat->count();
+        \Log::info("Total forecast records loaded: {$totalRecords}");
             
         // Pre-calculate intake and realisasi data for all customers and months
         $calculatedData = ForecastService::calculateMonthlyIntakeRealisasi($currentYear);
@@ -93,7 +96,8 @@ class ForecastCustController extends Controller
         $timingInfo = [
             'execution_time' => $executionTime,
             'total_records' => $total,
-            'query_count' => 2 // 1 for years + 1 for forecasts
+            'raw_records' => $totalRecords,
+            'query_count' => 3 // 1 for years + 1 for forecasts + 1 for pre-calculation
         ];
 
         return view('admin.marketing.forecast_cust.index', compact(

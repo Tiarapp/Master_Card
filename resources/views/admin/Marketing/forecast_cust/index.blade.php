@@ -142,7 +142,9 @@
               dari {{ $customerSalesCombinations->total() }} data
             </span>
             <span class="badge badge-success">
-              Loading: {{ $timingInfo['execution_time'] ?? 0 }}ms | Queries: {{ $timingInfo['query_count'] ?? 0 }}
+              Loading: {{ $timingInfo['execution_time'] ?? 0 }}ms | 
+              Records: {{ $timingInfo['raw_records'] ?? 0 }}/{{ $timingInfo['total_records'] ?? 0 }} | 
+              Queries: {{ $timingInfo['query_count'] ?? 0 }}
             </span>
           </div>
         </div>

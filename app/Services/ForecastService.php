@@ -55,8 +55,11 @@ class ForecastService
             $key = strtolower(trim($forecast->customer_name)) . '|' . $forecast->bulan;
             
             // Set intake and realisasi from pre-calculated data
-            $forecast->intake_calculated = $intakeData->get($key)->total_intake ?? 0;
-            $forecast->realisasi_calculated = $realisasiData->get($key)->total_realisasi ?? 0;
+            $intakeItem = $intakeData->get($key);
+            $realisasiItem = $realisasiData->get($key);
+            
+            $forecast->intake_calculated = $intakeItem ? $intakeItem->total_intake : 0;
+            $forecast->realisasi_calculated = $realisasiItem ? $realisasiItem->total_realisasi : 0;
         }
 
         return $forecasts;
