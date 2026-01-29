@@ -661,11 +661,12 @@ class Kontrak_DController extends Controller
                 $piutangData = Piutang::where('KodeCust', $customerData->Kode)
                     // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
                     ->selectRaw("
-                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
+                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * 1 ELSE TotalRp END) as total_piutang,
                         SUM(TotalTerima) as total_terima,
                         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
                     ")
                     ->first();
+
 
                     
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
@@ -705,6 +706,9 @@ class Kontrak_DController extends Controller
                     $opiStatus = 'Pending';
                     $numb_opi = 'PENDING';
                 }
+
+                
+                dd($customerData, $piutang, $piutangData, $opiStatus, $numb_opi);
 
                 // dd($opiStatus, $customerData, $piutangTotal, $piutang);
 

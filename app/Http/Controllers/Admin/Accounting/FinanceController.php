@@ -262,7 +262,7 @@ class FinanceController extends Controller
             'TglJT',
             'Note',
             DB::raw("CASE 
-                WHEN Note = 'RETUR' THEN ((0 - TotalRp) + TotalTerima)
+                WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
                 ELSE (TotalRp - TotalTerima)
                 END as sisa_piutang"),
             DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
@@ -294,6 +294,9 @@ class FinanceController extends Controller
         $totalPiutang = $piutang->sum('sisa_piutang');
         $sisaLimit = $customer->Plafond - $totalPiutang;
         $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
+        
+        
+        dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
         return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
     }
