@@ -691,6 +691,23 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Prepare data for batch insert
                 $currentTimestamp = now();
                 
+                // dd($dtId);
+                // OPTIMIZED: Determine OPI status based on customer conditions
+                $opiStatus = 'Proses'; // Default status
+
+                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                } elseif ($piutangTotal > $customerData->Plafond) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                }
+
+                // dd($opiStatus, $customerData, $piutangTotal, $piutang);
+
                 // OPTIMIZED: Insert DeliveryTime
                 $dtId = DB::table('dt')->insertGetId([
                     'kontrak_m_id' => $request->idkontrakm,
@@ -703,21 +720,6 @@ class Kontrak_DController extends Controller
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
-                
-                // dd($dtId);
-                // OPTIMIZED: Determine OPI status based on customer conditions
-                $opiStatus = 'Proses'; // Default status
-
-                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
-                    $opiStatus = 'Pending';
-                } elseif ($piutangTotal > $customerData->Plafond) {
-                    $opiStatus = 'Pending';
-                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
-                    $opiStatus = 'Pending';
-                }
-
-                // dd($opiStatus, $customerData, $piutangTotal, $piutang);
-                
 
                 // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
                 DB::table('opi_m')->insert([
@@ -747,8 +749,10 @@ class Kontrak_DController extends Controller
                 $newKgSisa = max(0, $kontrakData->kgSisaKontrak - ($jumlahKirim * $berat));
 
                 // Update number sequence and kontrak
-                $nomer_opi->nomer += 1;
-                $nomer_opi->save();
+                if ($opiStatus == 'Proses') {
+                    $nomer_opi->nomer += 1;
+                    $nomer_opi->save();
+                }
                 
                 // OPTIMIZED: Batch updates
                 DB::table('kontrak_d')

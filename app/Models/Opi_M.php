@@ -234,5 +234,61 @@ class Opi_M extends Model
     public function dt()
     {
         return $this->belongsTo(DeliveryTime::class, 'dt_id', 'id');
+    }   
+
+    /**
+     * Generate nomor OPI secara otomatis
+     * @return string Generated OPI number
+     */
+    public static function generate_numb_opi()
+    {
+        $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
+        
+        if (!$nomer_opi) {
+            throw new \Exception('Number sequence for nomer_opi not found');
+        }
+        
+        // Pad nomor dengan zeros untuk membuat 5 digit
+        $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
+        
+        // Gabungkan nomor dengan format
+        $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
+        
+        // Increment nomor untuk penggunaan selanjutnya
+        $nomer_opi->nomer += 1;
+        $nomer_opi->save();
+        
+        return $numb_opi;
+    }
+
+    /**
+     * Assign nomor OPI ke model ini dan update related DeliveryTime
+     * @param string|null $numb_opi Optional custom number, if null will generate automatically
+     * @return string The assigned OPI number
+     */
+    public function assign_numb_opi($numb_opi = null)
+    {
+        if (!$numb_opi) {
+            $numb_opi = self::generate_numb_opi();
+        }
+        
+        // Update OPI record
+        $this->status_opi = 'Proses';
+        $this->NoOPI = $numb_opi;
+        $this->nama = $numb_opi;
+        $this->lastUpdatedBy = auth()->user()->name ?? 'System';
+        $this->save();
+        
+        // Update related DeliveryTime if exists
+        if ($this->dt_id) {
+            $dt = DeliveryTime::where('id', $this->dt_id)->first();
+            if ($dt) {
+                $dt->opi = $numb_opi;
+                $dt->lastUpdatedBy = auth()->user()->name ?? 'System';
+                $dt->save();
+            }
+        }
+        
+        return $numb_opi;
     }
 }

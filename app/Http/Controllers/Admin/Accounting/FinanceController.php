@@ -7,6 +7,8 @@ use App\Imports\JurnalImport;
 use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
 use App\Models\Accounting\VendorTTDet;
+use App\Models\DeliveryTime;
+use App\Models\Number_Sequence;
 use App\Models\Opi_M;
 use App\Models\PurchaseOrder;
 use DateTime;
@@ -471,7 +473,7 @@ class FinanceController extends Controller
         }
 
         $opi = $opi->where('status_opi', 'Pending')
-                    ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at', 'asc');  // Ubah dari 'desc' ke 'asc'
 
         $opi = $opi->paginate(10);
 
@@ -481,11 +483,17 @@ class FinanceController extends Controller
     public function approve_opi_action(Request $request, $id)
     {
         $opi = Opi_M::findOrFail($id);
-        $opi->status_opi = 'Proses';
-        $opi->lastUpdatedBy = auth()->user()->name;
-        $opi->save();
-
-        return redirect()->back()->with('success', 'OPI No: ' . $opi->NoOPI . ' telah disetujui.');
+        
+        if ($opi->status_opi == 'Pending') {
+            try {
+                $numb_opi = $opi->assign_numb_opi();
+                return redirect()->back()->with('success', "OPI berhasil disetujui dengan nomor: {$numb_opi}");
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal approve OPI: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->back()->with('error', 'OPI sudah tidak berstatus Pending.');
+        }
     }
 
     public function approve_opi_bulk(Request $request)
@@ -505,12 +513,16 @@ class FinanceController extends Controller
         foreach ($selectedIds as $id) {
             $opi = Opi_M::find($id);
             if ($opi && $opi->status_opi == 'Pending') {
-                $opi->status_opi = 'Proses';
-                $opi->lastUpdatedBy = auth()->user()->name;
-                $opi->save();
-                
-                $approvedCount++;
-                $approvedNumbers[] = $opi->NoOPI;
+                try {
+                    // Menggunakan method baru dari model
+                    $numb_opi = $opi->assign_numb_opi();
+                    
+                    $approvedCount++;
+                    $approvedNumbers[] = $numb_opi;
+                } catch (\Exception $e) {
+                    Log::error('Error approving OPI ID ' . $id . ': ' . $e->getMessage());
+                    continue;
+                }
             }
         }
 
