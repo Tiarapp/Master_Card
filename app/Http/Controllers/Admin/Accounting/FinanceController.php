@@ -296,7 +296,7 @@ class FinanceController extends Controller
         $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
         
         
-        dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
+        // dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
         return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
     }
