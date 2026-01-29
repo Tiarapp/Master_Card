@@ -421,8 +421,7 @@ Route::middleware(['auth'])->group(function (){
     })->name('acc.vendor_tt.export');
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
-        $opi = Opi_M::where('status_opi', '!=', 'Cancel')
-                ->orWhere('status_opi', '!=', 'Pending');
+        $opi = Opi_M::where('status_opi', '=', 'Proses');
 
         if($request->search) {
             $opi->where(function($query) use ($request) {
