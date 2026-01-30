@@ -438,7 +438,10 @@ Route::middleware(['auth'])->group(function (){
             });
         }
 
-        $opi = $opi->orderBy('updated_at', 'desc')
+        $opi = $opi->orderBy([
+            'updated_at' => 'desc',
+            'id' => 'desc',
+        ])
             ->paginate(50, ['*'], 'page', $page);
         // dd($opi);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
