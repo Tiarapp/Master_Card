@@ -423,10 +423,7 @@ class OpiController extends Controller
         $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
             ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
-            ->orderBy([
-                'updated_at' => 'desc',
-                'id' => 'desc',
-            ]);
+            ->orderBy('updated_at', 'desc');
 
         if($request->search) {
             $productions->whereHas('kontrakm', function($query) use ($request) {
