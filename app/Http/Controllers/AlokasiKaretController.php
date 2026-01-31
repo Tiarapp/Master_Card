@@ -6,6 +6,8 @@ use App\Exports\AlokasiKaretExport;
 use App\Models\AlokasiKaret;
 use App\Models\BbmTeknik;
 use App\Models\Karet;
+use App\Models\Kontrak_D;
+use App\Models\Kontrak_M;
 use App\Models\Mastercard;
 use App\Models\Sales;
 use Illuminate\Http\Request;
@@ -129,6 +131,12 @@ class AlokasiKaretController extends Controller
 
         try {
             DB::beginTransaction();
+
+            $kontrak = Kontrak_D::find($request->kontrak_id);
+
+            $update_status_alokasi = Kontrak_M::find($kontrak->kontrak_m_id);
+            $update_status_alokasi->alokasi_status = 'Sudah Alokasi';
+            $update_status_alokasi->save();
 
             $update_bbm = BbmTeknik::find($request->bbm_id);
 

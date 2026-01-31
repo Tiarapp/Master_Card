@@ -55,7 +55,8 @@ class Kontrak_M extends Model
         'createdBy',
         'harga_expedisi',
         'harga_karet',
-        'harga_pisau'
+        'harga_pisau',
+        'alokasi_status'
     ];
 
     // Relasi one to Many
