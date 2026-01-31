@@ -708,7 +708,7 @@ class Kontrak_DController extends Controller
                 }
 
                 
-                dd($customerData, $piutang, $piutangData, $opiStatus, $numb_opi);
+                // dd($customerData, $piutang, $piutangData, $opiStatus, $numb_opi);
 
                 // dd($opiStatus, $customerData, $piutangTotal, $piutang);
 
