@@ -31,8 +31,14 @@ class KontrakController extends Controller
             // Add search functionality
             if (!empty($search)) {
                 $query->where(function($q) use ($search) {
-                    $q->where('kode', 'LIKE', '%' . $search . '%')
-                      ->orWhere('customer_name', 'LIKE', '%' . $search . '%');
+                    $q->whereHas('kontrakm', function($subQuery) use ($search) {
+                        $subQuery->where('kode', 'LIKE', '%' . $search . '%')
+                                 ->orWhere('customer_name', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('mc', function($subQuery) use ($search) {
+                        $subQuery->where('kode', 'LIKE', '%' . $search . '%')
+                                 ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
+                    });
                 });
             }
 
