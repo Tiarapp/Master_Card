@@ -130,7 +130,15 @@ class AlokasiKaretController extends Controller
         try {
             DB::beginTransaction();
 
-            
+            $update_bbm = BbmTeknik::find($request->bbm_id);
+
+            if (!$update_bbm) {
+                throw new \Exception('Data BBM Teknik tidak ditemukan.');
+            }
+
+            // Update BBM Teknik status
+            $update_bbm->ESTIMASI = 1;
+            $update_bbm->save();
 
             // Create new Karet record
             $karet = new Karet();

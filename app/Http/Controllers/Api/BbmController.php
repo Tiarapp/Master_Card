@@ -28,8 +28,7 @@ class BbmController extends Controller
                              ->orWhere('NoLC', 'like', '%PISAU%');
                 })
                 ->where(function($subQuery) {
-                    $subQuery->where('ESTIMASI', '!=', 1)
-                             ->orWhereNull('ESTIMASI');
+                    $subQuery->where('ESTIMASI', '!=', 1);
                 }); // Exclude records where ESTIMASI is 1
 
             // Add search functionality
@@ -48,6 +47,7 @@ class BbmController extends Controller
                       });
                 });
             }
+
 
             // Get paginated results with relationships
             $bbmData = $query->orderBy('NoBukti', 'desc')
