@@ -262,11 +262,11 @@
                              onclick="openEditModal({{ $item->id }}, '{{ $item->customer }}', '{{ $item->nama_karet }}', {{ $item->alokasi }})">
                             <i class="fas fa-edit text-warning"></i> Edit Alokasi
                           </a>
-                          <div class="dropdown-divider"></div>
+                          {{-- <div class="dropdown-divider"></div>
                           <a class="dropdown-item text-danger" href="#" 
                              onclick="return confirm('Yakin hapus data ini?')">
                             <i class="fas fa-trash"></i> Hapus
-                          </a>
+                          </a> --}}
                         </div>
                       </div>
                     </td>
