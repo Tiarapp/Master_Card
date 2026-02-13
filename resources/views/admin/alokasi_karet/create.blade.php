@@ -430,7 +430,10 @@ $(document).ready(function() {
                                 'data-customer="' + (kontrak.Customer || '') + '" ' +
                                 'data-tanggal="' + (kontrak.TglKontrak || '') + '" ' +
                                 'data-karet="' + (kontrak.HargaKaret || 0) + '" ' +
-                                'data-pisau="' + (kontrak.HargaPisau || 0) + '">' +
+                                'data-pisau="' + (kontrak.HargaPisau || 0) + '" ' +
+                                'data-gsm="' + (kontrak.gsm || 0) + '" ' +
+                                'data-hargakg="' + (kontrak.harga_kg || 0) + '">' +
+                                '>' +
                                 '<i class="fas fa-check"></i> Pilih' +
                                 '</button>' +
                             '</td>' +
@@ -731,8 +734,10 @@ $(document).ready(function() {
         var namaBarang = $(this).data('namabarang');
         var mcKode = $(this).data('mckode');
         var mcId = $(this).data('mc_id');
+        var gsm = $(this).data('gsm');
+        var hargaKg = $(this).data('hargakg');
 
-        // console.log($(this).data);
+        console.log($(this).data());
         
         
         var kontrakDisplay = noKontrak + ' - ' + customer + ' (' + tanggal + ')';
@@ -752,6 +757,8 @@ $(document).ready(function() {
         $('#kontrak_id').val(kontrakId);
         $('#kontrak').val(kontrakDisplay);
         $('#customer_display').val(customer);
+        $('#gsm').val(gsm);
+        $('#per_kg').val(hargaKg);
         
         $('#kontrakModal').modal('hide');
     });
