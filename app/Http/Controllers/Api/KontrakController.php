@@ -24,7 +24,7 @@ class KontrakController extends Controller
                     $q->select('id', 'kode as KodeKontrak', 'customer_name', 'tglKontrak', 'harga_pisau', 'harga_karet', 'Status');
                 },
                 'mc' => function($q) {
-                    $q->select('id', 'kode', 'revisi', 'namaBarang', 'kodeBarang');
+                    $q->select('id', 'kode', 'revisi', 'namaBarang', 'kodeBarang', 'gramSheetBoxKontrak');
                 }
             ]);
 
@@ -59,7 +59,7 @@ class KontrakController extends Controller
                     if ($kontrak->mc->revisi == '' || $kontrak->mc->revisi == 'R0') {
                         $mc = $kontrak->mc->kode;
                     } else {
-                        $mc = $kontrak->mc->kode . ' - ' . $kontrak->mc->revisi;
+                        $mc = $kontrak->mc->kode . '-' . $kontrak->mc->revisi;
                     };
 
                     return [
@@ -72,7 +72,9 @@ class KontrakController extends Controller
                         'mcKode' => $mc,
                         'mc_id' => $kontrak->mc->id,
                         'namaBarang' => $kontrak->mc->namaBarang,
-                        'Status' => $kontrak->kontrakm->Status ?: 'AKTIF'
+                        'Status' => $kontrak->kontrakm->Status ?: 'AKTIF',
+                        'gsm' => (float) $kontrak->mc->gramSheetBoxKontrak,
+                        'harga_kg' => $kontrak->harga_kg ? (float) $kontrak->harga_kg : 0,
                     ];
                 });
 
