@@ -257,14 +257,16 @@
                           <a class="dropdown-item" href="{{ route('karet.show', $item->id) }}">
                             <i class="fas fa-eye text-info"></i> Detail
                           </a>
-                          {{-- <a class="dropdown-item" href="#">
-                            <i class="fas fa-edit text-warning"></i> Edit
+                          
+                          <a class="dropdown-item" href="#" 
+                             onclick="openEditModal({{ $item->id }}, '{{ $item->customer }}', '{{ $item->nama_karet }}', {{ $item->alokasi }})">
+                            <i class="fas fa-edit text-warning"></i> Edit Alokasi
                           </a>
                           <div class="dropdown-divider"></div>
                           <a class="dropdown-item text-danger" href="#" 
                              onclick="return confirm('Yakin hapus data ini?')">
                             <i class="fas fa-trash"></i> Hapus
-                          </a> --}}
+                          </a>
                         </div>
                       </div>
                     </td>
@@ -364,7 +366,222 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+
+  <!-- Modal Edit Alokasi -->
+  <div class="modal fade" id="editAlokasiModal" tabindex="-1" role="dialog" aria-labelledby="editAlokasiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="editAlokasiModalLabel">
+            <i class="fas fa-edit"></i> Edit Alokasi Karet
+          </h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <form id="editAlokasiForm" method="POST">
+          @csrf
+          @method('PUT')
+          
+          <div class="modal-body">
+            <!-- Info Karet -->
+            <div class="card bg-light mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-primary mb-2">
+                      <i class="fas fa-info-circle"></i> Informasi Karet
+                    </h6>
+                    <div class="mb-2">
+                      <strong>Customer:</strong>
+                      <span id="modal-customer"></span>
+                    </div>
+                    <div>
+                      <strong>Nama Karet:</strong>
+                      <span id="modal-nama-karet"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="text-success mb-2">
+                      <i class="fas fa-weight"></i> Alokasi Saat Ini
+                    </h6>
+                    <div class="display-4 text-success font-weight-bold" id="modal-alokasi-awal">0</div>
+                    <small class="text-muted">Kilogram</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input Alokasi Baru -->
+            <div class="card border-warning">
+              <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">
+                  <i class="fas fa-edit"></i> Alokasi Baru
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="new-alokasi" class="font-weight-bold">
+                    Masukkan Alokasi Baru (KG) <span class="text-danger">*</span>
+                  </label>
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-warning">
+                        <i class="fas fa-weight"></i>
+                      </span>
+                    </div>
+                    <input type="number" 
+                           class="form-control form-control-lg" 
+                           id="new-alokasi" 
+                           name="alokasi" 
+                           step="0.01" 
+                           min="0" 
+                           placeholder="Contoh: 1000.50" 
+                           required>
+                    <div class="input-group-append">
+                      <span class="input-group-text">KG</span>
+                    </div>
+                  </div>
+                  <small class="text-muted">
+                    <i class="fas fa-info-circle"></i> 
+                    Gunakan titik (.) untuk desimal. Contoh: 1000.50
+                  </small>
+                </div>
+
+                <!-- Perbandingan -->
+                <div class="mt-4 p-3 bg-light rounded">
+                  <h6 class="text-primary mb-3">
+                    <i class="fas fa-chart-line"></i> Perbandingan
+                  </h6>
+                  <div class="row text-center">
+                    <div class="col-md-4">
+                      <div class="text-success">
+                        <strong>Alokasi Awal</strong><br>
+                        <span class="h4" id="comparison-awal">0</span> KG
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="text-primary">
+                        <i class="fas fa-arrow-right fa-2x"></i>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="text-warning">
+                        <strong>Alokasi Baru</strong><br>
+                        <span class="h4" id="comparison-baru">0</span> KG
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3 text-center">
+                    <div id="selisih-container" style="display: none;">
+                      <strong>Selisih: </strong>
+                      <span id="selisih" class="badge badge-lg"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Keterangan Tambahan -->
+            <div class="form-group mt-3">
+              <label for="keterangan" class="font-weight-bold">
+                <i class="fas fa-comment"></i> Keterangan Perubahan
+              </label>
+              <textarea class="form-control" 
+                        id="keterangan" 
+                        name="keterangan" 
+                        rows="3" 
+                        placeholder="Masukkan alasan atau keterangan perubahan alokasi..."></textarea>
+            </div>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <i class="fas fa-times"></i> Batal
+            </button>
+            <button type="submit" class="btn btn-primary" id="save-button">
+              <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<script>
+// Global functions that need to be accessible from onclick attributes
+function openEditModal(id, customer, namaKaret, alokasiAwal) {
+    // Set form action URL
+    $('#editAlokasiForm').attr('action', `/admin/marketing/karet_report/${id}`);
+    
+    // Fill modal data
+    $('#modal-customer').text(customer);
+    $('#modal-nama-karet').text(namaKaret);
+    $('#modal-alokasi-awal').text(numberFormat(alokasiAwal));
+    $('#comparison-awal').text(numberFormat(alokasiAwal));
+    
+    // Store original allocation for comparison
+    $('#editAlokasiForm').data('alokasi-awal', alokasiAwal);
+    
+    // Reset form
+    $('#new-alokasi').val('');
+    $('#keterangan').val('');
+    $('#comparison-baru').text('0');
+    $('#selisih-container').hide();
+    
+    // Reset button state
+    $('#save-button').html('<i class="fas fa-save"></i> Simpan Perubahan').prop('disabled', false);
+    
+    // Show modal
+    $('#editAlokasiModal').modal('show');
+    
+    // Focus on input after modal is shown
+    $('#editAlokasiModal').on('shown.bs.modal', function() {
+        $('#new-alokasi').focus();
+    });
+}
+
+function updateComparison() {
+    const alokasiAwal = parseFloat($('#editAlokasiForm').data('alokasi-awal')) || 0;
+    const alokasiBaru = parseFloat($('#new-alokasi').val()) || 0;
+    
+    // Update display
+    $('#comparison-baru').text(numberFormat(alokasiBaru));
+    
+    if (alokasiBaru > 0) {
+        const selisih = alokasiBaru - alokasiAwal;
+        const selisihAbs = Math.abs(selisih);
+        
+        $('#selisih-container').show();
+        
+        if (selisih > 0) {
+            $('#selisih').removeClass('badge-danger badge-secondary')
+                       .addClass('badge-success')
+                       .html(`<i class="fas fa-arrow-up"></i> +${numberFormat(selisihAbs)} KG`);
+        } else if (selisih < 0) {
+            $('#selisih').removeClass('badge-success badge-secondary')
+                       .addClass('badge-danger')
+                       .html(`<i class="fas fa-arrow-down"></i> -${numberFormat(selisihAbs)} KG`);
+        } else {
+            $('#selisih').removeClass('badge-success badge-danger')
+                       .addClass('badge-secondary')
+                       .html('<i class="fas fa-equals"></i> Tidak Berubah');
+        }
+    } else {
+        $('#selisih-container').hide();
+    }
+}
+
+function numberFormat(number) {
+    return new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(number);
+}
+</script>
 @endsection
 
 @section('scripts')
@@ -383,6 +600,28 @@ $(document).ready(function() {
             // Add actual delete functionality here
             console.log('Delete confirmed');
         }
+    });
+
+    // Real-time calculation for comparison
+    $('#new-alokasi').on('input', function() {
+        updateComparison();
+    });
+
+    // Form validation
+    $('#editAlokasiForm').on('submit', function(e) {
+        const newAlokasi = parseFloat($('#new-alokasi').val());
+        
+        if (!newAlokasi || newAlokasi < 0) {
+            e.preventDefault();
+            alert('Mohon masukkan nilai alokasi yang valid (minimal 0)');
+            $('#new-alokasi').focus();
+            return false;
+        }
+
+        // Add loading state
+        $('#save-button').html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...').prop('disabled', true);
+        
+        return true;
     });
 });
 </script>

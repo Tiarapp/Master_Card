@@ -622,6 +622,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/karet_report/{id}', [AlokasiKaretController::class, 'show'])->name('karet.show');
         Route::get('admin/marketing/karet_report/export/excel', [AlokasiKaretController::class, 'export'])->name('karet.export');
         Route::post('admin/marketing/karet_report/store', [AlokasiKaretController::class, 'store'])->name('karet.store');
+        Route::put('admin/marketing/karet_report/{id}', [AlokasiKaretController::class, 'update'])->name('karet.update');
 
         // Forecast Tonase Customer
         Route::get('admin/marketing/forecast_tonase', [ForecastCustController::class, 'index'])->name('forecast.tonase.index');

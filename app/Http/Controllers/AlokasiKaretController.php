@@ -198,4 +198,50 @@ class AlokasiKaretController extends Controller
                 ->withInput();
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'alokasi' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Data tidak valid. Alokasi harus berupa angka dan minimal 0.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $karet = Karet::findOrFail($id);
+
+            // Update karet record
+            $karet->alokasi = $request->alokasi;
+            $karet->save();
+
+            DB::commit();
+
+            // Log the change for audit trail
+            Log::info('Alokasi Karet Updated', [
+                'karet_id' => $id,
+                'customer' => $karet->customer,
+                'nama_karet' => $karet->nama_karet,
+                'keterangan' => $request->keterangan,
+                'updated_by' => auth()->user()->name ?? 'System'
+            ]);
+
+            return redirect()->route('karet.index')
+                ->with('success', 'Alokasi karet berhasil diupdate.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating alokasi karet: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat mengupdate alokasi: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
 }
