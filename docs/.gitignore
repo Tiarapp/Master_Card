@@ -1,0 +1,22 @@
+# Documentation folder .gitignore
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*~
+
+# Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE files
+.vscode/
+.idea/
+
+# Generated files
+*.pdf
+*.docx
+*.html

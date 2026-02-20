@@ -27,6 +27,7 @@ use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
+use App\Http\Controllers\Stellar\BP\BbmController;
 use App\Models\Accounting\VendorTT;
 use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
@@ -693,45 +694,48 @@ Route::middleware(['auth'])->group(function (){
         
         // BBK Roll Individual Item Operations
         Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
+
+        Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
+            Route::get('/', [FeedbackController::class, 'index'])->name('index');
+            Route::get('/create', [FeedbackController::class, 'create'])->name('create');
+            Route::post('/store', [FeedbackController::class, 'store'])->name('store');
+            Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
+            Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
+            Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
+        });
+        
+        // Public feedback submission (can be accessed by any authenticated user)
+        Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
+
+        // Hardware Template Download (Public access)
+        Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
+        // Artisan command for export (public access for simplicity)
+        Route::get('artisan/hardware-export', function() {
+            Artisan::call('hardware:export');
+            return response()->json(['success' => true, 'message' => 'Export completed']);
+        });
+
+        Route::resource('hardware', 'HardwareController');
+        Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
+        Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
+
+        Route::prefix('admin/report')->name('admin.report.')->group(function () {
+            Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
+            Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
+            Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
+            Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
+        });
+
+        
+        Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
+        Route::post('/company/switch/{companyId}', [App\Http\Controllers\CompanyController::class, 'switchCompany'])->name('company.switch');
+        Route::get('/company/info', [App\Http\Controllers\CompanyController::class, 'getCompanyInfo'])->name('company.info');
+
+
+        //Stellar 
+
+        Route::get('/admin/stellar_bp', [BbmController::class, 'index'])->name('stellar.bp.index');
+        Route::get('/admin/stellar_bp/export', [BbmController::class, 'export'])->name('stellar.bp.export');
 }); 
-
-// Feedback Routes
-Route::middleware(['auth'])->group(function () {
-    // Admin Feedback Management
-    Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
-        Route::get('/', [FeedbackController::class, 'index'])->name('index');
-        Route::get('/create', [FeedbackController::class, 'create'])->name('create');
-        Route::post('/store', [FeedbackController::class, 'store'])->name('store');
-        Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
-        Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
-        Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
-    });
-    
-    // Public feedback submission (can be accessed by any authenticated user)
-    Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
-});
-
-// Hardware Template Download (Public access)
-Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
-
-// Artisan command for export (public access for simplicity)
-Route::get('artisan/hardware-export', function() {
-    Artisan::call('hardware:export');
-    return response()->json(['success' => true, 'message' => 'Export completed']);
-});
-
-// Hardware Management Routes (Divisi ID 2 only)
-Route::middleware(['auth'])->group(function () {
-    Route::resource('hardware', 'HardwareController');
-    Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
-    Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
-
-    Route::prefix('admin/report')->name('admin.report.')->group(function () {
-        Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
-        Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
-        Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
-        Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
-    });
-});
 
 require __DIR__ . '/auth.php';
