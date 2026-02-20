@@ -50,7 +50,7 @@ class MenuService
         $companyId = $companyId ?? $user->company_id;
         $divisiId = $divisiId ?? $user->divisi_id;
 
-        if (!$companyId || !$divisiId) {
+        if (!$user || !$companyId || !$divisiId) {
             return false;
         }
 
@@ -119,5 +119,38 @@ class MenuService
         }
 
         return $menuStructure;
+    }
+
+    /**
+     * Get current user's company name
+     */
+    public function getCurrentCompanyName()
+    {
+        $user = Auth::user();
+        
+        if (!$user || !$user->company_id) {
+            return 'PT. SPA';
+        }
+
+        $company = \App\Models\Company::find($user->company_id);
+        return $company ? $company->name : 'PT. SPA';
+    }
+
+    /**
+     * Check if user has access based on divisi_id (fallback for existing logic)
+     */
+    public function getDivisiMenuAccess($divisiIds)
+    {
+        $user = Auth::user();
+        
+        if (!$user || !$user->divisi_id) {
+            return false;
+        }
+
+        if (!is_array($divisiIds)) {
+            $divisiIds = [$divisiIds];
+        }
+
+        return in_array($user->divisi_id, $divisiIds);
     }
 }

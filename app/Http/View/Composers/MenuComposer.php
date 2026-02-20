@@ -17,6 +17,12 @@ class MenuComposer
     public function compose(View $view)
     {
         $menuStructure = $this->menuService->getMenuStructure();
-        $view->with('menuStructure', $menuStructure);
+        $companyName = $this->menuService->getCurrentCompanyName();
+        
+        $view->with([
+            'menuStructure' => $menuStructure,
+            'currentCompanyName' => $companyName,
+            'menuService' => $this->menuService
+        ]);
     }
 }
