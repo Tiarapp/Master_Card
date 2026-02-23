@@ -187,7 +187,7 @@
                         <td class="text-gray-800 bold">{{ $production->NoOPI }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->poCustomer }}</td>
                         <td class="text-gray-800 bold">
-                            {{ $production->mc->kode . ($production->mc->revisi == 'R0' ? '' : '-' . $production->mc->revisi) }}
+                            {{ $production->kontrakd->mc->kode . ($production->kontrakd->mc->revisi == 'R0' ? '' : '-' . $production->kontrakd->mc->revisi) }}
                         </td>
                         <td class="text-gray-800 bold">
                           @php
