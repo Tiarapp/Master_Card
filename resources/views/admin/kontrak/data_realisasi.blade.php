@@ -136,6 +136,7 @@
                                                             <th scope="col">Customer</th>
                                                             <th scope="col">MOD</th>
                                                             <th scope="col">Qty</th>
+                                                            <th scope="col">OPI</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -149,6 +150,7 @@
                                                                 <td>{{ $data->NamaCust }}</td>
                                                                 <td>{{ trim($data->NomerMOD) }}</td>
                                                                 <td>{{ number_format($data->Quantity) }}</td>
+                                                                <td>{{ $data->NoSeal }}</td>
                                                             </tr>
                                                             <?php
                                                         }
@@ -263,6 +265,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="message-text" class="col-form-label">OPI:</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="opi" id="opi" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary" >Save</button>
                         </div>
                     </div>
@@ -279,17 +295,21 @@
                     <thead>
                         <tr>
                             <th scope="col">Tanggal Kirim</th>
+                            <th scope="col">Surat Jalan</th>
                             <th scope="col">Jumlah Kirim</th>
+                            <th scope="col">OPI</th>
                             <th scope="col">action</th>
                         </tr>
                     </thead>
                     <tbody>   
-                        @foreach ($kontrak_M->realisasi as $o)
+                        @foreach ($kontrak_M->realisasi as $data)
                         <tr>
-                            <td scope="col">{{ $o->tanggal_kirim }}</td>
-                            <td scope="col">{{ $o->qty_kirim }}</td>
+                            <td scope="col">{{ $data->tanggal_kirim }}</td>
+                            <td scope="col">{{ $data->nomer_sj }}</td>
+                            <td scope="col">{{ $data->qty_kirim }}</td>
+                            <td scope="col">{{ $data->opi_id ? $data->opi->nama : '' }}</td>
                             <td>
-                                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $o->id }}">Edit</button>
+                                <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#edit_kirim{{ $data->id }}">Edit</button>
                             </td>
                         </tr>
                         @include('admin.kontrak.edit_kirim')
@@ -437,12 +457,13 @@
         });
         
         $('#data_sj tbody').on( 'click', 'td', function () {
-            var kontrak = (table.row(this).data());
+            var surat_jalan = (table.row(this).data());
 
-            document.getElementById("tglKirim").value = kontrak[1]
-            document.getElementById("jumlahKirim").value = kontrak[4]
-            document.getElementById("sj").value = kontrak[0]
-            document.getElementById("mod").value = kontrak[3]
+            document.getElementById("tglKirim").value = surat_jalan[1]
+            document.getElementById("jumlahKirim").value = surat_jalan[4]
+            document.getElementById("sj").value = surat_jalan[0]
+            document.getElementById("mod").value = surat_jalan[3]
+            document.getElementById("opi").value = surat_jalan[5]
 
             $("#modal-sj").modal("hide")
         });

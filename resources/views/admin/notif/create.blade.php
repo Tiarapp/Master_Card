@@ -8,7 +8,7 @@
     <div class="content-header">
         <div class="row" id="form_list_mc">
             <div class="col-md-5">
-                <h4 class="modal-title">Tambah Koli</h4>
+                <h4 class="modal-title">Request Buka Blok</h4>
                 <hr>
 
                 @if ($errors->any())
@@ -32,52 +32,13 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div id="listKontrak">    
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-icon btn-success" data-toggle="modal" data-target="#modal-kontrak" title="Tambah Kontrak"><i class="fas fa-plus-circle fa-lg"></i></button>
+                                <div class="col-md-2 mb-2">
+                                    <button type="button" class="btn btn-icon btn-success btn-kontrak" data-toggle="modal" data-target="#modal-kontrak" title="Tambah Kontrak"><i class="fas fa-plus-circle fa-lg"></i></button>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal fade" id="modal-kontrak">
-                            <div class="modal-dialog modal-xl">                                                    
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">List Kontrak</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body kontrak">
-                                        <div class="card-body">
-                                            <table class="table table-bordered" id="data_kontrak">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">ID</th>
-                                                        <th scope="col">Kode</th>
-                                                        <th scope="col">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php 
-                                                    foreach ($kontrak as $data) { ?>
-                                                        <tr class="modal-plan-list">
-                                                            <td>
-                                                                {{ $data->id }}
-                                                            </td>
-                                                            <td scope="row">{{ $data->kode }}</td>
-                                                            <td><button class="btn btn-success" type="button">Add</button></td>
-                                                        </tr>
-                                                        <?php
-                                                    }
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                    </div>
+                                <div class="row detail-kontrak">
+
                                 </div>
                             </div>
                         </div>
@@ -93,6 +54,39 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Modal Kontrak -->
+                <div class="modal fade kontrak-list" id="modal-kontrak">
+                    <div class="modal-dialog modal-xl">                                                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">{{ __('Kontrak List') }}</h3>
+                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-6 mb-6">
+                                        <form class="form-search-kontrak" action="">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control search-item" id="search" name="search" value="" placeholder="Cari item">
+                                                <button type="submit" class="btn btn-light-primary keyword-search-item-button">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="content-body">
+                                    Please wait...
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>    
@@ -102,41 +96,52 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-    $(".kontrak").ready(function(){            
-        var table = $("#data_kontrak").DataTable({
-            select: true,
-            "order": [0, 'desc']
+        $(document).on("click", ".btn-kontrak", function(e) {
+            e.preventDefault();
+            $(".kontrak-list .content-body").html("Please wait...");
+
+            var url = "{{ route('kontrak.all') }}";
+
+            $('.form-search-kontrak').attr('action', url);
+
+            $.get(url, function(data) {
+                $(".kontrak-list .content-body").html(data);
+            });
         });
-        
-        $('#data_kontrak tbody').on( 'click', 'td', function () {
-            var kontrak = (table.row(this).data());
-            var html = '';
 
-            html += "<div id='listKontrak'>"  
-                html += "<div class='row'>"
-                    html += "<div class='col-md-12'>"
-                        html += "<div class='form-group'>"
-                            html += "<div class='row'>"
-                                html += "<div class='col-md-4'>"
-                                    html += "<label>No Kontrak</label>"
-                                html += "</div>"
-                                html += "<div class='col-md-6'>"
-                                    html += "<input type='hidden' class='form-control txt_line' name='idkontrak["+kontrak[0]+"]' id='idkontrak["+kontrak[0]+"]' value='"+kontrak[0]+"' readonly>"
-                                    html += "<input type='text' class='form-control txt_line' name='noKontrak["+kontrak[0]+"]' id='noKontrak["+kontrak[0]+"]' value='"+kontrak[1]+"' readonly>"
-                                html += "</div>"
-                                html += "<div class='col-md-2'>"
-                                    html += "<button type='button' class='remove-kontrak btn btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-                                html += "</div>"
-                            html += "</div>"
-                        html += "</div>"
-                    html += "</div>"
-                html += "</div>"
-            html += "</div>"
+        $( ".kontrak-list .form-search-kontrak" ).submit(function( e ) {
+            // Stop form from submitting normally
+            e.preventDefault();
 
-            $("#listKontrak").append(html)
-            $("#modal-kontrak").modal("hide")
+            // Get some values from elements on the page:
+            var $form = $( this ),
+            keyword = $form.find( "input[name='search']" ).val(),
+            url = $form.attr( "action" );
+
+            $(".kontrak-list .content-body" ).html( "Please wait..." );
+            $.get( url, { search: keyword }, function( data ) {
+                $( ".kontrak-list .content-body" ).html( data );
+            });
+        });
+
+        $(document).on("click", ".modal-kontrak-list .btn-insert-contract", function(e) {
+            e.preventDefault();
+
+            var contract_id = $(this).closest('tr').find('.contract_id').val();
+            var url = "{{ route('kontrak.single', ['id' => ':id']) }}";
+            url = url.replace(':id', contract_id);
+
+            $(this).closest(".modal-kontrak-list").find('.btn-insert-contract').attr('disabled', 'disabled');
+            $.get(url, function(data) {
+
+                kontrakHTML = 
+                    '<div class="col-md-4 mb-3">'+
+                        '<input type="text" class="form-control" name="kontrak[]" value="'+data.kode+'" readonly>'+
+                        '<input type="hidden" class="form-control" name="kontrak_id[]" value="'+data.id+'">'+
+                    '</div>';
+
+                $('#listKontrak .detail-kontrak').append(kontrakHTML);
+            });
         });
     });
 </script>

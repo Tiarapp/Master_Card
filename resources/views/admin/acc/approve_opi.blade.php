@@ -106,10 +106,35 @@
           </div>
         </div>
         <div class="card-body p-0">
+          <!-- Bulk Actions Form - wraps entire table -->
+          <form id="bulkApproveForm" action="{{ route('acc.opi.approve.bulk') }}" method="POST">
+            @csrf
+            <div class="px-3 py-2 bg-light border-bottom">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="selectAll">
+                    <label class="custom-control-label" for="selectAll">Pilih Semua</label>
+                  </div>
+                </div>
+                <div class="col-md-6 text-right">
+                  <button type="submit" class="btn btn-success btn-sm" id="bulkApproveBtn" disabled>
+                    <i class="fas fa-check-double mr-1"></i> Approve Terpilih
+                  </button>
+                  <span class="ml-2 text-muted">
+                    <span id="selectedCount">0</span> OPI dipilih
+                  </span>
+                </div>
+              </div>
+            </div>
           <div class="table-responsive">
             <table class="table table-hover table-striped mb-0">
               <thead class="thead-light">
                 <tr>
+                  <th scope="col" class="text-center" width="50">
+                    <i class="fas fa-tasks mr-1"></i>
+                    Pilih
+                  </th>
                   <th scope="col" class="text-center">#</th>
                   <th scope="col" class="text-center">
                     <i class="fas fa-hashtag mr-1"></i>
@@ -144,6 +169,15 @@
               <tbody>
                 @forelse ($opi as $index => $data)
                 <tr class="animate-row">
+                  <td class="text-center">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input opi-checkbox" 
+                             id="opi_{{ $data->id }}" 
+                             name="selected_opi[]" 
+                             value="{{ $data->id }}">
+                      <label class="custom-control-label" for="opi_{{ $data->id }}"></label>
+                    </div>
+                  </td>
                   <td class="text-center">{{ $opi->firstItem() + $index }}</td>
                   <td class="text-center font-weight-bold text-primary">
                     <i class="fas fa-file-alt mr-1"></i>
@@ -196,7 +230,7 @@
                 </tr>
                 @empty 
                 <tr>
-                  <td colspan="8" class="text-center py-5">
+                  <td colspan="9" class="text-center py-5">
                     <div class="empty-state">
                       <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                       <h5 class="text-muted">Tidak Ada OPI Pending</h5>
@@ -207,6 +241,7 @@
                 @endforelse
               </tbody>
             </table>
+          </form>
           </div>
         </div>
         @if($opi->count() > 0)
@@ -254,6 +289,48 @@ $(document).ready(function() {
                 $(this).html(text.replace(new RegExp('(' + searchTerm + ')', 'gi'), '<mark>$1</mark>'));
             }
         });
+    }
+    
+    // Bulk selection functionality
+    $('#selectAll').change(function() {
+        const isChecked = $(this).is(':checked');
+        $('.opi-checkbox').prop('checked', isChecked);
+        updateBulkActions();
+    });
+    
+    // Individual checkbox change
+    $('.opi-checkbox').change(function() {
+        updateBulkActions();
+        
+        // Update select all checkbox
+        const totalCheckboxes = $('.opi-checkbox').length;
+        const checkedCheckboxes = $('.opi-checkbox:checked').length;
+        
+        $('#selectAll').prop('indeterminate', checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes);
+        $('#selectAll').prop('checked', checkedCheckboxes === totalCheckboxes);
+    });
+    
+    // Bulk approve form submission
+    $('#bulkApproveForm').on('submit', function(e) {
+        const selectedCount = $('.opi-checkbox:checked').length;
+        
+        if (selectedCount === 0) {
+            e.preventDefault();
+            alert('Pilih minimal 1 OPI untuk di-approve');
+            return false;
+        }
+        
+        const confirmMsg = `Yakin ingin approve ${selectedCount} OPI yang dipilih?`;
+        if (!confirm(confirmMsg)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    function updateBulkActions() {
+        const checkedCount = $('.opi-checkbox:checked').length;
+        $('#selectedCount').text(checkedCount);
+        $('#bulkApproveBtn').prop('disabled', checkedCount === 0);
     }
 });
 </script>

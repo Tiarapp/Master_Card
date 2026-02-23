@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTempPhpDataTable extends Migration
+class AddUrutanToCorrDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateTempPhpDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('temp_php_data', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('corr_details', function (Blueprint $table) {
+            $table->integer('urutan')->nullable()->after('opi_id')->comment('Urutan item dalam planning');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateTempPhpDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp_php_data');
+        Schema::table('corr_details', function (Blueprint $table) {
+            $table->dropColumn('urutan');
+        });
     }
 }

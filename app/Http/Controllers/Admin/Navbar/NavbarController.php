@@ -58,11 +58,11 @@ class NavbarController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
 
-        $id = array_merge($request->idkontrak);
-        for ($i=0; $i < count($id) ; $i++) { 
+        for ($i=0; $i < count($request->kontrak_id) ; $i++) { 
             Notification::create([
-                'kontrak_id' => $id[$i],
+                'kontrak_id' => $request->kontrak_id[$i],
                 'alasan' => $request->alasan,
                 'tanggal' => $request->tanggal,
                 'status' => 'Proses',

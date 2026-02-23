@@ -19,7 +19,9 @@ use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
 use App\Models\Accounting\Piutang;
+use App\Models\AlokasiKaret;
 use App\Models\Customer;
+use App\Models\Karet;
 use App\Models\Number_Sequence;
 use Illuminate\Support\Facades\Log;
 
@@ -439,7 +441,10 @@ class Kontrak_DController extends Controller
                 'biaya_exp' => $request->biaya_exp,
                 'biaya_glue' => $request->biaya_glue,
                 'biaya_wax' => $request->biaya_wax,
-                'min_tgl_kirim' => $request->tglkirim
+                'min_tgl_kirim' => $request->tglkirim,
+                'harga_expedisi' => $request->asumsi_exp ?? 0,
+                'harga_karet' => $request->asumsi_harga_karet ?? 0,
+                'harga_pisau' => $request->asumsi_harga_pisau ?? 0
             ]);
             // End Insert Into
             
@@ -607,6 +612,7 @@ class Kontrak_DController extends Controller
         
         public function store_dt(Request $request)
         {
+
             // Validate required fields first
             if (empty($request->tglKirim)) {
                 return redirect()->back()->with('error', 'Tanggal kirim harus diisi');
@@ -620,17 +626,19 @@ class Kontrak_DController extends Controller
             $jumlahKirim = (int) $request->jumlahKirim;
             $berat = (float) ($request->berat ?? 1);
             
-            // OPTIMIZED: Check OPI existence early
-            if (Opi_M::where('nama', $request->nomer_opi)->exists()) {
-                return redirect()->back()->with('error', 'OPI ' . $request->nomer_opi . ' sudah ada');
-            }
+            
 
-            DB::beginTransaction();
-            try {
+            // DB::beginTransaction();
+            // try {
                 // OPTIMIZED: Get all required data in fewer queries
                 $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
                 $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
                 $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
+
+                // OPTIMIZED: Check OPI existence early
+                if (Opi_M::where('nama', $numb_opi)->exists()) {
+                    return redirect()->back()->with('error', 'OPI ' . $numb_opi . ' sudah ada');
+                }
 
                 // OPTIMIZED: Single query for customer data
                 $customerData = DB::connection('firebird')->table('TCustomer')
@@ -653,15 +661,16 @@ class Kontrak_DController extends Controller
                 $piutangData = Piutang::where('KodeCust', $customerData->Kode)
                     // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
                     ->selectRaw("
-                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang,
+                        SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * 1 ELSE TotalRp END) as total_piutang,
                         SUM(TotalTerima) as total_terima,
                         MAX(DATEDIFF(DAY, TglJT, GETDATE())) as selisih_hari_max
                     ")
                     ->first();
 
+
                     
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
-                    // dd($piutangTotal, $request->all());
+                    // dd($customerData, $piutangTotal, $piutang);
 
                 // OPTIMIZED: Get kontrak data in single query
                 // $kontrakData = DB::table('kontrak_d as kd')
@@ -683,10 +692,30 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Prepare data for batch insert
                 $currentTimestamp = now();
                 
+                // dd($dtId);
+                // OPTIMIZED: Determine OPI status based on customer conditions
+                $opiStatus = 'Proses'; // Default status
+
+                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                } elseif ($piutangTotal > $customerData->Plafond) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                    $opiStatus = 'Pending';
+                    $numb_opi = 'PENDING';
+                }
+
+                
+                // dd($customerData, $piutang, $piutangData, $opiStatus, $numb_opi);
+
+                // dd($opiStatus, $customerData, $piutangTotal, $piutang);
+
                 // OPTIMIZED: Insert DeliveryTime
                 $dtId = DB::table('dt')->insertGetId([
                     'kontrak_m_id' => $request->idkontrakm,
-                    'opi' => $request->nomer_opi,
+                    'opi' => $numb_opi,
                     'kodeKontrak' => $request->kode,
                     'tglKirimDt' => $tglKirim,
                     'pcsDt' => $jumlahKirim,
@@ -695,17 +724,6 @@ class Kontrak_DController extends Controller
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
-                
-                // OPTIMIZED: Determine OPI status based on customer conditions
-                $opiStatus = 'Proses'; // Default status
-                // if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
-                //     $opiStatus = 'Pending';
-                // } elseif ($piutangTotal > $customerData->Plafond) {
-                //     $opiStatus = 'Pending';
-                // } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
-                //     $opiStatus = 'Pending';
-                // }
-                
 
                 // OPTIMIZED: Single OPI insert instead of multiple conditional inserts
                 DB::table('opi_m')->insert([
@@ -735,8 +753,10 @@ class Kontrak_DController extends Controller
                 $newKgSisa = max(0, $kontrakData->kgSisaKontrak - ($jumlahKirim * $berat));
 
                 // Update number sequence and kontrak
-                $nomer_opi->nomer += 1;
-                $nomer_opi->save();
+                if ($opiStatus == 'Proses') {
+                    $nomer_opi->nomer += 1;
+                    $nomer_opi->save();
+                }
                 
                 // OPTIMIZED: Batch updates
                 DB::table('kontrak_d')
@@ -750,22 +770,23 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Simple tracking insert
                 DB::table('tracking')->insert([
                     'user' => $userName,
-                    'event' => "Tambah OPI " . $request->nomer_opi,
+                    'event' => "Tambah OPI " . $numb_opi,
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
                 
-                DB::commit();
+                // DB::commit();
                 
                 return redirect()->back()
-                    ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $request->nomer_opi);
+                    ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
                 
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Error in store_dt: ' . $e->getMessage());
-                return redirect()->back()
-                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-            }
+            // } 
+            // catch (\Exception $e) {
+            //     DB::rollBack();
+            //     Log::error('Error in store_dt: ' . $e->getMessage());
+            //     return redirect()->back()
+            //         ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            // }
         }
         
         /**
@@ -795,6 +816,9 @@ class Kontrak_DController extends Controller
             $kontrakm->biaya_exp = $request->biaya_exp;
             $kontrakm->biaya_glue = $request->biaya_glue;
             $kontrakm->biaya_wax = $request->biaya_wax;
+            $kontrakm->harga_expedisi = $request->asumsi_exp ?? 0;
+            $kontrakm->harga_karet = $request->asumsi_harga_karet ?? 0;
+            $kontrakm->harga_pisau = $request->asumsi_harga_pisau ?? 0;
             $kontrakm->status = 4;
             $kontrakm->lastUpdatedBy = Auth::user()->name;
             // End untuk set value yang di update
@@ -931,7 +955,7 @@ class Kontrak_DController extends Controller
             ->first();
             $sj = DB::connection('firebird2')->table('TDetSJ')
             ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', 'TSuratJalan.NomerSJ')
-            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD', 'TDetSJ.Quantity', 'TSuratJalan.TglSJ')
+            ->select('TDetSJ.NomerSJ as nomer', 'TSuratJalan.Periode', 'TSuratJalan.NamaCust', 'TSuratJalan.NomerMOD', 'TDetSJ.Quantity', 'TSuratJalan.TglSJ', 'TSuratJalan.NoSeal')
             ->where('TSuratJalan.NamaCust', 'LIKE', $kontrak_M->customer_name)
             ->orWhere('TSuratJalan.NamaCust', 'LIKE', 'PT. SARANA PACKAGING AGRAPANA')
             ->get();
@@ -957,15 +981,29 @@ class Kontrak_DController extends Controller
         }
         
         public function store_realisasi(Request $request)
-        {
+        {   
+            
             $id = array_merge($request->idkontrak);
             for ($i=0; $i < count($id); $i++) { 
+                
+                if(strlen($request->opi) > 6){
+                    $opis = explode(',', $request->opi);
+                    $opi = Opi_M::where('nama', '=', $opis[$i])->first();
+                } else {
+                    $opi = Opi_M::where('nama', '=', $request->opi)->first();
+                }
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
                 $kontrakm = Kontrak_M::where('id', '=', $id)->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
-                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();          
+                $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();
+
+                $karet = Karet::where('mc_id', '=', $kontrak->mc_id)
+                                ->orderBy('id', 'desc')
+                                ->first();
+
                 RealisasiKirim::create([
                     'kontrak_m_id'  => $id[$i],
+                    'opi_id'        => $opi ? $opi->id : '',
                     'tanggal_kirim' => $request->tglKirim,
                     'nomer_sj'      => $request->sj,
                     'mod'           => $request->mod,
@@ -973,6 +1011,21 @@ class Kontrak_DController extends Controller
                     'kg_kirim'      => $qty * $mc->gramSheetBoxKontrak,
                     'createdBy'     => Auth::user()->name
                 ]);
+
+                if ($karet) {
+                    $alokasi_karet = new AlokasiKaret();
+
+                    $alokasi_karet->karet_id = $karet->id;
+                    $alokasi_karet->mc_id = $kontrak->mc_id;
+                    $alokasi_karet->tanggal_kirim = $request->tglKirim;
+                    $alokasi_karet->pcs = $qty;
+                    $alokasi_karet->alokasi_harga = $karet->gsm * $karet->alokasi * $qty;
+
+                    $alokasi_karet->save();
+
+                    $karet->sisa = $karet->sisa - $alokasi_karet->alokasi_harga;
+                    $karet->save();
+                }
 
                 $kontrak->pcsSisaKirim = $kontrak->pcsSisaKontrak - $qty ;
                 $kontrak->save();
@@ -1151,5 +1204,33 @@ class Kontrak_DController extends Controller
             
             // Download Excel file
             return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
+        }
+
+        public function get_all_kontrak(Request $request)
+        {
+            $search = $request->search ?? $request->search;
+
+            $contracts = new Kontrak_M();
+
+            if ($search) {
+                $contracts = $contracts->where(function($q) use ($search) {
+                    $q->where('kode', 'LIKE', "%{$search}%")
+                      ->orWhere('customer_name', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $contracts = $contracts->orderBy('id', 'desc')->paginate();
+
+            $data = [
+                'contracts' => $contracts,
+            ];
+
+            return view('admin.notif.kontrak_modal', $data);
+        }
+
+        public function single($id)
+        {
+            $contracts = Kontrak_M::find($id);
+            return response()->json($contracts);
         }
     }

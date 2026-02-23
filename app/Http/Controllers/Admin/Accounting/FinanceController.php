@@ -7,6 +7,8 @@ use App\Imports\JurnalImport;
 use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
 use App\Models\Accounting\VendorTTDet;
+use App\Models\DeliveryTime;
+use App\Models\Number_Sequence;
 use App\Models\Opi_M;
 use App\Models\PurchaseOrder;
 use DateTime;
@@ -19,6 +21,7 @@ use Yajra\DataTables\DataTables;
 
 use function Ramsey\Uuid\v1;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class FinanceController extends Controller
 {
@@ -259,7 +262,7 @@ class FinanceController extends Controller
             'TglJT',
             'Note',
             DB::raw("CASE 
-                WHEN Note = 'RETUR' THEN ((0 - TotalRp) + TotalTerima)
+                WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
                 ELSE (TotalRp - TotalTerima)
                 END as sisa_piutang"),
             DB::raw("DATEDIFF(DAY, TglJT, GETDATE()) as selisih_hari")
@@ -291,6 +294,9 @@ class FinanceController extends Controller
         $totalPiutang = $piutang->sum('sisa_piutang');
         $sisaLimit = $customer->Plafond - $totalPiutang;
         $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
+        
+        
+        // dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
         return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
     }
@@ -460,12 +466,19 @@ class FinanceController extends Controller
     {
         $search = $request->input('search') ? $request->input('search') : '';
 
-        $opi = Opi_M::where('status_opi', 'Pending')
-            ->when($search, function($query, $search) {
-                return $query->where('NoOPI', 'LIKE', '%' . $search . '%');
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(20);
+        $opi = Opi_M::with('kontrakm');
+
+        if ($search) {
+            $opi = $opi->where('NoOPI', 'like', '%' . $search . '%')
+                ->orWhereHas('kontrakm', function ($query) use ($search) {
+                    $query->where('customer_name', 'like', '%' . $search . '%');
+                });
+        }
+
+        $opi = $opi->where('status_opi', 'Pending')
+                    ->orderBy('created_at', 'asc');  // Ubah dari 'desc' ke 'asc'
+
+        $opi = $opi->paginate(10);
 
         return view('admin.acc.approve_opi', compact('opi', 'search'));
     }
@@ -473,10 +486,54 @@ class FinanceController extends Controller
     public function approve_opi_action(Request $request, $id)
     {
         $opi = Opi_M::findOrFail($id);
-        $opi->status_opi = 'Proses';
-        $opi->lastUpdatedBy = auth()->user()->name;
-        $opi->save();
+        
+        if ($opi->status_opi == 'Pending') {
+            try {
+                $numb_opi = $opi->assign_numb_opi();
+                return redirect()->back()->with('success', "OPI berhasil disetujui dengan nomor: {$numb_opi}");
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal approve OPI: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->back()->with('error', 'OPI sudah tidak berstatus Pending.');
+        }
+    }
 
-        return redirect()->back()->with('success', 'OPI No: ' . $opi->NoOPI . ' telah disetujui.');
+    public function approve_opi_bulk(Request $request)
+    {
+        // Debug: Log the incoming request data
+        Log::info('Bulk Approve Request Data:', $request->all());
+        
+        $request->validate([
+            'selected_opi' => 'required|array|min:1',
+            'selected_opi.*' => 'exists:opi_m,id'
+        ]);
+
+        $selectedIds = $request->input('selected_opi');
+        $approvedCount = 0;
+        $approvedNumbers = [];
+
+        foreach ($selectedIds as $id) {
+            $opi = Opi_M::find($id);
+            if ($opi && $opi->status_opi == 'Pending') {
+                try {
+                    // Menggunakan method baru dari model
+                    $numb_opi = $opi->assign_numb_opi();
+                    
+                    $approvedCount++;
+                    $approvedNumbers[] = $numb_opi;
+                } catch (\Exception $e) {
+                    Log::error('Error approving OPI ID ' . $id . ': ' . $e->getMessage());
+                    continue;
+                }
+            }
+        }
+
+        if ($approvedCount > 0) {
+            $message = "Berhasil approve {$approvedCount} OPI: " . implode(', ', $approvedNumbers);
+            return redirect()->back()->with('success', $message);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada OPI yang berhasil di-approve.');
+        }
     }
 }

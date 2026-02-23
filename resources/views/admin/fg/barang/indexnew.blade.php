@@ -96,10 +96,21 @@ code {
                     <div class="card">
                         <div class="card-body">
                             <form method="GET" action="{{ route('barang.indexnew') }}" class="form-inline" id="searchForm">
-                                <div class="input-group" style="width: 100%;">
-                                    <input type="text" name="search" class="form-control search-input" 
+                                <div class="row" style="width: 100%; margin-bottom: 10px;">
+                                    <div class="input-group" style="width: 45%; margin-right: 5%;">
+                                        <input type="text" name="search" class="form-control search-input" 
                                            placeholder="Cari kode/nama barang..." value="{{ request('search') }}">
-                                    <div class="input-group-append">
+                                    </div>
+                                    <div class="input-group" style="width: 45%;">
+                                        <select name="month" id="month" class="form-control month-selected" style="color: black">
+                                            <option value="">-- Pilih Periode --</option>
+                                            @foreach($periode as $p)
+                                                <option value="{{ trim($p->Periode) }}">{{ trim($p->Periode) }}</option>
+                                            @endforeach
+                                        </select>
+                                   </div>
+                                </div>
+                                <div class="input-group-append">
                                         <button type="submit" class="btn btn-primary btn-search">
                                             <i class="fas fa-search"></i> Cari
                                         </button>
@@ -109,7 +120,6 @@ code {
                                             </a>
                                         @endif
                                     </div>
-                                </div>
                             </form>
                         </div>
                     </div>
@@ -129,7 +139,7 @@ code {
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-list"></i> Daftar Barang Jadi - Periode {{ date("m/Y") }}
+                        <i class="fas fa-list"></i> Daftar Barang Jadi - Periode <strong style="font-size: 18px">{{ $month }}</strong>
                     </h3>
                     <div class="card-tools">
                         <a href="{{ route('barang.create') }}" class="btn btn-success btn-sm">
@@ -444,9 +454,16 @@ $(document).ready(function() {
     // Handle search form submission
     $('#searchForm').on('submit', function(e) {
         e.preventDefault();
+        var period = $('.month-selected').val();
         var search = $('.search-input').val().toUpperCase();
-        if (search.trim() !== '') {
+        if (period === '') {
+            if (search.trim() !== '') {
             window.location.href = '{{ route("barang.indexnew") }}?search=' + encodeURIComponent(search);
+            } 
+        } else {
+            if (search.trim() !== '') {
+                window.location.href = '{{ route("barang.indexnew") }}?search=' + encodeURIComponent(search) + '&month=' + encodeURIComponent(period);
+            }
         }
     });
     

@@ -12,6 +12,8 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use League\CommonMark\Node\Block\TightBlockInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -157,14 +159,14 @@ class OpiController extends Controller
                 $nestedData['NoOPI'] = $opi->NoOPI;
                 $nestedData['poCustomer'] = $opi->poCustomer;
 
-                if ($opi->revisimc == '') {
+                if ($opi->revisi == '') {
                     $mc = $opi->mcKode;
-                } else if ($opi->revisimc == "R0") {
+                } else if ($opi->revisi == "R0") {
                     $mc = $opi->mcKode;
                 } else {
-                    $mc = $opi->mcKode.'-'.$opi->revisimc;
+                    $mc = $opi->mcKode.'-'.$opi->revisi;
                 }
-                // $mc = ($opi->revisimc != '' ? $opi->mcKode.'-'.$opi->revisimc : $opi->mcKode );
+                // $mc = ($opi->revisi != '' ? $opi->mcKode.'-'.$opi->revisi : $opi->mcKode );
 
                 $nestedData['nomc'] = $mc;
 
@@ -268,11 +270,145 @@ class OpiController extends Controller
 
     public function single($id)
     {
-        $data = Opi_M::opi2()
-            ->where('opi_m.id', '=', $id)
-            ->first();
+        $opis = Opi_M::with([
+            'kontrakm', 
+            'kontrakd', 
+            'mc.substanceproduksi.lineratas',
+            'mc.substanceproduksi.flute1', 
+            'mc.substanceproduksi.linertengah',
+            'mc.substanceproduksi.flute2',
+            'mc.substanceproduksi.linerbawah',
+            'dt'
+        ])->findOrFail($id);
         
-        echo (json_encode($data));
+        return response()->json($opis);
+    }
+
+    public function jsonPaginated(Request $request)
+    {
+        try {
+            $page = $request->input('page', 1);
+            $perPage = 20;
+            $search = $request->input('search', '');
+            $plan_corr = $request->input('plan_corr', null);
+            
+            // Convert string "0" to integer 0
+            if ($plan_corr === "0") {
+                $plan_corr = 0;
+            }
+            
+            // Use simple query instead of heavy opi() scope to avoid connection reset
+            $query = Opi_M::select([
+                    'opi_m.id',
+                    'opi_m.NoOPI', 
+                    'opi_m.jumlahOrder',
+                    'opi_m.status_opi',
+                    'opi_m.tglKirimDt',
+                    'kontrak_m.customer_name as Cust',
+                    'kontrak_m.poCustomer',
+                    'kontrak_m.kode as kontrakKode',
+                    'mc.kode as mcKode',
+                    'mc.namaBarang',
+                    'mc.tipeBox',
+                    'mc.flute',
+                    'mc.panjangSheet',
+                    'mc.lebarSheet', 
+                    'mc.outConv',
+                    'mc.gramSheetCorrProduksi as gramProd',
+                    'mc.revisi'
+                ])
+                ->leftJoin('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
+                ->leftJoin('kontrak_m', 'opi_m.kontrak_m_id', '=', 'kontrak_m.id')
+                ->leftJoin('mc', 'kontrak_d.mc_id', '=', 'mc.id')
+                ->where('opi_m.NoOPI', 'NOT LIKE', "%CANCEL%")
+                ->where('opi_m.status_opi', '=', "Proses");
+                
+            // Add plan_corr filter conditionally
+            if ($plan_corr !== null) {
+                $query->where('opi_m.plan_corr', '=', $plan_corr);
+            } else {
+                $query->whereNull('opi_m.plan_corr');
+            }
+        
+            // Apply search filter if provided
+            if (!empty($search)) {
+                $query->where(function($q) use ($search) {
+                    $q->where('kontrak_m.customer_name', 'LIKE', "%{$search}%")
+                      ->orWhere('kontrak_m.poCustomer', 'LIKE', "%{$search}%")
+                      ->orWhere('kontrak_m.kode', 'LIKE', "%{$search}%")
+                      ->orWhere('opi_m.NoOPI', 'LIKE', "%{$search}%")
+                      ->orWhere('mc.kode', 'LIKE', "%{$search}%")
+                      ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
+                });
+            }
+            
+            // Get total count for pagination
+            $totalRecords = $query->count();
+            
+            // Get paginated data
+            $opis = $query->offset(($page - 1) * $perPage)
+                         ->limit($perPage)
+                         ->orderBy('opi_m.id', 'desc')
+                         ->get();
+            
+            // Format data for response
+            $data = [];
+            foreach ($opis as $opi) {
+                $nestedData = [];
+                $nestedData['id'] = $opi->id;
+                $nestedData['NoOPI'] = $opi->NoOPI;
+                $nestedData['Cust'] = $opi->Cust;
+                $nestedData['namaBarang'] = $opi->namaBarang;
+                $nestedData['jumlahOrder'] = $opi->jumlahOrder;
+                $nestedData['tipeBox'] = $opi->tipeBox;
+                $nestedData['flute'] = $opi->flute;
+                $nestedData['panjangSheet'] = $opi->panjangSheet;
+                $nestedData['lebarSheet'] = $opi->lebarSheet;
+                $nestedData['outConv'] = $opi->outConv;
+                $nestedData['gram'] = $opi->gramProd;
+                $nestedData['status_opi'] = $opi->status_opi;
+                $nestedData['tglKirimDt'] = $opi->tglKirimDt;
+                
+                // Handle MC code with revision
+                if ($opi->revisi == '' || $opi->revisi == "R0") {
+                    $nestedData['kode'] = $opi->mcKode ?? 'N/A';
+                } else {
+                    $nestedData['kode'] = ($opi->mcKode ?? 'N/A') . '-' . $opi->revisi;
+                }
+                
+                $data[] = $nestedData;
+            }
+            
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'pagination' => [
+                    'current_page' => (int)$page,
+                    'per_page' => $perPage,
+                    'total' => $totalRecords,
+                    'total_pages' => ceil($totalRecords / $perPage),
+                    'from' => (($page - 1) * $perPage) + 1,
+                    'to' => min($page * $perPage, $totalRecords)
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error in OPI jsonPaginated: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memuat data OPI: ' . $e->getMessage(),
+                'data' => [],
+                'pagination' => [
+                    'current_page' => 1,
+                    'per_page' => 20,
+                    'total' => 0,
+                    'total_pages' => 0,
+                    'from' => 0,
+                    'to' => 0
+                ]
+            ], 500);
+        }
     }
     
     public function index(Request $request)
@@ -287,7 +423,8 @@ class OpiController extends Controller
         $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
             ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
-            ->orderBy('id', 'desc');
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('NoOPI', 'desc');
 
         if($request->search) {
             $productions->whereHas('kontrakm', function($query) use ($request) {
@@ -457,6 +594,7 @@ class OpiController extends Controller
             
             // Update OPI data
             $opi->jumlahOrder = $request->jumlahOrder;
+            $opi->tglKirimDt = $request->tglKirimDt;
             $opi->lastUpdatedBy = Auth::user()->name;
             $opi->save();
 

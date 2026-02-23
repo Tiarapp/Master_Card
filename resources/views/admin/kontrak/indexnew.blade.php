@@ -229,6 +229,9 @@
                     <th class="min-w-100px">{{ __('B. Expedisi') }}</th>
                     <th class="min-w-100px">{{ __('B. Glue Manual') }}</th>
                     <th class="min-w-100px">{{ __('B. Wax') }}</th>
+                    <th class="min-w-100px">{{ __('Asumsi Harga Expedisi') }}</th>
+                    <th class="min-w-100px">{{ __('Asumsi Harga Karet') }}</th>
+                    <th class="min-w-100px">{{ __('Asumsi Harga Pisau') }}</th>
                     {{-- <th class="min-w-100px">{{ __('Kode Barang') }}</th> --}}
                 </tr>
             </thead>
@@ -335,6 +338,9 @@
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_exp }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_glue }}</td>
                         <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->biaya_wax }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->harga_expedisi }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->harga_karet }}</td>
+                        <td class="text-{{ $contract->kontrakm->status == 4 ? 'black' : $colorClass }} fw-semibold">{{ $contract->kontrakm->harga_pisau }}</td>
                         {{-- <td class="text-{{ $colorClass }} fw-semibold">{{ $contract->mc->kodeBarang }}</td> --}}
                         {{-- <td>
                             <a href="{{ route('contract.show', $contract->id) }}" class="btn btn-light-primary btn-sm me-lg-n7"><i class="ki-outline ki-eye"></i>View</a>

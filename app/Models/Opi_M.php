@@ -31,7 +31,8 @@ class Opi_M extends Model
         'os_fin',
         'sisa_order',
         'status_opi',
-        'tol_corr'
+        'tol_corr',
+        'plan_corr'
     ];
 
     public function scopeOpi2($query)
@@ -54,7 +55,7 @@ class Opi_M extends Model
         ->leftJoin('jenis_gram as Jflute2K', 'subsK.jenisGramFlute2_id', 'Jflute2K.id')
         ->leftJoin('jenis_gram as JbawahK', 'subsK.jenisGramLinerBawah_id', 'JbawahK.id')
         ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
-        ->select('opi_m.id as opiid','opi_m.NoOPI as noopi', 'opi_m.jumlahOrder', 'kontrak_d.harga_kg', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi as revisimc', 'mc.kodeBarang', 'opi_m.created_at as tglopi', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'subsP.kode as subsP', 'subsK.kode as subsK', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi2 as gram', 'mc.gramSheetCorrProduksi as gramcorr', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt','kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_m.keterangan as ketkontrak','kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_m.tipeOrder', 'kontrak_d.pcsKontrak', 'mc.lebarSheet', 'mc.panjangSheet', 'mc.outConv', 'Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'JatasK.jenisKertasMc as kertasMcAtasK', 'JatasK.gramKertas as gramKertasAtasK', 'Jflute1K.jenisKertasMc as kertasMcflute1K', 'Jflute1K.gramKertas as gramKertasflute1K', 'JtengahK.jenisKertasMc as kertasMctengahK', 'JtengahK.gramKertas as gramKertastengahK', 'Jflute2K.jenisKertasMc as kertasMcflute2K',  'Jflute2K.gramKertas as gramKertasflute2K', 'JbawahK.jenisKertasMc as kertasMcbawahK', 'JbawahK.gramKertas as gramKertasbawahK', 'mc.gramSheetBoxKontrak as gramSheet', 'color_combine.nama as ccnama', 'mc.wax', 'box.tipeCreasCorr', 'mc.bungkus', 'mc.lain', 'opi_m.tol_corr')
+        ->select('opi_m.id as opiid','opi_m.NoOPI as noopi', 'opi_m.jumlahOrder', 'kontrak_d.harga_kg', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'opi_m.created_at as tglopi', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'subsP.kode as subsP', 'subsK.kode as subsK', 'box.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi2 as gram', 'mc.gramSheetCorrProduksi as gramcorr', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt','kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_m.keterangan as ketkontrak','kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_m.tipeOrder', 'kontrak_d.pcsKontrak', 'mc.lebarSheet', 'mc.panjangSheet', 'mc.outConv', 'Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'JatasK.jenisKertasMc as kertasMcAtasK', 'JatasK.gramKertas as gramKertasAtasK', 'Jflute1K.jenisKertasMc as kertasMcflute1K', 'Jflute1K.gramKertas as gramKertasflute1K', 'JtengahK.jenisKertasMc as kertasMctengahK', 'JtengahK.gramKertas as gramKertastengahK', 'Jflute2K.jenisKertasMc as kertasMcflute2K',  'Jflute2K.gramKertas as gramKertasflute2K', 'JbawahK.jenisKertasMc as kertasMcbawahK', 'JbawahK.gramKertas as gramKertasbawahK', 'mc.gramSheetBoxKontrak as gramSheet', 'color_combine.nama as ccnama', 'mc.wax', 'box.tipeCreasCorr', 'mc.bungkus', 'mc.lain', 'opi_m.tol_corr')
         ->orderBy('opi_m.created_at', 'desc')
         ->where('opi_m.status_opi', '!=', 'Cancel')
         ->orWhere('opi_m.status_opi', '!=', 'closed')
@@ -83,7 +84,7 @@ class Opi_M extends Model
         ->leftJoin('jenis_gram as Jflute2K', 'subsK.jenisGramFlute2_id', 'Jflute2K.id')
         ->leftJoin('jenis_gram as JbawahK', 'subsK.jenisGramLinerBawah_id', 'JbawahK.id')
         ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
-        ->select('opi_m.*', 'kontrak_d.harga_kg', 'mc.namaBarang', 'mc.revisi as revisimc', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'subsP.kode as subsP', 'subsK.kode as subsK', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi as gramProd', 'mc.gramSheetBoxKontrak as gramKontrak', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt','kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_m.keterangan as ketkontrak','kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_m.tipeOrder', 'kontrak_d.pcsKontrak', 'mc.lebarSheet', 'mc.panjangSheet', 'mc.outConv', 'Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'JatasK.jenisKertasMc as kertasMcAtasK', 'JatasK.gramKertas as gramKertasAtasK', 'Jflute1K.jenisKertasMc as kertasMcflute1K', 'Jflute1K.gramKertas as gramKertasflute1K', 'JtengahK.jenisKertasMc as kertasMctengahK', 'JtengahK.gramKertas as gramKertastengahK', 'Jflute2K.jenisKertasMc as kertasMcflute2K',  'Jflute2K.gramKertas as gramKertasflute2K', 'JbawahK.jenisKertasMc as kertasMcbawahK', 'JbawahK.gramKertas as gramKertasbawahK', 'mc.gramSheetBoxKontrak as gramSheet', 'color_combine.nama as ccnama', 'mc.wax', 'box.tipeCreasCorr', 'mc.bungkus','dt.dt_perubahan','dt.approve_mkt','dt.approve_ppic', 'mc.outConv as outConv')
+        ->select('opi_m.*', 'kontrak_d.harga_kg', 'mc.namaBarang', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'subsP.kode as subsP', 'subsK.kode as subsK', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxProduksi as gramProd', 'mc.gramSheetBoxKontrak as gramKontrak', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt','kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_m.keterangan as ketkontrak','kontrak_d.pctToleransiKurangKontrak as toleransiKurang', 'kontrak_d.pctToleransiLebihKontrak as toleransiLebih', 'kontrak_m.tipeOrder', 'kontrak_d.pcsKontrak', 'mc.lebarSheet', 'mc.panjangSheet', 'mc.outConv', 'Jatas.jenisKertasMc as kertasMcAtas', 'Jatas.gramKertas as gramKertasAtas', 'Jflute1.jenisKertasMc as kertasMcflute1', 'Jflute1.gramKertas as gramKertasflute1', 'Jtengah.jenisKertasMc as kertasMctengah', 'Jtengah.gramKertas as gramKertastengah', 'Jflute2.jenisKertasMc as kertasMcflute2',  'Jflute2.gramKertas as gramKertasflute2', 'Jbawah.jenisKertasMc as kertasMcbawah', 'Jbawah.gramKertas as gramKertasbawah', 'JatasK.jenisKertasMc as kertasMcAtasK', 'JatasK.gramKertas as gramKertasAtasK', 'Jflute1K.jenisKertasMc as kertasMcflute1K', 'Jflute1K.gramKertas as gramKertasflute1K', 'JtengahK.jenisKertasMc as kertasMctengahK', 'JtengahK.gramKertas as gramKertastengahK', 'Jflute2K.jenisKertasMc as kertasMcflute2K',  'Jflute2K.gramKertas as gramKertasflute2K', 'JbawahK.jenisKertasMc as kertasMcbawahK', 'JbawahK.gramKertas as gramKertasbawahK', 'mc.gramSheetBoxKontrak as gramSheet', 'color_combine.nama as ccnama', 'mc.wax', 'box.tipeCreasCorr', 'mc.bungkus','dt.dt_perubahan','dt.approve_mkt','dt.approve_ppic', 'mc.outConv as outConv')
         ->orderBy('opi_m.id', 'desc')
         // ->where('opi_m.status_opi', '=', 'Proses')
         ->get();
@@ -193,6 +194,28 @@ class Opi_M extends Model
         ->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id');
     }
 
+    // Optimized scope for CorrController - only essential fields
+    public function scopeOpi2Optimized($query)
+    {
+        return $query->leftJoin('kontrak_m', 'kontrak_m_id', 'kontrak_m.id')
+            ->leftJoin('kontrak_d', 'kontrak_d_id', 'kontrak_d.id')
+            ->leftJoin('dt', 'dt_id', 'dt.id')
+            ->leftJoin('mc', 'kontrak_d.mc_id', 'mc.id')
+            ->select([
+                'opi_m.id',
+                'opi_m.NoOPI as noopi', 
+                'opi_m.jumlahOrder',
+                'opi_m.os_corr',
+                'opi_m.created_at',
+                'kontrak_m.customer_name as Cust',
+                'mc.namaBarang',
+                'mc.kode as mcKode'
+            ])
+            ->where('opi_m.status_opi', '!=', 'Cancel')
+            ->where('opi_m.status_opi', '!=', 'closed')
+            ->orderBy('opi_m.created_at', 'desc');
+    }
+
     public function kontrakm()
     {
         return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id', 'id');
@@ -211,5 +234,61 @@ class Opi_M extends Model
     public function dt()
     {
         return $this->belongsTo(DeliveryTime::class, 'dt_id', 'id');
+    }   
+
+    /**
+     * Generate nomor OPI secara otomatis
+     * @return string Generated OPI number
+     */
+    public static function generate_numb_opi()
+    {
+        $nomer_opi = Number_Sequence::where('noBukti', 'nomer_opi')->first();
+        
+        if (!$nomer_opi) {
+            throw new \Exception('Number sequence for nomer_opi not found');
+        }
+        
+        // Pad nomor dengan zeros untuk membuat 5 digit
+        $paddedNumber = str_pad($nomer_opi->nomer, 5, '0', STR_PAD_LEFT);
+        
+        // Gabungkan nomor dengan format
+        $numb_opi = "{$paddedNumber}{$nomer_opi->format}";
+        
+        // Increment nomor untuk penggunaan selanjutnya
+        $nomer_opi->nomer += 1;
+        $nomer_opi->save();
+        
+        return $numb_opi;
+    }
+
+    /**
+     * Assign nomor OPI ke model ini dan update related DeliveryTime
+     * @param string|null $numb_opi Optional custom number, if null will generate automatically
+     * @return string The assigned OPI number
+     */
+    public function assign_numb_opi($numb_opi = null)
+    {
+        if (!$numb_opi) {
+            $numb_opi = self::generate_numb_opi();
+        }
+        
+        // Update OPI record
+        $this->status_opi = 'Proses';
+        $this->NoOPI = $numb_opi;
+        $this->nama = $numb_opi;
+        $this->lastUpdatedBy = auth()->user()->name ?? 'System';
+        $this->save();
+        
+        // Update related DeliveryTime if exists
+        if ($this->dt_id) {
+            $dt = DeliveryTime::where('id', $this->dt_id)->first();
+            if ($dt) {
+                $dt->opi = $numb_opi;
+                $dt->lastUpdatedBy = auth()->user()->name ?? 'System';
+                $dt->save();
+            }
+        }
+        
+        return $numb_opi;
     }
 }

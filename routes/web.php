@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Data\BbmRollController;
 use App\Http\Controllers\Admin\HRD\StationaryController;
 use App\Http\Controllers\Admin\Navbar\NavbarController;
 use App\Http\Controllers\Admin\PPIC\OpiPPICController;
+use App\Http\Controllers\AlokasiKaretController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Kontrak_DController;
@@ -19,11 +20,14 @@ use App\Http\Controllers\Marketing\FormPermintaan;
 use App\Http\Controllers\Marketing\MarektingOrder;
 use App\Http\Controllers\MastercardController;
 use App\Http\Controllers\OpiController;
+use App\Http\Controllers\CorrugatedController;
+use App\Http\Controllers\ForecastCustController;
 use App\Http\Controllers\PaletController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
+use App\Http\Controllers\Stellar\BP\BbmController;
 use App\Models\Accounting\VendorTT;
 use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
@@ -51,6 +55,9 @@ use Maatwebsite\Excel\Row;
 Route::get('/', function () {
     return view('auth.login');
 });
+
+// Test route for OPI without auth middleware
+Route::get('/test-opi-data', 'OpiController@jsonPaginated');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -338,6 +345,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/kontrak/oskontrak', 'Kontrak_DController@empty_opi')->name('kontrak.kosong');
     Route::get('/admin/kontrak/opened', 'Kontrak_DController@getOpenKontrak')->name('kontrak.opened');
     Route::get('/admin/kontrak/export', 'Kontrak_DController@exportExcel')->name('kontrak.export');
+    Route::get('/admin/kontrakall', 'Kontrak_DController@get_all_kontrak')->name('kontrak.all');
+    Route::get('/admin/single/{id}', 'Kontrak_DController@single')->name('kontrak.single');
 
     Route::get('/admin/kontraknew', [Kontrak_DController::class, 'index_new'])->name('kontraknew');
 
@@ -352,6 +361,10 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/opi', 'OpiController@index')->middleware(['auth'])->name('opi');
     Route::get('/admin/opi/create', 'OpiController@create')->name('opi.create');
     Route::post('opijson', 'OpiController@json')->name('opi.json');
+    Route::get('/admin/opi/json-paginated', 'OpiController@jsonPaginated')->name('opi.json.paginated');
+    Route::get('/test-opi', function() {
+        return response()->json(['status' => 'OPI test route working', 'timestamp' => now()]);
+    });
     Route::post('/admin/opi/store', 'OpiController@store')->name('opi.store');
     Route::get('/admin/opi/edit/{id}', 'OpiController@edit')->name('opi.edit');
     Route::put('/admin/opi/update/{id}', 'OpiController@update')->name('opi.update');
@@ -409,7 +422,7 @@ Route::middleware(['auth'])->group(function (){
     })->name('acc.vendor_tt.export');
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
-        $opi = Opi_M::where('status_opi', '!=', 'CANCEL');
+        $opi = Opi_M::where('status_opi', '=', 'Proses');
 
         if($request->search) {
             $opi->where(function($query) use ($request) {
@@ -426,38 +439,23 @@ Route::middleware(['auth'])->group(function (){
             });
         }
 
-        $opi = $opi->orderBy('id', 'desc')
+        $opi = $opi->orderBy('updated_at', 'desc')
+            ->orderBy('NoOPI', 'desc')
             ->paginate(50, ['*'], 'page', $page);
         // dd($opi);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
     
-    Route::get('/admin/ppic/opi', 'OpiController@approve_index')->name('opi.approve');
     Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
     Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
     Route::post('/admin/ppic/sync-php', [MastercardController::class, 'sync_php_to_mysql'])->name('ppic.sync_php');
-    Route::post('/approve', function (Request $request) {
-        $ids = $request->input('ids');
-        Opi_M::whereIn('id', $ids)->update(['status_opi' => 'Proses']);
-        
-        return response()->json(['message' => 'Status OPI berhasil diperbarui!']);
-    });
 
     //PLAN
-    Route::get('/admin/plan/corr', 'CorrController@index')->middleware(['auth'])->name('indexcorr');
-    Route::get('/admin/plan/corrm', 'CorrController@corrm')->middleware(['auth'])->name('corrm');
-    Route::get('/admin/plan/corrmhasil', 'CorrController@corrm_hasil')->middleware(['auth'])->name('corrm.hasil');
-    // Route::get('/admin/plan/corr/create', 'CorrController@create')->name('corr.create');
-    Route::get('/admin/plan/corr/newcreate', 'CorrController@create2')->name('corr.create2');
-    Route::post('/admin/plan/corr/json', 'CorrController@json')->name('corr.json');
-    // Route::post('/admin/plan/corr/store', 'CorrController@store')->name('corr.store');
-    Route::post('/admin/plan/corr/newstore', 'CorrController@new_store')->name('corr.newstore');
-    // Route::get('/admin/plan/corr/edit/{id}', 'CorrController@edit')->name('corr.edit');
-    Route::get('/admin/plan/corr/newedit/{id}', 'CorrController@new_edit')->name('corr.edit');
-    Route::put('/admin/plan/corr/newupdate/{id}', 'CorrController@new_update')->name('corr.newupdate');
-    // Route::put('/admin/plan/corr/update/{id}', 'CorrController@update')->name('corr.update');
-    Route::get('/admin/plan/corr/print/{id}', 'CorrController@corr_pdf')->name('corr.print');
-    Route::get('/admin/plan/corr/hapus/{id}', 'CorrController@delete')->name('corr.delete');
+    Route::get('/admin/plan/corr', 'CorrugatedController@index')->middleware(['auth'])->name('admin.corrplan.index');
+    Route::get('/admin/plan/create', 'CorrugatedController@create')->middleware(['auth'])->name('admin.corrplan.create');
+    Route::post('/admin/plan/corr/store', 'CorrugatedController@store')->middleware(['auth'])->name('admin.corrplan.store');
+    Route::get('/admin/plan/corr/{id}/edit', 'CorrugatedController@edit')->middleware(['auth'])->name('admin.corrplan.edit');
+    Route::put('/admin/plan/corr/{id}', 'CorrugatedController@update')->middleware(['auth'])->name('admin.corrplan.update');
 
     
     Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');
@@ -474,7 +472,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/conv/print/{id}', 'ConvController@conv_pdf')->name('conv.print');
 
     //Hasil Produksi
-    Route::get('/admin/plan/control', 'CorrController@control')->middleware(['auth'])->name('hasilcorr');
+    // Route::get('/admin/plan/control', 'CorrController@control')->middleware(['auth'])->name('hasilcorr');
     Route::get('/admin/produksi/datacorr', 'HasilProduksiController@plan_corr')->middleware(['auth'])->name('plan_corr');
     Route::get('/admin/produksi/hasilcorr', 'HasilProduksiController@index_corr')->middleware(['auth'])->name('index_corr');
     Route::get('/admin/produksi/convd_flexo', 'HasilProduksiController@convd_flexo')->middleware(['auth'])->name('convd.flexo');
@@ -484,7 +482,7 @@ Route::middleware(['auth'])->group(function (){
     // Route::get('/admin/produksi/hasilcorr/edit/{id}', 'HasilProduksiController@input_hasil')->name('hasilcorr.edit');
     // Route::get('/admin/produksi/hasilconv/edit/{id}', 'HasilProduksiController@input_hasil_conv')->name('hasilconv.edit');
     Route::post('/admin/produksi/hasil', 'HasilProduksiController@hasil_produksi')->middleware(['auth'])->name('hasil_produksi');
-    Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
+    // Route::get('/admin/plan/detail/{id}', 'CorrController@show')->middleware(['auth'])->name('detail');
 
     //Produksi
     Route::get('/admin/produksi/index',     'LaporanProduksiController@index')->name('lap.produksi');
@@ -525,6 +523,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
         Route::get('admin/acc/opi', [FinanceController::class, 'approve_opi'])->name('acc.opi');
         Route::post('admin/acc/opi/approve/{id}', [FinanceController::class, 'approve_opi_action'])->name('acc.opi.approve');
+        Route::post('admin/acc/opi/approve-bulk', [FinanceController::class, 'approve_opi_bulk'])->name('acc.opi.approve.bulk');
 
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
@@ -618,6 +617,27 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/mod/edit/{id}', [MarektingOrder::class, 'edit'])->name('mkt.edit.mod');
         Route::get('admin/marketing/mod/print/{id}', [MarektingOrder::class, 'print_mod'])->name('mkt.print.mod');
 
+        // Report Marketing
+        Route::get('admin/marketing/karet_report', [AlokasiKaretController::class, 'index'])->name('karet.index');
+        Route::get('admin/marketing/karet_report/create', [AlokasiKaretController::class, 'create'])->name('karet.create');
+        Route::get('admin/marketing/karet_report/{id}', [AlokasiKaretController::class, 'show'])->name('karet.show');
+        Route::get('admin/marketing/karet_report/export/excel', [AlokasiKaretController::class, 'export'])->name('karet.export');
+        Route::post('admin/marketing/karet_report/store', [AlokasiKaretController::class, 'store'])->name('karet.store');
+        Route::put('admin/marketing/karet_report/{id}', [AlokasiKaretController::class, 'update'])->name('karet.update');
+
+        // Forecast Tonase Customer
+        Route::get('admin/marketing/forecast_tonase', [ForecastCustController::class, 'index'])->name('forecast.tonase.index');
+        Route::get('admin/marketing/forecast_tonase/create', [ForecastCustController::class, 'create'])->name('forecast.tonase.create');
+        Route::post('admin/marketing/forecast_tonase/store', [ForecastCustController::class, 'store'])->name('forecast.tonase.store');
+        Route::get('admin/marketing/forecast_tonase/edit/{id}', [ForecastCustController::class, 'edit'])->name('forecast.tonase.edit');
+        Route::put('admin/marketing/forecast_tonase/update/{id}', [ForecastCustController::class, 'update'])->name('forecast.tonase.update');
+        Route::delete('admin/marketing/forecast_tonase/delete/{id}', [ForecastCustController::class, 'destroy'])->name('forecast.tonase.destroy');
+        
+        // Import & Template
+        Route::get('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'showImport'])->name('forecast.tonase.import.form');
+        Route::post('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'import'])->name('forecast.tonase.import');
+        Route::get('admin/marketing/forecast_tonase/template', [ForecastCustController::class, 'downloadTemplate'])->name('forecast.tonase.template');
+
         Route::get('finance', [FinanceController::class, 'index'])->name('finance');
         Route::post('finance/import', [FinanceController::class, 'import'])->name('finance.import');
         Route::get('finance/faktur', [FinanceController::class, 'index_faktur'])->name('finance.faktur');
@@ -674,45 +694,48 @@ Route::middleware(['auth'])->group(function (){
         
         // BBK Roll Individual Item Operations
         Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
+
+        Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
+            Route::get('/', [FeedbackController::class, 'index'])->name('index');
+            Route::get('/create', [FeedbackController::class, 'create'])->name('create');
+            Route::post('/store', [FeedbackController::class, 'store'])->name('store');
+            Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
+            Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
+            Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
+        });
+        
+        // Public feedback submission (can be accessed by any authenticated user)
+        Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
+
+        // Hardware Template Download (Public access)
+        Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
+        // Artisan command for export (public access for simplicity)
+        Route::get('artisan/hardware-export', function() {
+            Artisan::call('hardware:export');
+            return response()->json(['success' => true, 'message' => 'Export completed']);
+        });
+
+        Route::resource('hardware', 'HardwareController');
+        Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
+        Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
+
+        Route::prefix('admin/report')->name('admin.report.')->group(function () {
+            Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
+            Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
+            Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
+            Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
+        });
+
+        
+        Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
+        Route::post('/company/switch/{companyId}', [App\Http\Controllers\CompanyController::class, 'switchCompany'])->name('company.switch');
+        Route::get('/company/info', [App\Http\Controllers\CompanyController::class, 'getCompanyInfo'])->name('company.info');
+
+
+        //Stellar 
+
+        Route::get('/admin/stellar_bp', [BbmController::class, 'index'])->name('stellar.bp.index');
+        Route::get('/admin/stellar_bp/export', [BbmController::class, 'export'])->name('stellar.bp.export');
 }); 
-
-// Feedback Routes
-Route::middleware(['auth'])->group(function () {
-    // Admin Feedback Management
-    Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
-        Route::get('/', [FeedbackController::class, 'index'])->name('index');
-        Route::get('/create', [FeedbackController::class, 'create'])->name('create');
-        Route::post('/store', [FeedbackController::class, 'store'])->name('store');
-        Route::get('/{id}', [FeedbackController::class, 'show'])->name('show');
-        Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
-        Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
-    });
-    
-    // Public feedback submission (can be accessed by any authenticated user)
-    Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
-});
-
-// Hardware Template Download (Public access)
-Route::get('hardware/template', 'HardwareController@downloadTemplate')->name('hardware.template');
-
-// Artisan command for export (public access for simplicity)
-Route::get('artisan/hardware-export', function() {
-    Artisan::call('hardware:export');
-    return response()->json(['success' => true, 'message' => 'Export completed']);
-});
-
-// Hardware Management Routes (Divisi ID 2 only)
-Route::middleware(['auth'])->group(function () {
-    Route::resource('hardware', 'HardwareController');
-    Route::post('hardware/import', 'HardwareController@import')->name('hardware.import');
-    Route::get('hardware/export', 'HardwareController@export')->name('hardware.export');
-
-    Route::prefix('admin/report')->name('admin.report.')->group(function () {
-        Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
-        Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
-        Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
-        Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
-    });
-});
 
 require __DIR__ . '/auth.php';

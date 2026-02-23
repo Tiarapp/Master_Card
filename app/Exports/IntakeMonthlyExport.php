@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Opi_M;
 use App\Models\HasilProduksi;
+use App\Models\RealisasiKirim;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -46,22 +47,24 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
                 'opi_m.id',
                 'opi_m.NoOPI',
                 'opi_m.jumlahOrder',
-                'opi_m.keterangan as opi_keterangan',
-                'opi_m.created_at as intake_date',
+                'opi_m.tglKirimDt as intake_date',
                 'kontrak_m.tglKontrak',
                 'kontrak_m.customer_name',
                 'kontrak_m.poCustomer',
                 'kontrak_m.kode as noKontrak',
                 'kontrak_m.tipeOrder',
+                'kontrak_d.harga_pcs',
+                'kontrak_d.harga_kg',
                 'mc.namaBarang',
                 'mc.tipeBox',
                 'mc.wax',
                 'mc.gramSheetBoxKontrak',
-                'dt.tglKirimDt'
+                'dt.tglKirimDt',
+                'dt.keterangan',
             ])
             ->where('opi_m.status_opi', '!=', 'Cancel')
-            ->whereYear('opi_m.created_at', $this->year)
-            ->whereMonth('opi_m.created_at', $this->month)
+            ->whereYear('opi_m.tglKirimDt', $this->year)
+            ->whereMonth('opi_m.tglKirimDt', $this->month)
             ->orderBy('dt.tglKirimDt', 'asc');
 
         return $query->get();
@@ -73,20 +76,30 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
     public function map($opi): array
     {
         // Get hasil produksi (qty kirim) untuk OPI ini
-        $hasilProduksi = HasilProduksi::where('opi_id', $opi->id)
+        $realisasi = RealisasiKirim::where('opi_id', $opi->id)
             ->select([
-                DB::raw('SUM(hasil_baik) as total_qty_kirim'),
-                DB::raw('SUM(tonase_baik) as total_ton_kirim'),
-                DB::raw('MAX(end_date) as tanggal_kirim_terakhir')
+                DB::raw('SUM(qty_kirim) as total_qty_kirim'),
+                DB::raw('SUM(kg_kirim) as total_ton_kirim'), 
             ])
             ->first();
 
-        $qtyKirim = $hasilProduksi->total_qty_kirim ?? 0;
-        $tonKirim = $hasilProduksi->total_ton_kirim ?? 0;
-        $tanggalKirim = $hasilProduksi->tanggal_kirim_terakhir ?? '-';
+        // Get semua tanggal kirim untuk OPI ini
+        $tanggalKirimList = RealisasiKirim::where('opi_id', $opi->id)
+            ->whereNotNull('tanggal_kirim')
+            ->orderBy('tanggal_kirim', 'asc')
+            ->pluck('tanggal_kirim')
+            ->map(function($date) {
+                return date('d/m/Y', strtotime($date));
+            })
+            ->unique()
+            ->implode(', ');
+
+        $qtyKirim = $realisasi->total_qty_kirim ?? 0;
+        $tonKirim = $realisasi->total_ton_kirim ?? 0;
+        $tanggalKirim = !empty($tanggalKirimList) ? $tanggalKirimList : 'Belum Kirim';
 
         // Calculations
-        $beratKg = ($opi->gramSheetBoxKontrak ?? 0); // Convert gram to kg
+        $beratKg = ($opi->gramSheetBoxKontrak ?? 0) / 1000; // Convert gram to kg
         $tonase = ($opi->jumlahOrder ?? 0) * $beratKg; // Qty * berat in tons
         
         $kurangKirim = ($opi->jumlahOrder ?? 0) - $qtyKirim;
@@ -103,15 +116,17 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             $opi->wax ?? '-',                           // Wax
             $opi->tipeOrder ?? '-',                     // Tipe Order
             $opi->namaBarang ?? '-',                    // Nama Barang
-            $opi->jumlahOrder ?? 0, // Qty OPI Pcs
-            $opi->gramSheetBoxKontrak ?? 0, // Gram Kontrak
-            number_format($tonase, 3),        // Tonase (qty * berat)
-            $qtyKirim,      // Qty Kirim
-            $tonKirim,      // Ton Kirim
-            $tanggalKirim ? date('d/m/Y', strtotime($tanggalKirim)) : '-', // Tanggal Kirim
-            $kurangKirim,   // Kurang Kirim
-            $tonKurangKirim,// Ton Kurang Kirim
-            $opi->opi_keterangan ?? '-',                // Keterangan
+            $opi->jumlahOrder ?? 0,                     // Qty OPI Pcs
+            number_format($opi->gramSheetBoxKontrak ?? 0, 2),             // Gram Kontrak
+            number_format($opi->harga_pcs ?? 0, 2),     // Harga Pcs
+            number_format($opi->harga_kg ?? 0, 2),      // Harga Kg
+            number_format($tonase, 3),                  // Tonase (qty * berat)
+            number_format($qtyKirim, 0),                // Qty Kirim
+            number_format($tonKirim, 3),                // Ton Kirim
+            $tanggalKirim, // Tanggal Kirim (semua tanggal)
+            number_format($kurangKirim, 0),             // Kurang Kirim
+            number_format($tonKurangKirim, 3),          // Ton Kurang Kirim
+            $opi->keterangan ?? '-',                // Keterangan
         ];
     }
 
@@ -130,6 +145,8 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
             'Nama Barang',
             'Qty OPI Pcs',
             'Gram Kontrak',
+            'Harga Pcs',
+            'Harga Kg',
             'Tonase (Ton)',
             'Qty Kirim',
             'Ton Kirim',
@@ -149,7 +166,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
     public function styles(Worksheet $sheet)
     {
         // Style header row
-        $sheet->getStyle('A1:S1')->applyFromArray([
+        $sheet->getStyle('A1:U1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -176,7 +193,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
 
         // Add borders to all data cells
         $highestRow = $sheet->getHighestRow();
-        $sheet->getStyle('A1:S' . $highestRow)->applyFromArray([
+        $sheet->getStyle('A1:U' . $highestRow)->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -192,7 +209,6 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
         $sheet->getStyle('G2:G' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('H2:H' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('I2:I' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('P2:P' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Right align numeric columns
         $sheet->getStyle('K2:K' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
@@ -200,6 +216,7 @@ class IntakeMonthlyExport implements FromCollection, WithHeadings, WithMapping, 
         $sheet->getStyle('M2:M' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('N2:N' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('O2:O' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getStyle('P2:P' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('Q2:Q' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('R2:R' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
 

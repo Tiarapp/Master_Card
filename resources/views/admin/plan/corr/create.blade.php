@@ -1,356 +1,1283 @@
 @extends('admin.templates.partials.default')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-
-{{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> --}}
 
 <style>
-    .select2 {
-        width: 206px !important;
+    .card-header {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+    }
+    .btn-search-opi {
+        background: #17a2b8;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+    .btn-search-opi:hover {
+        background: #138496;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .form-group label {
+        font-weight: 600;
+        color: #495057;
+    }
+    .opi-result {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+        display: none;
+    }
+    .opi-result.show {
+        display: block;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .selected-opis-table {
+        overflow-x: auto;
+        min-width: 100%;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-top: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .selected-opis-table table {
+        min-width: 3600px;
+        margin-bottom: 0;
+        font-size: 13px;
+    }
+    .selected-opis-table th {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 10px 6px;
+        white-space: nowrap;
+        border-bottom: 2px solid #0056b3;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .selected-opis-table td {
+        vertical-align: middle;
+        padding: 6px 4px;
+        font-size: 12px;
+        border-right: 1px solid #e9ecef;
+    }
+    .selected-opis-table input.form-control-sm {
+        width: 70px !important;
+        font-size: 12px;
+        padding: 4px 6px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+    .selected-opis-table .readonly-cell {
+        background-color: #f8f9fa;
+    }
+    .selected-opis-table input[readonly] {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+        cursor: default;
+    }
+    .selected-opis-table .roll-result,
+    .selected-opis-table .plan-result,
+    .selected-opis-table .cop-result,
+    .selected-opis-table .rmorder-result {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+        cursor: default;
+        font-weight: bold;
+    }
+    /* Specific column widths */
+    .selected-opis-table th:nth-child(1) { min-width: 60px; } /* No */
+    .selected-opis-table th:nth-child(2) { min-width: 110px; } /* OPI */
+    .selected-opis-table th:nth-child(3) { min-width: 130px; } /* Tgl Kirim */
+    .selected-opis-table th:nth-child(4) { min-width: 130px; } /* Tgl Perubahan */
+    .selected-opis-table th:nth-child(5) { min-width: 160px; } /* Customer */
+    .selected-opis-table th:nth-child(6) { min-width: 220px; } /* Nama Barang */
+    .selected-opis-table th:nth-child(7) { min-width: 90px; } /* Kode */
+    .selected-opis-table th:nth-child(8) { min-width: 130px; } /* Sheet */
+    .selected-opis-table th:nth-child(9) { min-width: 100px; } /* Tipe/Flute */
+    .selected-opis-table th:nth-child(10) { min-width: 90px; } /* Order */
+    .selected-opis-table th:nth-child(11) { min-width: 80px; } /* Out Corr */
+    .selected-opis-table th:nth-child(12) { min-width: 80px; } /* Out Flexo */
+    .selected-opis-table th:nth-child(13) { min-width: 80px; } /* Toleransi */
+    .selected-opis-table th:nth-child(14) { min-width: 90px; } /* Berat Sheet */
+    .selected-opis-table th:nth-child(15) { min-width: 70px; } /* Roll */
+    .selected-opis-table th:nth-child(16) { min-width: 80px; } /* Plan */
+    .selected-opis-table th:nth-child(17) { min-width: 70px; } /* Cop */
+    .selected-opis-table th:nth-child(18) { min-width: 90px; } /* RM Order */
+    .selected-opis-table th:nth-child(19) { min-width: 120px; } /* Jenis Atas */
+    .selected-opis-table th:nth-child(20) { min-width: 80px; } /* Gram Atas */
+    .selected-opis-table th:nth-child(21) { min-width: 90px; } /* Kertas Atas */
+    .selected-opis-table th:nth-child(22) { min-width: 120px; } /* Jenis Flute 1 */
+    .selected-opis-table th:nth-child(23) { min-width: 80px; } /* Gram Flute 1 */
+    .selected-opis-table th:nth-child(24) { min-width: 90px; } /* Flute 1 */
+    .selected-opis-table th:nth-child(25) { min-width: 120px; } /* Jenis Tengah */
+    .selected-opis-table th:nth-child(26) { min-width: 80px; } /* Gram Tengah */
+    .selected-opis-table th:nth-child(27) { min-width: 90px; } /* Kertas Tengah */
+    .selected-opis-table th:nth-child(28) { min-width: 120px; } /* Jenis Flute 2 */
+    .selected-opis-table th:nth-child(29) { min-width: 80px; } /* Gram Flute 2 */
+    .selected-opis-table th:nth-child(30) { min-width: 90px; } /* Flute 2 */
+    .selected-opis-table th:nth-child(31) { min-width: 120px; } /* Jenis Bawah */
+    .selected-opis-table th:nth-child(32) { min-width: 80px; } /* Gram Bawah */
+    .selected-opis-table th:nth-child(33) { min-width: 90px; } /* Kertas Bawah */
+    .selected-opis-table th:nth-child(34) { min-width: 140px; } /* Keterangan */
+    .selected-opis-table th:nth-child(35) { min-width: 90px; } /* Action */
+    
+    /* Styling khusus untuk kolom kebutuhan kertas */
+    .selected-opis-table .kebutuhan-result {
+        font-weight: 600;
+        text-align: center;
+        color: #333;
+    }
+    
+    /* Hover effects */
+    .selected-opis-table tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Better spacing */
+    .selected-opis-table input.form-control-sm[readonly] {
+        cursor: default;
+        font-weight: 600;
+    }
+    
+    /* Paper type styling */
+    .selected-opis-table input[name*="jenis"] {
+        font-size: 10px !important;
+        font-weight: 500;
+        color: #495057 !important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    
+    /* Gram input styling */
+    .selected-opis-table .gramatas-input,
+    .selected-opis-table .gramflute1-input,
+    .selected-opis-table .gramtengah-input,
+    .selected-opis-table .gramflute2-input,
+    .selected-opis-table .grambawah-input {
+        font-weight: 600;
+        text-align: center;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .selected-opis-table {
+            font-size: 11px;
+        }
+        .selected-opis-table input.form-control-sm {
+            width: 60px !important;
+            font-size: 11px;
+            padding: 2px 4px;
+        }
+    }
+    
+    /* Scrollbar styling */
+    .selected-opis-table::-webkit-scrollbar {
+        height: 8px;
+    }
+    .selected-opis-table::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .selected-opis-table::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border-radius: 4px;
+    }
+    .selected-opis-table::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #0056b3, #004085);
     }
 </style>
 
-
 @section('content')
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="row" id="form_list_mc">
-            <div class="col-md-12">
-                <h4 class="modal-title">Planning Corrugating</h4>
-                <hr>
-                
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Error!</strong> 
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $errors }}</li>
-                        @endforeach
-                    </ul>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Planning Corrugating</h1>
                 </div>
-                @endif
-                
-                <form action="{{ route('corr.store') }}"  method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Kode Planning</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="kodeplan" id="kodeplan" onfocusout="getKode()" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Tanggal</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="date" class="form-control txt_line" name="tgl" id="tgl" autofocus onfocusout="getKode()">
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label>Shift</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control txt_line" name="shift" id="shift">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="Opi">
-                                                <div class="modal-dialog modal-xl">
-                                                    
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">List OPI</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body opi">
-                                                            <div class="card-body">
-                                                                <table class="table table-bordered" id="data_opi">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">Kode</th>
-                                                                            <th scope="col">Delivery Time</th>
-                                                                            <th scope="col">Customer</th>
-                                                                            <th scope="col">Barang</th>
-                                                                            <th scope="col">MC</th>
-                                                                            <th scope="col">Sheet P</th>
-                                                                            <th scope="col">Sheet L</th>
-                                                                            <th scope="col">tipe Box</th>
-                                                                            <th scope="col">Flute</th>
-                                                                            <th scope="col">jumlah Order</th>
-                                                                            <th scope="col">Toleransi</th>
-                                                                            <th scope="col">Jenis Atas</th>
-                                                                            <th scope="col">Kertas Atas</th>
-                                                                            <th scope="col">Jenis Flute 1</th>
-                                                                            <th scope="col">Kertas Flute 1</th>
-                                                                            <th scope="col">Jenis Tengah</th>
-                                                                            <th scope="col">Kertas Tengah</th>
-                                                                            <th scope="col">Jenis Flute 2</th>
-                                                                            <th scope="col">Kertas Flute 2</th>
-                                                                            <th scope="col">Jenis Bawah</th>
-                                                                            <th scope="col">Kertas Bawah</th>
-                                                                            <th scope="col">Berat Std Sheet</th>
-                                                                            <th scope="col">opi</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php 
-                                                                        foreach ($opi as $data) { ?>
-                                                                            <tr>
-                                                                                <td scope="row">{{ $data->noopi }}</td>
-                                                                                <td>{{ $data->tglKirimDt }}</td>
-                                                                                <td>{{ $data->Cust }}</td>
-                                                                                <td>{{ $data->namaBarang }}</td>
-                                                                                <td>{{ $data->mcKode }}</td>
-                                                                                <td>{{ $data->panjangSheet }}</td>
-                                                                                <td>{{ $data->lebarSheet }}</td>
-                                                                                <td>{{ $data->tipeBox }}</td>
-                                                                                <td>{{ $data->flute }}</td>
-                                                                                <td>{{ $data->pcsDt }}</td>
-                                                                                <td>{{ $data->toleransiLebih }}</td>
-                                                                                <td>{{ $data->kertasMcAtas }}</td>
-                                                                                <td>{{ $data->gramKertasAtas }}</td>
-                                                                                <td>{{ $data->kertasMcflute1 }}</td>
-                                                                                <td>{{ $data->gramKertasflute1 }}</td>
-                                                                                <td>{{ $data->kertasMctengah }}</td>
-                                                                                <td>{{ $data->gramKertastengah }}</td>
-                                                                                <td>{{ $data->kertasMcflute2 }}</td>
-                                                                                <td>{{ $data->gramKertasflute2 }}</td>
-                                                                                <td>{{ $data->kertasMcbawah }}</td>
-                                                                                <td>{{ $data->gramKertasbawah }}</td>
-                                                                                <td>{{ $data->gramSheet }}</td>
-                                                                                <td>{{ $data->opiid }}</td>
-                                                                            </tr>
-                                                                            <?php
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12" id="plancorr" style="margin-bottom: 10px;">
-                        
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <br>
-                            <button type="button" data-toggle="modal" data-target="#Opi" class="btn btn-search">
-                                Cari OPI  <i class="fas fa-search"></i>
-                            </button>
-                            <a class="btn btn-success" href="javascript:void(0);" id="add_button" title="Add field">TAMBAH</a>
-                            <a class="btn btn-success" href="javascript:void(0);" id="calc_button" title="Add field">HITUNG</a>
-                            <button class="btn btn-lg btn-primary" type="submit">SIMPAN
-                        </div>
-                    </div> 
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.corrplan.index') }}">Plan Corrugating</a></li>
+                        <li class="breadcrumb-item active">Create</li>
+                    </ol>
+                </div>
             </div>
         </div>
-    </div>    
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-plus"></i> Buat Planning Corrugating Baru
+                    </h3>
+                </div>
+                <form action="{{ route('admin.corrplan.store') }}" method="POST" id="corrugatingForm">
+                    @csrf
+                    <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Error!</strong> 
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <!-- Header Form -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Kode Planning</label>
+                                    <input type="text" class="form-control" name="kodeplan" id="kodeplan" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Tanggal Produksi</label>
+                                    <input type="date" class="form-control" name="tgl" id="tgl" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Shift</label>
+                                    <select class="form-control" name="shift" id="shift" required>
+                                        <option value="">Pilih Shift</option>
+                                        <option value="A">Shift A</option>
+                                        <option value="B">Shift B</option>
+                                        <option value="C">Shift C</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OPI Search -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Cari OPI</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-search-opi" id="findOpiBtn">
+                                                <i class="fas fa-search"></i> Find OPI
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <input type="text" class="form-control" name="notes" id="notes" placeholder="Catatan planning">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OPI Selection Info -->
+                        <div class="alert alert-info" id="opiSelectionInfo" style="display: none;">
+                            <h6><i class="fas fa-info-circle"></i> Petunjuk Pemilihan OPI:</h6>
+                            <ul class="mb-0">
+                                <li>Klik tombol <strong>"Find OPI"</strong> untuk membuka modal pemilihan OPI</li>
+                                <li>Pilih beberapa OPI dengan mengklik tombol <i class="fas fa-check text-success"></i> pada setiap OPI yang diinginkan</li>
+                                <li>OPI yang sudah dipilih akan ditandai dengan <i class="fas fa-check-circle text-secondary"></i> dan tidak dapat dipilih lagi</li>
+                                <li>Untuk menghapus OPI dari planning, klik tombol <strong>"Hapus"</strong> pada item planning yang bersangkutan</li>
+                            </ul>
+                        </div>
+
+                        <!-- Planning Items -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <h5><i class="fas fa-list"></i> Daftar Item Planning</h5>
+                                <div class="table-responsive mt-3" style="overflow-x: auto;">
+                                    <table class="table table-bordered table-striped table-nowrap" id="planningTable" style="display: none; min-width: 2000px;">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th style="min-width: 80px;">No</th>
+                                                <th style="min-width: 100px;">No OPI</th>
+                                                <th style="min-width: 110px;">DT</th>
+                                                <th style="min-width: 110px;">DT Perubahan</th>
+                                                <th style="min-width: 150px;">Customer</th>
+                                                <th style="min-width: 200px;">Item</th>
+                                                <th style="min-width: 80px;">MC</th>
+                                                <th style="min-width: 250px;">P x L</th>
+                                                <th style="min-width: 200px;">Tipe/Flute</th>
+                                                <th style="min-width: 120px;">Order</th>
+                                                <th style="min-width: 80px;">Out Corr</th>
+                                                <th style="min-width: 80px;">Out Flexo</th>
+                                                <th style="min-width: 80px;">Toleransi</th>
+                                                <th style="min-width: 100px;">Berat/Pcs</th>
+                                                <th style="min-width: 120px;">Roll</th>
+                                                <th style="min-width: 120px;">Plan</th>
+                                                <th style="min-width: 120px;">Trim</th>
+                                                <th style="min-width: 120px;">Cop</th>
+                                                <th style="min-width: 120px;">RM Order</th>
+                                                <th style="min-width: 120px; background: #28a745; color: white;">Jenis Atas</th>
+                                                <th style="min-width: 80px; background: #28a745; color: white;">Gram Atas</th>
+                                                <th style="min-width: 90px; background: #28a745; color: white;">Kertas Atas (Kg)</th>
+                                                <th style="min-width: 120px; background: #fd7e14; color: white;">Jenis Flute 1</th>
+                                                <th style="min-width: 80px; background: #fd7e14; color: white;">Gram Flute 1</th>
+                                                <th style="min-width: 90px; background: #fd7e14; color: white;">Flute 1 (Kg)</th>
+                                                <th style="min-width: 120px; background: #20c997; color: white;">Jenis Tengah</th>
+                                                <th style="min-width: 80px; background: #20c997; color: white;">Gram Tengah</th>
+                                                <th style="min-width: 90px; background: #20c997; color: white;">Kertas Tengah (Kg)</th>
+                                                <th style="min-width: 120px; background: #e83e8c; color: white;">Jenis Flute 2</th>
+                                                <th style="min-width: 80px; background: #e83e8c; color: white;">Gram Flute 2</th>
+                                                <th style="min-width: 90px; background: #e83e8c; color: white;">Flute 2 (Kg)</th>
+                                                <th style="min-width: 120px; background: #6f42c1; color: white;">Jenis Bawah</th>
+                                                <th style="min-width: 80px; background: #6f42c1; color: white;">Gram Bawah</th>
+                                                <th style="min-width: 90px; background: #6f42c1; color: white;">Kertas Bawah (Kg)</th>
+                                                <th style="min-width: 200px;">Keterangan</th>
+                                                <th style="min-width: 100px;">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="planningTableBody">
+                                            <!-- Planning items will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="noPlanningMessage" class="text-center py-4">
+                                    <i class="fas fa-inbox fa-3x text-muted"></i>
+                                    <p class="mt-2 text-muted">Belum ada OPI yang dipilih untuk planning</p>
+                                </div>
+                                
+                                <!-- Detail Forms Container (Hidden) -->
+                                <div id="planningDetails" style="display: none;">
+                                    <!-- Detail forms will be added here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan Planning
+                                </button>
+                                <a href="{{ route('admin.corrplan.index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal OPI Selection -->
+<div class="modal fade" id="opiModal" tabindex="-1" role="dialog" aria-labelledby="opiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="opiModalLabel">
+                    <i class="fas fa-search"></i> Pilih OPI
+                    <span class="badge badge-light ml-2" id="selectedOpiCount">0 dipilih</span>
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Search Filter -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Search OPI:</label>
+                            <input type="text" class="form-control" id="modalOpiSearch" placeholder="No OPI, Customer, atau Item">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Status:</label>
+                            <select class="form-control" id="modalStatusFilter">
+                                <option value="">Semua Status</option>
+                                <option value="Proses" selected>Proses</option>
+                                <option value="Selesai">Selesai</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-primary form-control" id="searchOpiBtn">
+                                <i class="fas fa-search"></i> Cari
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-secondary form-control" id="resetOpiBtn">
+                                <i class="fas fa-refresh"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPI Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="opiTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="5%">Aksi</th>
+                                <th width="10%">No OPI</th>
+                                <th width="20%">Customer</th>
+                                <th width="25%">Item</th>
+                                <th width="10%">MC Kode</th>
+                                <th width="10%">Tipe Box</th>
+                                <th width="5%">Flute</th>
+                                <th width="10%">Order</th>
+                                <th width="5%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="opiTableBody">
+                            <!-- Data will be loaded via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Loading State -->
+                <div id="opiLoading" class="text-center py-4" style="display: none;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p class="mt-2">Loading data OPI...</p>
+                </div>
+
+                <!-- No Data State -->
+                <div id="opiNoData" class="text-center py-4" style="display: none;">
+                    <i class="fas fa-inbox fa-2x text-muted"></i>
+                    <p class="mt-2 text-muted">Tidak ada data OPI ditemukan</p>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div id="opiInfo"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <nav aria-label="OPI pagination">
+                            <ul class="pagination pagination-sm justify-content-end" id="opiPagination">
+                                <!-- Pagination will be generated via JavaScript -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
 @section('javascripts')
 <script type="text/javascript">
-function getKode() {
-    tgl = document.getElementById("tgl").value;
-    kode = new Date(tgl);
-
-    year = kode.getFullYear();
-    month = kode.getMonth()+1;
-    dd = kode.getDate();
-
-    if (month <= 9 ) {
-        month = "0"+ month;
-    } 
-    if (dd < 9 ) {
-        dd =  "0"+dd;
-    } 
-
-
-    console.log(month);
-
-    document.getElementById("kodeplan").value = dd+""+month+""+year;
-}
-
 $(document).ready(function(){
-    var countrow = 1; //Input fields increment limitation
-    var countdata = 1; //Input fields increment limitation
-    var addButton = $('#add_button'); //Add button selector
+    let itemCounter = 0;
+    let currentOpiData = null;
+    let selectedOpis = []; // Track selected OPI IDs
 
-    //Once add button is clicked
-    $(addButton).click(function(){
-        $("#plancorr").append("<div class='row' style='margin-top:20px;'> <div class='col-md-12' style='border-top: 1px solid rgb(194, 175, 175); padding-top: 5px;'>  <div class='row'> <div class='col-md-1'>  <label>No Opi</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='noOpi["+countrow+"]' id='noOpi["+countrow+"]'> <input type='hidden' class='form-control txt_line' name='opi_id["+countrow+"]' id='opi_id["+countrow+"]'> </div> <div class='col-md-1'>  <label>DT</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dt["+countrow+"]' id='dt["+countrow+"]' readonly> </div> <div class='col-md-1'>  <label>DT Perubahan</label> </div> <div class='col-md-2'>  <input type='date' class='form-control txt_line' name='dtperubahan["+countrow+"]' id='dtperubahan["+countrow+"]'> </div> <div class='col-md-1'>  <label>Customer</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='customer["+countrow+"]' id='customer["+countrow+"]'> </div> <div class='col-md-1'>  <label>Item</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='item["+countrow+"]' id='item["+countrow+"]'> </div> </div>  <div class='row'> <div class='col-md-1'>  <label>MC</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='mc["+countrow+"]' id='mc["+countrow+"]'> </div> <div class='col-md-1'>  <label>P x L</label> </div> <div class='col-md-2'>  <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetp["+countrow+"]' id='sheetp["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>X</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='sheetl["+countrow+"]' id='sheetl["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Tipe / Flute</label> </div> <div class='col-md-2'> <div class='row'> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='tipebox["+countrow+"]' id='tipebox["+countrow+"]'> </div> <div class='col-md-2'> <label for=''>/</label> </div> <div class='col-md-5'> <input type='text' class='form-control txt_line' name='flute["+countrow+"]' id='flute["+countrow+"]'> </div> </div> </div> <div class='col-md-1'> <label>Order</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='order["+countrow+"]' id='order["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Out Corr / Out Flexo</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outCorr["+countrow+"]' id='outCorr["+countrow+"]' required>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='number' class='form-control txt_line' name='outFlexo["+countrow+"]' id='outFlexo["+countrow+"]' required>   </div>  </div> </div> <div class='col-md-1'>  <label>Lebar Roll / Custom Lebar</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='roll["+countrow+"]' id='roll["+countrow+"]'> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rollcustom["+countrow+"]' id='rollcustom["+countrow+"]'> </div>  <div class='col-md-1'>  <label>Plan</label> </div> <div class='col-md-2'>  <input type='text' class='form-control txt_line' name='plan["+countrow+"]' id='plan["+countrow+"]'> </div> <div class='col-md-1'>  <label>trim / cop</label> </div> <div class='col-md-2'>  <div class='row'>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='trim["+countrow+"]' id='trim["+countrow+"]'>   </div>   <div class='col-md-2'>  <label for=''>/</label>  </div>   <div class='col-md-5'>  <input type='text' class='form-control txt_line' name='cop["+countrow+"]' id='cop["+countrow+"]'>   </div>  </div> </div>  </div>  <div class='row' style='margin-botton:5px;'> <div class='col-md-1'>  <label style='margin-top:20px'>K. Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasAtas["+countrow+"]' id='kertasAtas["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramAtas["+countrow+"]' id='gramAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute1["+countrow+"]' id='kertasFlute1["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute1["+countrow+"]' id='gramFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasTengah["+countrow+"]' id='kertasTengah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramTengah["+countrow+"]' id='gramTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasFlute2["+countrow+"]' id='kertasFlute2["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramFlute2["+countrow+"]' id='gramFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>K. Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kertasBawah["+countrow+"]' id='kertasBawah["+countrow+"]'> <input type='text' class='form-control txt_line' name='gramBawah["+countrow+"]' id='gramBawah["+countrow+"]'> </div> <div class='col-md-1'>  <label style='margin-top:20px'>Toleransi(%)</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='toleransi["+countrow+"]' id='toleransi["+countrow+"]'>  </div>  <div class='row'> <div class='col-md-1'>  <label>Kebutuhan Atas</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanAtas["+countrow+"]' id='kebutuhanAtas["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute1</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute1["+countrow+"]' id='kebutuhanFlute1["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Tengah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanTengah["+countrow+"]' id='kebutuhanTengah["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Flute2</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanFlute2["+countrow+"]' id='kebutuhanFlute2["+countrow+"]'> </div> <div class='col-md-1'>  <label>Kebutuhan Bawah</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='kebutuhanBawah["+countrow+"]' id='kebutuhanBawah["+countrow+"]'> </div>  </div>  <div class='row'> <div class='col-md-1'>  <label>Berat/Pcs</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratSheet["+countrow+"]' id='beratSheet["+countrow+"]'> </div> <div class='col-md-1'>  <label>RM Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='rmorder["+countrow+"]' id='rmorder["+countrow+"]'> </div> <div class='col-md-1'>  <label>Berat Order</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='beratOrder["+countrow+"]' id='beratOrder["+countrow+"]'> </div> <div class='col-md-1'>  <label>urutan</label> </div> <div class='col-md-1'>  <input type='text' class='form-control txt_line' name='urutan["+countrow+"]' id='urutan["+countrow+"]' required> </div> </div> <div class='row' style='margin-top:10px'> <div class='col-md-1'>  <label>Keterangan</label> </div> <div class='col-md-10'> <input type='text' name='keterangan["+countrow+"]' id='keterangan["+countrow+"]' style='width:1000px'> </div> </div> </div> </div> </div>");
-        // <input type='text' class='form-control txt_line' '>
-        countrow++;
-        countdata++;
+    // Helper functions untuk mengambil data kertas
+    function getJenisKertas(opiData, layer) {
+        try {
+            const substance = opiData?.mc?.substanceproduksi;
+            if (!substance || !substance[layer]) {
+                console.log(`No substance data for layer: ${layer}`);
+                return '';
+            }
+            
+            // Try multiple possible field names
+            const layerData = substance[layer];
+            let jenisKertas = '';
+            
+            // Check direct fields first
+            if (layerData.jenisKertasMc) {
+                jenisKertas = layerData.jenisKertasMc;
+            } else if (layerData.jenis_gram) {
+                jenisKertas = layerData.jenis_gram;
+            } else if (layerData.jenisKertasLog) {
+                jenisKertas = layerData.jenisKertasLog;
+            }
+            
+            console.log(`Found jenis kertas for ${layer}:`, jenisKertas);
+            return jenisKertas ? jenisKertas.substring(0, 15) : '';
+        } catch (e) {
+            console.error(`Error getting jenis kertas for ${layer}:`, e);
+            return '';
+        }
+    }
+
+    function getGramKertas(opiData, layer) {
+        try {
+            const substance = opiData?.mc?.substanceproduksi;
+            if (!substance || !substance[layer]) {
+                console.log(`No substance data for layer: ${layer}`);
+                return '';
+            }
+            
+            // Try multiple possible field names
+            const layerData = substance[layer];
+            let gram = '';
+            
+            // Check direct fields first
+            if (layerData.gramKertas) {
+                gram = layerData.gramKertas;
+            } else if (layerData.gram) {
+                gram = layerData.gram;
+            } else if (layerData.gramKertas) {
+                gram = layerData.gramKertas;
+            }
+            
+            console.log(`Found gram for ${layer}:`, gram);
+            return gram || '';
+        } catch (e) {
+            console.error(`Error getting gram kertas for ${layer}:`, e);
+            return '';
+        }
+    }
+
+    // Show OPI selection info on page load
+    $('#opiSelectionInfo').show();
+
+    // Generate kode planning from date
+    $('#tgl').on('change', function() {
+        const tgl = new Date(this.value);
+        const year = tgl.getFullYear();
+        const month = String(tgl.getMonth() + 1).padStart(2, '0');
+        const day = String(tgl.getDate()).padStart(2, '0');
+        $('#kodeplan').val(day + month + year);
     });
 
-    $("#calc_button").click(function() {
-        for (let i = 1; i < countdata; i++) {
-            var  outCorr = document.getElementById("outCorr["+i+"]").value;
-            var  sheetl = document.getElementById("sheetl["+i+"]").value;
-            var  sheetp = document.getElementById("sheetp["+i+"]").value;
-            var  outConv = document.getElementById("outFlexo["+i+"]").value;
-            var  order = document.getElementById("order["+i+"]").value;
-            var  toleransi = document.getElementById("toleransi["+i+"]").value;
-            var  gramSheet = document.getElementById("beratSheet["+i+"]").value;
-            var  tipebox = document.getElementById("tipebox["+i+"]").value;
-            var gAtas =document.getElementById("gramAtas["+i+"]").value
-            var gFlute1 =document.getElementById("gramFlute1["+i+"]").value
-            var gTengah =document.getElementById("gramTengah["+i+"]").value
-            var gFlute2 =document.getElementById("gramFlute2["+i+"]").value
-            var gBawah =document.getElementById("gramBawah["+i+"]").value
+    // OPI Modal variables
+    let currentPage = 1;
+    let totalPages = 1;
+    let opiData = [];
 
-            
-            if (tipebox = 'DC') {
-                UkRoll = Math.ceil(((outCorr*sheetl)+20)/50)*50;
-            } else {
-                UkRoll =Math.ceil(((outCorr*sheetl)+30)/50)*50;
-            }
+    // Open OPI Modal
+    $('#findOpiBtn').on('click', function(e) {
+        e.preventDefault();
+        console.log('Find OPI button clicked');
+        
+        // Show modal first
+        $('#opiModal').modal('show');
+        
+        // Load data after modal is shown
+        setTimeout(function() {
+            loadOpiData(1);
+        }, 300);
+    });
 
-            qtyPlan =  (parseInt(order) + parseInt(order*(toleransi/100)))/outConv;
+    // Search OPI in modal
+    $('#searchOpiBtn').on('click', function() {
+        currentPage = 1;
+        loadOpiData(currentPage);
+    });
 
-            cop = qtyPlan/outCorr;
+    // Reset OPI search
+    $('#resetOpiBtn').on('click', function() {
+        $('#modalOpiSearch').val('');
+        $('#modalStatusFilter').val('Proses');
+        currentPage = 1;
+        loadOpiData(currentPage);
+    });
 
-            trim = (UkRoll-(sheetl*outCorr))/UkRoll;
-
-            rmorder = (sheetp*cop)/1000;
-
-            tonase = qtyPlan*gramSheet;
-
-            if (gAtas != '') {
-                KAtas = rmorder*(UkRoll/1000)*gAtas/1000;
-                document.getElementById("kebutuhanAtas["+i+"]").value = Math.round(KAtas);
-            } 
-            if (gFlute1 != '') {
-                KFlute1 = rmorder*(UkRoll/1000)*(gFlute1/1000)*1.34;
-                document.getElementById("kebutuhanFlute1["+i+"]").value = Math.round(KFlute1);
-            } 
-            if (gTengah != '') {
-                KTengah = rmorder*(UkRoll/1000)*gTengah/1000;
-                document.getElementById("kebutuhanTengah["+i+"]").value = Math.round(KTengah);
-            } 
-            if (gFlute2 != '') {
-                KFlute2 = rmorder*(UkRoll/1000)*(gFlute2/1000)*1.42;
-                document.getElementById("kebutuhanFlute2["+i+"]").value = Math.round(KFlute2);
-            } 
-            if (gBawah != '') {
-                KBawah = rmorder*(UkRoll/1000)*gBawah/1000;
-                document.getElementById("kebutuhanBawah["+i+"]").value = Math.round(KBawah);
-            } 
-
-            document.getElementById("plan["+i+"]").value = qtyPlan.toFixed(2);
-            document.getElementById("roll["+i+"]").value = UkRoll.toFixed(2);
-            document.getElementById("cop["+i+"]").value = cop.toFixed(2);
-            document.getElementById("trim["+i+"]").value = trim.toFixed(2);
-            document.getElementById("rmorder["+i+"]").value = rmorder.toFixed(0);
-            document.getElementById("beratOrder["+i+"]").value = tonase.toFixed(2);
+    // Enter key search
+    $('#modalOpiSearch').on('keypress', function(e) {
+        if (e.which === 13) {
+            $('#searchOpiBtn').click();
         }
     });
-    
-    // countrow++;
-    
 
-    $(".Opi").ready(function(){
+    // Load OPI Data function
+    function loadOpiData(page = 1) {
+        const search = $('#modalOpiSearch').val().trim();
         
-        var table = $("#data_opi").DataTable({
-            select: true,
-            "initComplete": function (settings, json) {  
-            $("#data_opi").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");            
-        },
-        });
+        console.log('Loading OPI data - Page:', page, 'Search:', search);
         
-        $('#data_opi tbody').on( 'click', 'td', function () {
-            var cust = (table.row(this).data());
-            x = countdata -1;
-            console.log(x);
-            
-            if (countdata != 'null') {
-                document.getElementById("noOpi["+x+"]").value = cust[0];
-                document.getElementById("dt["+x+"]").value = cust[1];
-                document.getElementById("customer["+x+"]").value = cust[2];
-                document.getElementById("item["+x+"]").value = cust[3];
-                document.getElementById("mc["+x+"]").value = cust[4];
-                document.getElementById("sheetp["+x+"]").value = cust[5];
-                document.getElementById("sheetl["+x+"]").value = cust[6];
-                document.getElementById("tipebox["+x+"]").value = cust[7];
-                document.getElementById("flute["+x+"]").value = cust[8];
-                document.getElementById("order["+x+"]").value = cust[9];
-                document.getElementById("opi_id["+x+"]").value = cust[22];
-                document.getElementById("gramAtas["+x+"]").value = cust[12];
-                document.getElementById("gramFlute1["+x+"]").value = cust[14];
-                document.getElementById("gramTengah["+x+"]").value = cust[16];
-                document.getElementById("gramFlute2["+x+"]").value = cust[18];
-                document.getElementById("gramBawah["+x+"]").value = cust[20];
-                document.getElementById("beratSheet["+x+"]").value = cust[21];
-                document.getElementById("kertasAtas["+x+"]").value = cust[11];
-                document.getElementById("kertasFlute1["+x+"]").value = cust[13];
-                document.getElementById("kertasTengah["+x+"]").value = cust[15];
-                document.getElementById("kertasFlute2["+x+"]").value = cust[17];
-                document.getElementById("kertasBawah["+x+"]").value = cust[19];
+        // Show loading
+        $('#opiLoading').show();
+        $('#opiTable').hide();
+        $('#opiNoData').hide();
+        $('#opiPagination').empty();
+        $('#opiInfo').empty();
 
-                if (cust[7] == 'DC') {
-                    toleransi = 2;
-                } else if(cust[7] == 'B1'){
-                    toleransi = 5;
-                } else {
-                    toleransi = 0;
-                }
-
+        // AJAX call to get OPI data with proper pagination
+        $.ajax({
+            url: '/admin/opi/json-paginated',
+            method: 'GET',
+            data: {
+                page: page,
+                search: search,
+                plan_corr: 0  // Only show OPI that haven't been planned for corrugated
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log('OPI Response:', response);
+                $('#opiLoading').hide();
                 
-                document.getElementById("toleransi["+x+"]").value = toleransi;
+                if (response.success && response.data && response.data.length > 0) {
+                    displayOpiTableAndStore(response.data);
+                    updatePaginationFromResponse(response.pagination);
+                    $('#opiTable').show();
+                } else {
+                    console.log('No OPI data found');
+                    $('#opiNoData').show();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: error
+                });
+                $('#opiLoading').hide();
+                $('#opiNoData').show();
+                
+                // Show error message
+                $('#opiNoData').html(`
+                    <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                    <p class="mt-2 text-danger">Error loading OPI data: ${xhr.status} ${xhr.statusText}</p>
+                    <button class="btn btn-sm btn-primary" onclick="loadOpiData(1)">Retry</button>
+                `);
+            }
+        });
+    }
 
-                // document.getElementById("roll["+x+"]").value = UkRoll.toFixed(2);
-                // console.log(UkRoll);
-                // countdata++;
+    // Display OPI table
+    function displayOpiTable(data) {
+        let tableRows = '';
+        
+        data.forEach(function(opi) {
+            // Handle status display
+            let statusBadge = 'primary';
+            let statusText = 'PROSES';
+            
+            if (opi.NoOPI && opi.NoOPI.includes('CANCEL')) {
+                statusBadge = 'danger';
+                statusText = 'CANCELLED';
+            } else if (opi.status_opi === 'Selesai') {
+                statusBadge = 'success';
+                statusText = 'SELESAI';
             }
             
-        } );
-    } );
+            // Check if OPI is already selected
+            const isSelected = selectedOpis.includes(opi.id);
+            const buttonClass = isSelected ? 'btn-secondary' : 'btn-success';
+            const buttonDisabled = isSelected ? 'disabled' : '';
+            const buttonIcon = isSelected ? 'fa-check-circle' : 'fa-check';
+            const buttonTitle = isSelected ? 'OPI sudah dipilih' : 'Pilih OPI ini';
+            
+            tableRows += `
+                <tr ${isSelected ? 'class="table-secondary"' : ''}>
+                    <td>
+                        <button type="button" class="btn btn-sm ${buttonClass} select-opi-btn" 
+                                data-opi-id="${opi.id}" title="${buttonTitle}" ${buttonDisabled}>
+                            <i class="fas ${buttonIcon}"></i>
+                        </button>
+                    </td>
+                    <td>${opi.NoOPI || '-'}</td>
+                    <td>${opi.Cust || '-'}</td>
+                    <td>${opi.namaBarang || '-'}</td>
+                    <td>${opi.kode || '-'}</td>
+                    <td>${opi.tipeBox || '-'}</td>
+                    <td>${opi.flute || '-'}</td>
+                    <td>${Number(opi.jumlahOrder).toLocaleString() || '-'}</td>
+                    <td>
+                        <span class="badge badge-${statusBadge}">
+                            ${statusText}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        $('#opiTableBody').html(tableRows);
+        console.log('OPI table populated with', data.length, 'rows');
+    }
 
-        // countdata++;
-    // var btn = $();
+    // Update pagination from API response
+    function updatePaginationFromResponse(pagination) {
+        currentPage = pagination.current_page;
+        totalPages = pagination.total_pages;
+        
+        // Update info
+        $('#opiInfo').html(`Showing ${pagination.from} to ${pagination.to} of ${pagination.total} entries`);
+        
+        // Generate pagination
+        let paginationHtml = '';
+        
+        // Previous button
+        paginationHtml += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
+            </li>
+        `;
+        
+        // Page numbers
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHtml += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+        }
+        
+        // Next button
+        paginationHtml += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
+            </li>
+        `;
+        
+        $('#opiPagination').html(paginationHtml);
+    }
 
+    // Pagination click handler
+    $(document).on('click', '#opiPagination .page-link', function(e) {
+        e.preventDefault();
+        const page = parseInt($(this).data('page'));
+        if (page && page !== currentPage && page > 0 && page <= totalPages) {
+            loadOpiData(page);
+        }
+    });
+
+    // Select OPI from modal
+    $(document).on('click', '.select-opi-btn', function() {
+        const opiId = parseInt($(this).data('opi-id'));
+        
+        // Check if already selected
+        if (selectedOpis.includes(opiId)) {
+            return;
+        }
+        
+        // Show loading on button
+        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+        
+        // Get single OPI data
+        $.ajax({
+            url: `/admin/opi/single/${opiId}`,
+            method: 'GET',
+            success: function(data) {
+                // Debug: log the data to see structure
+                console.log('OPI Data received:', data);
+                console.log('MC Data:', data.mc);
+                console.log('Substance Data:', data.mc?.substanceproduksi);
+                if (data.mc?.substanceproduksi) {
+                    console.log('Liner Atas:', data.mc.substanceproduksi.lineratas);
+                    console.log('Flute 1:', data.mc.substanceproduksi.flute1);
+                    console.log('Liner Tengah:', data.mc.substanceproduksi.linertengah);
+                    console.log('Flute 2:', data.mc.substanceproduksi.flute2);
+                    console.log('Liner Bawah:', data.mc.substanceproduksi.linerbawah);
+                }
+                
+                // Add to planning directly
+                addPlanningItem(data);
+                
+                // Add to selected list
+                selectedOpis.push(opiId);
+                
+                // Hide selection info after first OPI is selected
+                if (selectedOpis.length === 1) {
+                    $('#opiSelectionInfo').fadeOut();
+                }
+                
+                // Update counter
+                updateSelectedCounter();
+                
+                // Refresh table to show updated status
+                displayOpiTable(window.currentOpiTableData);
+            },
+            error: function(xhr) {
+                alert('Error loading OPI data');
+                $(this).prop('disabled', false).html('<i class="fas fa-check"></i>');
+            }
+        });
+    });
+
+    // Store current table data for refresh
+    window.currentOpiTableData = [];
     
+    // Update the success handler to store table data
+    function displayOpiTableAndStore(data) {
+        window.currentOpiTableData = data;
+        displayOpiTable(data);
+    }
+    
+    // Update selected OPI counter
+    function updateSelectedCounter() {
+        const count = selectedOpis.length;
+        $('#selectedOpiCount').text(`${count} dipilih`);
+    }
+
+    // Add planning item
+    function addPlanningItem(opiData) {
+        itemCounter++;
+        
+        // Calculate toleransi based on tipe box
+        let toleransi = 0;
+        if (opiData.mc?.tipeBox === 'B1') {
+            toleransi = 1;
+        } else {
+            toleransi = 0;
+        }
+        
+        // Get paper data from OPI using eager loaded relations
+        const kertasAtas = opiData.mc?.substanceproduksi?.lineratas?.jenisKertasMc || '';
+        const kertasFlute1 = opiData.mc?.substanceproduksi?.flute1?.jenisKertasMc || '';
+        const kertasTengah = opiData.mc?.substanceproduksi?.linertengah?.jenisKertasMc || '';
+        const kertasFlute2 = opiData.mc?.substanceproduksi?.flute2?.jenisKertasMc || '';
+        const kertasBawah = opiData.mc?.substanceproduksi?.linerbawah?.jenisKertasMc || '';
+        
+        // Get gram data from OPI using eager loaded relations
+        const gramAtas = opiData.mc?.substanceproduksi?.lineratas?.gramKertas || '';
+        const gramFlute1 = opiData.mc?.substanceproduksi?.flute1?.gramKertas || '';
+        const gramTengah = opiData.mc?.substanceproduksi?.linertengah?.gramKertas || '';
+        const gramFlute2 = opiData.mc?.substanceproduksi?.flute2?.gramKertas || '';
+        const gramBawah = opiData.mc?.substanceproduksi?.linerbawah?.gramKertas || '';
+        
+        // Add table row
+        const tableRow = `
+            <tr id="planRow${itemCounter}" data-opi-id="${opiData.id}">
+                <td>
+                    <input type="hidden" name="opi_id[]" value="${opiData.id}">
+                    <input type="hidden" name="mc_id[]" value="${opiData.mc?.id || ''}">
+                    <input type="number" class="form-control form-control-sm" name="urutan[]" value="${itemCounter}" required>
+                </td>
+                <td>${opiData.NoOPI || '-'}</td>
+                <td>
+                    <input type="date" class="form-control form-control-sm" name="dt[]" value="${opiData.dt?.tglKirimDt || ''}">
+                </td>
+                <td>
+                    <input type="date" class="form-control form-control-sm" name="dtperubahan[]">
+                </td>
+                <td title="${opiData.kontrakm?.customer_name || '-'}">${opiData.kontrakm?.customer_name || '-'}</td>
+                <td title="${opiData.mc?.namaBarang || '-'}">${opiData.mc?.namaBarang || '-'}</td>
+                <td>${opiData.mc?.kode || '-'}</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm" name="sheetp[]" value="${opiData.mc?.panjangSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
+                    <span class="mx-1">×</span>
+                    <input type="number" class="form-control form-control-sm" name="sheetl[]" value="${opiData.mc?.lebarSheet || ''}" step="0.01" style="width:100px;display:inline-block;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="tipebox[]" value="${opiData.mc?.tipeBox || ''}" style="width:60px;display:inline-block;">
+                    <span class="mx-1">/</span>
+                    <input type="text" class="form-control form-control-sm" name="flute[]" value="${opiData.mc?.flute || ''}" style="width:60px;display:inline-block;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm order-input" name="order[]" value="${opiData.jumlahOrder || ''}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm outcorr-input" name="outCorr[]" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm outflexo-input" name="outFlexo[]" value="${opiData.mc?.outConv || ''}" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[]" value="${toleransi}" step="0.1">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm beratsheet-input" name="beratSheet[]" value="${opiData.mc?.gramSheetBoxProduksi || ''}" step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]" readonly>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm plan-result" name="plan[]" readonly step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm trim-result" name="trim[]" readonly step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm cop-result" name="cop[]" readonly step="0.01">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm rmorder-result" name="rmorder[]" readonly>
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="jenisAtas[]" value="${getJenisKertas(opiData, 'lineratas')}" readonly style="background: #d4edda; border-color: #28a745; font-size: 10px;" title="${getJenisKertas(opiData, 'lineratas')}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm gramatas-input" name="gramAtas[]" value="${getGramKertas(opiData, 'lineratas')}" step="1" style="width: 60px; background: #d4edda; border-color: #28a745;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanAtas[]" readonly style="background: #d4edda; border-color: #28a745; font-weight: bold;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="jenisFlute1[]" value="${getJenisKertas(opiData, 'flute1')}" readonly style="background: #ffeaa7; border-color: #fd7e14; font-size: 10px;" title="${getJenisKertas(opiData, 'flute1')}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm gramflute1-input" name="gramFlute1[]" value="${getGramKertas(opiData, 'flute1')}" step="1" style="width: 60px; background: #ffeaa7; border-color: #fd7e14;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute1[]" readonly style="background: #ffeaa7; border-color: #fd7e14; font-weight: bold;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="jenisTengah[]" value="${getJenisKertas(opiData, 'linertengah')}" readonly style="background: #d1ecf1; border-color: #20c997; font-size: 10px;" title="${getJenisKertas(opiData, 'linertengah')}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm gramtengah-input" name="gramTengah[]" value="${getGramKertas(opiData, 'linertengah')}" step="1" style="width: 60px; background: #d1ecf1; border-color: #20c997;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanTengah[]" readonly style="background: #d1ecf1; border-color: #20c997; font-weight: bold;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="jenisFlute2[]" value="${getJenisKertas(opiData, 'flute2')}" readonly style="background: #f3e2f3; border-color: #e83e8c; font-size: 10px;" title="${getJenisKertas(opiData, 'flute2')}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm gramflute2-input" name="gramFlute2[]" value="${getGramKertas(opiData, 'flute2')}" step="1" style="width: 60px; background: #f3e2f3; border-color: #e83e8c;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanFlute2[]" readonly style="background: #f3e2f3; border-color: #e83e8c; font-weight: bold;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="jenisBawah[]" value="${getJenisKertas(opiData, 'linerbawah')}" readonly style="background: #e2d9f3; border-color: #6f42c1; font-size: 10px;" title="${getJenisKertas(opiData, 'linerbawah')}">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm grambawah-input" name="gramBawah[]" value="${getGramKertas(opiData, 'linerbawah')}" step="1" style="width: 60px; background: #e2d9f3; border-color: #6f42c1;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm kebutuhan-result" name="kebutuhanBawah[]" readonly style="background: #e2d9f3; border-color: #6f42c1; font-weight: bold;">
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="keterangan[]" placeholder="Catatan">
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-info" onclick="showDetails(${itemCounter})" title="Detail Kertas & Kalkulasi">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removePlanItem(${itemCounter})" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        
+        // Add detail form (hidden)
+        const detailForm = `
+            <div id="planDetail${itemCounter}" style="display: none;" class="mt-3 border p-3">
+                <h6><i class="fas fa-cog"></i> Detail & Kalkulasi - ${opiData.NoOPI}</h6>
+                
+                <!-- Info fields - no longer needed as hidden fields since they're in table row -->
+                
+                <!-- Info Summary -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="alert alert-light">
+                            <strong>Info:</strong> No OPI: ${opiData.NoOPI} | Customer: ${opiData.kontrakm?.customer_name || '-'} | Item: ${opiData.mc?.namaBarang || '-'}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Note: DT Perubahan, Berat Sheet, and Keterangan fields are managed in the main table -->
+                
+                <!-- Note: Jenis Kertas, Gram, dan Kebutuhan Kertas data dikelola di tabel utama -->
+                
+                <!-- Note: Hasil Kalkulasi data dikelola di tabel utama -->
+                
+                <div class="mt-3">
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="hideDetails(${itemCounter})">
+                        <i class="fas fa-eye-slash"></i> Sembunyikan Detail
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add to table and details
+        $('#planningTableBody').append(tableRow);
+        $('#planningDetails').append(detailForm);
+        
+        // Show table and hide no data message
+        $('#noPlanningMessage').hide();
+        $('#planningTable').show();
+        
+        // Auto calculate if basic data exists
+        setTimeout(function() {
+            const row = $(`#planRow${itemCounter}`);
+            const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
+            if (outCorr && outCorr > 0) {
+                calculateItemRequirements(itemCounter);
+            }
+        }, 100);
+    }
+
+    // Auto calculate when Out Corr or other key fields change
+    $(document).on('input change', '.outcorr-input, .order-input, .toleransi-input, .outflexo-input, .beratsheet-input', function() {
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
+        
+        // Only calculate if Out Corr has value
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
+        if (outCorr && outCorr > 0) {
+            calculateItemRequirements(itemId);
+        }
+    });
+
+    // Auto calculate when sheet dimensions change
+    $(document).on('input change', 'input[name="sheetp[]"], input[name="sheetl[]"], input[name="tipebox[]"]', function() {
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
+        
+        // Only calculate if Out Corr has value
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
+        if (outCorr && outCorr > 0) {
+            calculateItemRequirements(itemId);
+        }
+    });
+
+    // Auto calculate when gram inputs change (affects paper requirements)
+    $(document).on('input change', '.gramatas-input, .gramflute1-input, .gramtengah-input, .gramflute2-input, .grambawah-input', function() {
+        // Get the item ID from the row ID
+        const row = $(this).closest('tr');
+        const itemId = row.attr('id').replace('planRow', '');
+        
+        // Only calculate if Out Corr has value
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
+        if (outCorr && outCorr > 0) {
+            calculateItemRequirements(itemId);
+        }
+    });
+
+    // Calculate requirements
+    // $('#calculateBtn').on('click', function() {
+    //     $('.card[id^="planItem"]').each(function() {
+    //         const itemId = $(this).attr('id').replace('planItem', '');
+    //         calculateItemRequirements(itemId);
+    //     });
+        
+    //     alert('Perhitungan selesai! Silakan periksa hasil perhitungan.');
+    // });
+
+    // Calculate individual item requirements
+    function calculateItemRequirements(itemId) {
+        const row = $(`#planRow${itemId}`);
+        const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val()) || 0;
+        const sheetl = parseFloat(row.find('input[name="sheetl[]"]').val()) || 0;
+        const sheetp = parseFloat(row.find('input[name="sheetp[]"]').val()) || 0;
+        const outFlexo = parseFloat(row.find('input[name="outFlexo[]"]').val()) || 0;
+        const order = parseFloat(row.find('input[name="order[]"]').val()) || 0;
+        const toleransi = parseFloat(row.find('input[name="toleransi[]"]').val()) || 0;
+        const beratSheet = parseFloat(row.find('input[name="beratSheet[]"]').val()) || 0;
+        const tipebox = row.find('input[name="tipebox[]"]').val();
+        const flute = row.find('input[name="flute[]"]').val();
+
+        // Calculate UkRoll
+        let UkRoll;
+        if (tipebox === 'DC') {
+            UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
+        } else {
+            UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
+        }
+
+        let flute1, flute2;
+
+        if(flute == 'BF'){
+            flute1 = 1.36;
+            flute2 = 0;
+        } else if(flute == 'CF'){
+            flute1 = 0;
+            flute2 = 1.46;
+        } else if (flute == 'BCF') {
+            flute1 = 1.36;
+            flute2 = 1.46;  
+        } else if (flute == 'EF') {
+            flute1 = 1.2;
+            flute2 = 0;
+        } else if (flute == 'EBF') {
+            flute1 = 1.46;
+            flute2 = 1.2;
+        } else if (flute == 'EF') {
+            flute1 = 1.2;
+            flute2 = 0;
+        }
+
+        // Calculate other values
+        const qtyPlan = (order + (order * (toleransi / 100))) / outFlexo;
+        const cop = qtyPlan / outCorr;
+        const trim = (UkRoll - (sheetl * outCorr));
+        const rmorder = (sheetp * cop) / 1000;
+        const tonase = qtyPlan * beratSheet / 1000; // Convert to kg
+
+        // Calculate paper requirements
+        const gramAtas = parseFloat(row.find('input[name="gramAtas[]"]').val()) || 0;
+        const gramFlute1 = parseFloat(row.find('input[name="gramFlute1[]"]').val()) || 0;
+        const gramTengah = parseFloat(row.find('input[name="gramTengah[]"]').val()) || 0;
+        const gramFlute2 = parseFloat(row.find('input[name="gramFlute2[]"]').val()) || 0;
+        const gramBawah = parseFloat(row.find('input[name="gramBawah[]"]').val()) || 0;
+
+        // Calculate kebutuhan kertas (paper requirements in kg)
+        let kebutuhanAtas = 0, kebutuhanFlute1 = 0, kebutuhanTengah = 0, kebutuhanFlute2 = 0, kebutuhanBawah = 0;
+        
+        if (gramAtas > 0) {
+            kebutuhanAtas = rmorder * (UkRoll / 1000) * gramAtas / 1000;
+        }
+        if (gramFlute1 > 0) {
+            kebutuhanFlute1 = rmorder * (UkRoll / 1000) * (gramFlute1 / 1000) * flute1; // Flute factor
+        }
+        if (gramTengah > 0) {
+            kebutuhanTengah = rmorder * (UkRoll / 1000) * gramTengah / 1000;
+        }
+        if (gramFlute2 > 0) {
+            kebutuhanFlute2 = rmorder * (UkRoll / 1000) * (gramFlute2 / 1000) * flute2; // Flute factor
+        }
+        if (gramBawah > 0) {
+            kebutuhanBawah = rmorder * (UkRoll / 1000) * gramBawah / 1000;
+        }
+
+        // Update calculated fields in table
+        row.find('input[name="roll[]"]').val(UkRoll);
+        row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
+        row.find('input[name="cop[]"]').val(cop.toFixed(0));
+        row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
+        
+        // Also update detail fields if they exist
+        row.find('input[name="trim[]"]').val(trim.toFixed(0));
+        
+        // Update paper requirements
+        row.find('input[name="kebutuhanAtas[]"]').val(Math.round(kebutuhanAtas));
+        row.find('input[name="kebutuhanFlute1[]"]').val(Math.round(kebutuhanFlute1));
+        row.find('input[name="kebutuhanTengah[]"]').val(Math.round(kebutuhanTengah));
+        row.find('input[name="kebutuhanFlute2[]"]').val(Math.round(kebutuhanFlute2));
+        row.find('input[name="kebutuhanBawah[]"]').val(Math.round(kebutuhanBawah));
+    }
+
+    // Form validation
+    $('#corrugatingForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        if (!$('#tgl').val()) {
+            alert('Tanggal produksi harus diisi');
+            return;
+        }
+        
+        if (!$('#shift').val()) {
+            alert('Shift harus dipilih');
+            return;
+        }
+        
+        if ($('#planningTableBody tr').length === 0) {
+            alert('Minimal harus ada 1 item planning');
+            return;
+        }
+        
+        // If validation passes, submit via AJAX
+        const formData = new FormData(this);
+        
+        // Debug: Log form data
+        console.log('Form data being submitted:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
+        // Show loading
+        $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert('Planning corrugating berhasil disimpan dengan kode: ' + response.data.kode_corr);
+                    // Redirect to index page
+                    window.location.href = '{{ route("admin.corrplan.index") }}';
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr) {
+                let message = 'Terjadi kesalahan saat menyimpan data';
+                console.log('AJAX Error Response:', xhr.responseJSON);
+                
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    message = xhr.responseJSON.message;
+                } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    message = Object.values(xhr.responseJSON.errors).flat().join('\\n');
+                }
+                alert('Error: ' + message);
+            },
+            complete: function() {
+                // Reset button
+                $('button[type="submit"]').prop('disabled', false).html('<i class="fas fa-save"></i> Simpan Planning');
+            }
+        });
+    });
 });
+
+// Show/Hide detail functions
+function showDetails(itemId) {
+    $(`#planDetail${itemId}`).slideDown();
+    $(`button[onclick="showDetails(${itemId})"]`).html('<i class="fas fa-eye-slash"></i>').attr('onclick', `hideDetails(${itemId})`).attr('title', 'Sembunyikan Detail');
+}
+
+function hideDetails(itemId) {
+    $(`#planDetail${itemId}`).slideUp();
+    $(`button[onclick="hideDetails(${itemId})"]`).html('<i class="fas fa-eye"></i>').attr('onclick', `showDetails(${itemId})`).attr('title', 'Detail & Kalkulasi');
+}
+
+// Remove planning item
+function removePlanItem(itemId) {
+    if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
+        // Get OPI ID from the table row
+        const opiId = parseInt($(`#planRow${itemId}`).data('opi-id'));
+        
+        // Remove from selected list
+        const index = selectedOpis.indexOf(opiId);
+        if (index > -1) {
+            selectedOpis.splice(index, 1);
+        }
+        
+        // Update counter
+        updateSelectedCounter();
+        
+        // Remove the table row and detail form
+        $(`#planRow${itemId}`).remove();
+        $(`#planDetail${itemId}`).remove();
+        
+        // Hide table if no more items
+        if ($('#planningTableBody tr').length === 0) {
+            $('#planningTable').hide();
+            $('#noPlanningMessage').show();
+        }
+        
+        // Refresh OPI table if modal is open
+        if ($('#opiModal').hasClass('show') && window.currentOpiTableData.length > 0) {
+            displayOpiTable(window.currentOpiTableData);
+        }
+        
+        if (typeof toastr !== 'undefined') {
+            toastr.info('Item planning dihapus. OPI dapat dipilih kembali.');
+        }
+    }
+}
 </script>
 @endsection

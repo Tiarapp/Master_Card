@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'divisi_id',
+        'company_id',
         'email',
         'password',
         'password_changed_at',
@@ -43,4 +44,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password_changed_at' => 'datetime',
     ];
+
+    /**
+     * Relationship with company
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Relationship with divisi
+     */
+    public function divisi()
+    {
+        return $this->belongsTo(Divisi::class);
+    }
 }

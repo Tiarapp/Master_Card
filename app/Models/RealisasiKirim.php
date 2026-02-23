@@ -25,4 +25,9 @@ class RealisasiKirim extends Model
     {
         return $this->belongsTo(Kontrak_M::class, 'kontrak_m_id');
     }
+
+    public function opi()
+    {
+        return $this->belongsTo(Opi_M::class, 'opi_id');
+    }
 }
