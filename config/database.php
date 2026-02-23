@@ -177,11 +177,11 @@ return [
 
         'stellar_bp' => [
             'driver'   => 'firebird',
-            'host'     => env('DB_HOST5', '192.168.1.250'),
-            'port'     => env('DB_PORT5', '3050'),
-            'database' => env('DB_DATABASE5', 'D:\DB\Database\FBDB\BP_CONVERTING_STELLAR.FDB'),
-            'username' => env('DB_USERNAME5', 'sysdba'),
-            'password' => env('DB_PASSWORD5', 'masterkey'),
+            'host'     => env('DB_HOST6', '192.168.1.250'),
+            'port'     => env('DB_PORT6', '3050'),
+            'database' => env('DB_DATABASE6', 'D:\DB\Database\FBDB\BP_CONVERTING_STELLAR.FDB'),
+            'username' => env('DB_USERNAME6', 'sysdba'),
+            'password' => env('DB_PASSWORD6', 'masterkey'),
             'charset'  => env('DB_CHARSET', 'UTF8'),
             'version'  => env('DB_VERSION', '2.5'), // Supported versions: 2.5, 1.5
             'role'     => null,
