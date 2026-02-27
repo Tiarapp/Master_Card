@@ -66,7 +66,7 @@
                                                 <div class="col-md-4">
                                                     <label class="control-label">Kode Box</label>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-8">
                                                     <input type="text" class="form-control txt_line" name="kodeBarang" id="kodeBarang" placeholder="Kode Barang" readonly>
                                                 </div>
                                             </div>

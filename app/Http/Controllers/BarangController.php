@@ -215,7 +215,7 @@ class BarangController extends Controller
             ]);
 
             DB::connection('firebird2')->commit();
-            return redirect('admin/barang')->with('success', "Data Berhasil disimpan dengan kode Barang = ". $request->kodeBarang);
+            return redirect('admin/barang/new')->with('success', "Data Berhasil disimpan dengan kode Barang = ". $request->kodeBarang);
         } else {
             return redirect()->to(url()->previous())->with('danger', "Kode Barang ini ". $barang->KodeBrg." sudah ada dengan nama = ". $barang->NamaBrg);
         }
