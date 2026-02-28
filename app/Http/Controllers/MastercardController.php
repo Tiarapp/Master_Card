@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\McExport;
 use App\Models\Customer;
 use App\Models\DetPHP;
 use App\Models\Mastercard;
@@ -11,6 +12,7 @@ use App\Services\CrossDatabaseRelationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class MastercardController extends Controller
@@ -1084,6 +1086,23 @@ class MastercardController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Export MC data to Excel
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export(Request $request)
+    {
+        $search = $request->input('search');
+        $customer = $request->input('customer');
+        $tipeMc = $request->input('tipeMc');
+
+        $fileName = 'mastercard_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+        
+        return Excel::download(new McExport($search, $customer, $tipeMc), $fileName);
     }
 
 }

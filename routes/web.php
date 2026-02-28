@@ -319,6 +319,7 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/update', 'MastercardController@update')->name('update');
         Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
         Route::get('/show/{id}', [MastercardController::class, 'single'])->name('show');
+        Route::get('/export', [MastercardController::class, 'export'])->name('export');
     });
 
     Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');

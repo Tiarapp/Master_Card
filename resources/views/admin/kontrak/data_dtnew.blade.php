@@ -356,9 +356,9 @@
                         <button type="button" class="btn btn-info btn-sm" title="Lihat Detail" onclick="viewOpiDetail({{ $data->id }})">
                           <i class="fas fa-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-warning btn-sm" title="Edit" onclick="editOpi({{ $data->id }})" data-toggle="modal" data-target="#edit_opi">
+                        {{-- <button type="button" class="btn btn-warning btn-sm" title="Edit" onclick="editOpi({{ $data->id }})" data-toggle="modal" data-target="#edit_opi">
                           <i class="fas fa-edit"></i>
-                        </button>
+                        </button> --}}
                         <form action="{{ route('opi.cancel', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
                           <button type="submit" class="btn btn-danger btn-sm" title="Cancel" onclick="return confirm('Yakin ingin cancel data ini?')">
