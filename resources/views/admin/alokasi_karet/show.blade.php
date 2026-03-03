@@ -206,7 +206,11 @@
                 @if($karet->mastercard)
                 <tr>
                   <td><strong>Master Card:</strong></td>
-                  <td>{{ $karet->mastercard->kode }}</td>
+                  @if ($karet->mastercard->revisi != '' || $karet->mastercard->revisi == 'R0')
+                    <td>{{ $karet->mastercard->kode }}</td>
+                  @else
+                    <td>{{ $karet->mastercard->kode. '-' . $karet->mastercard->revisi }}</td>
+                  @endif
                 </tr>
                 @endif
               </table>
