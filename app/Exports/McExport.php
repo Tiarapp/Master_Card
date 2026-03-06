@@ -3,9 +3,10 @@
 namespace App\Exports;
 
 use App\Models\Mastercard;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -15,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles, ShouldAutoSize, WithEvents
+class McExport implements FromQuery, WithMapping, WithHeadings, WithStyles, ShouldAutoSize, WithEvents, WithChunkReading
 {
     protected $search;
     protected $customer;
@@ -23,12 +24,15 @@ class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles,
 
     public function __construct($search = null, $customer = null, $tipeMc = null)
     {
+        // Increase memory limit for large exports
+        ini_set('memory_limit', '1024M');
+        
         $this->search = $search;
         $this->customer = $customer;
         $this->tipeMc = $tipeMc;
     }
 
-    public function collection()
+    public function query()
     {
         $query = Mastercard::with(['substancekontrak', 'substanceproduksi', 'box', 'colorcombine']);
 
@@ -49,15 +53,20 @@ class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles,
             $query->where('tipeMc', $this->tipeMc);
         }
 
-        return $query->orderBy('created_at', 'desc')->get();
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000; // Process 1000 records at a time
     }
 
     public function map($mastercard): array
     {
-        if ($mastercard->revisi != '' || $mastercard->revisi != 'R0') {
-            $mc = $mastercard->kode . '-' . $mastercard->revisi;
-        } else {
+        if ($mastercard->revisi == '' || $mastercard->revisi == 'R0') {
             $mc = $mastercard->kode;
+        } else {
+            $mc = $mastercard->kode . '-' . $mastercard->revisi;
         }
 
         return [
@@ -84,8 +93,8 @@ class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles,
             $mastercard->luasSheetProd ?? 0,
             $mastercard->gramSheetBoxKontrak ?? 0,
             $mastercard->gramSheetCorrKontrak ?? 0,
-            $mastercard->gramSheetBoxProd ?? 0,
-            $mastercard->gramSheetCorrProd ?? 0,
+            $mastercard->gramSheetBoxProduksi ?? 0,
+            $mastercard->gramSheetCorrProduksi ?? 0,
             $mastercard->colorcombine->color1->nama ?? '',
             $mastercard->colorcombine->color2->nama ?? '',
             $mastercard->colorcombine->color3->nama ?? '',
@@ -104,24 +113,26 @@ class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles,
             $mastercard->lebarSheet ?? 0,
             $mastercard->gramSheetBoxProduksi2 ?? 0,
             $mastercard->gramSheetBoxKontrak2 ?? 0,
-
-            $mastercard->tipeMc ?? '',
-            number_format($mastercard->panjangSheet ?? 0, 2),
-            number_format($mastercard->lebarSheet ?? 0, 2),
-            number_format($mastercard->luasSheet ?? 0, 2),
-            number_format($mastercard->panjangSheetBox ?? 0, 2),
-            number_format($mastercard->lebarSheetBox ?? 0, 2),
-            number_format($mastercard->luasSheetBox ?? 0, 2),
-            $mastercard->colorCombine->nama ?? '',
-            $mastercard->joint ?? '',
-            $mastercard->koli ?? '',
-            number_format($mastercard->outConv ?? 0, 2),
-            number_format($mastercard->brt_kualitas ?? 0, 2),
-            $mastercard->mesin ?? '',
-            $mastercard->wax ?? '',
-            $mastercard->doubleJoint ?? '',
-            $mastercard->createdBy ?? '',
-            $mastercard->created_at ? $mastercard->created_at->format('Y-m-d') : '',
+            $mastercard->substancekontrak->lineratas ? $mastercard->substancekontrak->lineratas->gramKertas : '',
+            $mastercard->substancekontrak->lineratas ? $mastercard->substancekontrak->lineratas->jenisKertasMc : '',
+            $mastercard->substancekontrak->flute1 ? $mastercard->substancekontrak->flute1->gramKertas : '',
+            $mastercard->substancekontrak->flute1 ? $mastercard->substancekontrak->flute1->jenisKertasMc : '',
+            $mastercard->substancekontrak->linertengah ? $mastercard->substancekontrak->linertengah->gramKertas : '',
+            $mastercard->substancekontrak->linertengah ? $mastercard->substancekontrak->linertengah->jenisKertasMc : '',
+            $mastercard->substancekontrak->flute2 ? $mastercard->substancekontrak->flute2->gramKertas : '',
+            $mastercard->substancekontrak->flute2 ? $mastercard->substancekontrak->flute2->jenisKertasMc : '',
+            $mastercard->substancekontrak->linerbawah ? $mastercard->substancekontrak->linerbawah->gramKertas : '',
+            $mastercard->substancekontrak->linerbawah ? $mastercard->substancekontrak->linerbawah->jenisKertasMc : '',
+            $mastercard->substanceproduksi->lineratas ? $mastercard->substanceproduksi->lineratas->gramKertas : '',
+            $mastercard->substanceproduksi->lineratas ? $mastercard->substanceproduksi->lineratas->jenisKertasMc : '',
+            $mastercard->substanceproduksi->flute1 ? $mastercard->substanceproduksi->flute1->gramKertas : '',
+            $mastercard->substanceproduksi->flute1 ? $mastercard->substanceproduksi->flute1->jenisKertasMc : '',
+            $mastercard->substanceproduksi->linertengah ? $mastercard->substanceproduksi->linertengah->gramKertas : '',
+            $mastercard->substanceproduksi->linertengah ? $mastercard->substanceproduksi->linertengah->jenisKertasMc : '',
+            $mastercard->substanceproduksi->flute2 ? $mastercard->substanceproduksi->flute2->gramKertas : '',
+            $mastercard->substanceproduksi->flute2 ? $mastercard->substanceproduksi->flute2->jenisKertasMc : '',
+            $mastercard->substanceproduksi->linerbawah ? $mastercard->substanceproduksi->linerbawah->gramKertas : '',
+            $mastercard->substanceproduksi->linerbawah ? $mastercard->substanceproduksi->linerbawah->jenisKertasMc : '',
             $mastercard->keterangan ?? '',
         ];
     }
@@ -130,37 +141,75 @@ class McExport implements FromCollection, WithMapping, WithHeadings, WithStyles,
     {
         return [
             'Kode MC',
-            'Nama Barang',
             'Kode Barang',
+            'Tipe Cust',
             'Customer',
-            'Tipe MC',
+            'Nama Barang',
+            'Tipe Mc',
             'Tipe Box',
-            'Flute',
-            'Panjang Sheet (mm)',
-            'Lebar Sheet (mm)',
-            'Luas Sheet (m²)',
-            'Panjang Sheet Box (mm)',
-            'Lebar Sheet Box (mm)',
-            'Luas Sheet Box (m²)',
             'Substance Kontrak',
             'Substance Produksi',
-            'Warna',
-            'Joint',
-            'Koli',
-            'Out Conv',
+            'Ecer',
+            'Text',
+            'Panjang Dalam Box',
+            'Lebar Dalam Box',
+            'Tinggi Dalam Box',
             'Berat Kualitas',
-            'Mesin',
-            'Wax',
-            'Double Joint',
-            'Created By',
-            'Tanggal Dibuat',
+            'Flute',
+            'Tipe Box',
+            'Luas Sheet Box',
+            'Luas Sheet',
+            'Luas Sheet Box Produksi',
+            'Luas Sheet Produksi',
+            'Gram Sheet Box Kontrak',
+            'Gram Sheet Corrugator Kontrak',
+            'Gram Sheet Box Produksi',
+            'Gram Sheet Corrugator Produksi',
+            'Color Combine 1',
+            'Color Combine 2',
+            'Color Combine 3',
+            'Color Combine 4',
+            'Color Combine 5',
+            'Color Combine 1 Produksi',
+            'Color Combine 2 Produksi',
+            'Color Combine 3 Produksi',
+            'Color Combine 4 Produksi',
+            'Color Combine 5 Produksi',
+            'Tipe Creas Corr',
+            'Koli',
+            'Panjang Sheet Box',
+            'Lebar Sheet Box',
+            'Panjang Sheet',
+            'Lebar Sheet',
+            'Gram Sheet Box Produksi 2',
+            'Gram Sheet Box Kontrak 2',
+            'Liner Atas Kontrak Gram',
+            'Liner Atas Kontrak Jenis',
+            'Flute 1 Kontrak Gram',
+            'Flute 1 Kontrak Jenis',
+            'Liner Tengah Kontrak Gram',
+            'Liner Tengah Kontrak Jenis',
+            'Flute 2 Kontrak Gram',
+            'Flute 2 Kontrak Jenis',
+            'Liner Bawah Kontrak Gram',
+            'Liner Bawah Kontrak Jenis',
+            'Liner Atas Produksi Gram',
+            'Liner Atas Produksi Jenis',
+            'Flute 1 Produksi Gram',
+            'Flute 1 Produksi Jenis',
+            'Liner Tengah Produksi Gram',
+            'Liner Tengah Produksi Jenis',
+            'Flute 2 Produksi Gram',
+            'Flute 2 Produksi Jenis',
+            'Liner Bawah Produksi Gram',
+            'Liner Bawah Produksi Jenis',
             'Keterangan',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:AA1')->applyFromArray([
+        $sheet->getStyle('A1:BL1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => Color::COLOR_WHITE],
