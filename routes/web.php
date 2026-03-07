@@ -446,6 +446,33 @@ Route::middleware(['auth'])->group(function (){
         // dd($opi);
         return Excel::download(new OpiExport($opi), 'opi.xlsx');
     })->name('opi.export');
+
+    Route::get('/opi/export/karet', function (Request $request) {
+        $page = $request->input('page', 1);
+        $productions = new Opi_M();
+        $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
+            ->where('status_opi', 'Proses')
+            // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('NoOPI', 'desc');
+
+        if($request->search) {
+            $productions->whereHas('kontrakm', function($query) use ($request) {
+                $query->where('customer_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+            })
+            ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
+            ->orWhereHas('mc', function($query) use ($request) {
+                $query->where('kode', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        $productions = $productions->paginate(50, ['*'], 'page', $page);
+        // dd($opi);
+        return Excel::download(new OpiExport($productions), 'opi_karet.xlsx');
+    })->name('opi.export.karet');
     
     Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
     Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
