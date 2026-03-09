@@ -67,7 +67,7 @@
           {{-- Shared Menu: Master Card - accessible by multiple divisions and companies --}}
           @if (($menuService->hasMenuAccess('mastercard') && $menuService->getDivisiMenuAccess([2, 3, 5, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 5, 13])))
             <li class="nav-item">
-              <a href="{{ route('mastercard.b1') }}" class="nav-link">
+              <a href="{{ route('mastercard.index_new') }}" class="nav-link">
                 <i class="fa-solid fa-file-invoice nav-icon"></i>
                 <p>Master Card</p>
               </a>

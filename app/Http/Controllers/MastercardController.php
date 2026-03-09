@@ -1105,4 +1105,24 @@ class MastercardController extends Controller
         return Excel::download(new McExport($search, $customer, $tipeMc), $fileName);
     }
 
+    public function index_new(Request $request)
+    {
+        $mastercards = new Mastercard();
+        $mastercard = $mastercards->with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine']);
+
+        $search = $request->input('search');
+
+        $mastercards = Mastercard::query()
+            ->when($search, function($query) use ($search) {
+                $query->where('kode', 'like', "%{$search}%")
+                      ->orWhere('namaBarang', 'like', "%{$search}%")
+                      ->orWhere('kodeBarang', 'like', "%{$search}%")
+                      ->orWhere('customer', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return view('admin.mastercard.index_new', compact('mastercards'));
+    }
+
 }
