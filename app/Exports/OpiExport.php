@@ -34,7 +34,7 @@ class OpiExport implements FromCollection, WithHeadings
                 'namaBarang' => $item->kontrakd->mc->namaBarang,
                 'qtyOrder' => $item->kontrakd->jumlahOrder,
                 'sisaQtyOrder' => $item->jumlahOrder,
-                'keteranganOpi' => $item->kontrakm->keterangan,
+                'keteranganOpi' => $item->keterangan != '' ? $item->kontrakm->keterangan . ', ' .$item->keterangan : $item->kontrakm->keterangan,
                 'opi' => $item->NoOPI,
                 'poCustomer' => $item->kontrakm->poCustomer,
                 'noMc' => $item->kontrakd->mc->kode . ($item->kontrakd->mc->revisi == 'R0' ? '' : '-' . $item->kontrakd->mc->revisi),

@@ -188,7 +188,7 @@
                         <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
-                        <td class="text-gray-800 bold">{{ $production->kontrakm->keterangan }}</td>
+                        <td class="text-gray-800 bold">{{ $production->keterangan != '' ? $production->kontrakm->keterangan . ', ' .$production->keterangan : $production->ketkontrak }}</td>
                         <td class="text-gray-800 bold">{{ $production->NoOPI }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->poCustomer }}</td>
                         <td class="text-gray-800 bold">
