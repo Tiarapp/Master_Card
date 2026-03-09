@@ -70,6 +70,7 @@
                                         <th>Tipe Box</th>
                                         <th>Gram</th>
                                         <th>Customer</th>
+                                        <th>Keterangan</th>
                                         <th>Tanggal Dibuat</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -93,6 +94,7 @@
                                             </td>
                                             <td>{{ $mastercard->gramSheetBoxKontrak }}</td>
                                             <td>{{ $mastercard->customer }}</td>
+                                            <td>{{ $mastercard->keterangan ?? '' }}</td>
                                             <td>{{ $mastercard->created_at ? $mastercard->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
