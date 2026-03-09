@@ -69,6 +69,8 @@
                                         <th>Nama Barang</th>
                                         <th>Tipe Box</th>
                                         <th>Gram</th>
+                                        <th>Panjang Sheet</th>
+                                        <th>Lebar Sheet</th>
                                         <th>Customer</th>
                                         <th>Keterangan</th>
                                         <th>Tanggal Dibuat</th>
@@ -93,6 +95,8 @@
                                                 <span class="badge badge-secondary">{{ $mastercard->tipeBox ?? 'N/A' }}</span>
                                             </td>
                                             <td>{{ $mastercard->gramSheetBoxKontrak }}</td>
+                                            <td>{{ $mastercard->panjangSheet ?? '' }}</td>
+                                            <td>{{ $mastercard->lebarSheet ?? '' }}</td>
                                             <td>{{ $mastercard->customer }}</td>
                                             <td>{{ $mastercard->keterangan ?? '' }}</td>
                                             <td>{{ $mastercard->created_at ? $mastercard->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
