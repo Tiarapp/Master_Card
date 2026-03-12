@@ -72,6 +72,7 @@
                                         <th>Panjang Sheet</th>
                                         <th>Lebar Sheet</th>
                                         <th>Customer</th>
+                                        <th>Printed</th>
                                         <th>Keterangan</th>
                                         <th>Tanggal Dibuat</th>
                                         <th class="text-center">Action</th>
@@ -98,6 +99,9 @@
                                             <td>{{ $mastercard->panjangSheet ?? '' }}</td>
                                             <td>{{ $mastercard->lebarSheet ?? '' }}</td>
                                             <td>{{ $mastercard->customer }}</td>
+                                            <td>
+                                                <span class="badge badge-secondary">{{ $mastercard->text }}</span>
+                                            </td>
                                             <td>{{ $mastercard->keterangan ?? '' }}</td>
                                             <td>{{ $mastercard->created_at ? $mastercard->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                             <td class="text-center">
