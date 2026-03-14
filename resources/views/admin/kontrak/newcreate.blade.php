@@ -870,6 +870,10 @@
 
     $(document).on("click", ".modal-customer", function(e) {
         e.preventDefault();
+        // Fokus input search customer saat modal dibuka, tanpa timeout yang singkat
+        $('#modal-customer').on('shown.bs.modal', function () {
+            $('#search').focus();
+        });
         $(".customer-list .content-body").html("Please wait...");
         var url = "{{ route('kontrak.cust') }}";
         
@@ -949,16 +953,17 @@
     });
 
     $(document).on("click", ".modal-mastercard", function(e) {
-        console.log("test");
-        
         e.preventDefault();
+        
+        // Fokus input search customer saat modal dibuka, tanpa timeout yang singkat
+        $('#modal-mastercard').on('shown.bs.modal', function () {
+            $('.search-mastercard').val('');
+            $('.search-mastercard').focus();
+        });
+
         $(".mastercard-list .content-body").html("Please wait...");
-
             var url = "{{ route('mastercard.select') }}";
-
-            console.log(url);
-            
-
+            // console.log(url);
             $('.form-search-mastercard').attr('action', url);
 
             $.get(url, function(data) {
