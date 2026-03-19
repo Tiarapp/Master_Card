@@ -109,17 +109,17 @@
                                                     <a href="{{ route('mastercard.pdfb1', $mastercard->id) }}" 
                                                        class="btn btn-sm btn-danger" 
                                                        title="Print PDF">
-                                                        <i class="fas fa-print"></i>
+                                                        <i class="fas fa-print"></i> Print
                                                     </a>
                                                     <a href="{{ route('mastercard.edit', $mastercard->id) }}" 
                                                        class="btn btn-sm btn-primary" 
                                                        title="Revisi">
-                                                        <i class="fas fa-edit"></i>
+                                                        <i class="fas fa-cog"></i> Revisi
                                                     </a>
                                                     <a href="{{ route('mastercard.revisi', $mastercard->id) }}" 
                                                        class="btn btn-sm btn-warning" 
                                                        title="Edit">
-                                                        <i class="fas fa-cog"></i>
+                                                        <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                 </div>
                                             </td>
