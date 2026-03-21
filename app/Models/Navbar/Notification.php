@@ -13,6 +13,7 @@ class Notification extends Model
     public $timestamps = true; // Enable timestamps
     protected $fillable = [
         'kontrak_id',
+        'user_id',
         'alasan',
         'tanggal',
         'pemohon',

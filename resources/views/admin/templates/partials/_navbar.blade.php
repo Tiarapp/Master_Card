@@ -41,7 +41,7 @@
       </div>
     </li>
     
-    @if (Auth::user()->divisi_id == 2)
+    {{-- @if (Auth::user()->divisi_id == 2) --}}
     <!-- Notifications Dropdown -->
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -56,7 +56,7 @@
         </a>
       </div>
     </li>
-    @endif
+    {{-- @endif --}}
     
     <!-- Fullscreen Button -->
     <li class="nav-item">

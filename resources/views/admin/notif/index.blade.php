@@ -170,12 +170,21 @@ body.sidebar-collapse .content-wrapper {
                 </td>
                 <td>
                   @if($notification->status == 'Proses')
-                    <a href="{{ url('admin/kontrak/open/' . $notification->kontrak_id) }}" 
+                    @if (Auth::user()->divisi_id == 2)
+                      <a href="{{ url('admin/kontrak/open/' . $notification->kontrak_id) }}" 
                        class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm"
                        title="Open Kontrak">
                       <i class="fas fa-external-link-alt"></i>
                       <span>OPEN</span>
                     </a>
+                    @else
+                      <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm" 
+                            disabled 
+                            title="Sudah Selesai">
+                      <i class="fas fa-check"></i>
+                      <span>Proses</span>
+                    </button>
+                    @endif
                   @else
                     <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm" 
                             disabled 
