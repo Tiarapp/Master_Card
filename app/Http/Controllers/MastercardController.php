@@ -788,7 +788,7 @@ class MastercardController extends Controller
             return view('admin.mastercard.printb1t', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1'){
             return view('admin.mastercard.printb1', compact('mc','namaSubsK','namaSubsP'));
-        } else if ($mc->tipeMc == 'SHEET' || $mc->tipeMc == 'LAYER' || $mc->tipeMc == 'SINGLEFACE' || $mc->tipeMc == 'SH') {
+        } else if ($mc->tipeMc == 'SHEET' || $mc->tipeMc == 'LAYER' || $mc->tipeMc == 'SINGLEFACE' || $mc->tipeMc == 'SH' || $mc->tipeMc == 'PALET') {
             // dd($mc);
             return view('admin.mastercard.printsheet', compact('mc','namaSubsK','namaSubsP'));
         }
