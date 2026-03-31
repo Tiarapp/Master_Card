@@ -134,9 +134,15 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ route('kontraknew') }}" class="nav-link">
+                  <a href="{{ route('kontraknew') }}" class="nav-link {{ request()->routeIs('kontraknew') ? 'active' : '' }}">
                     <i class="fas fa-circle nav-icon"></i>
                     <p>Kontrak</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('acc.kaskecil') }}" class="nav-link {{ request()->routeIs('acc.kaskecil') ? 'active' : '' }}">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>Kas</p>
                   </a>
                 </li>
               </ul>
