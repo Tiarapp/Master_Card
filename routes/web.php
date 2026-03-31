@@ -557,6 +557,7 @@ Route::middleware(['auth'])->group(function (){
 
         // Kas Kecil
         Route::get('admin/acc/kaskecil', [KasKecilController::class, 'index'])->name('acc.kaskecil');
+        Route::get('admin/acc/kaskecil/export', [KasKecilController::class, 'export'])->name('acc.kaskecil.export');
 
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');

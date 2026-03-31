@@ -7,9 +7,11 @@ use App\Models\Accounting\COA;
 use App\Models\Accounting\KasKecil;
 use App\Models\Accounting\KasKecilDet;
 use App\Models\Accounting\TrialBalance;
+use App\Exports\KasKecilExport;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KasKecilController extends Controller
 {
@@ -92,5 +94,89 @@ class KasKecilController extends Controller
         ];
 
         return view('admin.acc.kas_kecil', $data);
+    }
+
+    public function export(Request $request)
+    {
+        // Validate required parameters
+        if (empty($request->date_start) || empty($request->date_end) || empty($request->coa)) {
+            return redirect()->route('acc.kaskecil')->with('error', 'Parameter filter harus diisi untuk export');
+        }
+
+        // Get COA info
+        $coaRecord = COA::where('Kode_Bukti', $request->coa)->first();
+        $coaName = $coaRecord ? $coaRecord->nm_coa : 'Unknown COA';
+
+        // Get saldo awal
+        $saldoKasBulanLalu = null;
+        if ($coaRecord) {
+            $periodeBulanLalu = Carbon::parse($request->date_start)->subMonth()->format('m/Y');
+            // $nomor_coa = $coaRecord->get_nomor_coa();
+            $saldoKasBulanLalu = TrialBalance::where('Periode', $periodeBulanLalu)
+                ->where('KdCOA', 'like', $coaRecord->kd_coa . '%')
+                ->first();
+            // dd($saldoKasBulanLalu);
+        }
+
+        // Get all data without pagination
+        $kasKecils = KasKecilDet::with('kasKecil')
+            ->join('tbKasKecil', 'tbKasKecil_Detail.Nomor', '=', 'tbKasKecil.Nomor')
+            ->whereBetween('tbKasKecil.Tanggal', [$request->date_start, $request->date_end])
+            ->where('tbKasKecil_Detail.Nomor', 'like', '%' . $request->coa . '%')
+            ->orderBy('tbKasKecil.Tanggal', 'asc')
+            ->select('tbKasKecil_Detail.*')
+            ->get();
+
+        // Prepare export data
+        $exportData = [];
+        $saldoAwal = $saldoKasBulanLalu ? $saldoKasBulanLalu->SaldoAkhir : 0;
+        $saldoBerjalan = $saldoAwal;
+
+        // Add header info
+        $exportData[] = ['Laporan Kas Kecil'];
+        $exportData[] = ['COA: ' . $request->coa . ' - ' . $coaName];
+        $exportData[] = ['Periode: ' . date('d/m/Y', strtotime($request->date_start)) . ' s/d ' . date('d/m/Y', strtotime($request->date_end))];
+        $exportData[] = ['Saldo Awal: Rp ' . number_format($saldoAwal, 0, ',', '.')];
+        $exportData[] = []; // Empty row
+
+        // Add table headers
+        $exportData[] = [
+            'No',
+            'Tanggal', 
+            'Nomor',
+            'No. Invoice',
+            'Deskripsi',
+            'Debit',
+            'Kredit', 
+            'Saldo',
+            'COA',
+            'Nama COA'
+        ];
+
+        // Add data rows
+        foreach ($kasKecils as $index => $kas) {
+            $saldoBerjalan -= ($kas->Nilai1);
+
+            $debit = ($kas->kasKecil && $kas->kasKecil->{'Jenis Transaksi'} == 'Kas Kecil Masuk') ? ($kas->Nilai1 * -1) : 0;
+            $kredit = ($kas->kasKecil && $kas->kasKecil->{'Jenis Transaksi'} == 'Kas Kecil Keluar') ? $kas->Nilai1 : 0;
+
+            $exportData[] = [
+                $index + 1,
+                $kas->kasKecil && $kas->kasKecil->Tanggal ? date('d/m/Y', strtotime($kas->kasKecil->Tanggal)) : '-',
+                $kas->Nomor ?? '-', 
+                $kas->{'Ref No'} ?? '-',
+                $kas->Description ?? '-',
+                $debit,
+                $kredit,
+                $saldoBerjalan,
+                $kas->COA ?? '-',
+                ($kas->coa && $kas->coa->nm_coa) ? $kas->coa->nm_coa : '-'
+            ];
+        }
+
+        // Generate filename
+        $filename = 'kas_kecil_' . str_replace(['/', '-'], '', $request->date_start) . '_' . str_replace(['/', '-'], '', $request->date_end) . '_' . $request->coa . '.xlsx';
+
+        return Excel::download(new KasKecilExport($exportData), $filename);
     }
 }

@@ -13,6 +13,15 @@
             </div>
         @endif
         
+        @if ($message = Session::get('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>{{ $message }}</strong>
+            </div>
+        @endif
+        
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -72,6 +81,11 @@
                                             <br>
                                             <button type="submit" class="btn btn-primary">Filter</button>
                                             <a href="{{ route('acc.kaskecil') }}" class="btn btn-secondary">Reset</a>
+                                            @if(!empty(request('date_start')) && !empty(request('date_end')) && !empty(request('coa')))
+                                                <a href="{{ route('acc.kaskecil.export') }}?{{ http_build_query(request()->all()) }}" class="btn btn-success">
+                                                    <i class="fas fa-file-excel"></i> Export Excel
+                                                </a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
