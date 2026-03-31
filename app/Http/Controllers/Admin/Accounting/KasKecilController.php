@@ -134,7 +134,7 @@ class KasKecilController extends Controller
 
         // Add header info
         $exportData[] = ['Laporan Kas Kecil'];
-        $exportData[] = ['COA: ' . $request->coa . ' - ' . $coaName];
+        $exportData[] = ['COA: ' . $coaRecord->kd_coa . ' - ' . $coaName];
         $exportData[] = ['Periode: ' . date('d/m/Y', strtotime($request->date_start)) . ' s/d ' . date('d/m/Y', strtotime($request->date_end))];
         $exportData[] = ['Saldo Awal: Rp ' . number_format($saldoAwal, 0, ',', '.')];
         $exportData[] = []; // Empty row
@@ -154,11 +154,18 @@ class KasKecilController extends Controller
         ];
 
         // Add data rows
+        $totalDebit = 0;
+        $totalKredit = 0;
+        
         foreach ($kasKecils as $index => $kas) {
             $saldoBerjalan -= ($kas->Nilai1);
 
             $debit = ($kas->kasKecil && $kas->kasKecil->{'Jenis Transaksi'} == 'Kas Kecil Masuk') ? ($kas->Nilai1 * -1) : 0;
             $kredit = ($kas->kasKecil && $kas->kasKecil->{'Jenis Transaksi'} == 'Kas Kecil Keluar') ? $kas->Nilai1 : 0;
+
+            // Accumulate totals
+            $totalDebit += $debit;
+            $totalKredit += $kredit;
 
             $exportData[] = [
                 $index + 1,
@@ -173,6 +180,21 @@ class KasKecilController extends Controller
                 ($kas->coa && $kas->coa->nm_coa) ? $kas->coa->nm_coa : '-'
             ];
         }
+
+        // Add footer with totals
+        $exportData[] = []; // Empty row
+        $exportData[] = [
+            '',
+            '',
+            '',
+            '',
+            'TOTAL',
+            $totalDebit,
+            $totalKredit,
+            $saldoBerjalan,
+            '',
+            ''
+        ];
 
         // Generate filename
         $filename = 'kas_kecil_' . str_replace(['/', '-'], '', $request->date_start) . '_' . str_replace(['/', '-'], '', $request->date_end) . '_' . $request->coa . '.xlsx';

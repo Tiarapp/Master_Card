@@ -25,6 +25,9 @@ class KasKecilExport implements FromArray, WithStyles, WithColumnFormatting
 
     public function styles(Worksheet $sheet)
     {
+        $dataCount = count($this->data);
+        $footerRow = $dataCount-2; // TOTAL row (last row)
+        
         return [
             // Style first 4 rows (header info)
             '1:4' => [
@@ -33,8 +36,8 @@ class KasKecilExport implements FromArray, WithStyles, WithColumnFormatting
                     'size' => 12,
                 ],
             ],
-            // Style table headers (row 6)
-            '6' => [
+            // Style table headers (row 5)
+            '5' => [
                 'font' => [
                     'bold' => true,
                 ],
@@ -46,6 +49,27 @@ class KasKecilExport implements FromArray, WithStyles, WithColumnFormatting
                 ],
                 'alignment' => [
                     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+            ],
+            // Style footer (TOTAL row) - Make it BOLD
+            $footerRow => [
+                'font' => [
+                    'bold' => true,
+                    'size' => 12,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'FFFFEAA7', // Light orange background
+                    ],
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                    ],
                 ],
             ],
         ];
