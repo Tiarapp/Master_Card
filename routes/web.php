@@ -3,6 +3,7 @@
 use App\Exports\OpiExport;
 use App\Exports\VendorTTExport;
 use App\Http\Controllers\Admin\Accounting\FinanceController;
+use App\Http\Controllers\Admin\Accounting\KasKecilController;
 use App\Http\Controllers\Admin\Accounting\KontrakAccController;
 use App\Http\Controllers\Admin\Converting\ConvertingController;
 use App\Http\Controllers\Admin\Data\BarangTeknikController;
@@ -553,6 +554,9 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/acc/opi', [FinanceController::class, 'approve_opi'])->name('acc.opi');
         Route::post('admin/acc/opi/approve/{id}', [FinanceController::class, 'approve_opi_action'])->name('acc.opi.approve');
         Route::post('admin/acc/opi/approve-bulk', [FinanceController::class, 'approve_opi_bulk'])->name('acc.opi.approve.bulk');
+
+        // Kas Kecil
+        Route::get('admin/acc/kaskecil', [KasKecilController::class, 'index'])->name('acc.kaskecil');
 
     // Data
         Route::get('admin/data/sync', [CustomerController::class, 'syncronize'])->name('data.sync');
