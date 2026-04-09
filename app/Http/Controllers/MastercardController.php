@@ -1107,13 +1107,12 @@ class MastercardController extends Controller
 
     public function index_new(Request $request)
     {
-        $mastercards = new Mastercard();
-        $mastercard = $mastercards->with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine']);
+        $mastercards = Mastercard::with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine']);
 
         $search = $request->input('search');
 
         if ($search) {
-            $mastercard->where(function($query) use ($search) {
+            $mastercards->where(function($query) use ($search) {
                 $query->where('kode', 'like', "%{$search}%")
                       ->orWhere('namaBarang', 'like', "%{$search}%")
                       ->orWhere('kodeBarang', 'like', "%{$search}%")
@@ -1122,8 +1121,11 @@ class MastercardController extends Controller
         }
 
         $mastercards = $mastercards->orderBy('created_at', 'desc')->paginate(20);
+        
+        // Append all request parameters to pagination links
+        $mastercards->appends($request->query());
 
-        return view('admin.mastercard.index_new', compact('mastercards'));
+        return view('admin.mastercard.index_new', compact('mastercards', 'search'));
     }
 
 }
