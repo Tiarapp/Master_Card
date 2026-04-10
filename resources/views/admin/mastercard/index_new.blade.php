@@ -111,15 +111,15 @@
                                                        title="Print PDF">
                                                         <i class="fas fa-print"></i> Print
                                                     </a>
-                                                    <a href="{{ route('mastercard.edit', $mastercard->id) }}" 
-                                                       class="btn btn-sm btn-primary" 
-                                                       title="Revisi">
-                                                        <i class="fas fa-cog"></i> Revisi
-                                                    </a>
                                                     <a href="{{ route('mastercard.revisi', $mastercard->id) }}" 
                                                        class="btn btn-sm btn-warning" 
                                                        title="Edit">
                                                         <i class="fas fa-edit"></i> Edit
+                                                    </a>
+                                                    <a href="{{ route('mastercard.edit', $mastercard->id) }}" 
+                                                       class="btn btn-sm btn-primary" 
+                                                       title="Revisi">
+                                                        <i class="fas fa-cog"></i> Revisi
                                                     </a>
                                                 </div>
                                             </td>
