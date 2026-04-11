@@ -763,6 +763,7 @@
                                         <div class="col-md-4">
                                             <select class="js-example-basic-single col-md-12" name="koli" id="koli" onchange="getKodeBarang();" >
                                                 <option value='{{ $koli }}'>{{ $koli }}</option>
+                                                <option value='00'>Tidak Ada</option>
                                                 <option value='05'>05 Koli</option>
                                                 <option value='10'>10 Koli</option>
                                                 <option value='20'>20 Koli</option>
