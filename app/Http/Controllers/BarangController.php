@@ -82,6 +82,7 @@ class BarangController extends Controller
 
     public function indexnew(Request $request)
     {
+        dd($request->all());
         DB::connection('firebird2')->beginTransaction();
         $periode = DB::connection('firebird2')->table('TClosing')
             ->get()
@@ -117,9 +118,9 @@ class BarangController extends Controller
                 'processed_search' => $search,
             ]);
 
-                // First, try to match the full search string
-                $query->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
-                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+            // First, try to match the full search string
+            $query->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
             
             // Debug: Log the final query
             Log::info('Final query SQL:', ['query' => $query->toSql()]);
