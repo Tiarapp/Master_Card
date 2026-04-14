@@ -100,7 +100,7 @@ class BarangController extends Controller
         ->leftJoin('TBarangConv', 'TPersediaan.KodeBrg', '=', 'TBarangConv.KodeBrg')
         ->select('TPersediaan.KodeBrg', 'TBarangConv.NamaBrg', 'TPersediaan.SaldoAkhirCrt as SaldoPcs', 'TPersediaan.SaldoAkhirKg as SaldoKg', 'TPersediaan.Periode', 'TBarangConv.BeratStandart', 'TBarangConv.Satuan', 'TBarangConv.IsiPerKarton', 'TBarangConv.WeightValue');
 
-        // Handle search - support multiple words with OR logic
+        // Handle month/period filter
         if (!$request->month) {
             $query->where('TPersediaan.Periode', 'LIKE', "%".$month."%");
         } else {
@@ -108,6 +108,7 @@ class BarangController extends Controller
             $month = $request->month;
         }
 
+        // Handle search - support multiple words with AND logic for period filter
         if ($request->has('search') && !empty($request->search)) {
             $search = strtoupper(trim($request->search));
             
@@ -117,9 +118,11 @@ class BarangController extends Controller
                 'processed_search' => $search,
             ]);
 
-            // First, try to match the full search string
-            $query->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
-                ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+            // Group search conditions to maintain period filter
+            $query->where(function($q) use ($search) {
+                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                  ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
+            });
             
             // Debug: Log the final query
             Log::info('Final query SQL:', ['query' => $query->toSql()]);
