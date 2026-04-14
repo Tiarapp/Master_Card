@@ -111,30 +111,15 @@ class BarangController extends Controller
         if ($request->has('search') && !empty($request->search)) {
             $search = strtoupper(trim($request->search));
             
-            // Split search into individual words
-            $searchWords = explode(' ', $search);
-            
             // Debug: Log the search parameters
             Log::info('Search parameters:', [
                 'original_search' => $request->search,
                 'processed_search' => $search,
-                'search_words' => $searchWords
             ]);
-            
-            $query->where(function($q) use ($searchWords, $search) {
+
                 // First, try to match the full search string
-                $q->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
+                $query->where('TPersediaan.KodeBrg', 'LIKE', '%'.$search.'%')
                   ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$search.'%');
-                
-                // Then, try to match individual words with OR logic
-                foreach ($searchWords as $word) {
-                    $word = trim($word);
-                    if (!empty($word) && strlen($word) > 1) {
-                        $q->orWhere('TPersediaan.KodeBrg', 'LIKE', '%'.$word.'%')
-                          ->orWhere('TBarangConv.NamaBrg', 'LIKE', '%'.$word.'%');
-                    }
-                }
-            });
             
             // Debug: Log the final query
             Log::info('Final query SQL:', ['query' => $query->toSql()]);
