@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-
 if (!function_exists('hasMenuAccess')) {
     /**
      * Check if current user has access to specific menu key

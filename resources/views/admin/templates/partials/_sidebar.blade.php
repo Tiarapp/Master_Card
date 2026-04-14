@@ -3,7 +3,7 @@
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
     <img src="{{ asset('asset/image/logo.jpg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8; height: 30px; width: 30px">
-    <span class="brand-text font-weight-light">{{ $currentCompanyName }}</span>
+    <span class="brand-text font-weight-light">{{ getCurrentCompanyName() }}</span>
   </a>
   
   <!-- Sidebar -->
@@ -45,7 +45,7 @@
           with font-awesome or any other icon font library -->
           
           {{-- Shared Menu: Barang - accessible by multiple divisions and companies --}}
-          @if (($menuService->hasMenuAccess('barang') && $menuService->getDivisiMenuAccess([2, 3, 5, 6, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 5, 6, 13])))
+          @if ((hasMenuAccess('barang') && getDivisiMenuAccess([2, 3, 5, 6, 13])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 3, 5, 6, 13])))
             <li class="nav-item">
               <a href="{{ route('barang.indexnew') }}" class="nav-link">
                 <i class="fa-solid fa-boxes-stacked nav-icon"></i>
@@ -55,7 +55,7 @@
           @endif
 
           {{-- Shared Menu: OPI - accessible by multiple divisions and companies --}}
-          @if (($menuService->hasMenuAccess('opi') && $menuService->getDivisiMenuAccess([2, 3, 5, 9, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 5, 9, 13])))
+          @if ((hasMenuAccess('opi') && getDivisiMenuAccess([2, 3, 5, 9, 13])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 3, 5, 9, 13])))
             <li class="nav-item">
               <a href="{{ route('opinew') }}" class="nav-link">
                 <i class="fa-solid fa-clipboard-check nav-icon"></i>
@@ -65,7 +65,7 @@
           @endif
 
           {{-- Shared Menu: Master Card - accessible by multiple divisions and companies --}}
-          @if (($menuService->hasMenuAccess('mastercard') && $menuService->getDivisiMenuAccess([2, 3, 5, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 5, 13])))
+          @if ((hasMenuAccess('mastercard') && getDivisiMenuAccess([2, 3, 5, 13])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 3, 5, 13])))
             <li class="nav-item">
               <a href="{{ route('mastercard.index_new') }}" class="nav-link">
                 <i class="fa-solid fa-file-invoice nav-icon"></i>
@@ -75,7 +75,7 @@
           @endif
           
           {{-- Accounting --}}
-          @if (($menuService->hasMenuAccess('accounting') && $menuService->getDivisiMenuAccess([2, 1])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 1])))
+          @if ((hasMenuAccess('accounting') && getDivisiMenuAccess([2, 1])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 1])))
             <li class="nav-item {{ request()->routeIs('acc.*') ? 'menu-open' : '' }}">
               <a href="#" class="nav-link {{ request()->routeIs('acc.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-calculator nav-icon"></i>
@@ -133,23 +133,11 @@
                     <p>Approve OPI</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="{{ route('kontraknew') }}" class="nav-link {{ request()->routeIs('kontraknew') ? 'active' : '' }}">
-                    <i class="fas fa-circle nav-icon"></i>
-                    <p>Kontrak</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{ route('acc.kaskecil') }}" class="nav-link {{ request()->routeIs('acc.kaskecil') ? 'active' : '' }}">
-                    <i class="fas fa-circle nav-icon"></i>
-                    <p>Kas</p>
-                  </a>
-                </li>
               </ul>
             </li>
           @endif
 
-          @if (($menuService->hasMenuAccess('logistik') && $menuService->getDivisiMenuAccess([2, 6])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 6])))
+          @if ((hasMenuAccess('logistik') && getDivisiMenuAccess([2, 6])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 6])))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fa-solid fa-warehouse nav-icon"></i>
@@ -193,7 +181,7 @@
           @endif
 
           {{-- Inventory Management --}}
-          @if (($menuService->hasMenuAccess('inventory') && $menuService->getDivisiMenuAccess([2, 6])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 6])))
+          @if ((hasMenuAccess('inventory') && getDivisiMenuAccess([2, 6])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 6])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-warehouse nav-icon"></i>
@@ -232,7 +220,7 @@
           @endif
 
           {{-- Master --}}
-          @if (($menuService->hasMenuAccess('master') && $menuService->getDivisiMenuAccess([2, 3, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 13])))
+          @if ((hasMenuAccess('master') && getDivisiMenuAccess([2, 3, 13])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 3, 13])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -305,7 +293,7 @@
               </ul>
             </li>
             {{-- Marketing --}}
-            @if (($menuService->hasMenuAccess('marketing') && $menuService->getDivisiMenuAccess([2, 3, 13])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2, 3, 13])))
+            @if ((hasMenuAccess('marketing') && getDivisiMenuAccess([2, 3, 13])) || (!Auth::user()->company_id && getDivisiMenuAccess([2, 3, 13])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-comment-dollar nav-icon"></i>
@@ -422,7 +410,7 @@
           @endif
 
           {{-- PPIC --}}
-          @if (($menuService->hasMenuAccess('ppic') && $menuService->getDivisiMenuAccess([5,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([5,2])))
+          @if ((hasMenuAccess('ppic') && getDivisiMenuAccess([5,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([5,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-users-gear nav-icon"></i>
@@ -500,7 +488,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('produksi') && $menuService->getDivisiMenuAccess([5,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([5,2])))
+          @if ((hasMenuAccess('produksi') && getDivisiMenuAccess([5,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([5,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-screwdriver-wrench nav-icon"></i>
@@ -525,7 +513,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('palet') && $menuService->getDivisiMenuAccess([10,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([10,2])))
+          @if ((hasMenuAccess('palet') && getDivisiMenuAccess([10,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([10,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-chess-board nav-icon"></i>
@@ -550,7 +538,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('qc') && $menuService->getDivisiMenuAccess([12,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([12,2])))
+          @if ((hasMenuAccess('qc') && getDivisiMenuAccess([12,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([12,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-medal nav-icon"></i>
@@ -569,7 +557,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('teknik') && $menuService->getDivisiMenuAccess([8,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([8,2])))
+          @if ((hasMenuAccess('teknik') && getDivisiMenuAccess([8,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([8,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-wrench nav-icon"></i>
@@ -588,7 +576,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('hrd_ga') && $menuService->getDivisiMenuAccess([9,2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([9,2])))
+          @if ((hasMenuAccess('hrd_ga') && getDivisiMenuAccess([9,2])) || (!Auth::user()->company_id && getDivisiMenuAccess([9,2])))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-user-pen nav-icon"></i>
@@ -607,7 +595,7 @@
               </ul>
             </li>
           @endif
-          @if (($menuService->hasMenuAccess('reports') && $menuService->getDivisiMenuAccess([2,14])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2,14])))
+          @if ((hasMenuAccess('reports') && getDivisiMenuAccess([2,14])) || (!Auth::user()->company_id && getDivisiMenuAccess([2,14])))
             <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-chart-bar nav-icon"></i>
@@ -640,7 +628,7 @@
           @endif
 
           {{-- Feedback Menu - accessible by all users --}}
-          @if (($menuService->hasMenuAccess('it_admin') && $menuService->getDivisiMenuAccess([2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2])))
+          @if ((hasMenuAccess('it_admin') && getDivisiMenuAccess([2])) || (!Auth::user()->company_id && getDivisiMenuAccess([2])))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-comment-dots nav-icon"></i>
@@ -656,7 +644,7 @@
                   <p>Kirim Feedback</p>
                 </a>
               </li>
-              {{-- @if (($menuService->hasMenuAccess('feedback_manage') && $menuService->getDivisiMenuAccess([2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2]))) Admin/IT only --}}
+              {{-- @if ((hasMenuAccess('feedback_manage') && getDivisiMenuAccess([2])) || (!Auth::user()->company_id && getDivisiMenuAccess([2]))) Admin/IT only --}}
                 <li class="nav-item">
                   <a href="{{ route('admin.feedback.index') }}" class="nav-link">
                     <i class="fas fa-list nav-icon"></i>
@@ -683,7 +671,7 @@
           @endif
 
           {{-- Menu Stellar --}}
-          @if (($menuService->hasMenuAccess('stellar') && $menuService->getDivisiMenuAccess([2])) || (!Auth::user()->company_id && $menuService->getDivisiMenuAccess([2])))
+          @if ((hasMenuAccess('stellar') && getDivisiMenuAccess([2])) || (!Auth::user()->company_id && getDivisiMenuAccess([2])))
             <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-comment-dots nav-icon"></i>

@@ -82,7 +82,6 @@ class BarangController extends Controller
 
     public function indexnew(Request $request)
     {
-        dd($request->all());
         DB::connection('firebird2')->beginTransaction();
         $periode = DB::connection('firebird2')->table('TClosing')
             ->get()
