@@ -264,7 +264,8 @@ class Kontrak_DController extends Controller
                 })
                 ->orWhereHas('mc', function($query) use ($request) {
                     $query->where('kode', 'like', '%'.$request->search.'%')
-                        ->orWhere('namaBarang', 'like', '%'.$request->search.'%');
+                        ->orWhere('namaBarang', 'like', '%'.$request->search.'%')
+                        ->orwhere('gramSheetBoxKontrak', 'like', '%'.$request->search.'%');
                 });
             }
 
