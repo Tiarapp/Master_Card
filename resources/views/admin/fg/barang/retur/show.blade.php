@@ -199,7 +199,7 @@
                             </a>
                             
                             @if($retur->Blocked == 'Y')
-                                <a href="{{ route('barang.retur.edit', $retur->NoBukti) }}" class="btn btn-warning mr-2">
+                                <a href="{{ route('barang.retur.edit', trim($retur->NoBukti)) }}" class="btn btn-warning mr-2">
                                     <i class="fas fa-edit mr-1"></i>Edit Retur
                                 </a>
                             @endif

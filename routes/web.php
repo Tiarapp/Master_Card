@@ -296,7 +296,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/fg/returjual', 'BarangController@returjual')->name('barang.retur');
     Route::get('/admin/fg/returjual/create', 'BarangController@create_retur')->name('barang.retur.create');
     Route::post('/admin/fg/returjual/store', 'BarangController@store_retur')->name('barang.retur.store');
-    Route::get('/admin/fg/returjual/{nobukti}/edit', 'BarangController@edit_retur')->name('barang.retur.edit');
+    Route::get('/admin/fg/returjual/edit/{nobukti}', 'BarangController@edit_retur')->name('barang.retur.edit');
     Route::put('/admin/fg/returjual/{nobukti}', 'BarangController@update_retur')->name('barang.retur.update');
     Route::get('/admin/fg/returjual/{nobukti}', 'BarangController@show_retur')->name('barang.retur.show');
     Route::get('/returjual/{tanggal}', 'BarangController@get_kode_retur')->name('barang.retur.get_kode');

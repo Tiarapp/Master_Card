@@ -171,7 +171,7 @@
                   </td>
                   <td class="text-center">
                     <div class="btn-group" role="group">
-                      <a href="{{ route('barang.retur.show', $data->NoBukti) }}" 
+                       <a href="{{ route('barang.retur.show', trim($data->NoBukti)) }}" 
                          class="btn btn-info btn-sm" 
                          data-toggle="tooltip" title="Lihat Detail">
                         <i class="fas fa-eye"></i>
@@ -185,7 +185,7 @@
                         </button>
                       @else
                       
-                        <a href="{{ route('barang.retur.edit', $data->NoBukti) }}" 
+                        <a href="{{ route('barang.retur.edit', trim($data->NoBukti)) }}" 
                            class="btn btn-warning btn-sm" 
                            data-toggle="tooltip" title="Edit (Blocked = N)">
                           <i class="fas fa-edit"></i>
