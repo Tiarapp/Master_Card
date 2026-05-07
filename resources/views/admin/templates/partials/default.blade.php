@@ -27,7 +27,7 @@
 @yield('javascripts')
 
 <!-- Include Floating Feedback Button -->
-@include('admin.feedback.floating-button')
+{{-- @include('admin.feedback.floating-button') --}}
 
 </body>
 </html>
