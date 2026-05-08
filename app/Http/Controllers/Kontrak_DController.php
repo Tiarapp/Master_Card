@@ -643,7 +643,7 @@ class Kontrak_DController extends Controller
 
                 // OPTIMIZED: Single query for customer data
                 $customerData = DB::connection('firebird')->table('TCustomer')
-                    ->select('WAKTUBAYAR', 'Plafond', 'Kode')
+                    ->select('WAKTUBAYAR', 'Plafond', 'Kode', 'IS_SPS')
                     ->where('Nama', $request->cust)
                     ->first();
 
@@ -671,14 +671,6 @@ class Kontrak_DController extends Controller
 
                     
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
-                    // dd($customerData, $piutangTotal, $piutang);
-
-                // OPTIMIZED: Get kontrak data in single query
-                // $kontrakData = DB::table('kontrak_d as kd')
-                //     ->join('kontrak_m as km', 'kd.kontrak_m_id', '=', 'km.id')
-                //     ->select('kd.id as kontrak_d_id', 'kd.mc_id', 'kd.pcsSisaKontrak', 'kd.kgSisaKontrak', 'km.keterangan')
-                //     ->where('kd.kontrak_m_id', $request->idkontrakm)
-                //     ->first();
 
                 $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak')
                     ->where('kontrak_m_id', $request->idkontrakm)
@@ -697,15 +689,19 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Determine OPI status based on customer conditions
                 $opiStatus = 'Proses'; // Default status
 
-                if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
-                    $opiStatus = 'Pending';
-                    $numb_opi = 'PENDING';
-                } elseif ($piutangTotal > $customerData->Plafond) {
-                    $opiStatus = 'Pending';
-                    $numb_opi = 'PENDING';
-                } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
-                    $opiStatus = 'Pending';
-                    $numb_opi = 'PENDING';
+                if (trim($customerData->IS_SPS) == 'Y') {
+                    $opiStatus = 'Proses';
+                } else {
+                    if ($customerData->WAKTUBAYAR == 0 || $customerData->Plafond == 0) {
+                        $opiStatus = 'Pending';
+                        $numb_opi = 'PENDING';
+                    } elseif ($piutangTotal > $customerData->Plafond) {
+                        $opiStatus = 'Pending';
+                        $numb_opi = 'PENDING';
+                    } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                        $opiStatus = 'Pending';
+                        $numb_opi = 'PENDING';
+                    }
                 }
 
                 
