@@ -322,6 +322,7 @@
                                                         <option value="OUP Joint dan Flute">OUP Joint dan Flute</option>
                                                         <option value="OUP Warna Kertas">OUP Warna Kertas</option>
                                                         <option value="OUP Warna, Ukuran, Design, dan Kualitas">OUP Warna, Ukuran, Design, dan Kualitas</option>
+                                                        <option value="OUP Nama, Kualitas, dan Flute">OUP Nama, Kualitas, dan Flute</option>
                                                     </select>
                                                 </div>
                                             </div>
