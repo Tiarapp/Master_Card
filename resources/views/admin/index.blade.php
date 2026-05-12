@@ -171,7 +171,7 @@
                         <th style="white-space: nowrap;">Waktu</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tracking-tbody">
                       @foreach($tracking_updates as $i => $track)
                         @php
                           $beforeDecoded = json_decode($track->before, true);
@@ -356,5 +356,73 @@
       options: barChartOptions
     })
   })
+</script>
+
+<script>
+(function($) {
+    if (!$('#tracking-tbody').length) return;
+
+    var tipeColorMap = {
+        'Kontrak': 'badge-success', 'OPI': 'badge-warning', 'Mastercard': 'badge-danger',
+        'Box': 'badge-info', 'Box Type': 'badge-secondary', 'Color Combine': 'badge-light',
+        'Form MC': 'badge-dark', 'Form Permintaan': 'badge-primary',
+        'Plan Produksi': 'badge-warning', 'Profile': 'badge-secondary'
+    };
+
+    function esc(v) {
+        if (v === null || v === undefined) return '-';
+        return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function fmtDate(s) {
+        var d = new Date(s);
+        return [String(d.getDate()).padStart(2,'0'), String(d.getMonth()+1).padStart(2,'0'), d.getFullYear()].join('/')
+            + ' ' + [String(d.getHours()).padStart(2,'0'), String(d.getMinutes()).padStart(2,'0')].join(':');
+    }
+
+    function buildRows(data) {
+        if (!data.length) return '<tr><td colspan="7" class="text-center text-muted p-3">Belum ada aktivitas terbaru.</td></tr>';
+        return data.map(function(t, i) {
+            var bef = null, aft = null;
+            try { bef = t.before ? JSON.parse(t.before) : null; } catch(e) {}
+            try { aft = t.after  ? JSON.parse(t.after)  : null; } catch(e) {}
+
+            var changed = [];
+            if (bef && typeof bef === 'object' && aft && typeof aft === 'object') {
+                Object.keys(aft).forEach(function(k) {
+                    if (String(bef[k] !== undefined ? bef[k] : null) !== String(aft[k])) changed.push(k);
+                });
+            }
+
+            var befHtml = '', aftHtml = '';
+            if (changed.length && bef && typeof bef === 'object') {
+                changed.forEach(function(k) { if (bef[k] !== undefined) befHtml += '<div><span class="text-muted">'+esc(k)+':</span> '+esc(bef[k])+'</div>'; });
+                changed.forEach(function(k) { if (aft[k] !== undefined) aftHtml += '<div class="font-weight-bold text-success"><span class="text-muted">'+esc(k)+':</span> '+esc(aft[k])+'</div>'; });
+            } else if (!bef || typeof bef !== 'object') {
+                befHtml = '<span class="text-muted">'+esc(t.before)+'</span>';
+                aftHtml = '<span class="text-muted">'+esc(t.after)+'</span>';
+            } else {
+                befHtml = aftHtml = '<span class="text-muted">-</span>';
+            }
+
+            return '<tr><td class="text-muted">'+(i+1)+'</td>'
+                +'<td><span class="badge badge-primary">'+esc(t.user)+'</span></td>'
+                +'<td style="white-space:nowrap;"><span class="badge '+(tipeColorMap[t.tipe]||'badge-secondary')+'">'+esc(t.tipe)+'</span></td>'
+                +'<td>'+esc(t.event)+'</td>'
+                +'<td style="font-size:0.82em;max-width:220px;">'+befHtml+'</td>'
+                +'<td style="font-size:0.82em;max-width:220px;">'+aftHtml+'</td>'
+                +'<td class="text-muted" style="white-space:nowrap;font-size:0.85em;">'+fmtDate(t.created_at)+'</td></tr>';
+        }).join('');
+    }
+
+    function refreshTracking() {
+        $.getJSON('{{ route("admin.tracking.json") }}', function(data) {
+            $('#tracking-tbody').html(buildRows(data));
+        });
+    }
+
+    // Auto-refresh setiap 1 menit
+    setInterval(refreshTracking, 1 * 60 * 1000);
+})(jQuery);
 </script>
 @endsection

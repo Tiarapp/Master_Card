@@ -778,6 +778,17 @@ Route::middleware(['auth'])->group(function (){
 
         Route::get('/admin/stellar_bp', [BbmController::class, 'index'])->name('stellar.bp.index');
         Route::get('/admin/stellar_bp/export', [BbmController::class, 'export'])->name('stellar.bp.export');
+
+        // Activity Tracking JSON endpoint
+        Route::get('/admin/tracking-json', function () {
+            $tracking_updates = \App\Models\Tracking::whereIn('tipe', ['Mastercard', 'Kontrak', 'OPI'])
+                ->where(function($q) {
+                    $q->where('event', 'LIKE', '%Ubah%')
+                      ->orWhere('event', 'LIKE', '%update%');
+                })
+                ->orderBy('created_at', 'desc')->take(50)->get();
+            return response()->json($tracking_updates);
+        })->name('admin.tracking.json');
 }); 
 
 require __DIR__ . '/auth.php';
