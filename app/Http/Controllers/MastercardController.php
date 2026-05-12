@@ -347,6 +347,7 @@ class MastercardController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Mastercard',
             'event'  => "Update MC ".$mc->kode,
             'before' => '-',
             'after'  => 'Kode: '.$mc->kode.', Revisi: '.$mc->revisi,
@@ -575,6 +576,7 @@ class MastercardController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Mastercard',
             'event'  => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi,
             'before' => '-',
             'after'  => 'Kode: '.$mc->kode.', Revisi: '.$mc->revisi,
@@ -772,6 +774,7 @@ class MastercardController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Mastercard',
             'event'  => "Update MC ".$mc->kode."-".$mc->revisi,
             'before' => $before_mc,
             'after'  => json_encode([

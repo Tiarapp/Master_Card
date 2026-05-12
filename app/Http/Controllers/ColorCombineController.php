@@ -65,6 +65,7 @@ class ColorCombineController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Color Combine',
             'event'  => "Tambah CC ".$color->nama,
             'before' => '-',
             'after'  => 'Kode: '.$color->kode.', Nama: '.$color->nama,

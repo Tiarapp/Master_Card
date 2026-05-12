@@ -481,6 +481,7 @@ class Kontrak_DController extends Controller
             $upMaster = Kontrak_M::find($kontrakm->id); // finding row sesuai id untuk update ke table
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'Kontrak',
                 'event'  => "Tambah Kontrak ".$upMaster->kode,
                 'before' => '-',
                 'after'  => 'Kode: '.$upMaster->kode.', Customer: '.$upMaster->customer_name,
@@ -898,6 +899,7 @@ class Kontrak_DController extends Controller
             
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'Kontrak',
                 'event'  => "Ubah Kontrak ".$kontrakm->kode,
                 'before' => $before_data,
                 'after'  => json_encode([
@@ -1100,6 +1102,7 @@ class Kontrak_DController extends Controller
                 
                 Tracking::create([
                     'user'   => Auth::user()->name,
+                    'tipe'   => 'Kontrak',
                     'event'  => "Tambah Realisasi Kirim SJ ".$request->sj,
                     'before' => '-',
                     'after'  => 'SJ: '.$request->sj.', Qty: '.$qty.' pcs',
@@ -1148,6 +1151,7 @@ class Kontrak_DController extends Controller
 
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'Kontrak',
                 'event'  => "Ubah Realisasi Kirim SJ ".$kirim->nomer_sj,
                 'before' => $before_realisasi,
                 'after'  => json_encode([
@@ -1182,6 +1186,7 @@ class Kontrak_DController extends Controller
             
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'Kontrak',
                 'event'  => "Cancel Kontrak ".$kontrak->kode,
                 'before' => 'Status: '.$old_status,
                 'after'  => 'Status: 5 (Cancel)',
@@ -1207,6 +1212,7 @@ class Kontrak_DController extends Controller
             $notif->save();        
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'Kontrak',
                 'event'  => "Open Kontrak ".$kontrak->kode,
                 'before' => 'Status: '.$old_status_open,
                 'after'  => 'Status: 2 (Open)',

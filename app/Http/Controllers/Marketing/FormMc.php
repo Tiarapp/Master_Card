@@ -53,6 +53,7 @@ class FormMc extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Form MC',
             'event'  => 'Tambah Form Mastercard MC'.$res,
             'before' => '-',
             'after'  => 'Kode: MC'.$res.', Customer: '.$request->cust.', Barang: '.$request->barang,
@@ -86,6 +87,7 @@ class FormMc extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Form MC',
             'event'  => 'Update Form Mastercard '.$form->kode,
             'before' => $before_formmc,
             'after'  => json_encode([

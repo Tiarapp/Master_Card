@@ -500,6 +500,7 @@ class OpiController extends Controller
                 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'OPI',
             'event'  => "Cancel OPI ".$opi->NoOPI,
             'before' => 'Status: '.$old_status_opi,
             'after'  => 'Status: Cancel',
@@ -619,6 +620,7 @@ class OpiController extends Controller
             // Track the change
             Tracking::create([
                 'user'   => Auth::user()->name,
+                'tipe'   => 'OPI',
                 'event'  => "Update OPI ".$opi->NoOPI,
                 'before' => 'Qty: '.$old_jumlah_opi.' pcs',
                 'after'  => 'Qty: '.$request->jumlahOrder.' pcs',

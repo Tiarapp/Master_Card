@@ -50,6 +50,7 @@ class BoxTypeController extends Controller
         
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Box Type',
             'event'  => "Tambah Tipe ".$type->kode,
             'before' => '-',
             'after'  => 'Kode: '.$type->kode.', Nama: '.$type->nama,
@@ -117,6 +118,7 @@ class BoxTypeController extends Controller
         
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Box Type',
             'event'  => "Ubah Tipe Box ".$boxtype->kode,
             'before' => $before_boxtype,
             'after'  => json_encode([

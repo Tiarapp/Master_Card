@@ -130,6 +130,7 @@ class BoxController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Box',
             'event'  => "Tambah Box ".$nobukti,
             'before' => '-',
             'after'  => 'Kode: '.$nobukti.', Nama: '.strtoupper($request->namaBarang),
@@ -222,6 +223,7 @@ class BoxController extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Box',
             'event'  => "Ubah Box ".$box->kode,
             'before' => $before_box,
             'after'  => json_encode([

@@ -53,6 +53,7 @@ class FormPermintaan extends Controller
 
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Form Permintaan',
             'event'  => 'Tambah Form Permintaan '.$kode,
             'before' => '-',
             'after'  => 'Kode: '.$kode.', Customer: '.$request->cust.', Barang: '.$request->barang,
@@ -88,6 +89,7 @@ class FormPermintaan extends Controller
         $memo->save();
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Form Permintaan',
             'event'  => 'Update Form Permintaan '.$id,
             'before' => $before_perm,
             'after'  => json_encode([

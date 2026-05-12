@@ -84,6 +84,7 @@ class ProfileController extends Controller
             // Log the activity
             Tracking::create([
                 'user'   => $user->name,
+                'tipe'   => 'Profile',
                 'event'  => 'Password berhasil diubah',
                 'before' => 'Password lama',
                 'after'  => 'Password baru berhasil diset',
@@ -148,6 +149,7 @@ class ProfileController extends Controller
             // Log the activity
             Tracking::create([
                 'user'   => $user->name,
+                'tipe'   => 'Profile',
                 'event'  => 'Profile berhasil diperbarui',
                 'before' => 'Nama: '.$old_name.', Email: '.$old_email,
                 'after'  => 'Nama: '.$request->name.', Email: '.$request->email,

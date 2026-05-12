@@ -106,6 +106,7 @@ class ConvController extends Controller
         
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Plan Produksi',
             'event'  => "Tambah Plan ".$convm->kode,
             'before' => '-',
             'after'  => 'Kode: '.$convm->kode.', Tgl: '.$request->tgl.', Mesin: '.$request->mesin,
@@ -177,6 +178,7 @@ class ConvController extends Controller
         $data = count($request->noOpi);
         Tracking::create([
             'user'   => Auth::user()->name,
+            'tipe'   => 'Plan Produksi',
             'event'  => "Tambah Plan ".$convm->kode,
             'before' => '-',
             'after'  => 'Kode: '.$convm->kode.', Tgl: '.$request->tgl.', Mesin: '.$request->mesin,
