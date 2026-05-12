@@ -144,7 +144,7 @@
         </div>
       @endif
       @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2)
-        <div class="col-md-8 mt-3">
+        <div class="col-md-12 mt-3">
           <div class="card card-primary card-outline">
             <div class="card-header">
               <h3 class="card-title">
@@ -156,7 +156,7 @@
                 </button>
               </div>
             </div>
-            <div class="card-body p-0" style="max-height: 400px; overflow-y: auto;">
+            <div class="card-body p-0" style="max-height: 600px; overflow-y: auto;">
               @if(isset($tracking_updates) && $tracking_updates->count() > 0)
                 <div class="table-responsive">
                   <table class="table table-sm table-hover table-striped mb-0">
@@ -189,6 +189,17 @@
                               'Profile'         => 'badge-secondary',
                           ];
                           $tipeColor = isset($tipeColorMap[$track->tipe]) ? $tipeColorMap[$track->tipe] : 'badge-secondary';
+
+                          // Hanya ambil field yang berubah
+                          $changedKeys = [];
+                          if ($beforeDecoded && is_array($beforeDecoded) && $afterDecoded && is_array($afterDecoded)) {
+                              foreach ($afterDecoded as $k => $v) {
+                                  $oldVal = isset($beforeDecoded[$k]) ? $beforeDecoded[$k] : null;
+                                  if ((string)$oldVal !== (string)$v) {
+                                      $changedKeys[] = $k;
+                                  }
+                              }
+                          }
                         @endphp
                         <tr>
                           <td class="text-muted">{{ $i + 1 }}</td>
@@ -200,24 +211,31 @@
                           </td>
                           <td>{{ $track->event }}</td>
                           <td style="font-size: 0.82em; max-width: 220px;">
-                            @if($beforeDecoded && is_array($beforeDecoded))
-                              @foreach($beforeDecoded as $key => $val)
-                                <div><span class="text-muted">{{ $key }}:</span> {{ $val ?? '-' }}</div>
+                            @if($beforeDecoded && is_array($beforeDecoded) && count($changedKeys) > 0)
+                              @foreach($changedKeys as $key)
+                                @if(isset($beforeDecoded[$key]))
+                                  <div><span class="text-muted">{{ $key }}:</span> {{ $beforeDecoded[$key] ?? '-' }}</div>
+                                @endif
                               @endforeach
-                            @else
+                            @elseif(!$beforeDecoded || !is_array($beforeDecoded))
                               <span class="text-muted">{{ $track->before ?? '-' }}</span>
+                            @else
+                              <span class="text-muted">-</span>
                             @endif
                           </td>
                           <td style="font-size: 0.82em; max-width: 220px;">
-                            @if($afterDecoded && is_array($afterDecoded))
-                              @foreach($afterDecoded as $key => $val)
-                                @php $changed = $beforeDecoded && isset($beforeDecoded[$key]) && $beforeDecoded[$key] != $val; @endphp
-                                <div class="{{ $changed ? 'font-weight-bold text-success' : '' }}">
-                                  <span class="text-muted">{{ $key }}:</span> {{ $val ?? '-' }}
-                                </div>
+                            @if($afterDecoded && is_array($afterDecoded) && count($changedKeys) > 0)
+                              @foreach($changedKeys as $key)
+                                @if(isset($afterDecoded[$key]))
+                                  <div class="font-weight-bold text-success">
+                                    <span class="text-muted">{{ $key }}:</span> {{ $afterDecoded[$key] ?? '-' }}
+                                  </div>
+                                @endif
                               @endforeach
-                            @else
+                            @elseif(!$afterDecoded || !is_array($afterDecoded))
                               <span class="text-muted">{{ $track->after ?? '-' }}</span>
+                            @else
+                              <span class="text-success">-</span>
                             @endif
                           </td>
                           <td class="text-muted" style="white-space: nowrap; font-size: 0.85em;">
