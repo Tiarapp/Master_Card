@@ -114,10 +114,10 @@ Route::get('/admin', function () {
     $jumlah_kontrak = count($kontrak);
 
     $tracking_updates = \App\Models\Tracking::whereIn('tipe', ['Mastercard', 'Kontrak', 'OPI'])
-        ->where(function($q) {
-            $q->where('event', 'LIKE', '%Ubah%')
-              ->orWhere('event', 'LIKE', '%update%');
-        })
+        // ->where(function($q) {
+        //     $q->where('event', 'LIKE', '%Ubah%')
+        //       ->orWhere('event', 'LIKE', '%update%');
+        // })
         ->orderBy('created_at', 'desc')->take(50)->get();
 
     return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open', 'tracking_updates'));
@@ -782,10 +782,10 @@ Route::middleware(['auth'])->group(function (){
         // Activity Tracking JSON endpoint
         Route::get('/admin/tracking-json', function () {
             $tracking_updates = \App\Models\Tracking::whereIn('tipe', ['Mastercard', 'Kontrak', 'OPI'])
-                ->where(function($q) {
-                    $q->where('event', 'LIKE', '%Ubah%')
-                      ->orWhere('event', 'LIKE', '%update%');
-                })
+                // ->where(function($q) {
+                //     $q->where('event', 'LIKE', '%Ubah%')
+                //       ->orWhere('event', 'LIKE', '%update%');
+                // })
                 ->orderBy('created_at', 'desc')->take(50)->get();
             return response()->json($tracking_updates);
         })->name('admin.tracking.json');
