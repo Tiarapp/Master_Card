@@ -118,7 +118,7 @@ Route::get('/admin', function () {
         //     $q->where('event', 'LIKE', '%Ubah%')
         //       ->orWhere('event', 'LIKE', '%update%');
         // })
-        ->orderBy('created_at', 'desc')->take(50)->get();
+        ->orderBy('created_at', 'desc')->take(100)->get();
 
     return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open', 'tracking_updates'));
 })->middleware(['auth'])->name('admin');
@@ -786,7 +786,7 @@ Route::middleware(['auth'])->group(function (){
                 //     $q->where('event', 'LIKE', '%Ubah%')
                 //       ->orWhere('event', 'LIKE', '%update%');
                 // })
-                ->orderBy('created_at', 'desc')->take(50)->get();
+                ->orderBy('created_at', 'desc')->take(100)->get();
             return response()->json($tracking_updates);
         })->name('admin.tracking.json');
 }); 
