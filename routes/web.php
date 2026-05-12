@@ -113,7 +113,7 @@ Route::get('/admin', function () {
             ->get();
     $jumlah_kontrak = count($kontrak);
 
-    $tracking_updates = \App\Models\Tracking::orderBy('created_at', 'desc')->take(50)->get();
+    $tracking_updates = \App\Models\Tracking::where('Event', 'LIKE', '%Update%')->orWhere('Event', 'LIKE', '%Ubah%')->orderBy('created_at', 'desc')->take(50)->get();
 
     return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open', 'tracking_updates'));
 })->middleware(['auth'])->name('admin');
