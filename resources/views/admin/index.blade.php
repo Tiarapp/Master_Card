@@ -143,6 +143,84 @@
           
         </div>
       @endif
+      @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2)
+        <div class="col-md-8 mt-3">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-history mr-1"></i> Activity Tracking
+              </h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0" style="max-height: 400px; overflow-y: auto;">
+              @if(isset($tracking_updates) && $tracking_updates->count() > 0)
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover table-striped mb-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th style="width: 40px;">#</th>
+                        <th>User</th>
+                        <th>Event</th>
+                        <th>Sebelum Perubahan</th>
+                        <th>Setelah Perubahan</th>
+                        <th style="white-space: nowrap;">Waktu</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($tracking_updates as $i => $track)
+                        @php
+                          $beforeDecoded = json_decode($track->before, true);
+                          $afterDecoded  = json_decode($track->after, true);
+                        @endphp
+                        <tr>
+                          <td class="text-muted">{{ $i + 1 }}</td>
+                          <td>
+                            <span class="badge badge-primary">{{ $track->user }}</span>
+                          </td>
+                          <td>{{ $track->event }}</td>
+                          <td style="font-size: 0.82em; max-width: 220px;">
+                            @if($beforeDecoded && is_array($beforeDecoded))
+                              @foreach($beforeDecoded as $key => $val)
+                                <div><span class="text-muted">{{ $key }}:</span> {{ $val ?? '-' }}</div>
+                              @endforeach
+                            @else
+                              <span class="text-muted">{{ $track->before ?? '-' }}</span>
+                            @endif
+                          </td>
+                          <td style="font-size: 0.82em; max-width: 220px;">
+                            @if($afterDecoded && is_array($afterDecoded))
+                              @foreach($afterDecoded as $key => $val)
+                                @php $changed = $beforeDecoded && isset($beforeDecoded[$key]) && $beforeDecoded[$key] != $val; @endphp
+                                <div class="{{ $changed ? 'font-weight-bold text-success' : '' }}">
+                                  <span class="text-muted">{{ $key }}:</span> {{ $val ?? '-' }}
+                                </div>
+                              @endforeach
+                            @else
+                              <span class="text-muted">{{ $track->after ?? '-' }}</span>
+                            @endif
+                          </td>
+                          <td class="text-muted" style="white-space: nowrap; font-size: 0.85em;">
+                            {{ \Carbon\Carbon::parse($track->created_at)->format('d/m/Y H:i') }}
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              @else
+                <div class="text-center text-muted p-4">
+                  <i class="fas fa-inbox fa-2x mb-2"></i>
+                  <p class="mb-0">Belum ada aktivitas terbaru.</p>
+                </div>
+              @endif
+            </div>
+          </div>
+        </div>
+      @endif
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>

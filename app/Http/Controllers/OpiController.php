@@ -496,10 +496,13 @@ class OpiController extends Controller
     {
         $opi = Opi_M::find($id);
         $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
+        $old_status_opi = $opi->status_opi;
                 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Cancel Kontrak". $opi->NoOPI
+            'user'   => Auth::user()->name,
+            'event'  => "Cancel OPI ".$opi->NoOPI,
+            'before' => 'Status: '.$old_status_opi,
+            'after'  => 'Status: Cancel',
         ]);
 
         $opi->nama = $opi->nama."(CANCEL)";
@@ -591,6 +594,12 @@ class OpiController extends Controller
             ]);
 
             $opi = Opi_M::findOrFail($id);
+            $old_jumlah_opi = $opi->jumlahOrder;
+            $before_opi = json_encode([
+                'jumlahOrder' => $opi->jumlahOrder,
+                'tglKirimDt'  => $opi->tglKirimDt,
+                'keterangan'  => $opi->dt ? $opi->dt->keterangan : null,
+            ]);
             
             // Update OPI data
             $opi->jumlahOrder = $request->jumlahOrder;
@@ -609,8 +618,10 @@ class OpiController extends Controller
 
             // Track the change
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Update OPI " . $opi->NoOPI
+                'user'   => Auth::user()->name,
+                'event'  => "Update OPI ".$opi->NoOPI,
+                'before' => 'Qty: '.$old_jumlah_opi.' pcs',
+                'after'  => 'Qty: '.$request->jumlahOrder.' pcs',
             ]);
 
             return redirect()->back()->with('success', 'Data OPI ' . $opi->NoOPI . ' berhasil diupdate!');

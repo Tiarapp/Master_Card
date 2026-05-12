@@ -480,8 +480,10 @@ class Kontrak_DController extends Controller
             
             $upMaster = Kontrak_M::find($kontrakm->id); // finding row sesuai id untuk update ke table
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Tambah Kontrak ".$upMaster->kode
+                'user'   => Auth::user()->name,
+                'event'  => "Tambah Kontrak ".$upMaster->kode,
+                'before' => '-',
+                'after'  => 'Kode: '.$upMaster->kode.', Customer: '.$upMaster->customer_name,
             ]);
             
             $upMaster->amountBeforeTax = $request->total; // update database field amountBefireTax dengan value sblTax
@@ -766,8 +768,10 @@ class Kontrak_DController extends Controller
                 
                 // OPTIMIZED: Simple tracking insert
                 DB::table('tracking')->insert([
-                    'user' => $userName,
-                    'event' => "Tambah OPI " . $numb_opi,
+                    'user'       => $userName,
+                    'event'      => "Tambah OPI " . $numb_opi,
+                    'before'     => '-',
+                    'after'      => 'No OPI: '.$numb_opi.', Qty: '.$jumlahKirim,
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
@@ -796,6 +800,28 @@ class Kontrak_DController extends Controller
         public function update(Request $request, $id)
         {
             $kontrakm =Kontrak_M::find($id);
+
+            // Snapshot semua field sebelum diubah
+            $before_data = json_encode([
+                'customer_name'  => $kontrakm->customer_name,
+                'alamatKirim'    => $kontrakm->alamatKirim,
+                'custTelp'       => $kontrakm->custTelp,
+                'poCustomer'     => $kontrakm->poCustomer,
+                'tipeOrder'      => $kontrakm->tipeOrder,
+                'tglKontrak'     => $kontrakm->tglKontrak,
+                'sales'          => $kontrakm->sales,
+                'top'            => $kontrakm->top,
+                'komisi'         => $kontrakm->komisi,
+                'caraKirim'      => $kontrakm->caraKirim,
+                'keterangan'     => $kontrakm->keterangan,
+                'min_tgl_kirim'  => $kontrakm->min_tgl_kirim,
+                'biaya_exp'      => $kontrakm->biaya_exp,
+                'biaya_glue'     => $kontrakm->biaya_glue,
+                'biaya_wax'      => $kontrakm->biaya_wax,
+                'harga_expedisi' => $kontrakm->harga_expedisi,
+                'harga_karet'    => $kontrakm->harga_karet,
+                'harga_pisau'    => $kontrakm->harga_pisau,
+            ]);
             
             // untuk set value yang di update
             $kontrakm->customer_name = $request->namaCust;
@@ -823,7 +849,24 @@ class Kontrak_DController extends Controller
             $kontrakm->save();
             
             $kontrakd = Kontrak_D::find($request->kontrakd_id);
-            
+
+            // Ambil kode MC lama dan baru untuk tracking
+            $old_mc = Mastercard::find($kontrakd->mc_id);
+            $new_mc = Mastercard::find($request->mcid);
+            $old_mc_label = $old_mc ? $old_mc->kode.($old_mc->revisi ? '-'.$old_mc->revisi : '') : $kontrakd->mc_id;
+            $new_mc_label = $new_mc ? $new_mc->kode.($new_mc->revisi ? '-'.$new_mc->revisi : '') : $request->mcid;
+
+            // Lengkapi before_data dengan info MC dan detail kontrak
+            $before_data_arr = json_decode($before_data, true);
+            $before_data_arr['mc']           = $old_mc_label;
+            $before_data_arr['pcsKontrak']   = $kontrakd->pcsKontrak;
+            $before_data_arr['kgKontrak']    = $kontrakd->kgKontrak;
+            $before_data_arr['harga_pcs']    = $kontrakd->harga_pcs;
+            $before_data_arr['harga_kg']     = $kontrakd->harga_kg;
+            $before_data_arr['toleransiLebih']  = $kontrakd->pctToleransiLebihKontrak;
+            $before_data_arr['toleransiKurang'] = $kontrakd->pctToleransiKurangKontrak;
+            $before_data = json_encode($before_data_arr);
+
             $kontrakd->mc_id = $request->mcid;
             $kontrakd->pcsKontrak = $request->qtyPcs;
             $kontrakd->kgKontrak = $request->qtyKg;
@@ -854,8 +897,36 @@ class Kontrak_DController extends Controller
             }
             
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Ubah Kontrak ".$kontrakm->kode
+                'user'   => Auth::user()->name,
+                'event'  => "Ubah Kontrak ".$kontrakm->kode,
+                'before' => $before_data,
+                'after'  => json_encode([
+                    'customer_name'  => $request->namaCust,
+                    'alamatKirim'    => $request->alamatKirim,
+                    'custTelp'       => $request->telp,
+                    'poCustomer'     => $request->poCustomer,
+                    'tipeOrder'      => $request->tipeOrder,
+                    'tglKontrak'     => $request->tanggal,
+                    'sales'          => $request->sales,
+                    'top'            => $request->top,
+                    'komisi'         => $request->komisi,
+                    'caraKirim'      => $request->caraKirim,
+                    'keterangan'     => $request->keterangan,
+                    'min_tgl_kirim'  => $request->tglkirim,
+                    'biaya_exp'      => $request->biaya_exp,
+                    'biaya_glue'     => $request->biaya_glue,
+                    'biaya_wax'      => $request->biaya_wax,
+                    'harga_expedisi' => $request->asumsi_exp ?? 0,
+                    'harga_karet'    => $request->asumsi_harga_karet ?? 0,
+                    'harga_pisau'    => $request->asumsi_harga_pisau ?? 0,
+                    'mc'             => $new_mc_label,
+                    'pcsKontrak'     => $request->qtyPcs,
+                    'kgKontrak'      => $request->qtyKg,
+                    'harga_pcs'      => $request->harga,
+                    'harga_kg'       => $request->hargakg,
+                    'toleransiLebih' => $request->toleransiLebih,
+                    'toleransiKurang'=> $request->toleransiKurang,
+                ]),
             ]);
             // dd($kontrakd);
             return redirect('admin/kontraknew');
@@ -1028,8 +1099,10 @@ class Kontrak_DController extends Controller
                 $kontrak->save();
                 
                 Tracking::create([
-                    'user' => Auth::user()->name,
-                    'event' => "Tambah Realisasi Kirim SJ ". $request->sj
+                    'user'   => Auth::user()->name,
+                    'event'  => "Tambah Realisasi Kirim SJ ".$request->sj,
+                    'before' => '-',
+                    'after'  => 'SJ: '.$request->sj.', Qty: '.$qty.' pcs',
                 ]);
 
                 $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
@@ -1055,6 +1128,14 @@ class Kontrak_DController extends Controller
             $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
             
             // dd($kirim->qty_kirim);
+            $before_realisasi = json_encode([
+                'nomer_sj'     => $kirim->nomer_sj,
+                'tanggal_kirim'=> $kirim->tanggal_kirim,
+                'qty_kirim'    => $kirim->qty_kirim,
+                'kg_kirim'     => $kirim->kg_kirim,
+            ]);
+            $old_qty_kirim = $kirim->qty_kirim;
+            $old_tgl_kirim = $kirim->tanggal_kirim;
             $kontrak->pcsSisaKirim = $kontrak->pcsSisaKirim + $kirim->qty_kirim - $request->jumlahKirim;
             $kontrak->save();
             // dd($id);
@@ -1066,8 +1147,15 @@ class Kontrak_DController extends Controller
             ]);
 
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Ubah Realisasi Kirim SJ ". $kirim->nomer_sj
+                'user'   => Auth::user()->name,
+                'event'  => "Ubah Realisasi Kirim SJ ".$kirim->nomer_sj,
+                'before' => $before_realisasi,
+                'after'  => json_encode([
+                    'nomer_sj'     => $kirim->nomer_sj,
+                    'tanggal_kirim'=> $request->tglKirim,
+                    'qty_kirim'    => $request->jumlahKirim,
+                    'kg_kirim'     => $request->jumlahKirim * $mc->gramSheetBoxKontrak,
+                ]),
             ]);
 
 
@@ -1089,11 +1177,14 @@ class Kontrak_DController extends Controller
         public function cancel_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
+            $old_status = $kontrak->status;
             $kontrak->status = 5;
             
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Cancel Kontrak". $kontrak->kode
+                'user'   => Auth::user()->name,
+                'event'  => "Cancel Kontrak ".$kontrak->kode,
+                'before' => 'Status: '.$old_status,
+                'after'  => 'Status: 5 (Cancel)',
             ]);
             
             $kontrak->save();
@@ -1103,6 +1194,7 @@ class Kontrak_DController extends Controller
         public function open_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
+            $old_status_open = $kontrak->status;
             $kontrak->status = 2;
             
             $notif = Notification::where('kontrak_id', '=', $id)
@@ -1114,8 +1206,10 @@ class Kontrak_DController extends Controller
     
             $notif->save();        
             Tracking::create([
-                'user' => Auth::user()->name,
-                'event' => "Open Kontrak ". $kontrak->kode
+                'user'   => Auth::user()->name,
+                'event'  => "Open Kontrak ".$kontrak->kode,
+                'before' => 'Status: '.$old_status_open,
+                'after'  => 'Status: 2 (Open)',
             ]);
             
             $kontrak->save();

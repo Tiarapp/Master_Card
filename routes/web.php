@@ -112,7 +112,10 @@ Route::get('/admin', function () {
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open'));
+
+    $tracking_updates = \App\Models\Tracking::orderBy('created_at', 'desc')->take(20)->get();
+
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open', 'tracking_updates'));
 })->middleware(['auth'])->name('admin');
 
 

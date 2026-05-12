@@ -52,8 +52,10 @@ class FormPermintaan extends Controller
         ]);
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => 'Tambah Form Permintaan '.$kode
+            'user'   => Auth::user()->name,
+            'event'  => 'Tambah Form Permintaan '.$kode,
+            'before' => '-',
+            'after'  => 'Kode: '.$kode.', Customer: '.$request->cust.', Barang: '.$request->barang,
         ]);
         return redirect('admin/marketing/formpermintaan')->with('success', "Data Berhasil disimpan dengan kode = ". $kode);
     }
@@ -68,6 +70,14 @@ class FormPermintaan extends Controller
     public function update(Request $request, $id)
     {
         $memo = MemoMastercard::where('id', $id)->first();
+        $old_customer_perm = $memo->customer;
+        $old_barang_perm   = $memo->barang;
+        $before_perm = json_encode([
+            'tanggal'    => $memo->tanggal,
+            'customer'   => $memo->customer,
+            'barang'     => $memo->barang,
+            'keterangan' => $memo->keterangan,
+        ]);
 
         $memo->tanggal = $request->input('tanggal');
         $memo->customer = $request->input('customer');
@@ -77,8 +87,15 @@ class FormPermintaan extends Controller
 
         $memo->save();
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => 'Update Form Permintaan '.$id
+            'user'   => Auth::user()->name,
+            'event'  => 'Update Form Permintaan '.$id,
+            'before' => $before_perm,
+            'after'  => json_encode([
+                'tanggal'    => $request->input('tanggal'),
+                'customer'   => $request->input('customer'),
+                'barang'     => $request->input('barang'),
+                'keterangan' => $request->input('keterangan'),
+            ]),
         ]);
 
         return redirect('/admin/marketing/formpermintaan')->with('success', 'Data berhasil diubah!!');

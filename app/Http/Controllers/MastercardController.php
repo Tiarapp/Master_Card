@@ -346,8 +346,10 @@ class MastercardController extends Controller
         
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Update MC ".$mc->kode
+            'user'   => Auth::user()->name,
+            'event'  => "Update MC ".$mc->kode,
+            'before' => '-',
+            'after'  => 'Kode: '.$mc->kode.', Revisi: '.$mc->revisi,
         ]);
         
         return redirect('mastercard');
@@ -572,8 +574,10 @@ class MastercardController extends Controller
         ]);
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi
+            'user'   => Auth::user()->name,
+            'event'  => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi,
+            'before' => '-',
+            'after'  => 'Kode: '.$mc->kode.', Revisi: '.$mc->revisi,
         ]);
         
         return redirect('mastercard');
@@ -662,6 +666,38 @@ class MastercardController extends Controller
     public function saveRevisi($id, Request $request)
     {
         $mc = Mastercard::find($id);
+
+        // Snapshot semua field MC sebelum diubah
+        $before_mc = json_encode([
+            'kode'                  => $mc->kode,
+            'revisi'                => $mc->revisi,
+            'namaBarang'            => $mc->namaBarang,
+            'kodeBarang'            => $mc->kodeBarang,
+            'customer'              => $mc->customer,
+            'tipeCust'              => $mc->tipeCust,
+            'tipeBox'               => $mc->tipeBox,
+            'flute'                 => $mc->flute,
+            'joint'                 => $mc->joint,
+            'lebarSheet'            => $mc->lebarSheet,
+            'panjangSheet'          => $mc->panjangSheet,
+            'lebarSheetBox'         => $mc->lebarSheetBox,
+            'panjangSheetBox'       => $mc->panjangSheetBox,
+            'substanceKontrak_id'   => $mc->substanceKontrak_id,
+            'substanceProduksi_id'  => $mc->substanceProduksi_id,
+            'gramSheetBoxKontrak'   => $mc->gramSheetBoxKontrak,
+            'gramSheetBoxProduksi'  => $mc->gramSheetBoxProduksi,
+            'gramSheetCorrKontrak'  => $mc->gramSheetCorrKontrak,
+            'gramSheetCorrProduksi' => $mc->gramSheetCorrProduksi,
+            'outConv'               => $mc->outConv,
+            'koli'                  => $mc->koli,
+            'bungkus'               => $mc->bungkus,
+            'wax'                   => $mc->wax,
+            'tipeMc'                => $mc->tipeMc,
+            'keterangan'            => $mc->keterangan,
+            'box_id'                => $mc->box_id,
+            'colorCombine_id'       => $mc->colorCombine_id,
+        ]);
+
         if($request->revisi == null){
             $rev = null;
         } else {
@@ -685,6 +721,8 @@ class MastercardController extends Controller
         }
         
         // dd($rev);
+        $old_kode_mc    = $mc->kode;
+        $old_revisi_mc  = $mc->revisi;
         $mc->kode = $request->kode;
         $mc->revisi = $rev;
         $mc->kodeBarang = $request->kodeBarang;
@@ -733,8 +771,38 @@ class MastercardController extends Controller
         $mc->save();
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Update MC ".$mc->kode."-".$mc->revisi
+            'user'   => Auth::user()->name,
+            'event'  => "Update MC ".$mc->kode."-".$mc->revisi,
+            'before' => $before_mc,
+            'after'  => json_encode([
+                'kode'                  => $mc->kode,
+                'revisi'                => $mc->revisi,
+                'namaBarang'            => $request->namaBarang,
+                'kodeBarang'            => $request->kodeBarang,
+                'customer'              => $request->customer,
+                'tipeCust'              => $request->golongan,
+                'tipeBox'               => $request->tipebox,
+                'flute'                 => $request->flute,
+                'joint'                 => $request->joint,
+                'lebarSheet'            => $request->lebarSheet,
+                'panjangSheet'          => $request->panjangSheet,
+                'lebarSheetBox'         => $request->lebarSheetBox,
+                'panjangSheetBox'       => $request->panjangSheetBox,
+                'substanceKontrak_id'   => $request->substanceKontrak_id,
+                'substanceProduksi_id'  => $request->substanceProduksi_id,
+                'gramSheetBoxKontrak'   => $request->gramSheetBoxKontrak,
+                'gramSheetBoxProduksi'  => $request->gramSheetBoxProduksi,
+                'gramSheetCorrKontrak'  => $request->gramSheetCorrKontrak,
+                'gramSheetCorrProduksi' => $request->gramSheetCorrProduksi,
+                'outConv'               => $request->outConv,
+                'koli'                  => $request->koli,
+                'bungkus'               => $request->bungkus,
+                'wax'                   => $request->wax,
+                'tipeMc'                => $request->tipeMc,
+                'keterangan'            => $request->keterangan,
+                'box_id'                => $request->box_id,
+                'colorCombine_id'       => $request->colorCombine_id,
+            ]),
         ]);
         
         return redirect('mastercard');

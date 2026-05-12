@@ -129,8 +129,10 @@ class BoxController extends Controller
             ]);
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Tambah Box ".$nobukti
+            'user'   => Auth::user()->name,
+            'event'  => "Tambah Box ".$nobukti,
+            'before' => '-',
+            'after'  => 'Kode: '.$nobukti.', Nama: '.strtoupper($request->namaBarang),
         ]);
 
         return redirect('admin/box');
@@ -177,6 +179,25 @@ class BoxController extends Controller
         // dd($request->all()); 
 
         $box = Box::find($id);
+        $old_nama_box = $box->namaBarang;
+        $before_box = json_encode([
+            'namaBarang'     => $box->namaBarang,
+            'tipebox'        => $box->tipebox,
+            'flute'          => $box->flute,
+            'tipeCreasCorr'  => $box->tipeCreasCorr,
+            'sizeCreasCorr'  => $box->sizeCreasCorr,
+            'sizeCreasConv'  => $box->sizeCreasConv,
+            'panjangDalamBox'=> $box->panjangDalamBox,
+            'lebarDalamBox'  => $box->lebarDalamBox,
+            'tinggiDalamBox' => $box->tinggiDalamBox,
+            'kuping'         => $box->kuping,
+            'kuping2'        => $box->kuping2,
+            'panjangCrease'  => $box->panjangCrease,
+            'lebarCrease1'   => $box->lebarCrease1,
+            'lebarCrease2'   => $box->lebarCrease2,
+            'flapCrease'     => $box->flapCrease,
+            'tinggiCrease'   => $box->tinggiCrease,
+        ]);
 
         // $box->kode = $request->kode;
         $box->namaBarang = $request->namaBarang;
@@ -200,8 +221,27 @@ class BoxController extends Controller
         $box->save();
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Ubah Box ".$box->kode
+            'user'   => Auth::user()->name,
+            'event'  => "Ubah Box ".$box->kode,
+            'before' => $before_box,
+            'after'  => json_encode([
+                'namaBarang'     => $request->namaBarang,
+                'tipebox'        => $request->tipebox,
+                'flute'          => $request->flute,
+                'tipeCreasCorr'  => $request->tipeCreasCorr,
+                'sizeCreasCorr'  => $request->sizeCreasCorr,
+                'sizeCreasConv'  => $request->sizeCreasConv,
+                'panjangDalamBox'=> $request->panjangDalamBox,
+                'lebarDalamBox'  => $request->lebarDalamBox,
+                'tinggiDalamBox' => $request->tinggiDalamBox,
+                'kuping'         => $request->kuping,
+                'kuping2'        => $request->kuping2,
+                'panjangCrease'  => $request->panjangCrease,
+                'lebarCrease1'   => $request->lebarCrease1,
+                'lebarCrease2'   => $request->lebarCrease2,
+                'flapCrease'     => $request->flapCrease,
+                'tinggiCrease'   => $request->tinggiCrease,
+            ]),
         ]);
 
         return redirect('admin/box');

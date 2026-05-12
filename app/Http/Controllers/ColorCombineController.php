@@ -64,8 +64,10 @@ class ColorCombineController extends Controller
         $color = ColorCombine::create($request->all());
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Tambah CC ".$color->nama
+            'user'   => Auth::user()->name,
+            'event'  => "Tambah CC ".$color->nama,
+            'before' => '-',
+            'after'  => 'Kode: '.$color->kode.', Nama: '.$color->nama,
         ]);
 
         return redirect('admin/colorcombine');

@@ -13,5 +13,7 @@ class Tracking extends Model
     protected $fillable = [
         'user',
         'event',
+        'before',
+        'after',
     ];
 }
