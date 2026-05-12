@@ -176,19 +176,19 @@
                         @php
                           $beforeDecoded = json_decode($track->before, true);
                           $afterDecoded  = json_decode($track->after, true);
-                          $tipeColor = match($track->tipe) {
-                              'Kontrak'        => 'badge-success',
-                              'OPI'            => 'badge-warning',
-                              'Mastercard'     => 'badge-danger',
-                              'Box'            => 'badge-info',
-                              'Box Type'       => 'badge-secondary',
-                              'Color Combine'  => 'badge-light',
-                              'Form MC'        => 'badge-dark',
-                              'Form Permintaan'=> 'badge-primary',
-                              'Plan Produksi'  => 'badge-warning',
-                              'Profile'        => 'badge-secondary',
-                              default          => 'badge-secondary',
-                          };
+                          $tipeColorMap = [
+                              'Kontrak'         => 'badge-success',
+                              'OPI'             => 'badge-warning',
+                              'Mastercard'      => 'badge-danger',
+                              'Box'             => 'badge-info',
+                              'Box Type'        => 'badge-secondary',
+                              'Color Combine'   => 'badge-light',
+                              'Form MC'         => 'badge-dark',
+                              'Form Permintaan' => 'badge-primary',
+                              'Plan Produksi'   => 'badge-warning',
+                              'Profile'         => 'badge-secondary',
+                          ];
+                          $tipeColor = isset($tipeColorMap[$track->tipe]) ? $tipeColorMap[$track->tipe] : 'badge-secondary';
                         @endphp
                         <tr>
                           <td class="text-muted">{{ $i + 1 }}</td>
