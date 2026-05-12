@@ -287,16 +287,6 @@ class Kontrak_DController extends Controller
         */
         public function create()
         {
-            
-            // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            // $cust = DB::table('TCustomer')->get();
-            // $mc = DB::table('mc')
-            // ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
-            // ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
-            // ->leftJoin('box', 'box_id', '=', 'box.id')
-            // ->select('mc.*', 'substance.kode as substance', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'box.namaBarang as box')
-            // ->where('mc.status', '=', '1')
-            // ->get();
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')
             ->where('aktif', '=', 1)
@@ -544,7 +534,7 @@ class Kontrak_DController extends Controller
             $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
-            
+
             if($kontrak_M->status == 2){
                 return view('admin.kontrak.edit', compact(
                     // 'cust',
@@ -930,6 +920,34 @@ class Kontrak_DController extends Controller
                     'toleransiKurang'=> $request->toleransiKurang,
                 ]),
             ]);
+
+            // ===== AUTO-UPDATE mc_id SEMUA OPI TERKAIT =====
+            $new_mc_id = (int) $request->mcid;
+            $relatedOpis = Opi_M::where('kontrak_m_id', $kontrakm->id)
+                ->whereNotIn('status_opi', ['Cancel'])
+                ->get();
+            foreach ($relatedOpis as $opi) {
+                if ((int) $opi->mc_id === $new_mc_id) continue; // tidak berubah, skip
+
+                $old_opi_mc = Mastercard::find($opi->mc_id);
+                $old_opi_mc_label = $old_opi_mc
+                    ? $old_opi_mc->kode.($old_opi_mc->revisi ? '-'.$old_opi_mc->revisi : '')
+                    : $opi->mc_id;
+
+                $opi->mc_id         = $new_mc_id;
+                $opi->lastUpdatedBy = Auth::user()->name;
+                $opi->save();
+
+                Tracking::create([
+                    'user'   => Auth::user()->name,
+                    'tipe'   => 'OPI',
+                    'event'  => "Update OPI ".$opi->NoOPI." (Kontrak ".$kontrakm->kode.")",
+                    'before' => json_encode(['mc' => $old_opi_mc_label]),
+                    'after'  => json_encode(['mc' => $new_mc_label]),
+                ]);
+            }
+            // ===== END AUTO-UPDATE OPI =====
+
             // dd($kontrakd);
             return redirect('admin/kontraknew');
         }
