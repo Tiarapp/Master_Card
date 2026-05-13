@@ -350,35 +350,7 @@ class MastercardController extends Controller
             'tipe'   => 'Mastercard',
             'event'  => "Tambah MC ".$mc->kode."-".$mc->revisi,
             'before' => '-',
-            'after'  => json_encode([
-                'kode'                  => $mc->kode,
-                'revisi'               => $mc->revisi,
-                'namaBarang'           => $mc->namaBarang,
-                'kodeBarang'           => $mc->kodeBarang,
-                'customer'             => $mc->customer,
-                'tipeCust'             => $mc->tipeCust,
-                'tipeBox'              => $mc->tipebox,
-                'flute'                => $mc->flute,
-                'joint'                => $mc->joint,
-                'lebarSheet'           => $mc->lebarSheet,
-                'panjangSheet'         => $mc->panjangSheet,
-                'lebarSheetBox'        => $mc->lebarSheetBox,
-                'panjangSheetBox'      => $mc->panjangSheetBox,
-                'substanceKontrak_id'  => $mc->substanceKontrak_id,
-                'substanceProduksi_id' => $mc->substanceProduksi_id,
-                'gramSheetBoxKontrak'  => $mc->gramSheetBoxKontrak,
-                'gramSheetBoxProduksi' => $mc->gramSheetBoxProduksi,
-                'gramSheetCorrKontrak' => $mc->gramSheetCorrKontrak,
-                'gramSheetCorrProduksi'=> $mc->gramSheetCorrProduksi,
-                'outConv'              => $mc->outConv,
-                'koli'                 => $mc->koli,
-                'bungkus'              => $mc->bungkus,
-                'wax'                  => $mc->wax,
-                'tipeMc'               => $mc->tipeMc,
-                'keterangan'           => $mc->keterangan,
-                'box_id'               => $mc->box_id,
-                'colorCombine_id'      => $mc->colorCombine_id,
-            ]),
+            'after'  => 'Kode: '.$mc->kode.', Nama Barang: '.$mc->namaBarang.', Customer: '.$mc->customer
         ]);
         
         return redirect('mastercard');
@@ -551,38 +523,6 @@ class MastercardController extends Controller
         } else {
             $outconv = $request->outConv;
         }
-
-        // Snapshot revisi sebelumnya sebagai before
-        $mc_sebelumnya = Mastercard::where('kode', $request->kode)->orderBy('id', 'desc')->first();
-        $before_mc = $mc_sebelumnya ? json_encode([
-            'kode'                  => $mc_sebelumnya->kode,
-            'revisi'               => $mc_sebelumnya->revisi,
-            'namaBarang'           => $mc_sebelumnya->namaBarang,
-            'kodeBarang'           => $mc_sebelumnya->kodeBarang,
-            'customer'             => $mc_sebelumnya->customer,
-            'tipeCust'             => $mc_sebelumnya->tipeCust,
-            'tipeBox'              => $mc_sebelumnya->tipebox,
-            'flute'                => $mc_sebelumnya->flute,
-            'joint'                => $mc_sebelumnya->joint,
-            'lebarSheet'           => $mc_sebelumnya->lebarSheet,
-            'panjangSheet'         => $mc_sebelumnya->panjangSheet,
-            'lebarSheetBox'        => $mc_sebelumnya->lebarSheetBox,
-            'panjangSheetBox'      => $mc_sebelumnya->panjangSheetBox,
-            'substanceKontrak_id'  => $mc_sebelumnya->substancekontrak->kode ?? null,
-            'substanceProduksi_id' => $mc_sebelumnya->substanceproduksi->kode ?? null,
-            'gramSheetBoxKontrak'  => $mc_sebelumnya->gramSheetBoxKontrak,
-            'gramSheetBoxProduksi' => $mc_sebelumnya->gramSheetBoxProduksi,
-            'gramSheetCorrKontrak' => $mc_sebelumnya->gramSheetCorrKontrak,
-            'gramSheetCorrProduksi'=> $mc_sebelumnya->gramSheetCorrProduksi,
-            'outConv'              => $mc_sebelumnya->outConv,
-            'koli'                 => $mc_sebelumnya->koli,
-            'bungkus'              => $mc_sebelumnya->bungkus,
-            'wax'                  => $mc_sebelumnya->wax,
-            'tipeMc'               => $mc_sebelumnya->tipeMc,
-            'keterangan'           => $mc_sebelumnya->keterangan,
-            'box_id'               => $mc_sebelumnya->box_id,
-            'colorCombine_id'      => $mc_sebelumnya->colorcombine->nama ?? null,
-        ]) : '-';
         
         $mc = Mastercard::create([
             'kode' => $request->kode,
@@ -638,36 +578,8 @@ class MastercardController extends Controller
             'user'   => Auth::user()->name,
             'tipe'   => 'Mastercard',
             'event'  => "Tambah Revisi MC ".$mc->kode."-".$mc->revisi,
-            'before' => $before_mc,
-            'after'  => json_encode([
-                'kode'                  => $mc->kode,
-                'revisi'               => $mc->revisi,
-                'namaBarang'           => $mc->namaBarang,
-                'kodeBarang'           => $mc->kodeBarang,
-                'customer'             => $mc->customer,
-                'tipeCust'             => $mc->tipeCust,
-                'tipeBox'              => $mc->tipebox,
-                'flute'                => $mc->flute,
-                'joint'                => $mc->joint,
-                'lebarSheet'           => $mc->lebarSheet,
-                'panjangSheet'         => $mc->panjangSheet,
-                'lebarSheetBox'        => $mc->lebarSheetBox,
-                'panjangSheetBox'      => $mc->panjangSheetBox,
-                'substanceKontrak_id'  => $mc->substancekontrak->kode ?? null,
-                'substanceProduksi_id' => $mc->substanceproduksi->kode ?? null,
-                'gramSheetBoxKontrak'  => $mc->gramSheetBoxKontrak,
-                'gramSheetBoxProduksi' => $mc->gramSheetBoxProduksi,
-                'gramSheetCorrKontrak' => $mc->gramSheetCorrKontrak,
-                'gramSheetCorrProduksi'=> $mc->gramSheetCorrProduksi,
-                'outConv'              => $mc->outConv,
-                'koli'                 => $mc->koli,
-                'bungkus'              => $mc->bungkus,
-                'wax'                  => $mc->wax,
-                'tipeMc'               => $mc->tipeMc,
-                'keterangan'           => $mc->keterangan,
-                'box_id'               => $mc->box_id,
-                'colorCombine_id'      => $mc->colorcombine->nama ?? null,
-            ]),
+            'before' => '-',
+            'after'  => 'Kode: '.$mc->kode.'-'.$mc->revisi.', Nama Barang: '.$mc->namaBarang.', Customer: '.$mc->customer
         ]);
         
         return redirect('mastercard');
