@@ -668,6 +668,12 @@ class Kontrak_DController extends Controller
                 $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak')
                     ->where('kontrak_m_id', $request->idkontrakm)
                     ->first();
+
+                if ($kontrakData->mc->revisi == '' || $kontrakData->mc->revisi == 'R0') {
+                    $kodemc = $kontrakData->mc->kode;
+                } else {
+                    $kodemc = $kontrakData->mc->kode.'-'.$kontrakData->mc->revisi;
+                }
                 
                 // dd($kontrakData);
                 
@@ -762,7 +768,7 @@ class Kontrak_DController extends Controller
                     'user'       => $userName,
                     'event'      => "Tambah OPI " . $numb_opi,
                     'before'     => '-',
-                    'after'      => 'No OPI: '.$numb_opi.', Qty: '.$jumlahKirim,
+                    'after'      => 'No OPI: '.$numb_opi.', Qty: '.$jumlahKirim.', MC: '.$kodemc,
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
