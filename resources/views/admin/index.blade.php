@@ -181,7 +181,7 @@
                               'OPI'             => 'badge-warning',
                               'Mastercard'      => 'badge-danger',
                               'Box'             => 'badge-info',
-                              'Box Type'        => 'badge-secondary',
+                              'Realisasi Kirim' => 'badge-secondary',
                               'Color Combine'   => 'badge-light',
                               'Form MC'         => 'badge-dark',
                               'Form Permintaan' => 'badge-primary',

@@ -1120,7 +1120,7 @@ class Kontrak_DController extends Controller
                 
                 Tracking::create([
                     'user'   => Auth::user()->name,
-                    'tipe'   => 'Kontrak',
+                    'tipe'   => 'Realisasi Kirim',
                     'event'  => "Tambah Realisasi Kirim SJ ".$request->sj,
                     'before' => '-',
                     'after'  => 'SJ: '.$request->sj.', Qty: '.$qty.' pcs',
