@@ -364,7 +364,7 @@
 
     var tipeColorMap = {
         'Kontrak': 'badge-success', 'OPI': 'badge-warning', 'Mastercard': 'badge-danger',
-        'Box': 'badge-info', 'Box Type': 'badge-secondary', 'Color Combine': 'badge-light',
+        'Box': 'badge-info', 'Realisasi Kirim': 'badge-secondary', 'Color Combine': 'badge-light',
         'Form MC': 'badge-dark', 'Form Permintaan': 'badge-primary',
         'Plan Produksi': 'badge-warning', 'Profile': 'badge-secondary'
     };
