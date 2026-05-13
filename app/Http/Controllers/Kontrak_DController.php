@@ -777,14 +777,6 @@ class Kontrak_DController extends Controller
                 
                 return redirect()->back()
                     ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
-                
-            // } 
-            // catch (\Exception $e) {
-            //     DB::rollBack();
-            //     Log::error('Error in store_dt: ' . $e->getMessage());
-            //     return redirect()->back()
-            //         ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-            // }
         }
         
         /**

@@ -568,8 +568,8 @@ class MastercardController extends Controller
             'panjangSheet'         => $mc_sebelumnya->panjangSheet,
             'lebarSheetBox'        => $mc_sebelumnya->lebarSheetBox,
             'panjangSheetBox'      => $mc_sebelumnya->panjangSheetBox,
-            'substanceKontrak_id'  => $mc_sebelumnya->substanceKontrak_id,
-            'substanceProduksi_id' => $mc_sebelumnya->substanceProduksi_id,
+            'substanceKontrak_id'  => $mc_sebelumnya->substancekontrak->kode ?? null,
+            'substanceProduksi_id' => $mc_sebelumnya->substanceproduksi->kode ?? null,
             'gramSheetBoxKontrak'  => $mc_sebelumnya->gramSheetBoxKontrak,
             'gramSheetBoxProduksi' => $mc_sebelumnya->gramSheetBoxProduksi,
             'gramSheetCorrKontrak' => $mc_sebelumnya->gramSheetCorrKontrak,
@@ -581,7 +581,7 @@ class MastercardController extends Controller
             'tipeMc'               => $mc_sebelumnya->tipeMc,
             'keterangan'           => $mc_sebelumnya->keterangan,
             'box_id'               => $mc_sebelumnya->box_id,
-            'colorCombine_id'      => $mc_sebelumnya->colorCombine_id,
+            'colorCombine_id'      => $mc_sebelumnya->colorcombine->nama ?? null,
         ]) : '-';
         
         $mc = Mastercard::create([
@@ -653,8 +653,8 @@ class MastercardController extends Controller
                 'panjangSheet'         => $mc->panjangSheet,
                 'lebarSheetBox'        => $mc->lebarSheetBox,
                 'panjangSheetBox'      => $mc->panjangSheetBox,
-                'substanceKontrak_id'  => $mc->substanceKontrak_id,
-                'substanceProduksi_id' => $mc->substanceProduksi_id,
+                'substanceKontrak_id'  => $mc->substancekontrak->kode ?? null,
+                'substanceProduksi_id' => $mc->substanceproduksi->kode ?? null,
                 'gramSheetBoxKontrak'  => $mc->gramSheetBoxKontrak,
                 'gramSheetBoxProduksi' => $mc->gramSheetBoxProduksi,
                 'gramSheetCorrKontrak' => $mc->gramSheetCorrKontrak,
@@ -666,7 +666,7 @@ class MastercardController extends Controller
                 'tipeMc'               => $mc->tipeMc,
                 'keterangan'           => $mc->keterangan,
                 'box_id'               => $mc->box_id,
-                'colorCombine_id'      => $mc->colorCombine_id,
+                'colorCombine_id'      => $mc->colorcombine->nama ?? null,
             ]),
         ]);
         
