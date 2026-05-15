@@ -781,6 +781,30 @@ Route::middleware(['auth'])->group(function (){
                 ->orderBy('created_at', 'desc')->take(100)->get();
             return response()->json($tracking_updates);
         })->name('admin.tracking.json');
+
+        // Activity Tracking - View All (read-only)
+        Route::get('/admin/tracking', function (\Illuminate\Http\Request $request) {
+            $query = \App\Models\Tracking::orderBy('created_at', 'desc');
+
+            if ($request->filled('tipe')) {
+                $query->where('tipe', $request->tipe);
+            }
+            if ($request->filled('user')) {
+                $query->where('user', $request->user);
+            }
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+
+            $trackings = $query->paginate(50);
+            $tipes = \App\Models\Tracking::select('tipe')->distinct()->whereNotNull('tipe')->orderBy('tipe')->pluck('tipe');
+            $users = \App\Models\Tracking::select('user')->distinct()->whereNotNull('user')->orderBy('user')->pluck('user');
+
+            return view('admin.tracking.index', compact('trackings', 'tipes', 'users'));
+        })->name('admin.tracking.index');
 }); 
 
 require __DIR__ . '/auth.php';

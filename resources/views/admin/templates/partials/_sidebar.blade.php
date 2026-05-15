@@ -627,6 +627,16 @@
           </li>
           @endif
 
+          {{-- Activity Tracking - accessible by IT admin --}}
+          @if ((hasMenuAccess('it_admin') && getDivisiMenuAccess([2])) || (!Auth::user()->company_id && getDivisiMenuAccess([2])))
+            <li class="nav-item">
+              <a href="{{ route('admin.tracking.index') }}" class="nav-link {{ request()->routeIs('admin.tracking.index') ? 'active' : '' }}">
+                <i class="fas fa-history nav-icon"></i>
+                <p>Activity Tracking</p>
+              </a>
+            </li>
+          @endif
+
           {{-- Feedback Menu - accessible by all users --}}
           @if ((hasMenuAccess('it_admin') && getDivisiMenuAccess([2])) || (!Auth::user()->company_id && getDivisiMenuAccess([2])))
           <li class="nav-item">
