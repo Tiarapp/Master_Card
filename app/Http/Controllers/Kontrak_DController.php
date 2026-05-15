@@ -766,6 +766,7 @@ class Kontrak_DController extends Controller
                 // OPTIMIZED: Simple tracking insert
                 DB::table('tracking')->insert([
                     'user'       => $userName,
+                    'tipe'       => 'OPI',
                     'event'      => "Tambah OPI " . $numb_opi,
                     'before'     => '-',
                     'after'      => 'No OPI: '.$numb_opi.', Qty: '.$jumlahKirim.', MC: '.$kodemc,
