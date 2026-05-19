@@ -162,6 +162,7 @@ code {
                                         <th class="text-center d-none d-md-table-cell">Saldo (Kg)</th>
                                         <th class="text-center d-none d-lg-table-cell">Berat Standart</th>
                                         <th class="text-center d-none d-xl-table-cell">Isi Karton</th>
+                                        <th class="text-center d-none d-lg-table-cell">Mutasi Terakhir</th>
                                         <th class="text-center action-column">Action</th>
                                     </tr>
                                 </thead>
@@ -196,6 +197,15 @@ code {
                                             </td>
                                             <td class="text-center d-none d-xl-table-cell">
                                                 {{ number_format($item->IsiPerKarton, 0) }}
+                                            </td>
+                                            <td class="text-center d-none d-lg-table-cell">
+                                                @if(!empty($lastMutasi[$item->KodeBrg]))
+                                                    <span class="badge badge-info">
+                                                        {{ \Carbon\Carbon::parse($lastMutasi[$item->KodeBrg])->format('d/m/Y') }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
                                             </td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
