@@ -83,8 +83,11 @@ class ProfileController extends Controller
 
             // Log the activity
             Tracking::create([
-                'user' => $user->name,
-                'event' => 'Password berhasil diubah'
+                'user'   => $user->name,
+                'tipe'   => 'Profile',
+                'event'  => 'Password berhasil diubah',
+                'before' => 'Password lama',
+                'after'  => 'Password baru berhasil diset',
             ]);
 
             // Performance monitoring
@@ -137,14 +140,19 @@ class ProfileController extends Controller
             ]);
 
             // Update user information
+            $old_name  = $user->name;
+            $old_email = $user->email;
             $user->name = $request->name;
             $user->email = $request->email;
             $user->save();
 
             // Log the activity
             Tracking::create([
-                'user' => $user->name,
-                'event' => 'Profile berhasil diperbarui'
+                'user'   => $user->name,
+                'tipe'   => 'Profile',
+                'event'  => 'Profile berhasil diperbarui',
+                'before' => 'Nama: '.$old_name.', Email: '.$old_email,
+                'after'  => 'Nama: '.$request->name.', Email: '.$request->email,
             ]);
 
             return redirect()->route('profile.index')

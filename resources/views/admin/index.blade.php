@@ -143,6 +143,119 @@
           
         </div>
       @endif
+      @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2)
+        <div class="col-md-12 mt-3">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-history mr-1"></i> Activity Tracking
+              </h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0" style="max-height: 600px; overflow-y: auto;">
+              @if(isset($tracking_updates) && $tracking_updates->count() > 0)
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover table-striped mb-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th style="width: 40px;">#</th>
+                        <th>User</th>
+                        <th>Tipe</th>
+                        <th>Event</th>
+                        <th>Sebelum Perubahan</th>
+                        <th>Setelah Perubahan</th>
+                        <th style="white-space: nowrap;">Waktu</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tracking-tbody">
+                      @foreach($tracking_updates as $i => $track)
+                        @php
+                          $beforeDecoded = json_decode($track->before, true);
+                          $afterDecoded  = json_decode($track->after, true);
+                          $tipeColorMap = [
+                              'Kontrak'         => 'badge-success',
+                              'OPI'             => 'badge-warning',
+                              'Mastercard'      => 'badge-danger',
+                              'Box'             => 'badge-info',
+                              'Realisasi Kirim' => 'badge-secondary',
+                              'Color Combine'   => 'badge-light',
+                              'Form MC'         => 'badge-dark',
+                              'Form Permintaan' => 'badge-primary',
+                              'Plan Produksi'   => 'badge-warning',
+                              'Profile'         => 'badge-secondary',
+                          ];
+                          $tipeColor = isset($tipeColorMap[$track->tipe]) ? $tipeColorMap[$track->tipe] : 'badge-secondary';
+
+                          // Hanya ambil field yang berubah
+                          $changedKeys = [];
+                          if ($beforeDecoded && is_array($beforeDecoded) && $afterDecoded && is_array($afterDecoded)) {
+                              foreach ($afterDecoded as $k => $v) {
+                                  $oldVal = isset($beforeDecoded[$k]) ? $beforeDecoded[$k] : null;
+                                  if ((string)$oldVal !== (string)$v) {
+                                      $changedKeys[] = $k;
+                                  }
+                              }
+                          }
+                        @endphp
+                        <tr>
+                          <td class="text-muted">{{ $i + 1 }}</td>
+                          <td>
+                            <span class="badge badge-primary">{{ $track->user }}</span>
+                          </td>
+                          <td style="white-space: nowrap;">
+                            <span class="badge {{ $tipeColor }}">{{ $track->tipe ?? '-' }}</span>
+                          </td>
+                          <td>{{ $track->event }}</td>
+                          <td style="font-size: 0.82em; max-width: 220px;">
+                            @if($beforeDecoded && is_array($beforeDecoded) && count($changedKeys) > 0)
+                              @foreach($changedKeys as $key)
+                                @if(isset($beforeDecoded[$key]))
+                                  <div><span class="text-muted">{{ $key }}:</span> {{ $beforeDecoded[$key] ?? '-' }}</div>
+                                @endif
+                              @endforeach
+                            @elseif(!$beforeDecoded || !is_array($beforeDecoded))
+                              <span class="text-muted">{{ $track->before ?? '-' }}</span>
+                            @else
+                              <span class="text-muted">-</span>
+                            @endif
+                          </td>
+                          <td style="font-size: 0.82em; max-width: 220px;">
+                            @if($afterDecoded && is_array($afterDecoded) && count($changedKeys) > 0)
+                              @foreach($changedKeys as $key)
+                                @if(isset($afterDecoded[$key]))
+                                  <div class="font-weight-bold text-success">
+                                    <span class="text-muted">{{ $key }}:</span> {{ $afterDecoded[$key] ?? '-' }}
+                                  </div>
+                                @endif
+                              @endforeach
+                            @elseif(!$afterDecoded || !is_array($afterDecoded))
+                              <span class="text-muted">{{ $track->after ?? '-' }}</span>
+                            @else
+                              <span class="text-success">-</span>
+                            @endif
+                          </td>
+                          <td class="text-muted" style="white-space: nowrap; font-size: 0.85em;">
+                            {{ \Carbon\Carbon::parse($track->created_at)->format('d/m/Y H:i') }}
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              @else
+                <div class="text-center text-muted p-4">
+                  <i class="fas fa-inbox fa-2x mb-2"></i>
+                  <p class="mb-0">Belum ada aktivitas terbaru.</p>
+                </div>
+              @endif
+            </div>
+          </div>
+        </div>
+      @endif
       <!-- /.row -->
     </div><!-- /.container-fluid -->
   </section>
@@ -243,5 +356,73 @@
       options: barChartOptions
     })
   })
+</script>
+
+<script>
+(function($) {
+    if (!$('#tracking-tbody').length) return;
+
+    var tipeColorMap = {
+        'Kontrak': 'badge-success', 'OPI': 'badge-warning', 'Mastercard': 'badge-danger',
+        'Box': 'badge-info', 'Realisasi Kirim': 'badge-secondary', 'Color Combine': 'badge-light',
+        'Form MC': 'badge-dark', 'Form Permintaan': 'badge-primary',
+        'Plan Produksi': 'badge-warning', 'Profile': 'badge-secondary'
+    };
+
+    function esc(v) {
+        if (v === null || v === undefined) return '-';
+        return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function fmtDate(s) {
+        var d = new Date(s);
+        return [String(d.getDate()).padStart(2,'0'), String(d.getMonth()+1).padStart(2,'0'), d.getFullYear()].join('/')
+            + ' ' + [String(d.getHours()).padStart(2,'0'), String(d.getMinutes()).padStart(2,'0')].join(':');
+    }
+
+    function buildRows(data) {
+        if (!data.length) return '<tr><td colspan="7" class="text-center text-muted p-3">Belum ada aktivitas terbaru.</td></tr>';
+        return data.map(function(t, i) {
+            var bef = null, aft = null;
+            try { bef = t.before ? JSON.parse(t.before) : null; } catch(e) {}
+            try { aft = t.after  ? JSON.parse(t.after)  : null; } catch(e) {}
+
+            var changed = [];
+            if (bef && typeof bef === 'object' && aft && typeof aft === 'object') {
+                Object.keys(aft).forEach(function(k) {
+                    if (String(bef[k] !== undefined ? bef[k] : null) !== String(aft[k])) changed.push(k);
+                });
+            }
+
+            var befHtml = '', aftHtml = '';
+            if (changed.length && bef && typeof bef === 'object') {
+                changed.forEach(function(k) { if (bef[k] !== undefined) befHtml += '<div><span class="text-muted">'+esc(k)+':</span> '+esc(bef[k])+'</div>'; });
+                changed.forEach(function(k) { if (aft[k] !== undefined) aftHtml += '<div class="font-weight-bold text-success"><span class="text-muted">'+esc(k)+':</span> '+esc(aft[k])+'</div>'; });
+            } else if (!bef || typeof bef !== 'object') {
+                befHtml = '<span class="text-muted">'+esc(t.before)+'</span>';
+                aftHtml = '<span class="text-muted">'+esc(t.after)+'</span>';
+            } else {
+                befHtml = aftHtml = '<span class="text-muted">-</span>';
+            }
+
+            return '<tr><td class="text-muted">'+(i+1)+'</td>'
+                +'<td><span class="badge badge-primary">'+esc(t.user)+'</span></td>'
+                +'<td style="white-space:nowrap;"><span class="badge '+(tipeColorMap[t.tipe]||'badge-secondary')+'">'+esc(t.tipe)+'</span></td>'
+                +'<td>'+esc(t.event)+'</td>'
+                +'<td style="font-size:0.82em;max-width:220px;">'+befHtml+'</td>'
+                +'<td style="font-size:0.82em;max-width:220px;">'+aftHtml+'</td>'
+                +'<td class="text-muted" style="white-space:nowrap;font-size:0.85em;">'+fmtDate(t.created_at)+'</td></tr>';
+        }).join('');
+    }
+
+    function refreshTracking() {
+        $.getJSON('{{ route("admin.tracking.json") }}', function(data) {
+            $('#tracking-tbody').html(buildRows(data));
+        });
+    }
+
+    // Auto-refresh setiap 1 menit
+    setInterval(refreshTracking, 1 * 60 * 1000);
+})(jQuery);
 </script>
 @endsection

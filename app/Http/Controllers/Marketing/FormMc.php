@@ -52,8 +52,11 @@ class FormMc extends Controller
         ]);
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => 'Tambah Form Mastercard MC'.$res
+            'user'   => Auth::user()->name,
+            'tipe'   => 'Form MC',
+            'event'  => 'Tambah Form Mastercard MC'.$res,
+            'before' => '-',
+            'after'  => 'Kode: MC'.$res.', Customer: '.$request->cust.', Barang: '.$request->barang,
         ]);
         return redirect('admin/marketing/formmc')->with('success', "Data Berhasil disimpan dengan kode = MC".$res);
     }
@@ -68,6 +71,13 @@ class FormMc extends Controller
     public function update(Request $request, $id)
     {
         $form = MarketingFormMc::where('kode', $id)->first();
+        $old_customer_mc = $form->customer;
+        $old_barang_mc   = $form->barang;
+        $before_formmc = json_encode([
+            'customer'    => $form->customer,
+            'barang'      => $form->barang,
+            'keterangan'  => $form->keterangan,
+        ]);
 
         $form->customer = $request->input('customer');
         $form->barang = $request->input('barang');
@@ -76,8 +86,15 @@ class FormMc extends Controller
         $form->save();
 
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => 'Update Form Mastercard '.$form->kode
+            'user'   => Auth::user()->name,
+            'tipe'   => 'Form MC',
+            'event'  => 'Update Form Mastercard '.$form->kode,
+            'before' => $before_formmc,
+            'after'  => json_encode([
+                'customer'   => $request->input('customer'),
+                'barang'     => $request->input('barang'),
+                'keterangan' => $form->keterangan,
+            ]),
         ]);
 
         return redirect('/admin/marketing/formmc')->with('success', 'Data berhasil diubah !!');

@@ -49,8 +49,11 @@ class BoxTypeController extends Controller
         $type = BoxType::create($request->all());
         
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Ubah Tipe ".$type->kode
+            'user'   => Auth::user()->name,
+            'tipe'   => 'Box Type',
+            'event'  => "Tambah Tipe ".$type->kode,
+            'before' => '-',
+            'after'  => 'Kode: '.$type->kode.', Nama: '.$type->nama,
         ]);
 
         return redirect('admin/boxtype');
@@ -99,6 +102,12 @@ class BoxTypeController extends Controller
         ]);
 
         $boxtype = BoxType::find($id);
+        $old_nama_type = $boxtype->nama;
+        $before_boxtype = json_encode([
+            'kode'   => $boxtype->kode,
+            'nama'   => $boxtype->nama,
+            'branch' => $boxtype->branch,
+        ]);
 
         $boxtype->kode = $request->kode;
         $boxtype->nama = $request->nama;
@@ -108,8 +117,15 @@ class BoxTypeController extends Controller
         $boxtype->save();
         
         Tracking::create([
-            'user' => Auth::user()->name,
-            'event' => "Ubah Box ".$boxtype->kode
+            'user'   => Auth::user()->name,
+            'tipe'   => 'Box Type',
+            'event'  => "Ubah Tipe Box ".$boxtype->kode,
+            'before' => $before_boxtype,
+            'after'  => json_encode([
+                'kode'   => $request->kode,
+                'nama'   => $request->nama,
+                'branch' => $request->branch,
+            ]),
         ]);
 
         return redirect('admin/boxtype');

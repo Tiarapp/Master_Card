@@ -322,6 +322,7 @@
                                                         <option value="OUP Joint dan Flute">OUP Joint dan Flute</option>
                                                         <option value="OUP Warna Kertas">OUP Warna Kertas</option>
                                                         <option value="OUP Warna, Ukuran, Design, dan Kualitas">OUP Warna, Ukuran, Design, dan Kualitas</option>
+                                                        <option value="OUP Nama, Kualitas, dan Flute">OUP Nama, Kualitas, dan Flute</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -774,6 +775,7 @@
                         </div>
                     </div>
                         <input type="hidden" class="form-control txt_line" name="createdBy" id="createdBy" value="{{ Auth::user()->name }}">
+
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>

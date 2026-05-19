@@ -112,7 +112,11 @@ Route::get('/admin', function () {
     $kontrak = Kontrak_M::where('tglKontrak', 'LIKE', '%'.$periode.'%')
             ->get();
     $jumlah_kontrak = count($kontrak);
-    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open'));
+
+    $tracking_updates = \App\Models\Tracking::whereIn('tipe', ['Mastercard', 'Kontrak', 'OPI'])
+        ->orderBy('created_at', 'desc')->take(100)->get();
+
+    return view('admin.index', compact('jumlah_kontrak','tonase','realisasi', 'all_periode','data', 'kontrak_open', 'tracking_updates'));
 })->middleware(['auth'])->name('admin');
 
 
@@ -770,6 +774,37 @@ Route::middleware(['auth'])->group(function (){
 
         Route::get('/admin/stellar_bp', [BbmController::class, 'index'])->name('stellar.bp.index');
         Route::get('/admin/stellar_bp/export', [BbmController::class, 'export'])->name('stellar.bp.export');
+
+        // Activity Tracking JSON endpoint
+        Route::get('/admin/tracking-json', function () {
+            $tracking_updates = \App\Models\Tracking::whereIn('tipe', ['Mastercard', 'Kontrak', 'OPI'])
+                ->orderBy('created_at', 'desc')->take(100)->get();
+            return response()->json($tracking_updates);
+        })->name('admin.tracking.json');
+
+        // Activity Tracking - View All (read-only)
+        Route::get('/admin/tracking', function (\Illuminate\Http\Request $request) {
+            $query = \App\Models\Tracking::orderBy('created_at', 'desc');
+
+            if ($request->filled('tipe')) {
+                $query->where('tipe', $request->tipe);
+            }
+            if ($request->filled('user')) {
+                $query->where('user', $request->user);
+            }
+            if ($request->filled('date_from')) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+
+            $trackings = $query->paginate(50);
+            $tipes = \App\Models\Tracking::select('tipe')->distinct()->whereNotNull('tipe')->orderBy('tipe')->pluck('tipe');
+            $users = \App\Models\Tracking::select('user')->distinct()->whereNotNull('user')->orderBy('user')->pluck('user');
+
+            return view('admin.tracking.index', compact('trackings', 'tipes', 'users'));
+        })->name('admin.tracking.index');
 }); 
 
 require __DIR__ . '/auth.php';
