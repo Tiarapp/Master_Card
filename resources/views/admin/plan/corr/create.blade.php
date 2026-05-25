@@ -1143,12 +1143,18 @@ $(document).ready(function(){
         const tipebox = row.find('input[name="tipebox[]"]').val();
         const flute = row.find('input[name="flute[]"]').val();
 
-        // Calculate UkRoll
+        // Calculate UkRoll - only auto-calculate if roll field is still empty
+        const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
         let UkRoll;
-        if (tipebox === 'DC') {
-            UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
+        if (existingRoll > 0) {
+            UkRoll = existingRoll; // Preserve manually set / previously calculated value
         } else {
-            UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
+            if (tipebox === 'DC') {
+                UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
+            } else {
+                UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
+            }
+            row.find('input[name="roll[]"]').val(UkRoll);
         }
 
         let flute1, flute2;
@@ -1206,8 +1212,7 @@ $(document).ready(function(){
             kebutuhanBawah = rmorder * (UkRoll / 1000) * gramBawah / 1000;
         }
 
-        // Update calculated fields in table
-        row.find('input[name="roll[]"]').val(UkRoll);
+        // Update calculated fields in table (roll is already set above if needed)
         row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
         row.find('input[name="cop[]"]').val(cop.toFixed(0));
         row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
