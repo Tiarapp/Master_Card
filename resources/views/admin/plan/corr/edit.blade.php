@@ -266,12 +266,12 @@
                                                     <input type="number" name="order[]" value="{{ $detail->order_qty ?? 0 }}" class="form-control form-control-sm order-input" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="outCorr[]" value="{{ $detail->out_corr }}" class="form-control form-control-sm outcorr-input" step="0.001" required>
+                                                    <input type="number" name="outCorr[]" value="{{ $detail->out_corr }}" class="form-control form-control-sm outcorr-input" step="1" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="outFlexo[]" value="{{ $detail->out_flx }}" class="form-control form-control-sm outflexo-input" required>
+                                                    <input type="number" name="outFlexo[]" value="{{ $detail->out_flx }}" class="form-control form-control-sm outflexo-input" step="1" required>
                                                 </td>
-                                                <td><input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[]" value="{{ $detail->opi->mc->tipeBox === 'B1' ? 1 : 0 }}" readonly></td>
+                                                <td><input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[]" value="{{ $detail->opi->mc->tipeBox === 'B1' ? 1 : 0 }}" step="1"></td>
                                                 <td>{{ number_format($detail->opi->gramSheet ?? $detail->opi->mc->gramSheetBoxProduksi ?? 0, 3) }}</td>
                                                 <td>
                                                     <input type="number" class="form-control form-control-sm roll-result" name="roll[]" value="{{ $detail->lebar_roll }}">
