@@ -72,7 +72,13 @@
         color: #495057 !important;
         cursor: default;
     }
-    .selected-opis-table .roll-result,
+    .selected-opis-table .roll-result {
+        background-color: #fff3cd !important;
+        border-color: #ffc107 !important;
+        color: #495057 !important;
+        font-weight: bold;
+        cursor: text;
+    }
     .selected-opis-table .plan-result,
     .selected-opis-table .cop-result,
     .selected-opis-table .rmorder-result {
@@ -236,6 +242,7 @@
                                                 <input type="hidden" name="detail_id[]" value="{{ $detail->id }}">
                                                 <input type="hidden" name="opi_id[]" value="{{ $detail->opi_id }}">
                                                 <input type="hidden" name="flute[]" value="{{ $detail->opi->mc->flute ?? '' }}">
+                                                <input type="hidden" name="tipebox[]" value="{{ $detail->opi->mc->tipeBox ?? '' }}">
                                                 <td>
                                                     <input type="number" name="urutan[]" value="{{ $detail->urutan }}" class="form-control form-control-sm" required>
                                                 </td>
@@ -256,20 +263,20 @@
                                                 </td>
                                                 <td>{{ ($detail->opi->mc->tipeBox ?? $detail->opi->tipeBox ?? 'N/A') . '/' . ($detail->opi->mc->flute ?? $detail->opi->flute ?? 'N/A') }}</td>
                                                 <td>
-                                                    <input type="number" name="order[]" value="{{ $detail->order_qty ?? 0 }}" class="form-control form-control-sm" required>
+                                                    <input type="number" name="order[]" value="{{ $detail->order_qty ?? 0 }}" class="form-control form-control-sm order-input" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="outCorr[]" value="{{ $detail->out_corr }}" class="form-control form-control-sm" step="0.001" required>
+                                                    <input type="number" name="outCorr[]" value="{{ $detail->out_corr }}" class="form-control form-control-sm outcorr-input" step="0.001" required>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="outFlexo[]" value="{{ $detail->out_flx }}" class="form-control form-control-sm" required>
+                                                    <input type="number" name="outFlexo[]" value="{{ $detail->out_flx }}" class="form-control form-control-sm outflexo-input" required>
                                                 </td>
-                                                <td>{{ $detail->opi->mc->tipeBox === 'B1' ? 1 : 0 }}%</td>
+                                                <td><input type="number" class="form-control form-control-sm toleransi-input" name="toleransi[]" value="{{ $detail->opi->mc->tipeBox === 'B1' ? 1 : 0 }}" readonly></td>
                                                 <td>{{ number_format($detail->opi->gramSheet ?? $detail->opi->mc->gramSheetBoxProduksi ?? 0, 3) }}</td>
                                                 <td>
                                                     <input type="number" class="form-control form-control-sm roll-result" name="roll[]" value="{{ $detail->lebar_roll }}">
                                                 </td>
-                                                <td><input type="number" class="form-control form-control-sm" name="sheetl[]" step="0.001" value="{{ $detail->plan_plus ?? 0 }}"></td>
+                                                <td><input type="number" class="form-control form-control-sm plan-result" name="plan[]" step="0.001" value="{{ $detail->plan_plus ?? 0 }}" readonly></td>
                                                 <td><input type="number" class="form-control form-control-sm" name="trim[]" step="0.001" value="{{ $detail->trim_waste }}"></td>
                                                 <td><input type="number" class="form-control form-control-sm cop-result" name="cop[]" step="0.001" value="{{ $detail->cop_plus }}" readonly></td>
                                                 <td><input type="number" class="form-control form-control-sm rmorder-result" name="rmorder[]" step="0.001" value="{{ $detail->rm_total }}" readonly></td>
@@ -759,7 +766,8 @@ $(document).ready(function(){
                 <td>
                     <input type="hidden" name="opi_id[]" value="${opi.id}">
                     <input type="hidden" name="mc_id[]" value="${opi.mc?.id || ''}">
-                    <input type="text" name="flute[]" value="${opi.mc?.flute || ''}">
+                    <input type="hidden" name="flute[]" value="${opi.mc?.flute || ''}">
+                    <input type="hidden" name="tipebox[]" value="${opi.mc?.tipeBox || ''}">
                     <input type="number" class="form-control form-control-sm" name="urutan[]" value="${itemCounter}" required>
                 </td>
                 <td>${opi.NoOPI || '-'}</td>
@@ -796,7 +804,7 @@ $(document).ready(function(){
                     <input type="number" class="form-control form-control-sm beratsheet-input" name="beratSheet[]" value="${opi.mc?.gramSheetBoxProduksi || ''}" step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]" readonly>
+                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]">
                 </td>
                 <td>
                     <input type="number" class="form-control form-control-sm plan-result" name="plan[]" readonly step="0.01">
@@ -923,7 +931,7 @@ $(document).ready(function(){
     }
 
     // Auto calculate when Out Corr or other key fields change
-    $(document).on('input change', 'input[name="outCorr[]"], input[name="jumlahOrder[]"], input[name="outFlexo[]"]', function() {
+    $(document).on('input change', '.outcorr-input, .order-input, .toleransi-input, .outflexo-input, .beratsheet-input', function() {
         const row = $(this).closest('tr');
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
@@ -932,7 +940,7 @@ $(document).ready(function(){
     });
 
     // Auto calculate when sheet dimensions change
-    $(document).on('input change', 'input[name="sheetp[]"], input[name="sheetl[]"], input[name="trim[]"]', function() {
+    $(document).on('input change', 'input[name="sheetp[]"], input[name="sheetl[]"], input[name="tipebox[]"]', function() {
         const row = $(this).closest('tr');
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
@@ -941,12 +949,61 @@ $(document).ready(function(){
     });
 
     // Auto calculate when gram inputs change (affects paper requirements)
-    $(document).on('input change', 'input[name="kertas_atas[]"], input[name="kertas_flute1[]"], input[name="kertas_tengah[]"], input[name="kertas_flute2[]"], input[name="kertas_bawah[]"]', function() {
+    $(document).on('input change', '.gramatas-input, .gramflute1-input, .gramtengah-input, .gramflute2-input, .grambawah-input', function() {
         const row = $(this).closest('tr');
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
             calculateRowRequirements(row);
         }
+    });
+
+    // Auto calculate when roll is manually changed by user
+    $(document).on('input change', '.roll-result', function() {
+        const row = $(this).closest('tr');
+        const UkRoll = parseFloat($(this).val()) || 0;
+        if (UkRoll <= 0) return;
+
+        const sheetl    = parseFloat(row.find('input[name="sheetl[]"]').val()) || 0;
+        const sheetp    = parseFloat(row.find('input[name="sheetp[]"]').val()) || 0;
+        const outCorr   = parseFloat(row.find('input[name="outCorr[]"]').val()) || 0;
+        const outFlexo  = parseFloat(row.find('input[name="outFlexo[]"]').val()) || 0;
+        const order     = parseFloat(row.find('input[name="order[]"]').val()) || 0;
+        const toleransi = parseFloat(row.find('input[name="toleransi[]"]').val()) || 0;
+        const flute     = row.find('input[name="flute[]"]').val();
+
+        let flute1 = 0, flute2 = 0;
+        if (flute === 'BF')       { flute1 = 1.36; flute2 = 0; }
+        else if (flute === 'CF')  { flute1 = 0;    flute2 = 1.46; }
+        else if (flute === 'BCF') { flute1 = 1.36; flute2 = 1.46; }
+        else if (flute === 'EF')  { flute1 = 1.2;  flute2 = 0; }
+        else if (flute === 'EBF') { flute1 = 1.46; flute2 = 1.2; }
+
+        const qtyPlan = outFlexo > 0 ? (order + (order * (toleransi / 100))) / outFlexo : 0;
+        const cop     = outCorr  > 0 ? qtyPlan / outCorr : 0;
+        const trim    = UkRoll - (sheetl * outCorr);
+        const rmorder = (sheetp * cop) / 1000;
+
+        const gramAtas   = parseFloat(row.find('input[name="gramAtas[]"]').val())   || 0;
+        const gramFlute1 = parseFloat(row.find('input[name="gramFlute1[]"]').val()) || 0;
+        const gramTengah = parseFloat(row.find('input[name="gramTengah[]"]').val()) || 0;
+        const gramFlute2 = parseFloat(row.find('input[name="gramFlute2[]"]').val()) || 0;
+        const gramBawah  = parseFloat(row.find('input[name="gramBawah[]"]').val())  || 0;
+
+        const kebutuhanAtas   = gramAtas   > 0 ? rmorder * (UkRoll / 1000) * gramAtas   / 1000            : 0;
+        const kebutuhanFlute1 = gramFlute1 > 0 ? rmorder * (UkRoll / 1000) * (gramFlute1 / 1000) * flute1 : 0;
+        const kebutuhanTengah = gramTengah > 0 ? rmorder * (UkRoll / 1000) * gramTengah / 1000            : 0;
+        const kebutuhanFlute2 = gramFlute2 > 0 ? rmorder * (UkRoll / 1000) * (gramFlute2 / 1000) * flute2 : 0;
+        const kebutuhanBawah  = gramBawah  > 0 ? rmorder * (UkRoll / 1000) * gramBawah  / 1000            : 0;
+
+        row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
+        row.find('input[name="trim[]"]').val(trim.toFixed(0));
+        row.find('input[name="cop[]"]').val(cop.toFixed(0));
+        row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
+        row.find('input[name="kebutuhanAtas[]"]').val(Math.round(kebutuhanAtas));
+        row.find('input[name="kebutuhanFlute1[]"]').val(Math.round(kebutuhanFlute1));
+        row.find('input[name="kebutuhanTengah[]"]').val(Math.round(kebutuhanTengah));
+        row.find('input[name="kebutuhanFlute2[]"]').val(Math.round(kebutuhanFlute2));
+        row.find('input[name="kebutuhanBawah[]"]').val(Math.round(kebutuhanBawah));
     });
 
     // Calculate individual row requirements
@@ -971,7 +1028,7 @@ $(document).ready(function(){
             UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
         }
 
-        let flute1, flute2;
+        let flute1 = 0, flute2 = 0;
 
         if(flute == 'BF'){
             flute1 = 1.36;
