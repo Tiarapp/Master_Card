@@ -130,7 +130,49 @@ class BarangController extends Controller
 
         $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);
 
-        return view('admin.fg.barang.indexnew', compact('barang', 'periode', 'month'));
+        // Get last mutation dates for items on current page
+        $kodeBrgList = $barang->pluck('KodeBrg')->toArray();
+
+        $lastPhp = DB::connection('firebird2')->table('TDetPHP')
+            ->leftJoin('TPHP', 'TDetPHP.NoPHP', '=', 'TPHP.NoBukti')
+            ->select('TDetPHP.KodeBrg', DB::raw('MAX("TPHP"."TglPHP") as "TglMax"'))
+            ->whereIn('TDetPHP.KodeBrg', $kodeBrgList)
+            ->groupBy('TDetPHP.KodeBrg')
+            ->pluck('TglMax', 'KodeBrg');
+
+        $lastBbm = DB::connection('firebird2')->table('TDetBBMLuar')
+            ->leftJoin('TBBMLuar', 'TDetBBMLuar.NoBBM', '=', 'TBBMLuar.NoBukti')
+            ->select('TDetBBMLuar.KodeBrg', DB::raw('MAX("TBBMLuar"."TglBBM") as "TglMax"'))
+            ->whereIn('TDetBBMLuar.KodeBrg', $kodeBrgList)
+            ->groupBy('TDetBBMLuar.KodeBrg')
+            ->pluck('TglMax', 'KodeBrg');
+
+        $lastSj = DB::connection('firebird2')->table('TDetSJ')
+            ->leftJoin('TSuratJalan', 'TDetSJ.NomerSJ', '=', 'TSuratJalan.NomerSJ')
+            ->select('TDetSJ.KodeBrg', DB::raw('MAX("TSuratJalan"."TglSJ") as "TglMax"'))
+            ->whereIn('TDetSJ.KodeBrg', $kodeBrgList)
+            ->groupBy('TDetSJ.KodeBrg')
+            ->pluck('TglMax', 'KodeBrg');
+
+        $lastRepack = DB::connection('firebird2')->table('TDetRepack')
+            ->leftJoin('TRepack', 'TDetRepack.NoRepack', '=', 'TRepack.NoRepack')
+            ->select('TDetRepack.KodeBrg', DB::raw('MAX("TRepack"."TglRepack") as "TglMax"'))
+            ->whereIn('TDetRepack.KodeBrg', $kodeBrgList)
+            ->groupBy('TDetRepack.KodeBrg')
+            ->pluck('TglMax', 'KodeBrg');
+
+        $lastMutasi = [];
+        foreach ($kodeBrgList as $kode) {
+            $dates = array_filter([
+                $lastPhp[$kode] ?? null,
+                $lastBbm[$kode] ?? null,
+                $lastSj[$kode] ?? null,
+                $lastRepack[$kode] ?? null,
+            ]);
+            $lastMutasi[$kode] = !empty($dates) ? max($dates) : null;
+        }
+
+        return view('admin.fg.barang.indexnew', compact('barang', 'periode', 'month', 'lastMutasi'));
     }
 
     /**
