@@ -933,9 +933,11 @@ class Kontrak_DController extends Controller
                     ? $old_opi_mc->kode.($old_opi_mc->revisi ? '-'.$old_opi_mc->revisi : '')
                     : $opi->mc_id;
 
+                $opi->timestamps    = false;
                 $opi->mc_id         = $new_mc_id;
                 $opi->lastUpdatedBy = Auth::user()->name;
                 $opi->save();
+                $opi->timestamps    = true;
 
                 Tracking::create([
                     'user'   => Auth::user()->name,
