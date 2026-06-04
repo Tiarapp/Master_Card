@@ -2,12 +2,16 @@
 
 if (!function_exists('hasMenuAccess')) {
     /**
-     * Check if current user has access to specific menu key.
+     * Check if current user has access to a menu key (parent or sub-menu).
      *
-     * Priority:
-     *  1. If the user has any roles assigned → use role-based permission check.
-     *  2. If the user has no roles and no company_id → legacy IT admin (allow all).
-     *  3. If the user has no roles but has company_id → use legacy MenuPermission table.
+     * Rules:
+     *  1. If user has roles → role-based check:
+     *     - For a PARENT slug (e.g. 'accounting'):
+     *       visible if user has 'accounting' OR any 'accounting.*' child permission.
+     *     - For a CHILD slug (e.g. 'accounting.cust'):
+     *       visible if user has 'accounting' (parent) OR 'accounting.cust' specifically.
+     *  2. No roles + no company_id → legacy IT admin (allow all).
+     *  3. No roles + has company_id → use legacy MenuPermission table (parent slug only).
      */
     function hasMenuAccess($menuKey)
     {
@@ -17,25 +21,36 @@ if (!function_exists('hasMenuAccess')) {
             return false;
         }
 
-        // 1. Role-based check (new system)
+        // 1. Role-based check
         if ($user->roles()->exists()) {
-            return $user->hasPermission($menuKey);
+            $userPerms = $user->getAllPermissions();
+
+            if (str_contains($menuKey, '.')) {
+                // Child slug: allow if user has the parent OR the specific child
+                $parentSlug = explode('.', $menuKey)[0];
+                return $userPerms->contains($parentSlug) || $userPerms->contains($menuKey);
+            }
+
+            // Parent slug: allow if user has exact slug OR any child permission of this parent
+            return $userPerms->contains($menuKey)
+                || $userPerms->filter(fn($s) => str_starts_with($s, $menuKey . '.'))->isNotEmpty();
         }
 
-        // 2. No roles assigned yet — legacy behaviour
-        // Users without a company are considered IT/admin (full access)
+        // 2. Legacy: no roles, no company → full access (IT admin)
         if (!$user->company_id) {
             return true;
         }
 
-        // 3. Company user without roles → use MenuPermission table
+        // 3. Legacy MenuPermission table (supports parent slugs only)
         if (!$user->divisi_id) {
             return false;
         }
 
+        $lookupKey = str_contains($menuKey, '.') ? explode('.', $menuKey)[0] : $menuKey;
+
         return \App\Models\MenuPermission::where('company_id', $user->company_id)
                                         ->where('divisi_id', $user->divisi_id)
-                                        ->where('menu_key', $menuKey)
+                                        ->where('menu_key', $lookupKey)
                                         ->where('is_active', true)
                                         ->exists();
     }
