@@ -86,18 +86,18 @@ Route::get('/admin', function () {
         }
 
     $realisasi = $dt->kirim;
-        
+
     $opi = Opi_M::where('nama', 'NOT LIKE', '%CANCEL%')
         ->where('tglKirimDt', 'LIKE', '%'.$periode.'%')
         ->leftJoin('mc', 'mc_id', '=', 'mc.id')
-        ->get();    
+        ->get();
 
-    $tonase = 0;    
+    $tonase = 0;
     foreach ($opi as $key) {
         $order = $key->jumlahOrder * $key->gramSheetBoxKontrak;
         $tonase = $tonase + $order ;
     }
-    
+
     $data = RealisasiKirim::select('id', DB::raw('SUM(kg_kirim) as kirim, DATE_FORMAT(realisasi_kirim.tanggal_kirim, "%Y-%m") as periode'))
     // ->where('tanggal_kirim', 'LIKE', '%'.$periode.'%')
     ->orderBy('periode', 'Desc')
@@ -121,19 +121,19 @@ Route::get('/admin', function () {
 
 
 Route::middleware(['auth'])->group(function (){
-    
+
     // Profile Management Routes
     Route::get('/profile', 'ProfileController@index')->name('profile.index');
     Route::put('/profile/update', 'ProfileController@updateProfile')->name('profile.update');
     Route::get('/profile/change-password', 'ProfileController@showChangePasswordForm')->name('profile.change-password');
     Route::post('/profile/change-password', 'ProfileController@updatePassword')->name('profile.update-password');
     Route::get('/profile/password-requirements', 'ProfileController@getPasswordRequirements')->name('profile.password-requirements');
-    
+
     // API routes for BBK Roll functionality
     Route::get('/api/inventories/available', [App\Http\Controllers\InventoryController::class, 'getAvailableInventories'])->name('api.inventories.available');
     Route::get('/api/inventories/paginated', [App\Http\Controllers\InventoryController::class, 'getPaginatedInventory'])->name('inventory.paginated');
     Route::get('/api/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'getInventoryDetails'])->name('api.inventories.details');
-    
+
     //Satuan
     Route::get('/admin/satuans', 'SatuansController@index')->name('satuan');
     Route::get('/admin/satuans/create', 'SatuansController@create')->name('satuan.create');
@@ -142,7 +142,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/satuans/update/{id}', 'SatuansController@update');
     Route::get('/admin/satuans/show/{id}', 'SatuansController@show');
     Route::get('/admin/satuans/delete/{id}', 'SatuansController@updateDeleted');
-    
+
     //Divisi
     Route::get('/admin/divisi', 'DivisiController@index')->name('divisi');
     Route::get('/admin/divisi/create', 'DivisiController@create')->name('divisi.create');
@@ -151,7 +151,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/divisi/edit/{id}', 'DivisiController@edit');
     Route::put('/admin/divisi/update/{id}', 'DivisiController@update')->name('divisi.update');
     Route::get('/admin/divisi/delete/{id}', 'DivisiController@updateDeleted');
-    
+
     //Flute
     Route::get('/admin/flute', 'FluteController@index')->name('flute');
     Route::get('/admin/flute/create', 'FluteController@create')->name('flute.create');
@@ -169,7 +169,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/jenisdowntime/edit/{id}', 'JenisDowntimeController@edit');
     Route::put('/admin/jenisdowntime/update/{id}', 'JenisDowntimeController@update');
     Route::get('/admin/jenisdowntime/delete/{id}', 'JenisDowntimeController@updateDeleted');
-    
+
     //Mata Uang
     Route::get('/admin/matauang', 'MataUangController@index')->name('matauang');
     Route::get('/admin/matauang/create', 'MataUangController@create')->name('matauang.create');
@@ -178,7 +178,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/matauang/edit/{id}', 'MataUangController@edit');
     Route::put('/admin/matauang/update/{id}', 'MataUangController@update');
     Route::get('/admin/matauang/delete/{id}', 'MataUangController@updateDeleted');
-    
+
     //Joint
     Route::get('/admin/joint', 'JointController@index')->name('joint');
     Route::get('/admin/joint/create', 'JointController@create')->name('joint.create');
@@ -187,7 +187,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/joint/edit/{id}', 'JointController@edit');
     Route::put('/admin/joint/update/{id}', 'JointController@update');
     Route::get('/admin/joint/delete/{id}', 'JointController@updateDeleted');
-    
+
     //Sheet
     Route::get('converting/getsheet', [ConvertingController::class, 'get_sheet'])->name('getsheet');
     Route::get('converting/sheet', [ConvertingController::class, 'index_sheet'])->name('sheet');
@@ -197,7 +197,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/sheet/edit/{id}', 'SheetController@edit');
     Route::put('/admin/sheet/update/{id}', 'SheetController@update');
     Route::get('/admin/sheet/delete/{id}', 'SheetController@updateDeleted');
-    
+
     //Box
     Route::get('/admin/box', 'BoxController@index')->name('box');
     Route::get('/admin/box/create', 'BoxController@create')->name('box.create');
@@ -206,7 +206,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/box/edit/{id}', 'BoxController@edit');
     Route::put('/admin/box/update/{id}', 'BoxController@update')->name('box.update');
     Route::get('/admin/box/delete/{id}', 'BoxController@updateDeleted');
-    
+
     //Koli
     Route::get('/admin/koli', 'KoliController@index')->name('koli');
     Route::get('/admin/koli/create', 'KoliController@create')->name('koli.create');
@@ -215,7 +215,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/koli/edit/{id}', 'KoliController@edit');
     Route::put('/admin/koli/update/{id}', 'KoliController@update');
     Route::get('/admin/koli/delete/{id}', 'KoliController@updateDeleted');
-    
+
     //Substance
     Route::get('/admin/substance', 'SubstanceController@index')->name('substance');
     Route::get('/admin/substance/create', 'SubstanceController@create')->name('substance.create');
@@ -224,7 +224,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/substance/edit/{id}', 'SubstanceController@edit');
     Route::put('/admin/substance/update/{id}', 'SubstanceController@update');
     Route::get('/admin/substance/delete/{id}', 'SubstanceController@updateDeleted');
-    
+
     //Jenis Gram
     Route::get('/admin/jenisgram', 'JenisGramController@index')->name('jenisgram');
     Route::get('/admin/jenisgram/create', 'JenisGramController@create')->name('jenisgram.create');
@@ -233,8 +233,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/jenisgram/edit/{id}', 'JenisGramController@edit');
     Route::put('/admin/jenisgram/update/{id}', 'JenisGramController@update');
     Route::get('/admin/jenisgram/delete/{id}', 'JenisGramController@updateDeleted');
-    
-    
+
+
     //Tipe Box
     Route::get('/admin/boxtype', 'BoxTypeController@index')->name('boxtype');
     Route::get('/admin/boxtype/create', 'BoxTypeController@create')->name('boxtype.create');
@@ -243,7 +243,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/boxtype/edit/{id}', 'BoxTypeController@edit');
     Route::put('/admin/boxtype/update/{id}', 'BoxTypeController@update');
     Route::get('/admin/boxtype/delete/{id}', 'BoxTypeController@updateDeleted');
-    
+
     //Warna
     Route::get('/admin/warna', 'WarnaController@index')->name('warna');
     Route::get('/admin/warna/create', 'WarnaController@create')->name('warna.create');
@@ -252,13 +252,13 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/warna/edit/{id}', 'WarnaController@edit');
     Route::put('/admin/warna/update/{id}', 'WarnaController@update');
     Route::get('/admin/warna/delete/{id}', 'WarnaController@updateDeleted');
-    
+
     //Warna Combine
     Route::get('/admin/colorcombine', 'ColorCombineController@index')->name('colorcombine');
     Route::get('/admin/colorcombine/create', 'ColorCombineController@create')->name('colorcombine.create');
     Route::post('/admin/colorcombine/store', 'ColorCombineController@store')->name('colorcombine.store');
-    
-    
+
+
     //Sales
     Route::get('/admin/sales', 'SalesController@index')->name('sales');
     Route::get('/admin/sales/create', 'SalesController@create')->name('sales.create');
@@ -267,7 +267,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/sales/edit/{id}', 'SalesController@edit');
     Route::put('/admin/sales/update/{id}', 'SalesController@update');
     Route::get('/admin/sales/delete/{id}', 'SalesController@updateDeleted');
-    
+
     //Palet Item
     Route::get('/admin/palet', 'PaletController@index')->name('palet');
     Route::get('/admin/sycn_sj', 'PaletController@sync_sj')->name('sync_sj');
@@ -278,7 +278,7 @@ Route::middleware(['auth'])->group(function (){
     Route::put('/admin/palet/update/{id}', 'PaletController@update');
     Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
     // Route::post('/admin/palet/getPalet/{id}', 'PaletController@updateDeleted')->name('palet.getPalet');
-    
+
     //Surat Jalan
     Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');
     Route::get('/admin/sj_palet/create', 'SJ_Palet_DController@create')->name('sj_palet.create');
@@ -289,11 +289,11 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
     Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
     Route::get('/export/sjpalet', [SJ_Palet_DController::class, 'export_sjpalet_excel'])->name('export.sjpalet');
-    
+
     //Supplier
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
     Route::get('/admin/supplier/show/{id}', 'SuppliersController@show')->name('supplier.show');
-    
+
     //Barang Jadi
     Route::get('/admin/barang', 'BarangController@index')->name('barang');
     Route::get('/admin/barang/new', 'BarangController@indexnew')->name('barang.indexnew');
@@ -309,7 +309,7 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/admin/barang/store', 'BarangController@store')->name('barang.store');
     Route::post('/admin/barang/mutasi', 'BarangController@getMutasi')->name('barang.mutasi');
     Route::get('/barang/{kode}', 'BarangController@get_barang')->name('get_barang');
-    
+
     //Mastercard
     Route::name('mastercard.')->prefix('mastercard')->group(function() {
         Route::get('/json', 'MastercardController@json')->name('json');
@@ -331,7 +331,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');
 
     //Converting
-    
+
     //Kontrak
     Route::post('kontrakjson', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak', 'Kontrak_DController@index')->middleware(['auth'])->name('kontrak');
@@ -403,14 +403,14 @@ Route::middleware(['auth'])->group(function (){
             if ($request->filled('date_start') && $request->filled('date_end')) {
                 $dateStart = $request->date_start;
                 $dateEnd = $request->date_end;
-                
+
                 // Filter berdasarkan Tglterima dari tabel VendorTT
                 $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
                     $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
                 });
             }
             $fileName = 'VendorTT_';
-            
+
             if ($request->filled('date_start') && $request->filled('date_end')) {
                 $fileName .= date('Ymd', strtotime($request->date_start)) . '_to_' . date('Ymd', strtotime($request->date_end));
             } elseif ($request->filled('periode_manual')) {
@@ -418,13 +418,13 @@ Route::middleware(['auth'])->group(function (){
             } else {
                 $fileName .= date('Ymd');
             }
-            
+
             if ($request->filled('gudang_filter')) {
                 $fileName .= '_' . strtolower($request->gudang_filter);
             }
-            
+
             $fileName .= '_' . now()->format('His') . '.xlsx';
-            
+
             return Excel::download(new VendorTTExport($vendortt), $fileName);
     })->name('acc.vendor_tt.export');
     Route::get('/opi/export', function (Request $request) {
@@ -479,7 +479,7 @@ Route::middleware(['auth'])->group(function (){
         // dd($opi);
         return Excel::download(new OpiExport($productions), 'opi_karet.xlsx');
     })->name('opi.export.karet');
-    
+
     Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
     Route::get('/admin/ppic/test-php-relation', [MastercardController::class, 'test_php_relation'])->name('ppic.test_php');
     Route::post('/admin/ppic/sync-php', [MastercardController::class, 'sync_php_to_mysql'])->name('ppic.sync_php');
@@ -491,7 +491,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/plan/corr/{id}/edit', 'CorrugatedController@edit')->middleware(['auth'])->name('admin.corrplan.edit');
     Route::put('/admin/plan/corr/{id}', 'CorrugatedController@update')->middleware(['auth'])->name('admin.corrplan.update');
 
-    
+
     Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');
     Route::get('/admin/plan/conv/flexoacreate', 'ConvController@createFlexoA')->middleware(['auth'])->name('flexoa.create');
     Route::post('/admin/plan/conv/storenonprint', 'ConvController@storeNonPrinting')->middleware(['auth'])->name('conv.storenonprint');
@@ -544,14 +544,14 @@ Route::middleware(['auth'])->group(function (){
         // Route::get('admin/ppic/opi_approve_proses/{id}', [OpiPPICController::class, 'proses_approve'])->name('ppic.opi.proses_approve');
 
     // Accounting
-        // 
+        //
         Route::get('admin/acc/mod', [MarektingOrder::class, 'index_acc'])->name('acc.mod.index');
         Route::get('admin/acc/mod/approve/{kode}', [MarektingOrder::class, 'approve_by_acc'])->name('acc.mod.approve');
         Route::post('admin/acc/mod/tolak', [MarektingOrder::class, 'tolak_acc'])->name('acc.mod.disapprove');
         Route::get('admin/acc', [KontrakAccController::class, 'index'])->name('acc.kontrak.index');
         Route::get('admin/acc/kontrak', [KontrakAccController::class, 'json'])->name('acc.kontrak.json');
         Route::get('admin/acc/customer', [FinanceController::class, 'getCust'])->name('acc.cust');
-        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');        
+        Route::get('admin/acc/piutang', [FinanceController::class, 'get_piutang'])->name('acc.piutang');
         Route::get('admin/acc/piutang/{cust}', [FinanceController::class, 'get_piutang_cust'])->name('acc.piutang.cust');
         Route::get('admin/acc/vendortt', [FinanceController::class, 'vendor_tt'])->name('acc.vendortt');
         Route::get('admin/acc/update_po', [FinanceController::class, 'update_po'])->name('acc.update_po');
@@ -594,7 +594,7 @@ Route::middleware(['auth'])->group(function (){
             return response()->json($all_periode);
 
         })->name('periode');
-    
+
     // QC
         Route::get('admin/qc', 'QcController@index')->name('qc.index');
         Route::get('admin/qc/create', 'QcController@create')->name('qc.create');
@@ -634,7 +634,7 @@ Route::middleware(['auth'])->group(function (){
         Route::put('admin/marketing/formpermintaan/update/{id}', [FormPermintaan::class, 'update'])->name('mkt.update.formpermintaan');
 
         Route::get('admin/marketing/plan_kirim', [OpiController::class, 'plan_kirim'])->name('mkt.plan.kirim');
-        
+
         Route::get('admin/marketing/getformmc', [FormMc::class, 'getListMc'])->name('mkt.get.formmc');
         Route::get('admin/marketing/formmc', [FormMc::class, 'list'])->name('mkt.list.formmc');
         Route::get('admin/marketing/formmc/add', [FormMc::class, 'add'])->name('mkt.add.formmc');
@@ -670,7 +670,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/marketing/forecast_tonase/edit/{id}', [ForecastCustController::class, 'edit'])->name('forecast.tonase.edit');
         Route::put('admin/marketing/forecast_tonase/update/{id}', [ForecastCustController::class, 'update'])->name('forecast.tonase.update');
         Route::delete('admin/marketing/forecast_tonase/delete/{id}', [ForecastCustController::class, 'destroy'])->name('forecast.tonase.destroy');
-        
+
         // Import & Template
         Route::get('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'showImport'])->name('forecast.tonase.import.form');
         Route::post('admin/marketing/forecast_tonase/import', [ForecastCustController::class, 'import'])->name('forecast.tonase.import');
@@ -681,7 +681,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('finance/faktur', [FinanceController::class, 'index_faktur'])->name('finance.faktur');
         Route::get('finance/getfaktur/', [FinanceController::class, 'get_faktur'])->name('finance.getfaktur');
         Route::get('finance/faktur/print/{kode}', [FinanceController::class, 'print_faktur'])->name('finance.print.faktur');
-        
+
         Route::get('hrd/stationary', [StationaryController::class, 'getBarang'])->name('stationary.barang');
 
         Route::get('/getnotif', [NavbarController::class, 'getNotifOpenKontrak'])->name('notif.open');
@@ -690,7 +690,7 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/jobs/store', [NavbarController::class, 'store'])->name('job.store');
         Route::get('/jobs/action/{id}', [NavbarController::class, 'update'])->name('job.update');
 
-        
+
         Route::get('/persediaan', [BarangController::class, 'getPersediaan'])->name('persediaan.bj');
 
         Route::get('/nomer_opi', [SettingController::class, 'get_opi'])->name('nomer_opi');
@@ -705,31 +705,31 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/inventory/import/inventory', 'InventoryController@importInventory')->name('inventory.import.inventory');
         Route::get('/inventory/import/inventory-template', 'InventoryController@downloadInventoryTemplate')->name('inventory.import.inventory.template');
         Route::resource('/inventory', 'InventoryController');
-        
+
         // Inventory Export
         Route::post('/inventory/export', 'InventoryController@export')->name('inventory.export');
-        
+
         Route::resource('/jenis-roll', 'JenisRollController');
         Route::resource('/lebar-roll', 'LebarRollController');
         Route::resource('/supplier-roll', 'SupplierRollController');
-        
+
         // Potongan Management
         Route::resource('/potongan', 'PotongController');
-        
+
         // BBK Roll Management
         Route::resource('/bbk-roll', 'BbkRollController');
         Route::get('/api/bbk-roll/generate-number', 'BbkRollController@generateBbkNumber')->name('bbk-roll.generate-number');
         Route::get('/api/bbk-roll/inventory/{id}/details', 'BbkRollController@getInventoryDetails')->name('bbk-roll.inventory.details');
-        
+
         // BBK Roll Group Operations
         Route::get('/bbk-roll/group/{bbkNumber}/show', 'BbkRollController@showGroup')->name('bbk-roll.show-group');
         Route::get('/bbk-roll/group/{bbkNumber}/edit', 'BbkRollController@editGroup')->name('bbk-roll.edit-group');
         Route::put('/bbk-roll/group/{bbkNumber}/update', 'BbkRollController@updateGroup')->name('bbk-roll.update-group');
         Route::delete('/bbk-roll/group/{bbkNumber}/destroy', 'BbkRollController@destroyGroup')->name('bbk-roll.destroy-group');
-        
+
         // BBK Roll Export
         Route::post('/bbk-roll/export', 'BbkRollController@export')->name('bbk-roll.export');
-        
+
         // BBK Roll Individual Item Operations
         Route::delete('/bbk-roll/delete-item/{bbkRollId}', 'BbkRollController@deleteItem')->name('bbk-roll.delete-item');
 
@@ -741,7 +741,7 @@ Route::middleware(['auth'])->group(function (){
             Route::put('/{id}', [FeedbackController::class, 'update'])->name('update');
             Route::get('/statistics', [FeedbackController::class, 'statistics'])->name('statistics');
         });
-        
+
         // Public feedback submission (can be accessed by any authenticated user)
         Route::post('/feedback/quick-submit', [FeedbackController::class, 'quickSubmit'])->name('admin.feedback.quick-submit');
 
@@ -764,13 +764,19 @@ Route::middleware(['auth'])->group(function (){
             Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
         });
 
-        
+
         Route::get('/company', [App\Http\Controllers\CompanyController::class, 'index'])->name('company.index');
         Route::post('/company/switch/{companyId}', [App\Http\Controllers\CompanyController::class, 'switchCompany'])->name('company.switch');
         Route::get('/company/info', [App\Http\Controllers\CompanyController::class, 'getCompanyInfo'])->name('company.info');
 
+        // Role & Permission Management (IT Admin only)
+        Route::resource('roles', 'RoleController');
+        Route::get('/users', 'UserRoleController@index')->name('users.index');
+        Route::get('/users/{user}/assign-role', 'UserRoleController@assignRole')->name('users.assign-role');
+        Route::put('/users/{user}/update-role', 'UserRoleController@updateRole')->name('users.update-role');
 
-        //Stellar 
+
+        //Stellar
 
         Route::get('/admin/stellar_bp', [BbmController::class, 'index'])->name('stellar.bp.index');
         Route::get('/admin/stellar_bp/export', [BbmController::class, 'export'])->name('stellar.bp.export');
@@ -805,6 +811,6 @@ Route::middleware(['auth'])->group(function (){
 
             return view('admin.tracking.index', compact('trackings', 'tipes', 'users'));
         })->name('admin.tracking.index');
-}); 
+});
 
 require __DIR__ . '/auth.php';

@@ -2,13 +2,34 @@
 
 if (!function_exists('hasMenuAccess')) {
     /**
-     * Check if current user has access to specific menu key
+     * Check if current user has access to specific menu key.
+     *
+     * Priority:
+     *  1. If the user has any roles assigned → use role-based permission check.
+     *  2. If the user has no roles and no company_id → legacy IT admin (allow all).
+     *  3. If the user has no roles but has company_id → use legacy MenuPermission table.
      */
     function hasMenuAccess($menuKey)
     {
         $user = Auth::user();
-        
-        if (!$user || !$user->company_id || !$user->divisi_id) {
+
+        if (!$user) {
+            return false;
+        }
+
+        // 1. Role-based check (new system)
+        if ($user->roles()->exists()) {
+            return $user->hasPermission($menuKey);
+        }
+
+        // 2. No roles assigned yet — legacy behaviour
+        // Users without a company are considered IT/admin (full access)
+        if (!$user->company_id) {
+            return true;
+        }
+
+        // 3. Company user without roles → use MenuPermission table
+        if (!$user->divisi_id) {
             return false;
         }
 
@@ -22,21 +43,16 @@ if (!function_exists('hasMenuAccess')) {
 
 if (!function_exists('hasAnyMenuAccess')) {
     /**
-     * Check if current user has access to any of the menu keys
+     * Check if current user has access to any of the menu keys.
      */
     function hasAnyMenuAccess($menuKeys)
     {
-        $user = Auth::user();
-        
-        if (!$user || !$user->company_id || !$user->divisi_id) {
-            return false;
+        foreach ((array) $menuKeys as $key) {
+            if (hasMenuAccess($key)) {
+                return true;
+            }
         }
-
-        return \App\Models\MenuPermission::where('company_id', $user->company_id)
-                                        ->where('divisi_id', $user->divisi_id)
-                                        ->whereIn('menu_key', $menuKeys)
-                                        ->where('is_active', true)
-                                        ->exists();
+        return false;
     }
 }
 
@@ -47,7 +63,7 @@ if (!function_exists('getCurrentCompanyName')) {
     function getCurrentCompanyName()
     {
         $user = Auth::user();
-        
+
         if (!$user || !$user->company_id) {
             return 'PT. SPA';
         }
@@ -64,7 +80,7 @@ if (!function_exists('getDivisiMenuAccess')) {
     function getDivisiMenuAccess($divisiIds)
     {
         $user = Auth::user();
-        
+
         if (!$user || !$user->divisi_id) {
             return false;
         }
@@ -74,5 +90,16 @@ if (!function_exists('getDivisiMenuAccess')) {
         }
 
         return in_array($user->divisi_id, $divisiIds);
+    }
+}
+
+if (!function_exists('hasRole')) {
+    /**
+     * Check if current authenticated user has a given role (by slug).
+     */
+    function hasRole($slug)
+    {
+        $user = Auth::user();
+        return $user ? $user->hasRole($slug) : false;
     }
 }
