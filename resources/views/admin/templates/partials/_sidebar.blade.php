@@ -141,56 +141,6 @@
               </ul>
             </li>
           @endif
-
-          @if ((hasMenuAccess('logistik')))
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="fa-solid fa-warehouse nav-icon"></i>
-              <p>
-                Logistik
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview"> 
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fa-solid fa-toilet-paper nav-icon"></i>
-                  <p>
-                    Barang Jadi                    
-                    <i class="right fas fa-angle-left"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ route('barang.retur') }}" class="nav-link">
-                      <i class="fas fa-circle nav-icon"></i>
-                      <p>Retur Penjualan</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('fb.list.bp') }}" class="nav-link">
-                  <i class="fas fa-circle nav-icon"></i>
-                  <p>BP Baru</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('fb.list.bp_sheet') }}" class="nav-link">
-                  <i class="fas fa-circle nav-icon"></i>
-                  <p>BP Sheet</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('fb.list.bp_lama') }}" class="nav-link">
-                  <i class="fas fa-circle nav-icon"></i>
-                  <p>BP Lama</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          @endif
-
           {{-- Inventory Management --}}
           @if ((hasMenuAccess('inventory')))
             <li class="nav-item">
@@ -212,6 +162,14 @@
                       <i class="fas fa-circle nav-icon"></i><p>BP Baru</p>
                     </a>
                   </li>
+                @endif
+                @if (hasMenuAccess('logistik.bp_sheet'))
+                <li class="nav-item">
+                  <a href="{{ route('fb.list.bp_sheet') }}" class="nav-link">
+                    <i class="fas fa-circle nav-icon"></i>
+                    <p>BP Sheet</p>
+                  </a>
+                </li>
                 @endif
                 @if (hasMenuAccess('logistik.bp_lama'))
                   <li class="nav-item">
