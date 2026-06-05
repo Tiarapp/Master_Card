@@ -88,7 +88,13 @@
         color: #495057 !important;
         cursor: default;
     }
-    .selected-opis-table .roll-result,
+    .selected-opis-table .roll-result {
+        background-color: #fff3cd !important;
+        border-color: #ffc107 !important;
+        color: #495057 !important;
+        font-weight: bold;
+        cursor: text;
+    }
     .selected-opis-table .plan-result,
     .selected-opis-table .cop-result,
     .selected-opis-table .rmorder-result {
@@ -133,25 +139,25 @@
     .selected-opis-table th:nth-child(33) { min-width: 90px; } /* Kertas Bawah */
     .selected-opis-table th:nth-child(34) { min-width: 140px; } /* Keterangan */
     .selected-opis-table th:nth-child(35) { min-width: 90px; } /* Action */
-    
+
     /* Styling khusus untuk kolom kebutuhan kertas */
     .selected-opis-table .kebutuhan-result {
         font-weight: 600;
         text-align: center;
         color: #333;
     }
-    
+
     /* Hover effects */
     .selected-opis-table tr:hover {
         background-color: #f8f9fa;
     }
-    
+
     /* Better spacing */
     .selected-opis-table input.form-control-sm[readonly] {
         cursor: default;
         font-weight: 600;
     }
-    
+
     /* Paper type styling */
     .selected-opis-table input[name*="jenis"] {
         font-size: 10px !important;
@@ -161,7 +167,7 @@
         overflow: hidden;
         white-space: nowrap;
     }
-    
+
     /* Gram input styling */
     .selected-opis-table .gramatas-input,
     .selected-opis-table .gramflute1-input,
@@ -171,7 +177,7 @@
         font-weight: 600;
         text-align: center;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 1200px) {
         .selected-opis-table {
@@ -183,7 +189,7 @@
             padding: 2px 4px;
         }
     }
-    
+
     /* Scrollbar styling */
     .selected-opis-table::-webkit-scrollbar {
         height: 8px;
@@ -232,7 +238,7 @@
                     <div class="card-body">
                         @if ($errors->any())
                             <div class="alert alert-danger">
-                                <strong>Error!</strong> 
+                                <strong>Error!</strong>
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -356,7 +362,7 @@
                                     <i class="fas fa-inbox fa-3x text-muted"></i>
                                     <p class="mt-2 text-muted">Belum ada OPI yang dipilih untuk planning</p>
                                 </div>
-                                
+
                                 <!-- Detail Forms Container (Hidden) -->
                                 <div id="planningDetails" style="display: none;">
                                     <!-- Detail forms will be added here -->
@@ -505,11 +511,11 @@ $(document).ready(function(){
                 console.log(`No substance data for layer: ${layer}`);
                 return '';
             }
-            
+
             // Try multiple possible field names
             const layerData = substance[layer];
             let jenisKertas = '';
-            
+
             // Check direct fields first
             if (layerData.jenisKertasMc) {
                 jenisKertas = layerData.jenisKertasMc;
@@ -518,7 +524,7 @@ $(document).ready(function(){
             } else if (layerData.jenisKertasLog) {
                 jenisKertas = layerData.jenisKertasLog;
             }
-            
+
             console.log(`Found jenis kertas for ${layer}:`, jenisKertas);
             return jenisKertas ? jenisKertas.substring(0, 15) : '';
         } catch (e) {
@@ -534,11 +540,11 @@ $(document).ready(function(){
                 console.log(`No substance data for layer: ${layer}`);
                 return '';
             }
-            
+
             // Try multiple possible field names
             const layerData = substance[layer];
             let gram = '';
-            
+
             // Check direct fields first
             if (layerData.gramKertas) {
                 gram = layerData.gramKertas;
@@ -547,7 +553,7 @@ $(document).ready(function(){
             } else if (layerData.gramKertas) {
                 gram = layerData.gramKertas;
             }
-            
+
             console.log(`Found gram for ${layer}:`, gram);
             return gram || '';
         } catch (e) {
@@ -577,10 +583,10 @@ $(document).ready(function(){
     $('#findOpiBtn').on('click', function(e) {
         e.preventDefault();
         console.log('Find OPI button clicked');
-        
+
         // Show modal first
         $('#opiModal').modal('show');
-        
+
         // Load data after modal is shown
         setTimeout(function() {
             loadOpiData(1);
@@ -611,9 +617,9 @@ $(document).ready(function(){
     // Load OPI Data function
     function loadOpiData(page = 1) {
         const search = $('#modalOpiSearch').val().trim();
-        
+
         console.log('Loading OPI data - Page:', page, 'Search:', search);
-        
+
         // Show loading
         $('#opiLoading').show();
         $('#opiTable').hide();
@@ -634,7 +640,7 @@ $(document).ready(function(){
             success: function(response) {
                 console.log('OPI Response:', response);
                 $('#opiLoading').hide();
-                
+
                 if (response.success && response.data && response.data.length > 0) {
                     displayOpiTableAndStore(response.data);
                     updatePaginationFromResponse(response.pagination);
@@ -653,7 +659,7 @@ $(document).ready(function(){
                 });
                 $('#opiLoading').hide();
                 $('#opiNoData').show();
-                
+
                 // Show error message
                 $('#opiNoData').html(`
                     <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
@@ -667,12 +673,12 @@ $(document).ready(function(){
     // Display OPI table
     function displayOpiTable(data) {
         let tableRows = '';
-        
+
         data.forEach(function(opi) {
             // Handle status display
             let statusBadge = 'primary';
             let statusText = 'PROSES';
-            
+
             if (opi.NoOPI && opi.NoOPI.includes('CANCEL')) {
                 statusBadge = 'danger';
                 statusText = 'CANCELLED';
@@ -680,18 +686,18 @@ $(document).ready(function(){
                 statusBadge = 'success';
                 statusText = 'SELESAI';
             }
-            
+
             // Check if OPI is already selected
             const isSelected = selectedOpis.includes(opi.id);
             const buttonClass = isSelected ? 'btn-secondary' : 'btn-success';
             const buttonDisabled = isSelected ? 'disabled' : '';
             const buttonIcon = isSelected ? 'fa-check-circle' : 'fa-check';
             const buttonTitle = isSelected ? 'OPI sudah dipilih' : 'Pilih OPI ini';
-            
+
             tableRows += `
                 <tr ${isSelected ? 'class="table-secondary"' : ''}>
                     <td>
-                        <button type="button" class="btn btn-sm ${buttonClass} select-opi-btn" 
+                        <button type="button" class="btn btn-sm ${buttonClass} select-opi-btn"
                                 data-opi-id="${opi.id}" title="${buttonTitle}" ${buttonDisabled}>
                             <i class="fas ${buttonIcon}"></i>
                         </button>
@@ -711,7 +717,7 @@ $(document).ready(function(){
                 </tr>
             `;
         });
-        
+
         $('#opiTableBody').html(tableRows);
         console.log('OPI table populated with', data.length, 'rows');
     }
@@ -720,24 +726,24 @@ $(document).ready(function(){
     function updatePaginationFromResponse(pagination) {
         currentPage = pagination.current_page;
         totalPages = pagination.total_pages;
-        
+
         // Update info
         $('#opiInfo').html(`Showing ${pagination.from} to ${pagination.to} of ${pagination.total} entries`);
-        
+
         // Generate pagination
         let paginationHtml = '';
-        
+
         // Previous button
         paginationHtml += `
             <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
             </li>
         `;
-        
+
         // Page numbers
         const startPage = Math.max(1, currentPage - 2);
         const endPage = Math.min(totalPages, currentPage + 2);
-        
+
         for (let i = startPage; i <= endPage; i++) {
             paginationHtml += `
                 <li class="page-item ${i === currentPage ? 'active' : ''}">
@@ -745,14 +751,14 @@ $(document).ready(function(){
                 </li>
             `;
         }
-        
+
         // Next button
         paginationHtml += `
             <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
             </li>
         `;
-        
+
         $('#opiPagination').html(paginationHtml);
     }
 
@@ -768,15 +774,15 @@ $(document).ready(function(){
     // Select OPI from modal
     $(document).on('click', '.select-opi-btn', function() {
         const opiId = parseInt($(this).data('opi-id'));
-        
+
         // Check if already selected
         if (selectedOpis.includes(opiId)) {
             return;
         }
-        
+
         // Show loading on button
         $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
-        
+
         // Get single OPI data
         $.ajax({
             url: `/admin/opi/single/${opiId}`,
@@ -793,21 +799,21 @@ $(document).ready(function(){
                     console.log('Flute 2:', data.mc.substanceproduksi.flute2);
                     console.log('Liner Bawah:', data.mc.substanceproduksi.linerbawah);
                 }
-                
+
                 // Add to planning directly
                 addPlanningItem(data);
-                
+
                 // Add to selected list
                 selectedOpis.push(opiId);
-                
+
                 // Hide selection info after first OPI is selected
                 if (selectedOpis.length === 1) {
                     $('#opiSelectionInfo').fadeOut();
                 }
-                
+
                 // Update counter
                 updateSelectedCounter();
-                
+
                 // Refresh table to show updated status
                 displayOpiTable(window.currentOpiTableData);
             },
@@ -820,13 +826,13 @@ $(document).ready(function(){
 
     // Store current table data for refresh
     window.currentOpiTableData = [];
-    
+
     // Update the success handler to store table data
     function displayOpiTableAndStore(data) {
         window.currentOpiTableData = data;
         displayOpiTable(data);
     }
-    
+
     // Update selected OPI counter
     function updateSelectedCounter() {
         const count = selectedOpis.length;
@@ -836,7 +842,7 @@ $(document).ready(function(){
     // Add planning item
     function addPlanningItem(opiData) {
         itemCounter++;
-        
+
         // Calculate toleransi based on tipe box
         let toleransi = 0;
         if (opiData.mc?.tipeBox === 'B1') {
@@ -844,21 +850,21 @@ $(document).ready(function(){
         } else {
             toleransi = 0;
         }
-        
+
         // Get paper data from OPI using eager loaded relations
         const kertasAtas = opiData.mc?.substanceproduksi?.lineratas?.jenisKertasMc || '';
         const kertasFlute1 = opiData.mc?.substanceproduksi?.flute1?.jenisKertasMc || '';
         const kertasTengah = opiData.mc?.substanceproduksi?.linertengah?.jenisKertasMc || '';
         const kertasFlute2 = opiData.mc?.substanceproduksi?.flute2?.jenisKertasMc || '';
         const kertasBawah = opiData.mc?.substanceproduksi?.linerbawah?.jenisKertasMc || '';
-        
+
         // Get gram data from OPI using eager loaded relations
         const gramAtas = opiData.mc?.substanceproduksi?.lineratas?.gramKertas || '';
         const gramFlute1 = opiData.mc?.substanceproduksi?.flute1?.gramKertas || '';
         const gramTengah = opiData.mc?.substanceproduksi?.linertengah?.gramKertas || '';
         const gramFlute2 = opiData.mc?.substanceproduksi?.flute2?.gramKertas || '';
         const gramBawah = opiData.mc?.substanceproduksi?.linerbawah?.gramKertas || '';
-        
+
         // Add table row
         const tableRow = `
             <tr id="planRow${itemCounter}" data-opi-id="${opiData.id}">
@@ -903,7 +909,7 @@ $(document).ready(function(){
                     <input type="number" class="form-control form-control-sm beratsheet-input" name="beratSheet[]" value="${opiData.mc?.gramSheetBoxProduksi || ''}" step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]" readonly>
+                    <input type="number" class="form-control form-control-sm roll-result" name="roll[]">
                 </td>
                 <td>
                     <input type="number" class="form-control form-control-sm plan-result" name="plan[]" readonly step="0.01">
@@ -977,14 +983,14 @@ $(document).ready(function(){
                 </td>
             </tr>
         `;
-        
+
         // Add detail form (hidden)
         const detailForm = `
             <div id="planDetail${itemCounter}" style="display: none;" class="mt-3 border p-3">
                 <h6><i class="fas fa-cog"></i> Detail & Kalkulasi - ${opiData.NoOPI}</h6>
-                
+
                 <!-- Info fields - no longer needed as hidden fields since they're in table row -->
-                
+
                 <!-- Info Summary -->
                 <div class="row mb-3">
                     <div class="col-md-12">
@@ -993,13 +999,13 @@ $(document).ready(function(){
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Note: DT Perubahan, Berat Sheet, and Keterangan fields are managed in the main table -->
-                
+
                 <!-- Note: Jenis Kertas, Gram, dan Kebutuhan Kertas data dikelola di tabel utama -->
-                
+
                 <!-- Note: Hasil Kalkulasi data dikelola di tabel utama -->
-                
+
                 <div class="mt-3">
                     <button type="button" class="btn btn-sm btn-secondary" onclick="hideDetails(${itemCounter})">
                         <i class="fas fa-eye-slash"></i> Sembunyikan Detail
@@ -1007,15 +1013,15 @@ $(document).ready(function(){
                 </div>
             </div>
         `;
-        
+
         // Add to table and details
         $('#planningTableBody').append(tableRow);
         $('#planningDetails').append(detailForm);
-        
+
         // Show table and hide no data message
         $('#noPlanningMessage').hide();
         $('#planningTable').show();
-        
+
         // Auto calculate if basic data exists
         setTimeout(function() {
             const row = $(`#planRow${itemCounter}`);
@@ -1031,7 +1037,7 @@ $(document).ready(function(){
         // Get the item ID from the row ID
         const row = $(this).closest('tr');
         const itemId = row.attr('id').replace('planRow', '');
-        
+
         // Only calculate if Out Corr has value
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
@@ -1044,7 +1050,7 @@ $(document).ready(function(){
         // Get the item ID from the row ID
         const row = $(this).closest('tr');
         const itemId = row.attr('id').replace('planRow', '');
-        
+
         // Only calculate if Out Corr has value
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
@@ -1057,12 +1063,61 @@ $(document).ready(function(){
         // Get the item ID from the row ID
         const row = $(this).closest('tr');
         const itemId = row.attr('id').replace('planRow', '');
-        
+
         // Only calculate if Out Corr has value
         const outCorr = parseFloat(row.find('input[name="outCorr[]"]').val());
         if (outCorr && outCorr > 0) {
             calculateItemRequirements(itemId);
         }
+    });
+
+    // Auto calculate when roll is manually changed by user
+    $(document).on('input change', '.roll-result', function() {
+        const row = $(this).closest('tr');
+        const UkRoll = parseFloat($(this).val()) || 0;
+        if (UkRoll <= 0) return;
+
+        const sheetl   = parseFloat(row.find('input[name="sheetl[]"]').val()) || 0;
+        const sheetp   = parseFloat(row.find('input[name="sheetp[]"]').val()) || 0;
+        const outCorr  = parseFloat(row.find('input[name="outCorr[]"]').val()) || 0;
+        const outFlexo = parseFloat(row.find('input[name="outFlexo[]"]').val()) || 0;
+        const order    = parseFloat(row.find('input[name="order[]"]').val()) || 0;
+        const toleransi = parseFloat(row.find('input[name="toleransi[]"]').val()) || 0;
+        const flute    = row.find('input[name="flute[]"]').val();
+
+        let flute1 = 0, flute2 = 0;
+        if (flute === 'BF')       { flute1 = 1.36; flute2 = 0; }
+        else if (flute === 'CF')  { flute1 = 0;    flute2 = 1.46; }
+        else if (flute === 'BCF') { flute1 = 1.36; flute2 = 1.46; }
+        else if (flute === 'EF')  { flute1 = 1.2;  flute2 = 0; }
+        else if (flute === 'EBF') { flute1 = 1.46; flute2 = 1.2; }
+
+        const qtyPlan = outFlexo > 0 ? (order + (order * (toleransi / 100))) / outFlexo : 0;
+        const cop     = outCorr  > 0 ? qtyPlan / outCorr : 0;
+        const trim    = UkRoll - (sheetl * outCorr);
+        const rmorder = (sheetp * cop) / 1000;
+
+        const gramAtas   = parseFloat(row.find('input[name="gramAtas[]"]').val())   || 0;
+        const gramFlute1 = parseFloat(row.find('input[name="gramFlute1[]"]').val()) || 0;
+        const gramTengah = parseFloat(row.find('input[name="gramTengah[]"]').val()) || 0;
+        const gramFlute2 = parseFloat(row.find('input[name="gramFlute2[]"]').val()) || 0;
+        const gramBawah  = parseFloat(row.find('input[name="gramBawah[]"]').val())  || 0;
+
+        const kebutuhanAtas   = gramAtas   > 0 ? rmorder * (UkRoll / 1000) * gramAtas   / 1000          : 0;
+        const kebutuhanFlute1 = gramFlute1 > 0 ? rmorder * (UkRoll / 1000) * (gramFlute1 / 1000) * flute1 : 0;
+        const kebutuhanTengah = gramTengah > 0 ? rmorder * (UkRoll / 1000) * gramTengah / 1000          : 0;
+        const kebutuhanFlute2 = gramFlute2 > 0 ? rmorder * (UkRoll / 1000) * (gramFlute2 / 1000) * flute2 : 0;
+        const kebutuhanBawah  = gramBawah  > 0 ? rmorder * (UkRoll / 1000) * gramBawah  / 1000          : 0;
+
+        row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
+        row.find('input[name="trim[]"]').val(trim.toFixed(0));
+        row.find('input[name="cop[]"]').val(cop.toFixed(0));
+        row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
+        row.find('input[name="kebutuhanAtas[]"]').val(Math.round(kebutuhanAtas));
+        row.find('input[name="kebutuhanFlute1[]"]').val(Math.round(kebutuhanFlute1));
+        row.find('input[name="kebutuhanTengah[]"]').val(Math.round(kebutuhanTengah));
+        row.find('input[name="kebutuhanFlute2[]"]').val(Math.round(kebutuhanFlute2));
+        row.find('input[name="kebutuhanBawah[]"]').val(Math.round(kebutuhanBawah));
     });
 
     // Calculate requirements
@@ -1071,7 +1126,7 @@ $(document).ready(function(){
     //         const itemId = $(this).attr('id').replace('planItem', '');
     //         calculateItemRequirements(itemId);
     //     });
-        
+
     //     alert('Perhitungan selesai! Silakan periksa hasil perhitungan.');
     // });
 
@@ -1088,12 +1143,18 @@ $(document).ready(function(){
         const tipebox = row.find('input[name="tipebox[]"]').val();
         const flute = row.find('input[name="flute[]"]').val();
 
-        // Calculate UkRoll
+        // Calculate UkRoll - only auto-calculate if roll field is still empty
+        const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
         let UkRoll;
-        if (tipebox === 'DC') {
-            UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
+        if (existingRoll > 0) {
+            UkRoll = existingRoll; // Preserve manually set / previously calculated value
         } else {
-            UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
+            if (tipebox === 'DC') {
+                UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
+            } else {
+                UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
+            }
+            row.find('input[name="roll[]"]').val(UkRoll);
         }
 
         let flute1, flute2;
@@ -1106,7 +1167,7 @@ $(document).ready(function(){
             flute2 = 1.46;
         } else if (flute == 'BCF') {
             flute1 = 1.36;
-            flute2 = 1.46;  
+            flute2 = 1.46;
         } else if (flute == 'EF') {
             flute1 = 1.2;
             flute2 = 0;
@@ -1134,7 +1195,7 @@ $(document).ready(function(){
 
         // Calculate kebutuhan kertas (paper requirements in kg)
         let kebutuhanAtas = 0, kebutuhanFlute1 = 0, kebutuhanTengah = 0, kebutuhanFlute2 = 0, kebutuhanBawah = 0;
-        
+
         if (gramAtas > 0) {
             kebutuhanAtas = rmorder * (UkRoll / 1000) * gramAtas / 1000;
         }
@@ -1151,15 +1212,14 @@ $(document).ready(function(){
             kebutuhanBawah = rmorder * (UkRoll / 1000) * gramBawah / 1000;
         }
 
-        // Update calculated fields in table
-        row.find('input[name="roll[]"]').val(UkRoll);
+        // Update calculated fields in table (roll is already set above if needed)
         row.find('input[name="plan[]"]').val(qtyPlan.toFixed(0));
         row.find('input[name="cop[]"]').val(cop.toFixed(0));
         row.find('input[name="rmorder[]"]').val(Math.round(rmorder));
-        
+
         // Also update detail fields if they exist
         row.find('input[name="trim[]"]').val(trim.toFixed(0));
-        
+
         // Update paper requirements
         row.find('input[name="kebutuhanAtas[]"]').val(Math.round(kebutuhanAtas));
         row.find('input[name="kebutuhanFlute1[]"]').val(Math.round(kebutuhanFlute1));
@@ -1171,34 +1231,34 @@ $(document).ready(function(){
     // Form validation
     $('#corrugatingForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         if (!$('#tgl').val()) {
             alert('Tanggal produksi harus diisi');
             return;
         }
-        
+
         if (!$('#shift').val()) {
             alert('Shift harus dipilih');
             return;
         }
-        
+
         if ($('#planningTableBody tr').length === 0) {
             alert('Minimal harus ada 1 item planning');
             return;
         }
-        
+
         // If validation passes, submit via AJAX
         const formData = new FormData(this);
-        
+
         // Debug: Log form data
         console.log('Form data being submitted:');
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
-        
+
         // Show loading
         $('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
-        
+
         $.ajax({
             url: $(this).attr('action'),
             type: 'POST',
@@ -1217,7 +1277,7 @@ $(document).ready(function(){
             error: function(xhr) {
                 let message = 'Terjadi kesalahan saat menyimpan data';
                 console.log('AJAX Error Response:', xhr.responseJSON);
-                
+
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     message = xhr.responseJSON.message;
                 } else if (xhr.responseJSON && xhr.responseJSON.errors) {
@@ -1249,31 +1309,31 @@ function removePlanItem(itemId) {
     if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
         // Get OPI ID from the table row
         const opiId = parseInt($(`#planRow${itemId}`).data('opi-id'));
-        
+
         // Remove from selected list
         const index = selectedOpis.indexOf(opiId);
         if (index > -1) {
             selectedOpis.splice(index, 1);
         }
-        
+
         // Update counter
         updateSelectedCounter();
-        
+
         // Remove the table row and detail form
         $(`#planRow${itemId}`).remove();
         $(`#planDetail${itemId}`).remove();
-        
+
         // Hide table if no more items
         if ($('#planningTableBody tr').length === 0) {
             $('#planningTable').hide();
             $('#noPlanningMessage').show();
         }
-        
+
         // Refresh OPI table if modal is open
         if ($('#opiModal').hasClass('show') && window.currentOpiTableData.length > 0) {
             displayOpiTable(window.currentOpiTableData);
         }
-        
+
         if (typeof toastr !== 'undefined') {
             toastr.info('Item planning dihapus. OPI dapat dipilih kembali.');
         }

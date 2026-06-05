@@ -32,13 +32,13 @@ class Kontrak_DController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    
+
     // public function json()
     // {
         //     return Datatables::ofn(Kontrak_M::all())->make(true);
         // }
-        
-        
+
+
         public function json(Request $request)
         {
             $columns = [
@@ -49,32 +49,32 @@ class Kontrak_DController extends Controller
                 5=>'cust',
                 6=>'alamatKirim',
             ];
-            
+
             $totalData = Kontrak_M::count();
             $kontrak= Kontrak_M::get();
             // $kontrak = Kontrak_M::all();
-            
+
             // dd($kontrak);
-            
+
             $totalData = Kontrak_M::count();
             $limit = $request->input('length');
             $start = $request->input('start');
-            
+
             // dd($start);
-            
+
             if(empty($request->input('search.value')))
-            {            
+            {
                 $kontrak = Kontrak_M::offset($start)
                 ->limit(50)
                 ->orderBy('id', 'desc')
                 ->get();
-                
+
                 $totalFiltered = Kontrak_M::count();
                 // dd($opi);
             }
             else {
-                $search = $request->input('search.value'); 
-                
+                $search = $request->input('search.value');
+
                 $kontrak =  Kontrak_M::where('customer_name','LIKE',"%{$search}%")
                 ->orWhere('kode', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
@@ -84,7 +84,7 @@ class Kontrak_DController extends Controller
                 ->limit(50)
                 ->orderBy('id', 'desc')
                 ->get();
-                
+
                 $totalFiltered = Kontrak_M::where('kode','LIKE',"%{$search}%")
                 ->orWhere('customer_name', 'LIKE',"%{$search}%")
                 ->orWhere('poCustomer', 'LIKE',"%{$search}%")
@@ -93,30 +93,30 @@ class Kontrak_DController extends Controller
                 ->count();
                 // dd($opi);
             }
-            
+
             $data = array();
             if (!empty($kontrak)) {
                 foreach ($kontrak as $kontrak)
                 {
                     $show =  route('kontrak.pdfb1',$kontrak->id);
-                    
+
                     if ($kontrak->status == 4 || $kontrak->status == 3 && Auth::user()->divisi_id == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = route('kontrak.cancel', $kontrak->id);
                         $open = route('kontrak.open', $kontrak->id);
-                    } else if ($kontrak->status == 2) {  
+                    } else if ($kontrak->status == 2) {
                         $edit =  route('kontrak.edit',$kontrak->id);
                         $cancel = null;
                         $open = null;
-                    } else if ($kontrak->status == 3 || $kontrak->status == 5) {  
+                    } else if ($kontrak->status == 3 || $kontrak->status == 5) {
                         $edit =  null;
                         $cancel = null;
                         $open = null;
                     }
-                    
+
                     $dt =  route('kontrak.dt',$kontrak->id);
                     $kirim =  route('kontrak.realisasi',$kontrak->id);
-                    
+
                     if ($kontrak->status == 2) {
                         $color = '#ff9800';
                         $status = "<div class='status label warning'>Opened</div>";
@@ -130,7 +130,7 @@ class Kontrak_DController extends Controller
                         $color = 'f44336';
                         $status = "<div class='status label danger'>Cancel</div>";
                     }
-                    
+
                     // if($kontrak->status == 2 || $kontrak->status == 3 ){
                         $nestedData['id'] = "<p style='color:".$color."'>".$kontrak->id."</p>";
                         $nestedData['kontrak'] = "<p style='color:".$color."'>".$kontrak->kode."</p>";
@@ -150,28 +150,28 @@ class Kontrak_DController extends Controller
                         // }
 
                         $nestedData['status'] = $status;
-                        
+
                         // Realisasi Kirim
                         $terkirim = 0;
                         $dataRealisasi = [];
                         foreach ($kontrak->realisasi as $realisasi) {
-                            
-                            $dataRealisasi[] = 
+
+                            $dataRealisasi[] =
                             "&emsp;<li><span class='glyphicon glyphicon-list'>".$realisasi->qty_kirim." ( ".date('d F', strtotime($realisasi->tanggal_kirim)).")</span></li>";
-                            
+
                             $terkirim = $terkirim + $realisasi->qty_kirim;
                         }
-                        
+
                         if (Auth::user()->divisi_id == 2) {
                             $nestedData['komisi'] = "<p style='color:".$color."'>".$kontrak->komisi."</p>";
                         } else {
                             $nestedData['komisi'] = "<p style='color:".$color."'>0</p>";
                         }
-                        
+
                         $nestedData['realisasi'] = $dataRealisasi;
                         $nestedData['pcsKontrak'] = "<p style='color:".$color."'>".$kontrak->kontrak_d['pcsKontrak']."</p>";
                         $nestedData['kgKontrak'] = "<p style='color:".$color."'>".$kontrak->kontrak_d['kgKontrak']."</p>";
-                        
+
                         $sisakontrak = $kontrak->kontrak_d['pcsKontrak'] - $terkirim;
 
                         if ($sisakontrak < 0) {
@@ -179,13 +179,13 @@ class Kontrak_DController extends Controller
                         } else {
                             $sisakontrak = $sisakontrak;
                         }
-                        
+
                         $nestedData['sisaKirim'] = "<p style='color:".$color."'>".$sisakontrak."</p>";
                         $nestedData['rp_pcs'] = "<p style='color:".$color."'>".$kontrak->kontrak_d['harga_pcs']."</p>";
-                        
+
                         $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
                         // $mcKode = ($mc->revisi != '' ? $mc->kode.'-'.$mc->revisi : $mc->kode);
-                        
+
                         if($mc->revisi == ''){
                             $mcKode = $mc->kode;
                         } else if ($mc->revisi == "R0"){
@@ -193,14 +193,14 @@ class Kontrak_DController extends Controller
                         } else {
                             $mcKode = $mc->kode.'-'.$mc->revisi;
                         }
-                        
+
                         $nestedData['brt_kualitas'] = "<p style='color:".$color."'>".$mc->gramSheetBoxKontrak."</p>" ;
                         $nestedData['nomc'] = "<p style='color:".$color."'>".$mcKode."</p>";
                         $nestedData['kodeBarang'] = "<p style='color:".$color."'>".$mc->kodeBarang."</p>";
                         $nestedData['namaBarang'] = "<p style='color:".$color."'>".$mc->namaBarang."</p>";
                         $nestedData['action'] = "&emsp;<button><a href='{$show}' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>
                         &emsp;<a href='{$edit}' title='EDIT' ><span class='glyphicon glyphicon-edit'>Edit</span></a>&emsp;<a href='{$dt}' title='SHOW' ><span class='glyphicon glyphicon-list'>DT</span></a>&emsp;<a href='{$kirim}' title='SHOW' ><span class='glyphicon glyphicon-list'>Kirim</span></a>&emsp;<a href='{$cancel}' title='SHOW' ><span class='glyphicon glyphicon-list'>Cancel</span></a>&emsp;<a href='{$open}' title='SHOW' ><span class='glyphicon glyphicon-list'>Open</span></a>";
-                        
+
                         $nestedData['b_expedisi'] = "<p style='color:".$color."'>".$kontrak->biaya_exp."</p>";
                         $nestedData['b_glue'] = "<p style='color:".$color."'>".$kontrak->biaya_glue."</p>";
                         $nestedData['b_wax'] = "<p style='color:".$color."'>".$kontrak->biaya_wax."</p>";
@@ -214,17 +214,17 @@ class Kontrak_DController extends Controller
                     $data[] = $nestedData;
                 }
             }
-            
+
             $json_data = array(
-                "draw"            => intval($request->input('draw')),  
-                "recordsTotal"    => intval($totalData),  
-                "recordsFiltered" => intval($totalFiltered), 
+                "draw"            => intval($request->input('draw')),
+                "recordsTotal"    => intval($totalData),
+                "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
                 "start"           => $start,
                 "limit"           => $limit
             );
-            
-            echo json_encode($json_data); 
+
+            echo json_encode($json_data);
         }
 
         public function getOpenKontrak(Request $request)
@@ -241,12 +241,12 @@ class Kontrak_DController extends Controller
 
             return view('admin.kontrak.open_kontrak');
         }
-        
+
         public function index(Request $request)
         {
             return view('admin.kontrak.index');
             // $kontrak_m = Kontrak_M::get();
-            
+
             // return view('admin.kontrak.index',compact('kontrak_m'));
         }
 
@@ -254,7 +254,7 @@ class Kontrak_DController extends Controller
         {
             $contractsQuery = new Kontrak_D;
             $contractsQuery = $contractsQuery->with('kontrakm', 'mc');
-            
+
             if ($request->search) {
                 $contractsQuery->WhereHas('kontrakm', function($query) use ($request) {
                     $query->where('kode', 'like', '%'.$request->search.'%')
@@ -276,10 +276,10 @@ class Kontrak_DController extends Controller
             $data = [
                 'contracts' => $contracts,
             ];
-            
+
             return view('admin.kontrak.indexnew', $data);
         }
-        
+
         /**
         * Show the form for creating a new resource.
         *
@@ -292,11 +292,11 @@ class Kontrak_DController extends Controller
             ->where('aktif', '=', 1)
             ->orderBy('nama', 'Asc')
             ->get();
-            
+
             return view('admin.kontrak.newcreate', compact(
-                // 'mc', 
-                'top', 
-                // 'cust', 
+                // 'mc',
+                'top',
+                // 'cust',
                 'sales'
             ));
         }
@@ -320,11 +320,11 @@ class Kontrak_DController extends Controller
 
             } catch (\Exception $e) {
                 Log::error('Customer model error: ' . $e->getMessage());
-                
+
                 // Fallback to DB facade
                 try {
                     $query = DB::connection('firebird')->table('TCustomer');
-                    
+
                     if ($request->has('search') && !empty($request->search)) {
                         $search = trim($request->search);
                         $query = $query->where(function($q) use ($search) {
@@ -335,13 +335,13 @@ class Kontrak_DController extends Controller
                     }
 
                     $customers = $query->orderBy('Nama', 'asc')->paginate(10);
-                    
+
                     // Convert to collection for consistency
                     $cust = $customers;
-                    
+
                 } catch (\Exception $e2) {
                     Log::error('Database connection error: ' . $e2->getMessage());
-                    
+
                     // Return empty paginated collection
                     $cust = new \Illuminate\Pagination\LengthAwarePaginator(
                         collect([]),
@@ -356,12 +356,12 @@ class Kontrak_DController extends Controller
             $data = [
                 'cust' => $cust,
             ];
-            
+
             return view('admin.customer.modal', $data);
         }
 
-        
-        
+
+
         /**
         * Store a newly created resource in storage.
         *
@@ -372,34 +372,34 @@ class Kontrak_DController extends Controller
         {
             //ambil url/ No Bukti halaman
             $url = Route::currentRouteName(); //output kontrak.store
-            
+
             //ambil noBukti dari number_sequence table
             $ns = DB::table('number_sequence')
             ->select('format')
             ->where('noBukti', '=', $url)->get(); //ambil format yg sesuai url/nobukti
-            
+
             $nobukti = $ns[0]->format;
             $tanggal = $request->tanggal;
-            
+
             // dd($nobukti, $tanggal);
-            
+
             $start = Carbon::createFromFormat('Y-m-d', $tanggal)
             ->firstOfMonth()
             ->format('Y-m-d');
-            
+
             $end = Carbon::createFromFormat('Y-m-d', $tanggal)
             ->endOfMonth()
             ->format('Y-m-d');
-            
+
             $fromDate = Carbon::now()->startOfMonth();
             $tillDate = Carbon::now()->endOfMonth();
-            
+
             if (strpos($fromDate, $start) !== false ) {
                 $result = Kontrak_M::whereBetween(DB::raw('date(tglKontrak)'), [$fromDate, $tillDate])->get();
                 $count = count($result)+1;
                 if ($nobukti === $nobukti) {
                     $nobukti = str_replace('~YYYY~', date('Y'), $nobukti);
-                    $nobukti = str_replace('~MM~', date('m'), $nobukti);                
+                    $nobukti = str_replace('~MM~', date('m'), $nobukti);
                     $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
                 }
             } else {
@@ -407,16 +407,16 @@ class Kontrak_DController extends Controller
                 $count = count($result)+2;
                 if ($nobukti === $nobukti) {
                     $nobukti = str_replace('~YYYY~', date('Y', strtotime($start)), $nobukti);
-                    $nobukti = str_replace('~MM~', date('m', strtotime($start)), $nobukti);                
+                    $nobukti = str_replace('~MM~', date('m', strtotime($start)), $nobukti);
                     $nobukti = str_replace('~999~', str_pad($count, 3, '0', STR_PAD_LEFT), $nobukti);
                 }
             }
-            
-            
+
+
             // dd($nobukti, $request->all());
-            
+
             // Insert Into ke table
-            $kontrakm = Kontrak_M::create([   
+            $kontrakm = Kontrak_M::create([
                 'kode' => $nobukti,
                 'tglKontrak' => $request->tanggal,
                 'top' => $request->top,
@@ -438,9 +438,9 @@ class Kontrak_DController extends Controller
                 'harga_pisau' => $request->asumsi_harga_pisau ?? 0
             ]);
             // End Insert Into
-            
+
             // dd($kontrakm);
-            
+
             $tax = 0 ;
             $sblTax = 0 ;
             $total = 0 ;
@@ -467,7 +467,7 @@ class Kontrak_DController extends Controller
                 'harga_kg' => $request->hargakg,
                 'createdBy' => $request->createdBy,
             ]);
-            
+
             $upMaster = Kontrak_M::find($kontrakm->id); // finding row sesuai id untuk update ke table
             Tracking::create([
                 'user'   => Auth::user()->name,
@@ -476,16 +476,16 @@ class Kontrak_DController extends Controller
                 'before' => '-',
                 'after'  => 'Kode: '.$upMaster->kode.', Customer: '.$upMaster->customer_name,
             ]);
-            
+
             $upMaster->amountBeforeTax = $request->total; // update database field amountBefireTax dengan value sblTax
             $upMaster->tax = $request->hargappn;
             $upMaster->amountTotal = $request->total + $request->hargappn;
-            
+
             $upMaster->save(); // simpan ke table
-            
+
             return redirect('admin/kontraknew')->with('success', "Data Berhasil disimpan dengan kode Kontrak = ". $nobukti);
         }
-        
+
         /**
         * Display the specified resource.
         *
@@ -494,9 +494,9 @@ class Kontrak_DController extends Controller
         */
         public function show(Kontrak_D $kontrak_D)
         {
-            //  
+            //
         }
-        
+
         /**
         * Show the form for editing the specified resource.
         *
@@ -507,7 +507,7 @@ class Kontrak_DController extends Controller
         {
             // menampilkan untuk dropdown
             // $cust = DB::connection('firebird')->table('TCustomer')->get();
-            
+
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -519,8 +519,8 @@ class Kontrak_DController extends Controller
             ->orderBy('nama', 'Asc')
             ->get();
             // End Dropdown
-            
-            
+
+
             // tampilkan data yang akan di edit
             $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -530,7 +530,7 @@ class Kontrak_DController extends Controller
             ->where('kontrak_m_id', '=', $id)
             ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.tipeMc as tipeMc', 'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'box.namaBarang as box', 'mc.tipeBox as tipeBox','mc.flute as flute', 'color_combine.nama as warna')
             ->first();
-            
+
             $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
@@ -553,9 +553,9 @@ class Kontrak_DController extends Controller
                 ), ['kontrak_M' => $kontrak_M]);
             } else {
                 return redirect('admin/kontraknew');
-            } 
+            }
         }
-        
+
         public function add_dt($id)
         {
             try {
@@ -597,13 +597,13 @@ class Kontrak_DController extends Controller
                     'kontrak' => $kontrak,
                     'opi' => $opi,
                 ]);
-                
+
             } catch (\Exception $e) {
                 Log::error('Error in add_dt: ' . $e->getMessage());
                 return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat data kontrak.');
             }
         }
-        
+
         public function store_dt(Request $request)
         {
 
@@ -619,8 +619,8 @@ class Kontrak_DController extends Controller
             $userName = Auth::user()->name;
             $jumlahKirim = (int) $request->jumlahKirim;
             $berat = (float) ($request->berat ?? 1);
-            
-            
+
+
 
             // DB::beginTransaction();
             // try {
@@ -651,7 +651,7 @@ class Kontrak_DController extends Controller
                         COUNT(*) as total_records
                     ")
                     ->first();
-                
+
                 $piutangData = Piutang::where('KodeCust', $customerData->Kode)
                     // ->whereRaw("DATEDIFF(DAY, TglJT, GETDATE()) > 30") // Filter data yang sudah lewat jatuh tempo + 30 hari
                     ->selectRaw("
@@ -662,7 +662,7 @@ class Kontrak_DController extends Controller
                     ->first();
 
 
-                    
+
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
 
                 $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak')
@@ -674,16 +674,16 @@ class Kontrak_DController extends Controller
                 } else {
                     $kodemc = $kontrakData->mc->kode.'-'.$kontrakData->mc->revisi;
                 }
-                
+
                 // dd($kontrakData);
-                
+
                 if (!$kontrakData) {
                     throw new \Exception('Data kontrak tidak ditemukan');
                 }
-                
+
                 // OPTIMIZED: Prepare data for batch insert
                 $currentTimestamp = now();
-                
+
                 // dd($dtId);
                 // OPTIMIZED: Determine OPI status based on customer conditions
                 $opiStatus = 'Proses'; // Default status
@@ -703,7 +703,7 @@ class Kontrak_DController extends Controller
                     }
                 }
 
-                
+
                 // dd($customerData, $piutang, $piutangData, $opiStatus, $numb_opi);
 
                 // dd($opiStatus, $customerData, $piutangTotal, $piutang);
@@ -743,7 +743,7 @@ class Kontrak_DController extends Controller
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
-                
+
                 // OPTIMIZED: Calculate new values safely
                 $newPcsSisa = max(0, $kontrakData->pcsSisaKontrak - $jumlahKirim);
                 $newKgSisa = max(0, $kontrakData->kgSisaKontrak - ($jumlahKirim * $berat));
@@ -753,7 +753,7 @@ class Kontrak_DController extends Controller
                     $nomer_opi->nomer += 1;
                     $nomer_opi->save();
                 }
-                
+
                 // OPTIMIZED: Batch updates
                 DB::table('kontrak_d')
                     ->where('id', $kontrakData->kontrak_d_id)
@@ -762,7 +762,7 @@ class Kontrak_DController extends Controller
                         'kgSisaKontrak' => $newKgSisa,
                         'updated_at' => $currentTimestamp
                     ]);
-                
+
                 // OPTIMIZED: Simple tracking insert
                 DB::table('tracking')->insert([
                     'user'       => $userName,
@@ -773,13 +773,13 @@ class Kontrak_DController extends Controller
                     'created_at' => $currentTimestamp,
                     'updated_at' => $currentTimestamp
                 ]);
-                
+
                 // DB::commit();
-                
+
                 return redirect()->back()
                     ->with('success', 'Data DT dan OPI berhasil disimpan dengan Nomor OPI ' . $numb_opi);
         }
-        
+
         /**
         * Update the specified resource in storage.
         *
@@ -812,7 +812,7 @@ class Kontrak_DController extends Controller
                 'harga_karet'    => $kontrakm->harga_karet,
                 'harga_pisau'    => $kontrakm->harga_pisau,
             ]);
-            
+
             // untuk set value yang di update
             $kontrakm->customer_name = $request->namaCust;
             $kontrakm->alamatKirim = $request->alamatKirim;
@@ -835,9 +835,9 @@ class Kontrak_DController extends Controller
             $kontrakm->status = 4;
             $kontrakm->lastUpdatedBy = Auth::user()->name;
             // End untuk set value yang di update
-            
+
             $kontrakm->save();
-            
+
             $kontrakd = Kontrak_D::find($request->kontrakd_id);
 
             // Ambil kode MC lama dan baru untuk tracking
@@ -871,8 +871,8 @@ class Kontrak_DController extends Controller
             $kontrakd->kgKurangToleransiKontrak = $request->toleransiKurangKg;
             $kontrakd->kgLebihToleransiKontrak = $request->toleransiLebihKg;
             $kontrakd->lastUpdatedBy = Auth::user()->name;
-            
-            $kontrakd->save();            
+
+            $kontrakd->save();
 
             $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
             ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
@@ -883,9 +883,9 @@ class Kontrak_DController extends Controller
                 if ($realisasi->qty >= $kontrakm->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
-                } 
+                }
             }
-            
+
             Tracking::create([
                 'user'   => Auth::user()->name,
                 'tipe'   => 'Kontrak',
@@ -933,9 +933,11 @@ class Kontrak_DController extends Controller
                     ? $old_opi_mc->kode.($old_opi_mc->revisi ? '-'.$old_opi_mc->revisi : '')
                     : $opi->mc_id;
 
+                $opi->timestamps = false;
                 $opi->mc_id         = $new_mc_id;
                 $opi->lastUpdatedBy = Auth::user()->name;
                 $opi->save();
+                $opi->timestamps = true;
 
                 Tracking::create([
                     'user'   => Auth::user()->name,
@@ -950,7 +952,7 @@ class Kontrak_DController extends Controller
             // dd($kontrakd);
             return redirect('admin/kontraknew');
         }
-        
+
         /**
         * Remove the specified resource from storage.
         *
@@ -961,12 +963,12 @@ class Kontrak_DController extends Controller
         {
             //
         }
-        
+
         public function pdfprint($id){
-            
-            
+
+
             $cust = DB::connection('firebird')->table('TCustomer')->get();
-            
+
             $mc = DB::table('mc')
             ->leftJoin('substance', 'substanceKontrak_id', '=', 'substance.id')
             ->leftJoin('color_combine', 'colorCombine_id', '=', 'color_combine.id')
@@ -976,8 +978,8 @@ class Kontrak_DController extends Controller
             $top = DB::table('top')->get();
             $sales = DB::table('sales_m')->get();
             // End Dropdown
-            
-            
+
+
             // tampilkan data yang akan di edit
             $kontrakBox = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
@@ -989,9 +991,9 @@ class Kontrak_DController extends Controller
             ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'box.panjangDalamBox as panjangBox', 'box.lebarDalamBox as lebarBox', 'box.tinggiDalamBox as tinggiBox', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'color_combine.nama as warna', 'box.tipeCreasCorr as tipeCrease', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus', 'mc.keterangan as keterangan')
             ->first();
             // dd($kontrakBox);
-            
+
             // $mytime = Carbon::now();
-            
+
             $kontrak_D = DB::table('kontrak_d')
             ->leftJoin('mc', 'mc_id', '=', 'mc.id')
             ->leftJoin('box', 'mc.box_id', '=', 'box.id')
@@ -1001,7 +1003,7 @@ class Kontrak_DController extends Controller
             ->select('kontrak_d.*', 'mc.kode as mc', 'mc.id as mcid', 'mc.wax as wax', 'mc.tipeMc as tipeMc', 'mc.panjangSheetBox as panjangSheetBox', 'mc.lebarSheetBox as lebarSheetBox',  'mc.gramSheetBoxKontrak as gram', 'substance.kode as substance', 'mc.namaBarang as Barang', 'mc.flute as flute', 'mc.tipeBox as tipeBox', 'mc.koli as koli', 'mc.joint as joint', 'mc.bungkus as bungkus','box.panjangDalamBox as panjangBox', 'box.lebarDalamBox as lebarBox', 'box.tinggiDalamBox as tinggiBox', 'kontrak_d.pcsKontrak as qtyKontrak', 'kontrak_d.harga_pcs as harga', 'kontrak_d.pctToleransiLebihKontrak as lebih', 'kontrak_d.pctToleransiKurangKontrak as kurang' )
             ->get();
             // dd($kontrak_D);
-            
+
             $kontrak_M = DB::table('kontrak_m')
             ->where('kontrak_m.id', '=', $id)
             ->first();
@@ -1009,12 +1011,12 @@ class Kontrak_DController extends Controller
             $dt = DB::table('dt')
             ->where('kontrak_m_id', '=', $id)
             ->get();
-            
+
             $date = date_create($kontrak_M->tglKontrak);
-            
+
             $count = count($kontrak_D);
-            
-            
+
+
             // dd($kontrak_M);
             return view('admin.kontrak.pdf', compact(
                 'cust',
@@ -1028,16 +1030,16 @@ class Kontrak_DController extends Controller
                 'date',
             ), ['kontrak_M' => $kontrak_M]);
         }
-        
+
         public function add_realisasi($id)
         {
-            
+
             DB::connection('firebird2')->beginTransaction();
-            
+
             $kontrak_D = Kontrak_D::where('kontrak_m_id', '=', $id)->first();
-            
-            $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();            
-            
+
+            $opi = DB::table('opi_m')->where('kontrak_m_id', '=', $id)->get();
+
             $kontrak_M =Kontrak_M::where('kontrak_m.id', '=', $id)
             ->first();
             $sj = DB::connection('firebird2')->table('TDetSJ')
@@ -1057,22 +1059,22 @@ class Kontrak_DController extends Controller
             ->get();
 
             // dd($kontrakMaster);
-            
+
             return view('admin.kontrak.data_realisasi', compact(
-                'kontrak_D', 
-                'kontrak_M', 
+                'kontrak_D',
+                'kontrak_M',
                 'opi',
                 'kontrakMaster',
                 'sj'
             ));
         }
-        
+
         public function store_realisasi(Request $request)
-        {   
-            
+        {
+
             $id = array_merge($request->idkontrak);
-            for ($i=0; $i < count($id); $i++) { 
-                
+            for ($i=0; $i < count($id); $i++) {
+
                 if(strlen($request->opi) > 6){
                     $opis = explode(',', $request->opi);
                     $opi = Opi_M::where('nama', '=', $opis[$i])->first();
@@ -1116,7 +1118,7 @@ class Kontrak_DController extends Controller
 
                 $kontrak->pcsSisaKirim = $kontrak->pcsSisaKontrak - $qty ;
                 $kontrak->save();
-                
+
                 Tracking::create([
                     'user'   => Auth::user()->name,
                     'tipe'   => 'Realisasi Kirim',
@@ -1133,20 +1135,20 @@ class Kontrak_DController extends Controller
                 if ($realisasi->qty >= $kontrak->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
-                } 
+                }
             }
-            
+
             return redirect('admin/kontraknew');
         }
-        
+
         public function edit_realisasi(Request $request, $id)
         {
             $kirim = RealisasiKirim::findOrFail($id);
 
             $kontrak = Kontrak_D::where('kontrak_m_id', "=", $kirim->kontrak_m_id)->first();
             $kontrakm = Kontrak_M::where('id', '=', $kontrak->kontrak_m_id)->first();
-            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();   
-            
+            $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();
+
             // dd($kirim->qty_kirim);
             $before_realisasi = json_encode([
                 'nomer_sj'     => $kirim->nomer_sj,
@@ -1159,7 +1161,7 @@ class Kontrak_DController extends Controller
             $kontrak->pcsSisaKirim = $kontrak->pcsSisaKirim + $kirim->qty_kirim - $request->jumlahKirim;
             $kontrak->save();
             // dd($id);
-            
+
             $kirim->update([
                 'tanggal_kirim' => $request->tglKirim,
                 'qty_kirim' => $request->jumlahKirim,
@@ -1184,23 +1186,23 @@ class Kontrak_DController extends Controller
                         ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
                         ->where('realisasi_kirim.kontrak_m_id', '=', $kontrakm->id)
                         ->first();
-                        
+
 
                 if ($realisasi->qty >= $kontrak->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
-                } 
-            
+                }
+
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
-            
+
         }
-        
+
         public function cancel_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
             $old_status = $kontrak->status;
             $kontrak->status = 5;
-            
+
             Tracking::create([
                 'user'   => Auth::user()->name,
                 'tipe'   => 'Kontrak',
@@ -1208,25 +1210,25 @@ class Kontrak_DController extends Controller
                 'before' => 'Status: '.$old_status,
                 'after'  => 'Status: 5 (Cancel)',
             ]);
-            
+
             $kontrak->save();
             return redirect('admin/kontraknew')->with('success', 'Kontrak Berhasil di Cancel');
         }
-        
+
         public function open_kontrak($id)
         {
             $kontrak = Kontrak_M::find($id);
             $old_status_open = $kontrak->status;
             $kontrak->status = 2;
-            
+
             $notif = Notification::where('kontrak_id', '=', $id)
                     ->where('status', '=', 'Proses')
                     ->first();
 
             $notif->pic = Auth::user()->name;
             $notif->status = 'Done';
-    
-            $notif->save();        
+
+            $notif->save();
             Tracking::create([
                 'user'   => Auth::user()->name,
                 'tipe'   => 'Kontrak',
@@ -1234,12 +1236,12 @@ class Kontrak_DController extends Controller
                 'before' => 'Status: '.$old_status_open,
                 'after'  => 'Status: 2 (Open)',
             ]);
-            
+
             $kontrak->save();
             return redirect()->back()->with('success', 'Kontrak Berhasil di Buka');
         }
 
-        public function recall($id) 
+        public function recall($id)
         {
             $order = 0;
             $kirim = 0;
@@ -1247,7 +1249,7 @@ class Kontrak_DController extends Controller
             $kontrakm = Kontrak_M::where("id", "=", $id)->first();
             $opi = Opi_M::where("kontrak_m_id", "=", $id)->get();
             $realisasi = RealisasiKirim::where("kontrak_m_id", "=", $id)->get();
-            
+
             foreach ($opi as $opi) {
                 $order = $order + $opi->jumlahOrder;
             }
@@ -1267,7 +1269,7 @@ class Kontrak_DController extends Controller
             $kontrak->pcsSisaKirim = $sisakirim;
 
             $kontrak->save();
-            
+
             return redirect()->back()->with('success', 'Berhasil Recall QTY Kontrak');
         }
 
@@ -1298,14 +1300,14 @@ class Kontrak_DController extends Controller
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
             $search = $request->input('search');
-            
+
             // Validasi tanggal jika ada
             if ($startDate && $endDate) {
                 if (strtotime($startDate) > strtotime($endDate)) {
                     return redirect()->back()->with('error', 'Tanggal mulai tidak boleh lebih besar dari tanggal akhir');
                 }
             }
-            
+
             // Generate filename dengan timestamp dan parameter
             $filename = 'export_kontrak_';
             if ($search) {
@@ -1315,7 +1317,7 @@ class Kontrak_DController extends Controller
                 $filename .= $startDate . '_to_' . $endDate . '_';
             }
             $filename .= date('Y-m-d_H-i-s') . '.xlsx';
-            
+
             // Download Excel file
             return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
         }
