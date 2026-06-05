@@ -171,6 +171,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('fb.list.bp_sheet') }}" class="nav-link">
+                  <i class="fas fa-circle nav-icon"></i>
+                  <p>BP Sheet</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('fb.list.bp_lama') }}" class="nav-link">
                   <i class="fas fa-circle nav-icon"></i>
                   <p>BP Lama</p>

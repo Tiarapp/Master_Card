@@ -131,7 +131,7 @@ class BarangController extends Controller
         $barang = $query->orderBy('TPersediaan.KodeBrg', 'asc')->paginate(20);
 
         // Get last mutation dates for items on current page
-        $kodeBrgList = $barang->pluck('KodeBrg')->toArray();
+        $kodeBrgList = collect($barang->items())->pluck('KodeBrg')->toArray();
 
         $lastPhp = DB::connection('firebird2')->table('TDetPHP')
             ->leftJoin('TPHP', 'TDetPHP.NoPHP', '=', 'TPHP.NoBukti')
@@ -618,6 +618,84 @@ class BarangController extends Controller
             }
 
         return view('admin.barangpembantu.index');
+    }
+
+    public function bp_sheet(Request $request)
+    {
+        DB::connection('fbbp')->beginTransaction();
+        $periode = date("m/Y");
+
+        $barang = DB::connection('fbbp')->table('TPersediaanConv')
+            ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
+            ->select(
+                'TPersediaanConv.KodeBrg',
+                'TBarang.NamaBrg',
+                'TPersediaanConv.SaldoAkhirP as SaldoPrimer',
+                'TPersediaanConv.SaldoAkhirS as SaldoSekunder',
+                'TPersediaanConv.Periode',
+                'TBarang.NilaiKonversi',
+                'TBarang.SatuanP',
+                'TBarang.SatuanS'
+            )
+            ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
+            ->where(function ($query) {
+                $query->where('TPersediaanConv.KodeBrg', 'LIKE', '11.18.%')
+                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '11.19.%')
+                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '12.19.%');
+            })
+            ->orderBy('TPersediaanConv.KodeBrg', 'asc')
+            ->paginate(20);
+
+        $kodeBrgList = collect($barang->items())->pluck('KodeBrg')->toArray();
+        $lastMutasi = [];
+
+        if (!empty($kodeBrgList)) {
+            $lastBbm = DB::connection('fbbp')->table('TDetBBMConv')
+                ->leftJoin('TBBMConv', 'TDetBBMConv.NoBBM', '=', 'TBBMConv.NoBukti')
+                ->select('TDetBBMConv.KodeBrg', DB::raw('MAX("TBBMConv"."TglMasuk") as "TglMax"'))
+                ->whereIn('TDetBBMConv.KodeBrg', $kodeBrgList)
+                ->groupBy('TDetBBMConv.KodeBrg')
+                ->pluck('TglMax', 'KodeBrg');
+
+            $lastReturBbk = DB::connection('fbbp')->table('TDetReturProd')
+                ->leftJoin('TReturProd', 'TDetReturProd.NoBBK', '=', 'TReturProd.NoBukti')
+                ->select('TDetReturProd.KodeBrg', DB::raw('MAX("TReturProd"."TglRetur") as "TglMax"'))
+                ->whereIn('TDetReturProd.KodeBrg', $kodeBrgList)
+                ->groupBy('TDetReturProd.KodeBrg')
+                ->pluck('TglMax', 'KodeBrg');
+
+            $lastBbk = DB::connection('fbbp')->table('TDetBBKConv')
+                ->leftJoin('TBBKConv', 'TDetBBKConv.NoBukti', '=', 'TBBKConv.NoBukti')
+                ->select('TDetBBKConv.KodeBrg', DB::raw('MAX("TBBKConv"."TglKeluar") as "TglMax"'))
+                ->whereIn('TDetBBKConv.KodeBrg', $kodeBrgList)
+                ->groupBy('TDetBBKConv.KodeBrg')
+                ->pluck('TglMax', 'KodeBrg');
+
+            $lastReturBbm = DB::connection('fbbp')->table('TDetReturBBM')
+                ->leftJoin('TReturBBM', 'TDetReturBBM.NoRetur', '=', 'TReturBBM.NoBukti')
+                ->select('TDetReturBBM.KodeBrg', DB::raw('MAX("TReturBBM"."TglRetur") as "TglMax"'))
+                ->whereIn('TDetReturBBM.KodeBrg', $kodeBrgList)
+                ->groupBy('TDetReturBBM.KodeBrg')
+                ->pluck('TglMax', 'KodeBrg');
+
+            foreach ($kodeBrgList as $kode) {
+                $dates = array_filter([
+                    $lastBbm[$kode] ?? null,
+                    $lastReturBbk[$kode] ?? null,
+                    $lastBbk[$kode] ?? null,
+                    $lastReturBbm[$kode] ?? null,
+                ]);
+
+                $timestamps = array_filter(array_map(function ($date) {
+                    $value = strtotime((string) $date);
+                    return $value !== false ? $value : null;
+                }, $dates));
+
+                $lastMutasi[$kode] = !empty($timestamps) ? date('d/m/Y', max($timestamps)) : null;
+            }
+        }
+
+        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi'));
     }
 
     public function get_mutasi_bp(Request $request)

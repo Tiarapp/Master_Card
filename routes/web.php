@@ -615,6 +615,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('admin/getSupp', [BbmRollController::class, 'getSupp'])->name('get.supp');
 
         Route::get('admin/fb/bp', [BarangController::class, 'teknik'])->name('fb.list.bp');
+        Route::get('admin/fb/bp-sheet', [BarangController::class, 'bp_sheet'])->name('fb.list.bp_sheet');
         Route::post('admin/fb/bp/mutasi/', [BarangController::class, 'get_mutasi_bp'])->name('fb.bp.mutasi');
         Route::get('admin/fb/bp-lama', [BarangController::class, 'bp_lama'])->name('fb.list.bp_lama');
         Route::post('admin/fb/bp/mutasi-lama/', [BarangController::class, 'get_mutasi_bp_lama'])->name('fb.bp_lama.mutasi');
