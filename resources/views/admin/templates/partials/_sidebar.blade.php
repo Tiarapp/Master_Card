@@ -201,17 +201,9 @@
               <ul class="nav nav-treeview">
                 @if (hasMenuAccess('logistik.retur'))
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fa-solid fa-toilet-paper nav-icon"></i>
-                      <p>Barang Jadi <i class="right fas fa-angle-left"></i></p>
+                    <a href="{{ route('barang.retur') }}" class="nav-link">
+                      <i class="fas fa-circle nav-icon"></i><p>Retur Penjualan</p>
                     </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="{{ route('barang.retur') }}" class="nav-link">
-                          <i class="fas fa-circle nav-icon"></i><p>Retur Penjualan</p>
-                        </a>
-                      </li>
-                    </ul>
                   </li>
                 @endif
                 @if (hasMenuAccess('logistik.bp_baru'))
