@@ -2286,7 +2286,8 @@
         <tr class="row0">
           <td class="column0">&nbsp;</td>
           <td class="column1 style70 s style44" colspan="9">PT. SARANA PACKAGING AGRAPANA</td>
-          <td class="column10 style2 null"><img src="{{ asset('images/tes.png') }}" alt="" width="50" height="50"></td>
+          {{-- <td class="column10 style2 null"><img src="{{ asset('images/tes.png') }}" alt="" width="50" height="50"></td> --}}
+          <td class="column10 style2 null"></td>
           <td class="column11 style3 null"></td>
         </tr>
         <tr class="row1">
