@@ -2286,7 +2286,7 @@
         <tr class="row0">
           <td class="column0">&nbsp;</td>
           <td class="column1 style70 s style44" colspan="9">PT. SARANA PACKAGING AGRAPANA</td>
-          <td class="column10 style2 null"></td>
+          <td class="column10 style2 null"><img src="{{ asset('images/tes.png') }}" alt="" width="50" height="50"></td>
           <td class="column11 style3 null"></td>
         </tr>
         <tr class="row1">
@@ -2421,7 +2421,7 @@
           <td class="column9 style59 null">RM :</td>
           @php
 
-            $qty = ($opi2->jumlahOrder) / $opi2->outConv ; 
+            $qty = ($opi2->jumlahOrder) / $opi2->outConv ;
             // dd($qty);
             $outCorr = floor(2500/$opi2->lebarSheet);
             $cop = $qty / $outCorr;
