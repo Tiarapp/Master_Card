@@ -38,7 +38,7 @@ if (!function_exists('hasMenuAccess')) {
 
         // 2. Legacy: no roles, no company → full access (IT admin)
         if (!$user->company_id) {
-            return true;
+            return false;
         }
 
         // 3. Legacy MenuPermission table (supports parent slugs only)
