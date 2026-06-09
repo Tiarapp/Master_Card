@@ -40,7 +40,7 @@ class OpiController extends Controller
         $dir = $request->input('order.0.dir');
 
         if(empty($request->input('search.value')))
-        {            
+        {
            if (Auth::user()->divisi_id == 5) {
                 $opi = Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
                 ->where('status_opi', '=', "Proses")
@@ -49,19 +49,19 @@ class OpiController extends Controller
                 ->limit(50)
                 ->orderBy('NoOPI')
                 ->get();
-                
+
                 $totalFiltered = Opi_M::opi()->count();
            } else {
                 $opi = Opi_M::opi()->offset($start)
                 ->limit(50)
                 ->orderBy('NoOPI')
                 ->get();
-                
+
                 $totalFiltered = Opi_M::opi()->count();
            }
         }
         else {
-            $search = $request->input('search.value'); 
+            $search = $request->input('search.value');
 
             if (Auth::user()->divisi_id == 5) {
                 $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
@@ -118,9 +118,9 @@ class OpiController extends Controller
                 $nestedData['id'] = $opi->id;
                 $nestedData['NoOPI'] = $opi->NoOPI;
 
-                if ($cek_opi == '') { 
+                if ($cek_opi == '') {
                     if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2) {
-                           
+
                         $nestedData['action'] = "
                         <a href='{$closed}' title='Closed' class='btn btn-outline-warning' type='button'><i class='fa fa-lock' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
                         <a href='{$cancel}' title='Cancel' class='btn btn-outline-danger' type='button'><i class='fa fa-ban' data-toggle='tooltip' data-placement='bottom' title='' id=''></i></a>
@@ -131,7 +131,7 @@ class OpiController extends Controller
                         ";
                     }
                 } else {
-                
+
                     $nestedData['action'] = "<a href='{$show}' title='SHOW' class='btn btn-outline-success' type='button'><i class='fa fa-eye' data-toggle='tooltip' data-placement='bottom' title='Print' id='Print'></i></a>
                     ";
                 }
@@ -223,18 +223,18 @@ class OpiController extends Controller
 
             }
         }
-          
+
         $json_data = array(
-                    "draw"            => intval($request->input('draw')),  
-                    "recordsTotal"    => intval($totalData),  
-                    "recordsFiltered" => intval($totalFiltered), 
-                    "data"            => $data   
+                    "draw"            => intval($request->input('draw')),
+                    "recordsTotal"    => intval($totalData),
+                    "recordsFiltered" => intval($totalFiltered),
+                    "data"            => $data
                     );
-        
+
 
         // dd($json_data);
-        echo json_encode($json_data); 
-     
+        echo json_encode($json_data);
+
         // $data = Opi_M::opi()->get();
         // return Datatables::of($data)->make(true);
     }
@@ -244,7 +244,7 @@ class OpiController extends Controller
         $opi = Opi_M::opi()->where('status_opi', '=', 'Pending')->get();
         if ($request->ajax()) {
             return DataTables::of($opi)
-                    ->addColumn('checkbox', function($opi){ 
+                    ->addColumn('checkbox', function($opi){
                         return '<input type="checkbox" class="rowCheckbox" value="'. $opi->id .'">';
                     })
                     ->addColumn('action', function($opi) {
@@ -264,23 +264,23 @@ class OpiController extends Controller
 
         $opi->status_opi = 'Proses';
         $opi->save();
-        
+
         return redirect()->back()->with('success', 'OPI '.$opi->NoOPI.' sudah diapprive!!');
     }
 
     public function single($id)
     {
         $opis = Opi_M::with([
-            'kontrakm', 
-            'kontrakd', 
+            'kontrakm',
+            'kontrakd',
             'mc.substanceproduksi.lineratas',
-            'mc.substanceproduksi.flute1', 
+            'mc.substanceproduksi.flute1',
             'mc.substanceproduksi.linertengah',
             'mc.substanceproduksi.flute2',
             'mc.substanceproduksi.linerbawah',
             'dt'
         ])->findOrFail($id);
-        
+
         return response()->json($opis);
     }
 
@@ -291,16 +291,16 @@ class OpiController extends Controller
             $perPage = 20;
             $search = $request->input('search', '');
             $plan_corr = $request->input('plan_corr', null);
-            
+
             // Convert string "0" to integer 0
             if ($plan_corr === "0") {
                 $plan_corr = 0;
             }
-            
+
             // Use simple query instead of heavy opi() scope to avoid connection reset
             $query = Opi_M::select([
                     'opi_m.id',
-                    'opi_m.NoOPI', 
+                    'opi_m.NoOPI',
                     'opi_m.jumlahOrder',
                     'opi_m.status_opi',
                     'opi_m.tglKirimDt',
@@ -312,7 +312,7 @@ class OpiController extends Controller
                     'mc.tipeBox',
                     'mc.flute',
                     'mc.panjangSheet',
-                    'mc.lebarSheet', 
+                    'mc.lebarSheet',
                     'mc.outConv',
                     'mc.gramSheetCorrProduksi as gramProd',
                     'mc.revisi'
@@ -322,14 +322,14 @@ class OpiController extends Controller
                 ->leftJoin('mc', 'kontrak_d.mc_id', '=', 'mc.id')
                 ->where('opi_m.NoOPI', 'NOT LIKE', "%CANCEL%")
                 ->where('opi_m.status_opi', '=', "Proses");
-                
+
             // Add plan_corr filter conditionally
             if ($plan_corr !== null) {
                 $query->where('opi_m.plan_corr', '=', $plan_corr);
             } else {
                 $query->whereNull('opi_m.plan_corr');
             }
-        
+
             // Apply search filter if provided
             if (!empty($search)) {
                 $query->where(function($q) use ($search) {
@@ -341,16 +341,16 @@ class OpiController extends Controller
                       ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
                 });
             }
-            
+
             // Get total count for pagination
             $totalRecords = $query->count();
-            
+
             // Get paginated data
             $opis = $query->offset(($page - 1) * $perPage)
                          ->limit($perPage)
                          ->orderBy('opi_m.id', 'desc')
                          ->get();
-            
+
             // Format data for response
             $data = [];
             foreach ($opis as $opi) {
@@ -368,17 +368,17 @@ class OpiController extends Controller
                 $nestedData['gram'] = $opi->gramProd;
                 $nestedData['status_opi'] = $opi->status_opi;
                 $nestedData['tglKirimDt'] = $opi->tglKirimDt;
-                
+
                 // Handle MC code with revision
                 if ($opi->revisi == '' || $opi->revisi == "R0") {
                     $nestedData['kode'] = $opi->mcKode ?? 'N/A';
                 } else {
                     $nestedData['kode'] = ($opi->mcKode ?? 'N/A') . '-' . $opi->revisi;
                 }
-                
+
                 $data[] = $nestedData;
             }
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $data,
@@ -391,10 +391,10 @@ class OpiController extends Controller
                     'to' => min($page * $perPage, $totalRecords)
                 ]
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Error in OPI jsonPaginated: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat memuat data OPI: ' . $e->getMessage(),
@@ -410,7 +410,7 @@ class OpiController extends Controller
             ], 500);
         }
     }
-    
+
     public function index(Request $request)
     {
         $data = Opi_M::opi()->limit(100)->get();
@@ -483,7 +483,7 @@ class OpiController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**
@@ -497,7 +497,7 @@ class OpiController extends Controller
         $opi = Opi_M::find($id);
         $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
         $old_status_opi = $opi->status_opi;
-                
+
         Tracking::create([
             'user'   => Auth::user()->name,
             'tipe'   => 'OPI',
@@ -510,7 +510,7 @@ class OpiController extends Controller
         $opi->NoOPI = $opi->NoOPI."(CANCEL)";
         $opi->lastUpdatedBy = Auth::user()->name;
         $opi->status_opi = "Cancel";
-        
+
         $kontrakd->pcsSisaKontrak = $kontrakd->pcsSisaKontrak + $opi->jumlahOrder ;
 
         $opi->jumlahOrder = 0;
@@ -538,7 +538,7 @@ class OpiController extends Controller
 
         return redirect('admin/opi');
 
-        
+
     }
 
     /**
@@ -551,7 +551,7 @@ class OpiController extends Controller
     {
         try {
             $opi = Opi_M::with(['kontrakm', 'kontrakd', 'mc', 'dt'])->findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -601,7 +601,7 @@ class OpiController extends Controller
                 'tglKirimDt'  => $opi->tglKirimDt,
                 'keterangan'  => $opi->dt ? $opi->dt->keterangan : null,
             ]);
-            
+
             // Update OPI data
             $opi->jumlahOrder = $request->jumlahOrder;
             $opi->tglKirimDt = $request->tglKirimDt;
@@ -651,7 +651,7 @@ class OpiController extends Controller
         ->leftJoin('substance', 'mc.substanceProduksi_id', 'substance.id')
         ->leftJoin('color_combine', 'mc.colorCombine_id', 'color_combine.id')
         ->where('opi_m.id', '=', $id)
-        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak', 'opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid', 'mc.lebarSheet', 'mc.panjangSheet')
+        ->select('kontrak_m.kode', 'kontrak_m.tglKontrak', 'kontrak_m.customer_name as Cust', 'kontrak_m.poCustomer', 'kontrak_m.alamatKirim', 'kontrak_d.pctToleransiKurangKontrak', 'kontrak_d.pctToleransiLebihKontrak', 'kontrak_m.tipeOrder', 'kontrak_m.keterangan as ketkontrak', 'opi_m.noOPI', 'opi_m.jumlahOrder', 'opi_m.keterangan', 'mc.namaBarang', 'opi_m.nama', 'mc.revisi', 'mc.kodeBarang', 'box.panjangDalamBox as panjang', 'box.lebarDalamBox as lebar', 'box.tinggiDalamBox as tinggi', 'substance.kode as subsKode', 'mc.flute', 'color_combine.nama as namacc', 'mc.gramSheetBoxKontrak as gram', 'mc.koli', 'mc.joint', 'mc.tipeBox', 'mc.kode as mcKode', 'dt.pcsDt', 'dt.tglKirimDt', 'mc.outConv', 'mc.id as mcid', 'mc.lebarSheet', 'mc.panjangSheet', 'mc.fsc')
         ->first();
 
         // dd($opi2);
@@ -678,15 +678,15 @@ class OpiController extends Controller
 
         // Alternatif 1: Menggunakan subquery untuk ORDER BY
         $data = Opi_M::with([
-                'mc', 
-                'kontrakm', 
-                'kontrakd', 
+                'mc',
+                'kontrakm',
+                'kontrakd',
                 'dt'
             ])
             ->whereBetween('tglKirimDt', [$request->start, $request->end])
             ->where('status_opi', 'Proses')
-            ->orderByRaw('(SELECT kodeBarang FROM mc 
-                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id 
+            ->orderByRaw('(SELECT kodeBarang FROM mc
+                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id
                           WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
             ->get();
 
@@ -709,7 +709,7 @@ class OpiController extends Controller
 
         // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
         $stockMap = $stock->pluck('quantity', 'KodeBrg');
-        
+
         // Debug: Lihat hasil clean data
         // dd('Cleaned stock:', $stock->take(3), 'Stock map:', $stockMap->take(3));
 
@@ -717,13 +717,13 @@ class OpiController extends Controller
         $data = $data->map(function ($item) use ($stockMap) {
             // Ambil kode barang dari relasi mc
             $kodeBarang = $item->mc->kodeBarang ?? null;
-            
+
             // Cari quantity di stock berdasarkan kode barang
             $quantity = $stockMap->get($kodeBarang, 0); // Default 0 jika tidak ditemukan
-            
+
             // Tambahkan property stock_quantity ke item
             $item->stock_quantity = $quantity;
-            
+
             // Hitung stock status (aman, kurang, habis)
             $needed = $item->jumlahOrder ?? 0;
             if ($quantity >= $needed) {
@@ -736,10 +736,10 @@ class OpiController extends Controller
                 $item->stock_status = 'habis';
                 $item->stock_indicator = 'danger';
             }
-            
+
             // Hitung selisih stock vs kebutuhan
             $item->stock_difference = $quantity - $needed;
-            
+
             return $item;
         });
 
@@ -759,15 +759,15 @@ class OpiController extends Controller
 
         // Ambil data OPI sesuai periode (sama seperti plan_kirim method)
         $data = Opi_M::with([
-                'mc', 
-                'kontrakm', 
-                'kontrakd', 
+                'mc',
+                'kontrakm',
+                'kontrakd',
                 'dt'
             ])
             ->whereBetween('tglKirimDt', [$request->start, $request->end])
             ->where('status_opi', 'Proses')
-            ->orderByRaw('(SELECT kodeBarang FROM mc 
-                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id 
+            ->orderByRaw('(SELECT kodeBarang FROM mc
+                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id
                           WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
             ->get();
 
@@ -787,14 +787,14 @@ class OpiController extends Controller
         });
 
         $stockMap = $stock->pluck('quantity', 'KodeBrg');
-        
+
         // Map quantity dari stock ke data OPI
         $data = $data->map(function ($item) use ($stockMap) {
             $kodeBarang = $item->mc->kodeBarang ?? null;
             $quantity = $stockMap->get($kodeBarang, 0);
-            
+
             $item->stock_quantity = $quantity;
-            
+
             $needed = $item->jumlahOrder ?? 0;
             if ($quantity >= $needed) {
                 $item->stock_status = 'aman';
@@ -806,9 +806,9 @@ class OpiController extends Controller
                 $item->stock_status = 'habis';
                 $item->stock_indicator = 'danger';
             }
-            
+
             $item->stock_difference = $quantity - $needed;
-            
+
             return $item;
         });
 

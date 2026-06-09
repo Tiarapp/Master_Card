@@ -20,7 +20,7 @@ class OpiExport implements FromCollection, WithHeadings
     }
 
     public function collection()
-    {   
+    {
         return $this->opi->getCollection()->map(function ($item) {
             return [
                 'ID' => $item->id,
@@ -91,6 +91,7 @@ class OpiExport implements FromCollection, WithHeadings
                 'bungkus' => $item->kontrakd->mc->bungkus,
                 'lainLain' => $item->kontrakd->mc->lain,
                 'blok' => $item->kontrakd->mc->text,
+                'FSC' => $item->kontrakd->mc->fsc == 1 ? 'FSC' : 'Non FSC'
             ];
         });
     }
@@ -143,21 +144,22 @@ class OpiExport implements FromCollection, WithHeadings
             'Harga/Kg (Rp)',
             'Real Kirim (Kg)',
             'Sisa DT (Kg)',
-            'Status OPI', 
-            'No Kontrak Urut', 
-            'Tgl Kontrak', 
-            'Kualitas Kontrak KM Atas', 
-            'Kualitas Kontrak I1', 
-            'Kualitas Kontrak I2', 
-            'Kualitas Kontrak I3', 
-            'Kualitas Kontrak I4', 
-            'Kualitas Kontrak I5', 
-            'Kualitas Kontrak KM Bawah', 
-            'Kode Barang', 
-            "Tipe Crease", 
-            "Bungkus", 
+            'Status OPI',
+            'No Kontrak Urut',
+            'Tgl Kontrak',
+            'Kualitas Kontrak KM Atas',
+            'Kualitas Kontrak I1',
+            'Kualitas Kontrak I2',
+            'Kualitas Kontrak I3',
+            'Kualitas Kontrak I4',
+            'Kualitas Kontrak I5',
+            'Kualitas Kontrak KM Bawah',
+            'Kode Barang',
+            "Tipe Crease",
+            "Bungkus",
             "Lain-Lain",
-            "Blok"
-        ]; 
+            "Blok",
+            "FSC"
+        ];
     }
 }
