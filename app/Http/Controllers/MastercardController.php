@@ -22,7 +22,7 @@ class MastercardController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    
+
     public function json(Request $request)
     {
         $columns = [
@@ -33,32 +33,32 @@ class MastercardController extends Controller
             5=>'cust',
             6=>'alamatKirim',
         ];
-        
+
         $totalData = Mastercard::count();
         $mastercard= Mastercard::get();
         // $mastercard = Kontrak_M::all();
-        
+
         // dd($mastercard);
-        
+
         $totalData = Mastercard::count();
         $limit = $request->input('length');
         $start = $request->input('start');
-        
+
         // dd($start);
-        
+
         if(empty($request->input('search.value')))
-        {            
+        {
             $mastercard = Mastercard::offset($start)
             ->limit(50)
             ->orderBy('id', 'desc')
             ->get();
-            
+
             $totalFiltered = Mastercard::count();
             // dd($opi);
         }
         else {
-            $search = $request->input('search.value'); 
-            
+            $search = $request->input('search.value');
+
             $mastercard =  Mastercard::where('kode','LIKE',"%{$search}%")
             ->orWhere('namaBarang', 'LIKE',"%{$search}%")
             ->orWhere('customer', 'LIKE',"%{$search}%")
@@ -66,14 +66,14 @@ class MastercardController extends Controller
             ->limit(50)
             ->orderBy('id', 'desc')
             ->get();
-            
+
             $totalFiltered = Mastercard::where('kode','LIKE',"%{$search}%")
             ->orWhere('namaBarang', 'LIKE',"%{$search}%")
             ->orWhere('customer', 'LIKE',"%{$search}%")
             ->count();
             // dd($opi);
         }
-        
+
         $data = array();
         if (!empty($mastercard)) {
             foreach ($mastercard as $mastercard)
@@ -82,7 +82,7 @@ class MastercardController extends Controller
                 $revisi = route('mastercard.revisi', $mastercard->id);
                 $print =  route('mastercard.pdfb1',$mastercard->id);
                 // $kirim =  route('mastercard.realisasi',$mastercard->id);
-                
+
                 if($mastercard->status == 5){
                     $nestedData['id'] = "<p style='color:#4842f5'>".$mastercard->id."</p>";
                     $nestedData['kode'] = "<p style='color:#4842f5'>".$mastercard->kode."</p>";
@@ -99,13 +99,13 @@ class MastercardController extends Controller
                     $nestedData['luasSheet'] = "<p style='color:#4842f5'>".$mastercard->luasSheet."</p>";
                     $nestedData['keterangan'] = "<p style='color:#4842f5'>".$mastercard->keterangan."</p>";
                     $nestedData['blok'] = "<p style='color:#4842f5'>".$mastercard->text."</p>";
-                    $nestedData['action'] = 
+                    $nestedData['action'] =
                     "<ul>
                     &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>
                     &emsp;<li><button class='btn-warning btn-sm mr-2'><a style='color:white' href='{$revisi}' title='Edit' ><span class='glyphicon glyphicon-list'>Edit</span></a></button></li>
                     &emsp;<li><button class='btn-primary btn-sm mr-2'><a style='color:white' href='{$edit}' title='Revisi' ><span class='glyphicon glyphicon-list'>Revisi</span></a></button></li>
                     </ul>";
-                } else {                    
+                } else {
                     $nestedData['id'] = $mastercard->id;
                     $nestedData['kode'] = $mastercard->kode;
                     $nestedData['revisi'] = $mastercard->revisi;
@@ -121,42 +121,42 @@ class MastercardController extends Controller
                     $nestedData['luasSheet'] = $mastercard->luasSheet;
                     $nestedData['keterangan'] = $mastercard->keterangan;
                     $nestedData['blok'] = $mastercard->text;
-                    $nestedData['action'] = 
+                    $nestedData['action'] =
                     "<ul>
                     &emsp;<li><button class='btn-danger btn-sm mr-2'><a style='color:white' href='{$print}' title='Print' ><span class='glyphicon glyphicon-list'>Print</span></a></button></li>
                     &emsp;<li><button class='btn-warning btn-sm mr-2'><a style='color:white' href='{$revisi}' title='Edit' ><span class='glyphicon glyphicon-list'>Edit</span></a></button></li>
                     &emsp;<li><button class='btn-primary btn-sm mr-2'><a style='color:white' href='{$edit}' title='Revisi' ><span class='glyphicon glyphicon-list'>Revisi</span></a></button></li>
                     </ul>";
                 }
-                
-                
+
+
                 // dd($nestedData);
                 $data[] = $nestedData;
-                
+
             }
         }
-        
+
         $json_data = array(
-            "draw"            => intval($request->input('draw')),  
-            "recordsTotal"    => intval($totalData),  
-            "recordsFiltered" => intval($totalFiltered), 
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
             "data"            => $data,
             "start"           => $start,
             "limit"           => $limit
         );
-        
+
         // dd($json_data);
-        echo json_encode($json_data); 
+        echo json_encode($json_data);
     }
-    
+
     public function get_mc_all()
     {
-        
+
         // "AA";
         $mc = Mastercard::query();
-        
+
         // dd($mc);
-        
+
         return DataTables::of($mc)
         ->addColumn('action', function(Mastercard $mastercard) {
             $data = [
@@ -166,24 +166,24 @@ class MastercardController extends Controller
         })
         ->make(true);
     }
-    
+
     public function indexb1()
     {
         return view('admin.mastercard.index');
     }
-    
+
     public function indexdc()
     {
         $mc = DB::table('mc')
         ->where('tipeBox', '=', 'DC')
         ->orderBy('id','desc')
         ->get();
-        
+
         // dd($mc);
-        
+
         return view('admin.mastercard.index', compact('mc'));
     }
-    
+
     /**
     * Show the form for creating a new resource.
     *
@@ -193,7 +193,6 @@ class MastercardController extends Controller
     {
         $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
         $kode = 'MC'. $nomer->nomer;
-        $cust = DB::connection('firebird')->table('TCustomer')->get();
         $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -207,7 +206,7 @@ class MastercardController extends Controller
         $colorcombine = DB::table('color_combine')->get();
         $joint = DB::table('joint')->get();
         $koli = DB::table('koli')->get();
-        
+
         return view('admin.mastercard.create', compact([
             'kode',
             'cust',
@@ -217,9 +216,9 @@ class MastercardController extends Controller
             'joint',
             'koli'
         ]));
-        
+
     }
-    
+
     /**
     * Store a newly created resource in storage.
     *
@@ -231,7 +230,7 @@ class MastercardController extends Controller
         $messages = [
             'koli.required' => 'Mohon isi Kolom Koli'
         ];
-        
+
         $this->validate($request, [
             'kode' => 'required',
             'revisi' => 'nullable',
@@ -269,25 +268,25 @@ class MastercardController extends Controller
             'gambar'    => 'nullable|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
         ], $messages);
-        
+
         // dd($request->file('gambar'));
         $file = $request->file('gambar');
         if ($file != null) {
             $nama_file = time()."_".$file->getClientOriginalName();
-            
+
             $tujuan_upload = 'upload';
             $file->move($tujuan_upload, $nama_file);
         } else {
             $nama_file = '';
         }
-        
+
         if ($request->outConv == null || $request->outConv == '') {
             $outconv = 1;
         } else {
             $outconv = $request->outConv;
         }
-        
-        
+
+
         $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R0",
@@ -325,6 +324,7 @@ class MastercardController extends Controller
             'doubleJoint' => $request->doublejoint,
             'lock' => 0,
             'box_id' => $request->box_id,
+            'fsc' => $request->fsc,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
             'gramSheetBoxKontrak2' => $request->gramSheetBoxKontrak2,
             'gramSheetCorrKontrak' => $request->gramSheetCorrKontrak,
@@ -343,7 +343,7 @@ class MastercardController extends Controller
         $nomer->nomer = $nomer->nomer + 1;
 
         $nomer->save();
-        
+
 
         Tracking::create([
             'user'   => Auth::user()->name,
@@ -352,10 +352,10 @@ class MastercardController extends Controller
             'before' => '-',
             'after'  => 'Kode: '.$mc->kode.', Nama Barang: '.$mc->namaBarang.', Customer: '.$mc->customer
         ]);
-        
+
         return redirect('mastercard');
     }
-    
+
     /**
     * Display the specified resource.
     *
@@ -366,7 +366,7 @@ class MastercardController extends Controller
     {
         //
     }
-    
+
     /**
     * Show the form for editing the specified resource.
     *
@@ -391,7 +391,7 @@ class MastercardController extends Controller
         $colorcombine = DB::table('color_combine')->get();
         $joint = DB::table('joint')->get();
         $koli = DB::table('koli')->get();
-        
+
         $mc = DB::table('mc')
         ->leftJoin('box', 'box_id', '=', 'box.id')
         ->leftJoin('substance as subskontrak', 'substanceKontrak_id', '=', 'subskontrak.id')
@@ -400,7 +400,7 @@ class MastercardController extends Controller
         ->where('mc.id', '=', $id)
         ->select('mc.*','color_combine.id as ccid','color_combine.nama as ccnama','subskontrak.namaMc as subsKontrak','subsproduksi.namaMc as subsProduksi', 'box.panjangDalamBox as panjangDalam','box.lebarDalamBox as lebarDalam','box.tinggiDalamBox as tinggiDalam', 'box.id as box_id' )
         ->first();
-        
+
         // dd($mc->tipeCust);
         // $tipe = null;
         if ($mc->tipeCust === "000") {
@@ -424,14 +424,14 @@ class MastercardController extends Controller
         } else {
             $tipe = "";
         }
-        
+
         // dd($tipe);
         $kodemc = DB::table('mc')
         ->where('kode', '=', $mc->kode)
         ->get();
-        
+
         $revisi = count($kodemc);
-        
+
         return view('admin.mastercard.edit', compact([
             // 'item',
             'cust',
@@ -445,7 +445,7 @@ class MastercardController extends Controller
             'revisi'
         ]));
     }
-    
+
     /**
     * Update the specified resource in storage.
     *
@@ -455,19 +455,19 @@ class MastercardController extends Controller
     */
     public function update(Request $request)
     {
-        
+
         $kode = DB::table('mc')
         ->where('kode', '=', $request->kode)
         ->get();
-        
+
         $rev = "R".count($kode);
-        
+
         // dd($rev);
-        
+
         $messages = [
             'koli.required' => 'Mohon isi Kolom Koli'
         ];
-        
+
         $this->validate($request, [
             'kode' => 'required',
             'revisi' => 'nullable',
@@ -507,23 +507,23 @@ class MastercardController extends Controller
             'gambar'    => 'nullable|file|mimes:jpeg,png,jpg|max: 1048',
             'createdBy' => 'required',
         ], $messages);
-        
+
         $file = $request->file('gambar');
         if ($file != null) {
             $nama_file = time()."_".$file->getClientOriginalName();
-            
+
             $tujuan_upload = 'upload';
             $file->move($tujuan_upload, $nama_file);
         } else {
             $nama_file = $request->old;
         }
-        
+
         if ($request->outConv == '' ||$request->outConv == null) {
             $outconv = 1;
         } else {
             $outconv = $request->outConv;
         }
-        
+
         $mc = Mastercard::create([
             'kode' => $request->kode,
             'revisi' => "R".$request->revisi,
@@ -560,6 +560,7 @@ class MastercardController extends Controller
             'wax' => $request->wax,
             'doubleJoint' => $request->doublejoint,
             'box_id' => $request->box_id,
+            'fsc' => $request->fsc,
             'gramSheetBoxKontrak' => $request->gramSheetBoxKontrak,
             'gramSheetBoxKontrak2' => $request->gramSheetBoxKontrak2,
             'gramSheetCorrKontrak' => $request->gramSheetCorrKontrak,
@@ -581,10 +582,10 @@ class MastercardController extends Controller
             'before' => '-',
             'after'  => 'Kode: '.$mc->kode.'-'.$mc->revisi.', Nama Barang: '.$mc->namaBarang.', Customer: '.$mc->customer
         ]);
-        
+
         return redirect('mastercard');
     }
-    
+
     public function revisi($id)
     {
         // $item = DB::connection('firebird2')->table('TBarangConv')->get();
@@ -602,7 +603,7 @@ class MastercardController extends Controller
         $colorcombine = DB::table('color_combine')->get();
         $joint = DB::table('joint')->get();
         $koli = DB::table('koli')->get();
-        
+
         $mc = DB::table('mc')
         ->leftJoin('box', 'box_id', '=', 'box.id')
         ->leftJoin('substance as subskontrak', 'substanceKontrak_id', '=', 'subskontrak.id')
@@ -611,18 +612,18 @@ class MastercardController extends Controller
         ->where('mc.id', '=', $id)
         ->select('mc.*','color_combine.id as ccid','color_combine.nama as ccnama','subskontrak.namaMc as subsKontrak','subsproduksi.namaMc as subsProduksi', 'box.panjangDalamBox as panjangDalam','box.lebarDalamBox as lebarDalam','box.tinggiDalamBox as tinggiDalam', 'box.id as box_id' )
         ->first();
-        
+
         $kodemc = DB::table('mc')
         ->where('kode', '=', $mc->kode)
         ->get();
-        
-        
+
+
         if ($mc->revisi === '') {
             $revisi = 0;
         } else {
             $revisi = preg_replace("/[^0-9]/","",$mc->revisi);
         }
-        
+
         if ($mc->tipeCust === "000") {
             $tipe = "Sheet";
         }elseif ($mc->tipeCust === "001") {
@@ -644,7 +645,7 @@ class MastercardController extends Controller
         } else {
             $tipe = "";
         }
-        
+
         return view('admin.mastercard.revisi', compact([
             'cust',
             // 'item',
@@ -658,7 +659,7 @@ class MastercardController extends Controller
             'revisi'
         ]));
     }
-    
+
     /**
     * Remove the specified resource from storage.
     *
@@ -697,6 +698,7 @@ class MastercardController extends Controller
             'tipeMc'                => $mc->tipeMc,
             'keterangan'            => $mc->keterangan,
             'box_id'                => $mc->box_id,
+            'fsc'                   => $mc->fsc,
             'colorCombine_id'       => $mc->colorCombine_id,
         ]);
 
@@ -705,23 +707,23 @@ class MastercardController extends Controller
         } else {
             $rev = "R".$request->revisi;
         }
-        
+
         $file = $request->file('gambar');
         if ($file != null) {
             $nama_file = time()."_".$file->getClientOriginalName();
-            
+
             $tujuan_upload = 'upload';
             $file->move($tujuan_upload, $nama_file);
         } else {
             $nama_file = $request->old;
         }
-        
+
         if ($request->outConv == 0) {
             $outconv = 1;
         } else {
             $outconv = $request->outConv;
         }
-        
+
         // dd($rev);
         $old_kode_mc    = $mc->kode;
         $old_revisi_mc  = $mc->revisi;
@@ -766,6 +768,7 @@ class MastercardController extends Controller
         $mc->gramSheetCorrKontrak = $request->gramSheetCorrKontrak;
         $mc->gramSheetCorrProduksi = $request->gramSheetCorrProduksi;
         $mc->box_id = $request->box_id;
+        $mc->fsc = $request->fsc;
         $mc->colorCombine_id = $request->colorCombine_id;
         $mc->lastUpdatedBy = Auth::user()->name;
         $mc->gambar = $nama_file;
@@ -804,17 +807,18 @@ class MastercardController extends Controller
                 'tipeMc'                => $request->tipeMc,
                 'keterangan'            => $request->keterangan,
                 'box_id'                => $request->box_id,
+                'fsc'                   => $request->fsc,
                 'colorCombine_id'       => $request->colorCombine_id,
             ]),
         ]);
-        
+
         return redirect('mastercard');
-        
-        
+
+
     }
-    
+
     public function pdfprint($id)
-    {   
+    {
         $mc = DB::table('mc')
         ->leftJoin('substance as SubsProduksi','substanceProduksi_id', '=', 'SubsProduksi.id')
         ->leftJoin('substance as SubsKontrak', 'substanceKontrak_id', '=', 'SubsKontrak.id')
@@ -836,7 +840,7 @@ class MastercardController extends Controller
         ->leftJoin('jenis_gram as linerBawahP', 'SubsProduksi.jenisGramLinerBawah_id', '=', 'linerBawahP.id')
         ->leftJoin('box', 'box_id', 'box.id')
         ->select('mc.*', 'SubsProduksi.namaMc AS SubsProduksiNama', 'SubsKontrak.namaMc AS SubsKontrakNama', 'color_combine.nama AS colComNama', 'box.lebarDalamBox AS lebarDalamBox', 'box.panjangDalamBox AS panjangDalamBox', 'box.tinggiDalamBox AS tinggiDalamBox', 'box.tipeCreasCorr AS tipeCrease', 'box.kuping', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease', 'linerAtasK.jenisKertasMc as JAtasK', 'linerBawahK.jenisKertasMc as JBawahK', 'linerAtasK.gramKertas as AtasK', 'bfK.gramKertas as bfK', 'linerTengahK.gramKertas as TengahK', 'cfK.gramKertas as cfK', 'linerBawahK.gramKertas as linerBawahK', 'linerAtasP.gramKertas as AtasP', 'bfP.gramKertas as bfP', 'linerTengahP.gramKertas as TengahP', 'cfP.gramKertas as cfP', 'linerBawahP.gramKertas as BawahP', 'linerBawahK.gramKertas as BawahK', 'linerAtasP.jenisKertasMc as JAtasP', 'linerBawahP.jenisKertasMc as JBawahP', 'color1.nama as warna1', 'color2.nama as warna2', 'color3.nama as warna3', 'color4.nama as warna4', 'color5.nama as warna5', 'box.kuping as kuping', 'box.kuping2 as kuping2', 'box.panjangCrease', 'box.lebarCrease1', 'box.lebarCrease2', 'box.flapCrease', 'box.tinggiCrease')
-        
+
         ->where('mc.id', $id)
         ->first();
         // dd($mc);
@@ -852,7 +856,7 @@ class MastercardController extends Controller
             return view('admin.mastercard.printb1double', compact('mc', 'namaSubsK', 'namaSubsP'));
         }
 
-        
+
         if ($mc->tipeMc == 'DC' || $mc->tipeMc == 'B3') {
             return view('admin.mastercard.printdc', compact('mc','namaSubsK','namaSubsP'));
         } else if ($mc->tipeMc == 'B1 Terbalik' ) {
@@ -864,18 +868,18 @@ class MastercardController extends Controller
             return view('admin.mastercard.printsheet', compact('mc','namaSubsK','namaSubsP'));
         }
     }
-    
+
     public function add_note($id,Request $request)
     {
         $mc = Mastercard::findOrFail($id);
-        
+
         $mc->note ;
     }
 
     public function select_view(Request $request)
     {
         $mastercards = new Mastercard();
-        
+
         if($request->search)
         {
             $mastercards = $mastercards->where('kode', 'like', '%'.$request->search.'%')
@@ -898,11 +902,11 @@ class MastercardController extends Controller
         $mc = $mc->with(['substanceProduksi', 'substanceKontrak', 'box', 'colorCombine'])
             ->where('id', $id)
             ->first();
-        
+
         $data = [
             'mc' => $mc
         ];
-        
+
         return response()->json($data);
     }
 
@@ -916,19 +920,19 @@ class MastercardController extends Controller
             }
 
             $cacheKey = 'php_data_summary_' . md5(json_encode($request->only(['search', 'filter'])));
-            
+
             // STEP 1: Coba ambil dari cache dulu (5 menit cache)
             $phpData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 300, function() {
                 try {
                     DB::connection('firebird2')->beginTransaction();
                     // LIMIT data untuk performa - hanya ambil 1000 records teratas
                     $phpDataRaw = DB::connection('firebird2')
-                        ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records 
-                                 FROM "TDetPHP" 
+                        ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records
+                                 FROM "TDetPHP"
                                  GROUP BY TRIM("KodeBrg")
                                  ORDER BY SUM("Quantity") DESC');
                     DB::connection('firebird2')->commit();
-                    
+
                     return collect($phpDataRaw)->map(function($item) {
                         $item->KODEBRG = trim($item->KODEBRG ?? '');
                         return $item;
@@ -940,15 +944,15 @@ class MastercardController extends Controller
                 }
             });
 
-            
+
             // STEP 2: Optimized Mastercard query dengan pagination-first approach
             $perPage = 20;
             $currentPage = request()->get('page', 1);
-            
-            
+
+
             // STEP 3: Query MC dengan pagination langsung - TIDAK ambil semua data dulu
             $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'tipeBox', 'customer', 'created_at');
-            
+
             // Tambahkan search jika ada
             if ($request->has('search') && !empty($request->search)) {
                 $searchTerm = $request->search;
@@ -959,7 +963,7 @@ class MastercardController extends Controller
                       ->orWhere('customer', 'LIKE', "%{$searchTerm}%");
                 });
             }
-            
+
             // Pre-filter berdasarkan PHP data jika diperlukan
             if ($request->has('filter') && !empty($request->filter)) {
                 if ($request->filter === 'with_php') {
@@ -968,18 +972,18 @@ class MastercardController extends Controller
                     $mcQuery->whereNotIn('kodeBarang', $phpData->keys()->toArray());
                 }
             }
-            
+
             // LANGSUNG PAGINATE - tidak load semua data
             $mcWithPhp = $mcQuery->orderBy('created_at', 'desc')
                 ->paginate($perPage, ['*'], 'page', $currentPage)
                 ->appends($request->query());
-            
-            
+
+
             // STEP 4: Hanya proses data yang ada di halaman aktif - TIDAK semua data
             $mcWithPhp->getCollection()->transform(function($mc) use ($phpData) {
                 $trimmedKodeBarang = trim($mc->kodeBarang ?? '');
                 $phpRecord = $phpData->get($trimmedKodeBarang);
-                
+
                 $mc->php_data = [
                     'total_quantity' => $phpRecord ? ($phpRecord->TOTALBBM ?? 0) : 0,
                     'total_records' => $phpRecord ? ($phpRecord->TOTAL_RECORDS ?? 0) : 0,
@@ -987,7 +991,7 @@ class MastercardController extends Controller
                     'kode_brg' => $phpRecord ? ($phpRecord->KODEBRG ?? $trimmedKodeBarang) : $trimmedKodeBarang,
                     'original_kode' => $mc->kodeBarang,
                 ];
-                
+
                 return $mc;
             });
 
@@ -995,7 +999,7 @@ class MastercardController extends Controller
             $summary = \Illuminate\Support\Facades\Cache::remember('mc_summary_stats', 600, function() use ($phpData) {
                 $totalMc = Mastercard::count();
                 $mcWithPhpCount = Mastercard::whereIn('kodeBarang', $phpData->keys()->toArray())->count();
-                
+
                 return [
                     'total_mc' => $totalMc,
                     'mc_with_php' => $mcWithPhpCount,
@@ -1020,10 +1024,10 @@ class MastercardController extends Controller
             } catch (\Exception $rollbackError) {
                 // Ignore rollback errors if connection is already broken
             }
-            
+
             // Log error untuk debugging
             \Illuminate\Support\Facades\Log::error('Cross-database relation error: ' . $e->getMessage());
-            
+
             return $this->showFirebirdUnavailableMessage($e->getMessage());
         }
     }
@@ -1036,9 +1040,9 @@ class MastercardController extends Controller
         // Get basic Mastercard data without Firebird integration
         $perPage = 20;
         $currentPage = request()->get('page', 1);
-        
+
         $mcQuery = Mastercard::select('id', 'kode','revisi','namaBarang', 'kodeBarang', 'tipeBox', 'customer', 'created_at');
-        
+
         // Tambahkan search jika ada
         if (request()->has('search') && !empty(request('search'))) {
             $searchTerm = request('search');
@@ -1049,11 +1053,11 @@ class MastercardController extends Controller
                   ->orWhere('customer', 'LIKE', "%{$searchTerm}%");
             });
         }
-        
+
         $mcWithPhp = $mcQuery->orderBy('created_at', 'desc')
             ->paginate($perPage, ['*'], 'page', $currentPage)
             ->appends(request()->query());
-        
+
         // Add empty PHP data for all records
         $mcWithPhp->getCollection()->transform(function($mc) {
             $mc->php_data = [
@@ -1073,8 +1077,8 @@ class MastercardController extends Controller
             'total_php_quantity' => 0
         ];
 
-        $errorMsg = $errorMessage ? 
-            "Firebird database tidak tersedia: " . $errorMessage : 
+        $errorMsg = $errorMessage ?
+            "Firebird database tidak tersedia: " . $errorMessage :
             "Firebird database tidak tersedia. Extension pdo_firebird belum terinstall.";
 
         return view('admin.ppic.mc.mc_bbm', [
@@ -1094,10 +1098,10 @@ class MastercardController extends Controller
             // Test 1: Raw SQL langsung
             $phpTest = DB::connection('firebird2')
                 ->select('SELECT FIRST 3 TRIM(KodeBrg) as KodeBrg, Quantity FROM TDetPHP');
-            
+
             // Test 2: Menggunakan Service
             $cachedPhp = CrossDatabaseRelationService::getAllPhpDataCached();
-            
+
             // Test 3: Single record test
             $singleTest = CrossDatabaseRelationService::findMastercardWithPhp('TEST001');
 
@@ -1129,8 +1133,8 @@ class MastercardController extends Controller
         try {
             // Ambil semua data PHP
             $phpDataRaw = DB::connection('firebird2')
-                ->select('SELECT TRIM(KodeBrg) as KodeBrg, SUM(Quantity) as totalBbm, COUNT(*) as total_records 
-                         FROM TDetPHP 
+                ->select('SELECT TRIM(KodeBrg) as KodeBrg, SUM(Quantity) as totalBbm, COUNT(*) as total_records
+                         FROM TDetPHP
                          GROUP BY TRIM(KodeBrg)');
 
             // Simpan ke tabel sementara di MySQL (jika diperlukan)
@@ -1172,7 +1176,7 @@ class MastercardController extends Controller
         $tipeMc = $request->input('tipeMc');
 
         $fileName = 'mastercard_export_' . date('Y-m-d_H-i-s') . '.xlsx';
-        
+
         return Excel::download(new McExport($search, $customer, $tipeMc), $fileName);
     }
 
@@ -1192,7 +1196,7 @@ class MastercardController extends Controller
         }
 
         $mastercards = $mastercards->orderBy('created_at', 'desc')->paginate(20);
-        
+
         // Append all request parameters to pagination links
         $mastercards->appends($request->query());
 

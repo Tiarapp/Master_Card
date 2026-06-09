@@ -54,6 +54,7 @@ class Mastercard extends Model
         'substanceProduksi_id',
         'bom_m_id',
         'box_id',
+        'fsc',
         'colorCombine_id',
         'createdBy',
         'customer',
@@ -83,11 +84,11 @@ class Mastercard extends Model
     }
 
     /**
-     * CATATAN: Relasi ke DetPHP tidak bisa menggunakan Eloquent relationship 
+     * CATATAN: Relasi ke DetPHP tidak bisa menggunakan Eloquent relationship
      * karena berada di database yang berbeda (firebird2 vs default)
      * Gunakan method manual untuk mendapatkan data PHP
      */
-    
+
     /**
      * Mendapatkan data PHP dari database firebird2 berdasarkan kodeBarang
      */

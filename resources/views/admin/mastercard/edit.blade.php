@@ -23,13 +23,13 @@
         console.error('jQuery is not available!');
         return;
     }
-    
+
     // Create a safe reference to jQuery
     var $safe = jQuery.noConflict(true);
-    
+
     // Make it available globally as $ and jQuery
     window.$ = window.jQuery = $safe;
-    
+
     console.log('jQuery loaded successfully:', $safe.fn.jquery);
 })();
 </script>
@@ -118,10 +118,10 @@
             <div class="col-md-12">
                 <h4 class="modal-title">Edit Master Card</h4>
                 <hr>
-                
+
                 @if (count($errors) > 0)
                 <div class="alert alert-danger">
-                    <strong>Error!</strong> 
+                    <strong>Error!</strong>
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -129,7 +129,7 @@
                     </ul>
                 </div>
                 @endif
-                
+
                 <form action="{{ route('mastercard.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-body">
@@ -174,11 +174,11 @@
                                                     <div class="col-md-5">
                                                         <input type="text" class="form-control txt_line col-md-11" name="customer" id="customer" value="{{ $mc->customer }}" onchange="getGramKontrak()" readonly>
                                                     </div>
-                                                    
+
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="List-Customer">
                                                         <div class="modal-dialog modal-xl">
-                                                            
+
                                                             <!-- Modal content-->
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -199,7 +199,7 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                                <?php 
+                                                                                <?php
                                                                                 foreach ($cust as $data) { ?>
                                                                                     <tr>
                                                                                         <td scope="row">{{ $data->Kode }}</td>
@@ -220,7 +220,7 @@
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
                                                                 </div>
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
                                                     <button type="button" data-toggle="modal" data-target="#List-Customer">
@@ -228,7 +228,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="row">
@@ -282,7 +282,7 @@
                                                 <option value='Tidak'>Tidak</option>
                                                 <option value='Ya'>Ya</option>
                                             </select>
-                                        </div>         
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -302,7 +302,7 @@
                                             </div>
                                             <div class="modal fade" id="Box">
                                                 <div class="modal-dialog modal-xl">
-                                                    
+
                                                     <!-- Modal content-->
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -357,7 +357,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2" style="margin-top: 30px;">
-                                            <label class="control-label">Ukuran Dalam Box</label> 
+                                            <label class="control-label">Ukuran Dalam Box</label>
                                         </div>
                                         <div class="col-md-1">
                                             <span class="x">P</span>
@@ -392,7 +392,7 @@
                                             <input type="text" class="form-control txt_line" value="{{ $mc->luasSheetBox }}" name="luasSheetBox" id="luasSheetBox" onchange="getKodeBarang();">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label class="control-label">Luas Sheet Box Prod</label>
@@ -437,7 +437,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-12" style="border: 2px solid black;  margin-top:10px;">
                                 <div class="form-group">
                                     <h4 class="form-section">Ukuran Sheet</h4>
@@ -457,7 +457,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2" style="margin-top: 30px;">
-                                            <label class="control-label">Ukuran Sheet</label> 
+                                            <label class="control-label">Ukuran Sheet</label>
                                         </div>
                                         <div class="col-md-2">
                                             <span class="x">P</span>
@@ -560,7 +560,7 @@
                                             <!-- Modal -->
                                             <div class="modal fade" id="SubstanceKontrak">
                                                 <div class="modal-dialog modal-xl">
-                                                    
+
                                                     <!-- Modal content-->
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -584,7 +584,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <?php 
+                                                                        <?php
                                                                         foreach ($substance as $data) { ?>
                                                                             <tr>
                                                                                 <td scope="row">{{ $data->id }}</td>
@@ -608,7 +608,7 @@
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -616,7 +616,7 @@
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label>Susbtance Produksi</label>
@@ -632,7 +632,7 @@
                                             <!-- Modal -->
                                             <div class="modal fade" id="SubstanceProduksi">
                                                 <div class="modal-dialog modal-xl">
-                                                    
+
                                                     <!-- Modal content-->
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -681,7 +681,7 @@
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Simpan</button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -781,6 +781,17 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label class="control-label">FSC</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="js-example-basic-single col-md-12" name="fsc" id="fsc">
+                                                <option value='0' {{ $mc->fsc == 0 ? 'selected' : '' }}>Non FSC</option>
+                                                <option value='1' {{ $mc->fsc == 1 ? 'selected' : '' }}>FSC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label class="control-label">Bungkus</label>
                                         </div>
                                         <div class="col-md-4">
@@ -837,13 +848,13 @@
                         <i class='far fa-window-close' style='color:red'></i>
                     </a></button>
                 </div>
-            </div> 
+            </div>
         </form>
     </div>
 </div>
 </div>
 
-</div>    
+</div>
 
 
 @endsection
@@ -867,14 +878,14 @@
     // Initialize everything after jQuery is ready
     waitForJQuery(function($) {
         console.log('jQuery is ready:', $.fn.jquery);
-        
+
         // Document ready handler
         $(document).ready(function() {
             console.log('Document ready, preparing Select2...');
-            
+
             // Initialize immediately
             initializeSelect2();
-            
+
             // Fallback initialization after a delay
             setTimeout(function() {
                 if (!$('.js-example-basic-single').hasClass('select2-hidden-accessible')) {
@@ -895,7 +906,7 @@
         // Window load handler for final initialization
         $(window).on('load', function() {
             console.log('Window loaded, final Select2 check...');
-            
+
             // Final initialization attempt
             setTimeout(function() {
                 initializeSelect2();
@@ -904,22 +915,22 @@
 
         function initializeSelect2() {
             console.log('Initializing Select2...');
-            
+
             // Check if Select2 is available
             if (typeof $.fn.select2 === 'undefined') {
                 console.error('Select2 plugin not available!');
                 return;
             }
-            
+
             // Find all select elements
             var selectElements = $('.js-example-basic-single');
             console.log('Found', selectElements.length, 'select elements');
-            
+
             if (selectElements.length === 0) {
                 console.error('No select elements found with class js-example-basic-single');
                 return;
             }
-            
+
             // Destroy existing instances safely
             selectElements.each(function() {
                 var $this = $(this);
@@ -932,7 +943,7 @@
                     }
                 }
             });
-            
+
             // Initialize Select2 with error handling
             try {
                 selectElements.select2({
@@ -958,7 +969,7 @@
                         }
                     }
                 });
-                
+
                 // Verify initialization
                 var initializedCount = 0;
                 selectElements.each(function() {
@@ -969,9 +980,9 @@
                         console.error('✗ Select2 failed for', $(this).attr('id'));
                     }
                 });
-                
+
                 console.log('Select2 initialized for', initializedCount, 'out of', selectElements.length, 'elements');
-                
+
             } catch (error) {
                 console.error('Error initializing Select2:', error);
             }
@@ -1024,16 +1035,16 @@
             console.log('jQuery available:', typeof $ !== 'undefined');
             console.log('jQuery version:', $.fn.jquery);
             console.log('Select2 available:', typeof $.fn.select2 !== 'undefined');
-            
+
             $('.js-example-basic-single').each(function() {
                 var $this = $(this);
                 console.log('Element:', $this.attr('id'), 'Has Select2:', $this.hasClass('select2-hidden-accessible'));
             });
-            
+
             // Force reinitialize
             console.log('Force reinitializing...');
             reinitializeSelect2();
-            
+
             // Check again after reinit
             setTimeout(function() {
                 console.log('=== After Reinitialize ===');
@@ -1047,14 +1058,14 @@
         // Manual initialization function
         window.forceSelect2 = function() {
             console.log('=== Force Select2 Initialization ===');
-            
+
             // Try direct initialization without destroy
             $('.js-example-basic-single').each(function() {
                 var $element = $(this);
                 var id = $element.attr('id');
-                
+
                 console.log('Processing element:', id);
-                
+
                 try {
                     $element.select2({
                         theme: 'bootstrap4',
@@ -1075,7 +1086,7 @@
         window.reinitializeSelect2 = reinitializeSelect2;
     });
     // Datatable Barang(Item)
-    
+
     $(document).on("keyup", ".lebar-box", function() {
             lebar = $(this).val();
             panjang = document.getElementById("panjangSheet").value;
@@ -1109,20 +1120,20 @@
     });
 
     $(".customer").ready(function(){
-        
+
         var table = $("#data_customer").DataTable({
             select: true,
         });
-        
+
         $('#data_customer tbody').on( 'click', 'td', function () {
             var cust = (table.row(this).data());
-            
+
             // document.getElementById('customer_id').value = cust[0]    ;
             document.getElementById('customer').value = cust[1];
             // document.getElementById('alamatKirim').value = cust[5];
             // document.getElementById('telp').value = cust[3];
             // document.getElementById('fax').value = cust[4];
-            
+
             console.log(cust);
         } );
     } );
@@ -1167,7 +1178,7 @@
         }
 
         console.log(tipemc);
-        
+
 
         if (flute == 'BF') {
             flute = '01';
@@ -1183,7 +1194,7 @@
             flute = '50';
         }
 
-        if (tipemc == 'F' || tipebox == 'R') {  
+        if (tipemc == 'F' || tipebox == 'R') {
             kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
             kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+revisi+"."+golongan;
@@ -1196,24 +1207,24 @@
 
 
     $(".Item").ready(function(){
-        
+
         var table = $("#data_barang").DataTable({
             select: true,
         });
-        
+
         $('#data_barang tbody').on( 'click', 'td', function () {
             var item = (table.row(this).data());
-            
+
             // document.getElementById('bj_id').value = item[0];
             document.getElementById('kodeBarang').value = item[0];
             document.getElementById('namaBarang').value = item[1];
         } );
         //  alert.row();
     } );
-    
+
     //Datatable Box
     $(".Box").ready(function(){
-        
+
         var table = $("#data_box").DataTable({
             processing: true,
             serverSide: true,
@@ -1237,10 +1248,10 @@
             ],
             select: true
         });
-        
+
         $('#data_box tbody').on( 'click', 'td', function () {
             var Box = (table.row(this).data());
-            
+
             // document.getElementById('kodeBarang').value = Box[2];
             document.getElementById('namaBarang').value = Box['namaBarang'];
             document.getElementById('tipebox').value = Box['tipebox'];
@@ -1251,9 +1262,9 @@
             document.getElementById('creasCorr').value = Box['sizeCreasCorr'];
             document.getElementById('creasConv').value = Box['sizeCreasConv'];
             document.getElementById('flute').value = Box['flute'];
-            
+
             $('.berat-roll').hide();
-            
+
             if (Box['tipebox'] == 'B1' || Box['tipebox'] == 'B3') {
                 var resultP = getID(Box['sizeCreasCorr']);
                 var resultL = getID(Box['sizeCreasConv']);
@@ -1275,7 +1286,7 @@
 
                 document.getElementById("lebarSheetBox").value = parseInt(resultP);
                 document.getElementById("panjangSheetBox").value = parseInt(resultL);
-                
+
                 var luasmkt =(((panjang*2)+(lebar*2)+faktorp)/1000) * (parseInt(faktorl)+parseInt(lebar)+parseInt(tinggi))/1000;
                 var luasProd = (parseInt(resultL)*parseInt(resultP))/1000000;
                 // var luas = parseInt(resultL)*parseInt(resultP)/1000000;
@@ -1305,20 +1316,20 @@
                 document.getElementById("luasSheetBox").value = null;
                 document.getElementById("subsKontrak").value = null;
                 document.getElementById("subsProduksi").value = null;
-                
+
                 getKodeBarang();
             }
         } );
-        
-        
+
+
         //  alert.row();
     } );
-    
+
     function getID(a){
         var pos = a.indexOf('=');
         var panjang = a.length;
         var creas = a.substr(pos+1);
-        
+
         return creas;
     }
 
@@ -1326,7 +1337,7 @@
         var pos = a.indexOf('|');
         var panjang = a.length;
         var id = a.substr(0,pos);
-        
+
         return id;
     }
 
@@ -1338,57 +1349,57 @@
 
         document.getElementById("colorCombine_id").value = combine;
     }
-    
-    
+
+
     $(".SubstanceKontrak").ready(function(){
-        
+
         var table = $("#data_substanceKontrak").DataTable({
             select: true,
         });
-        
+
         $('#data_substanceKontrak tbody').on( 'click', 'td', function () {
             var SubstanceKontrak = (table.row(this).data());
-            
+
             document.getElementById('Katas').value = SubstanceKontrak[4]    ;
             document.getElementById('Kbf').value = SubstanceKontrak[5];
             document.getElementById('Ktengah').value = SubstanceKontrak[6];
             document.getElementById('Kcf').value = SubstanceKontrak[7];
             document.getElementById('Kbawah').value = SubstanceKontrak[8];
-            
+
             document.getElementById('substanceKontrak_id').value = SubstanceKontrak[0];
             document.getElementById('subskontrak').value = SubstanceKontrak[2];
-            
+
             getGramKontrak();
             // getLuasDC();
             getKodeBarang()
         } );
     } );
-    
+
     $(".SubstanceProduksi").ready(function(){
-        
+
         var table = $("#data_substanceProduksi").DataTable({
             select: true,
         });
-        
+
         $('#data_substanceProduksi tbody').on( 'click', 'td', function () {
             var SubstanceProduksi = (table.row(this).data());
-            
+
             document.getElementById('Patas').value = SubstanceProduksi[4];
             document.getElementById('Pbf').value = SubstanceProduksi[5];
             document.getElementById('Ptengah').value = SubstanceProduksi[6];
             document.getElementById('Pcf').value = SubstanceProduksi[7];
             document.getElementById('Pbawah').value = SubstanceProduksi[8];
-            
+
             document.getElementById('substanceProduksi_id').value = SubstanceProduksi[0];
             document.getElementById('subsProduksi').value = SubstanceProduksi[2];
-            
+
             getGramProduksi();
             getKodeBarang()
         } );
     } );
-    
+
     function getGramKontrak(){
-        
+
         var flutenama = document.getElementById('flute').value;
         var Katas = parseInt(document.getElementById('Katas').value);
         var Kbf = parseFloat(document.getElementById('Kbf').value);
@@ -1398,14 +1409,14 @@
         var luasSheet = parseFloat(document.getElementById('luasSheet').value);
         var luasSheetBox = parseFloat(document.getElementById('luasSheetBox').value);
         var doublejoint = document.getElementById('doublejoint').value;
-        
+
         var result;
         var result2;
-        
+
         if (flutenama == 'BF') {
             if (isNaN(Katas)) {
                 Katas = 0;
-            } 
+            }
             if (isNaN(Kbf)) {
                 Kbf = 0;
             }
@@ -1418,7 +1429,7 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
@@ -1428,7 +1439,7 @@
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
-            
+
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
@@ -1437,7 +1448,7 @@
         } else if (flutenama == 'EF') {
             if (isNaN(Katas)) {
                 Katas = 0;
-            } 
+            }
             if (isNaN(Kbf)) {
                 Kbf = 0;
             }
@@ -1450,7 +1461,7 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.21) + parseInt(Ktengah) + (parseInt(Kcf)*0) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
@@ -1460,7 +1471,7 @@
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
-            
+
             document.getElementById('gramSheetCorrKontrak').value = result.toFixed(3);
             document.getElementById('gramSheetCorrKontrak2').value = result.toFixed(3);
             document.getElementById('gramSheetBoxKontrak').value = result2.toFixed(3);
@@ -1470,7 +1481,7 @@
         if (flutenama == 'CF') {
             if (isNaN(Katas)) {
                 Katas = 0;
-            } 
+            }
             if (isNaN(Kbf)) {
                 Kbf = 0;
             }
@@ -1483,9 +1494,9 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.46) + parseInt(Ktengah) + (parseInt(Kbf)*0) + parseInt(Kbawah))/1000;
-            
+
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
@@ -1500,12 +1511,12 @@
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
-            
-        } else 
+
+        } else
         if (flutenama == 'EBF') {
             if (isNaN(Katas)) {
                 Katas = 0;
-            } 
+            }
             if (isNaN(Kbf)) {
                 Kbf = 0;
             }
@@ -1518,9 +1529,9 @@
             if (isNaN(Kbawah)) {
                 Kbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Katas) + (parseInt(Kcf)*1.21) + parseInt(Ktengah) + (parseInt(Kbf)*1.36) + parseInt(Kbawah))/1000;
-            
+
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
@@ -1535,9 +1546,9 @@
             document.getElementById('gramSheetBoxKontrak2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
-            
+
         } else {
-            
+
             gramKualitas = (parseInt(Katas) + (parseInt(Kbf)*1.36) + parseInt(Ktengah) + (parseInt(Kcf)*1.46) + parseInt(Kbawah))/1000;
 
             if (doublejoint == 'Ya') {
@@ -1555,10 +1566,10 @@
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
         }
-        
+
         return result;
     }
-    
+
     function getLuasDC(){
         $panjang = document.getElementById("panjangSheet").value;
         $lebar = document.getElementById("lebarSheet").value;
@@ -1578,12 +1589,12 @@
         document.getElementById('luasSheetProd').value = $result.toFixed(3);
         document.getElementById('luasSheetBoxProd').value = $result2.toFixed(3);
         getKodeBarang();
-        } else { 
+        } else {
         $result = ($panjang * $lebar)/1000000;
             $result2 = ($panjangbox * $lebarbox)/1000000;
 
             $out = $result/$result2;
-            document.getElementById('outConv').value = $out.toFixed(0); 
+            document.getElementById('outConv').value = $out.toFixed(0);
             document.getElementById('luasSheet').value = $result.toFixed(3);
             document.getElementById('luasSheetBox').value = $result2.toFixed(3);
             document.getElementById('luasSheetProd').value = $result.toFixed(3);
@@ -1593,7 +1604,7 @@
     }
 
     function getGramProduksi(){
-        
+
         var flutenama = document.getElementById('flute').value;
         var Patas = parseInt(document.getElementById('Patas').value);
         var Pbf = parseFloat(document.getElementById('Pbf').value);
@@ -1603,13 +1614,13 @@
         var luasSheet = parseFloat(document.getElementById('luasSheetProd').value);
         var luasSheetBox = parseFloat(document.getElementById('luasSheetBoxProd').value);
         var doublejoint = document.getElementById('doublejoint').value;
-        
+
         var result, result2;
-        
+
         if (flutenama == 'BF') {
             if (isNaN(Patas)) {
                 Patas = 0;
-            } 
+            }
             if (isNaN(Pbf)) {
                 Pbf = 0;
             }
@@ -1622,7 +1633,7 @@
             if (isNaN(Pbawah)) {
                 Pbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
@@ -1632,7 +1643,7 @@
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
-            
+
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
@@ -1641,7 +1652,7 @@
         } else if (flutenama == 'EF') {
             if (isNaN(Patas)) {
                 Patas = 0;
-            } 
+            }
             if (isNaN(Pbf)) {
                 Pbf = 0;
             }
@@ -1654,7 +1665,7 @@
             if (isNaN(Pbawah)) {
                 Pbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.21) + parseInt(Ptengah) + (parseInt(Pcf)*0) + parseInt(Pbawah))/1000;
 
             if (doublejoint == 'Ya') {
@@ -1664,7 +1675,7 @@
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3);
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3);
             }
-            
+
             document.getElementById('gramSheetCorrProduksi').value = result.toFixed(3);
             document.getElementById('gramSheetBoxProduksi').value = result2.toFixed(3);
             document.getElementById('gramSheetCorrProduksi2').value = result.toFixed(3);
@@ -1674,7 +1685,7 @@
         if (flutenama == 'CF') {
             if (isNaN(Patas)) {
                 Patas = 0;
-            } 
+            }
             if (isNaN(Pbf)) {
                 Pbf = 0;
             }
@@ -1687,9 +1698,9 @@
             if (isNaN(Pbawah)) {
                 Pbawah = 0 ;
             }
-            
+
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*0) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
-            
+
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
@@ -1704,13 +1715,13 @@
             document.getElementById('gramSheetBoxProduksi2').value = result2.toFixed(3);
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
             getKodeBarang()
-            
+
         } else
         if (flutenama == 'EBF') {
-            
+
             if (isNaN(Patas)) {
                 Patas = 0;
-            } 
+            }
             if (isNaN(Pbf)) {
                 Pbf = 0;
             }
@@ -1725,11 +1736,11 @@
             }
 
             console.log(Patas, Pbf, Ptengah, Pcf, Pbawah);
-            
-            
+
+
             gramKualitas = (parseInt(Patas) + (parseInt(Pcf)*1.21) + parseInt(Ptengah) + (parseInt(Pbf)*1.36) + parseInt(Pbawah))/1000;
-            
-            
+
+
             if (doublejoint == 'Ya') {
                 result = parseFloat(luasSheet) * gramKualitas.toFixed(3) * 2;
                 result2 = parseFloat(luasSheetBox) * gramKualitas.toFixed(3) * 2;
@@ -1745,8 +1756,8 @@
             document.getElementById('gram_kualitas').value = gramKualitas.toFixed(3);
 
             console.log(result.toFixed(3), result2.toFixed(3), gramKualitas);
-            
-            
+
+
         } else {
 
             gramKualitas = (parseInt(Patas) + (parseInt(Pbf)*1.36) + parseInt(Ptengah) + (parseInt(Pcf)*1.46) + parseInt(Pbawah))/1000;
@@ -1767,6 +1778,6 @@
             getKodeBarang()
         }
     }
-    
-    
+
+
 </script>
