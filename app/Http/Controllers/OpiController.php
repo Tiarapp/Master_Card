@@ -420,22 +420,42 @@ class OpiController extends Controller
     public function index_new(Request $request)
     {
         $productions = new Opi_M();
-        $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
+        $productions = $productions->with([
+            'dt',
+            'kontrakm',
+            'kontrakd.mc',
+            'mc.colorcombine',
+            'mc.box',
+            'mc.substanceproduksi.lineratas',
+            'mc.substanceproduksi.flute1',
+            'mc.substanceproduksi.linertengah',
+            'mc.substanceproduksi.flute2',
+            'mc.substanceproduksi.linerbawah',
+            'mc.substancekontrak.lineratas',
+            'mc.substancekontrak.flute1',
+            'mc.substancekontrak.linertengah',
+            'mc.substancekontrak.flute2',
+            'mc.substancekontrak.linerbawah',
+        ])
             ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('updated_at', 'desc')
             ->orderBy('NoOPI', 'desc');
 
         if($request->search) {
-            $productions->whereHas('kontrakm', function($query) use ($request) {
-                $query->where('customer_name', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
-            })
-            ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
-            ->orWhereHas('mc', function($query) use ($request) {
-                $query->where('kode', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $productions->where(function ($builder) use ($search) {
+                $builder->whereHas('kontrakm', function($query) use ($search) {
+                    $query->where('customer_name', 'LIKE', '%' . $search . '%')
+                          ->orWhere('poCustomer', 'LIKE', '%' . $search . '%')
+                          ->orWhere('kode', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('NoOPI', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('mc', function($query) use ($search) {
+                    $query->where('kode', 'LIKE', '%' . $search . '%')
+                          ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
+                });
             });
         }
 
