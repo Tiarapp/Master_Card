@@ -11,14 +11,14 @@
     .select2-container {
         width: 100% !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-selection--single {
         height: 38px !important;
         border: 1px solid #ced4da !important;
         border-radius: 0.25rem !important;
         padding: 0 !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-selection__rendered {
         line-height: 36px !important;
         padding-left: 12px !important;
@@ -26,13 +26,13 @@
         color: #495057 !important;
         font-size: 14px !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-selection__arrow {
         height: 36px !important;
         right: 10px !important;
         top: 1px !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-selection__arrow b {
         border-color: #999 transparent transparent transparent !important;
         border-style: solid !important;
@@ -45,27 +45,27 @@
         top: 50% !important;
         width: 0 !important;
     }
-    
+
     .select2-container--bootstrap4.select2-container--open .select2-selection__arrow b {
         border-color: transparent transparent #999 transparent !important;
         border-width: 0 4px 5px 4px !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-dropdown {
         border: 1px solid #ced4da !important;
         border-radius: 0.25rem !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-search--dropdown .select2-search__field {
         border: 1px solid #ced4da !important;
         border-radius: 0.25rem !important;
         padding: 6px 12px !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-results__option {
         padding: 6px 12px !important;
     }
-    
+
     .select2-container--bootstrap4 .select2-results__option--highlighted {
         background-color: #007bff !important;
         color: white !important;
@@ -78,10 +78,10 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="row" id="form_list_mc">
-            <div class="col-md-12">                
+            <div class="col-md-12">
                 @if ($errors->any())
                 <div class="alert alert-danger">
-                    <strong>Error!</strong> 
+                    <strong>Error!</strong>
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $errors }}</li>
@@ -112,7 +112,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -244,7 +244,7 @@
                                                         <option value="OUP Joint">OUP Joint</option>
                                                         <option value="OUP Ukuran & Kualitas">OUP Ukuran & Kualitas</option>
                                                         <option value="OUP Nama & Ukuran">OUP Nama & Ukuran</option>
-                                                        <option value="OUP Nama & Warna">OUP Nama & Warna</option>  
+                                                        <option value="OUP Nama & Warna">OUP Nama & Warna</option>
                                                         <option value="OUP Nama & Kualitas">OUP Nama & Kualitas</option>
                                                         <option value="OUP Design, Nama & Kualitas">OUP Design, Nama & Kualitas</option>
                                                         <option value="OUP Ukuran & Design">OUP Ukuran & Design</option>
@@ -262,7 +262,7 @@
                                                         <option value="OUP Nama Item, Ukuran & Koli">OUP Nama Item, Ukuran & Koli</option>
                                                         <option value="OUP Nama Item & Proses">OUP Nama Item & Proses</option>
                                                         <option value="OUP Arah Flute">OUP Arah Flute</option>
-                                                        <option value="OUP Design, Kualitas, Creasing">OUP Design, Kualitas, Creasing</option>  
+                                                        <option value="OUP Design, Kualitas, Creasing">OUP Design, Kualitas, Creasing</option>
                                                         <option value="OUP Nama, Ukuran, Design">OUP Nama, Ukuran, Design</option>
                                                         <option value="OUP Kualitas, Ukuran, Design">OUP Kualitas, Ukuran, Design</option>
                                                         <option value="OUP Design, Warna, Nama Item">OUP Design, Warna, Nama Item</option>
@@ -278,7 +278,7 @@
                                                         <option value="OUP Creasing">OUP Creasing</option>
                                                         <option value="OUP Ukuran, Creasing, Arah Serat">OUP Ukuran, Creasing, Arah Serat</option>
                                                         <option value="OUP Design, Kualitas, Nama Item, Ukuran">OUP Design, Kualitas, Nama Item, Ukuran</option>
-                                                        <option value="OUP Type Box, Koli, Ukuran & Kualitas">OUP Type Box, Koli, Ukuran & Kualitas</option> 
+                                                        <option value="OUP Type Box, Koli, Ukuran & Kualitas">OUP Type Box, Koli, Ukuran & Kualitas</option>
                                                         <option value="OUP Nama, Ukuran, Kualitas">OUP Nama, Ukuran, Kualitas</option>
                                                         <option value="OUP Ukuran & Koli">OUP Ukuran & Koli</option>
                                                         <option value="OUP FLUTE, JOIN, CREASING DAN COLLY">OUP FLUTE, JOIN, CREASING DAN COLLY</option>
@@ -327,9 +327,10 @@
                                                         <option value="OUP Warna Kertas">OUP Warna Kertas</option>
                                                         <option value="OUP Warna, Ukuran, Design, dan Kualitas">OUP Warna, Ukuran, Design, dan Kualitas</option>
                                                         <option value="OUP Nama, Kualitas, dan Flute">OUP Nama, Kualitas, dan Flute</option>
+                                                        <option value="OUP Desain, Kwalitas & Kupingan">OUP Desain, Kwalitas & Kupingan</option>
                                                     </select>
                                                 </div>
-                                            </div>  
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -546,7 +547,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -654,7 +655,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -693,7 +694,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -789,7 +790,7 @@
                                         <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                                     </div>
                                 </div>
-                    
+
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-6 mb-6">
@@ -805,7 +806,7 @@
                                         Please wait...
                                     </div>
                                 </div>
-                    
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Close</button>
                                 </div>
@@ -822,7 +823,7 @@
                                         <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                                     </div>
                                 </div>
-                    
+
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-6 mb-6">
@@ -838,7 +839,7 @@
                                         Please wait...
                                     </div>
                                 </div>
-                    
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Close</button>
                                 </div>
@@ -847,9 +848,9 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
-    
+
 @endsection
 
 @section('javascripts')
@@ -879,7 +880,7 @@
         });
         $(".customer-list .content-body").html("Please wait...");
         var url = "{{ route('kontrak.cust') }}";
-        
+
         $('.form-search-customer').attr('action', url);
 
         $.get(url, function(data) {
@@ -916,7 +917,7 @@
     $(document).on("change", '.jenis-order', function(e) {
         e.preventDefault();
         var jenisOrder = $(this).val();
-        
+
         if (jenisOrder === 'Order Baru') {
             $('.asumsi-exp').show();
             $('.asumsi-karet').show();
@@ -957,7 +958,7 @@
 
     $(document).on("click", ".modal-mastercard", function(e) {
         e.preventDefault();
-        
+
         // Fokus input search customer saat modal dibuka, tanpa timeout yang singkat
         $('#modal-mastercard').on('shown.bs.modal', function () {
             $('.search-mastercard').val('');
@@ -996,7 +997,7 @@
     $(document).on("click", ".btn-insert-mastercard", function(e) {
         e.preventDefault();
         mc_id = $(this).closest(".modal-mastercard-list").find('.mastercard_id').val();
-        
+
         var url = "{{ route('mastercard.show', ':id') }}"
         url = url.replace(':id', mc_id);
 
@@ -1013,7 +1014,7 @@
 
             $('#modal-mastercard').modal('hide');
         });
-        
+
     });
 
     $(document).on("keyup", ".qty", function(e) {
@@ -1028,12 +1029,12 @@
 
         if (harga != '' || harga != 0) {
             hargakg = parseInt(qty) * parseFloat(harga) / kg;
-            
+
             if (ppn != '') {
                 total = (parseInt(qty) * parseFloat(harga)) + (parseInt(qty) * parseFloat(harga) * ppn / 100);
             } else {
                 total = (parseInt(qty) * parseFloat(harga)) ;
-            } 
+            }
         }
 
         document.getElementById('total').value = total;
@@ -1093,8 +1094,8 @@
 
         document.getElementById("hargappn").value = hargappn.toFixed(2);
     });
-                            
-                        
+
+
 </script>
 
-@endsection 
+@endsection
