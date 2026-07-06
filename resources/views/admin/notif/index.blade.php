@@ -131,7 +131,7 @@ body.sidebar-collapse .content-wrapper {
             @forelse ($notifications as $notification)
               <tr>
                 <td class="text-gray-800 fw-semibold">
-                  {{ $notification->tanggal ? \Carbon\Carbon::parse($notification->tanggal)->format('d-m-Y H:i') : '-' }}
+                  {{ $notification->tanggal ? \Carbon\Carbon::parse($notification->created_at)->format('d-m-Y H:i') : '-' }}
                 </td>
                 <td class="text-primary fw-semibold">
                   {{ $notification->kontrak->kode ?? '-' }}
