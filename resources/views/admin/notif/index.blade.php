@@ -58,7 +58,7 @@ body.sidebar-collapse .content-wrapper {
           <strong>{{ $message }}</strong>
         </div>
       @endif
-      
+
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Notifikasi</h1>
@@ -77,7 +77,7 @@ body.sidebar-collapse .content-wrapper {
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      
+
       <!-- Action Buttons & Search -->
       <div class="row mb-4 align-items-center">
         <div class="col-auto d-flex align-items-center gap-3">
@@ -92,12 +92,12 @@ body.sidebar-collapse .content-wrapper {
               <span class="input-group-text bg-white border-end-0" style="border-radius: 20px 0 0 20px; border-right: none;">
                 <i class="fas fa-search text-muted"></i>
               </span>
-              <input 
-                type="text" 
-                class="form-control border-start-0 shadow-none" 
-                name="search" 
-                placeholder="{{ __('Cari Notifikasi...') }}" 
-                value="{{ request('search') }}" 
+              <input
+                type="text"
+                class="form-control border-start-0 shadow-none"
+                name="search"
+                placeholder="{{ __('Cari Notifikasi...') }}"
+                value="{{ request('search') }}"
                 style="border-radius: 0 20px 20px 0; border-left: none; min-width: 200px;"
                 autocomplete="off"
               >
@@ -131,7 +131,7 @@ body.sidebar-collapse .content-wrapper {
             @forelse ($notifications as $notification)
               <tr>
                 <td class="text-gray-800 fw-semibold">
-                  {{ $notification->tanggal ? \Carbon\Carbon::parse($notification->tanggal)->format('d-m-Y') : '-' }}
+                  {{ $notification->tanggal ? \Carbon\Carbon::parse($notification->tanggal)->format('d-m-Y H:i') : '-' }}
                 </td>
                 <td class="text-primary fw-semibold">
                   {{ $notification->kontrak->kode ?? '-' }}
@@ -171,23 +171,23 @@ body.sidebar-collapse .content-wrapper {
                 <td>
                   @if($notification->status == 'Proses')
                     @if (Auth::user()->divisi_id == 2)
-                      <a href="{{ url('admin/kontrak/open/' . $notification->kontrak_id) }}" 
+                      <a href="{{ url('admin/kontrak/open/' . $notification->kontrak_id) }}"
                        class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm"
                        title="Open Kontrak">
                       <i class="fas fa-external-link-alt"></i>
                       <span>OPEN</span>
                     </a>
                     @else
-                      <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm" 
-                            disabled 
+                      <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm"
+                            disabled
                             title="Sudah Selesai">
                       <i class="fas fa-check"></i>
                       <span>Proses</span>
                     </button>
                     @endif
                   @else
-                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm" 
-                            disabled 
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1 shadow-sm"
+                            disabled
                             title="Sudah Selesai">
                       <i class="fas fa-check"></i>
                       <span>Done</span>
@@ -206,12 +206,12 @@ body.sidebar-collapse .content-wrapper {
           </tbody>
         </table>
       </div>
-      
+
       <!-- Pagination -->
       @if($notifications->hasPages())
         {{ $notifications->appends(request()->query())->links('pagination::bootstrap-4') }}
       @endif
-      
+
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
@@ -226,7 +226,7 @@ $(document).ready(function() {
     console.log('Body classes:', $('body').attr('class'));
     console.log('Sidebar exists:', $('.main-sidebar').length > 0);
     console.log('Sidebar visible:', $('.main-sidebar').is(':visible'));
-    
+
     // Debug sidebar state
     function debugSidebar() {
         console.log('=== SIDEBAR DEBUG ===');
@@ -236,15 +236,15 @@ $(document).ready(function() {
         console.log('Body has sidebar-collapse:', $('body').hasClass('sidebar-collapse'));
         console.log('Pushmenu button exists:', $('[data-widget="pushmenu"]').length > 0);
     }
-    
+
     // Ensure sidebar is visible and functional
     function ensureSidebarWorks() {
         // Debug first
         debugSidebar();
-        
+
         // Force show sidebar if hidden
         $('.main-sidebar').show().css('visibility', 'visible');
-        
+
         // Remove any inline styles that might hide it
         $('.main-sidebar').attr('style', function(i, style) {
             if (style) {
@@ -252,12 +252,12 @@ $(document).ready(function() {
             }
             return style;
         });
-        
+
         // Ensure body has proper AdminLTE classes
         if (!$('body').hasClass('hold-transition')) {
             $('body').addClass('hold-transition sidebar-mini layout-fixed');
         }
-        
+
         // Re-initialize sidebar toggle functionality
         $('[data-widget="pushmenu"]').off('click.notif').on('click.notif', function(e) {
             e.preventDefault();
@@ -265,26 +265,26 @@ $(document).ready(function() {
             $('body').toggleClass('sidebar-collapse');
             console.log('Sidebar toggled from notifikasi page - collapsed:', $('body').hasClass('sidebar-collapse'));
         });
-        
+
         // Initialize AdminLTE sidebar functionality if available
         if (typeof $.AdminLTE !== 'undefined' && $.AdminLTE.layout) {
             $.AdminLTE.layout.activate();
             console.log('AdminLTE layout activated');
         }
-        
+
         // Force sidebar to be visible
         setTimeout(function() {
             $('.main-sidebar').show();
             debugSidebar();
         }, 500);
     }
-    
+
     // Run on page load
     ensureSidebarWorks();
-    
+
     // Also run after a short delay to ensure DOM is fully loaded
     setTimeout(ensureSidebarWorks, 100);
-    
+
     // Add click handler to debug button if needed
     if (window.location.search.includes('debug=1')) {
         $('body').append('<button id="debugSidebar" style="position:fixed;top:10px;right:10px;z-index:9999;background:red;color:white;padding:10px;">Debug Sidebar</button>');

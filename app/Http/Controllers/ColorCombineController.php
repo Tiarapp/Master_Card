@@ -74,48 +74,23 @@ class ColorCombineController extends Controller
         return redirect('admin/colorcombine');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ColorCombine  $colorCombine
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ColorCombine $colorCombine)
+    public function color_select2(Request $request)
     {
-        //
-    }
+        $search = $request->search;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ColorCombine  $colorCombine
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ColorCombine $colorCombine)
-    {
-        //
-    }
+        $warna = ColorCombine::select('id', 'nama')
+                ->when($search, function($query) use ($search) {
+                    $query->where('nama', 'like', "%{$search}%");
+                })
+                ->get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ColorCombine  $colorCombine
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ColorCombine $colorCombine)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ColorCombine  $colorCombine
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ColorCombine $colorCombine)
-    {
-        //
+        return response()->json(
+            $warna->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'text' => $item->nama,
+                ];
+            })
+        );
     }
 }
