@@ -78,12 +78,16 @@ class ColorCombineController extends Controller
     {
         $search = $request->search;
 
-        $warna = ColorCombine::select('id', 'nama')
-                ->when($search, function($query) use ($search) {
-                    $query->where('nama', 'like', "%{$search}%");
-                })
-                ->get();
-
+        if ($search == '') {
+            $warna = ColorCombine::select('id', 'nama')->get();
+        } else {
+            $warna = ColorCombine::select('id', 'nama')
+                    ->when($search, function($query) use ($search) {
+                        $query->where('nama', 'like', "%{$search}%");
+                    })
+                    ->get();
+        }
+        
         return response()->json(
             $warna->map(function ($item) {
                 return [

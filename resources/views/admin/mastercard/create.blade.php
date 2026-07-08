@@ -1,38 +1,8 @@
 @extends('admin.templates.partials.default')
 
-<!-- Load jQuery first before any other scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <!-- Select2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
-
-<!-- DataTables and other scripts after jQuery -->
-<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-
-<!-- Select2 after jQuery -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<script>
-// jQuery conflict resolution and validation
-(function() {
-    // Ensure jQuery is available
-    if (typeof jQuery === 'undefined') {
-        console.error('jQuery is not available!');
-        return;
-    }
-
-    // Create a safe reference to jQuery
-    var $safe = jQuery.noConflict(true);
-
-    // Make it available globally as $ and jQuery
-    window.$ = window.jQuery = $safe;
-
-
-})();
-</script>
 
 <style>
 /* Custom Select2 Styling */
@@ -714,15 +684,13 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
-                                            <label class="control-label">Warna</label>
+                                            <label class="control-label">
+                                                Warna
+                                            </label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="hidden" name="colorCombine_id" id="colorCombine_id">
-                                            <select class="js-example-basic-single col-md-12" name="warna" id="warna" onchange="getColor()">
-                                                <option value=''>--</option>
-                                                @foreach ($colorcombine as $data)
-                                                <option value="{{ $data->id }}|{{ $data->nama }}">{{ $data->nama }}</option>
-                                                @endforeach
+                                            <select class="js-example-basic-single col-md-12" name="colorCombine_id" id="colorCombine_id">
+
                                             </select>
                                         </div>
                                     </div>
@@ -851,6 +819,11 @@
 
 @endsection
 
+@section('javascripts')
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
     // Ensure jQuery is loaded before proceeding
     function waitForJQuery(callback) {
@@ -907,8 +880,8 @@
                 return;
             }
 
-            // Find all select elements
-            var selectElements = $('.js-example-basic-single');
+            // Find all select elements except AJAX-backed fields that need custom config
+            var selectElements = $('.js-example-basic-single').not('#colorCombine_id');
 
 
             if (selectElements.length === 0) {
@@ -994,10 +967,27 @@
             }
         });
 
-        $(document).on('select2:select', '#warna', function (e) {
-
-            if (typeof getColor === 'function') {
-                getColor();
+        $('#colorCombine_id').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            placeholder: 'Pilih Warna',
+            allowClear: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ route("colorcombine.select") }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term, // search term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
             }
         });
 
@@ -1315,23 +1305,6 @@
         var creas = a.substr(pos+1);
 
         return creas;
-    }
-
-    function getColorCombine(a){
-        var pos = a.indexOf('|');
-        var panjang = a.length;
-        var id = a.substr(0,pos);
-
-        return id;
-    }
-
-
-    function getColor(){
-        var color = document.getElementById("warna").value;
-
-        var combine = getColorCombine(color);
-
-        document.getElementById("colorCombine_id").value = combine;
     }
 
 
@@ -1768,3 +1741,4 @@
 
 
 </script>
+@endsection

@@ -193,7 +193,7 @@ class MastercardController extends Controller
     {
         $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
         $kode = 'MC'. $nomer->nomer;
-        $cust = Customer::all();
+        // $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
         ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -203,16 +203,14 @@ class MastercardController extends Controller
         ->select('substance.*', 'linerAtas.gramKertas AS linerAtas', 'bf.gramKertas AS bf', 'linerTengah.gramKertas AS linerTengah', 'cf.gramKertas AS cf', 'linerBawah.gramKertas AS linerBawah')
         ->get();
         $box = DB::table('box')->get();
-        $colorcombine = DB::table('color_combine')->get();
         $joint = DB::table('joint')->get();
         $koli = DB::table('koli')->get();
 
         return view('admin.mastercard.create', compact([
             'kode',
-            'cust',
+            // 'cust',
             'substance',
             'box',
-            'colorcombine',
             'joint',
             'koli'
         ]));
@@ -227,6 +225,7 @@ class MastercardController extends Controller
     */
     public function store(Request $request)
     {
+        dd($request->all());
         $messages = [
             'koli.required' => 'Mohon isi Kolom Koli'
         ];

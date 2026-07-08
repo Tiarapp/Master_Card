@@ -257,7 +257,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/colorcombine', 'ColorCombineController@index')->name('colorcombine');
     Route::get('/admin/colorcombine/create', 'ColorCombineController@create')->name('colorcombine.create');
     Route::post('/admin/colorcombine/store', 'ColorCombineController@store')->name('colorcombine.store');
-    Route::post('/admin/colorcombine/select', 'ColorCombineController@color_select2')->name('colorcombine.select');
+    Route::get('/admin/colorcombine/select', 'ColorCombineController@color_select2')->name('colorcombine.select');
 
 
     //Sales
