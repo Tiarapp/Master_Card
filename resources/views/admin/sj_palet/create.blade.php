@@ -89,14 +89,14 @@
                 <div class="alert alert-danger">
                     <strong>Error!</strong>
                     <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $errors }}</li>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
                 @endif
                 {{-- form untuk create --}}
-                <form action="{{ route('sj_palet.store') }}"  method="POST">
+                <form id="sj-palet-form" action="{{ route('sj_palet.store') }}"  method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-5">
@@ -137,12 +137,12 @@
                                     {{-- dropdown customer, ambil dari controller untuk query selectnya --}}
                                     <div class="col-md-6">
                                         <input type="hidden" name="namaCustomer" id="namaCustomer">
-                                        <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
+                                        {{-- <select class='js-example-basic-single col-md-12' name="listCust" id="listCust" onchange="getCustomer()">
                                             <option value="PT. SUPRACOR SEJAHTERA">PT. SUPRACOR SEJAHTERA</option>
                                             @foreach ($customer as $data)
                                                 <option value="{{ $data->Nama }}|{{ $data->AlamatKirim }}">{{ $data->Nama }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </div>
                                 </div>
                             </div>
@@ -293,9 +293,12 @@
     }
 
     $('.simpan').on('click', function(e) {
-        $(this).prop('disabled', true);
-        getCatatan();
-        $('form').submit();
+           e.preventDefault();
+           getCatatan();
+
+           var $form = $('#sj-palet-form');
+           $(this).prop('disabled', true);
+            $form.get(0).submit();
     });
 
     function getCatatan() {
