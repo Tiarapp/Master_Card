@@ -225,7 +225,6 @@ class MastercardController extends Controller
     */
     public function store(Request $request)
     {
-        dd($request->all());
         $messages = [
             'koli.required' => 'Mohon isi Kolom Koli'
         ];
