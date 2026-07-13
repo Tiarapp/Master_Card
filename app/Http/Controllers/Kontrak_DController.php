@@ -697,7 +697,7 @@ class Kontrak_DController extends Controller
                     } elseif ($piutangTotal > $customerData->Plafond) {
                         $opiStatus = 'Pending';
                         $numb_opi = 'PENDING';
-                    } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 30)) {
+                    } elseif (($piutang->selisih_hari_max ?? 0) > ($customerData->WAKTUBAYAR + 15)) {
                         $opiStatus = 'Pending';
                         $numb_opi = 'PENDING';
                     }
