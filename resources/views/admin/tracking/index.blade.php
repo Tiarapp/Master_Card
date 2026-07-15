@@ -70,6 +70,12 @@
                                     <input type="date" name="date_to" class="form-control" value="{{ request('date_to') }}">
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Search</label>
+                                    <input type="text" name="search" class="form-control" value="{{ request('search') }}">
+                                </div>
+                            </div>
                             <div class="col-md-2 d-flex align-items-end">
                                 <div class="form-group w-100">
                                     <button type="submit" class="btn btn-primary btn-block">

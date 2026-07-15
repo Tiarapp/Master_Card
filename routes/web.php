@@ -430,55 +430,86 @@ Route::middleware(['auth'])->group(function (){
     })->name('acc.vendor_tt.export');
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
-        $opi = Opi_M::where('status_opi', '=', 'Proses');
+        $opi = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
+            ->where('status_opi', '=', 'Proses');
 
         if($request->search) {
-            $opi->where(function($query) use ($request) {
-                $query->whereHas('kontrakm', function($q) use ($request) {
-                    $q->where('customer_name', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $opi->where(function($query) use ($search) {
+                $query->whereHas('kontrakm', function($q) use ($search) {
+                    $q->where('customer_name', 'LIKE', '%' . $search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $search . '%');
                 })
-                ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
-                ->orWhereHas('mc', function($q) use ($request) {
-                    $q->where('kode', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+                ->orWhere('NoOPI', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('mc', function($q) use ($search) {
+                    $q->where('kode', 'LIKE', '%' . $search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
                 });
             });
+        }
+
+        if ($request->filled('date_start')) {
+            $opi->whereDate('created_at', '>=', $request->date_start);
+        }
+
+        if ($request->filled('date_end')) {
+            $opi->whereDate('created_at', '<=', $request->date_end);
         }
 
         $opi = $opi->orderBy('updated_at', 'desc')
             ->orderBy('NoOPI', 'desc')
             ->paginate(50, ['*'], 'page', $page);
-        // dd($opi);
-        return Excel::download(new OpiExport($opi), 'opi.xlsx');
+
+        $fileName = 'opi_page_' . $page;
+        if ($request->filled('date_start') || $request->filled('date_end')) {
+            $fileName .= '_' . ($request->date_start ?: 'start') . '_to_' . ($request->date_end ?: 'end');
+        }
+
+        return Excel::download(new OpiExport($opi), $fileName . '.xlsx');
     })->name('opi.export');
 
     Route::get('/opi/export/karet', function (Request $request) {
-        $page = $request->input('page', 1);
-        $productions = new Opi_M();
-        $productions = $productions->with('mc', 'dt', 'kontrakm', 'kontrakd')
+        $productions = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
             ->where('status_opi', 'Proses')
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('updated_at', 'desc')
             ->orderBy('NoOPI', 'desc');
 
         if($request->search) {
-            $productions->whereHas('kontrakm', function($query) use ($request) {
-                $query->where('customer_name', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('poCustomer', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('kode', 'LIKE', '%' . $request->search . '%');
-            })
-            ->orWhere('NoOPI', 'LIKE', '%' . $request->search . '%')
-            ->orWhereHas('mc', function($query) use ($request) {
-                $query->where('kode', 'LIKE', '%' . $request->search . '%')
-                      ->orWhere('namaBarang', 'LIKE', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $productions->where(function($query) use ($search) {
+                $query->whereHas('kontrakm', function($q) use ($search) {
+                    $q->where('customer_name', 'LIKE', '%' . $search . '%')
+                      ->orWhere('poCustomer', 'LIKE', '%' . $search . '%')
+                      ->orWhere('kode', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('NoOPI', 'LIKE', '%' . $search . '%')
+                ->orWhereHas('mc', function($q) use ($search) {
+                    $q->where('kode', 'LIKE', '%' . $search . '%')
+                      ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
+                });
             });
         }
 
-        $productions = $productions->paginate(50, ['*'], 'page', $page);
-        // dd($opi);
-        return Excel::download(new OpiExport($productions), 'opi_karet.xlsx');
+        if ($request->filled('date_start')) {
+            $productions->whereDate('created_at', '>=', $request->date_start);
+        }
+
+        if ($request->filled('date_end')) {
+            $productions->whereDate('created_at', '<=', $request->date_end);
+        }
+
+        $productions = $productions->get();
+
+        $fileName = 'opi_history';
+        if ($request->filled('date_start') || $request->filled('date_end')) {
+            $fileName .= '_' . ($request->date_start ?: 'start') . '_to_' . ($request->date_end ?: 'end');
+        }
+
+        return Excel::download(new OpiExport($productions), $fileName . '.xlsx');
     })->name('opi.export.karet');
 
     Route::get('/admin/ppic/karet', 'MastercardController@get_mc_php')->name('ppic.karet');
@@ -793,6 +824,10 @@ Route::middleware(['auth'])->group(function (){
         // Activity Tracking - View All (read-only)
         Route::get('/admin/tracking', function (\Illuminate\Http\Request $request) {
             $query = \App\Models\Tracking::orderBy('created_at', 'desc');
+
+            if ($request->filled('search')) {
+                $query->where('event', 'LIKE', '%' . $request->search . '%');
+            }
 
             if ($request->filled('tipe')) {
                 $query->where('tipe', $request->tipe);

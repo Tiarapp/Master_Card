@@ -21,7 +21,11 @@ class OpiExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return $this->opi->getCollection()->map(function ($item) {
+        $items = method_exists($this->opi, 'getCollection')
+            ? $this->opi->getCollection()
+            : collect($this->opi);
+
+        return $items->map(function ($item) {
             return [
                 'ID' => $item->id,
                 'OPI' => $item->NoOPI,

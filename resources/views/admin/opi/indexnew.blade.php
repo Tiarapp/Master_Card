@@ -58,14 +58,25 @@
       @endif
       <!-- Small boxes (Stat box) -->
 
+      @php
+        $exportParams = array_filter([
+          'page' => request()->get('page', 1),
+          'search' => request('search'),
+          'date_start' => request('date_start'),
+          'date_end' => request('date_end'),
+        ], function ($value) {
+          return $value !== null && $value !== '';
+        });
+      @endphp
+
       <div class="row mb-4 align-items-center">
         <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ url('/opi/export?page=' . request()->get('page', 1) . (request()->has('search') ? '&search=' . urlencode(request('search')) : '')) }}" class="btn btn-success mb-3">
+          <a href="{{ route('opi.export', $exportParams) }}" class="btn btn-success mb-3">
         Export Halaman Ini
           </a>
         </div>
         <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ url('/opi/export/karet?page=' . request()->get('page', 1) . (request()->has('search') ? '&search=' . urlencode(request('search')) : '')) }}" class="btn btn-success mb-3">
+          <a href="{{ route('opi.export.karet', $exportParams) }}" class="btn btn-success mb-3">
         Export History
           </a>
         </div>
@@ -75,16 +86,32 @@
               <span class="input-group-text bg-white border-end-0" style="border-radius: 20px 0 0 20px; border-right: none;">
                 <i class="fas fa-search text-muted"></i>
               </span>
-              <input 
-                type="text" 
-                class="form-control border-start-0 shadow-none" 
-                name="search" 
-                placeholder="{{ __('Cari OPI...') }}" 
-                value="{{ request('search') }}" 
+              <input
+                type="text"
+                class="form-control border-start-0 shadow-none"
+                name="search"
+                placeholder="{{ __('Cari OPI...') }}"
+                value="{{ request('search') }}"
                 style="border-radius: 0 20px 20px 0; border-left: none; min-width: 200px;"
                 autocomplete="off"
               >
             </div>
+            <input
+              type="date"
+              name="date_start"
+              class="form-control"
+              value="{{ request('date_start') }}"
+              title="Tanggal mulai (created_at)"
+              style="max-width: 170px;"
+            >
+            <input
+              type="date"
+              name="date_end"
+              class="form-control"
+              value="{{ request('date_end') }}"
+              title="Tanggal akhir (created_at)"
+              style="max-width: 170px;"
+            >
             <button type="submit" class="btn btn-primary px-4 shadow-sm">
               <i class="fas fa-search me-1"></i> {{ __('Cari') }}
             </button>
@@ -255,7 +282,7 @@
                         <td class="text-gray-800 bold">-</td>
                         <td class="text-gray-800 bold">-</td>
                         <td class="text-gray-800 bold">
-                            
+
                         </td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->kode }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->tglKontrak }}</td>
@@ -288,7 +315,7 @@
                         <td class="text-gray-800 bold">{{ $production->mc->box->tipeCreasCorr }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->bungkus }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->lain }}</td>
-                        
+
                     </tr>
                 @endforeach
             </tbody>
