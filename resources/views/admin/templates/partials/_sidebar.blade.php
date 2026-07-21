@@ -641,6 +641,13 @@
                     </a>
                   </li>
                 @endif
+                @if (hasMenuAccess('reports.surat_jalan'))
+                  <li class="nav-item">
+                    <a href="{{ route('admin.report.surat_jalan') }}" class="nav-link">
+                      <i class="fas fa-file-alt nav-icon"></i><p>Surat Jalan</p>
+                    </a>
+                  </li>
+                @endif
               </ul>
             </li>
           @endif
