@@ -66,6 +66,9 @@
                     </div>
                 </form>
             </div>
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <a href="{{ route('sj_palet.create') }}" class="btn btn-primary" type="button">Tambah SJ Palet</a>
+            </div>
         </div>
 
       <div class="table-responsive shadow rounded-3">
