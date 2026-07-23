@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use App\Exports\DeadstockExport;
+use App\Exports\SuratJalanExport;
+use App\Models\DetSuratJalan;
+use App\Models\Supplier;
+use App\Models\SuratJalan;
 
 class ReportController extends Controller
 {
@@ -687,5 +691,67 @@ class ReportController extends Controller
         $periode = $month . '/' . $year;
         
         return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
+    }
+
+    public function surat_jalan(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        // $query = SuratJalan::with('supplier');
+
+        if ($request->tanggal_awal == null || $request->tanggal_akhir == null) {
+            $query = SuratJalan::with('supplier', 'mod')->select('NomerSJ', 'TglSJ', 'NamaCust', 'NomerMOD', 'Expedisi', 'NoKend', 'CaraAngkut');
+        } else {
+            $query = SuratJalan::with('supplier', 'mod')->select('NomerSJ', 'TglSJ', 'NamaCust', 'NomerMOD', 'Expedisi', 'NoKend', 'CaraAngkut')
+                    ->whereBetween('TglSJ', [$request->tanggal_awal, $request->tanggal_akhir]);
+        }
+
+        $suratjalan = $query->orderBy('TglSJ', 'desc')->paginate(20);
+
+        // $expedisi = Supplier::select('Kode', 'Nama')
+        //     ->where('Kode', 'LIKE', "%J%")
+        //     ->orderBy('Nama', 'asc')
+        //     ->get();
+        
+        $data = [
+            'suratjalan' => $suratjalan,
+            'tanggal_awal' => $request->tanggal_awal,
+            'tanggal_akhir' => $request->tanggal_akhir,
+        ];
+
+        return view('admin.reports.surat_jalan', $data);
+    }
+
+    public function exportSuratJalanExcel(Request $request)
+    {
+        DB::connection('firebird2')->beginTransaction();
+
+        if ($request->tanggal_awal == null || $request->tanggal_akhir == null) {
+           return redirect()->back()->with('error', 'Tanggal awal dan tanggal akhir harus diisi untuk ekspor.');
+        } else {
+            $query = DetSuratJalan::exportDetail($request->tanggal_awal, $request->tanggal_akhir)->get();
+            // dd($query);
+
+            $suppliers = Supplier::whereIn(
+                DB::raw('TRIM("Kode")'),
+                $query->pluck('Expedisi')
+                    ->map(fn ($kode) => trim($kode))
+                    ->unique()
+            )
+            ->get()
+            ->map(function ($supplier) {
+                $supplier->Kode = rtrim($supplier->Kode);
+                return $supplier;
+            })
+            ->keyBy('Kode');
+
+            $data = $query->map(function ($item) use ($suppliers) {
+                $supplier = $suppliers->get(trim($item->Expedisi));
+                $item->NamaSupplier = $supplier ? $supplier->Nama : null;
+                return $item;
+            });
+        }
+
+        return Excel::download(new SuratJalanExport($data), 'Surat_Jalan_' . $request->tanggal_awal . '_to_' . $request->tanggal_akhir . '.xlsx');
     }
 }

@@ -12,6 +12,8 @@ class SJ extends Model
     protected $connection = 'firebird2';
     protected $table = 'TSuratJalanBackup';
     protected $primaryKey = 'NomerSJ';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'NomerSJ'
     ];

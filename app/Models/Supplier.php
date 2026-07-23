@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Supplier extends Model
 {
     use HasFactory;
+
+    protected $connection = 'firebird';
+    protected $table = 'TSupplier';
+    protected $primaryKey = 'Kode';
+    protected $keyType = 'string';
+    public $incrementing = false;
 }

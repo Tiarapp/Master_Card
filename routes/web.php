@@ -795,6 +795,8 @@ Route::middleware(['auth'])->group(function (){
             Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
             Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
             Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
+            Route::get('surat_jalan/', 'ReportController@surat_jalan')->name('surat_jalan');
+            Route::get('surat_jalan/export', 'ReportController@exportSuratJalanExcel')->name('surat_jalan.export');
         });
 
 
