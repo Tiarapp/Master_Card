@@ -42,13 +42,13 @@
                                 <label>Start Date:</label>
                             </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control txt_line" name="start_date" value="{{ $start_date }}" required>
+                                <input type="date" class="form-control txt_line" name="start_date" value="{{ $start_date }}">
                             </div>
                             <div class="col-md-2">
                                 <label>End Date:</label>
                             </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control txt_line" name="end_date" value="{{ $end_date }}" required>
+                                <input type="date" class="form-control txt_line" name="end_date" value="{{ $end_date }}">
                             </div>
                         </div>
                         <div class="input-group col-md-5">
