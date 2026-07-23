@@ -848,6 +848,11 @@ Route::middleware(['auth'])->group(function (){
 
             return view('admin.tracking.index', compact('trackings', 'tipes', 'users'));
         })->name('admin.tracking.index');
+
+        Route::name('iso.')->prefix('iso')->group(function () {
+            Route::get('/it', 'IsoController@index_it')->name('it');
+            Route::get('/it/prosedure-one', 'IsoController@prosedureOne')->name('it.prosedure-one');
+        });
 });
 
 require __DIR__ . '/auth.php';
