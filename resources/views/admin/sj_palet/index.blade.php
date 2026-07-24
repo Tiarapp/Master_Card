@@ -92,7 +92,7 @@
                         <td class="text-gray-800 bold">
                             <div class="input-group">
                                 <div class="input-group-append" id="button-addon4">
-                                    <a href="../admin/sj_palet/show/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">View</a>
+                                    <a href="../admin/sj_palet/pdf/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Print</a>
                                     <a href="../admin/sj_palet/edit/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
                                     <a href="../admin/sj_palet/delete/{{ $suratjalan->id }}" class="btn btn-outline-danger" type="button">Delete</a>
                                 </div>
