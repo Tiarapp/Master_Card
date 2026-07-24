@@ -275,9 +275,17 @@ class SJ_Palet_DController extends Controller
     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
     * @return \Illuminate\Http\Response
     */
-    public function destroy(SJ_Palet_D $sJ_Palet_D)
+    public function destroy($id)
     {
-        //
+        $sj = SJ_Palet_M::find($id);
+        $sj_detail = SJ_Palet_D::where('sj_palet_m_id', $id)->get();
+
+        foreach ($sj_detail as $detail) {
+            $detail->delete();
+        }
+        $sj->delete();
+
+        return redirect('admin/sj_palet');
     }
 
     public function pdfprint($sj_palet_m_id){

@@ -94,7 +94,13 @@
                                 <div class="input-group-append" id="button-addon4">
                                     <a href="../admin/sj_palet/pdf/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Print</a>
                                     <a href="../admin/sj_palet/edit/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                                    <a href="../admin/sj_palet/delete/{{ $suratjalan->id }}" class="btn btn-outline-danger" type="button">Delete</a>
+                                    @if (Auth::user()->divisi->kode == 'IT')
+                                        <form action="{{ route('sj_palet.destroy', $suratjalan->id) }}" method="POST" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </td>

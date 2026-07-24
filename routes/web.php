@@ -290,6 +290,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
     Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
     Route::get('/export/sjpalet', [SJ_Palet_DController::class, 'export_sjpalet_excel'])->name('export.sjpalet');
+    Route::delete('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@destroy')->name('sj_palet.destroy');
 
     //Supplier
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
