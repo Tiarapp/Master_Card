@@ -44,7 +44,8 @@ class SJ_Palet_D extends Model
                 'sj_palet_m.noPolisi',
                 'item_palet.nama as palet',
                 'sj_palet_d.qty as quantity',
-                'sj_palet_m.alamatCustomer'
+                'sj_palet_m.alamatCustomer',
+                'sj_palet_d.ukuran'
             )
             ->whereBetween('sj_palet_m.tanggal', [$startDate, $endDate]);
 

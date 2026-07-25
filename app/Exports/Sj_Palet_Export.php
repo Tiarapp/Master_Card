@@ -30,6 +30,7 @@ class Sj_Palet_Export implements FromCollection, WithHeadings, WithMapping
             'Customer',
             'No Polisi',
             'Palet',
+            'Ukuran',
             'Quantity',
             'Alamat Customer'
         ];
@@ -43,6 +44,7 @@ class Sj_Palet_Export implements FromCollection, WithHeadings, WithMapping
             $data['namaCustomer'],
             $data['noPolisi'],
             $data['palet'],
+            $data['ukuran'],
             $data['quantity'],
             $data['alamatCustomer']
         ];
