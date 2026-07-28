@@ -61,6 +61,7 @@ class DetSuratJalan extends Model
                 'barang.BeratStandart'
             )
             ->whereBetween('sj.TglSJ', [$tgl_awal, $tgl_akhir])
-            ->orderBy('sj.TglSJ', 'desc');
+            ->orderBy('sj.TglSJ', 'desc')
+            ->orderBy('TDetSJ.NomerSJ', 'desc');
     }
 }

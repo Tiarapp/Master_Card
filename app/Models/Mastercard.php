@@ -13,6 +13,7 @@ class Mastercard extends Model
     protected $table = 'mc';
 
     protected $fillable = [
+        'parent_id',
         'kode',
         'revisi',
         'namaBarang',
