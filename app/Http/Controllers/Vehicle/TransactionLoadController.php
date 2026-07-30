@@ -32,4 +32,26 @@ class TransactionLoadController extends Controller
 
         return view('admin.vehicle.index', $data);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'driver_name' => 'required|string|max:255',
+            'vehicle_number' => 'required|string|max:255',
+            'masterdata_id' => 'required|exists:masterdata,id',
+            'destination' => 'required|string|max:255',
+            'date_in' => 'required|date',
+        ]);
+
+        TransactionLoad::create($request->all());
+
+        return redirect()->route('vehicle.index')->with('success', 'Vehicle transaction created successfully.');
+    }
+
+    public function show($id)
+    {
+        $vehicle = TransactionLoad::with('masterdata')->findOrFail($id);
+
+        return view('admin.vehicle.show', compact('vehicle'));
+    }
 }

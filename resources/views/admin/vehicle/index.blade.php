@@ -57,23 +57,53 @@
                 </button>
               </div>
               <div class="modal-body">
-                    <form action="#" method="POST">
+                    <form action="#" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                                <label for="recipient-name" class="col-form-label">No Polisi :</label>
+                                <input type="text" class="form-control" id="no-polisi">
                         </div>
                         <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                            <label for="message-text" class="col-form-label">Sopir</label>
+                            <input type="text" class="form-control" id="driver-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Type </label>
+                            <select class="custom-select" name="type" id="tipe">
+                                <option value="customer">Customer</option>
+                                <option value="supplier">Supplier</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Supplier / Customer</label>
+                            <select class="custom-select" name="masterdata_id" id="masterdata_id">
+                                {{-- @foreach ($masterdata as $data)
+                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Tujuan</label>
+                            <input type="text" class="form-control" id="destination">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Status</label>
+                            <select class="custom-select" name="status" id="status">
+                                <option value="load">Load</option>
+                                <option value="unload">Unload</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Gambar</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <img id="imagePreview" src="#" alt="Preview Gambar" style="display:none; max-width:200px; margin-top:10px; border:1px solid #ddd; padding:5px;">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-
             </div>
           </div>
         </div>
@@ -89,6 +119,23 @@
   <script>
     $(document).ready(function() {
       $("#data_colorcombine").DataTable();
+
+      $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        const preview = $('#imagePreview');
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onload = function(event) {
+            preview.attr('src', event.target.result).show();
+          };
+
+          reader.readAsDataURL(file);
+        } else {
+          preview.hide().attr('src', '#');
+        }
+      });
     });
   </script>
 

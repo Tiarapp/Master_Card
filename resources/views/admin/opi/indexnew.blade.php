@@ -186,6 +186,7 @@
                     <th class="min-w-125px">{{ __('Tipe Crease') }}</th>
                     <th class="min-w-125px">{{ __('Bungkus') }}</th>
                     <th class="min-w-125px">{{ __('Lain-Lain') }}</th>
+                    <th class="min-w-125px">{{ __('Sales') }}</th>
                 </tr>
             </thead>
             <tbody class="text-gray-900 fw-semibold">
@@ -315,6 +316,7 @@
                         <td class="text-gray-800 bold">{{ $production->mc->box->tipeCreasCorr }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->bungkus }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->lain }}</td>
+                        <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
 
                     </tr>
                 @endforeach
