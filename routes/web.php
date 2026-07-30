@@ -458,11 +458,11 @@ Route::middleware(['auth'])->group(function (){
         }
 
         if ($request->filled('date_start')) {
-            $opi->whereDate('created_at', '>=', $request->date_start);
+            $opi->whereDate('updated_at', '>=', $request->date_start);
         }
 
         if ($request->filled('date_end')) {
-            $opi->whereDate('created_at', '<=', $request->date_end);
+            $opi->whereDate('updated_at', '<=', $request->date_end);
         }
 
         $opi = $opi->orderBy('updated_at', 'desc')
