@@ -29,6 +29,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Http\Controllers\Stellar\BP\BbmController;
+use App\Http\Controllers\Vehicle\TransactionLoadController;
 use App\Models\Accounting\VendorTT;
 use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
@@ -329,6 +330,10 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/show/{id}', [MastercardController::class, 'single'])->name('show');
         Route::get('/export', [MastercardController::class, 'export'])->name('export');
         Route::get('/history/{id}', [MastercardController::class, 'history'])->name('history');
+    });
+
+    Route::name('vehicle.')->prefix('vehicle')->group(function() {
+        Route::get('/', [TransactionLoadController::class, 'index'])->name('index');
     });
 
     Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');

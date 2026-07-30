@@ -460,11 +460,11 @@ class OpiController extends Controller
         }
 
         if ($request->filled('date_start')) {
-            $productions->whereDate('created_at', '>=', $request->date_start);
+            $productions->whereDate('updated_at', '>=', $request->date_start);
         }
 
         if ($request->filled('date_end')) {
-            $productions->whereDate('created_at', '<=', $request->date_end);
+            $productions->whereDate('updated_at', '<=', $request->date_end);
         }
 
         $productions = $productions->paginate(50);

@@ -121,12 +121,13 @@
                                                        title="Revisi">
                                                         <i class="fas fa-cog"></i> Revisi
                                                     </a>
-                                                    {{-- <a href="#" data-toggle="modal" data-target="#historyModal{{ $mastercard->id }}"
-                                                       class="btn btn-sm btn-info"
+                                                    <a href="#"
+                                                       class="btn btn-sm btn-primary history"
+                                                       data-id="{{ $mastercard->id }}"
                                                        title="History">
-                                                        <i class="fas fa-cog"></i> History
+                                                        <i class="fas fa-history"></i> History
                                                     </a>
-                                                    @include('admin.mastercard.history-modal', ['data' => $mastercard]) --}}
+                                                    @include('admin.mastercard.history-modal', ['data' => $mastercard])
                                                 </div>
                                             </td>
                                         </tr>
@@ -190,6 +191,36 @@ $(document).ready(function() {
 
     // Tooltip for action buttons
     $('[title]').tooltip();
+});
+
+$('.history').on('click', function() {
+    var id = $(this).data('id');
+
+    $.ajax({
+        url: '/mastercard/history/' + id,
+        method: 'GET',
+        success: function(data) {
+            data = JSON.parse(data);
+
+            // alert(data); // Debugging line to check the data received
+
+            $('#historyTableBody').empty(); // Clear previous history data
+            $.each(data, function(index, history) {
+                var row = '<tr>' +
+                    '<td>' + history.id + '</td>' +
+                    '<td>' + history.kode + '</td>' +
+                    '<td>' + history.revisi + '</td>' +
+                    '<td>' + history.namaBarang + '</td>' +
+                    '<td>' + (history.parent_id ? history.parent_id : 'N/A') + '</td>' +
+                    '</tr>';
+                $('#historyTableBody').append(row);
+            });
+            $('#historyModal').modal('show');
+        },
+        error: function() {
+            alert('Gagal memuat data history.');
+        }
+    });
 });
 </script>
 @endsection

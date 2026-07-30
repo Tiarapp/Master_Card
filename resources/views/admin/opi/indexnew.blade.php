@@ -97,7 +97,7 @@
               >
             </div>
             <input
-              type="date"
+              type="text"
               name="date_start"
               class="form-control"
               value="{{ request('date_start') }}"

@@ -1206,18 +1206,15 @@ class MastercardController extends Controller
         $mc = Mastercard::findOrFail($id);
 
         if ($mc->revisi == null || $mc->revisi == "R0") {
-            $history = Mastercard::where('parent_id', $mc->id)->orWhere('id', $mc->id)->orderBy('created_at', 'desc')->get();
+            $history = Mastercard::select('id', 'kode', 'revisi', 'namaBarang', 'parent_id')
+                ->where('parent_id', $mc->id)->orWhere('id', $mc->id)->orderBy('id', 'desc')->get();
         } else {
-            $history = Mastercard::where('parent_id', $mc->parent_id)
-            ->orWhere('id', $mc->parent_id)
-            ->orderBy('created_at', 'desc')->get();
+            $history = Mastercard::select('id', 'kode', 'revisi', 'namaBarang', 'parent_id')
+                ->where('parent_id', $mc->parent_id)
+                ->orWhere('id', $mc->parent_id)
+                ->orderBy('id', 'desc')->get();
         }
 
-        $data = [
-            'history' => $history,
-            'mc' => $mc
-        ];
-
-        return json_encode($data);
+        return json_encode($history);
     }
 }
