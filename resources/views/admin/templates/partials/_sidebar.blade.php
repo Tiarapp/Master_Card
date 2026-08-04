@@ -648,6 +648,13 @@
                     </a>
                   </li>
                 @endif
+                @if (hasMenuAccess('reports.finish_goods'))
+                  <li class="nav-item">
+                    <a href="{{ route('admin.report.finish_goods') }}" class="nav-link">
+                      <i class="fas fa-file-alt nav-icon"></i><p>Finish Goods</p>
+                    </a>
+                  </li>
+                @endif
               </ul>
             </li>
           @endif

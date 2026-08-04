@@ -797,6 +797,8 @@ Route::middleware(['auth'])->group(function (){
             Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
             Route::get('surat_jalan/', 'ReportController@surat_jalan')->name('surat_jalan');
             Route::get('surat_jalan/export', 'ReportController@exportSuratJalanExcel')->name('surat_jalan.export');
+            Route::get('finish_goods/', 'ReportController@finish_goods')->name('finish_goods');
+            Route::get('finish_goods/export', 'ReportController@export_fg')->name('finish_goods.export');
         });
 
 

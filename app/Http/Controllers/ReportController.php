@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use App\Exports\DeadstockExport;
+use App\Exports\PersediaanBjExport;
 use App\Exports\SuratJalanExport;
 use App\Models\DetSuratJalan;
+use App\Models\PersediaanBj;
 use App\Models\Supplier;
 use App\Models\SuratJalan;
 
@@ -753,5 +755,62 @@ class ReportController extends Controller
         }
 
         return Excel::download(new SuratJalanExport($data), 'Surat_Jalan_' . $request->tanggal_awal . '_to_' . $request->tanggal_akhir . '.xlsx');
+    }
+
+    public function finish_goods(Request $request)
+    {
+        $periode = $request->periode ?? date_format(now(), 'm/Y');
+
+        DB::connection('firebird2')->beginTransaction();
+
+        $stockFG = PersediaanBj::leftJoin('TBarangConv as b', 'a.KodeBrg', '=', 'b.KodeBrg')
+        ->select(
+            'a.KodeBrg',
+            'a.Periode',
+            'b.NamaBrg',
+            'a.SaldoAwalCrt',
+            'a.SaldoAwalKg',
+            DB::raw('"a"."ProduksiCrt" + "a"."BBMCrt" + "a"."ReturJualCrt" + "a"."RepackInCrt" as "MasukCrt"'),
+            DB::raw('"a"."ProduksiKg" + "a"."BBMKg" + "a"."ReturJualKg" + "a"."RepackInKg" as "MasukKg"'),
+            DB::raw('"a"."JualLokalCrt" + "a"."JualExportCrt" + "a"."SampleCrt" + "a"."BonusCrt" + "a"."RepackOutCrt" + "a"."RejectCrt" + "a"."ReturPembelianCrt" as "KeluarCrt"'),
+            DB::raw('"a"."JualLokalKg" + "a"."JualExportKg" + "a"."SampleKg" + "a"."BonusKg" + "a"."RepackOutKg" + "a"."RejectKg" + "a"."ReturPembelianKg" as "KeluarKg"'),
+            'a.AdjCRCrt',
+            'a.AdjCRKg',
+            'a.AdjDBCrt',
+            'a.AdjDBKg',
+            'a.SaldoAkhirCrt',
+            'a.SaldoAkhirKg'
+        )
+        ->where('a.Periode', $periode)
+        ->orderBy('a.KodeBrg')
+        ->paginate(20);
+        // ->take(5)->get();
+
+        // dd($stockFG);
+
+        $data = [
+            'stockFG' => $stockFG,
+            'periode' => $periode
+        ];
+
+        DB::connection('firebird2')->commit();
+
+        return view('admin.reports.stock_fg', compact('stockFG', 'periode'));
+    }
+
+    public function export_fg(Request $request)
+    {
+        $periode = $request->periode ?? date_format(now(), 'm/Y');
+
+        DB::connection('firebird2')->beginTransaction();
+
+        $data = PersediaanBj::export($periode)
+        ->get();
+
+        DB::connection('firebird2')->commit();
+
+        $filename = 'Finish-Goods-' . str_replace('/', '-', $periode) . '.xlsx';
+
+        return Excel::download(new PersediaanBjExport($data), $filename);
     }
 }
