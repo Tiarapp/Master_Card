@@ -20,11 +20,49 @@ class SJ_Palet_DController extends Controller
     * @return \Illuminate\Http\Response
     */
     // Tampilan Awal
-    public function index()
+    public function new_index()
     {
         $sj = DB::table('sj_palet_m')->orderBy('noSuratJalan', 'DESC')->get();
 
         return view('admin.sj_palet.index', compact('sj'));
+    }
+
+    public function index(Request $request)
+    {
+        $query = SJ_Palet_M::query();
+        $search = $request->input('search');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('tanggal', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('tanggal', '<=', $request->end_date);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('noSuratJalan', 'like', '%' . $search . '%')
+                    ->orWhere('namaCustomer', 'like', '%' . $search . '%')
+                    ->orWhere('alamatCustomer', 'like', '%' . $search . '%');
+            });
+        }
+
+        $sj = $query->orderBy('noSuratJalan', 'DESC')->paginate(20);
+
+        // dd($sj);
+
+        $data = [
+            'sj' => $sj,
+            'search' => $search,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ];
+
+        return view('admin.sj_palet.index', $data);
     }
 
     /**
@@ -237,9 +275,17 @@ class SJ_Palet_DController extends Controller
     * @param  \App\Models\SJ_Palet_D  $sJ_Palet_D
     * @return \Illuminate\Http\Response
     */
-    public function destroy(SJ_Palet_D $sJ_Palet_D)
+    public function destroy($id)
     {
-        //
+        $sj = SJ_Palet_M::find($id);
+        $sj_detail = SJ_Palet_D::where('sj_palet_m_id', $id)->get();
+
+        foreach ($sj_detail as $detail) {
+            $detail->delete();
+        }
+        $sj->delete();
+
+        return redirect('admin/sj_palet');
     }
 
     public function pdfprint($sj_palet_m_id){
@@ -258,15 +304,21 @@ class SJ_Palet_DController extends Controller
 
     public function export_sjpalet_excel(Request $request)
     {
-        $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date'
-        ]);
+        $search = $request->input('search');
+        $data = SJ_Palet_D::exportData($request->input('start_date'), $request->input('end_date'))
+            ->where(function ($query) use ($search) {
+                if (!empty($search)) {
+                    $query->where('sj_palet_m.noSuratJalan', 'like', '%' . $search . '%')
+                        ->orWhere('sj_palet_m.namaCustomer', 'like', '%' . $search . '%')
+                        ->orWhere('sj_palet_m.alamatCustomer', 'like', '%' . $search . '%');
+                }
+            })
+            ->get();
 
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $data = $data->sortByDesc('noBukti')->values();
 
-        return Excel::download(new Sj_Palet_Export($startDate, $endDate), 'sj_palet '.$startDate.' - '.$endDate.'.xlsx');
+
+        return Excel::download(new Sj_Palet_Export($data), 'sj_palet '.$request->input('start_date').' - '.$request->input('end_date').'.xlsx');
     }
 
 }

@@ -133,6 +133,7 @@
                     <th class="min-w-125px">{{ __('OPI ke') }}</th>
                     <th class="min-w-125px">{{ __('DT') }}</th>
                     <th class="min-w-125px">{{ __('QTY Kirim') }}</th>
+                    <th class="min-w-125px">{{ __('Sales') }}</th>
                     <th class="min-w-125px">{{ __('Customer') }}</th>
                     <th class="min-w-125px">{{ __('Item') }}</th>
                     <th class="min-w-125px">{{ __('Qty Order') }}</th>
@@ -211,6 +212,7 @@
                         <td class="text-gray-800 bold">{{ $production->created_at }}</td>
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
+                        <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>

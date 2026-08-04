@@ -35,7 +35,7 @@ class SuratJalanExport implements FromCollection, WithHeadings, WithMapping, Wit
             'PO',
             'Customer',
             'Kode Barang',
-            'Nama Barang', 
+            'Nama Barang',
             'Berat Std',
             'PCS',
             'KG',

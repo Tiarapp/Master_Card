@@ -29,6 +29,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SJ_Palet_DController;
 use App\Http\Controllers\Stellar\BP\BbmController;
+use App\Http\Controllers\Vehicle\TransactionLoadController;
 use App\Models\Accounting\VendorTT;
 use App\Models\Accounting\VendorTTDet;
 use App\Models\Kontrak_D;
@@ -290,6 +291,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@updateDeleted');
     Route::get('/admin/sj_palet/pdf/{sj_palet_m_id}', 'SJ_Palet_DController@pdfprint');
     Route::get('/export/sjpalet', [SJ_Palet_DController::class, 'export_sjpalet_excel'])->name('export.sjpalet');
+    Route::delete('/admin/sj_palet/delete/{id}', 'SJ_Palet_DController@destroy')->name('sj_palet.destroy');
 
     //Supplier
     Route::get('/admin/supplier', 'SuppliersController@index')->name('supplier');
@@ -327,6 +329,11 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');
         Route::get('/show/{id}', [MastercardController::class, 'single'])->name('show');
         Route::get('/export', [MastercardController::class, 'export'])->name('export');
+        Route::get('/history/{id}', [MastercardController::class, 'history'])->name('history');
+    });
+
+    Route::name('vehicle.')->prefix('vehicle')->group(function() {
+        Route::get('/', [TransactionLoadController::class, 'index'])->name('index');
     });
 
     Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');
@@ -428,6 +435,7 @@ Route::middleware(['auth'])->group(function (){
 
             return Excel::download(new VendorTTExport($vendortt), $fileName);
     })->name('acc.vendor_tt.export');
+
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
         $opi = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
@@ -451,11 +459,11 @@ Route::middleware(['auth'])->group(function (){
         }
 
         if ($request->filled('date_start')) {
-            $opi->whereDate('created_at', '>=', $request->date_start);
+            $opi->whereDate('updated_at', '>=', $request->date_start);
         }
 
         if ($request->filled('date_end')) {
-            $opi->whereDate('created_at', '<=', $request->date_end);
+            $opi->whereDate('updated_at', '<=', $request->date_end);
         }
 
         $opi = $opi->orderBy('updated_at', 'desc')
@@ -495,11 +503,11 @@ Route::middleware(['auth'])->group(function (){
         }
 
         if ($request->filled('date_start')) {
-            $productions->whereDate('created_at', '>=', $request->date_start);
+            $productions->whereDate('updated_at', '>=', $request->date_start);
         }
 
         if ($request->filled('date_end')) {
-            $productions->whereDate('created_at', '<=', $request->date_end);
+            $productions->whereDate('updated_at', '<=', $request->date_end);
         }
 
         $productions = $productions->get();
@@ -852,6 +860,11 @@ Route::middleware(['auth'])->group(function (){
 
             return view('admin.tracking.index', compact('trackings', 'tipes', 'users'));
         })->name('admin.tracking.index');
+
+        Route::name('iso.')->prefix('iso')->group(function () {
+            Route::get('/it', 'IsoController@index_it')->name('it');
+            Route::get('/it/prosedure-one', 'IsoController@prosedureOne')->name('it.prosedure-one');
+        });
 });
 
 require __DIR__ . '/auth.php';

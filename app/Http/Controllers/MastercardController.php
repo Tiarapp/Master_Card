@@ -1201,4 +1201,20 @@ class MastercardController extends Controller
         return view('admin.mastercard.index_new', compact('mastercards', 'search'));
     }
 
+    public function history($id)
+    {
+        $mc = Mastercard::findOrFail($id);
+
+        if ($mc->revisi == null || $mc->revisi == "R0") {
+            $history = Mastercard::select('id', 'kode', 'revisi', 'namaBarang', 'parent_id')
+                ->where('parent_id', $mc->id)->orWhere('id', $mc->id)->orderBy('id', 'desc')->get();
+        } else {
+            $history = Mastercard::select('id', 'kode', 'revisi', 'namaBarang', 'parent_id')
+                ->where('parent_id', $mc->parent_id)
+                ->orWhere('id', $mc->parent_id)
+                ->orderBy('id', 'desc')->get();
+        }
+
+        return json_encode($history);
+    }
 }

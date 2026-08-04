@@ -33,81 +33,83 @@
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
-
-      
-      <form action="{{ route('export.sjpalet') }}" method="GET">
-        <div class="col-md-4">
-          <div class="row">
-            <div class="col-md-2">
-              <label>Start Date:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="date" class="form-control txt_line" name="start_date" required>
-            </div>
-            <div class="col-md-2">
-              <label>End Date:</label>
-            </div>
-            <div class="col-md-3">
-              <input type="date" class="form-control txt_line" name="end_date" required>
-            </div>
-            <div class="col-md-1">
-              <button type="submit" class="btn btn-success">Export</button>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <a href="../admin/sj_palet/create" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
-      <button class="btn btn-primary">
-        <a href={{ route('sync_sj') }} style="margin-bottom: 20px; color: white"> Sync Nomer SJ</a>  
-      </button>
-
-      {{-- Datatable SJ Palet --}}
-      <div class="card-body">
-        <table class="table table-bordered" id="data_palet">
-          <thead>
-            <tr>
-              {{-- <th scope="col">No.</th> --}}
-              <th scope="col">No SJ</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col">No Polisi</th>
-              <th scope="col">Customer</th>
-              {{-- <th scope="col">No PO Customer</th> --}}
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $no = 1;
-            // Perulangan untuk mengambil data SJ
-            foreach ($sj as $data) { ?>
-              <tr>
-                {{-- <td scope="row">{{ $no++ }}</td> --}}
-                <td><b>{{ $data->noSuratJalan }}</b></td>
-                <td>{{ $data->tanggal }}</td>
-                <td>{{ $data->noPolisi }}</td>
-                <td>{{ $data->namaCustomer }}</td>
-                {{-- <td>{{ $data->noPoCustomer }}</td> --}}
-                <td>
-                  <div class="input-group">
-                    <div class="input-group-append" id="button-addon4">
-                      {{-- <a href="../admin/sj_palet/show/{{ $data->id }}" class="btn btn-outline-secondary" type="button">View</a> --}}
-                      <a href="../admin/sj_palet/pdf/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Print</a>
-                      <a href="../admin/sj_palet/edit/{{ $data->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
-                      {{-- <a href="../admin/sj_palet/delete/{{ $data->id }}" class="btn btn-outline-danger" type="button">Delete</a> --}}
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <form action="{{ route('sj_palet') }}" method="GET">
+                    <div class="row">
+                        <div class="row col-md-6">
+                            <div class="col-md-2">
+                                <label>Start Date:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control txt_line" name="start_date" value="{{ $start_date }}">
+                            </div>
+                            <div class="col-md-2">
+                                <label>End Date:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control txt_line" name="end_date" value="{{ $end_date }}">
+                            </div>
+                        </div>
+                        <div class="input-group col-md-5">
+                            <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                            <div class="input-group-append">
+                                <a href="{{ route('sj_palet') }}" class="btn btn-outline-secondary" type="button">Reset</a>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="{{ route('export.sjpalet', ['start_date' => $start_date, 'end_date' => $end_date, 'search' => request('search')]) }}" class="btn btn-outline-success" type="button">Export</a>
+                        </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            <?php
-            }
-            // End Perulangan
-            ?>
-          </tbody>
+                </form>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 20px;">
+                <a href="{{ route('sj_palet.create') }}" class="btn btn-primary" type="button">Tambah SJ Palet</a>
+            </div>
+        </div>
+
+      <div class="table-responsive shadow rounded-3">
+        <table class="table align-middle table-row-dashed table-row-bordered gy-5 gs-7 fs-6" style="background-color: #fff;">
+            <thead>
+                <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                    <th class="min-w-125px">{{ __('No Surat Jalan') }}</th>
+                    <th class="min-w-125px">{{ __('Tanggal') }}</th>
+                    <th class="min-w-125px">{{ __('No Kendaraan') }}</th>
+                    <th class="min-w-125px">{{ __('Customer') }}</th>
+                    <th class="min-w-125px">{{ __('Action') }}</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-900 fw-semibold">
+                @foreach ($sj as $suratjalan)
+                    <tr>
+                        <td class="text-gray-800 bold">{{ $suratjalan->noSuratJalan }}</td>
+                        <td class="text-gray-800 bold">{{ $suratjalan->tanggal }}</td>
+                        <td class="text-gray-800 bold">{{ $suratjalan->noPolisi }}</td>
+                        <td class="text-gray-800 bold">{{ $suratjalan->namaCustomer }}</td>
+                        <td class="text-gray-800 bold">
+                            <div class="input-group">
+                                <div class="input-group-append" id="button-addon4">
+                                    <a href="../admin/sj_palet/pdf/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Print</a>
+                                    <a href="../admin/sj_palet/edit/{{ $suratjalan->id }}" class="btn btn-outline-secondary" type="button">Edit</a>
+                                    @if (Auth::user()->divisi->kode == 'IT')
+                                        <form action="{{ route('sj_palet.destroy', $suratjalan->id) }}" method="POST" style="display: inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
-      </div>
-      {{-- End Datatable SJ --}}
-      <!-- /.row -->
+      </div><!-- /.table-responsive -->
+      {{ $sj->appends(request()->query())->links('pagination::bootstrap-4') }}
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
@@ -117,30 +119,6 @@
   <!-- DataTables -->
   {{-- Script untuk Datatable --}}
   <script>
-    // Javascript untuk Datatable
-    $(document).ready(function() {
-      $("#data_palet").DataTable({
-        "order": [0, 'desc'],
-        dom: 'Bfrtip',
-        buttons: [
-          'copy',
-          'csv',
-          'excel',
-          'pdf',
-          'colvis',
-          {
-            extend: 'print',
-            text: 'Print',
-            exportOption: {
-              modifier: {
-                selected: null
-              }
-            }
-          }
-        ],
-        select: true
-      });
-    });
   </script>
 
   @endsection

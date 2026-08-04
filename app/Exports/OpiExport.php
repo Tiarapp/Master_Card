@@ -95,7 +95,8 @@ class OpiExport implements FromCollection, WithHeadings
                 'bungkus' => $item->kontrakd->mc->bungkus,
                 'lainLain' => $item->kontrakd->mc->lain,
                 'blok' => $item->kontrakd->mc->text,
-                'FSC' => $item->kontrakd->mc->fsc == 1 ? 'FSC' : 'Non FSC'
+                'FSC' => $item->kontrakd->mc->fsc == 1 ? 'FSC' : 'Non FSC',
+                'Sales' => $item->kontrakm->sales,
             ];
         });
     }
@@ -163,7 +164,8 @@ class OpiExport implements FromCollection, WithHeadings
             "Bungkus",
             "Lain-Lain",
             "Blok",
-            "FSC"
+            "FSC",
+            "Sales"
         ];
     }
 }

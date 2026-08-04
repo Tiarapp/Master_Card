@@ -23,7 +23,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            
+
             <!-- Action Buttons -->
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -34,7 +34,7 @@
                 <div class="col-md-6">
                     <!-- Search Form -->
                     <form method="GET" action="{{ route('mastercard.index_new') }}" class="d-flex">
-                        <input type="text" name="search" class="form-control" placeholder="Cari kode, nama barang, kode barang, atau customer..." 
+                        <input type="text" name="search" class="form-control" placeholder="Cari kode, nama barang, kode barang, atau customer..."
                                value="{{ request('search') }}">
                         <button type="submit" class="btn btn-outline-secondary ml-2">
                             <i class="fas fa-search"></i>
@@ -106,21 +106,28 @@
                                             <td>{{ $mastercard->created_at ? $mastercard->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                             <td class="text-center">
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('mastercard.pdfb1', $mastercard->id) }}" 
-                                                       class="btn btn-sm btn-danger" 
+                                                    <a href="{{ route('mastercard.pdfb1', $mastercard->id)  }}"
+                                                       class="btn btn-sm btn-danger"
                                                        title="Print PDF">
                                                         <i class="fas fa-print"></i> Print
                                                     </a>
-                                                    <a href="{{ route('mastercard.revisi', $mastercard->id) }}" 
-                                                       class="btn btn-sm btn-warning" 
+                                                    <a href="{{ route('mastercard.revisi', $mastercard->id) }}"
+                                                       class="btn btn-sm btn-warning"
                                                        title="Edit">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <a href="{{ route('mastercard.edit', $mastercard->id) }}" 
-                                                       class="btn btn-sm btn-primary" 
+                                                    <a href="{{ route('mastercard.edit', $mastercard->id) }}"
+                                                       class="btn btn-sm btn-primary"
                                                        title="Revisi">
                                                         <i class="fas fa-cog"></i> Revisi
                                                     </a>
+                                                    <a href="#"
+                                                       class="btn btn-sm btn-primary history"
+                                                       data-id="{{ $mastercard->id }}"
+                                                       title="History">
+                                                        <i class="fas fa-history"></i> History
+                                                    </a>
+                                                    @include('admin.mastercard.history-modal', ['data' => $mastercard])
                                                 </div>
                                             </td>
                                         </tr>
@@ -145,13 +152,13 @@
                         </div>
                     @endif
                 </div>
-                
+
                 @if($mastercards->count() > 0)
                     <div class="card-footer">
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <p class="text-muted mb-0">
-                                    Menampilkan {{ $mastercards->firstItem() }} - {{ $mastercards->lastItem() }} 
+                                    Menampilkan {{ $mastercards->firstItem() }} - {{ $mastercards->lastItem() }}
                                     dari {{ $mastercards->total() }} hasil
                                 </p>
                             </div>
@@ -176,14 +183,44 @@ $(document).ready(function() {
     @if(request('search'))
         $('input[name="search"]').focus();
     @endif
-    
+
     // Add loading state to buttons
     $('.btn-group a').click(function() {
         $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
     });
-    
+
     // Tooltip for action buttons
     $('[title]').tooltip();
+});
+
+$('.history').on('click', function() {
+    var id = $(this).data('id');
+
+    $.ajax({
+        url: '/mastercard/history/' + id,
+        method: 'GET',
+        success: function(data) {
+            data = JSON.parse(data);
+
+            // alert(data); // Debugging line to check the data received
+
+            $('#historyTableBody').empty(); // Clear previous history data
+            $.each(data, function(index, history) {
+                var row = '<tr>' +
+                    '<td>' + history.id + '</td>' +
+                    '<td>' + history.kode + '</td>' +
+                    '<td>' + history.revisi + '</td>' +
+                    '<td>' + history.namaBarang + '</td>' +
+                    '<td>' + (history.parent_id ? history.parent_id : 'N/A') + '</td>' +
+                    '</tr>';
+                $('#historyTableBody').append(row);
+            });
+            $('#historyModal').modal('show');
+        },
+        error: function() {
+            alert('Gagal memuat data history.');
+        }
+    });
 });
 </script>
 @endsection

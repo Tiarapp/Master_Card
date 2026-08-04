@@ -25,12 +25,12 @@ class ReportController extends Controller
             $perPage = $request->per_page ?? 50; // Pagination size
             $page = $request->page ?? 1;
             $offset = ($page - 1) * $perPage;
-            
+
             $startTime = microtime(true);
             \Illuminate\Support\Facades\Log::info("Starting optimized deadstock report for periode: {$periode}");
-            
+
             DB::connection('firebird2')->beginTransaction();
-            
+
             // OPTIMIZED: Cache SJ data terlebih dahulu dengan subquery yang efisien
             $cacheKey = "latest_sj_data_{$periode}_v2";
             $latestSJData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 5, function() use ($periode) {
@@ -45,16 +45,16 @@ class ReportController extends Controller
                         FROM "TDetSJ" d
                         WHERE d."KodeBrg" IS NOT NULL
                     ');
-                    
+
                     \Illuminate\Support\Facades\Log::info("Debug KodeBrg formats: " . json_encode($testQuery));
-                    
+
                     return DB::connection('firebird2')->select('
-                        SELECT 
+                        SELECT
                             d."KodeBrg" as KodeBrg,
                             MAX(s."TglPHP") as LatestTglPHP
                         FROM "TDetPHP" d
                         LEFT JOIN "TPHP" s ON d."NoPHP" = s."NoBukti"
-                        WHERE d."KodeBrg" IS NOT NULL 
+                        WHERE d."KodeBrg" IS NOT NULL
                             AND TRIM(d."KodeBrg") != \'\'
                             AND CHAR_LENGTH(TRIM(d."KodeBrg")) > 0
                         GROUP BY d."KodeBrg"
@@ -66,7 +66,7 @@ class ReportController extends Controller
             });
 
             // dd($latestSJData);
-            
+
             // Convert to keyed collection for O(1) lookup
             $sjLookup = collect($latestSJData)->mapWithKeys(function($item) {
                 $trimmedKey = trim($item->KODEBRG ?? '');
@@ -79,11 +79,11 @@ class ReportController extends Controller
             // DEBUG: Log detailed info about SJ data
             \Illuminate\Support\Facades\Log::info("Raw SJ data count: " . count($latestSJData));
             \Illuminate\Support\Facades\Log::info("SJ Lookup count after keyBy: " . $sjLookup->count());
-            
+
             if (count($latestSJData) > 0) {
                 \Illuminate\Support\Facades\Log::info("First 3 raw SJ items: " . json_encode(array_slice($latestSJData, 0, 3)));
             }
-            
+
             // Check if there are duplicates causing keyBy to overwrite
             $kodeBarangCounts = collect($latestSJData)->countBy(function($item) {
                 return trim($item->KODEBRG ?? '');
@@ -93,13 +93,13 @@ class ReportController extends Controller
             if ($duplicates->count() > 0) {
                 \Illuminate\Support\Facades\Log::info("Sample duplicates: " . json_encode($duplicates->take(5)->toArray()));
             }
-            
+
             // OPTIMIZED: Get ALL persediaan data first (for filtering)
             $persediaan = DB::connection('firebird2')->select('
-                SELECT 
+                SELECT
                     p."KodeBrg",
                     b."NamaBrg",
-                    p."SaldoAkhirCrt", 
+                    p."SaldoAkhirCrt",
                     p."SaldoAkhirKg",
                     p."Periode"
                 FROM "TPersediaan" p
@@ -108,11 +108,11 @@ class ReportController extends Controller
                     AND (p."SaldoAkhirCrt" > 0 OR p."SaldoAkhirKg" > 0)
                 ORDER BY p."SaldoAkhirCrt" DESC
             ', ['%' . $periode . '%']);
-            
+
             // Get total count BEFORE filtering
             $totalItemsBeforeFilter = count($persediaan);
-            
-            
+
+
             $loadTime = round((microtime(true) - $startTime) * 1000, 2);
             \Illuminate\Support\Facades\Log::info("Data loaded in {$loadTime}ms, processing {$totalItemsBeforeFilter} total items");
 
@@ -122,19 +122,19 @@ class ReportController extends Controller
                 $sampleSJ = $sjLookup->first();
                 \Illuminate\Support\Facades\Log::info("Sample SJ structure: " . json_encode($sampleSJ));
             }
-            
+
             // OPTIMIZED: Build data with fast lookup
             $stock = collect($persediaan)->map(function($item) use ($sjLookup, $periode) {
                 $kodeBarang = trim($item->KodeBrg ?? '');
                 $latestSJ = $sjLookup->get($kodeBarang);
-                
+
                 // Calculate days since last SJ
                 $daysSinceLastSJ = null;
                 $tglKeluar = null;
-                
+
                 if ($latestSJ && !empty($latestSJ->LATESTTGLPHP)) {
                     $tglKeluar = \Carbon\Carbon::parse($latestSJ->LATESTTGLPHP)->toDateString();
-                    
+
                     // Smart date calculation based on period
                     $currentPeriod = date('m/Y');
                     if ($currentPeriod === $periode) {
@@ -151,12 +151,12 @@ class ReportController extends Controller
                             $endDate = \Carbon\Carbon::now();
                         }
                     }
-                    
+
                     $daysSinceLastSJ = \Carbon\Carbon::parse($latestSJ->LATESTTGLPHP)->diffInDays($endDate);
                 } else {
                     // No SJ data available - use default date 31/05/2025
                     $tglKeluar = '2025-05-31';
-                    
+
                     // Calculate days from default date to end of period
                     $currentPeriod = date('m/Y');
                     if ($currentPeriod === $periode) {
@@ -171,10 +171,10 @@ class ReportController extends Controller
                             $endDate = \Carbon\Carbon::now();
                         }
                     }
-                    
+
                     $daysSinceLastSJ = \Carbon\Carbon::parse('2025-05-31')->diffInDays($endDate);
                 }
-                
+
                 return (object)[
                     'KodeBrg' => $kodeBarang,
                     'NamaBrg' => $item->NamaBrg ?? 'N/A',
@@ -185,21 +185,21 @@ class ReportController extends Controller
                     'DaysSinceLastSJ' => $daysSinceLastSJ
                 ];
             });
-            
+
             // Calculate chart data from ALL items before any filtering/pagination
             $stockBeforeFilter = $stock; // Keep reference to all data
             $chartData = [
                 '1-3' => 0,
-                '4-6' => 0, 
+                '4-6' => 0,
                 '6-12' => 0,
                 '12+' => 0,
                 'no-data' => 0
             ];
-            
+
             // Count all items for chart
             foreach ($stockBeforeFilter as $item) {
                 $days = $item->DaysSinceLastSJ ?? 9999;
-                
+
                 if ($days >= 9999 || is_null($days)) {
                     $chartData['no-data']++;
                 } elseif ($days <= 90) {
@@ -212,12 +212,12 @@ class ReportController extends Controller
                     $chartData['12+']++;
                 }
             }
-            
+
             // Apply age filter if specified BEFORE pagination
             if ($ageFilter) {
                 $stock = $stock->filter(function($item) use ($ageFilter) {
                     $days = $item->DaysSinceLastSJ;
-                    
+
                     switch ($ageFilter) {
                         case '1-3':
                             return $days <= 90;
@@ -233,10 +233,10 @@ class ReportController extends Controller
                             return true;
                     }
                 });
-                
+
                 // Update total count after filtering
                 $totalItems = $stock->count();
-                
+
                 // Apply pagination to filtered results
                 $stock = $stock->slice($offset, $perPage)->values();
             } else {
@@ -244,11 +244,11 @@ class ReportController extends Controller
                 $totalItems = $totalItemsBeforeFilter;
                 $stock = $stock->slice($offset, $perPage)->values();
             }
-            
+
             // Calculate statistics
             $totalCrt = $stock->sum('SaldoAkhirCrt');
             $totalKg = $stock->sum('SaldoAkhirKg');
-            
+
             // Categories based on stock levels
             $deadstockCategories = collect([
                 'High Stock (>1000 Crt)' => $stock->filter(fn($item) => $item->SaldoAkhirCrt > 1000),
@@ -257,20 +257,20 @@ class ReportController extends Controller
             ]);
 
             // dd($deadstockCategories);
-            
+
             // Statistics for charts
             $stockWithSJ = $stock->filter(fn($item) => $item->TglKeluar !== null);
             $stockWithoutSJ = $stock->filter(fn($item) => $item->TglKeluar === null);
-            $avgDeadstockDays = $stockWithSJ->count() > 0 ? 
+            $avgDeadstockDays = $stockWithSJ->count() > 0 ?
                 $stockWithSJ->map(fn($item) => \Carbon\Carbon::parse($item->TglKeluar)->diffInDays(\Carbon\Carbon::now()))->avg() : 0;
-            
+
             // dd($avgDeadstockDays, $stockWithoutSJ);
             // Calculate warehouse capacity utilization
             $maxKapasitasTon = 1000; // Maximum warehouse capacity: 1000 tons
-            
+
             // Get total weight from all items with BeratStandart
             $totalBeratKg = DB::connection('firebird2')->selectOne('
-                SELECT 
+                SELECT
                     SUM(p."SaldoAkhirCrt" * COALESCE(b."BeratStandart", 0)) as TotalBeratKg,
                     COUNT(*) as TotalItems,
                     COUNT(CASE WHEN b."BeratStandart" > 0 THEN 1 END) as ItemsWithWeight
@@ -280,12 +280,12 @@ class ReportController extends Controller
                     AND p."SaldoAkhirCrt" > 0
             ', ['%' . $periode . '%']);
 
-            
+
             $totalBeratKg = $totalBeratKg->TOTALBERATKG ?? 0;
             $totalTon = $totalBeratKg / 1000;
             $sisaKapasitasTon = $maxKapasitasTon - $totalTon;
             $persentasePenggunaan = ($totalTon / $maxKapasitasTon) * 100;
-            
+
             // Capacity data for chart (in tons)
             $capacityData = [
                 'terpakai' => round($totalTon, 2),
@@ -295,7 +295,7 @@ class ReportController extends Controller
                 'total_kg' => round($totalBeratKg, 2),
                 'items_with_weight' => $totalBeratKg->ITEMSWITHWEIGHT ?? 0
             ];
-            
+
             // Pagination data
             $pagination = [
                 'current_page' => $page,
@@ -305,28 +305,28 @@ class ReportController extends Controller
                 'from' => $offset + 1,
                 'to' => min($offset + $perPage, $totalItems)
             ];
-            
+
             DB::connection('firebird2')->commit();
 
             return view('admin.reports.deadstock', compact(
                 'stock', 'periode', 'totalItems', 'totalCrt', 'totalKg',
-                'deadstockCategories', 'stockWithSJ', 'stockWithoutSJ', 
+                'deadstockCategories', 'stockWithSJ', 'stockWithoutSJ',
                 'avgDeadstockDays', 'pagination', 'ageFilter', 'chartData', 'capacityData'
             ));
-            
+
         } catch (\Exception $e) {
             if (DB::connection('firebird2')->transactionLevel() > 0) {
                 DB::connection('firebird2')->rollback();
             }
-            
+
             \Illuminate\Support\Facades\Log::error('Optimized Deadstock Error: ' . $e->getMessage());
-            
+
             // Ensure $periode is available even in error case
             $periode = $request->periode ?? date_format(now(), 'm/Y');
             $ageFilter = $request->age_filter ?? null;
             $perPage = $request->per_page ?? 50;
             $page = $request->page ?? 1;
-            
+
             // Return with empty data but required variables
             $stock = collect();
             $totalItems = $totalCrt = $totalKg = 0;
@@ -343,10 +343,10 @@ class ReportController extends Controller
             ];
             $chartData = [];
             $capacityData = [];
-            
+
             return view('admin.reports.deadstock', compact(
                 'stock', 'periode', 'totalItems', 'totalCrt', 'totalKg',
-                'deadstockCategories', 'stockWithSJ', 'stockWithoutSJ', 
+                'deadstockCategories', 'stockWithSJ', 'stockWithoutSJ',
                 'avgDeadstockDays', 'pagination', 'ageFilter', 'chartData', 'capacityData'
             ))->with('error', 'Error loading data: ' . $e->getMessage());
         }
@@ -364,13 +364,13 @@ class ReportController extends Controller
 
             // Optimized query without LIMIT - focus on WHERE clause optimization
             $queryStartTime = microtime(true);
-            
+
             // Split into smaller, faster queries
             $gudangData = DB::connection('firebird2')->select('
-                SELECT 
+                SELECT
                     p."KodeBrg",
                     p."SaldoAkhirKg",
-                    p."SaldoAkhirCrt", 
+                    p."SaldoAkhirCrt",
                     p."Periode",
                     b."NamaBrg",
                     b."JenisProd",
@@ -387,7 +387,7 @@ class ReportController extends Controller
 
             $queryEndTime = microtime(true);
             $queryTime = round(($queryEndTime - $queryStartTime) * 1000, 2);
-            
+
             \Illuminate\Support\Facades\Log::info("Kapasitas query completed in {$queryTime}ms. Records found: " . count($gudangData));
 
             DB::connection('firebird2')->commit();
@@ -396,7 +396,7 @@ class ReportController extends Controller
             $totalKg = 0;
             $totalCrt = 0;
             $totalItems = count($gudangData);
-            
+
             foreach ($gudangData as $item) {
                 $totalKg += (float)($item->SaldoAkhirKg ?? 0);
                 $totalCrt += (float)($item->SaldoAkhirCrt ?? 0);
@@ -404,7 +404,7 @@ class ReportController extends Controller
 
             $totals = [
                 'totalKg' => $totalKg,
-                'totalCrt' => $totalCrt, 
+                'totalCrt' => $totalCrt,
                 'totalItems' => $totalItems,
                 'percentage' => $totalKg > 0 ? ($totalKg / 1000000) * 100 : 0
             ];
@@ -413,18 +413,18 @@ class ReportController extends Controller
             \Illuminate\Support\Facades\Log::info("Kapasitas gudang report completed in {$totalTime}ms");
 
             return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode', 'totals'));
-            
+
         } catch (\Exception $e) {
             if (DB::connection('firebird2')->transactionLevel() > 0) {
                 DB::connection('firebird2')->rollback();
             }
-            
+
             \Illuminate\Support\Facades\Log::error('Kapasitas Gudang Error: ' . $e->getMessage());
-            
+
             // Return empty data on error
             $totals = ['totalKg' => 0, 'totalCrt' => 0, 'totalItems' => 0, 'percentage' => 0];
             $gudangData = [];
-            
+
             return view('admin.reports.kapasitas_gudang', compact('gudangData', 'periode', 'totals'))
                 ->with('error', 'Terjadi kesalahan saat memuat data kapasitas gudang.');
         }
@@ -433,41 +433,41 @@ class ReportController extends Controller
     public function in_out_bound(Request $request)
     {
         $periode = $request->periode ?? date_format(now(), 'm/Y');
-        
+
         try {
             \Illuminate\Support\Facades\Log::info("Starting in_out_bound report for periode: {$periode}");
-            
+
             DB::connection('firebird2')->beginTransaction();
-            
+
             // Parse periode
             $periodeParts = explode('/', $periode);
             $month = intval($periodeParts[0] ?? 0);
             $year = intval($periodeParts[1] ?? 0);
-            
+
             if ($month == 0 || $year == 0) {
                 throw new \Exception("Invalid periode format: {$periode}");
             }
-            
+
             \Illuminate\Support\Facades\Log::info("Parsed periode: Month={$month}, Year={$year}");
-            
+
             // Jika ada parameter test, gunakan data sample kecil
             if ($request->has('test')) {
                 return $this->in_out_bound_test($request, $month, $year);
             }
-            
+
             // DEBUG: Check available tables and their structure
             try {
                 $sjTables = DB::connection('firebird2')->select('
-                    SELECT RDB$RELATION_NAME 
-                    FROM RDB$RELATIONS 
+                    SELECT RDB$RELATION_NAME
+                    FROM RDB$RELATIONS
                     WHERE RDB$RELATION_NAME LIKE \'%SJ%\' OR RDB$RELATION_NAME LIKE \'%SURAT%\'
                     ORDER BY RDB$RELATION_NAME
                 ');
                 \Illuminate\Support\Facades\Log::info("Available SJ tables: " . json_encode($sjTables));
-                
+
                 $phpTables = DB::connection('firebird2')->select('
-                    SELECT RDB$RELATION_NAME 
-                    FROM RDB$RELATIONS 
+                    SELECT RDB$RELATION_NAME
+                    FROM RDB$RELATIONS
                     WHERE RDB$RELATION_NAME LIKE \'%PHP%\'
                     ORDER BY RDB$RELATION_NAME
                 ');
@@ -475,11 +475,11 @@ class ReportController extends Controller
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::warning("Could not query table structure: " . $e->getMessage());
             }
-            
+
             // Query untuk mendapatkan data SJ (Outbound) - LIMIT untuk testing
             \Illuminate\Support\Facades\Log::info("Executing SJ query for month={$month}, year={$year}");
             $sjData = DB::connection('firebird2')->select('
-                SELECT 
+                SELECT
                     CAST(sj."TglSJ" AS DATE) as tanggal,
                     det."KodeBrg",
                     b."NamaBrg",
@@ -490,24 +490,24 @@ class ReportController extends Controller
                 FROM "TDetSJ" det
                 LEFT JOIN "TSuratJalan" sj ON det."NomerSJ" = sj."NomerSJ"
                 LEFT JOIN "TBarangConv" b ON det."KodeBrg" = b."KodeBrg"
-                WHERE EXTRACT(MONTH FROM sj."TglSJ") = ? 
+                WHERE EXTRACT(MONTH FROM sj."TglSJ") = ?
                     AND EXTRACT(YEAR FROM sj."TglSJ") = ?
                     AND det."Quantity" > 0
                     AND sj."TglSJ" IS NOT NULL
-                GROUP BY 
+                GROUP BY
                     CAST(sj."TglSJ" AS DATE),
-                    det."KodeBrg", 
+                    det."KodeBrg",
                     b."NamaBrg",
                     b."BeratStandart"
                 ORDER BY tanggal DESC, det."KodeBrg"
             ', [$month, $year]);
 
             // dd($sjData);
-            
+
             // Query untuk mendapatkan data PHP (Inbound) - LIMIT untuk testing
             \Illuminate\Support\Facades\Log::info("Executing PHP query for month={$month}, year={$year}");
             $phpData = DB::connection('firebird2')->select('
-                SELECT 
+                SELECT
                     CAST(php."TglPHP" AS DATE) as tanggal,
                     det."KodeBrg",
                     b."NamaBrg",
@@ -518,27 +518,27 @@ class ReportController extends Controller
                 FROM "TDetPHP" det
                 LEFT JOIN "TPHP" php ON det."NoPHP" = php."NoBukti"
                 LEFT JOIN "TBarangConv" b ON det."KodeBrg" = b."KodeBrg"
-                WHERE EXTRACT(MONTH FROM php."TglPHP") = ? 
+                WHERE EXTRACT(MONTH FROM php."TglPHP") = ?
                     AND EXTRACT(YEAR FROM php."TglPHP") = ?
                     AND det."Berat" > 0
                     AND php."TglPHP" IS NOT NULL
-                GROUP BY 
+                GROUP BY
                     CAST(php."TglPHP" AS DATE),
-                    det."KodeBrg", 
+                    det."KodeBrg",
                     b."NamaBrg",
                     b."BeratStandart"
                 ORDER BY tanggal DESC, det."KodeBrg"
             ', [$month, $year]);
-            
+
             DB::connection('firebird2')->commit();
-            
+
             \Illuminate\Support\Facades\Log::info("Query completed. SJ count: " . count($sjData) . ", PHP count: " . count($phpData));
-            
+
             // Gabungkan dan olah data
             $combinedData = collect($sjData)->merge(collect($phpData));
-            
+
             \Illuminate\Support\Facades\Log::info("Combined data count: " . $combinedData->count());
-            
+
             // Group by tanggal saja untuk menggabungkan semua transaksi per hari
             // Note: Field names in Firebird are typically uppercase
             $groupedData = $combinedData->groupBy(function($item) {
@@ -565,19 +565,19 @@ class ReportController extends Controller
                     $jenisTransaksi = trim($item->JENIS_TRANSAKSI ?? '');
                     return $jenisTransaksi === 'SJ';
                 });
-                
+
                 $phpItems = $group->filter(function($item) {
                     $jenisTransaksi = trim($item->JENIS_TRANSAKSI ?? '');
                     return $jenisTransaksi === 'PHP';
                 });
 
                 // dd($tanggal, $sjItems->sum('TOTAL_BERAT'), $phpItems);
-                
+
                 $totalQtySJ = $sjItems->sum('TOTAL_BERAT') ?? 0;
                 $totalQtyPHP = $phpItems->sum('TOTAL_BERAT') ?? 0;
                 $totalSJDokumen = $sjItems->sum('TOTAL_DOKUMEN') ?? 0;
                 $totalPHPDokumen = $phpItems->sum('TOTAL_DOKUMEN') ?? 0;
-                
+
                 // Ambil daftar barang yang terlibat
                 $kodeBarangField = null;
                 if ($group->count() > 0) {
@@ -588,14 +588,14 @@ class ReportController extends Controller
                         $kodeBarangField = 'KODEBRG';
                     }
                 }
-                
+
                 $totalItemTypes = 0;
-                
+
                 if ($kodeBarangField) {
                     $uniqueCodes = $group->pluck($kodeBarangField)->unique();
                     $totalItemTypes = $uniqueCodes->count();
                 }
-                
+
                 return (object)[
                     'tanggal' => $tanggal,
                     'total_item_types' => $totalItemTypes,
@@ -605,31 +605,31 @@ class ReportController extends Controller
                     'total_php' => $totalPHPDokumen
                 ];
             })->sortByDesc('tanggal')->values();
-            
+
             $inOutData = $groupedData;
-            
+
             \Illuminate\Support\Facades\Log::info("Data processing completed. Final count: " . $inOutData->count());
-            
+
         } catch (\Exception $e) {
             if (DB::connection('firebird2')->transactionLevel() > 0) {
                 DB::connection('firebird2')->rollback();
             }
-            
+
             \Illuminate\Support\Facades\Log::error('In/Out Bound Report Error: ' . $e->getMessage());
-            
+
             // Return empty collection on error
             $inOutData = collect();
         }
 
         return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
     }
-    
+
     public function in_out_bound_test(Request $request, $month, $year)
     {
         // Test dengan data statis untuk debug
         $testData = collect([
             (object)[
-                'tanggal' => '2025-10-01', 
+                'tanggal' => '2025-10-01',
                 'jenis_transaksi' => 'SJ',
                 'total_berat' => 100,
                 'total_dokumen' => 5,
@@ -637,7 +637,7 @@ class ReportController extends Controller
                 'NamaBrg' => 'Test Barang SJ'
             ],
             (object)[
-                'tanggal' => '2025-10-01', 
+                'tanggal' => '2025-10-01',
                 'jenis_transaksi' => 'PHP',
                 'total_berat' => 150,
                 'total_dokumen' => 3,
@@ -645,7 +645,7 @@ class ReportController extends Controller
                 'NamaBrg' => 'Test Barang PHP'
             ],
             (object)[
-                'tanggal' => '2025-10-02', 
+                'tanggal' => '2025-10-02',
                 'jenis_transaksi' => 'SJ ',  // dengan whitespace
                 'total_berat' => 80,
                 'total_dokumen' => 2,
@@ -653,31 +653,31 @@ class ReportController extends Controller
                 'NamaBrg' => 'Test Barang SJ 2'
             ]
         ]);
-        
+
         \Illuminate\Support\Facades\Log::info("Using test data count: " . $testData->count());
-        
+
         // Group by tanggal
         $groupedData = $testData->groupBy('tanggal')->map(function($group, $tanggal) {
             // Debug: Check jenis_transaksi values
             $jenisValues = $group->map(function($item) {
                 return "'" . $item->jenis_transaksi . "' (length:" . strlen($item->jenis_transaksi) . ")";
             })->unique()->values()->toArray();
-            
+
             \Illuminate\Support\Facades\Log::info("Date {$tanggal} - All JENIS_TRANSAKSI values: " . json_encode($jenisValues));
-            
+
             // Filter dengan trim
             $sjItems = $group->filter(function($item) {
                 $jenisTransaksi = trim($item->jenis_transaksi ?? '');
                 return $jenisTransaksi === 'SJ';
             });
-            
+
             $phpItems = $group->filter(function($item) {
                 $jenisTransaksi = trim($item->jenis_transaksi ?? '');
                 return $jenisTransaksi === 'PHP';
             });
-            
+
             \Illuminate\Support\Facades\Log::info("Date {$tanggal}: Total items: {$group->count()}, SJ items: {$sjItems->count()}, PHP items: {$phpItems->count()}");
-            
+
             return (object)[
                 'tanggal' => $tanggal,
                 'daftar_barang' => 'TEST_ITEMS',
@@ -688,10 +688,10 @@ class ReportController extends Controller
                 'total_php' => $phpItems->sum('total_dokumen')
             ];
         })->sortByDesc('tanggal')->values();
-        
+
         $inOutData = $groupedData;
         $periode = $month . '/' . $year;
-        
+
         return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
     }
 
@@ -708,13 +708,13 @@ class ReportController extends Controller
                     ->whereBetween('TglSJ', [$request->tanggal_awal, $request->tanggal_akhir]);
         }
 
-        $suratjalan = $query->orderBy('TglSJ', 'desc')->paginate(20);
+        $suratjalan = $query->orderBy('TglSJ', 'desc')->orderBy('NomerSJ', 'desc')->paginate(20);
 
         // $expedisi = Supplier::select('Kode', 'Nama')
         //     ->where('Kode', 'LIKE', "%J%")
         //     ->orderBy('Nama', 'asc')
         //     ->get();
-        
+
         $data = [
             'suratjalan' => $suratjalan,
             'tanggal_awal' => $request->tanggal_awal,
