@@ -37,6 +37,10 @@
                             <label for="periode" class="mr-2">Periode:</label>
                             <input type="text" name="periode" id="periode" class="form-control" value="{{ $periode }}" placeholder="MM/YYYY" style="width: 140px;">
                         </div>
+                        <div class="form-group mr-3">
+                            <label for="search" class="mr-2">Search:</label>
+                            <input type="text" name="search" id="search" class="form-control" value="{{ request('search') }}" placeholder="Nama Barang" style="width: 200px;">
+                        </div>
                         <button type="submit" class="btn btn-primary mr-2">
                             <i class="fas fa-search mr-1"></i>Filter
                         </button>

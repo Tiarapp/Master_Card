@@ -760,6 +760,7 @@ class ReportController extends Controller
     public function finish_goods(Request $request)
     {
         $periode = $request->periode ?? date_format(now(), 'm/Y');
+        $search = $request->search ?? null;
 
         DB::connection('firebird2')->beginTransaction();
 
@@ -782,11 +783,26 @@ class ReportController extends Controller
             'a.SaldoAkhirKg'
         )
         ->where('a.Periode', $periode)
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('b.NamaBrg', 'like', "%{$search}%")
+                    ->orWhere('a.KodeBrg', 'like', "%{$search}%");
+            });
+        })
+        ->whereRaw('(
+            (COALESCE("a"."SaldoAwalCrt", 0) +COALESCE("a"."ProduksiCrt", 0) + COALESCE("a"."BBMCrt", 0) + COALESCE("a"."ReturJualCrt", 0) + COALESCE("a"."RepackInCrt", 0) +
+             COALESCE("a"."SaldoAwalKg", 0) + COALESCE("a"."ProduksiKg", 0) + COALESCE("a"."BBMKg", 0) + COALESCE("a"."ReturJualKg", 0) + COALESCE("a"."RepackInKg", 0) +
+             COALESCE("a"."JualLokalCrt", 0) + COALESCE("a"."JualExportCrt", 0) + COALESCE("a"."SampleCrt", 0) + COALESCE("a"."BonusCrt", 0) +
+             COALESCE("a"."SaldoAkhirCrt", 0) + COALESCE("a"."RepackOutCrt", 0) + COALESCE("a"."RejectCrt", 0) + COALESCE("a"."ReturPembelianCrt", 0) +
+             COALESCE("a"."JualLokalKg", 0) + COALESCE("a"."JualExportKg", 0) + COALESCE("a"."SampleKg", 0) + COALESCE("a"."BonusKg", 0) +
+             COALESCE("a"."SaldoAkhirKg", 0) + COALESCE("a"."RepackOutKg", 0) + COALESCE("a"."RejectKg", 0) + COALESCE("a"."ReturPembelianKg", 0)
+            ) <> 0
+        )')
         ->orderBy('a.KodeBrg')
         ->paginate(20);
         // ->take(5)->get();
 
-        // dd($stockFG);
+        dd($stockFG);
 
         $data = [
             'stockFG' => $stockFG,
