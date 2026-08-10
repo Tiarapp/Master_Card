@@ -18,8 +18,8 @@ class CreateTransactionLoadsTable extends Migration
             $table->string('driver_name');
             $table->string('vehicle_number');
             $table->unsignedBigInteger('masterdata_id');
-            $table->enum('type', ['customer', 'supplier']);
-            $table->enum('status', ['load', 'unload']);
+            $table->string('type');
+            $table->enum('status', ['load', 'unload','finish']);
             $table->date('date_in');
             $table->date('date_out')->nullable();
             $table->string('destination')->nullable();

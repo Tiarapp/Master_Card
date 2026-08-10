@@ -609,6 +609,15 @@
                   </li>
                 @endif
               </ul>
+              <ul class="nav nav-treeview">
+                @if (hasMenuAccess('vehicle.list'))
+                  <li class="nav-item">
+                    <a href="{{ route('vehicle.index') }}" class="nav-link">
+                      <i class="fas fa-circle nav-icon"></i><p>Vehicle List</p>
+                    </a>
+                  </li>
+                @endif
+              </ul>
             </li>
           @endif
 

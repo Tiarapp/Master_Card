@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\MastercardController;
 use App\Http\Controllers\Api\BbmController;
 use App\Http\Controllers\Api\KontrakController;
+use App\Http\Controllers\Api\MasterdataController;
+use App\Http\Controllers\Api\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +39,12 @@ Route::get('/bbm/{id}', [BbmController::class, 'show']);
 // Kontrak API routes
 Route::get('/kontraks', [KontrakController::class, 'index']);
 Route::get('/kontraks/{id}', [KontrakController::class, 'show']);
+
+// masterdata API route
+Route::get('/masterdata/{type}', [MasterdataController::class, 'get_masterdata_by_type']);
+Route::get('/masterdata/id/{id}', [MasterdataController::class, 'get_masterdata_by_id']);
+Route::post('/masterdata', [MasterdataController::class, 'store'])->name('masterdata.store');
+
+// Vehicle API route
+Route::get('/vehicle/{nopol}', [VehicleController::class, 'get_vehicle_by_nopol']);
+Route::get('/vehicle/photos/{id}', [VehicleController::class, 'get_vehicle_by_transaction']);

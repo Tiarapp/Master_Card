@@ -334,6 +334,8 @@ Route::middleware(['auth'])->group(function (){
 
     Route::name('vehicle.')->prefix('vehicle')->group(function() {
         Route::get('/', [TransactionLoadController::class, 'index'])->name('index');
+        Route::post('/store', [TransactionLoadController::class, 'store'])->name('store');
+        Route::put('/update/{id}', [TransactionLoadController::class, 'update'])->name('update');
     });
 
     Route::get('mastercard/select', [MastercardController::class, 'select_view'])->name('mastercard.select');

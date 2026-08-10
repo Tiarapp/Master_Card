@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Masterdata extends Model
+class VehiclePhotos extends Model
 {
     use HasFactory;
-    protected $table = 'masterdatas';
-    protected $fillable = ['name', 'city', 'type'];
+
+    protected $fillable = ['transaction_load_id', 'photo_path', 'photo_type'];
 }
