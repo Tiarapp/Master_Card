@@ -75,8 +75,8 @@
                     <td>{{ $data->vehicle_number }}</td>
                     <td>{{ $data->driver_name }}</td>
                     <td>{{ $data->date_in }}</td>
-                    <td>{{ $data->masterdata ? $data->masterdata->name : 'N/A' }}</td>
-                    <td>{{ $data->date_out ?? 'N/A' }}</td>
+                    <td>{{ $data->masterdata ? $data->masterdata->city : '' }}</td>
+                    <td>{{ $data->date_out ?? "Belum Check Out" }}</td>
                     <td>
                         @if($data->date_out)
                             @php
@@ -117,11 +117,11 @@
                         <input type="hidden" name="_method" id="form-method" value="POST">
                         <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">No Polisi :</label>
-                                <input type="text" class="form-control" name="vehicle_number" id="no-polisi">
+                                <input type="text" class="form-control" name="vehicle_number" id="no-polisi" readonly required>
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Sopir</label>
-                            <input type="text" class="form-control" name="driver_name" id="driver-name">
+                            <input type="text" class="form-control" name="driver_name" id="driver-name" required>
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Type </label>
@@ -210,7 +210,13 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-        $("#data_colorcombine").DataTable();
+        $("#data_colorcombine").DataTable({
+            order: []
+        });
+
+        $("#nopol").on("keyup", function(e) {
+            this.value = this.value.toUpperCase();
+        });
 
         $(".select2").select2({
             dropdownParent: $("#createModal"),
@@ -220,7 +226,7 @@
         // locks every field except the photo upload; disabled selects are re-enabled on submit so their values still post
         function setFormReadonly(isReadonly) {
             $("#no-polisi, #driver-name, #destination").prop("readonly", isReadonly);
-            $("#tipe, #masterdata_id, #status").prop("disabled", isReadonly);
+            $("#status").prop("disabled", isReadonly);
         }
 
         $("#vehicleForm").on("submit", function() {
@@ -242,19 +248,21 @@
                         $("#driver-name").val(data.driver_name);
                         $("#tipe").val(data.type);
 
-                        $.get(`/api/masterdata/id/${data.masterdata_id}`, function(masterdataResponse) {
-                            if (masterdataResponse.success) {
-                                const masterdata = masterdataResponse.data;
-                                $("#masterdata_id").empty().append(
-                                    `<option value="${masterdata.id}" selected>${masterdata.name}</option>`
-                                );
-                                $("#masterdata_id").trigger('change');
-                            } else {
-                                alert("Failed to fetch master data by ID.");
-                            }
-                        }).fail(function() {
-                            alert("An error occurred while fetching master data by ID.");
-                        });
+                        if (data.masterdata_id !== null) {
+                            $.get(`/api/masterdata/id/${data.masterdata_id}`, function(masterdataResponse) {
+                                if (masterdataResponse.success) {
+                                    const masterdata = masterdataResponse.data;
+                                    $("#masterdata_id").empty().append(
+                                        `<option value="${masterdata.id}" selected>${masterdata.name}</option>`
+                                    );
+                                    $("#masterdata_id").trigger('change');
+                                } else {
+                                    alert("Failed to fetch master data by ID.");
+                                }
+                            }).fail(function() {
+                                alert("An error occurred while fetching master data by ID.");
+                            });
+                        }
 
                         $("#destination").val(data.destination);
                         $("#status").val(data.status);
@@ -290,7 +298,11 @@
             const masterdataSelect = $("#masterdata_id");
 
             masterdataSelect.empty();
-            $("#destination").val('');
+            if (selectedType == 'supplier') {
+                $("#destination").prop('readonly', true);
+            } else if (selectedType == 'customer') {
+                $("#destination").val('').prop('readonly', false);
+            }
 
             if (selectedType) {
                 $.get(`/api/masterdata/${selectedType}`, function(response) {

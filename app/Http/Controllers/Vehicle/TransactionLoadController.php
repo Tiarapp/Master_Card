@@ -25,7 +25,9 @@ class TransactionLoadController extends Controller
                 });
         }
 
-        $vehicle = $query->orderBy('date_in', 'desc')->paginate(10);
+        $vehicle = $query->orderByRaw("CASE WHEN status = 'finish' THEN 2 ELSE 1 END")
+            ->orderBy('date_in', 'asc')
+            ->paginate(10);
 
         $data = [
             'vehicle' => $vehicle,
@@ -37,13 +39,9 @@ class TransactionLoadController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->file('images'));
         $request->validate([
             'driver_name' => 'required|string|max:255',
             'vehicle_number' => 'required|string|max:255',
-            'masterdata_id' => 'required|exists:masterdatas,id',
-            'destination' => 'required|string|max:255',
-            'type' => 'required|in:customer,supplier',
             'status' => 'required|in:load,unload',
         ]);
 
@@ -52,9 +50,9 @@ class TransactionLoadController extends Controller
             $transactionLoad = new TransactionLoad();
             $transactionLoad->driver_name = $request->input('driver_name');
             $transactionLoad->vehicle_number = $request->input('vehicle_number');
-            $transactionLoad->masterdata_id = $request->input('masterdata_id');
-            $transactionLoad->destination = $request->input('destination');
-            $transactionLoad->type = $request->input('type');
+            $transactionLoad->masterdata_id = $request->input('masterdata_id') ?? null;
+            $transactionLoad->destination = $request->input('destination') ?? null;
+            $transactionLoad->type = $request->input('type') ?? null;
             $transactionLoad->status = $request->input('status');
             $transactionLoad->date_in = now();
             $transactionLoad->save();
