@@ -62,6 +62,7 @@
               <th scope="col">Nomer Kendaraan</th>
               <th scope="col">Sopir</th>
               <th scope="col">Tanggal Masuk</th>
+              <th scope="col">Customer / Supplier</th>
               <th scope="col">Tujuan</th>
               <th scope="col">Tanggal Keluar 2</th>
               <th scope="col">Lama Proses</th>
@@ -75,6 +76,7 @@
                     <td>{{ $data->vehicle_number }}</td>
                     <td>{{ $data->driver_name }}</td>
                     <td>{{ $data->date_in }}</td>
+                    <td>{{ $data->masterdata ? $data->masterdata->name : '' }}</td>
                     <td>{{ $data->masterdata ? $data->masterdata->city : '' }}</td>
                     <td>{{ $data->date_out ?? "Belum Check Out" }}</td>
                     <td>
