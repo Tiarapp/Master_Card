@@ -248,6 +248,7 @@
                                 $("#masterdata_id").empty().append(
                                     `<option value="${masterdata.id}" selected>${masterdata.name}</option>`
                                 );
+                                $("#masterdata_id").trigger('change');
                             } else {
                                 alert("Failed to fetch master data by ID.");
                             }
@@ -302,6 +303,7 @@
                                 `<option value="${item.id}">${item.name}</option>`
                             );
                         });
+                        masterdataSelect.trigger('change');
                     } else {
                         alert("Failed to fetch master data." + selectedType);
                     }
@@ -310,6 +312,7 @@
                 });
             } else {
                 masterdataSelect.append('<option value="">Select Type First</option>');
+                masterdataSelect.trigger('change');
             }
         });
 
