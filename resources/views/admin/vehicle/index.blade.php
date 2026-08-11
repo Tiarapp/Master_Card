@@ -158,7 +158,7 @@
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Gambar</label>
-                            <input type="file" class="form-control" id="image" name="images[]" accept="image/*" capture="environment" multiple>
+                            <input type="file" class="form-control" id="image" name="images[]" accept="image/*" multiple>
                             <div id="imagePreview" class="d-flex flex-wrap mt-2"></div>
                         </div>
                         <div class="modal-footer">
@@ -262,6 +262,8 @@
                         $("#form-method").val("POST");
                         $("#submit-btn").text("Check-In");
                         setFormReadonly(false);
+                        selectedImageFiles = [];
+                        syncImageInput();
                         $("#imagePreview").empty();
                         $("#no-polisi").val(nopol);
                         $("#createModalLabel").text("Add New Vehicle");
@@ -324,23 +326,38 @@
             }
         });
 
-        $('#image').on('change', function(e) {
-            const files = e.target.files;
-            const preview = $('#imagePreview');
+        // holds files across repeated camera/gallery triggers since each trigger replaces input.files
+        let selectedImageFiles = [];
 
+        function syncImageInput() {
+            const dataTransfer = new DataTransfer();
+            selectedImageFiles.forEach(function(file) {
+                dataTransfer.items.add(file);
+            });
+            $('#image')[0].files = dataTransfer.files;
+        }
+
+        function renderImagePreview() {
+            const preview = $('#imagePreview');
             preview.empty();
 
-            Array.from(files).forEach(function(file) {
-            const reader = new FileReader();
+            selectedImageFiles.forEach(function(file) {
+                const reader = new FileReader();
 
-            reader.onload = function(event) {
-                preview.append(
-                `<img src="${event.target.result}" alt="Preview Gambar" style="max-width:200px; margin-top:10px; margin-right:10px; border:1px solid #ddd; padding:5px;">`
-                );
-            };
+                reader.onload = function(event) {
+                    preview.append(
+                    `<img src="${event.target.result}" alt="Preview Gambar" style="max-width:200px; margin-top:10px; margin-right:10px; border:1px solid #ddd; padding:5px;">`
+                    );
+                };
 
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
             });
+        }
+
+        $('#image').on('change', function(e) {
+            selectedImageFiles = selectedImageFiles.concat(Array.from(e.target.files));
+            syncImageInput();
+            renderImagePreview();
         });
 
         $(".view-photos").on("click", function() {
