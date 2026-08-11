@@ -158,7 +158,7 @@
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Gambar</label>
-                            <input type="file" class="form-control" id="image" name="images[]" accept="image/*" multiple>
+                            <input type="file" class="form-control" id="image" name="images[]" accept="image/*" capture="environment" multiple>
                             <div id="imagePreview" class="d-flex flex-wrap mt-2"></div>
                         </div>
                         <div class="modal-footer">
