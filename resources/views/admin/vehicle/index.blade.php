@@ -158,7 +158,12 @@
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Gambar</label>
-                            <input type="file" class="form-control" id="image" name="images[]" accept="image/*" multiple>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="btn-take-photo">Ambil Foto (Kamera)</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-pick-gallery">Pilih dari Galeri</button>
+                            </div>
+                            <input type="file" id="image-camera" accept="image/*" capture="environment" class="d-none">
+                            <input type="file" id="image-gallery" name="images[]" accept="image/*" multiple class="d-none">
                             <div id="imagePreview" class="d-flex flex-wrap mt-2"></div>
                         </div>
                         <div class="modal-footer">
@@ -334,7 +339,7 @@
             selectedImageFiles.forEach(function(file) {
                 dataTransfer.items.add(file);
             });
-            $('#image')[0].files = dataTransfer.files;
+            $('#image-gallery')[0].files = dataTransfer.files;
         }
 
         function renderImagePreview() {
@@ -354,10 +359,19 @@
             });
         }
 
-        $('#image').on('change', function(e) {
+        $('#btn-take-photo').on('click', function() {
+            $('#image-camera').trigger('click');
+        });
+
+        $('#btn-pick-gallery').on('click', function() {
+            $('#image-gallery').trigger('click');
+        });
+
+        $('#image-camera, #image-gallery').on('change', function(e) {
             selectedImageFiles = selectedImageFiles.concat(Array.from(e.target.files));
             syncImageInput();
             renderImagePreview();
+            $(this).val('');
         });
 
         $(".view-photos").on("click", function() {
