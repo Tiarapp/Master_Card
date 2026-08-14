@@ -925,7 +925,11 @@ class MastercardController extends Controller
                     DB::connection('firebird2')->beginTransaction();
                     // LIMIT data untuk performa - hanya ambil 1000 records teratas
                     $phpDataRaw = DB::connection('firebird2')
-                        ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records
+                        // ->select('SELECT FIRST 1000 TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records
+                        //          FROM "TDetPHP"
+                        //          GROUP BY TRIM("KodeBrg")
+                        //          ORDER BY SUM("Quantity") DESC');
+                        ->select('SELECT TRIM("KodeBrg") as KodeBrg, SUM("Quantity") as totalBbm, COUNT(*) as total_records
                                  FROM "TDetPHP"
                                  GROUP BY TRIM("KodeBrg")
                                  ORDER BY SUM("Quantity") DESC');
