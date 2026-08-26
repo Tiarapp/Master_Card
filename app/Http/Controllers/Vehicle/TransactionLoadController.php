@@ -63,7 +63,7 @@ class TransactionLoadController extends Controller
             foreach ($request->file('images', []) as $file) {
                 if ($file != null) {
                     $image = Image::decode($file);
-                    $image->scaleDown(width: 1200);
+                    $image->scaleDown(1200);
 
                     $nama_file = uniqid() . '.webp';
 
@@ -115,7 +115,7 @@ class TransactionLoadController extends Controller
             foreach ($request->file('images', []) as $photo) {
                 if ($photo != null) {
                     $image = Image::decode($photo);
-                    $image->scaleDown(width: 1200);
+                    $image->scaleDown(1200);
 
                     $nama_file = uniqid() . '.webp';
 
