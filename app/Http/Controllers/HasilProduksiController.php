@@ -21,7 +21,7 @@ class HasilProduksiController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-     
+
                         $btn = "<a href='inputhasilcorr/".$row->id."' class='edit btn btn-primary btn-sm'>Input Hasil</a>";
 
                         return $btn;
@@ -40,19 +40,19 @@ class HasilProduksiController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-     
+
                         $btn = "<a href='inputhasilconv/".$row->id."' class='edit btn btn-primary btn-sm'>Input Hasil</a>";
 
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
-            // dd($data);                    
+            // dd($data);
         }
         // return view('admin.plan.corr.index');
     }
 
-    
+
     public function index_conv()
     {
         return view('admin.plan.hasilconv.indexflexo');

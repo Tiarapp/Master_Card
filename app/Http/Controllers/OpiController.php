@@ -288,7 +288,7 @@ class OpiController extends Controller
     {
         try {
             $page = $request->input('page', 1);
-            $perPage = 20;
+            $perPage = 10;
             $search = $request->input('search', '');
             $plan_corr = $request->input('plan_corr', null);
 

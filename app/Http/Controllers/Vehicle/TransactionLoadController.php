@@ -7,6 +7,8 @@ use App\Models\TransactionLoad;
 use App\Models\VehiclePhotos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Laravel\Facades\Image;
 
 class TransactionLoadController extends Controller
 {
@@ -26,7 +28,8 @@ class TransactionLoadController extends Controller
         }
 
         $vehicle = $query->orderByRaw("CASE WHEN status = 'finish' THEN 2 ELSE 1 END")
-            ->orderBy('date_in', 'asc')
+            ->orderByRaw("CASE WHEN status = 'finish' THEN date_in END DESC")
+            ->orderByRaw("CASE WHEN status != 'finish' THEN date_in END ASC")
             ->paginate(10);
 
         $data = [
@@ -43,8 +46,8 @@ class TransactionLoadController extends Controller
             'driver_name' => 'required|string|max:255',
             'vehicle_number' => 'required|string|max:255',
             'status' => 'required|in:load,unload',
+            // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
-
         DB::beginTransaction();
         try {
             $transactionLoad = new TransactionLoad();
@@ -59,10 +62,12 @@ class TransactionLoadController extends Controller
 
             foreach ($request->file('images', []) as $file) {
                 if ($file != null) {
-                    $nama_file = time()."_".$file->getClientOriginalName();
+                    $image = Image::decode($file);
+                    $image->scaleDown(width: 1200);
 
-                    $tujuan_upload = 'upload_vehicle';
-                    $file->move($tujuan_upload, $nama_file);
+                    $nama_file = uniqid() . '.webp';
+
+                    $image->encode(new WebpEncoder(80))->save(public_path('upload_vehicle/' . $nama_file));
                 } else {
                     $nama_file = '';
                 }
@@ -109,8 +114,12 @@ class TransactionLoadController extends Controller
 
             foreach ($request->file('images', []) as $photo) {
                 if ($photo != null) {
-                    $nama_file = time()."_".$photo->getClientOriginalName();
-                    $photo->move('upload_vehicle', $nama_file);
+                    $image = Image::decode($photo);
+                    $image->scaleDown(width: 1200);
+
+                    $nama_file = uniqid() . '.webp';
+
+                    $image->encode(new WebpEncoder(80))->save(public_path('upload_vehicle/' . $nama_file));
                 } else {
                     $nama_file = '';
                 }

@@ -104,6 +104,8 @@
           </tbody>
         </table>
 
+        {{ $vehicle->appends(request()->query())->links() }}
+
         <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -213,7 +215,10 @@
   <script>
     $(document).ready(function() {
         $("#data_colorcombine").DataTable({
-            order: []
+            order: [],
+            paging: false,
+            searching: false,
+            info: false,
         });
 
         $("#nopol").on("keyup", function(e) {
@@ -386,9 +391,12 @@
 
         $('#image-camera, #image-gallery').on('change', function(e) {
             selectedImageFiles = selectedImageFiles.concat(Array.from(e.target.files));
+            // only clear the camera input's own value; #image-gallery holds the actual files posted to the server
+            if (this.id !== 'image-gallery') {
+                $(this).val('');
+            }
             syncImageInput();
             renderImagePreview();
-            $(this).val('');
         });
 
         $(".view-photos").on("click", function() {

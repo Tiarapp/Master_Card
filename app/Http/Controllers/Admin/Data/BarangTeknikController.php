@@ -19,7 +19,7 @@ class BarangTeknikController extends Controller
             ->select('TPersediaanTK.KodeBrg', 'TBarang.NamaBrg', 'TBarang.Merk', 'TBarang.Tipe','TBarang.Spesifikasi', 'TPersediaanTK.SaldoAkhir', 'TPersediaanTK.Periode')
             ->where('TPersediaanTK.Periode', 'LIKE', "%".$periode."%");
             // ->where('TPersediaanTK.SaldoAkhir', '>', 0);
-            
+
         return DataTables::of($persediaan)->toJson();
     }
 
@@ -35,16 +35,13 @@ class BarangTeknikController extends Controller
             // ->where('TPersediaanTK.SaldoAkhir', '>', 0)
             ->get();
 
-            // dd($persediaan);
-            // phpinfo();
-
         return view('admin.fb.listTeknik', compact('persediaan'));
     }
 
     public function getMutasi($kodebarang)
     {
         DB::connection('fbteknik')->beginTransaction();
-        
+
         $periode = date("m/Y");
         $result = [];
 
@@ -77,7 +74,7 @@ class BarangTeknikController extends Controller
             // ->where('TReturBBM.Periode', 'LIKE', "%".$request->periode."%")
             ->get();
 
-            
+
         $returbbk = DB::connection('fbteknik')->table('TDetReturBBK')
         ->leftJoin('TReturBBK', 'TDetReturBBK.NoBukti', '=', 'TReturBBK.NoBukti')
         ->select('TDetReturBBK.*', 'TReturBBK.TglRetur', 'TReturBBK.Keterangan')
@@ -94,7 +91,7 @@ class BarangTeknikController extends Controller
 
         if ($bbm) {
             foreach ($bbm as $data) {
-                
+
                 $nestedData["tanggal"] = $data->TglMasuk;
                 $nestedData["nobukti"] = $data->NoBukti;
                 $nestedData["jenis"] = "Pembelian";
@@ -105,11 +102,11 @@ class BarangTeknikController extends Controller
 
                 $result[] = $nestedData;
             }
-        } 
+        }
 
         if ($returbbm) {
             foreach ($returbbm as $data) {
-                
+
                 $nestedData["tanggal"] = $data->TglRetur;
                 $nestedData["nobukti"] = $data->NoBukti;
                 $nestedData["jenis"] = "Retur Pembelian";
@@ -120,11 +117,11 @@ class BarangTeknikController extends Controller
 
                 $result[] = $nestedData;
             }
-        } 
+        }
 
         if ($returbbk) {
             foreach ($returbbk as $data) {
-                
+
                 $nestedData["tanggal"] = $data->TglRetur;
                 $nestedData["nobukti"] = $data->NoBukti;
                 $nestedData["jenis"] = "Retur Pemakaian";
@@ -135,7 +132,7 @@ class BarangTeknikController extends Controller
 
                 $result[] = $nestedData;
             }
-        } 
+        }
 
 
         if ($bbk) {
@@ -147,7 +144,7 @@ class BarangTeknikController extends Controller
                 $nestedData["masuk"] = 0;
                 $nestedData["harga"] = $data->HargaRp;
                 $nestedData["keterangan"] = "Diambil oleh : ". $data->Peminta ."- ". $data->Keterangan;
-                
+
                 $result[] = $nestedData;
             }
         }
@@ -163,24 +160,24 @@ class BarangTeknikController extends Controller
                     $nestedData["keluar"] = $data->QtyS;
                     $nestedData["harga"] = $data->HargaRp;
                     $nestedData["keterangan"] = $data->Keterangan;
-    
-                    
+
+
                 $result[] = $nestedData;
                 } else {
-                    
+
                     $nestedData["tanggal"] = $data->TglSesuai;
                     $nestedData["nobukti"] = $data->NoBukti;
                     $nestedData["masuk"] = $data->QtyS;
                     $nestedData["keluar"] = 0;
                     $nestedData["harga"] = $data->HargaRp;
                     $nestedData["keterangan"] = $data->Keterangan;
-                    
+
                 $result[] = $nestedData;
                 }
 
             }
         }
-        
+
         return view('admin.fb.mutasi', compact('result', 'barang', 'persediaan'));
     }
 }

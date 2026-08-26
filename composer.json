@@ -15,6 +15,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "harrygulliford/laravel-firebird": "^3.2",
+        "intervention/image-laravel": "^4.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.12",
