@@ -7,8 +7,6 @@ use App\Models\TransactionLoad;
 use App\Models\VehiclePhotos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Encoders\WebpEncoder;
-use Intervention\Image\Laravel\Facades\Image;
 
 class TransactionLoadController extends Controller
 {
@@ -62,12 +60,7 @@ class TransactionLoadController extends Controller
 
             foreach ($request->file('images', []) as $file) {
                 if ($file != null) {
-                    $image = Image::decode($file);
-                    $image->scaleDown(1200);
-
-                    $nama_file = uniqid() . '.webp';
-
-                    $image->encode(new WebpEncoder(80))->save(public_path('upload_vehicle/' . $nama_file));
+                    $nama_file = $this->compressImage($file);
                 } else {
                     $nama_file = '';
                 }
@@ -114,12 +107,7 @@ class TransactionLoadController extends Controller
 
             foreach ($request->file('images', []) as $photo) {
                 if ($photo != null) {
-                    $image = Image::decode($photo);
-                    $image->scaleDown(1200);
-
-                    $nama_file = uniqid() . '.webp';
-
-                    $image->encode(new WebpEncoder(80))->save(public_path('upload_vehicle/' . $nama_file));
+                    $nama_file = $this->compressImage($photo);
                 } else {
                     $nama_file = '';
                 }
@@ -145,6 +133,54 @@ class TransactionLoadController extends Controller
         $vehicle = VehiclePhotos::with('transactionLoad')->findOrFail($id);
 
         return view('admin.vehicle.show', compact('vehicle'));
+    }
+
+    private function compressImage($file)
+    {
+        if (!function_exists('imagecreatefromstring') || !function_exists('imagewebp')) {
+            throw new \RuntimeException('PHP GD with WebP support is required to process vehicle images.');
+        }
+
+        $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
+
+        if ($image === false) {
+            throw new \RuntimeException('The uploaded image could not be read.');
+        }
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $maxWidth = 1200;
+        $targetWidth = min($width, $maxWidth);
+        $targetHeight = (int) round($height * ($targetWidth / $width));
+        $resizedImage = imagecreatetruecolor($targetWidth, $targetHeight);
+
+        imagealphablending($resizedImage, false);
+        imagesavealpha($resizedImage, true);
+        imagecopyresampled(
+            $resizedImage,
+            $image,
+            0,
+            0,
+            0,
+            0,
+            $targetWidth,
+            $targetHeight,
+            $width,
+            $height
+        );
+
+        $namaFile = uniqid() . '.webp';
+        $path = public_path('upload_vehicle/' . $namaFile);
+        $saved = imagewebp($resizedImage, $path, 80);
+
+        imagedestroy($resizedImage);
+        imagedestroy($image);
+
+        if (!$saved) {
+            throw new \RuntimeException('The compressed image could not be saved.');
+        }
+
+        return $namaFile;
     }
 
 
