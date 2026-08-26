@@ -177,6 +177,10 @@
                     </form>
 
                     <div id="showPhotos" class="d-flex flex-wrap mt-2"></div>
+                    <div id="photoLoading" class="text-center py-4 d-none" aria-live="polite">
+                        <i class="fas fa-spinner fa-spin fa-2x text-info" aria-hidden="true"></i>
+                        <div class="mt-2">Memuat foto...</div>
+                    </div>
                 </div>
             </div>
           </div>
@@ -401,6 +405,12 @@
 
         $(".view-photos").on("click", function() {
             const transactionId = $(this).data("id");
+            $("#showPhotos").empty();
+            $("#photoLoading").removeClass("d-none");
+            $("#createModalLabel").text("Vehicle Photos");
+            $("#createModal form").hide();
+            $("#createModal").modal("show");
+
             $.get(`/api/vehicle/photos/${transactionId}`, function(response) {
                 if (response.success) {
                     const photos = response.data;
@@ -413,14 +423,14 @@
                                 <a href="${url}" download class="btn btn-sm btn-light position-absolute" style="bottom:5px; right:5px;" title="Download"><i class="fas fa-download"></i></a>
                             </div>`;
                     });
+                    $("#photoLoading").addClass("d-none");
                     $("#showPhotos").html(photoHtml);
-                    $("#createModalLabel").text("Vehicle Photos");
-                    $("#createModal form").hide();
-                    $("#createModal").modal("show");
                 } else {
+                    $("#photoLoading").addClass("d-none");
                     alert("Failed to fetch vehicle photos.");
                 }
             }).fail(function() {
+                $("#photoLoading").addClass("d-none");
                 alert("An error occurred while fetching vehicle photos.");
             });
         });
