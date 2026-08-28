@@ -1144,18 +1144,18 @@ $(document).ready(function(){
         const flute = row.find('input[name="flute[]"]').val();
 
         // Calculate UkRoll - only auto-calculate if roll field is still empty
-        const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
+        // const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
         let UkRoll;
-        if (existingRoll > 0) {
-            UkRoll = existingRoll; // Preserve manually set / previously calculated value
+        // if (existingRoll > 0) {
+        //     UkRoll = existingRoll; // Preserve manually set / previously calculated value
+        // } else {
+        if (tipebox === 'DC') {
+            UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
         } else {
-            if (tipebox === 'DC') {
-                UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
-            } else {
-                UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
-            }
-            row.find('input[name="roll[]"]').val(UkRoll);
+            UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
         }
+        row.find('input[name="roll[]"]').val(UkRoll);
+        // }
 
         let flute1, flute2;
 

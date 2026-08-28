@@ -2,6 +2,8 @@
 
 return [
 
+    'inventory_available_status_id' => env('INVENTORY_AVAILABLE_STATUS_ID', 2),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

@@ -532,6 +532,11 @@ Route::middleware(['auth'])->group(function (){
     Route::post('/admin/plan/corr/store', 'CorrugatedController@store')->middleware(['auth'])->name('admin.corrplan.store');
     Route::get('/admin/plan/corr/{id}/edit', 'CorrugatedController@edit')->middleware(['auth'])->name('admin.corrplan.edit');
     Route::put('/admin/plan/corr/{id}', 'CorrugatedController@update')->middleware(['auth'])->name('admin.corrplan.update');
+    Route::get('/admin/plan/corr/detail/{detail}/material-requirement', 'CorrMaterialBookingController@index')->name('admin.corr.material.index');
+    Route::get('/admin/plan/material-requirement/{requirement}/rolls', 'CorrMaterialBookingController@rolls')->name('admin.corr.material.rolls');
+    Route::get('/admin/plan/material-requirement/{requirement}/auto-select', 'CorrMaterialBookingController@autoSelect')->name('admin.corr.material.auto');
+    Route::post('/admin/plan/material-requirement/{requirement}/book', 'CorrMaterialBookingController@book')->name('admin.corr.material.book');
+    Route::patch('/admin/plan/material-booking/{booking}/release', 'CorrMaterialBookingController@release')->name('admin.corr.material.release');
 
 
     Route::get('/admin/plan/conv', 'ConvController@index')->middleware(['auth'])->name('conv');

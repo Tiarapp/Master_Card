@@ -327,6 +327,9 @@
                                                 </td>
                                                 <td><input type="text" class="form-control form-control-sm" name="keterangan[]" value="{{ $detail->keterangan ?? '' }}" placeholder="Keterangan"></td>
                                                 <td>
+                                                    <a class="btn btn-info btn-sm mb-1" href="{{ route('admin.corr.material.index', $detail) }}">
+                                                        <i class="fas fa-boxes"></i> Material Requirement & Booking
+                                                    </a>
                                                     <button type="button" class="btn btn-danger btn-sm remove-planning-item">
                                                         <i class="fas fa-trash"></i> Hapus
                                                     </button>
@@ -1021,18 +1024,18 @@ $(document).ready(function(){
 
 
         // Calculate UkRoll - only auto-calculate if roll field is still empty
-        const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
+        // const existingRoll = parseFloat(row.find('input[name="roll[]"]').val()) || 0;
         let UkRoll;
-        if (existingRoll > 0) {
-            UkRoll = existingRoll; // Preserve manually set / previously calculated value
-        } else {
+        // if (existingRoll > 0) {
+        //     UkRoll = existingRoll; // Preserve manually set / previously calculated value
+        // } else {
             if (tipebox === 'DC') {
                 UkRoll = Math.ceil(((outCorr * sheetl) + 20) / 50) * 50;
             } else {
                 UkRoll = Math.ceil(((outCorr * sheetl) + 30) / 50) * 50;
             }
             row.find('input[name="roll[]"]').val(UkRoll);
-        }
+        // }
 
         let flute1 = 0, flute2 = 0;
 

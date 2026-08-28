@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CorrMaster;
 use App\Models\CorrDetail;
 use App\Models\Opi_M;
+use App\Services\CorrMaterialBookingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,7 @@ class CorrugatedController extends Controller
     public function create()
     {
         return view('admin.plan.corr.create');
-        
+
     }
 
     public function store(Request $request)
@@ -58,7 +59,7 @@ class CorrugatedController extends Controller
             'outCorr' => $request->outCorr,
             'total_items' => count($request->opi_id ?? [])
         ]);
-        
+
         $request->validate([
             'tgl' => 'required|date',
             'shift' => 'required|in:A,B,C',
@@ -84,7 +85,7 @@ class CorrugatedController extends Controller
             'kebutuhanFlute1' => 'nullable|array',
             'jenisTengah' => 'nullable|array',
             'gramTengah' => 'nullable|array',
-            'kebutuhanTengah' => 'nullable|array', 
+            'kebutuhanTengah' => 'nullable|array',
             'jenisFlute2' => 'nullable|array',
             'gramFlute2' => 'nullable|array',
             'kebutuhanFlute2' => 'nullable|array',
@@ -112,37 +113,37 @@ class CorrugatedController extends Controller
                                   ->where('shift', $shift)
                                   ->orderBy('kode_corr', 'desc')
                                   ->first();
-            
+
             if ($lastPlan) {
                 $lastNumber = intval(substr($lastPlan->kode_corr, -3));
                 $newNumber = $lastNumber + 1;
             } else {
                 $newNumber = 1;
             }
-            
+
             $kodeCorr = "CORR{$tanggal}{$shift}" . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
 
             // Calculate totals - use same filtering logic
             $totalRm = 0;
             $totalKg = 0;
             $opiIds = array_filter($request->opi_id ?? []);
-            
+
             foreach ($opiIds as $index => $opiId) {
                 // Skip incomplete records
                 if (empty($opiId) || empty($request->outCorr[$index] ?? null)) {
                     continue;
                 }
-                
+
                 // Calculate RM total for this item
                 $rmTotalItem = floatval($request->kebutuhanAtas[$index] ?? 0) +
                               floatval($request->kebutuhanFlute1[$index] ?? 0) +
                               floatval($request->kebutuhanTengah[$index] ?? 0) +
                               floatval($request->kebutuhanFlute2[$index] ?? 0) +
                               floatval($request->kebutuhanBawah[$index] ?? 0);
-                              
+
                 // Calculate KG total for this item (order qty * berat sheet / 1000)
                 $kgTotalItem = floatval($request->order[$index] ?? 0) * floatval($request->beratSheet[$index] ?? 0);
-                           
+
                 $totalRm += $rmTotalItem;
                 $totalKg += $kgTotalItem;
             }
@@ -163,7 +164,7 @@ class CorrugatedController extends Controller
             // Create detail records - filter out empty OPI IDs and ensure data consistency
             $opiIds = array_filter($request->opi_id ?? []);
             Log::info('Creating detail records', ['filtered_opi_ids' => $opiIds, 'count' => count($opiIds)]);
-            
+
             $detailsCreated = 0;
             foreach ($opiIds as $index => $opiId) {
                 // Validate that we have the minimum required data for this index
@@ -171,25 +172,25 @@ class CorrugatedController extends Controller
                     Log::info('Skipping incomplete record', ['index' => $index, 'opi_id' => $opiId]);
                     continue; // Skip incomplete records
                 }
-                
+
                 Log::info('Creating detail record', ['index' => $index, 'opi_id' => $opiId]);
                 // Get mc_id from form data
                 $mcId = $request->mc_id[$index] ?? null;
-                
+
                 // Calculate totals for this item
                 $rmTotalItem = floatval($request->kebutuhanAtas[$index] ?? 0) +
                               floatval($request->kebutuhanFlute1[$index] ?? 0) +
                               floatval($request->kebutuhanTengah[$index] ?? 0) +
                               floatval($request->kebutuhanFlute2[$index] ?? 0) +
                               floatval($request->kebutuhanBawah[$index] ?? 0);
-                              
+
                 $kgTotalItem = floatval($request->order[$index] ?? 0) * floatval($request->beratSheet[$index] ?? 0);
-                
+
                 // Plan calculations
                 $planPlus = floatval($request->plan[$index] ?? 0);
                 $planMin = floatval($request->order[$index] ?? 0); // Same as plan_plus for now, can be adjusted
-                
-                CorrDetail::create([
+
+                $detail = CorrDetail::create([
                     'corr_master_id' => $corrMaster->id,
                     'opi_id' => $opiId,
                     'mc_id' => $mcId,
@@ -223,8 +224,9 @@ class CorrugatedController extends Controller
                     'kg_total' => $kgTotalItem,
                     'keterangan' => $request->keterangan[$index] ?? ''
                 ]);
+                app(CorrMaterialBookingService::class)->syncRequirements($detail);
                 $detailsCreated++;
-                
+
                 // Update OPI status and os_corr
                 $orderQty = intval($request->order[$index] ?? 0);
                 if ($orderQty > 0) {
@@ -237,10 +239,10 @@ class CorrugatedController extends Controller
                             $opi->os_corr = $newOsCorr;
                             if ($opi->os_corr <= 0) {
                                 $opi->plan_corr = true;
-                            } 
-                            
+                            }
+
                             $opi->save();
-                            
+
                             Log::info('Updated OPI status', [
                                 'opi_id' => $opiId,
                                 'plan_corr' => true,
@@ -260,7 +262,7 @@ class CorrugatedController extends Controller
                     }
                 }
             }
-            
+
             Log::info('Detail records creation completed', ['total_created' => $detailsCreated]);
 
             DB::commit();
@@ -276,7 +278,7 @@ class CorrugatedController extends Controller
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed: ' . implode(', ', $e->validator->errors()->all()),
@@ -284,7 +286,7 @@ class CorrugatedController extends Controller
             ], 422);
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan planning corrugating: ' . $e->getMessage()
@@ -294,15 +296,15 @@ class CorrugatedController extends Controller
 
     public function edit($id)
     {
-        $corrMaster = CorrMaster::with(['details.opi.mc.substanceproduksi.lineratas', 
+        $corrMaster = CorrMaster::with(['details.opi.mc.substanceproduksi.lineratas',
                                        'details.opi.mc.substanceproduksi.flute1',
                                        'details.opi.mc.substanceproduksi.linertengah',
-                                       'details.opi.mc.substanceproduksi.flute2', 
+                                       'details.opi.mc.substanceproduksi.flute2',
                                        'details.opi.mc.substanceproduksi.linerbawah',
                                        'details.opi.kontrakm',
                                        'details.opi.dt'])
                                 ->findOrFail($id);
-        
+
         return view('admin.plan.corr.edit', compact('corrMaster'));
     }
 
@@ -333,7 +335,7 @@ class CorrugatedController extends Controller
             'kebutuhanFlute1' => 'nullable|array',
             'jenisTengah' => 'nullable|array',
             'gramTengah' => 'nullable|array',
-            'kebutuhanTengah' => 'nullable|array', 
+            'kebutuhanTengah' => 'nullable|array',
             'jenisFlute2' => 'nullable|array',
             'gramFlute2' => 'nullable|array',
             'kebutuhanFlute2' => 'nullable|array',
@@ -360,23 +362,23 @@ class CorrugatedController extends Controller
             $totalRm = 0;
             $totalKg = 0;
             $opiIds = array_filter($request->opi_id ?? []);
-            
+
             foreach ($opiIds as $index => $opiId) {
                 // Skip incomplete records
                 if (empty($opiId) || empty($request->outCorr[$index] ?? null)) {
                     continue;
                 }
-                
+
                 // Calculate RM total for this item
                 $rmTotalItem = floatval($request->kebutuhanAtas[$index] ?? 0) +
                               floatval($request->kebutuhanFlute1[$index] ?? 0) +
                               floatval($request->kebutuhanTengah[$index] ?? 0) +
                               floatval($request->kebutuhanFlute2[$index] ?? 0) +
                               floatval($request->kebutuhanBawah[$index] ?? 0);
-                              
+
                 // Calculate KG total for this item (order qty * berat sheet / 1000)
                 $kgTotalItem = floatval($request->order[$index] ?? 0) * floatval($request->beratSheet[$index] ?? 0) / 1000;
-                           
+
                 $totalRm += $rmTotalItem;
                 $totalKg += $kgTotalItem;
             }
@@ -394,42 +396,62 @@ class CorrugatedController extends Controller
 
             // Delete old details and revert OPI updates
             $oldDetails = CorrDetail::where('corr_master_id', $corrMaster->id)->get();
-            foreach ($oldDetails as $detail) {
-                // Revert OPI changes
-                $opi = Opi_M::find($detail->opi_id);
-                if ($opi) {
-                    $opi->plan_corr = false;
-                    $opi->os_corr = ($opi->os_corr ?? 0) + $detail->order_qty;
-                    $opi->save();
+            $hasActiveBookings = $oldDetails->flatMap->materialRequirements->flatMap->bookings->contains(function ($booking) {
+                return $booking->status === 'BOOKED';
+            });
+            $existingDetailIds = $oldDetails->pluck('id')->map(function ($detailId) {
+                return (string) $detailId;
+            })->all();
+            $submittedDetailIds = collect($request->detail_id ?? [])->filter()->map(function ($detailId) {
+                return (string) $detailId;
+            })->all();
+
+            if ($hasActiveBookings) {
+                $missingDetailIds = array_diff($existingDetailIds, $submittedDetailIds);
+                if ($missingDetailIds) {
+                    throw new \RuntimeException('Planning memiliki booking roll aktif. Detail yang sudah dibooking tidak boleh dihapus.');
                 }
+            } else {
+                foreach ($oldDetails as $detail) {
+                    // Revert OPI changes
+                    $opi = Opi_M::find($detail->opi_id);
+                    if ($opi) {
+                        $opi->plan_corr = false;
+                        $opi->os_corr = ($opi->os_corr ?? 0) + $detail->order_qty;
+                        $opi->save();
+                    }
+                }
+                CorrDetail::where('corr_master_id', $corrMaster->id)->delete();
             }
-            CorrDetail::where('corr_master_id', $corrMaster->id)->delete();
 
             // Create new detail records
             $detailsCreated = 0;
             foreach ($opiIds as $index => $opiId) {
+                if ($hasActiveBookings && !empty($request->detail_id[$index] ?? null)) {
+                    continue;
+                }
                 // Validate that we have the minimum required data for this index
                 if (empty($opiId) || empty($request->outCorr[$index] ?? null)) {
                     continue; // Skip incomplete records
                 }
-                
+
                 // Get mc_id from form data
                 $mcId = $request->mc_id[$index] ?? null;
-                
+
                 // Calculate totals for this item
                 $rmTotalItem = floatval($request->kebutuhanAtas[$index] ?? 0) +
                               floatval($request->kebutuhanFlute1[$index] ?? 0) +
                               floatval($request->kebutuhanTengah[$index] ?? 0) +
                               floatval($request->kebutuhanFlute2[$index] ?? 0) +
                               floatval($request->kebutuhanBawah[$index] ?? 0);
-                              
+
                 $kgTotalItem = floatval($request->order[$index] ?? 0) * floatval($request->beratSheet[$index] ?? 0) / 1000;
-                
+
                 // Plan calculations
                 $planPlus = floatval($request->plan[$index] ?? 0);
                 $planMin = $planPlus; // Same as plan_plus for now, can be adjusted
-                
-                CorrDetail::create([
+
+                $detail = CorrDetail::create([
                     'corr_master_id' => $corrMaster->id,
                     'opi_id' => $opiId,
                     'mc_id' => $mcId,
@@ -463,8 +485,9 @@ class CorrugatedController extends Controller
                     'kg_total' => $kgTotalItem,
                     'keterangan' => $request->keterangan[$index] ?? ''
                 ]);
+                app(CorrMaterialBookingService::class)->syncRequirements($detail);
                 $detailsCreated++;
-                
+
                 // Update OPI status and os_corr
                 $orderQty = intval($request->order[$index] ?? 0);
                 if ($orderQty > 0) {
@@ -473,12 +496,12 @@ class CorrugatedController extends Controller
                         if ($opi) {
                             // Set plan_corr to true
                             $opi->plan_corr = true;
-                            
+
                             // Reduce os_corr by order quantity
                             $currentOsCorr = $opi->os_corr ?? 0;
                             $newOsCorr = max(0, $currentOsCorr - $orderQty); // Ensure not negative
                             $opi->os_corr = $newOsCorr;
-                            
+
                             $opi->save();
                         }
                     } catch (\Exception $updateException) {
@@ -500,7 +523,7 @@ class CorrugatedController extends Controller
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed: ' . implode(', ', $e->validator->errors()->all()),
@@ -508,7 +531,7 @@ class CorrugatedController extends Controller
             ], 422);
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengupdate planning corrugating: ' . $e->getMessage()

@@ -55,5 +55,10 @@ class CorrDetail extends Model
         return $this->belongsTo(Opi_M::class, 'opi_id');
     }
 
+    public function materialRequirements()
+    {
+        return $this->hasMany(CorrMaterialRequirement::class, 'corr_detail_id');
+    }
+
 
 }

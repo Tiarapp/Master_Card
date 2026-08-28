@@ -15,7 +15,7 @@ class Inventory extends Model
 
     protected $fillable = [
         'kode_internal',
-        'kode_roll', 
+        'kode_roll',
         'gsm',
         'jenis',
         'lebar',
@@ -55,5 +55,10 @@ class Inventory extends Model
     public function status_roll()
     {
         return $this->belongsTo(StatusRoll::class);
+    }
+
+    public function materialBookings()
+    {
+        return $this->hasMany(CorrMaterialBooking::class);
     }
 }
