@@ -29,6 +29,7 @@ class CorrMaterialBookingController extends Controller
         return response()->json($this->service->getAvailableRolls($requirement)->map(function ($roll) {
             return [
                 'id' => $roll->id,
+                'kode_internal' => $roll->kode_internal,
                 'kode_roll' => $roll->kode_roll,
                 'tanggal_masuk' => $roll->tanggal_masuk ? date('d-m-Y', strtotime($roll->tanggal_masuk)) : null,
                 'gsm' => $roll->gsm,

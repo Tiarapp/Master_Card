@@ -229,7 +229,7 @@ td:last-child {
                 </div>
               </div>
             </div>
-            
+
             <!-- Hidden field to preserve search term when filtering -->
             @if(request('search'))
               <input type="hidden" name="search" value="{{ request('search') }}">
@@ -256,7 +256,7 @@ td:last-child {
                 <i class="fas fa-file-import me-2"></i>
                 <span>{{ __('Import Update') }}</span>
             </a>
-            
+
             <!-- Export Button -->
             <button type="button" id="exportInventoryBtn" class="btn btn-dark d-flex align-items-center shadow-sm mb-2">
                 <i class="fas fa-file-excel me-2"></i>
@@ -265,12 +265,12 @@ td:last-child {
         </div>
         <div class="col-md-4 ms-auto">
             <form action="{{ route('inventory.index') }}" method="GET" class="d-flex align-items-center shadow-sm rounded-pill bg-white px-2 py-1 mb-2" style="max-width: 250px; margin-left: auto;">
-                <input 
-                    type="text" 
-                    name="search" 
-                    class="form-control border-0 bg-transparent me-2 rounded-pill" 
-                    placeholder="Cari kode internal, kode roll, supplier..." 
-                    value="{{ request('search') }}" 
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control border-0 bg-transparent me-2 rounded-pill"
+                    placeholder="Cari kode internal, kode roll, supplier..."
+                    value="{{ request('search') }}"
                     style="width: 200px; font-size: 15px; box-shadow: none;"
                 >
                 <button type="submit" class="btn btn-primary rounded-pill px-3 d-flex align-items-center" style="box-shadow: none;">
@@ -293,6 +293,7 @@ td:last-child {
                     <th class="min-w-100px">{{ __('Berat SJ') }}</th>
                     <th class="min-w-100px">{{ __('Berat Timbang') }}</th>
                     <th class="min-w-100px">{{ __('Berat') }}</th>
+                    <th class="min-w-100px">{{ __('Booked') }}</th>
                     <th class="min-w-100px">{{ __('Supplier') }}</th>
                     <th class="min-w-100px">{{ __('No PO') }}</th>
                     <th class="min-w-100px">{{ __('Warna') }}</th>
@@ -328,6 +329,16 @@ td:last-child {
                         <td class="text-gray-800 fw-semibold">{{ $inventory->berat_sj ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->berat_timbang }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->quantity }}</td>
+                        <td class="text-gray-800 fw-semibold">
+                          {{ number_format($inventory->booked_quantity ?? 0, 0) }}
+                          @if($inventory->materialBookings->isNotEmpty())
+                            <button type="button" class="btn btn-outline-info btn-xs ml-1"
+                                onclick="showBookingDetails({{ $inventory->id }})"
+                                title="Lihat detail booking">
+                              <i class="fas fa-list"></i>
+                            </button>
+                          @endif
+                        </td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->supplier->name ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->purchase_order ?? '-' }}</td>
                         <td>
@@ -347,31 +358,31 @@ td:last-child {
                         <td class="text-gray-800 fw-semibold">{{ $inventory->gsm_actual ? number_format(($inventory->gsm_actual - $inventory->gsm) / $inventory->gsm * 100) . '%' : '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->cobsize_top ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->cobsize_back ?? '-' }}</td>
-                        <td class="text-gray-800 fw-semibold">{{ $inventory->rct_cd ?? '-' }}</td>  
+                        <td class="text-gray-800 fw-semibold">{{ $inventory->rct_cd ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ $inventory->rct_md ?? '-' }}</td>
                         <td class="text-gray-800 fw-semibold">{{ \Carbon\Carbon::parse($inventory->created_at)->format('d-m-Y H:i') }}</td>
                         <td>
                             <div class="d-flex flex-wrap gap-1">
-                                <button type="button" class="btn btn-outline-info btn-xs" 
-                                        onclick="addKeterangan({{ $inventory->id }}, '{{ $inventory->descoription ?? '' }}')" 
+                                <button type="button" class="btn btn-outline-info btn-xs"
+                                        onclick="addKeterangan({{ $inventory->id }}, '{{ $inventory->descoription ?? '' }}')"
                                         title="Tambah/Edit Keterangan">
                                     <i class="fas fa-comment"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-success btn-xs" 
-                                        onclick="rollPotong({{ $inventory->id }}, '{{ $inventory->kode_internal }}', {{ $inventory->lebar ?? 0 }})" 
+                                <button type="button" class="btn btn-outline-success btn-xs"
+                                        onclick="rollPotong({{ $inventory->id }}, '{{ $inventory->kode_internal }}', {{ $inventory->lebar ?? 0 }})"
                                         title="Roll Potong">
                                     <i class="fas fa-cut"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-warning btn-xs" 
-                                        onclick="editInventory({{ $inventory->id }})" 
+                                <button type="button" class="btn btn-outline-warning btn-xs"
+                                        onclick="editInventory({{ $inventory->id }})"
                                         title="Edit Inventory">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <form action="{{ route('inventory.destroy', $inventory->id) }}" method="POST" class="d-inline" 
+                                <form action="{{ route('inventory.destroy', $inventory->id) }}" method="POST" class="d-inline"
                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-xs" 
+                                    <button type="submit" class="btn btn-outline-danger btn-xs"
                                             title="Hapus Inventory">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -392,7 +403,7 @@ td:last-child {
             </tbody>
         </table>
     </div>
-    
+
     @if($inventories->hasPages())
         <div class="mt-3">
             {{ $inventories->appends(request()->query())->links('pagination::bootstrap-4') }}
@@ -403,6 +414,36 @@ td:last-child {
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+</div>
+
+<!-- Modal Detail Booking Corr -->
+<div class="modal fade" id="bookingDetailModal" tabindex="-1" role="dialog" aria-labelledby="bookingDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="bookingDetailModalLabel"><i class="fas fa-list me-2"></i>Detail Booking Roll</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th>Planning Corr</th>
+                <th>OPI</th>
+                <th>Layer</th>
+                <th>Material</th>
+                <th class="text-right">Qty Booked</th>
+              </tr>
+            </thead>
+            <tbody id="bookingDetailRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal untuk Edit Keterangan -->
@@ -423,7 +464,7 @@ td:last-child {
         <div class="modal-body">
           <div class="form-group">
             <label for="description_input" class="form-label">Keterangan:</label>
-            <textarea class="form-control" id="description_input" name="description" rows="4" 
+            <textarea class="form-control" id="description_input" name="description" rows="4"
                       placeholder="Masukkan keterangan untuk inventory ini..."></textarea>
           </div>
           <div class="alert alert-info">
@@ -466,35 +507,35 @@ td:last-child {
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="lebar_potongan" class="form-label">Lebar Potongan (cm) <span class="text-danger">*</span></label>
                 <input type="hidden" name="lebar_roll" id="lebar_roll">
-                <input type="number" class="form-control lebar-potongan" id="lebar_potongan" name="lebar_potongan" 
+                <input type="number" class="form-control lebar-potongan" id="lebar_potongan" name="lebar_potongan"
                        min="1" step="1" required placeholder="Masukkan lebar potongan">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="rasio" class="form-label">Rasio</label>
-                <input type="number" class="form-control" id="rasio" name="rasio" 
+                <input type="number" class="form-control" id="rasio" name="rasio"
                        min="0" step="0.01" placeholder="0.00">
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
                 <label for="keterangan_potongan" class="form-label">Keterangan</label>
-                <textarea class="form-control" id="keterangan_potongan" name="keterangan" rows="3" 
+                <textarea class="form-control" id="keterangan_potongan" name="keterangan" rows="3"
                           placeholder="Masukkan keterangan potongan..."></textarea>
               </div>
             </div>
           </div>
-          
+
           <div class="alert alert-warning">
             <i class="fas fa-exclamation-triangle me-2"></i>
             <strong>Perhatian:</strong> Data potongan akan tersimpan dan terhubung dengan inventory ini.
@@ -520,6 +561,24 @@ td:last-child {
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
+  var inventoryBookings = @json($inventoryBookingDetails);
+
+  function showBookingDetails(inventoryId) {
+    var bookings = inventoryBookings[inventoryId] || [];
+    var rows = bookings.map(function(booking) {
+      return '<tr>' +
+        '<td>' + booking.kode_corr + '</td>' +
+        '<td>' + booking.opi + '</td>' +
+        '<td>' + booking.layer_no + '</td>' +
+        '<td>' + booking.material + '</td>' +
+        '<td class="text-right">' + Number(booking.qty_booked).toLocaleString('id-ID') + ' kg</td>' +
+        '</tr>';
+    });
+
+    $('#bookingDetailRows').html(rows.join(''));
+    $('#bookingDetailModal').modal('show');
+  }
+
     $(document).ready(function() {
         // Initialize Select2 for filter dropdowns
         $('#gsm_filter, #lebar_filter, #jenis_filter, #supplier_filter').select2({
@@ -539,7 +598,7 @@ td:last-child {
             placeholder: 'Pilih...',
             minimumResultsForSearch: 0
         });
-        
+
         // Reinitialize Select2 when modal is shown
         $('#addInventoryModal').on('shown.bs.modal', function () {
             $('.js-example-basic-single').select2({
@@ -557,9 +616,9 @@ td:last-child {
             var url = '{{ route("supplier-roll.show", ":id") }}';
             var kw = $('.kw').val();
             // console.log(kw);
-            
+
             url = url.replace(':id', selectedSupplier);
-            
+
             $.get(url, function(data) {
                 function strpad(str, length) {
                     str = String(str);
@@ -596,7 +655,7 @@ td:last-child {
                 }
             }
         });
-        
+
     });
 
     function editInventory(id) {
@@ -607,20 +666,20 @@ td:last-child {
     function rollPotong(inventoryId, kodeInternal, lebarRoll) {
         // Set form action URL to create potongan
         $('#rollPotongForm').attr('action', '{{ route("potongan.store") }}');
-        
+
         // Add hidden input for inventory_id
         $('#rollPotongForm').find('input[name="inventory_id"]').remove();
         $('#rollPotongForm').append('<input type="hidden" name="inventory_id" value="' + inventoryId + '">');
-        
+
         // Set inventory info
         $('#inventory-info').text(kodeInternal + ' (Lebar: ' + lebarRoll + ' cm)');
-        
+
         // Reset form
         $('#lebar_roll').val(lebarRoll);
         $('#lebar_potongan').val('');
         $('#rasio').val('');
         $('#keterangan_potongan').val('');
-        
+
         // Show modal
         $('#rollPotongModal').modal('show');
     }
@@ -628,10 +687,10 @@ td:last-child {
     function addKeterangan(id, currentKeterangan) {
         // Set form action URL
         $('#keteranganForm').attr('action', '{{ route("inventory.update", ":id") }}'.replace(':id', id));
-        
+
         // Set current keterangan value
         $('#description_input').val(currentKeterangan);
-        
+
         // Show modal
         $('#keteranganModal').modal('show');
     }
@@ -639,23 +698,23 @@ td:last-child {
     // Handle form submission untuk keterangan
     $('#keteranganForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         var formData = $(this).serialize();
         var url = $(this).attr('action');
-        
+
         // Show loading state
         var submitBtn = $(this).find('button[type="submit"]');
         var originalText = submitBtn.html();
         submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>Menyimpan...');
         submitBtn.prop('disabled', true);
-        
+
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
             success: function(response) {
                 $('#keteranganModal').modal('hide');
-                
+
                 // Reload page to show updated data
                 setTimeout(function() {
                     location.reload();
@@ -666,7 +725,7 @@ td:last-child {
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMsg = xhr.responseJSON.message;
                 }
-                
+
                 $('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
                   '<span aria-hidden="true">&times;</span></button>' +
@@ -684,26 +743,26 @@ td:last-child {
     // Handle form submission untuk roll potong
     $('#rollPotongForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         var formData = $(this).serialize();
         var url = $(this).attr('action');
 
         console.log(formData, url);
-        
-        
+
+
         // Show loading state
         var submitBtn = $(this).find('button[type="submit"]');
         var originalText = submitBtn.html();
         submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>Menyimpan...');
         submitBtn.prop('disabled', true);
-        
+
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
             success: function(response) {
                 $('#rollPotongModal').modal('hide');
-                
+
                 // Reload page to show updated data
                 setTimeout(function() {
                     location.reload();
@@ -720,7 +779,7 @@ td:last-child {
                         errorMsg += errors[key][0] + ' ';
                     });
                 }
-                
+
                 $('<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
                   '<span aria-hidden="true">&times;</span></button>' +
@@ -739,29 +798,29 @@ td:last-child {
     document.getElementById('exportInventoryBtn').addEventListener('click', function() {
         const btn = this;
         const originalContent = btn.innerHTML;
-        
+
         // Show loading state
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i><span>Mengexport...</span>';
-        
+
         // Get current filter values
         const searchParam = '{{ request("search") }}';
         const supplierParam = '{{ request("supplier") }}';
         const jenisParam = '{{ request("jenis") }}';
-        
+
         // Create form for export
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '{{ route("inventory.export") }}';
         form.style.display = 'none';
-        
+
         // Add CSRF token
         const csrfInput = document.createElement('input');
         csrfInput.type = 'hidden';
         csrfInput.name = '_token';
         csrfInput.value = '{{ csrf_token() }}';
         form.appendChild(csrfInput);
-        
+
         // Add search parameter
         if (searchParam) {
             const searchInput = document.createElement('input');
@@ -770,7 +829,7 @@ td:last-child {
             searchInput.value = searchParam;
             form.appendChild(searchInput);
         }
-        
+
         // Add supplier filter
         if (supplierParam) {
             const supplierInput = document.createElement('input');
@@ -779,7 +838,7 @@ td:last-child {
             supplierInput.value = supplierParam;
             form.appendChild(supplierInput);
         }
-        
+
         // Add jenis filter
         if (jenisParam) {
             const jenisInput = document.createElement('input');
@@ -788,11 +847,11 @@ td:last-child {
             jenisInput.value = jenisParam;
             form.appendChild(jenisInput);
         }
-        
+
         // Submit form
         document.body.appendChild(form);
         form.submit();
-        
+
         // Restore button state after a delay
         setTimeout(() => {
             btn.disabled = false;

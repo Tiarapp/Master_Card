@@ -17,7 +17,19 @@ class InventoryController extends Controller
     public function index(Request $request)
     {
         $inventories = new Inventory();
-        $inventories = $inventories->with(['supplier', 'potongan']);
+        $inventories = $inventories
+            ->with([
+                'supplier',
+                'potongan',
+                'materialBookings' => function ($query) {
+                    $query->active()->with(['requirement.corrDetail.corrMaster','requirement.corrDetail.opi']);
+                },
+            ])
+            ->withSum([
+                'materialBookings as booked_quantity' => function ($query) {
+                    $query->active();
+                },
+            ], 'qty_booked');
 
         // Apply search filter
         if ($request->search) {
@@ -55,7 +67,21 @@ class InventoryController extends Controller
         $inventories = $inventories->orderBy('tanggal_masuk', 'desc')
                        ->orderBy('kode_internal', 'desc')
                        ->paginate(20);
-        
+
+        $inventoryBookingDetails = $inventories->getCollection()->mapWithKeys(function ($inventory) {
+            return [$inventory->id => $inventory->materialBookings->map(function ($booking) {
+                $requirement = $booking->requirement;
+
+                return [
+                    'kode_corr' => data_get($requirement, 'corrDetail.corrMaster.kode_corr', '-'),
+                    'opi' => data_get($requirement, 'corrDetail.opi.NoOPI', '-'),
+                    'layer_no' => optional($requirement)->layer_no ?? '-',
+                    'material' => trim((optional($requirement)->jenis ?? '-') . ' / ' . (optional($requirement)->gsm ?? '-') . ' GSM / ' . (optional($requirement)->lebar_roll ?? '-') . ' mm'),
+                    'qty_booked' => $booking->qty_booked,
+                ];
+            })->values()];
+        });
+
         // Get data for filters
         $supplier = SupplierRoll::orderBy('name')->get();
         $gsmOptions = Inventory::select('gsm')->distinct()->whereNotNull('gsm')->orderBy('gsm')->pluck('gsm');
@@ -67,7 +93,8 @@ class InventoryController extends Controller
             'supplier' => $supplier,
             'gsmOptions' => $gsmOptions,
             'lebarOptions' => $lebarOptions,
-            'jenisOptions' => $jenisOptions
+            'jenisOptions' => $jenisOptions,
+            'inventoryBookingDetails' => $inventoryBookingDetails,
         ];
 
         return view('admin.inventory.index', $data);
@@ -132,7 +159,7 @@ class InventoryController extends Controller
     public function update(Request $request, $id)
     {
         $inventory = Inventory::findOrFail($id);
-        
+
         // Validate the request
         $request->validate([
             'description' => 'nullable|string|max:500',
@@ -179,10 +206,10 @@ class InventoryController extends Controller
         try {
             // Use custom import class for full inventory import
             $import = new InventoryImport();
-            
+
             // Get temporary file path
             $filePath = $request->file('file')->getPathname();
-            
+
             // Process import
             $import->import($filePath);
 
@@ -204,7 +231,7 @@ class InventoryController extends Controller
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessage = "Validasi gagal pada baris: ";
-            
+
             foreach ($failures as $failure) {
                 $errorMessage .= "Baris {$failure->row()}: " . implode(', ', $failure->errors()) . "; ";
             }
@@ -231,10 +258,10 @@ class InventoryController extends Controller
         try {
             // Use custom import class that saves RGB codes directly
             $import = new InventoryUpdateWithRgbImport();
-            
+
             // Get temporary file path
             $filePath = $request->file('file')->getPathname();
-            
+
             // Process import
             $import->import($filePath);
 
@@ -256,7 +283,7 @@ class InventoryController extends Controller
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessage = "Validasi gagal pada baris: ";
-            
+
             foreach ($failures as $failure) {
                 $errorMessage .= "Baris {$failure->row()}: " . implode(', ', $failure->errors()) . "; ";
             }
@@ -280,7 +307,7 @@ class InventoryController extends Controller
         // Sample data untuk template - menggunakan data inventory yang ada
         $sampleInventories = Inventory::limit(3)->get(['kode_internal']);
         $sampleData = [];
-        
+
         foreach ($sampleInventories as $index => $inventory) {
             $sampleData[] = [
                 'kode_internal' => $inventory->kode_internal,
@@ -292,7 +319,7 @@ class InventoryController extends Controller
                 'rct_md' => number_format(180 + ($index * 10), 2, '.', '')
             ];
         }
-        
+
         // Jika tidak ada inventory, gunakan contoh default
         if (empty($sampleData)) {
             $sampleData = [
@@ -310,15 +337,15 @@ class InventoryController extends Controller
 
         return Excel::download(new class($sampleData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
             private $data;
-            
+
             public function __construct($data) {
                 $this->data = collect($data);
             }
-            
+
             public function collection() {
                 return $this->data;
             }
-            
+
             public function headings(): array {
                 return [
                     'kode_internal',
@@ -343,7 +370,7 @@ class InventoryController extends Controller
         // Sample data untuk template inventory lengkap
         $suppliers = SupplierRoll::limit(3)->get(['id', 'name']);
         $sampleData = [];
-        
+
         foreach ($suppliers as $index => $supplier) {
             $sampleData[] = [
                 'tanggal_masuk' => date('Y-m-d'),
@@ -361,7 +388,7 @@ class InventoryController extends Controller
                 'description' => 'Roll kertas ' . ($index + 1)
             ];
         }
-        
+
         // Jika tidak ada supplier, gunakan contoh default
         if (empty($sampleData)) {
             $sampleData = [
@@ -385,15 +412,15 @@ class InventoryController extends Controller
 
         return Excel::download(new class($sampleData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
             private $data;
-            
+
             public function __construct($data) {
                 $this->data = collect($data);
             }
-            
+
             public function collection() {
                 return $this->data;
             }
-            
+
             public function headings(): array {
                 return [
                     'tanggal_masuk',
@@ -419,7 +446,7 @@ class InventoryController extends Controller
         // Group by jenis, gsm, and lebar with quantity sum
         $summaryQuery = Inventory::select(
             'jenis',
-            'gsm', 
+            'gsm',
             'lebar',
             DB::raw('SUM(quantity) as total_quantity'),
             DB::raw('COUNT(*) as total_rolls'),
@@ -434,11 +461,11 @@ class InventoryController extends Controller
         if ($request->jenis_filter) {
             $summaryQuery->where('jenis', $request->jenis_filter);
         }
-        
+
         if ($request->gsm_filter) {
             $summaryQuery->where('gsm', $request->gsm_filter);
         }
-        
+
         if ($request->lebar_filter) {
             $summaryQuery->where('lebar', $request->lebar_filter);
         }
