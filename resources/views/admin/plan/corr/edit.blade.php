@@ -135,13 +135,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Kode Planning</label>
-                                    <input type="text" class="form-control" name="kodeplan" id="kodeplan" value="{{ $corrMaster->kode_plan }}" readonly>
+                                    <input type="text" class="form-control" name="kodeplan" id="kodeplan" value="{{ $corrMaster->kode_corr }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Tanggal Produksi</label>
-                                    <input type="date" class="form-control" name="tgl" id="tgl" value="{{ $corrMaster->tgl }}" required>
+                                    <input type="date" class="form-control" name="tgl" id="tgl" value="{{ date('Y-m-d', strtotime($corrMaster->tanggal_produksi)) }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">

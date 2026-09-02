@@ -45,6 +45,11 @@ class CorrMaterialBookingController extends Controller
         return response()->json(['selected' => $this->service->autoSelectRolls($requirement)]);
     }
 
+    public function autoSelectAll(CorrDetail $detail)
+    {
+        return response()->json(['selected' => $this->service->autoSelectForDetail($detail)]);
+    }
+
     public function book(Request $request, CorrMaterialRequirement $requirement)
     {
         $data = $request->validate([
@@ -56,6 +61,31 @@ class CorrMaterialBookingController extends Controller
         try {
             $this->service->createBooking($requirement, $data['selections']);
             return redirect()->back()->with('success', 'Booking roll berhasil dikonfirmasi.');
+        } catch (\InvalidArgumentException $exception) {
+            return redirect()->back()->withInput()->withErrors(['booking' => $exception->getMessage()]);
+        }
+    }
+
+    public function bookAll(Request $request, CorrDetail $detail)
+    {
+        $data = $request->validate([
+            'selections' => 'required|array|min:1',
+            'selections.*' => 'array|min:1',
+            'selections.*.*.inventory_id' => 'required|integer|exists:inventories,id',
+            'selections.*.*.qty_booked' => 'required|numeric|gt:0',
+        ]);
+
+        $requirementIds = $detail->materialRequirements()->pluck('id')->map(function ($id) {
+            return (string) $id;
+        })->all();
+
+        if (array_diff(array_keys($data['selections']), $requirementIds)) {
+            return redirect()->back()->withErrors(['booking' => 'Requirement booking tidak sesuai dengan planning ini.']);
+        }
+
+        try {
+            $this->service->createBookings($data['selections']);
+            return redirect()->back()->with('success', 'Seluruh booking roll berhasil dikonfirmasi.');
         } catch (\InvalidArgumentException $exception) {
             return redirect()->back()->withInput()->withErrors(['booking' => $exception->getMessage()]);
         }

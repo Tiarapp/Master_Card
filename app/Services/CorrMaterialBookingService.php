@@ -108,6 +108,54 @@ class CorrMaterialBookingService
         return $selected;
     }
 
+    public function autoSelectForDetail($detail)
+    {
+        $selectedRollIds = [];
+
+        return $detail->materialRequirements()->orderBy('layer_no')->get()->mapWithKeys(function ($requirement) use (&$selectedRollIds) {
+            $remaining = $requirement->remaining;
+            $selected = [];
+
+            foreach ($this->getAvailableRolls($requirement) as $roll) {
+                if ($remaining <= 0) {
+                    break;
+                }
+
+                if (isset($selectedRollIds[$roll->id])) {
+                    continue;
+                }
+
+                $quantity = min($remaining, (float) $roll->available_qty);
+
+                if ($quantity > 0) {
+                    $selected[] = ['inventory_id' => $roll->id, 'qty_booked' => $quantity];
+                    $selectedRollIds[$roll->id] = true;
+                    $remaining -= $quantity;
+                }
+            }
+
+            return [$requirement->id => $selected];
+        });
+    }
+
+    public function createBookings(array $selectionsByRequirement)
+    {
+        return DB::transaction(function () use ($selectionsByRequirement) {
+            $created = collect();
+
+            foreach ($selectionsByRequirement as $requirementId => $selections) {
+                if (!$selections) {
+                    continue;
+                }
+
+                $requirement = CorrMaterialRequirement::findOrFail($requirementId);
+                $created = $created->merge($this->createBooking($requirement, $selections));
+            }
+
+            return $created;
+        });
+    }
+
     public function createBooking(CorrMaterialRequirement $requirement, array $selections)
     {
         return DB::transaction(function () use ($requirement, $selections) {
