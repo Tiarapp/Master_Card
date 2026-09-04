@@ -66,6 +66,7 @@
               <th scope="col">Tujuan</th>
               <th scope="col">Tanggal Keluar 2</th>
               <th scope="col">Lama Proses</th>
+              <th scope="col">Keperluan</th>
               <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
@@ -78,7 +79,11 @@
                     <td>{{ $data->date_in }}</td>
                     <td>{{ $data->masterdata ? $data->masterdata->name : '' }}</td>
                     <td>{{ $data->masterdata ? $data->masterdata->city : '' }}</td>
-                    <td>{{ $data->date_out ?? "Belum Check Out" }}</td>
+                    <td>{{ $data->date_out ?? '' }}
+                        @if(!$data->date_out)
+                            <button type="button" class="btn btn-primary check-vehicle" data-vehicle-number="{{ $data->vehicle_number }}">Cek</button>
+                        @endif
+                    </td>
                     <td>
                         @if($data->date_out)
                             @php
@@ -95,6 +100,7 @@
                         @endif
                     </td>
                     <td>{{ ucfirst($data->status) }}</td>
+                    <td>{{ ucfirst($data->status_load) }}</td>
                     <td>
                         <button type="button" class="btn btn-info view-photos" data-id="{{ $data->id }}">View</button>
                         {{-- Add other action buttons if needed --}}
@@ -156,8 +162,10 @@
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Status</label>
                             <select class="custom-select" name="status" id="status">
-                                <option value="load">Load</option>
-                                <option value="unload">Unload</option>
+                                <option value="Muat Barang">Muat Barang</option>
+                                <option value="Bongkar Barang">Bongkar Barang</option>
+                                <option value="Proyek/Maintenance">Proyek/Maintenance</option>
+                                <option value="Antri Muat">Antri Muat</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -302,6 +310,11 @@
             } else {
                 alert("Please enter a vehicle number.");
             }
+        });
+
+        $(".check-vehicle").on("click", function() {
+            $("#nopol").val($(this).data("vehicle-number"));
+            $(".cek").trigger("click");
         });
 
         $(".type").on("change", function() {

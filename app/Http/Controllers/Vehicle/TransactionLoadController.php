@@ -25,9 +25,9 @@ class TransactionLoadController extends Controller
                 });
         }
 
-        $vehicle = $query->orderByRaw("CASE WHEN status = 'finish' THEN 2 ELSE 1 END")
-            ->orderByRaw("CASE WHEN status = 'finish' THEN date_in END DESC")
-            ->orderByRaw("CASE WHEN status != 'finish' THEN date_in END ASC")
+        $vehicle = $query->orderByRaw("CASE WHEN status_load = 'Selesai' THEN 2 ELSE 1 END")
+            ->orderByRaw("CASE WHEN status_load = 'Selesai' THEN date_in END DESC")
+            ->orderByRaw("CASE WHEN status_load != 'Selesai' THEN date_in END ASC")
             ->paginate(10);
 
         $data = [
@@ -43,7 +43,7 @@ class TransactionLoadController extends Controller
         $request->validate([
             'driver_name' => 'required|string|max:255',
             'vehicle_number' => 'required|string|max:255',
-            'status' => 'required|in:load,unload',
+            'status' => 'required',
             // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
         DB::beginTransaction();
@@ -55,6 +55,7 @@ class TransactionLoadController extends Controller
             $transactionLoad->destination = $request->input('destination') ?? null;
             $transactionLoad->type = $request->input('type') ?? null;
             $transactionLoad->status = $request->input('status');
+            $transactionLoad->status_load = 'Proses';
             $transactionLoad->date_in = now();
             $transactionLoad->save();
 
@@ -90,7 +91,7 @@ class TransactionLoadController extends Controller
             'masterdata_id' => 'required|exists:masterdatas,id',
             'destination' => 'required|string|max:255',
             'type' => 'required|in:customer,supplier',
-            'status' => 'required|in:load,unload',
+            // 'status' => 'required|in:load,unload',
         ]);
 
         DB::beginTransaction();
@@ -101,7 +102,7 @@ class TransactionLoadController extends Controller
             $transactionLoad->masterdata_id = $request->input('masterdata_id');
             $transactionLoad->destination = $request->input('destination');
             $transactionLoad->type = $request->input('type');
-            $transactionLoad->status = 'finish'; // Set status to 'finish' when updating
+            $transactionLoad->status_load = 'Selesai';
             $transactionLoad->date_out = now();
             $transactionLoad->save();
 
