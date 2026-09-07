@@ -828,8 +828,16 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" name="gambar" id="gambar">
+                                            <input type="file" name="gambar" id="gambar" accept="image/jpeg,image/png">
                                             <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
+                                            <div class="mt-2">
+                                                <img
+                                                    id="gambar-preview"
+                                                    src="{{ $mc->gambar ? asset('upload/' . $mc->gambar) : '' }}"
+                                                    alt="Preview gambar Master Card"
+                                                    style="{{ $mc->gambar ? '' : 'display: none;' }} max-width: 100%; max-height: 240px; object-fit: contain;"
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -862,6 +870,23 @@
 <script type="text/javascript">
     $(document).ready(function() {
         getKodeBarang();
+
+        $('#gambar').on('change', function() {
+            var preview = document.getElementById('gambar-preview');
+            var file = this.files && this.files[0];
+
+            if (!file) {
+                preview.style.display = 'none';
+                preview.removeAttribute('src');
+                return;
+            }
+
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            preview.onload = function() {
+                URL.revokeObjectURL(preview.src);
+            };
+        });
     });
 
     // Ensure jQuery is loaded before proceeding
