@@ -828,7 +828,10 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" name="gambar" id="gambar" accept="image/jpeg,image/png" value="{{ $mc->gambar }}">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="gambar" id="gambar" accept="image/jpeg,image/png">
+                                                <label class="custom-file-label" for="gambar" id="gambar-label">{{ $mc->gambar ?: 'Pilih gambar' }}</label>
+                                            </div>
                                             <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
                                             <div class="mt-2">
                                                 <img
@@ -873,14 +876,15 @@
 
         $('#gambar').on('change', function() {
             var preview = document.getElementById('gambar-preview');
+            var label = document.getElementById('gambar-label');
             var file = this.files && this.files[0];
 
             if (!file) {
-                preview.style.display = 'none';
-                preview.removeAttribute('src');
+                label.textContent = document.getElementById('old').value || 'Pilih gambar';
                 return;
             }
 
+            label.textContent = file.name;
             preview.src = URL.createObjectURL(file);
             preview.style.display = 'block';
             preview.onload = function() {
