@@ -828,7 +828,7 @@
                                             <label class="control-label">Gambar</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="file" name="gambar" id="gambar" accept="image/jpeg,image/png">
+                                            <input type="file" name="gambar" id="gambar" accept="image/jpeg,image/png" value="{{ $mc->gambar }}">
                                             <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
                                             <div class="mt-2">
                                                 <img
