@@ -1262,7 +1262,7 @@
             document.getElementById('creasCorr').value = Box['sizeCreasCorr'];
             document.getElementById('creasConv').value = Box['sizeCreasConv'];
             document.getElementById('flute').value = Box['flute'];
-
+x
             $('.berat-roll').hide();
 
             if (Box['tipebox'] == 'B1' || Box['tipebox'] == 'B3') {
@@ -1298,14 +1298,14 @@
                 document.getElementById("luasSheetBoxProd").value = luasProd.toFixed(3);
             } else if (Box['tipebox'] == 'DC') {
                 $('.berat-roll').hide();
-                document.getElementById("panjangSheet").value = null;
-                document.getElementById("lebarSheet").value = null;
-                document.getElementById("luasSheet").value = null;
-                document.getElementById("panjangSheetBox").value = null;
-                document.getElementById("lebarSheetBox").value = null;
-                document.getElementById("luasSheetBox").value = null;
-                document.getElementById("subsKontrak").value = null;
-                document.getElementById("subsProduksi").value = null;
+                // document.getElementById("panjangSheet").value = null;
+                // document.getElementById("lebarSheet").value = null;
+                // document.getElementById("luasSheet").value = null;
+                // document.getElementById("panjangSheetBox").value = null;
+                // document.getElementById("lebarSheetBox").value = null;
+                // document.getElementById("luasSheetBox").value = null;
+                // document.getElementById("subsKontrak").value = null;
+                // document.getElementById("subsProduksi").value = null;
             } else {
                 $('.berat-roll').show();
                 document.getElementById("panjangSheet").value = null;

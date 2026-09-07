@@ -26,7 +26,7 @@ class TransactionLoadController extends Controller
         }
 
         $vehicle = $query->orderByRaw("CASE WHEN status_load = 'Selesai' THEN 2 ELSE 1 END")
-            ->orderByRaw("CASE WHEN status_load = 'Selesai' THEN date_in END DESC")
+            ->orderByRaw("CASE WHEN status_load = 'Selesai' THEN date_out END DESC")
             ->orderByRaw("CASE WHEN status_load != 'Selesai' THEN date_in END ASC")
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class TransactionLoadController extends Controller
             'vehicle' => $vehicle,
             'search' => $search,
         ];
-
+    
         return view('admin.vehicle.index', $data);
     }
 

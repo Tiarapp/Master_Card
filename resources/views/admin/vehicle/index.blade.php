@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <table class="table table-bordered" id="data_colorcombine">
+        <table class="table table-bordered" id="data_vehicle">
           <thead>
             <tr>
               <th scope="col">Nomer Kendaraan</th>
@@ -226,7 +226,7 @@
   <!-- DataTables -->
   <script>
     $(document).ready(function() {
-        $("#data_colorcombine").DataTable({
+        $("#data_vehicle").DataTable({
             order: [],
             paging: false,
             searching: false,
