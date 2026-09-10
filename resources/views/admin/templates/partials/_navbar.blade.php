@@ -1,3 +1,39 @@
+<style>
+  @media (max-width: 767.98px) {
+    .main-header {
+      min-height: 56px;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .main-header .navbar-nav .nav-link {
+      padding: 0.5rem 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .main-header .navbar-nav .nav-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .main-header .navbar-nav .dropdown-menu {
+      min-width: 220px;
+      font-size: 0.85rem;
+    }
+
+    .main-header .badge {
+      font-size: 0.6rem;
+      padding: 0.28rem 0.4rem;
+    }
+
+    .main-header .nav-user-label {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+</style>
+
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
@@ -8,18 +44,13 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="/admin" class="nav-link">Home</a>
     </li>
-    <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" class="nav-link">Contact</a>
-    </li>
   </ul>
-
-  
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">
     <!-- User Dropdown -->
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+      <a class="nav-link dropdown-toggle nav-user-label" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
         <i class="fas fa-user"></i> {{ Auth::user()->name }}
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -40,12 +71,11 @@
         </form>
       </div>
     </li>
-    
-    {{-- @if (Auth::user()->divisi_id == 2) --}}
+
     <!-- Notifications Dropdown -->
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-        <i class="fas fa-bell"></i> Notifications 
+        <i class="fas fa-bell"></i>
         <span class="badge badge-danger" id="notificationCount">0</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notificationList">
@@ -56,17 +86,11 @@
         </a>
       </div>
     </li>
-    {{-- @endif --}}
-    
+
     <!-- Fullscreen Button -->
     <li class="nav-item">
       <a class="nav-link" data-widget="fullscreen" href="#" role="button">
         <i class="fas fa-expand-arrows-alt"></i>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-        <i class="fas fa-th-large"></i>
       </a>
     </li>
   </ul>

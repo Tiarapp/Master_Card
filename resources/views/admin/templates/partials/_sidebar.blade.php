@@ -1,3 +1,76 @@
+<style>
+  @media (max-width: 767.98px) {
+    .main-sidebar {
+      width: 220px !important;
+    }
+
+    .main-sidebar .brand-link {
+      min-height: 56px;
+      padding: 0.55rem 0.75rem;
+    }
+
+    .main-sidebar .brand-text {
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .main-sidebar .brand-image {
+      width: 28px !important;
+      height: 28px !important;
+      margin-right: 0.35rem !important;
+    }
+
+    .main-sidebar .user-panel {
+      padding: 0.6rem 0.5rem;
+      margin-bottom: 0.5rem !important;
+    }
+
+    .main-sidebar .user-panel .image {
+      margin-right: 0.5rem;
+    }
+
+    .main-sidebar .user-panel .image img {
+      width: 34px;
+      height: 34px;
+    }
+
+    .main-sidebar .user-panel .info {
+      font-size: 0.76rem;
+      line-height: 1.3;
+    }
+
+    .main-sidebar .nav-sidebar .nav-link {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .main-sidebar .nav-sidebar .nav-icon {
+      margin-right: 0.45rem;
+      font-size: 0.9rem;
+    }
+
+    .main-sidebar .nav-sidebar .nav-treeview .nav-link {
+      padding-left: 1.3rem;
+      font-size: 0.75rem;
+    }
+
+    .main-sidebar .form-inline {
+      padding: 0 0.5rem;
+    }
+
+    .main-sidebar .form-control-sidebar {
+      height: 36px;
+      font-size: 0.8rem;
+    }
+
+    .main-sidebar .btn-sidebar {
+      height: 36px;
+      width: 36px;
+      padding: 0;
+    }
+  }
+</style>
+
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
