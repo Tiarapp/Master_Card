@@ -1,7 +1,14 @@
 <style>
+  @media (max-width: 991.98px) {
+    .main-sidebar {
+      margin-left: -250px !important;
+    }
+  }
+
   @media (max-width: 767.98px) {
     .main-sidebar {
       width: 220px !important;
+      margin-left: -220px !important;
     }
 
     .main-sidebar .brand-link {
