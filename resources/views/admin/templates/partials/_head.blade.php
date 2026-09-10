@@ -1,5 +1,6 @@
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ asset('asset/plugins/summernote/summernote-bs4.min.css') }}">
 
   <!-- Select2 -->
@@ -74,53 +75,53 @@
       width: 250px;
       transition: margin-left 0.3s ease-in-out;
     }
-    
+
     /* Content wrapper positioning */
     .content-wrapper {
       margin-left: 250px;
       transition: margin-left 0.3s ease-in-out;
       min-height: 100vh;
     }
-    
+
     /* Main header positioning */
     .main-header {
       margin-left: 250px;
       transition: margin-left 0.3s ease-in-out;
     }
-    
+
     /* Sidebar collapsed state */
     .sidebar-collapse .main-sidebar {
       margin-left: -250px;
     }
-    
+
     .sidebar-collapse .content-wrapper {
       margin-left: 0;
     }
-    
+
     .sidebar-collapse .main-header {
       margin-left: 0;
     }
-    
+
     /* Mobile responsive */
     @media (max-width: 991.98px) {
       .main-sidebar {
         margin-left: -250px;
       }
-      
+
       .content-wrapper {
         margin-left: 0 !important;
       }
-      
+
       .main-header {
         margin-left: 0 !important;
       }
-      
+
       body:not(.sidebar-collapse) .main-sidebar {
         margin-left: 0;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
       }
     }
-    
+
     /* Sidebar menu styling */
     .nav-sidebar .nav-item .nav-link {
       cursor: pointer;
@@ -129,40 +130,40 @@
       border-radius: 0.25rem;
       margin: 0.125rem 0.5rem;
     }
-    
+
     .nav-sidebar .nav-item .nav-link:hover {
       background-color: rgba(255,255,255,.1);
       color: #fff;
     }
-    
+
     /* Parent menu styling */
     .nav-sidebar > .nav-item > .nav-link {
       font-weight: 600;
       font-size: 0.875rem;
       padding: 0.75rem 1rem;
     }
-    
+
     .nav-sidebar > .nav-item > .nav-link .nav-icon {
       font-size: 1rem;
       margin-right: 0.5rem;
       width: 1.5rem;
       text-align: center;
     }
-    
+
     /* First level child (submenu) styling */
     .nav-treeview > .nav-item > .nav-link {
       padding: 0.5rem 1rem 0.5rem 2.5rem;
       font-size: 0.8125rem;
       color: rgba(255,255,255,.7);
     }
-    
+
     .nav-treeview > .nav-item > .nav-link .nav-icon {
       font-size: 0.875rem;
       margin-right: 0.5rem;
       width: 1rem;
       text-align: center;
     }
-    
+
     /* Second level child (nested submenu) styling */
     .nav-treeview .nav-treeview > .nav-item > .nav-link {
       padding: 0.375rem 1rem 0.375rem 4rem;
@@ -170,20 +171,20 @@
       color: rgba(255,255,255,.6);
       position: relative;
     }
-    
+
     .nav-treeview .nav-treeview > .nav-item > .nav-link::before {
       content: "›";
       position: absolute;
       left: 3rem;
       color: rgba(255,255,255,.4);
     }
-    
+
     .nav-treeview .nav-treeview > .nav-item > .nav-link .nav-icon {
       font-size: 0.75rem;
       margin-right: 0.5rem;
       width: 0.875rem;
     }
-    
+
     /* Treeview menu styling */
     .nav-treeview {
       display: none;
@@ -191,12 +192,12 @@
       border-radius: 0.25rem;
       margin: 0.125rem 0.5rem;
     }
-    
+
     .nav-item.menu-open > .nav-treeview {
       display: block;
       animation: slideDown 0.3s ease-out;
     }
-    
+
     @keyframes slideDown {
       from {
         opacity: 0;
@@ -207,7 +208,7 @@
         max-height: 500px;
       }
     }
-    
+
     /* Active menu states */
     .nav-sidebar .nav-item .nav-link.active,
     .nav-sidebar .nav-item .nav-link.current-page {
@@ -216,58 +217,58 @@
       box-shadow: 0 2px 4px rgba(0,123,255,.3);
       font-weight: 600;
     }
-    
+
     /* Parent menu open indicator */
     .nav-item.menu-open > .nav-link {
       background-color: rgba(255,255,255,.05);
       color: #fff;
     }
-    
+
     .nav-item.menu-open > .nav-link .right {
       transform: rotate(-90deg);
       transition: transform 0.3s ease;
     }
-    
+
     .nav-item > .nav-link .right {
       transition: transform 0.3s ease;
     }
-    
+
     /* Hover effects with different intensity */
     .nav-sidebar > .nav-item > .nav-link:hover {
       background-color: rgba(255,255,255,.15);
       transform: translateX(2px);
       transition: all 0.2s ease;
     }
-    
+
     .nav-treeview > .nav-item > .nav-link:hover {
       background-color: rgba(255,255,255,.1);
       color: rgba(255,255,255,.9);
       padding-left: 2.75rem;
       transition: all 0.2s ease;
     }
-    
+
     .nav-treeview .nav-treeview > .nav-item > .nav-link:hover {
       background-color: rgba(255,255,255,.08);
       color: rgba(255,255,255,.8);
       padding-left: 4.25rem;
       transition: all 0.2s ease;
     }
-    
+
     /* Icon colors for different levels */
     .nav-sidebar > .nav-item > .nav-link .nav-icon {
       color: #ffc107;
     }
-    
+
     .nav-treeview > .nav-item > .nav-link .nav-icon {
       color: #17a2b8;
     }
-    
+
     .nav-treeview .nav-treeview > .nav-item > .nav-link .nav-icon {
       color: #6c757d;
     }
-    
+
     /* Current page indicator - removed separate styling, will use same as active */
-    
+
     .nav-link.current-page::after {
       content: "";
       position: absolute;
@@ -279,17 +280,17 @@
       background-color: #fff;
       border-radius: 50%;
     }
-    
+
     /* Ensure sidebar is always visible when not collapsed */
     body:not(.sidebar-collapse) .main-sidebar {
       margin-left: 0;
     }
-    
+
     /* Fix for pushmenu button */
     [data-widget="pushmenu"] {
       cursor: pointer;
     }
-    
+
     /* Loading state prevention */
     .nav-sidebar * {
       -webkit-user-select: none;

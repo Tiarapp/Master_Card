@@ -8,21 +8,305 @@
   $periode = '';
   $hasil = '';
 
-  for ($i=0; $i < count($all_periode) ; $i++) { 
+  for ($i=0; $i < count($all_periode) ; $i++) {
     if ($periode == '') {
       $periode = $all_periode[$i];
-    } else {    
+    } else {
       $periode = $periode.'/'.$all_periode[$i];
     }
   }
-  for ($i=0; $i < count($data) ; $i++) { 
+  for ($i=0; $i < count($data) ; $i++) {
     if ($hasil == '') {
       $hasil = $data[$i]->kirim;
-    } else {    
+    } else {
       $hasil = $hasil.'/'.$data[$i]->kirim;
     }
   }
 ?>
+
+<style>
+  .mobile-dashboard-menu {
+    display: none;
+  }
+
+  .mobile-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .mobile-menu-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 108px;
+    padding: 0.7rem 0.35rem;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: linear-gradient(180deg, var(--card-bg) 0%, rgba(255,255,255,0.98) 100%);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    color: #0f172a;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-menu-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+    color: #0f172a;
+  }
+
+  .mobile-menu-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.7);
+    color: var(--card-accent);
+    font-size: 1.15rem;
+    margin-bottom: 0.45rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+  }
+
+  .mobile-menu-label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+  }
+
+  .mobile-menu-group {
+    margin-bottom: 0.9rem;
+  }
+
+  .mobile-menu-group-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin: 0 0 0.45rem 0.15rem;
+    font-weight: 800;
+  }
+
+  @media (max-width: 767.98px) {
+    .mobile-dashboard-menu {
+      display: block;
+    }
+
+    .mobile-menu-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .mobile-menu-card {
+      min-height: 88px;
+      padding: 0.5rem 0.25rem;
+      border-radius: 11px;
+    }
+
+    .mobile-menu-icon {
+      width: 34px;
+      height: 34px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-bottom: 0.35rem;
+    }
+
+    .mobile-menu-label {
+      font-size: 0.56rem;
+      line-height: 1.15;
+    }
+
+    .mobile-menu-group-title {
+      font-size: 0.62rem;
+      margin-bottom: 0.3rem;
+    }
+  }
+
+</style>
+
+@php
+    $dashboardGroups = [
+        [
+            'group' => 'barang',
+            'label' => 'Barang',
+            'items' => [
+                ['label' => 'Data Barang', 'key' => 'barang', 'icon' => 'fa-boxes-stacked', 'route' => route('barang.indexnew'), 'accent' => '#2563eb', 'bg' => '#e0ecff'],
+            ],
+        ],
+        [
+            'group' => 'opi',
+            'label' => 'OPI',
+            'items' => [
+                ['label' => 'OPI', 'key' => 'opi', 'icon' => 'fa-clipboard-check', 'route' => route('opinew'), 'accent' => '#0f766e', 'bg' => '#dff9f6'],
+            ],
+        ],
+        [
+            'group' => 'mastercard',
+            'label' => 'Master Card',
+            'items' => [
+                ['label' => 'Master Card', 'key' => 'mastercard', 'icon' => 'fa-file-invoice', 'route' => route('mastercard.index_new'), 'accent' => '#dc2626', 'bg' => '#ffe3e3'],
+            ],
+        ],
+        [
+            'group' => 'accounting',
+            'label' => 'Accounting',
+            'items' => [
+                ['label' => 'Data Customer', 'key' => 'accounting.cust', 'icon' => 'fa-user', 'route' => route('acc.cust'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Data Vendor TT', 'key' => 'accounting.vendortt', 'icon' => 'fa-building-columns', 'route' => route('acc.vendortt'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Data Piutang', 'key' => 'accounting.piutang', 'icon' => 'fa-wallet', 'route' => route('acc.piutang'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Export Kontrak', 'key' => 'accounting.kontrak', 'icon' => 'fa-file-export', 'route' => route('acc.kontrak.index'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Print Alamat', 'key' => 'accounting.alamat', 'icon' => 'fa-map-location-dot', 'route' => route('data.alamat'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Import JU', 'key' => 'accounting.finance', 'icon' => 'fa-file-import', 'route' => route('finance'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Approve MOD', 'key' => 'accounting.mod', 'icon' => 'fa-check-to-slot', 'route' => route('acc.mod.index'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+                ['label' => 'Approve OPI', 'key' => 'accounting.opi', 'icon' => 'fa-clipboard-check', 'route' => route('acc.opi'), 'accent' => '#7c3aed', 'bg' => '#efe7ff'],
+            ],
+        ],
+        [
+            'group' => 'inventory',
+            'label' => 'Inventory',
+            'items' => [
+                ['label' => 'Retur Penjualan', 'key' => 'logistik.retur', 'icon' => 'fa-rotate-left', 'route' => route('barang.retur'), 'accent' => '#f59e0b', 'bg' => '#fff3d6'],
+                ['label' => 'BP Baru', 'key' => 'logistik.bp_baru', 'icon' => 'fa-cube', 'route' => route('fb.list.bp'), 'accent' => '#f59e0b', 'bg' => '#fff3d6'],
+                ['label' => 'BP Sheet', 'key' => 'logistik.bp_sheet', 'icon' => 'fa-sheet-plastic', 'route' => route('fb.list.bp_sheet'), 'accent' => '#f59e0b', 'bg' => '#fff3d6'],
+                ['label' => 'BP Lama', 'key' => 'logistik.bp_lama', 'icon' => 'fa-box-archive', 'route' => route('fb.list.bp_lama'), 'accent' => '#f59e0b', 'bg' => '#fff3d6'],
+                ['label' => 'Supplier', 'key' => 'inventory.supplier', 'icon' => 'fa-truck-field', 'route' => route('supplier-roll.index'), 'accent' => '#f97316', 'bg' => '#ffedd5'],
+                ['label' => 'Inventory', 'key' => 'inventory.inventory', 'icon' => 'fa-box-open', 'route' => route('inventory.index'), 'accent' => '#f97316', 'bg' => '#ffedd5'],
+                ['label' => 'BBK Roll', 'key' => 'inventory.bbk_roll', 'icon' => 'fa-clipboard-list', 'route' => route('bbk-roll.index'), 'accent' => '#f97316', 'bg' => '#ffedd5'],
+            ],
+        ],
+        [
+            'group' => 'master',
+            'label' => 'Master',
+            'items' => [
+                ['label' => 'Divisi', 'key' => 'master.divisi', 'icon' => 'fa-sitemap', 'route' => route('divisi'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Flute', 'key' => 'master.flute', 'icon' => 'fa-cubes', 'route' => route('flute'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Jenis Gram', 'key' => 'master.jenisgram', 'icon' => 'fa-ruler-combined', 'route' => route('jenisgram'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Joint', 'key' => 'master.joint', 'icon' => 'fa-link', 'route' => route('joint'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Koli', 'key' => 'master.koli', 'icon' => 'fa-box', 'route' => route('koli'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Mata Uang', 'key' => 'master.matauang', 'icon' => 'fa-money-bill-wave', 'route' => route('matauang'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Sales', 'key' => 'master.sales', 'icon' => 'fa-user-tie', 'route' => route('sales'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Satuan', 'key' => 'master.satuan', 'icon' => 'fa-balance-scale', 'route' => route('satuan'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Sheet', 'key' => 'master.sheet', 'icon' => 'fa-table-cells-large', 'route' => route('sheet'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+                ['label' => 'Supplier', 'key' => 'master.supplier', 'icon' => 'fa-truck', 'route' => route('supplier'), 'accent' => '#14b8a6', 'bg' => '#dffcf8'],
+            ],
+        ],
+        [
+            'group' => 'marketing',
+            'label' => 'Marketing',
+            'items' => [
+                ['label' => 'Tipe Box', 'key' => 'marketing.boxtype', 'icon' => 'fa-boxes', 'route' => route('boxtype'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Substance', 'key' => 'marketing.substance', 'icon' => 'fa-flask', 'route' => route('substance'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Box', 'key' => 'marketing.box', 'icon' => 'fa-cube', 'route' => route('box'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Warna', 'key' => 'marketing.warna', 'icon' => 'fa-palette', 'route' => route('warna'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Color Combine', 'key' => 'marketing.colorcombine', 'icon' => 'fa-paintbrush', 'route' => route('colorcombine'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Kontrak', 'key' => 'marketing.kontrak', 'icon' => 'fa-file-contract', 'route' => route('kontraknew'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Delivery Time', 'key' => 'marketing.dt', 'icon' => 'fa-clock', 'route' => route('dt'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Plan Kirim', 'key' => 'marketing.plan_kirim', 'icon' => 'fa-truck-fast', 'route' => route('opi.plan_kirim'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Export Intake', 'key' => 'marketing.intake', 'icon' => 'fa-file-arrow-up', 'route' => route('opi.intake'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Alokasi Karet', 'key' => 'marketing.karet', 'icon' => 'fa-clipboard-list', 'route' => route('karet.index'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Target Customer', 'key' => 'marketing.forecast', 'icon' => 'fa-chart-line', 'route' => route('forecast.tonase.index'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Form Permintaan', 'key' => 'marketing.formpermintaan', 'icon' => 'fa-pen-to-square', 'route' => route('mkt.list.formpermintaan'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'Form Mastercard', 'key' => 'marketing.formmc', 'icon' => 'fa-file-invoice', 'route' => route('mkt.list.formmc'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'MOD', 'key' => 'marketing.mod', 'icon' => 'fa-folder-open', 'route' => route('mkt.index.mod'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+                ['label' => 'List MOD by Tanggal', 'key' => 'marketing.mod_tanggal', 'icon' => 'fa-calendar-days', 'route' => route('mod.by.tanggal'), 'accent' => '#ec4899', 'bg' => '#ffe3f3'],
+            ],
+        ],
+        [
+            'group' => 'ppic',
+            'label' => 'PPIC',
+            'items' => [
+                ['label' => 'Persediaan Roll', 'key' => 'ppic.roll', 'icon' => 'fa-clipboard-list', 'route' => route('roll'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'BBM Roll', 'key' => 'ppic.bbm_roll', 'icon' => 'fa-truck', 'route' => route('roll.bbm'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'BBK Roll', 'key' => 'ppic.bbk_roll', 'icon' => 'fa-boxes-stacked', 'route' => route('bbk-roll.index'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                // ['label' => 'Retur Roll', 'key' => 'ppic.retur_roll', 'icon' => 'fa-rotate-left', 'route' => route('retur_roll'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'Warna', 'key' => 'ppic.warna', 'icon' => 'fa-palette', 'route' => route('warna'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'Plan Corrugating', 'key' => 'ppic.corrplan', 'icon' => 'fa-clipboard-check', 'route' => route('admin.corrplan.index'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'Plan Converting', 'key' => 'ppic.conv', 'icon' => 'fa-industry', 'route' => route('conv'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+                ['label' => 'Karet', 'key' => 'ppic.karet', 'icon' => 'fa-ribbon', 'route' => route('ppic.karet'), 'accent' => '#3b82f6', 'bg' => '#dfeeff'],
+            ],
+        ],
+        [
+            'group' => 'produksi',
+            'label' => 'Produksi',
+            'items' => [
+                ['label' => 'Hasil Produksi', 'key' => 'produksi.hasil', 'icon' => 'fa-industry', 'route' => route('conv.hasilflexo'), 'accent' => '#059669', 'bg' => '#dffcf1'],
+                ['label' => 'Laporan Produksi', 'key' => 'produksi.laporan', 'icon' => 'fa-chart-column', 'route' => route('lap.produksi'), 'accent' => '#059669', 'bg' => '#dffcf1'],
+            ],
+        ],
+        [
+            'group' => 'palet',
+            'label' => 'Palet',
+            'items' => [
+                ['label' => 'Surat Jalan Palet', 'key' => 'palet.sj', 'icon' => 'fa-truck-ramp-box', 'route' => route('sj_palet'), 'accent' => '#0ea5e9', 'bg' => '#dff6ff'],
+                ['label' => 'Palet', 'key' => 'palet.palet', 'icon' => 'fa-boxes', 'route' => route('palet'), 'accent' => '#0ea5e9', 'bg' => '#dff6ff'],
+            ],
+        ],
+        [
+            'group' => 'qc',
+            'label' => 'QC',
+            'items' => [
+                ['label' => 'COA', 'key' => 'qc.coa', 'icon' => 'fa-shield-check', 'route' => route('qc.index'), 'accent' => '#22c55e', 'bg' => '#dcfce7'],
+            ],
+        ],
+        [
+            'group' => 'teknik',
+            'label' => 'Teknik',
+            'items' => [
+                ['label' => 'List Barang', 'key' => 'teknik.barang', 'icon' => 'fa-screwdriver-wrench', 'route' => route('fb.list.teknik'), 'accent' => '#475569', 'bg' => '#e2e8f0'],
+            ],
+        ],
+        [
+            'group' => 'hrd_ga',
+            'label' => 'HRD & GA',
+            'items' => [
+                ['label' => 'Stationary', 'key' => 'hrd_ga.stationary', 'icon' => 'fa-user-tie', 'route' => route('stationary.barang'), 'accent' => '#a855f7', 'bg' => '#f3e8ff'],
+            ],
+        ],
+        [
+            'group' => 'vehicle.list',
+            'label' => 'Vehicle',
+            'items' => [
+                ['label' => 'Vehicle List', 'key' => 'vehicle.list', 'icon' => 'fa-truck', 'route' => route('vehicle.index'), 'accent' => '#0891b2', 'bg' => '#cffafe'],
+            ],
+        ],
+        [
+            'group' => 'reports',
+            'label' => 'Reports',
+            'items' => [
+                ['label' => 'Deadstock Report', 'key' => 'reports.deadstock', 'icon' => 'fa-chart-column', 'route' => route('admin.report.deadstock'), 'accent' => '#ef4444', 'bg' => '#fee2e2'],
+                ['label' => 'Kapasitas Gudang', 'key' => 'reports.kapasitas', 'icon' => 'fa-warehouse', 'route' => route('admin.report.kapasitas'), 'accent' => '#ef4444', 'bg' => '#fee2e2'],
+                ['label' => 'In/Out Bound', 'key' => 'reports.in_out_bound', 'icon' => 'fa-arrows-left-right', 'route' => route('admin.report.in_out_bound'), 'accent' => '#ef4444', 'bg' => '#fee2e2'],
+            ],
+        ],
+    ];
+
+    $visibleDashboardMenus = [];
+    foreach ($dashboardGroups as $group) {
+        $items = collect($group['items'])->filter(function ($item) {
+            return hasMenuAccess($item['key']);
+        })->values()->all();
+
+        if (!empty($items)) {
+            $visibleDashboardMenus[] = [
+                'group' => $group['label'],
+                'items' => $items,
+            ];
+        }
+    }
+@endphp
 
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -46,6 +330,28 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+      @if(!empty($visibleDashboardMenus))
+        <div class="mb-3 mobile-dashboard-menu">
+          @foreach($visibleDashboardMenus as $menuGroup)
+            <div class="mobile-menu-group">
+              <h6 class="mobile-menu-group-title">{{ $menuGroup['group'] }}</h6>
+              <div class="mobile-menu-grid">
+                @foreach($menuGroup['items'] as $menu)
+                  @if(hasMenuAccess($menu['key']))
+                    <a href="{{ $menu['route'] }}" class="mobile-menu-card" style="--card-accent: {{ $menu['accent'] }}; --card-bg: {{ $menu['bg'] }};">
+                      <div class="mobile-menu-icon">
+                        <i class="fa-solid {{ $menu['icon'] }}"></i>
+                      </div>
+                      <div class="mobile-menu-label">{{ $menu['label'] }}</div>
+                    </a>
+                  @endif
+                @endforeach
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
+
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-6">
@@ -110,7 +416,7 @@
         <!-- ./col -->
       </div>
       @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
-        
+
       <div class="col-md-6">
           <!-- LINE CHART -->
           <div class="card card-info">
@@ -140,7 +446,7 @@
       @if (Auth::user()->divisi_id == 13)
         <div class="col-md-6 p-3 text-left  border bg-gray-300">
           <h5 class="mb-0">Terdapat {{ count($kontrak_open) }} Kontrak yang berstatus OPEN. <a href="{{ route('kontrak.opened') }}"> click to see Details</a></h5>
-          
+
         </div>
       @endif
       @if (Auth::user()->divisi_id == 5 || Auth::user()->divisi_id == 2)
