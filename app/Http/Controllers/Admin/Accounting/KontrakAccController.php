@@ -34,17 +34,17 @@ class KontrakAccController extends Controller
         } else {
             return redirect('admin/ppic/opi')->with('success', "masukkan tanggal dengan benar!!!");
         }
-    }   
-    
+    }
+
     public function json(Request $request)
         {
 
             // dd($request->periode);
             $kontrak = Kontrak_M::where('kode', 'LIKE', '%'.$request->periode.'%')
                 ->where('status', '!=', 2)
-                ->get();           
-            
-            // dd($kontrak);
+                ->get();
+
+            dd($kontrak);
             $data = array();
             if (!empty($kontrak)) {
                 foreach ($kontrak as $kontrak)
@@ -74,25 +74,25 @@ class KontrakAccController extends Controller
 
                     $nestedData['komisi'] = $komisi;
                     $nestedData['sales'] = $kontrak->sales;
-                    
+
                     $mc = Mastercard::find($kontrak->kontrak_d->mc_id);
 
                     // $nestedData['namaBarang'] = $mc->namaBarang;
-                    
+
                     $data[] = $nestedData;
                 }
             }
 
             // dd($data);
-            
+
             $json_data = array(
-                "draw"            => intval($request->input('draw')),  
-                // "recordsTotal"    => intval($totalData),  
-                // "recordsFiltered" => intval($totalFiltered), 
+                "draw"            => intval($request->input('draw')),
+                // "recordsTotal"    => intval($totalData),
+                // "recordsFiltered" => intval($totalFiltered),
                 "data"            => $data,
             );
-            
+
             // dd($json_data);
-            echo json_encode($json_data); 
+            echo json_encode($json_data);
         }
 }
