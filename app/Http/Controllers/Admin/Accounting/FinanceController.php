@@ -53,24 +53,24 @@ class FinanceController extends Controller
     {
         DB::connection('firebird2')->beginTransaction();
 
-        
+
         if ($request->periode !== '') {
             $faktur = DB::connection('firebird2')->table('TFakturConv')
             ->leftJoin('TSuratJalan as a', 'a.NomerSJ', '=', 'TFakturConv.NomerSJ')
             ->where('TFakturConv.Periode', 'LIKE', $request->periode.'%')
             ->select('NoFaktur', 'TFakturConv.NoFakturPajak', 'NoKwitansi', 'TFakturConv.NomerSJ', 'a.TglSJ', 'a.NamaCust', 'TotalTagihan')
             ->get();
-            
+
             return DataTables::of($faktur)
                 ->addColumn('action', function($faktur) {
                     return "<button><a href='../finance/faktur/print/" .trim($faktur->NomerSJ). "' title='SHOW' ><span class='glyphicon glyphicon-list'>Print</span></a></button>";
                 })
-                ->addColumn('total', function($faktur){ 
+                ->addColumn('total', function($faktur){
                     return number_format(round($faktur->TotalTagihan, 2), 2, ',', '.');
                 })
                 ->make(true);
         }
-        
+
     }
 
     public function terbilang($angka)
@@ -78,7 +78,7 @@ class FinanceController extends Controller
         $angka = abs($angka);
             $huruf = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
             $temp = "";
-        
+
             if ($angka < 12) {
                 $temp = " " . $huruf[$angka];
             } elseif ($angka < 20) {
@@ -100,7 +100,7 @@ class FinanceController extends Controller
             } elseif ($angka < 1000000000000000) {
                 $temp = terbilang($angka / 1000000000000) . " triliun" . terbilang($angka % 1000000000000);
             }
-        
+
             return trim($temp);
     }
 
@@ -120,13 +120,13 @@ class FinanceController extends Controller
                 ->where('Kode', 'LIKE', '%'.trim($faktur->KodeCust).'%')
                 ->select('KotaKantor', 'AlamatKantor')
                 ->first();
-            
+
             function terbilang($angka)
             {
                 $angka = abs($angka);
                 $huruf = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
                 $temp = "";
-            
+
                 if ($angka < 12) {
                     $temp = " " . $huruf[$angka];
                 } elseif ($angka < 20) {
@@ -148,7 +148,7 @@ class FinanceController extends Controller
                 } elseif ($angka < 1000000000000000) {
                     $temp = terbilang($angka / 1000000000000) . " triliun " . terbilang($angka % 1000000000000);
                 }
-            
+
                 return trim($temp);
             }
 
@@ -168,7 +168,7 @@ class FinanceController extends Controller
             $top->modify('+'.$faktur->WaktuBayar.' days');
 
             // dd($faktur, $cust, $top, $angka);
-        
+
 
         return view('admin.acc.print_faktur', compact('terbilang', 'faktur', 'cust', 'top'));
     }
@@ -185,9 +185,9 @@ class FinanceController extends Controller
     {
         // STEP 1: Get piutang data from SQL Server
         $piutang = Piutang::select(
-            'KodeCust', 
-            'NamaCust', 
-            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"), 
+            'KodeCust',
+            'NamaCust',
+            DB::raw("SUM(CASE WHEN Note = 'RETUR' THEN TotalRp * -1 ELSE TotalRp END) as total_piutang"),
             DB::raw('SUM(TotalTerima) as total_terima')
         )
         ->whereIn('Note', ['JUAL', 'RETUR'])
@@ -204,20 +204,20 @@ class FinanceController extends Controller
         // STEP 3: Manual join - merge data based on KodeCust = Kode
         $piutangWithCustomer = $piutang->map(function($item) use ($customers) {
             $kodeCust = trim($item->KodeCust); // Clean whitespace
-            
+
             // Find matching customer by Kode
             $customer = $customers->get($kodeCust);
-            
+
             // Add customer data to piutang item
             $item->customer_alamat = $customer->AlamatKantor ?? 'N/A';
             $item->customer_kota = $customer->KotaKantor ?? 'N/A';
             $item->customer_plafond = $customer->Plafond ?? 0;
             $item->customer_waktu_bayar = $customer->WAKTUBAYAR ?? 0;
             $item->customer_found = $customer !== null;
-            
+
             // Calculate sisa piutang
             $item->sisa_piutang = $item->total_piutang - $item->total_terima;
-            
+
             return $item;
         });
 
@@ -233,7 +233,7 @@ class FinanceController extends Controller
     private function getCustomerByKode($kodeCust)
     {
         static $customerCache = null;
-        
+
         // Cache customers untuk menghindari query berulang
         if ($customerCache === null) {
             $customerCache = DB::connection('firebird')->table('TCustomer')
@@ -243,7 +243,7 @@ class FinanceController extends Controller
                     return trim($item->Kode); // Normalize whitespace
                 });
         }
-        
+
         return $customerCache->get(trim($kodeCust));
     }
 
@@ -255,13 +255,13 @@ class FinanceController extends Controller
         // Get piutang data from SQL Server
         $piutang = Piutang::select(
             'NoBukti',
-            'NoRef', 
+            'NoRef',
             'Tanggal',
             'TotalRp',
             'TotalTerima',
             'TglJT',
             'Note',
-            DB::raw("CASE 
+            DB::raw("CASE
                 WHEN Note = 'RETUR' THEN (TotalRp + TotalTerima)
                 ELSE (TotalRp - TotalTerima)
                 END as sisa_piutang"),
@@ -275,7 +275,7 @@ class FinanceController extends Controller
 
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
-        
+
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
             $customer = (object) [
@@ -294,8 +294,8 @@ class FinanceController extends Controller
         $totalPiutang = $piutang->sum('sisa_piutang');
         $sisaLimit = $customer->Plafond - $totalPiutang;
         $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
-        
-        
+
+
         // dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
         return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
@@ -310,7 +310,7 @@ class FinanceController extends Controller
         try {
             // Attempt cross-database query (hanya jika konfigurasi mendukung)
             $piutangWithCustomer = DB::select("
-                SELECT 
+                SELECT
                     p.KodeCust,
                     p.NamaCust,
                     SUM(CASE WHEN p.Note = 'RETUR' THEN p.TotalRp * -1 ELSE p.TotalRp END) as total_piutang,
@@ -320,16 +320,16 @@ class FinanceController extends Controller
                     c.Plafond,
                     c.WAKTUBAYAR
                 FROM Piutang p
-                LEFT JOIN OPENQUERY(FIREBIRD_LINKED_SERVER, 
+                LEFT JOIN OPENQUERY(FIREBIRD_LINKED_SERVER,
                     'SELECT Kode, Nama, AlamatKantor, KotaKantor, Plafond, WAKTUBAYAR FROM TCustomer'
                 ) c ON TRIM(p.KodeCust) = TRIM(c.Kode)
                 WHERE p.Note IN ('JUAL', 'RETUR')
                 GROUP BY p.KodeCust, p.NamaCust, c.AlamatKantor, c.KotaKantor, c.Plafond, c.WAKTUBAYAR
                 ORDER BY p.KodeCust ASC
             ");
-            
+
             return view('admin.acc.piutang_advanced', compact('piutangWithCustomer'));
-            
+
         } catch (\Exception $e) {
             // Fallback to manual join method
             return $this->get_piutang();
@@ -347,7 +347,7 @@ class FinanceController extends Controller
             $customers = DB::connection('firebird')->table('TCustomer')
                 ->select('Kode', 'Nama', 'AlamatKantor', 'KotaKantor', 'Plafond', 'WAKTUBAYAR')
                 ->get();
-            
+
             // Create/update customer cache table di SQL Server (optional)
             foreach ($customers as $customer) {
                 DB::table('customer_cache')->updateOrInsert(
@@ -362,14 +362,14 @@ class FinanceController extends Controller
                     ]
                 );
             }
-            
+
             return response()->json(['success' => 'Customer data synchronized successfully']);
-            
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'Sync failed: ' . $e->getMessage()], 500);
         }
-    }    
-    
+    }
+
     public function vendor_tt(Request $request)
     {
         try {
@@ -390,12 +390,12 @@ class FinanceController extends Controller
             if ($request->filled('date_start') && $request->filled('date_end')) {
                 $dateStart = $request->date_start;
                 $dateEnd = $request->date_end;
-                
+
                 // Filter berdasarkan Tglterima dari tabel VendorTT
                 $vendortt = $vendortt->whereHas('master_vend', function($query) use ($dateStart, $dateEnd) {
                     $query->whereBetween('Tglterima', [$dateStart, $dateEnd]);
                 });
-            }           
+            }
 
             // Try ordering by TglTerima from VendorTT using raw SQL
             try {
@@ -415,7 +415,7 @@ class FinanceController extends Controller
                 ]
             );
         }        return view('admin.acc.vendor_tt', compact('vendortt'));
-    }    
+    }
 
     public function update_po(Request $request)
     {
@@ -433,7 +433,7 @@ class FinanceController extends Controller
             ->select('NoOP', 'WaktuBayar')
             ->get();
         } elseif ($request->gudang_filter == 'Stationary') {
-            
+
             DB::connection('stationary')->beginTransaction();
             $data = DB::connection('stationary')->table('TOPStat')
             ->where('Periode', 'LIKE', $request->periode_manual.'%')
@@ -447,7 +447,7 @@ class FinanceController extends Controller
 
         foreach ($data as $item) {
             $po = PurchaseOrder::where('po_number', trim($item->NoOP))->first();
-            
+
             if ($po) {
                 $po->top = $item->WaktuBayar;
                 $po->save();
@@ -476,7 +476,7 @@ class FinanceController extends Controller
         }
 
         $opi = $opi->where('status_opi', 'Pending')
-                    ->orderBy('created_at', 'asc');  // Ubah dari 'desc' ke 'asc'
+                    ->orderBy('created_at', 'desc');  // Ubah dari 'desc' ke 'asc'
 
         $opi = $opi->paginate(10);
 
@@ -486,7 +486,7 @@ class FinanceController extends Controller
     public function approve_opi_action(Request $request, $id)
     {
         $opi = Opi_M::findOrFail($id);
-        
+
         if ($opi->status_opi == 'Pending') {
             try {
                 $numb_opi = $opi->assign_numb_opi();
@@ -503,7 +503,7 @@ class FinanceController extends Controller
     {
         // Debug: Log the incoming request data
         Log::info('Bulk Approve Request Data:', $request->all());
-        
+
         $request->validate([
             'selected_opi' => 'required|array|min:1',
             'selected_opi.*' => 'exists:opi_m,id'
@@ -519,7 +519,7 @@ class FinanceController extends Controller
                 try {
                     // Menggunakan method baru dari model
                     $numb_opi = $opi->assign_numb_opi();
-                    
+
                     $approvedCount++;
                     $approvedNumbers[] = $numb_opi;
                 } catch (\Exception $e) {

@@ -50,7 +50,7 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
-      
+
       <!-- Search and Filter Card -->
       <div class="card card-primary card-outline mb-4">
         <div class="card-header">
@@ -65,11 +65,11 @@
               <div class="col-md-8">
                 <div class="form-group">
                   <label for="search">Cari No OPI:</label>
-                  <input type="text" 
-                         class="form-control" 
-                         id="search" 
-                         name="search" 
-                         value="{{ $search }}" 
+                  <input type="text"
+                         class="form-control"
+                         id="search"
+                         name="search"
+                         value="{{ $search }}"
                          placeholder="Masukkan No OPI...">
                 </div>
               </div>
@@ -149,6 +149,10 @@
                     Qty Order (Pcs)
                   </th>
                   <th scope="col" class="text-center">
+                    <i class="fas fa-money-bill mr-1"></i>
+                    Value (Rp)
+                  </th>
+                  <th scope="col" class="text-center">
                     <i class="fas fa-file-contract mr-1"></i>
                     No Kontrak
                   </th>
@@ -171,9 +175,9 @@
                 <tr class="animate-row">
                   <td class="text-center">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input opi-checkbox" 
-                             id="opi_{{ $data->id }}" 
-                             name="selected_opi[]" 
+                      <input type="checkbox" class="custom-control-input opi-checkbox"
+                             id="opi_{{ $data->id }}"
+                             name="selected_opi[]"
                              value="{{ $data->id }}">
                       <label class="custom-control-label" for="opi_{{ $data->id }}"></label>
                     </div>
@@ -193,6 +197,12 @@
                     <span class="badge badge-info badge-lg">
                       <i class="fas fa-arrow-up mr-1"></i>
                       {{ number_format((int)$data->jumlahOrder) }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-success badge-lg">
+                      <i class="fas fa-money-bill-wave mr-1"></i>
+                      Rp {{ number_format((int) ($data->kontrak_d_id ? (($data->kontrakd->harga_pcs ?? 0) * ($data->jumlahOrder ?? 0)) : 0), 0, ',', '.') }}
                     </span>
                   </td>
                   <td class="text-center">
@@ -220,7 +230,7 @@
                           <i class="fas fa-check"></i> Approve
                         </button>
                       </form>
-                      
+
                       {{-- <!-- View Detail Button -->
                       <a href="{{ route('opi.show', $data->id) }}" class="btn btn-info btn-sm ml-1" title="Lihat Detail">
                         <i class="fas fa-eye"></i>
@@ -228,7 +238,7 @@
                     </div>
                   </td>
                 </tr>
-                @empty 
+                @empty
                 <tr>
                   <td colspan="9" class="text-center py-5">
                     <div class="empty-state">
@@ -260,7 +270,7 @@
         </div>
         @endif
       </div>
-      
+
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
@@ -276,10 +286,10 @@ $(document).ready(function() {
             location.reload();
         }
     }, 30000);
-    
+
     // Initialize tooltips
     $('[data-toggle="tooltip"]').tooltip();
-    
+
     // Highlight search term
     const searchTerm = '{{ $search }}';
     if (searchTerm) {
@@ -290,43 +300,43 @@ $(document).ready(function() {
             }
         });
     }
-    
+
     // Bulk selection functionality
     $('#selectAll').change(function() {
         const isChecked = $(this).is(':checked');
         $('.opi-checkbox').prop('checked', isChecked);
         updateBulkActions();
     });
-    
+
     // Individual checkbox change
     $('.opi-checkbox').change(function() {
         updateBulkActions();
-        
+
         // Update select all checkbox
         const totalCheckboxes = $('.opi-checkbox').length;
         const checkedCheckboxes = $('.opi-checkbox:checked').length;
-        
+
         $('#selectAll').prop('indeterminate', checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes);
         $('#selectAll').prop('checked', checkedCheckboxes === totalCheckboxes);
     });
-    
+
     // Bulk approve form submission
     $('#bulkApproveForm').on('submit', function(e) {
         const selectedCount = $('.opi-checkbox:checked').length;
-        
+
         if (selectedCount === 0) {
             e.preventDefault();
             alert('Pilih minimal 1 OPI untuk di-approve');
             return false;
         }
-        
+
         const confirmMsg = `Yakin ingin approve ${selectedCount} OPI yang dipilih?`;
         if (!confirm(confirmMsg)) {
             e.preventDefault();
             return false;
         }
     });
-    
+
     function updateBulkActions() {
         const checkedCount = $('.opi-checkbox:checked').length;
         $('#selectedCount').text(checkedCount);
