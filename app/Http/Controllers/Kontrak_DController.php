@@ -661,13 +661,14 @@ class Kontrak_DController extends Controller
                     ")
                     ->first();
 
+                $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak', 'harga_pcs')
+                    ->where('kontrak_m_id', $request->idkontrakm)
+                    ->first();
 
 
                     $piutangTotal = ($piutangData->total_piutang ?? 0) - ($piutangData->total_terima ?? 0);
+                    $piutangTotal += ($jumlahKirim * $kontrakData->harga_pcs ?? 0);
 
-                $kontrakData = Kontrak_D::select('id as kontrak_d_id', 'mc_id', 'pcsSisaKontrak', 'kgSisaKontrak')
-                    ->where('kontrak_m_id', $request->idkontrakm)
-                    ->first();
 
                 if ($kontrakData->mc->revisi == '' || $kontrakData->mc->revisi == 'R0') {
                     $kodemc = $kontrakData->mc->kode;
