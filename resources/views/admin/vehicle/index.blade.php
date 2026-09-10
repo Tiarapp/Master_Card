@@ -3,9 +3,157 @@
 
 @extends('admin.templates.partials.default')
 
+<style>
+  .vehicle-mobile-shell {
+    overflow-x: hidden;
+  }
+
+  .vehicle-mobile-shell .card-body {
+    padding: 0.75rem;
+  }
+
+  .vehicle-mobile-shell .btn,
+  .vehicle-mobile-shell .form-control,
+  .vehicle-mobile-shell .custom-select {
+    min-height: 42px;
+  }
+
+  .vehicle-mobile-shell .btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.55rem 0.9rem;
+  }
+
+  .vehicle-mobile-shell .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .vehicle-mobile-shell .form-control,
+  .vehicle-mobile-shell .custom-select {
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .vehicle-mobile-shell .table-responsive {
+    border-radius: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vehicle-mobile-shell .table th,
+  .vehicle-mobile-shell .table td {
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .vehicle-mobile-shell .modal-content {
+    border-radius: 16px;
+  }
+
+  .vehicle-mobile-shell .modal-header,
+  .vehicle-mobile-shell .modal-footer {
+    padding: 0.9rem 1rem;
+  }
+
+  .vehicle-mobile-shell #cameraBox {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.75rem;
+    background: #f8fafc;
+  }
+
+  .vehicle-mobile-shell #cameraPreview {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .vehicle-mobile-shell #imagePreview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 0.25rem;
+    border: 1px solid #ddd;
+    padding: 4px;
+    background: white;
+  }
+
+  .vehicle-mobile-shell .photo-thumb {
+    width: 120px !important;
+    height: 120px !important;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .vehicle-mobile-shell .filter-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .vehicle-mobile-shell .filter-box .form-control {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  @media (max-width: 767.98px) {
+    .vehicle-mobile-shell {
+      padding: 0.25rem;
+    }
+
+    .vehicle-mobile-shell .content-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .vehicle-mobile-shell .card-body {
+      padding: 0.75rem 0.5rem;
+    }
+
+    .vehicle-mobile-shell .filter-box {
+      display: block;
+    }
+
+    .vehicle-mobile-shell .filter-box > div {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .vehicle-mobile-shell .filter-box .btn {
+      width: 100%;
+    }
+
+    .vehicle-mobile-shell .modal-dialog {
+      margin: 0.5rem;
+      max-width: calc(100% - 1rem);
+    }
+
+    .vehicle-mobile-shell .modal-footer {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 0.5rem;
+    }
+
+    .vehicle-mobile-shell .modal-footer .btn {
+      width: 100%;
+    }
+
+    .vehicle-mobile-shell .mobile-stack {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vehicle-mobile-shell .mobile-stack button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
 
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper vehicle-mobile-shell">
   <!-- Content Header (Page header) -->
   <div class="content-header">
     <div class="container-fluid">
@@ -44,71 +192,71 @@
             </div>
         @endif
       <div class="card-body">
-        <div class="row col-md-6 mb-3">
-            <div class="col-md-2">
-                <label for="filter-vehicle-number">Nomor Kendaraan :</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" id="nopol" placeholder="Enter Vehicle Number">
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary cek">Cek</button>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="filter-box">
+                    <label for="filter-vehicle-number" class="mb-0">Nomor Kendaraan :</label>
+                    <input type="text" class="form-control" id="nopol" placeholder="Masukkan nomor kendaraan">
+                    <button type="button" class="btn btn-primary cek">Cek</button>
+                </div>
             </div>
         </div>
 
-        <table class="table table-bordered" id="data_vehicle">
-          <thead>
-            <tr>
-              <th scope="col">Nomer Kendaraan</th>
-              <th scope="col">Sopir</th>
-              <th scope="col">Tanggal Masuk</th>
-              <th scope="col">Customer / Supplier</th>
-              <th scope="col">Tujuan</th>
-              <th scope="col">Tanggal Keluar 2</th>
-              <th scope="col">Lama Proses</th>
-              <th scope="col">Keperluan</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach ($vehicle as $data)
-                <tr class="{{ $data->date_out ? 'table-success' : 'table-warning' }}">
-                    <td>{{ $data->vehicle_number }}</td>
-                    <td>{{ $data->driver_name }}</td>
-                    <td>{{ $data->date_in }}</td>
-                    <td>{{ $data->masterdata ? $data->masterdata->name : '' }}</td>
-                    <td>{{ $data->masterdata ? $data->masterdata->city : '' }}</td>
-                    <td>{{ $data->date_out ?? '' }}
-                        @if(!$data->date_out)
-                            <button type="button" class="btn btn-primary check-vehicle" data-vehicle-number="{{ $data->vehicle_number }}">Cek</button>
-                        @endif
-                    </td>
-                    <td>
-                        @if($data->date_out)
-                            @php
-                                $totalMinutes = \Carbon\Carbon::parse($data->date_in)->diffInMinutes(\Carbon\Carbon::parse($data->date_out));
-                                $days = intdiv($totalMinutes, 1440);
-                                $hours = intdiv($totalMinutes % 1440, 60);
-                                $minutes = $totalMinutes % 60;
-                                $seconds = \Carbon\Carbon::parse($data->date_in)->diffInSeconds(\Carbon\Carbon::parse($data->date_out)) % 60;
-                                $pad = fn($num) => str_pad($num, 2, '0', STR_PAD_LEFT);
-                            @endphp
-                            {{ $days }} hari - {{ $pad($hours) }} : {{ $pad($minutes) }} : {{ $pad($seconds) }}
-                        @else
-                            <span class="live-duration" data-datein="{{ \Carbon\Carbon::parse($data->date_in)->toIso8601String() }}"></span>
-                        @endif
-                    </td>
-                    <td>{{ ucfirst($data->status) }}</td>
-                    <td>{{ ucfirst($data->status_load) }}</td>
-                    <td>
-                        <button type="button" class="btn btn-info view-photos" data-id="{{ $data->id }}">View</button>
-                        {{-- Add other action buttons if needed --}}
-                    </td>
-                </tr>
-            @endforeach
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="data_vehicle">
+            <thead>
+              <tr>
+                <th scope="col">Nomer Kendaraan</th>
+                <th scope="col">Sopir</th>
+                <th scope="col">Tanggal Masuk</th>
+                <th scope="col">Customer / Supplier</th>
+                <th scope="col">Tujuan</th>
+                <th scope="col">Tanggal Keluar 2</th>
+                <th scope="col">Lama Proses</th>
+                <th scope="col">Keperluan</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($vehicle as $data)
+                  <tr class="{{ $data->date_out ? 'table-success' : 'table-warning' }}">
+                      <td>{{ $data->vehicle_number }}</td>
+                      <td>{{ $data->driver_name }}</td>
+                      <td>{{ $data->date_in }}</td>
+                      <td>{{ $data->masterdata ? $data->masterdata->name : '' }}</td>
+                      <td>{{ $data->masterdata ? $data->masterdata->city : '' }}</td>
+                      <td>{{ $data->date_out ?? '' }}
+                          @if(!$data->date_out)
+                              <button type="button" class="btn btn-primary btn-sm check-vehicle" data-vehicle-number="{{ $data->vehicle_number }}">Cek</button>
+                          @endif
+                      </td>
+                      <td>
+                          @if($data->date_out)
+                              @php
+                                  $totalMinutes = \Carbon\Carbon::parse($data->date_in)->diffInMinutes(\Carbon\Carbon::parse($data->date_out));
+                                  $days = intdiv($totalMinutes, 1440);
+                                  $hours = intdiv($totalMinutes % 1440, 60);
+                                  $minutes = $totalMinutes % 60;
+                                  $seconds = \Carbon\Carbon::parse($data->date_in)->diffInSeconds(\Carbon\Carbon::parse($data->date_out)) % 60;
+                                  $pad = fn($num) => str_pad($num, 2, '0', STR_PAD_LEFT);
+                              @endphp
+                              {{ $days }} hari - {{ $pad($hours) }} : {{ $pad($minutes) }} : {{ $pad($seconds) }}
+                          @else
+                              <span class="live-duration" data-datein="{{ \Carbon\Carbon::parse($data->date_in)->toIso8601String() }}"></span>
+                          @endif
+                      </td>
+                      <td>{{ ucfirst($data->status) }}</td>
+                      <td>{{ ucfirst($data->status_load) }}</td>
+                      <td>
+                          <button type="button" class="btn btn-info btn-sm view-photos" data-id="{{ $data->id }}">View</button>
+                          {{-- Add other action buttons if needed --}}
+                      </td>
+                  </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
 
         {{ $vehicle->appends(request()->query())->links() }}
 
@@ -170,12 +318,20 @@
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">Gambar</label>
-                            <div>
+                            <div class="mobile-stack">
                                 <button type="button" class="btn btn-outline-primary btn-sm" id="btn-take-photo">Ambil Foto (Kamera)</button>
                                 <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-pick-gallery">Pilih dari Galeri</button>
                             </div>
-                            <input type="file" id="image-camera" accept="image/*" capture="environment" class="d-none">
+                            <input type="file" id="image-camera" accept="image/*" class="d-none">
                             <input type="file" id="image-gallery" name="images[]" accept="image/*" multiple class="d-none">
+                            <div id="cameraBox" class="mt-3 d-none">
+                                <video id="cameraPreview" autoplay playsinline muted style="max-width:100%; max-height:240px; border:1px solid #ddd; border-radius:6px; background:#000;"></video>
+                                <canvas id="cameraCanvas" class="d-none"></canvas>
+                                <div class="mt-2 mobile-stack">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btn-capture-photo">Ambil Gambar</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" id="btn-close-camera">Batal</button>
+                                </div>
+                            </div>
                             <div id="imagePreview" class="d-flex flex-wrap mt-2"></div>
                         </div>
                         <div class="modal-footer">
@@ -398,8 +554,71 @@
             });
         }
 
+        async function openCamera() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Browser ini tidak mendukung kamera. Silakan pilih foto dari galeri.');
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment'
+                    },
+                    audio: false
+                });
+
+                const video = document.getElementById('cameraPreview');
+                const cameraBox = document.getElementById('cameraBox');
+                const closeBtn = document.getElementById('btn-close-camera');
+                const captureBtn = document.getElementById('btn-capture-photo');
+
+                video.srcObject = stream;
+                cameraBox.classList.remove('d-none');
+
+                const stopStream = function() {
+                    stream.getTracks().forEach(function(track) {
+                        track.stop();
+                    });
+                    video.srcObject = null;
+                    cameraBox.classList.add('d-none');
+                };
+
+                closeBtn.onclick = stopStream;
+                captureBtn.onclick = function() {
+                    const canvas = document.getElementById('cameraCanvas');
+                    const width = video.videoWidth || 1280;
+                    const height = video.videoHeight || 720;
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, width, height);
+
+                    canvas.toBlob(function(blob) {
+                        if (!blob) {
+                            stopStream();
+                            return;
+                        }
+
+                        const file = new File([blob], 'camera-' + Date.now() + '.jpg', {
+                            type: 'image/jpeg'
+                        });
+
+                        selectedImageFiles.push(file);
+                        syncImageInput();
+                        renderImagePreview();
+                        stopStream();
+                    }, 'image/jpeg', 0.9);
+                };
+            } catch (error) {
+                console.error('Camera error:', error);
+                alert('Tidak bisa membuka kamera. Pastikan browser memiliki izin kamera dan coba lagi.');
+            }
+        }
+
         $('#btn-take-photo').on('click', function() {
-            $('#image-camera').trigger('click');
+            openCamera();
         });
 
         $('#btn-pick-gallery').on('click', function() {
@@ -408,7 +627,6 @@
 
         $('#image-camera, #image-gallery').on('change', function(e) {
             selectedImageFiles = selectedImageFiles.concat(Array.from(e.target.files));
-            // only clear the camera input's own value; #image-gallery holds the actual files posted to the server
             if (this.id !== 'image-gallery') {
                 $(this).val('');
             }
