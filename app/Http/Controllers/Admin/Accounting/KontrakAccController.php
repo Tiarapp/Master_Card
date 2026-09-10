@@ -44,7 +44,7 @@ class KontrakAccController extends Controller
                 ->where('status', '!=', 2)
                 ->get();
 
-            dd($kontrak);
+            // dd($kontrak);
             $data = array();
             if (!empty($kontrak)) {
                 foreach ($kontrak as $kontrak)
