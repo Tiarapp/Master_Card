@@ -373,10 +373,7 @@ class MastercardController extends Controller
     */
     public function edit($id)
     {
-        // $item = DB::connection('firebird2')->table('TBarangConv')->get();
         $cust = DB::connection('firebird')->table('TCustomer')->get();
-        // $cust = Customer::all();
-        // dd($cust);
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
         ->leftJoin('jenis_gram as bf', 'jenisGramFlute1_id', '=', 'bf.id')
@@ -399,8 +396,6 @@ class MastercardController extends Controller
         ->select('mc.*','color_combine.id as ccid','color_combine.nama as ccnama','subskontrak.namaMc as subsKontrak','subsproduksi.namaMc as subsProduksi', 'box.panjangDalamBox as panjangDalam','box.lebarDalamBox as lebarDalam','box.tinggiDalamBox as tinggiDalam', 'box.id as box_id' )
         ->first();
 
-        // dd($mc->tipeCust);
-        // $tipe = null;
         if ($mc->tipeCust === "000") {
             $tipe = "Sheet";
         }elseif ($mc->tipeCust === "001") {
@@ -423,7 +418,6 @@ class MastercardController extends Controller
             $tipe = "";
         }
 
-        // dd($tipe);
         $kodemc = DB::table('mc')
         ->where('kode', '=', $mc->kode)
         ->get();
@@ -431,7 +425,6 @@ class MastercardController extends Controller
         $revisi = count($kodemc);
 
         return view('admin.mastercard.edit', compact([
-            // 'item',
             'cust',
             'tipe',
             'substance',
