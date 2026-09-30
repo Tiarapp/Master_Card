@@ -286,8 +286,6 @@ class FinanceController extends Controller
             })
             ->value('total_idr_opi');
 
-        dd($idr_opi, $customer);
-
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
             $customer = (object) [
@@ -311,7 +309,7 @@ class FinanceController extends Controller
 
         // dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
-        return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue'));
+        return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue', 'idr_opi'));
     }
 
     /**
