@@ -1106,7 +1106,7 @@ class Kontrak_DController extends Controller
                 $remaining = $update_opi->pcsDt + $qty;
 
                 if ($update_opi->jumlahOrder <= $remaining) {
-                    $update_opi->status = 'closed';
+                    $update_opi->status_opi = 'closed';
                     $update_opi->pcsDt = $remaining;
                     $update_opi->save();
                 }
