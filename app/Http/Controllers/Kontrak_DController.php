@@ -1102,10 +1102,18 @@ class Kontrak_DController extends Controller
                     'createdBy'     => Auth::user()->name
                 ]);
 
-                Opi_M::where('id', '=', $opi->id)->update([
-                    'status' => 'closed',
-                    'pcsDt' => $qty
-                ]);
+                $update_opi = Opi_M::where('id', '=', $opi->id)->first();
+                $remaining = $update_opi->pcsDt + $qty;
+
+                if ($update_opi->jumlahOrder <= $remaining) {
+                    $update_opi->status = 'closed';
+                    $update_opi->pcsDt = $remaining;
+                    $update_opi->save();
+                }
+                else {
+                    $update_opi->pcsDt = $remaining;
+                    $update_opi->save();
+                }
 
                 if ($karet) {
                     $alokasi_karet = new AlokasiKaret();
