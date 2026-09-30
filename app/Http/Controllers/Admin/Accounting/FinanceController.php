@@ -277,14 +277,13 @@ class FinanceController extends Controller
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
 
-        $idr_opi = Opi_M::with('kontrakm')
-            ->select(DB::raw('SUM(jumlahOrder * kontrakm.harga_pcs) as total_idr_opi'))
+        $idr_opi = Opi_M::query()
+            ->join('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
+            ->selectRaw('COALESCE(SUM(opi_m.jumlahOrder * kontrak_d.harga_pcs), 0) as total_idr_opi')
             ->whereHas('kontrakm', function ($query) use ($cust) {
                 $query->where('customer_name', 'LIKE', '%' . $cust . '%');
             })
-            ->get();
-
-        dd($idr_opi);
+            ->value('total_idr_opi');
 
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
