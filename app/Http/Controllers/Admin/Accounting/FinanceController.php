@@ -8,6 +8,7 @@ use App\Exports\VendorTTExport;
 use App\Models\Accounting\Piutang;
 use App\Models\Accounting\VendorTTDet;
 use App\Models\DeliveryTime;
+use App\Models\Kontrak_M;
 use App\Models\Number_Sequence;
 use App\Models\Opi_M;
 use App\Models\PurchaseOrder;
@@ -275,6 +276,15 @@ class FinanceController extends Controller
 
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
+
+        $idr_opi = Opi_M::with('kontrakm')
+            ->select(DB::raw('SUM(jumlahOrder * kontrakm.harga_pcs) as total_idr_opi'))
+            ->whereHas('kontrakm', function ($query) use ($cust) {
+                $query->where('customer_name', 'LIKE', '%' . $cust . '%');
+            })
+            ->get();
+
+        dd($idr_opi);
 
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
