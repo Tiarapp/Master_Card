@@ -106,6 +106,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <input type="text" class="form-control txt_line col-md-11" name="namaCust" id="namaCust" readonly>
+                                                    <input type="text" name="customer_id" id="customer_id">
                                                 </div>
                                                 <button type="button" class="modal-customer" data-toggle="modal" data-target="#modal-customer">
                                                     <i class="fas fa-search"></i>
