@@ -285,6 +285,8 @@ class FinanceController extends Controller
             })
             ->value('total_idr_opi');
 
+        dd($idr_opi);
+
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
             $customer = (object) [
