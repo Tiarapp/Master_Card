@@ -286,8 +286,6 @@ class FinanceController extends Controller
             })
             ->value('total_idr_opi');
 
-        dd($idr_opi, $customer);
-
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
             $customer = (object) [
@@ -296,7 +294,8 @@ class FinanceController extends Controller
                 'AlamatKantor' => 'N/A',
                 'KotaKantor' => 'N/A',
                 'Plafond' => 0,
-                'WAKTUBAYAR' => 0
+                'WAKTUBAYAR' => 0,
+                'TotalIdrOpi' => $idr_opi ?? 0
             ];
         }
 

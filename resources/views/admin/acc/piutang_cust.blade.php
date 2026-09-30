@@ -16,6 +16,7 @@
             {{-- <p><strong>No. Telepon:</strong> {{ $customer->TelpKantor }} </p> --}}
             <p><strong>Term of Payment:</strong> {{ $customer->WAKTUBAYAR }} </p>
             <p><strong>Limit Piutang:</strong> {{ number_format($customer->Plafond, 2, '.', ',') }} </p>
+            <p><strong>Total IDR OPI:</strong> {{ number_format($customer->TotalIdrOpi ?? 0, 2, '.', ',') }} </p>
         </div>
     </div>
 
