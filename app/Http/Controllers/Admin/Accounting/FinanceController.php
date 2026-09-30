@@ -284,6 +284,7 @@ class FinanceController extends Controller
             ->whereHas('kontrakm', function ($query) use ($customerName) {
                 $query->where('customer_name', 'LIKE', '%' . $customerName . '%');
             })
+            ->where('opi_m.status', 'Proses')
             ->value('total_idr_opi');
 
         if (!$customer) {
