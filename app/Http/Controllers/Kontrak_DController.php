@@ -421,6 +421,7 @@ class Kontrak_DController extends Controller
                 'tglKontrak' => $request->tanggal,
                 'top' => $request->top,
                 'poCustomer' => $request->poCustomer,
+                'customer_id' => $request->customer_id,
                 'customer_name' => $request->namaCust,
                 'alamatKirim' => $request->alamatKirim,
                 'caraKirim' => $request->caraKirim,
@@ -580,7 +581,7 @@ class Kontrak_DController extends Controller
                 }
 
                 // OPTIMIZED: Get OPI data with minimal fields
-                $opi = Opi_M::select(['id', 'NoOPI', 'jumlahOrder', 'dt_id', 'status_opi'])
+                $opi = Opi_M::select(['id', 'NoOPI', 'jumlahOrder', 'dt_id', 'status_opi', 'pcsDt'])
                     ->with('dt:id,tglKirimDt,keterangan')
                     ->where('kontrak_m_id', $id)
                     ->orderBy('id', 'desc')
@@ -795,6 +796,7 @@ class Kontrak_DController extends Controller
             // Snapshot semua field sebelum diubah
             $before_data = json_encode([
                 'customer_name'  => $kontrakm->customer_name,
+                'customer_id'    => $kontrakm->customer_id,
                 'alamatKirim'    => $kontrakm->alamatKirim,
                 'custTelp'       => $kontrakm->custTelp,
                 'poCustomer'     => $kontrakm->poCustomer,
@@ -816,6 +818,7 @@ class Kontrak_DController extends Controller
 
             // untuk set value yang di update
             $kontrakm->customer_name = $request->namaCust;
+            $kontrakm->customer_id = $request->customer_id;
             $kontrakm->alamatKirim = $request->alamatKirim;
             $kontrakm->custTelp = $request->telp;
             $kontrakm->poCustomer = $request->poCustomer;

@@ -151,7 +151,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Summary Statistics Card -->
           <div class="col-lg-4">
             <div class="card card-info card-outline">
@@ -179,11 +179,11 @@
                     </span>
                   </div>
                   <div class="progress progress-sm">
-                    <div class="progress-bar bg-{{ $progress >= 100 ? 'success' : ($progress >= 50 ? 'warning' : 'danger') }}" 
+                    <div class="progress-bar bg-{{ $progress >= 100 ? 'success' : ($progress >= 50 ? 'warning' : 'danger') }}"
                          style="width: {{ min($progress, 100) }}%"></div>
                   </div>
                 </div>
-                
+
                 <!-- Quantities in Pieces -->
                 <div class="p-3 border-bottom">
                   <h6 class="text-muted mb-2">
@@ -205,7 +205,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Quantities in Kilograms -->
                 <div class="p-3">
                   <h6 class="text-muted mb-2">
@@ -244,7 +244,7 @@
               <button type="button" class="btn btn-primary btn-sm opi" data-toggle="modal" data-target="#add_dt" id="btnTambahDT">
                 <i class="fas fa-plus mr-1"></i> Tambah DT & OPI
               </button>
-                
+
               <!-- Button untuk refresh -->
               <a href="{{ route('kontrak.recall', $kontrak->kontrak_m_id) }}">
                 <button type="button" class="btn btn-info btn-sm ml-2">
@@ -279,6 +279,10 @@
                       Running Meter
                     </th>
                     <th scope="col" class="text-center">
+                      <i class="fas fa-shipping-fast mr-1"></i>
+                      Terkirim
+                    </th>
+                    <th scope="col" class="text-center">
                       <i class="fas fa-box-open mr-1"></i>
                       Status
                     </th>
@@ -298,7 +302,7 @@
                 </thead>
                 <tbody>
                   @forelse ( $opi as $data)
-                      
+
                   <tr class="animate-row">
                     <td class="text-center font-weight-bold text-primary">
                       <i class="fas fa-file-alt mr-1"></i>
@@ -325,20 +329,25 @@
                       <span class="text-success font-weight-bold">
                         @php
                           $rm = 0;
-                          
+
                           // Check for valid data before calculations
                           if ($data->outConv > 0 && $data->lebarSheet > 0) {
                             $qty = ($data->jumlahOrder) / $data->outConv;
                             $outCorr = floor(2500 / $data->lebarSheet);
-                            
+
                             if ($outCorr > 0) {
                               $cop = $qty / $outCorr;
                               $rm = ($data->panjangSheet * $cop) / 1000;
                             }
                           }
-                          
+
                           echo number_format((float)$rm, 2);
                         @endphp
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span class="text-success font-weight-bold">
+                        {{ number_format((int)$data->pcsDt) }}
                       </span>
                     </td>
                     <td class="text-center">
@@ -368,7 +377,7 @@
                       </div>
                     </td>
                   </tr>
-                  @empty 
+                  @empty
                   <tr>
                     <td colspan="7" class="text-center py-5">
                       <div class="empty-state">
@@ -410,7 +419,7 @@
               <div class="col-sm-6">
                 <small class="text-muted">
                   <i class="fas fa-info-circle mr-1"></i>
-                  Menampilkan {{ $opi->count() }} data OPI 
+                  Menampilkan {{ $opi->count() }} data OPI
                 </small>
               </div>
               <div class="col-sm-6 text-right">
@@ -436,25 +445,25 @@
 $(document).ready(function() {
     // Performance optimization: Debounce AJAX calls
     let ajaxTimeout;
-    
+
     // Event handler untuk modal OPI dengan optimasi
     $('.opi').on('click', function(e) {
         e.preventDefault();
-        
+
         $('#add_dt').modal('show');
-        
+
         // const btn = $(this);
         // const originalText = btn.html();
-        
+
         // // Add loading state
         // btn.prop('disabled', true)
         //    .html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-        
+
         // // Clear previous timeout
         // if (ajaxTimeout) {
         //     clearTimeout(ajaxTimeout);
         // }
-        
+
         // // Always get OPI number from database sequence
         // ajaxTimeout = setTimeout(function() {
         //       complete: function() {
@@ -469,7 +478,7 @@ $(document).ready(function() {
     $('#add_dt').on('shown.bs.modal', function(e) {
         $('#tglKirim').focus();
     });
-    
+
     $('#add_dt').on('hidden.bs.modal', function(e) {
         $('#jquery-val-form')[0].reset();
     });
@@ -496,7 +505,7 @@ function editOpi(opiId) {
         success: function(response) {
             if (response.success) {
                 const data = response.data;
-                
+
                 // Restore modal content and remove loading class
                 $('#edit_opi .modal-body').removeClass('text-center').html(`
                     <div class="row">
@@ -517,7 +526,7 @@ function editOpi(opiId) {
                                         </label>
                                         <input type="text" class="form-control" id="edit_noopi" name="NoOPI" readonly>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="edit_customer" class="form-label">
                                             <i class="fas fa-building mr-1"></i>
@@ -525,7 +534,7 @@ function editOpi(opiId) {
                                         </label>
                                         <input type="text" class="form-control" id="edit_customer" readonly>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="edit_namabarang" class="form-label">
                                             <i class="fas fa-box mr-1"></i>
@@ -533,7 +542,7 @@ function editOpi(opiId) {
                                         </label>
                                         <input type="text" class="form-control" id="edit_namabarang" readonly>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="edit_jumlahorder" class="form-label">
                                             <i class="fas fa-sort-numeric-up mr-1"></i>
@@ -545,7 +554,7 @@ function editOpi(opiId) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- DT Information -->
                         <div class="col-md-6">
                             <div class="card border-success">
@@ -564,7 +573,7 @@ function editOpi(opiId) {
                                         <input type="date" class="form-control" id="edit_tglkirim" name="tglKirimDt" required>
                                         <small class="form-text text-muted">Pilih tanggal pengiriman yang diinginkan</small>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="edit_pcsdt" class="form-label">
                                             <i class="fas fa-boxes mr-1"></i>
@@ -573,7 +582,7 @@ function editOpi(opiId) {
                                         <input type="number" class="form-control" id="edit_pcsdt" name="pcsDt" required min="1" readonly>
                                         <small class="form-text text-muted">Biasanya sama dengan jumlah order OPI</small>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label class="form-label">
                                             <i class="fas fa-info-circle mr-1"></i>
@@ -581,7 +590,7 @@ function editOpi(opiId) {
                                         </label>
                                         <input type="text" class="form-control" id="edit_status" readonly>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="edit_keterangan_opi" class="form-label">
                                             <i class="fas fa-comment mr-1"></i>
@@ -589,7 +598,7 @@ function editOpi(opiId) {
                                         </label>
                                         <textarea class="form-control" id="keterangan_kirim" name="keterangan" rows="3" placeholder="Tambahkan keterangan untuk OPI ini..."></textarea>
                                     </div>
-                                    
+
                                     <!-- Info Display -->
                                     <div class="alert alert-info">
                                         <i class="fas fa-info-circle mr-2"></i>
@@ -602,15 +611,15 @@ function editOpi(opiId) {
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Warning Alert -->
                     <div class="alert alert-warning mt-3">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                        <strong>Perhatian:</strong> 
+                        <strong>Perhatian:</strong>
                         Pastikan data yang Anda ubah sudah benar. Perubahan akan mempengaruhi laporan dan kalkulasi terkait.
                     </div>
                 `);
-                
+
                 // Fill form with data
                 $('#edit_noopi').val(data.NoOPI);
                 $('#edit_customer').val(data.customer_name);
@@ -621,15 +630,15 @@ function editOpi(opiId) {
                 $('#edit_pcsdt').val(data.pcsDt);
                 $('#edit_status').val(data.status_opi);
                 $('#keterangan_kirim').val(data.keterangan);
-                
+
                 // Set form action
                 $('#edit-opi-form').attr('action', '/admin/opi/update/' + opiId);
-                
+
                 // Auto-sync quantity fields
                 $('#edit_jumlahorder').on('input', function() {
                     $('#edit_pcsdt').val(this.value);
                 });
-                
+
             } else {
                 $('#edit_opi .modal-body').html('<div class="alert alert-danger"><i class="fas fa-exclamation-triangle mr-2"></i>Gagal memuat data: ' + response.message + '</div>');
             }
@@ -651,23 +660,23 @@ function viewOpiDetail(opiId) {
 function validateForm() {
     const jumlahKirim = parseInt($('#jumlahKirim').val()) || 0;
     const sisaKontrak = parseInt($('#sisaKontrak').val()) || 0;
-    
+
     if (jumlahKirim > sisaKontrak) {
         alert('Jumlah kirim tidak boleh melebihi sisa kontrak (' + sisaKontrak.toLocaleString() + ')!');
         return false;
     }
-    
+
     if (jumlahKirim <= 0) {
         alert('Jumlah kirim harus lebih dari 0!');
         return false;
     }
-    
+
     const tglKirim = $('#tglKirim').val();
     if (!tglKirim) {
         alert('Tanggal kirim harus diisi!');
         return false;
     }
-    
+
     return true;
 }
 

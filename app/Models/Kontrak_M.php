@@ -56,7 +56,8 @@ class Kontrak_M extends Model
         'harga_expedisi',
         'harga_karet',
         'harga_pisau',
-        'alokasi_status'
+        'alokasi_status',
+        'customer_id',
     ];
 
     // Relasi one to Many
