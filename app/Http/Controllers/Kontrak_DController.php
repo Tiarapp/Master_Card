@@ -1111,10 +1111,12 @@ class Kontrak_DController extends Controller
                 if ($update_opi->jumlahOrder <= $remaining) {
                     $update_opi->status_opi = 'closed';
                     $update_opi->pcsDt = $remaining;
+                    $update_opi->timestamps = false;
                     $update_opi->save();
                 }
                 else {
                     $update_opi->pcsDt = $remaining;
+                    $update_opi->timestamps = false;
                     $update_opi->save();
                 }
 
