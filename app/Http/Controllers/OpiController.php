@@ -563,7 +563,7 @@ class OpiController extends Controller
         $opi->save();
         // $kontrakd->save();
 
-        return redirect('admin/opi');
+        return redirect()->back()->with('success', 'OPI '.$opi->NoOPI.' sudah di closed!!');
 
 
     }
