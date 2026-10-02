@@ -887,6 +887,9 @@ class Kontrak_DController extends Controller
                 if ($realisasi->qty >= $kontrakm->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
+                    DB::table('opi_m')
+                        ->where('kontrak_m_id', $kontrakm->id)
+                        ->update(['status_opi' => 'closed']);
                 }
             }
 
@@ -1086,7 +1089,7 @@ class Kontrak_DController extends Controller
                     $opi = Opi_M::where('nama', '=', $request->opi)->first();
                 }
                 $kontrak = Kontrak_D::where('kontrak_m_id', "=", $id[$i])->first();
-                $kontrakm = Kontrak_M::where('id', '=', $id)->first();
+                $kontrakm = Kontrak_M::where('id', '=', $id[$i])->first();
                 $qty = intval(str_replace(',','',$request->jumlahKirim));
                 $mc = Mastercard::where('id', "=", $kontrak->mc_id)->first();
 
@@ -1146,14 +1149,15 @@ class Kontrak_DController extends Controller
                     'after'  => 'SJ: '.$request->sj.', Qty: '.$qty.' pcs',
                 ]);
 
-                $realisasi = RealisasiKirim::leftJoin('kontrak_m', 'realisasi_kirim.kontrak_m_id', '=', 'kontrak_m.id')
-                        ->select(DB::raw('sum(qty_kirim) as qty'), 'kontrak_m.kode')
-                        ->where('realisasi_kirim.kontrak_m_id', '=', $id[$i])
-                        ->first();
+                $totalRealisasi = RealisasiKirim::where('kontrak_m_id', $id[$i])
+                    ->sum('qty_kirim');
 
-                if ($realisasi->qty >= $kontrak->pcsKontrak) {
+                if ((int) $totalRealisasi >= (int) $kontrak->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
+                    DB::table('opi_m')
+                        ->where('kontrak_m_id', $kontrakm->id)
+                        ->update(['status_opi' => 'closed']);
                 }
             }
 
@@ -1210,6 +1214,9 @@ class Kontrak_DController extends Controller
                 if ($realisasi->qty >= $kontrak->pcsKontrak) {
                     $kontrakm->status = 3;
                     $kontrakm->save();
+                    DB::table('opi_m')
+                        ->where('kontrak_m_id', $kontrakm->id)
+                        ->update(['status_opi' => 'closed']);
                 }
 
             return redirect()->to(url()->previous())->with('success', 'Berhasil Disimpan');
