@@ -554,10 +554,9 @@ class OpiController extends Controller
         $opi = Opi_M::find($id);
         $kontrakd = Kontrak_D::find($opi->kontrak_d_id);
 
-        // dd($opi);
-
         $opi->status_opi = "closed";
         $opi->lastUpdatedBy = Auth::user()->name;
+        $opi->timestamps = false;
 
         $opi->jumlahOrder = 0;
 

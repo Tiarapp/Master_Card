@@ -374,6 +374,12 @@
                             <i class="fas fa-ban"></i>
                           </button>
                         </form>
+                        <form action="{{ route('opi.closed', $data->id) }}" method="GET" style="display:inline;">
+                          @csrf
+                          <button type="submit" class="btn btn-success btn-sm" title="Close" onclick="return confirm('Yakin ingin menutup data ini?')">
+                            <i class="fas fa-check"></i>
+                          </button>
+                        </form>
                       </div>
                     </td>
                   </tr>
