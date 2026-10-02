@@ -363,7 +363,7 @@
                     <td class="text-center">
                       <div class="btn-group" role="group">
                         <button type="button" class="btn btn-info btn-sm" title="Lihat Detail" onclick="viewOpiDetail({{ $data->id }})">
-                          <i class="fas fa-eye"></i>
+                          <i class="fas fa-eye"> Detail </i>
                         </button>
                         {{-- <button type="button" class="btn btn-warning btn-sm" title="Edit" onclick="editOpi({{ $data->id }})" data-toggle="modal" data-target="#edit_opi">
                           <i class="fas fa-edit"></i>
@@ -371,13 +371,13 @@
                         <form action="{{ route('opi.cancel', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
                           <button type="submit" class="btn btn-danger btn-sm" title="Cancel" onclick="return confirm('Yakin ingin cancel data ini?')">
-                            <i class="fas fa-ban"></i>
+                            <i class="fas fa-ban"> Cancel </i>
                           </button>
                         </form>
                         <form action="{{ route('opi.closed', $data->id) }}" method="GET" style="display:inline;">
                           @csrf
                           <button type="submit" class="btn btn-success btn-sm" title="Close" onclick="return confirm('Yakin ingin menutup data ini?')">
-                            <i class="fas fa-check"></i>
+                            <i class="fas fa-check"> Closed </i>
                           </button>
                         </form>
                       </div>
