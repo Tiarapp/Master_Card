@@ -558,7 +558,7 @@ class OpiController extends Controller
         $opi->lastUpdatedBy = Auth::user()->name;
         $opi->timestamps = false;
 
-        $opi->jumlahOrder = 0;
+        // $opi->jumlahOrder = 0;
 
         $opi->save();
         // $kontrakd->save();
