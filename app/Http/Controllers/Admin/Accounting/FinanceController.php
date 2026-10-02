@@ -280,7 +280,7 @@ class FinanceController extends Controller
 
         $idr_opi = Opi_M::query()
             ->join('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
-            ->selectRaw('COALESCE(SUM(opi_m.jumlahOrder * kontrak_d.harga_pcs), 0) as total_idr_opi')
+            ->selectRaw('COALESCE(SUM((opi_m.jumlahOrder - opi_m.pcsDt) * kontrak_d.harga_pcs), 0) as total_idr_opi')
             ->whereHas('kontrakm', function ($query) use ($customerName) {
                 $query->where('customer_name', 'LIKE', '%' . $customerName . '%');
             })
