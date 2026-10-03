@@ -69,7 +69,7 @@
         });
       @endphp
 
-      <div class="row mb-4 align-items-center">
+      <div class="row mb-1 align-items-center">
         <div class="col-auto d-flex align-items-center gap-3">
           <a href="{{ route('opi.export', $exportParams) }}" class="btn btn-success mb-3">
         Export Halaman Ini
@@ -120,6 +120,17 @@
             </a>
           </form>
         </div>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-3 mb-3 small text-muted" aria-label="Keterangan warna status OPI">
+        <span class="fw-semibold">Status OPI:</span>
+        <span class="d-inline-flex align-items-center gap-2">
+          <span class="rounded-circle" style="width: 10px; height: 10px; background-color: #198754;"></span>
+          Dalam proses
+        </span>
+        <span class="d-inline-flex align-items-center gap-2">
+          <span class="rounded-circle" style="width: 10px; height: 10px; background-color: #0d6efd;"></span>
+          Ditutup
+        </span>
       </div>
 
       <div class="table-responsive shadow rounded-3">
@@ -191,7 +202,7 @@
             </thead>
             <tbody class="text-gray-900 fw-semibold">
                 @foreach ($productions as $production)
-                    <tr>
+                    <tr @if($production->status_opi == 'closed') class="table-primary" @elseif($production->status_opi == 'Proses') class="table-success" @endif>
                         <td class="text-gray-800 bold">{{ $production->id }}</td>
                         <td class="text-gray-800 bold">{{ $production->NoOPI }}</td>
                         <td>
