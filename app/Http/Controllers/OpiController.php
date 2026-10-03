@@ -63,43 +63,24 @@ class OpiController extends Controller
         else {
             $search = $request->input('search.value');
 
-            if (Auth::user()->divisi_id == 5) {
-                $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                            // ->where('status_opi', '=', "Proses")
-                            ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
-                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
-                            ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
-                            ->orWhere('NoOPI', 'LIKE',"%{$search}%")
-                            ->orWhere('mc.kode', 'LIKE',"%{$search}%")
-                            ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
-                            ->offset($start)
-                            ->limit(50)
-                            ->orderBy($order, $dir)
-                            ->get();
+            $searchQuery = Opi_M::opi()
+                ->where('opi_m.NoOPI', 'NOT LIKE', '%CANCEL%')
+                ->whereNotIn('opi_m.status_opi', ['Pending', 'Cancel'])
+                ->where(function ($query) use ($search) {
+                    $query->where('kontrak_m.customer_name', 'LIKE', "%{$search}%")
+                        ->orWhere('kontrak_m.poCustomer', 'LIKE', "%{$search}%")
+                        ->orWhere('kontrak_m.kode', 'LIKE', "%{$search}%")
+                        ->orWhere('opi_m.NoOPI', 'LIKE', "%{$search}%")
+                        ->orWhere('mc.kode', 'LIKE', "%{$search}%")
+                        ->orWhere('mc.namaBarang', 'LIKE', "%{$search}%");
+                });
 
-                $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
-                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
-                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
-                             ->count();
-            } else {
-                $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                            ->where('status_opi', 'NOT LIKE', "closed")
-                            ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
-                            ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
-                            ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
-                            ->orWhere('NoOPI', 'LIKE',"%{$search}%")
-                            ->orWhere('mc.kode', 'LIKE',"%{$search}%")
-                            ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
-                            ->offset($start)
-                            ->limit(50)
-                            ->orderBy($order, $dir)
-                            ->get();
-
-                $totalFiltered = Opi_M::opi()->where('kontrak_m.customer_name','LIKE',"%{$search}%")
-                             ->orWhere('NoOPI', 'LIKE',"%{$search}%")
-                             ->orWhere('mc.namaBarang', 'LIKE',"%{$search}%")
-                             ->count();
-            }
+            $totalFiltered = (clone $searchQuery)->count('opi_m.id');
+            $opi = $searchQuery
+                ->offset($start)
+                ->limit(50)
+                ->orderBy($order, $dir)
+                ->get();
         }
 
         // dd($opi);
@@ -420,6 +401,7 @@ class OpiController extends Controller
     public function index_new(Request $request)
     {
         $productions = new Opi_M();
+        $status = 'Proses';
         $productions = $productions->with([
             'dt',
             'kontrakm',
@@ -437,7 +419,7 @@ class OpiController extends Controller
             'mc.substancekontrak.flute2',
             'mc.substancekontrak.linerbawah',
         ])
-            ->where('status_opi', 'Proses')
+            ->whereNotIn('status_opi', ['Cancel', 'Pending'])
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('updated_at', 'desc')
             ->orderBy('NoOPI', 'desc');
