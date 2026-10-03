@@ -45,6 +45,15 @@ class Kernel extends HttpKernel
         ],
     ];
 
+    protected function schedule(\Illuminate\Console\Scheduling\Schedule $schedule)
+    {
+        // ...existing code...
+
+        $schedule->command('finger:sync-attendance')
+            ->everyFiveMinutes()
+            ->withoutOverlapping();
+    }
+
     /**
      * The application's route middleware.
      *

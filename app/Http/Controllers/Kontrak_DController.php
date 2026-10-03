@@ -622,7 +622,6 @@ class Kontrak_DController extends Controller
             $berat = (float) ($request->berat ?? 1);
 
 
-
             // DB::beginTransaction();
             // try {
                 // OPTIMIZED: Get all required data in fewer queries

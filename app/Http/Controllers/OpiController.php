@@ -65,7 +65,7 @@ class OpiController extends Controller
 
             if (Auth::user()->divisi_id == 5) {
                 $opi =  Opi_M::opi()->where('NoOPI', 'NOT LIKE', "%CANCEL%")
-                            ->where('status_opi', '=', "Proses")
+                            // ->where('status_opi', '=', "Proses")
                             ->where('kontrak_m.customer_name','LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.poCustomer', 'LIKE',"%{$search}%")
                             ->orWhere('kontrak_m.kode', 'LIKE',"%{$search}%")
