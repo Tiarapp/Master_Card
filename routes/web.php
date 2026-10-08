@@ -441,7 +441,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
         $opi = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
-            ->whereIn('status_opi', ['Proses','closed']);
+            ->where('status_opi', '=', 'Proses');
 
         if($request->search) {
             $search = $request->search;
@@ -482,7 +482,7 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/opi/export/karet', function (Request $request) {
         $productions = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
-            ->where('status_opi', 'Proses')
+            ->whereIn('status_opi', ['Proses','closed'])
             // ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
             ->orderBy('updated_at', 'desc')
             ->orderBy('NoOPI', 'desc');
