@@ -285,7 +285,7 @@ class FinanceController extends Controller
             ->orderBy('TSuratJalan.TglSJ', 'Asc')
             ->get();
 
-        dd($suratJalan);
+        // dd($suratJalan);
 
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
