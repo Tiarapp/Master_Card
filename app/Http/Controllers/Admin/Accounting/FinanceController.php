@@ -281,7 +281,7 @@ class FinanceController extends Controller
             ->select('TSuratJalan.NomerSJ as nomer_sj', 'TSuratJalan.KodeCust', 'TSuratJalan.TglSJ', 'TSuratJalan.TotalAkhir')
             ->where('TSuratJalan.KodeCust', $cust)
             ->whereNull('TFakturConv.NomerSJ')
-            ->whereBetween('TSuratJalan.TglSJ', ['2025-05-31', now()]) // Adjust the start date as needed
+            ->whereBetween('TSuratJalan.TglSJ', ['2025-05-31', now()->format('Y-m-d')]) // Adjust the start date as needed
             ->orderBy('TSuratJalan.TglSJ', 'Asc')
             ->get();
 
