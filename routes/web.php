@@ -441,7 +441,7 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/opi/export', function (Request $request) {
         $page = $request->input('page', 1);
         $opi = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
-            ->where('status_opi', '=', 'Proses');
+            ->whereIn('status_opi', ['Proses','closed']);
 
         if($request->search) {
             $search = $request->search;

@@ -274,6 +274,14 @@ class FinanceController extends Controller
         ->orderBy('Tanggal', 'Asc')
         ->get();
 
+        // Get Surat Jalan data from Firebird to include in the view if needed
+        $suratJalan = DB::connection('firebird')->table('TSuratJalan')
+            ->leftjoin('TDetSJ', 'TSuratJalan.NomerSJ', '=', 'TDetSJ.NomerSJ')
+            ->select('NoBukti', 'KodeCust', 'Tanggal', 'TotalRp')
+            ->where('KodeCust', $cust)
+            ->orderBy('Tanggal', 'Asc')
+            ->get();
+
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
         $customerName = $customer->Nama ?? $cust;
@@ -314,6 +322,7 @@ class FinanceController extends Controller
         return view('admin.acc.piutang_cust', compact(
             'customer',
             'piutang',
+            'suratJalan',
             // 'totalPiutang',
             // 'sisaLimit',
             // 'piutangOverdue',
