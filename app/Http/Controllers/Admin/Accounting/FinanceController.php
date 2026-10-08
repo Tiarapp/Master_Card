@@ -304,15 +304,22 @@ class FinanceController extends Controller
         // dd($customer);
 
         // Calculate additional metrics
-        $totalPiutang = $piutang->sum('sisa_piutang');
-        $sisaLimit = $customer->Plafond - $totalPiutang;
-        $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
+        // $totalPiutang = $piutang->sum('sisa_piutang');
+        // $sisaLimit = $customer->Plafond - $totalPiutang;
+        // $piutangOverdue = $piutang->where('selisih_hari', '>', 0);
 
 
         // dd($piutang, $customer, $totalPiutang, $sisaLimit, $piutangOverdue);
 
-        return view('admin.acc.piutang_cust', compact('customer', 'piutang', 'totalPiutang', 'sisaLimit', 'piutangOverdue', 'idr_opi'));
-    }
+        return view('admin.acc.piutang_cust', compact(
+            'customer',
+            'piutang',
+            // 'totalPiutang',
+            // 'sisaLimit',
+            // 'piutangOverdue',
+            'idr_opi'
+            ));
+        }
 
     /**
      * Advanced method: Cross-database join menggunakan Raw SQL (jika memungkinkan)
