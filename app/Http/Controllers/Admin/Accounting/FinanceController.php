@@ -274,6 +274,7 @@ class FinanceController extends Controller
         ->orderBy('Tanggal', 'Asc')
         ->get();
 
+        DB::connection('firebird2')->beginTransaction();
         // Get Surat Jalan data from Firebird to include in the view if needed
         $suratJalan = DB::connection('firebird2')->table('TSuratJalan')
             ->leftjoin('TFakturConv', 'TSuratJalan.NomerSJ', '=', 'TFakturConv.NomerSJ')
