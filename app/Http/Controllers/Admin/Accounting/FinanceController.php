@@ -306,11 +306,11 @@ class FinanceController extends Controller
                 'tanggal' => $sj->TglSJ,
                 'no_ref' => '-',
                 'nomor' => $sj->nomer_sj,
-                'jatuh_tempo' => null,
+                'jatuh_tempo' => \Carbon\Carbon::parse($sj->TglSJ)->addDays($customer->WAKTUBAYAR ?? 0),
                 'nilai' => $sj->TotalAkhir,
                 'terima' => null,
-                'sisa_piutang' => null,
-                'selisih_hari' => null,
+                'sisa_piutang' => $sj->TotalAkhir,
+                'selisih_hari' => now()->diffInDays(\Carbon\Carbon::parse($sj->TglSJ)),
             ])
         )->sortBy('tanggal')->values();
 
