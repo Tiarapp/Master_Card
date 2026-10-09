@@ -16,7 +16,9 @@
             {{-- <p><strong>No. Telepon:</strong> {{ $customer->TelpKantor }} </p> --}}
             <p><strong>Term of Payment:</strong> {{ $customer->WAKTUBAYAR }} </p>
             <p><strong>Limit Piutang:</strong> {{ number_format($customer->Plafond, 2, '.', ',') }} </p>
-            <p><strong>Total IDR OPI:</strong> {{ number_format($idr_opi ?? 0, 2, '.', ',') }} </p>
+            <p><strong>Total IDR OPI:</strong>
+                <a href="#" data-toggle="modal" data-target="#opiModal" data-bs-toggle="modal" data-bs-target="#opiModal">{{ number_format($idr_opi ?? 0, 2, '.', ',') }}</a>
+            </p>
         </div>
     </div>
 
@@ -108,6 +110,54 @@
                     </tr>
                 </tfoot>
             </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="opiModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail OPI Proses - {{ $customer->Nama }}</h5>
+                <button type="button" class="close btn-close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>No. OPI</th>
+                            <th>No. Kontrak</th>
+                            <th>Barang</th>
+                            <th class="text-right">Jumlah Order</th>
+                            <th class="text-right">Terkirim</th>
+                            <th class="text-right">Sisa Pcs</th>
+                            <th class="text-right">Harga/Pcs</th>
+                            <th class="text-right">Total IDR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($opiDetails as $opi)
+                        <tr>
+                            <td>{{ $opi->NoOPI }}</td>
+                            <td>{{ $opi->kode_kontrak }}</td>
+                            <td>{{ $opi->namaBarang }}</td>
+                            <td class="text-right">{{ number_format($opi->jumlahOrder ?? 0) }}</td>
+                            <td class="text-right">{{ number_format($opi->pcsDt ?? 0) }}</td>
+                            <td class="text-right">{{ number_format($opi->sisa_pcs) }}</td>
+                            <td class="text-right">{{ number_format($opi->harga_pcs ?? 0, 2, '.', ',') }}</td>
+                            <td class="text-right">{{ number_format($opi->total_idr, 2, '.', ',') }}</td>
+                        </tr>
+                        @empty
+                        <tr><td colspan="8" class="text-center">Tidak ada OPI berstatus Proses</td></tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="7">TOTAL</th>
+                            <th class="text-right">{{ number_format($opiDetails->sum('total_idr'), 2, '.', ',') }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </div>

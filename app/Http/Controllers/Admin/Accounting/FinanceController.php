@@ -320,15 +320,29 @@ class FinanceController extends Controller
         // dd($rows);
 
 
-        $idr_opi = Opi_M::query()
+        $opiDetails = Opi_M::query()
             ->join('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
-            ->selectRaw('COALESCE(SUM((COALESCE(opi_m.jumlahOrder, 0)
-                - COALESCE(opi_m.pcsDt, 0)) * COALESCE(kontrak_d.harga_pcs, 0)), 0) as total_idr_opi')
-            ->whereHas('kontrakm', function ($query) use ($customerName) {
-                $query->where('customer_name', 'LIKE', '%' . $customerName . '%');
-            })
+            ->join('kontrak_m', 'opi_m.kontrak_m_id', '=', 'kontrak_m.id')
+            ->leftJoin('mc', 'opi_m.mc_id', '=', 'mc.id')
+            ->where('kontrak_m.customer_name', 'LIKE', '%' . $customerName . '%')
             ->where('opi_m.status_opi', 'Proses')
-            ->value('total_idr_opi');
+            ->select(
+                'opi_m.NoOPI',
+                'kontrak_m.kode as kode_kontrak',
+                'mc.namaBarang',
+                'opi_m.jumlahOrder',
+                'opi_m.pcsDt',
+                'kontrak_d.harga_pcs'
+            )
+            ->orderBy('opi_m.NoOPI')
+            ->get()
+            ->map(function ($row) {
+                $row->sisa_pcs = ($row->jumlahOrder ?? 0) - ($row->pcsDt ?? 0);
+                $row->total_idr = $row->sisa_pcs * ($row->harga_pcs ?? 0);
+                return $row;
+            });
+
+        $idr_opi = $opiDetails->sum('total_idr');
 
         if (!$customer) {
             // Fallback jika customer tidak ditemukan
@@ -361,7 +375,8 @@ class FinanceController extends Controller
             // 'totalPiutang',
             // 'sisaLimit',
             // 'piutangOverdue',
-            'idr_opi'
+            'idr_opi',
+            'opiDetails'
             ));
         }
 
