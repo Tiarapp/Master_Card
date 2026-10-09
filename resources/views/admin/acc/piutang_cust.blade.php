@@ -47,14 +47,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($piutang as $data)
+                    @foreach ($rows as $data)
                     <tr>
-                        <td>{{ date('Y-m-d', strtotime($data->Tanggal)) }}</td>
-                        <td>{{ $data->NoRef }}</td>
-                        <td>{{ $data->NoBukti }}</td>
-                        <td>{{ date('Y-m-d', strtotime($data->TglJT)) }}</td>
-                        <td>{{ number_format($data->TotalRp, 2, '.', ',') }}</td>
-                        <td>{{ number_format($data->TotalTerima, 2, '.', ',') }}</td>
+                        <td>{{ date('Y-m-d', strtotime($data->tanggal)) }}</td>
+                        <td>{{ $data->no_ref }}</td>
+                        <td>{{ $data->nomor }}</td>
+                        <td>{{ $data->jatuh_tempo ? date('Y-m-d', strtotime($data->jatuh_tempo)) : '-' }}</td>
+                        <td>{{ number_format($data->nilai, 2, '.', ',') }}</td>
+                        <td>{{ number_format($data->terima, 2, '.', ',') }}</td>
                         <td>{{ number_format($data->sisa_piutang, 2, '.', ',') }}</td>
                         <td>{{ $data->selisih_hari < 0 ? number_format($data->sisa_piutang, 2, '.', ',') : '-' }}</td>
                         <td>{{ ($data->selisih_hari >= 0 && $data->selisih_hari <= 15) ? number_format($data->sisa_piutang, 2, '.', ',') : '-' }}</td>
@@ -72,37 +72,37 @@
                     <tr>
                         <th colspan="4" style="text-align:left">TOTAL</th>
                         <th>
-                            {{ number_format($piutang->sum('TotalRp'), 2, '.', ',') }}
+                            {{ number_format($rows->sum('nilai'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->sum('TotalTerima'), 2, '.', ',') }}
+                            {{ number_format($rows->sum('terima'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari < 0)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari < 0)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 0 && $d->selisih_hari <= 15)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 0 && $d->selisih_hari <= 15)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 16 && $d->selisih_hari <= 30)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 16 && $d->selisih_hari <= 30)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 31 && $d->selisih_hari <= 45)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 31 && $d->selisih_hari <= 45)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 46 && $d->selisih_hari <= 60)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 46 && $d->selisih_hari <= 60)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 61 && $d->selisih_hari <= 90)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 61 && $d->selisih_hari <= 90)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 91 && $d->selisih_hari <= 120)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 91 && $d->selisih_hari <= 120)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th>
-                            {{ number_format($piutang->filter(fn($d) => $d->selisih_hari >= 121)->sum('sisa_piutang'), 2, '.', ',') }}
+                            {{ number_format($rows->filter(fn($d) => $d->selisih_hari >= 121)->sum('sisa_piutang'), 2, '.', ',') }}
                         </th>
                         <th></th>
                     </tr>

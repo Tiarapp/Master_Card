@@ -285,6 +285,11 @@ class FinanceController extends Controller
             ->orderBy('TSuratJalan.TglSJ', 'Asc')
             ->get();
 
+
+        // Get customer data from Firebird using helper method
+        $customer = $this->getCustomerByKode($cust);
+        $customerName = $customer->Nama ?? $cust;
+
         $rows = $piutang->map(fn ($p) => (object) [
             'jenis' => 'Piutang',
             'tanggal' => $p->Tanggal,
@@ -311,9 +316,6 @@ class FinanceController extends Controller
 
         dd($rows);
 
-        // Get customer data from Firebird using helper method
-        $customer = $this->getCustomerByKode($cust);
-        $customerName = $customer->Nama ?? $cust;
 
         $idr_opi = Opi_M::query()
             ->join('kontrak_d', 'opi_m.kontrak_d_id', '=', 'kontrak_d.id')
@@ -352,6 +354,7 @@ class FinanceController extends Controller
             'customer',
             'piutang',
             'suratJalan',
+            'rows',
             // 'totalPiutang',
             // 'sisaLimit',
             // 'piutangOverdue',
