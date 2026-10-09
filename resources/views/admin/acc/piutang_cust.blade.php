@@ -17,7 +17,11 @@
             <p><strong>Term of Payment:</strong> {{ $customer->WAKTUBAYAR }} </p>
             <p><strong>Limit Piutang:</strong> {{ number_format($customer->Plafond, 2, '.', ',') }} </p>
             <p><strong>Total IDR OPI:</strong>
-                <a href="#" data-toggle="modal" data-target="#opiModal" data-bs-toggle="modal" data-bs-target="#opiModal">{{ number_format($idr_opi ?? 0, 2, '.', ',') }}</a>
+                {{ number_format($idr_opi ?? 0, 2, '.', ',') }}
+                <button type="button" class="btn btn-sm btn-outline-primary ml-2 ms-2" title="Lihat detail OPI"
+                    data-toggle="modal" data-target="#opiModal" data-bs-toggle="modal" data-bs-target="#opiModal">
+                    <i class="fas fa-eye"></i> Detail
+                </button>
             </p>
         </div>
     </div>
