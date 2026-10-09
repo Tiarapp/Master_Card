@@ -314,7 +314,7 @@ class FinanceController extends Controller
             ])
         )->sortBy('tanggal')->values();
 
-        dd($rows);
+        // dd($rows);
 
 
         $idr_opi = Opi_M::query()
