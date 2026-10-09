@@ -285,7 +285,31 @@ class FinanceController extends Controller
             ->orderBy('TSuratJalan.TglSJ', 'Asc')
             ->get();
 
-        // dd($suratJalan);
+        $rows = $piutang->map(fn ($p) => (object) [
+            'jenis' => 'Piutang',
+            'tanggal' => $p->Tanggal,
+            'no_ref' => $p->NoRef,
+            'nomor' => $p->NoBukti,
+            'jatuh_tempo' => $p->TglJT,
+            'nilai' => $p->TotalRp,
+            'terima' => $p->TotalTerima,
+            'sisa_piutang' => $p->sisa_piutang,
+            'selisih_hari' => $p->selisih_hari,
+        ])->concat(
+            $suratJalan->map(fn ($sj) => (object) [
+                'jenis' => 'Surat Jalan',
+                'tanggal' => $sj->TglSJ,
+                'no_ref' => '-',
+                'nomor' => $sj->nomer_sj,
+                'jatuh_tempo' => null,
+                'nilai' => $sj->TotalAkhir,
+                'terima' => null,
+                'sisa_piutang' => null,
+                'selisih_hari' => null,
+            ])
+        )->sortBy('tanggal')->values();
+
+        dd($rows);
 
         // Get customer data from Firebird using helper method
         $customer = $this->getCustomerByKode($cust);
