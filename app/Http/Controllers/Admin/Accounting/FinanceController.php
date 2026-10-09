@@ -310,7 +310,7 @@ class FinanceController extends Controller
                 'nilai' => $sj->TotalAkhir,
                 'terima' => null,
                 'sisa_piutang' => $sj->TotalAkhir,
-                'selisih_hari' => now()->diffInDays(\Carbon\Carbon::parse($sj->TglSJ)),
+                'selisih_hari' => \Carbon\Carbon::parse($sj->TglSJ)->addDays($customer->WAKTUBAYAR ?? 0)->diffInDays(now()),
             ])
         )->sortBy('tanggal')->values();
 
