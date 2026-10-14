@@ -164,22 +164,34 @@
               <div class="card-body p-0">
                 <!-- Progress Bar -->
                 @php
-                  $progress = 0;
-                  if ($kontrak->kontrakm->realisasi && $kontrak->pcsKontrak > 0) {
-                    $progress = number_format((int)$kontrak->kontrakm->realisasi->sum('qty_kirim') / $kontrak->pcsKontrak * 100, 2);
-                  }
-                  // Ensure progress doesn't exceed 100%
-                  $progress = min($progress, 100);
+                  $progress = 0.0;
+
+                    $totalKirim = (float) (
+                        $kontrak->kontrakm->realisasi->sum('qty_kirim') ?? 0
+                    );
+
+                    $totalKontrak = (float) ($kontrak->pcsKontrak ?? 0);
+
+                    if ($totalKontrak > 0) {
+                        $progress = ($totalKirim / $totalKontrak) * 100;
+                    }
+
+                    // Batasi progress antara 0% dan 100%
+                    $progress = max(0, min($progress, 100));
+
+                    $progressColor = $progress >= 100
+                        ? 'success'
+                        : ($progress >= 50 ? 'warning' : 'danger');
                 @endphp
                 <div class="p-3 border-bottom">
                   <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="text-sm font-weight-bold">Progress Pengiriman</span>
-                    <span class="badge badge-{{ $progress >= 100 ? 'success' : ($progress >= 50 ? 'warning' : 'danger') }}">
+                    <span class="badge badge-{{ $progressColor }}">
                       {{ number_format($progress < 100 ? $progress : 100, 1) }}%
                     </span>
                   </div>
                   <div class="progress progress-sm">
-                    <div class="progress-bar bg-{{ $progress >= 100 ? 'success' : ($progress >= 50 ? 'warning' : 'danger') }}"
+                    <div class="progress-bar bg-{{ $progressColor }}"
                          style="width: {{ min($progress, 100) }}%"></div>
                   </div>
                 </div>
