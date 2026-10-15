@@ -36,7 +36,13 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             'kontrak_d.mc:id,namaBarang,gramSheetBoxKontrak,tipeBox',
             'kontrak_d:kontrak_m_id,mc_id,pcsKontrak,kgKontrak,harga_pcs,amountTotal',
             'realisasi:kontrak_m_id,opi_id,tanggal_kirim,qty_kirim',
-            'opis:id,kontrak_m_id,NoOPI,status_opi,jumlahOrder'
+            'opis' => function ($q) {
+                $q->select('id', 'kontrak_m_id', 'NoOPI', 'status_opi', 'jumlahOrder');
+
+                if ($this->exportType === 'opi') {
+                    $q->whereIn('status_opi', ['closed', 'Proses']);
+                }
+            }
         ]);
 
         // Filter berdasarkan tanggal jika ada
@@ -80,7 +86,6 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             $qtyKontrak = $kontrakDetail ? $kontrakDetail->pcsKontrak : 0;
             $beratKontrak = $kontrakDetail ? $kontrakDetail->kgKontrak : 0;
             $gram = $kontrakDetail->mc->gramSheetBoxKontrak ?? 0;
-            $tipeBox = $kontrakDetail->mc->tipeBox ?? '-';
             $hargaPcs = $kontrakDetail->harga_pcs ?? 0;
             $totalNominal = $this->exportType === 'opi'
                 ? 0
@@ -91,7 +96,9 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             $sisaKontrakQty = $qtyKontrak - $totalRealisasiQty;
             $sisaKontrakKg = $beratKontrak - ($totalRealisasiQty * ($beratKontrak / max($qtyKontrak, 1)));
 
-            $opis = $this->exportType === 'opi' ? $kontrak->opis : [null];
+            $opis = $this->exportType === 'opi'
+                ? $kontrak->opis->whereIn('status_opi', ['closed', 'Proses'])
+                : [null];
 
             foreach ($opis as $opi) {
                 $realisasiPerOpi = $opi
@@ -129,7 +136,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     $kontrak->kontrak_d->mc->tipeBox ?? '-',
                     number_format($gram, 3, '.', ''),
                     $qtyDisplay,
-                    number_format($beratDisplay, 3, '.', ''),
+                    number_format($beratDisplay, 2, '.', ''),
                     $hargaPcs,
                     $rupiahPerKg,
                     $totalNominalDisplay,
@@ -139,6 +146,10 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     $sisaQtyDisplay,
                     number_format($sisaKgDisplay, 3, '.', '')
                 ];
+
+                if ($this->exportType === 'opi') {
+                    array_splice($row, 13, 1);
+                }
 
                 if ($opi) {
                     array_splice($row, 1, 0, [$opi->NoOPI ?? '-', $opi->status_opi ?? '-']);
@@ -179,6 +190,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
         ];
 
         if ($this->exportType === 'opi') {
+            array_splice($headings, 13, 1);
             array_splice($headings, 1, 0, ['No OPI', 'Status OPI']);
         }
 
@@ -189,7 +201,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
     {
         if ($this->exportType === 'opi') {
             return [
-                'M' => self::FORMAT_ACCOUNTING_IDR,
+                // 'M' => self::FORMAT_ACCOUNTING_IDR,
                 'N' => self::FORMAT_ACCOUNTING_IDR,
                 'O' => self::FORMAT_ACCOUNTING_IDR,
             ];
