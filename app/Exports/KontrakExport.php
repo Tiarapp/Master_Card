@@ -7,10 +7,13 @@ use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSize
+class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSize, WithColumnFormatting
 {
+    private const FORMAT_ACCOUNTING_IDR = '_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)';
+
     protected $startDate;
     protected $endDate;
     protected $search;
@@ -28,8 +31,8 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
     public function array(): array
     {
         $query = Kontrak_M::with([
-            'kontrak_d.mc:id,namaBarang',
-            'kontrak_d:kontrak_m_id,mc_id,pcsKontrak,kgKontrak',
+            'kontrak_d.mc:id,namaBarang,gramSheetBoxKontrak',
+            'kontrak_d:kontrak_m_id,mc_id,pcsKontrak,kgKontrak,harga_pcs,amountTotal',
             'realisasi:kontrak_m_id,tanggal_kirim,qty_kirim'
         ]);
 
@@ -62,67 +65,48 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
 
             // Hitung total realisasi
             $totalRealisasiQty = $realisasiKirim->sum('qty_kirim');
-            
+
             // Ambil data kontrak detail untuk qty dan berat
             $kontrakDetail = $kontrak->kontrak_d;
             $qtyKontrak = $kontrakDetail ? $kontrakDetail->pcsKontrak : 0;
             $beratKontrak = $kontrakDetail ? $kontrakDetail->kgKontrak : 0;
+            $gram = $kontrakDetail->mc->gramSheetBoxKontrak ?? 0;
+            $hargaPcs = $kontrakDetail->harga_pcs ?? 0;
+            $totalNominal = $kontrakDetail->amountTotal ?? $kontrak->amountTotal ?? 0;
+            $rupiahPerKg = $gram > 0 ? $hargaPcs / $gram : 0;
 
             // Hitung sisa kontrak
             $sisaKontrakQty = $qtyKontrak - $totalRealisasiQty;
             $sisaKontrakKg = $beratKontrak - ($totalRealisasiQty * ($beratKontrak / max($qtyKontrak, 1)));
 
-            // Jika ada realisasi kirim, buat baris untuk setiap realisasi
-            if ($realisasiKirim->count() > 0) {
-                foreach ($realisasiKirim as $index => $realisasi) {
-                    if ($index === 0) {
-                        // Baris pertama dengan semua data kontrak
-                        $exportData[] = [
-                            $kontrak->kode,
-                            \Carbon\Carbon::parse($kontrak->tglKontrak)->format('d/m/Y'),
-                            $kontrak->customer_name ?? '-',
-                            $kontrak->poCustomer ?? '-',
-                            $kontrak->kontrak_d->mc->namaBarang ?? '-',
-                            $qtyKontrak,
-                            number_format($beratKontrak, 2, '.', ''),
-                            \Carbon\Carbon::parse($realisasi->tanggal_kirim)->format('d/m/Y'),
-                            $realisasi->qty_kirim,
-                            $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
-                            $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
-                        ];
-                    } else {
-                        // Baris berikutnya hanya data realisasi
-                        $exportData[] = [
-                            '', // No Kontrak kosong
-                            '', // Tanggal Kontrak kosong
-                            '', // Customer kosong
-                            '', // PO Customer kosong
-                            '', // Nama Barang kosong
-                            '', // Qty Kontrak kosong
-                            '', // Berat Kontrak kosong
-                            \Carbon\Carbon::parse($realisasi->tanggal_kirim)->format('d/m/Y'),
-                            $realisasi->qty_kirim,
-                            '', // Sisa Kontrak kosong
-                            ''  // Sisa Kontrak Kg kosong
-                        ];
-                    }
-                }
-            } else {
-                // Jika tidak ada realisasi kirim
-                $exportData[] = [
-                    $kontrak->kode,
-                    \Carbon\Carbon::parse($kontrak->tglKontrak)->format('d/m/Y'),
-                    $kontrak->customer_name ?? '-',
-                    $kontrak->poCustomer ?? '-',
-                    $kontrak->kontrak_d->mc->namaBarang ?? '-',
-                    $qtyKontrak,
-                    number_format($beratKontrak, 2, '.', ''),
-                    '-', // Tanggal Kirim
-                    '0', // Quantity Kirim
-                    $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
-                    $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
-                ];
-            }
+            $tanggalKirim = $realisasiKirim
+                ->pluck('tanggal_kirim')
+                ->filter()
+                ->map(fn ($tanggal) => \Carbon\Carbon::parse($tanggal)->format('d/m/Y'))
+                ->unique()
+                ->implode(', ');
+
+            $exportData[] = [
+                $kontrak->kode,
+                \Carbon\Carbon::parse($kontrak->tglKontrak)->format('d/m/Y'),
+                $kontrak->customer_name ?? '-',
+                $kontrak->poCustomer ?? '-',
+                $kontrak->sales ?? '-',
+                $kontrak->min_tgl_kirim
+                    ? \Carbon\Carbon::parse($kontrak->min_tgl_kirim)->format('d/m/Y')
+                    : '-',
+                $kontrak->kontrak_d->mc->namaBarang ?? '-',
+                number_format($gram, 2, '.', ''),
+                $qtyKontrak,
+                number_format($beratKontrak, 2, '.', ''),
+                $hargaPcs,
+                $rupiahPerKg,
+                $totalNominal,
+                $tanggalKirim ?: '-',
+                $totalRealisasiQty,
+                $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
+                $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
+            ];
         }
 
         return $exportData;
@@ -138,13 +122,28 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             'Tanggal Kontrak',
             'Customer',
             'PO Customer',
+            'Nama Sales',
+            'Tanggal Kirim (Est)',
             'Nama Barang',
+            'Gram',
             'Qty Kontrak',
             'Berat Kontrak (Kg)',
+            'Harga per Pcs',
+            'Rupiah per Kg',
+            'Total Nominal Penjualan',
             'Tanggal Kirim',
             'Quantity Kirim',
             'Sisa Kontrak (Qty)',
             'Sisa Kontrak (Kg)'
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'K' => self::FORMAT_ACCOUNTING_IDR,
+            'L' => self::FORMAT_ACCOUNTING_IDR,
+            'M' => self::FORMAT_ACCOUNTING_IDR,
         ];
     }
 
