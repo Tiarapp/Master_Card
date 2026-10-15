@@ -82,7 +82,9 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             $gram = $kontrakDetail->mc->gramSheetBoxKontrak ?? 0;
             $tipeBox = $kontrakDetail->mc->tipeBox ?? '-';
             $hargaPcs = $kontrakDetail->harga_pcs ?? 0;
-            $totalNominal = $kontrakDetail->amountTotal ?? $kontrak->amountTotal ?? 0;
+            $totalNominal = $this->exportType === 'opi'
+                ? 0
+                : ($kontrakDetail->amountTotal ?? $kontrak->amountTotal ?? 0);
             $rupiahPerKg = $gram > 0 ? $hargaPcs / $gram : 0;
 
             // Hitung sisa kontrak
@@ -111,7 +113,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     ? max($beratDisplay - ($qtyKirim * $gram), 0)
                     : max($sisaKontrakKg, 0);
                 $totalNominalDisplay = $opi
-                    ? $qtyDisplay * $hargaPcs
+                    ? 0
                     : $totalNominal;
 
                 $row = [
@@ -133,6 +135,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     $totalNominalDisplay,
                     $tanggalKirim ?: '-',
                     $qtyKirim,
+                    number_format($qtyKirim * $gram, 3, '.', ''),
                     $sisaQtyDisplay,
                     number_format($sisaKgDisplay, 3, '.', '')
                 ];
