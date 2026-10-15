@@ -1325,6 +1325,11 @@ class Kontrak_DController extends Controller
             $startDate = $request->input('start_date');
             $endDate = $request->input('end_date');
             $search = $request->input('search');
+            $exportType = $request->input('export_type', 'running');
+
+            if (!in_array($exportType, ['running', 'opi'], true)) {
+                abort(400, 'Jenis export tidak valid.');
+            }
 
             // Validasi tanggal jika ada
             if ($startDate && $endDate) {
@@ -1334,9 +1339,12 @@ class Kontrak_DController extends Controller
             }
 
             // Generate filename dengan timestamp dan parameter
-            $filename = 'export_kontrak_';
+            $filename = $exportType === 'opi'
+                ? 'export_kontrak_dengan_opi_'
+                : 'export_kontrak_berjalan_';
             if ($search) {
-                $filename .= 'search_' . str_replace(' ', '_', $search) . '_';
+                $safeSearch = str_replace(['/', '\\'], '_', $search);
+                $filename .= 'search_' . str_replace(' ', '_', $safeSearch) . '_';
             }
             if ($startDate && $endDate) {
                 $filename .= $startDate . '_to_' . $endDate . '_';
@@ -1344,7 +1352,10 @@ class Kontrak_DController extends Controller
             $filename .= date('Y-m-d_H-i-s') . '.xlsx';
 
             // Download Excel file
-            return Excel::download(new KontrakExport($startDate, $endDate, $search), $filename);
+            return Excel::download(
+                new KontrakExport($startDate, $endDate, $search, $exportType),
+                $filename
+            );
         }
 
         public function get_all_kontrak(Request $request)

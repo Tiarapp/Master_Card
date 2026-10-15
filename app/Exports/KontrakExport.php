@@ -17,12 +17,14 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
     protected $startDate;
     protected $endDate;
     protected $search;
+    protected $exportType;
 
-    public function __construct($startDate = null, $endDate = null, $search = null)
+    public function __construct($startDate = null, $endDate = null, $search = null, $exportType = 'running')
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->search = $search;
+        $this->exportType = $exportType;
     }
 
     /**
@@ -33,7 +35,8 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
         $query = Kontrak_M::with([
             'kontrak_d.mc:id,namaBarang,gramSheetBoxKontrak',
             'kontrak_d:kontrak_m_id,mc_id,pcsKontrak,kgKontrak,harga_pcs,amountTotal',
-            'realisasi:kontrak_m_id,tanggal_kirim,qty_kirim'
+            'realisasi:kontrak_m_id,opi_id,tanggal_kirim,qty_kirim',
+            'opis:id,kontrak_m_id,NoOPI,status_opi'
         ]);
 
         // Filter berdasarkan tanggal jika ada
@@ -52,6 +55,12 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             ->orWhereHas('kontrak_d.mc', function($query) {
                 $query->where('kode', 'like', '%'.$this->search.'%')
                       ->orWhere('namaBarang', 'like', '%'.$this->search.'%');
+            });
+        }
+
+        if ($this->exportType === 'opi') {
+            $query->whereHas('opis', function ($q) {
+                $q->whereIn('status_opi', ['closed', 'Proses']);
             });
         }
 
@@ -79,34 +88,48 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             $sisaKontrakQty = $qtyKontrak - $totalRealisasiQty;
             $sisaKontrakKg = $beratKontrak - ($totalRealisasiQty * ($beratKontrak / max($qtyKontrak, 1)));
 
-            $tanggalKirim = $realisasiKirim
-                ->pluck('tanggal_kirim')
-                ->filter()
-                ->map(fn ($tanggal) => \Carbon\Carbon::parse($tanggal)->format('d/m/Y'))
-                ->unique()
-                ->implode(', ');
+            $opis = $this->exportType === 'opi' ? $kontrak->opis : [null];
 
-            $exportData[] = [
-                $kontrak->kode,
-                \Carbon\Carbon::parse($kontrak->tglKontrak)->format('d/m/Y'),
-                $kontrak->customer_name ?? '-',
-                $kontrak->poCustomer ?? '-',
-                $kontrak->sales ?? '-',
-                $kontrak->min_tgl_kirim
-                    ? \Carbon\Carbon::parse($kontrak->min_tgl_kirim)->format('d/m/Y')
-                    : '-',
-                $kontrak->kontrak_d->mc->namaBarang ?? '-',
-                number_format($gram, 2, '.', ''),
-                $qtyKontrak,
-                number_format($beratKontrak, 2, '.', ''),
-                $hargaPcs,
-                $rupiahPerKg,
-                $totalNominal,
-                $tanggalKirim ?: '-',
-                $totalRealisasiQty,
-                $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
-                $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
-            ];
+            foreach ($opis as $opi) {
+                $realisasiPerOpi = $opi
+                    ? $realisasiKirim->where('opi_id', $opi->id)
+                    : $realisasiKirim;
+                $qtyKirim = $realisasiPerOpi->sum('qty_kirim');
+                $tanggalKirim = $realisasiPerOpi
+                    ->pluck('tanggal_kirim')
+                    ->filter()
+                    ->map(fn ($tanggal) => \Carbon\Carbon::parse($tanggal)->format('d/m/Y'))
+                    ->unique()
+                    ->implode(', ');
+
+                $row = [
+                    $kontrak->kode,
+                    \Carbon\Carbon::parse($kontrak->tglKontrak)->format('d/m/Y'),
+                    $kontrak->customer_name ?? '-',
+                    $kontrak->poCustomer ?? '-',
+                    $kontrak->sales ?? '-',
+                    $kontrak->min_tgl_kirim
+                        ? \Carbon\Carbon::parse($kontrak->min_tgl_kirim)->format('d/m/Y')
+                        : '-',
+                    $kontrak->kontrak_d->mc->namaBarang ?? '-',
+                    number_format($gram, 2, '.', ''),
+                    $qtyKontrak,
+                    number_format($beratKontrak, 2, '.', ''),
+                    $hargaPcs,
+                    $rupiahPerKg,
+                    $totalNominal,
+                    $tanggalKirim ?: '-',
+                    $qtyKirim,
+                    $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
+                    $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
+                ];
+
+                if ($opi) {
+                    array_splice($row, 1, 0, [$opi->NoOPI ?? '-', $opi->status_opi ?? '-']);
+                }
+
+                $exportData[] = $row;
+            }
         }
 
         return $exportData;
@@ -117,7 +140,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
      */
     public function headings(): array
     {
-        return [
+        $headings = [
             'No Kontrak',
             'Tanggal Kontrak',
             'Customer',
@@ -136,10 +159,24 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             'Sisa Kontrak (Qty)',
             'Sisa Kontrak (Kg)'
         ];
+
+        if ($this->exportType === 'opi') {
+            array_splice($headings, 1, 0, ['No OPI', 'Status OPI']);
+        }
+
+        return $headings;
     }
 
     public function columnFormats(): array
     {
+        if ($this->exportType === 'opi') {
+            return [
+                'M' => self::FORMAT_ACCOUNTING_IDR,
+                'N' => self::FORMAT_ACCOUNTING_IDR,
+                'O' => self::FORMAT_ACCOUNTING_IDR,
+            ];
+        }
+
         return [
             'K' => self::FORMAT_ACCOUNTING_IDR,
             'L' => self::FORMAT_ACCOUNTING_IDR,

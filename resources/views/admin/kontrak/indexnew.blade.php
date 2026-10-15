@@ -153,7 +153,7 @@
                     <input type="hidden" name="search" value="{{ request('search') }}">
                   @endif
                   
-                  <div class="col-md-5">
+                  <div class="col-md-4">
                     <div class="input-group input-group-sm">
                       <span class="input-group-text bg-white border-end-0">
                         <i class="fas fa-calendar-alt text-muted"></i>
@@ -164,7 +164,7 @@
                     </div>
                   </div>
                   
-                  <div class="col-md-5">
+                  <div class="col-md-4">
                     <div class="input-group input-group-sm">
                       <span class="input-group-text bg-white border-end-0">
                         <i class="fas fa-calendar-alt text-muted"></i>
@@ -176,14 +176,20 @@
                   </div>
                   
                   <div class="col-md-2">
-                    <button type="submit" class="btn btn-success btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm"
-                            title="{{ request('search') ? 'Export data yang sudah difilter' : 'Export semua data' }}">
+                    <button type="submit" name="export_type" value="running"
+                            class="btn btn-success btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm"
+                            title="Export kontrak berjalan">
                       <i class="fas fa-download me-1"></i>
-                      @if(request('search'))
-                        <span class="d-none d-lg-inline">Filtered</span>
-                      @else
-                        <span class="d-none d-lg-inline">Excel</span>
-                      @endif
+                      <span class="d-none d-lg-inline">Berjalan</span>
+                    </button>
+                  </div>
+
+                  <div class="col-md-2">
+                    <button type="submit" name="export_type" value="opi"
+                            class="btn btn-primary btn-sm w-100 d-flex align-items-center justify-content-center shadow-sm"
+                            title="Export kontrak dengan OPI">
+                      <i class="fas fa-download me-1"></i>
+                      <span class="d-none d-lg-inline">Dengan OPI</span>
                     </button>
                   </div>
                 </form>
