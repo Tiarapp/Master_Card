@@ -36,7 +36,7 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             'kontrak_d.mc:id,namaBarang,gramSheetBoxKontrak',
             'kontrak_d:kontrak_m_id,mc_id,pcsKontrak,kgKontrak,harga_pcs,amountTotal',
             'realisasi:kontrak_m_id,opi_id,tanggal_kirim,qty_kirim',
-            'opis:id,kontrak_m_id,NoOPI,status_opi'
+            'opis:id,kontrak_m_id,NoOPI,status_opi,jumlahOrder'
         ]);
 
         // Filter berdasarkan tanggal jika ada
@@ -101,6 +101,17 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     ->map(fn ($tanggal) => \Carbon\Carbon::parse($tanggal)->format('d/m/Y'))
                     ->unique()
                     ->implode(', ');
+                $qtyDisplay = $opi ? ($opi->jumlahOrder ?? 0) : $qtyKontrak;
+                $beratDisplay = $opi ? $qtyDisplay * $gram : $beratKontrak;
+                $sisaQtyDisplay = $opi
+                    ? max($qtyDisplay - $qtyKirim, 0)
+                    : max($sisaKontrakQty, 0);
+                $sisaKgDisplay = $opi
+                    ? max($beratDisplay - ($qtyKirim * $gram), 0)
+                    : max($sisaKontrakKg, 0);
+                $totalNominalDisplay = $opi
+                    ? $qtyDisplay * $hargaPcs
+                    : $totalNominal;
 
                 $row = [
                     $kontrak->kode,
@@ -113,15 +124,15 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                         : '-',
                     $kontrak->kontrak_d->mc->namaBarang ?? '-',
                     number_format($gram, 2, '.', ''),
-                    $qtyKontrak,
-                    number_format($beratKontrak, 2, '.', ''),
+                    $qtyDisplay,
+                    number_format($beratDisplay, 2, '.', ''),
                     $hargaPcs,
                     $rupiahPerKg,
-                    $totalNominal,
+                    $totalNominalDisplay,
                     $tanggalKirim ?: '-',
                     $qtyKirim,
-                    $sisaKontrakQty >= 0 ? $sisaKontrakQty : 0,
-                    $sisaKontrakKg >= 0 ? number_format($sisaKontrakKg, 2, '.', '') : 0
+                    $sisaQtyDisplay,
+                    number_format($sisaKgDisplay, 2, '.', '')
                 ];
 
                 if ($opi) {
@@ -149,15 +160,15 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
             'Tanggal Kirim (Est)',
             'Nama Barang',
             'Gram',
-            'Qty Kontrak',
-            'Berat Kontrak (Kg)',
+            $this->exportType === 'opi' ? 'Qty OPI' : 'Qty Kontrak',
+            $this->exportType === 'opi' ? 'Berat Qty OPI (Kg)' : 'Berat Kontrak (Kg)',
             'Harga per Pcs',
             'Rupiah per Kg',
             'Total Nominal Penjualan',
             'Tanggal Kirim',
             'Quantity Kirim',
-            'Sisa Kontrak (Qty)',
-            'Sisa Kontrak (Kg)'
+            $this->exportType === 'opi' ? 'Sisa OPI (Qty)' : 'Sisa Kontrak (Qty)',
+            $this->exportType === 'opi' ? 'Sisa OPI (Kg)' : 'Sisa Kontrak (Kg)'
         ];
 
         if ($this->exportType === 'opi') {
