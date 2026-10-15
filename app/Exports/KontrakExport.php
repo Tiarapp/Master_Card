@@ -122,6 +122,19 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                 $totalNominalDisplay = $opi
                     ? 0
                     : $totalNominal;
+                $hasOpiRealisasi = $opi && $realisasiPerOpi->isNotEmpty();
+                $firstRealisasi = $hasOpiRealisasi ? $realisasiPerOpi->first() : null;
+                $tanggalKirimDisplay = $firstRealisasi
+                    ? ($firstRealisasi->tanggal_kirim
+                        ? \Carbon\Carbon::parse($firstRealisasi->tanggal_kirim)->format('d/m/Y')
+                        : '-')
+                    : ($tanggalKirim ?: '-');
+                $qtyKirimDisplay = $firstRealisasi
+                    ? ($firstRealisasi->qty_kirim ?? 0)
+                    : $qtyKirim;
+                $beratKirimDisplay = $firstRealisasi
+                    ? number_format(($firstRealisasi->qty_kirim ?? 0) * $gram, 3, '.', '')
+                    : number_format($qtyKirim * $gram, 3, '.', '');
 
                 $row = [
                     $kontrak->kode,
@@ -140,9 +153,9 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                     $hargaPcs,
                     $rupiahPerKg,
                     $totalNominalDisplay,
-                    $tanggalKirim ?: '-',
-                    $qtyKirim,
-                    number_format($qtyKirim * $gram, 3, '.', ''),
+                    $tanggalKirimDisplay,
+                    $qtyKirimDisplay,
+                    $beratKirimDisplay,
                     $sisaQtyDisplay,
                     number_format($sisaKgDisplay, 3, '.', '')
                 ];
@@ -156,6 +169,23 @@ class KontrakExport implements FromArray, WithHeadings, WithStyles, ShouldAutoSi
                 }
 
                 $exportData[] = $row;
+
+                if ($hasOpiRealisasi) {
+                    foreach ($realisasiPerOpi->skip(1) as $realisasi) {
+                        $detailRow = array_fill(0, count($row), '');
+                        $detailRow[15] = $realisasi->tanggal_kirim
+                            ? \Carbon\Carbon::parse($realisasi->tanggal_kirim)->format('d/m/Y')
+                            : '-';
+                        $detailRow[16] = $realisasi->qty_kirim ?? 0;
+                        $detailRow[17] = number_format(
+                            ($realisasi->qty_kirim ?? 0) * $gram,
+                            3,
+                            '.',
+                            ''
+                        );
+                        $exportData[] = $detailRow;
+                    }
+                }
             }
         }
 
