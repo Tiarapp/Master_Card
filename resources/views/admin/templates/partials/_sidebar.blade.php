@@ -737,6 +737,13 @@
                     </a>
                   </li>
                 @endif
+                @if (hasMenuAccess('reports.opi'))
+                  <li class="nav-item">
+                    <a href="{{ route('admin.report.opi') }}" class="nav-link">
+                      <i class="fas fa-truck nav-icon"></i><p>Realisasi Kirim OPI</p>
+                    </a>
+                  </li>
+                @endif
                 @if (hasMenuAccess('reports.finish_goods'))
                   <li class="nav-item">
                     <a href="{{ route('admin.report.finish_goods') }}" class="nav-link">
