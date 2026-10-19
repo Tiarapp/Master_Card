@@ -91,6 +91,36 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-4">
+          <div class="info-box">
+            <span class="info-box-icon bg-warning"><i class="fas fa-clock"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Jumlah OPI{{ $search ? ' (sesuai pencarian)' : '' }}</span>
+              <span class="info-box-number">{{ number_format($opi->total(), 0, ',', '.') }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info-box">
+            <span class="info-box-icon bg-info"><i class="fas fa-boxes"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Total Qty Order (Pcs)</span>
+              <span class="info-box-number">{{ number_format($totalQty, 0, ',', '.') }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="fas fa-money-bill-wave"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Total Nominal (Rp)</span>
+              <span class="info-box-number">Rp {{ number_format($totalNominal, 0, ',', '.') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Data Table Card -->
       <div class="card card-success card-outline">
         <div class="card-header">

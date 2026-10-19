@@ -545,21 +545,27 @@ class FinanceController extends Controller
     {
         $search = $request->input('search') ? $request->input('search') : '';
 
-        $opi = Opi_M::with('kontrakm');
+        $opi = Opi_M::with(['kontrakm', 'kontrakd.kontrakm'])
+            ->where('opi_m.status_opi', 'Pending');
 
         if ($search) {
-            $opi = $opi->where('NoOPI', 'like', '%' . $search . '%')
-                ->orWhereHas('kontrakm', function ($query) use ($search) {
-                    $query->where('customer_name', 'like', '%' . $search . '%');
-                });
+            $opi = $opi->where(function ($q) use ($search) {
+                $q->where('opi_m.NoOPI', 'like', '%' . $search . '%')
+                    ->orWhereHas('kontrakm', function ($query) use ($search) {
+                        $query->where('customer_name', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
-        $opi = $opi->where('status_opi', 'Pending')
-                    ->orderBy('created_at', 'desc');  // Ubah dari 'desc' ke 'asc'
+        // Total nominal seluruh hasil filter (bukan hanya halaman aktif)
+        $totalNominal = (clone $opi)
+            ->join('kontrak_d', 'kontrak_d.id', '=', 'opi_m.kontrak_d_id')
+            ->sum(DB::raw('kontrak_d.harga_pcs * opi_m.jumlahOrder'));
+        $totalQty = (clone $opi)->sum('opi_m.jumlahOrder');
 
-        $opi = $opi->paginate(10);
+        $opi = $opi->orderBy('opi_m.created_at', 'desc')->paginate(10)->appends($request->query());
 
-        return view('admin.acc.approve_opi', compact('opi', 'search'));
+        return view('admin.acc.approve_opi', compact('opi', 'search', 'totalNominal', 'totalQty'));
     }
 
     public function approve_opi_action(Request $request, $id)
