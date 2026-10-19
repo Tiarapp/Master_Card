@@ -744,6 +744,13 @@
                     </a>
                   </li>
                 @endif
+                @if (hasMenuAccess('reports.opi_export'))
+                  <li class="nav-item">
+                    <a href="{{ route('admin.report.opi_export') }}" class="nav-link">
+                      <i class="fas fa-file-export nav-icon"></i><p>Export OPI</p>
+                    </a>
+                  </li>
+                @endif
                 @if (hasMenuAccess('reports.finish_goods'))
                   <li class="nav-item">
                     <a href="{{ route('admin.report.finish_goods') }}" class="nav-link">

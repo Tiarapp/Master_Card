@@ -8,6 +8,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use App\Exports\DeadstockExport;
 use App\Exports\OpiRealisasiExport;
+use App\Exports\OpiExportReport;
+use App\Models\Opi_M;
 use App\Exports\PersediaanBjExport;
 use App\Exports\SuratJalanExport;
 use App\Models\DetSuratJalan;
@@ -735,11 +737,8 @@ class ReportController extends Controller
 
     private function opiRealisasiQuery(Request $request)
     {
-        // Satu baris per kombinasi OPI + No. SJ; qty dan kg dijumlahkan
         $query = RealisasiKirim::with(['opi.kontrakm', 'opi.kontrakd', 'opi.mc', 'kontrakm'])
-            ->selectRaw('MIN(id) as id, opi_id, nomer_sj, MIN(kontrak_m_id) as kontrak_m_id, MIN(tanggal_kirim) as tanggal_kirim, SUM(qty_kirim) as qty_kirim, SUM(kg_kirim) as kg_kirim')
-            ->whereNotNull('opi_id')
-            ->groupBy('opi_id', 'nomer_sj');
+            ->whereNotNull('opi_id');
 
         if ($request->filled('tanggal_awal')) {
             $query->whereDate('tanggal_kirim', '>=', $request->input('tanggal_awal'));
@@ -749,7 +748,60 @@ class ReportController extends Controller
             $query->whereDate('tanggal_kirim', '<=', $request->input('tanggal_akhir'));
         }
 
-        return $query->orderByRaw('MIN(tanggal_kirim) desc')->orderByRaw('MIN(id) desc');
+        return $query->orderBy('tanggal_kirim', 'desc')->orderBy('id', 'desc');
+    }
+
+    public function opiExport(Request $request)
+    {
+        $this->validateOpiRealisasiDates($request);
+
+        $opi = $this->opiExportQuery($request)->paginate(20)->appends($request->query());
+
+        return view('admin.reports.opi_export', [
+            'opi' => $opi,
+            'tanggal_awal' => $request->input('tanggal_awal'),
+            'tanggal_akhir' => $request->input('tanggal_akhir'),
+        ]);
+    }
+
+    public function exportOpiData(Request $request)
+    {
+        if (!$request->filled('tanggal_awal') || !$request->filled('tanggal_akhir')) {
+            return redirect()->route('admin.report.opi_export')
+                ->with('error', 'Tanggal estimasi kirim awal dan akhir harus diisi untuk export.');
+        }
+
+        $this->validateOpiRealisasiDates($request);
+
+        $opi = $this->opiExportQuery($request)->get();
+        $filename = 'Export_OPI_' . $request->input('tanggal_awal') . '_to_' . $request->input('tanggal_akhir');
+
+        return Excel::download(new OpiExportReport($opi), $filename . '.xlsx');
+    }
+
+    // Satu baris per OPI; realisasi dijumlahkan dari realisasi_kirim
+    private function opiExportQuery(Request $request)
+    {
+        $query = Opi_M::with(['kontrakm', 'mc'])
+            ->withSum('realisasiKirim as total_qty_realisasi', 'qty_kirim')
+            ->withSum('realisasiKirim as total_kg_realisasi', 'kg_kirim')
+            ->withMax('realisasiKirim as tanggal_realisasi', 'tanggal_kirim')
+            ->whereNotNull('NoOPI')
+            ->where('NoOPI', 'NOT LIKE', '%CANCEL%')
+            ->where('NoOPI', 'NOT LIKE', '%PENDING%')
+            ->where(function ($q) {
+                $q->whereNull('status_opi')->orWhere('status_opi', '!=', 'Cancel');
+            });
+
+        if ($request->filled('tanggal_awal')) {
+            $query->whereDate('updated_at', '>=', $request->input('tanggal_awal'));
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('updated_at', '<=', $request->input('tanggal_akhir'));
+        }
+
+        return $query->orderBy('updated_at', 'desc')->orderBy('NoOPI', 'desc');
     }
 
     public function surat_jalan(Request $request)
