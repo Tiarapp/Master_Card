@@ -735,8 +735,11 @@ class ReportController extends Controller
 
     private function opiRealisasiQuery(Request $request)
     {
+        // Satu baris per kombinasi OPI + No. SJ; qty dan kg dijumlahkan
         $query = RealisasiKirim::with(['opi.kontrakm', 'opi.kontrakd', 'opi.mc', 'kontrakm'])
-            ->whereNotNull('opi_id');
+            ->selectRaw('MIN(id) as id, opi_id, nomer_sj, MIN(kontrak_m_id) as kontrak_m_id, MIN(tanggal_kirim) as tanggal_kirim, SUM(qty_kirim) as qty_kirim, SUM(kg_kirim) as kg_kirim')
+            ->whereNotNull('opi_id')
+            ->groupBy('opi_id', 'nomer_sj');
 
         if ($request->filled('tanggal_awal')) {
             $query->whereDate('tanggal_kirim', '>=', $request->input('tanggal_awal'));
@@ -746,7 +749,7 @@ class ReportController extends Controller
             $query->whereDate('tanggal_kirim', '<=', $request->input('tanggal_akhir'));
         }
 
-        return $query->orderBy('tanggal_kirim', 'desc')->orderBy('id', 'desc');
+        return $query->orderByRaw('MIN(tanggal_kirim) desc')->orderByRaw('MIN(id) desc');
     }
 
     public function surat_jalan(Request $request)
