@@ -42,6 +42,7 @@ class OpiRealisasiExport implements FromCollection, WithHeadings, WithMapping
     {
         $opi = $realisasi->opi;
         $kontrak = $opi ? $opi->kontrakm : $realisasi->kontrakm;
+        $kgkirim = $realisasi->qty_kirim * ($opi && $opi->mc && $opi->mc->gramSheetBoxKontrak2 ? round($opi->mc->gramSheetBoxKontrak2, 2) : 0);
 
         return [
             $opi->NoOPI ?? '',
@@ -52,7 +53,7 @@ class OpiRealisasiExport implements FromCollection, WithHeadings, WithMapping
             $realisasi->tanggal_kirim ? Carbon::parse($realisasi->tanggal_kirim)->format('d-m-Y') : '',
             $realisasi->nomer_sj ?? '',
             $realisasi->qty_kirim ?? '',
-            $realisasi->kg_kirim ?? '',
+            $kgkirim ?? '',
             $opi->kontrakd->harga_kg ?? '',
         ];
     }
