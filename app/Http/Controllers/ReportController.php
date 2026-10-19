@@ -793,7 +793,7 @@ class ReportController extends Controller
             ->leftJoin('kontrak_d as d', 'o.kontrak_d_id', '=', 'd.id')
             ->leftJoin('mc', 'o.mc_id', '=', 'mc.id')
             ->leftJoinSub($realisasi, 'r', 'r.opi_id', '=', 'o.id')
-            ->selectRaw("o.NoOPI, k.customer_name, mc.namaBarang, mc.tipeBox, mc.flute, d.harga_kg, k.kode as kontrak_kode, DATE_FORMAT(k.tglKontrak, '%d-%m-%Y') as tgl_kontrak, o.jumlahOrder, mc.gramSheetBoxKontrak2 as gram, DATE_FORMAT(o.tglKirimDt, '%d-%m-%Y') as tgl_estimasi, DATE_FORMAT(r.tgl_kirim, '%d-%m-%Y') as tgl_kirim, COALESCE(r.total_qty, 0) as total_qty, COALESCE(r.total_kg, 0) as total_kg")
+            ->selectRaw("o.NoOPI, k.customer_name, mc.namaBarang, mc.tipeBox, mc.flute, d.harga_kg, k.kode as kontrak_kode, DATE_FORMAT(k.tglKontrak, '%d-%m-%Y') as tgl_kontrak, k.sales, o.jumlahOrder, mc.gramSheetBoxKontrak2 as gram, DATE_FORMAT(o.tglKirimDt, '%d-%m-%Y') as tgl_estimasi, DATE_FORMAT(r.tgl_kirim, '%d-%m-%Y') as tgl_kirim, COALESCE(r.total_qty, 0) as total_qty, COALESCE(r.total_kg, 0) as total_kg")
             ->whereNotNull('o.NoOPI')
             ->where('o.NoOPI', 'NOT LIKE', '%CANCEL%')
             ->where('o.NoOPI', 'NOT LIKE', '%PENDING%')
