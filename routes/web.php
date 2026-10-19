@@ -810,6 +810,8 @@ Route::middleware(['auth'])->group(function (){
         Route::prefix('admin/report')->name('admin.report.')->group(function () {
             Route::get('deadstock/', 'ReportController@deadstock')->name('deadstock');
             Route::get('deadstock/export', 'ReportController@exportDeadstockExcel')->name('deadstock.export');
+            Route::get('opi/', 'ReportController@opi')->name('opi');
+            Route::get('opi/export', 'ReportController@exportOpiRealisasi')->name('opi.export');
             Route::get('kapasitas/', 'ReportController@kapasitasGudang')->name('kapasitas');
             Route::get('in_out_bound/', 'ReportController@in_out_bound')->name('in_out_bound');
             Route::get('surat_jalan/', 'ReportController@surat_jalan')->name('surat_jalan');

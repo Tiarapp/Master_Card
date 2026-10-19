@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 use App\Exports\DeadstockExport;
+use App\Exports\OpiRealisasiExport;
 use App\Exports\PersediaanBjExport;
 use App\Exports\SuratJalanExport;
 use App\Models\DetSuratJalan;
+use App\Models\RealisasiKirim;
 use App\Models\PersediaanBj;
 use App\Models\Supplier;
 use App\Models\SuratJalan;
@@ -693,6 +695,58 @@ class ReportController extends Controller
         $periode = $month . '/' . $year;
 
         return view('admin.reports.in_out_bound', compact('inOutData', 'periode'));
+    }
+
+    public function opi(Request $request)
+    {
+        $this->validateOpiRealisasiDates($request);
+
+        $realisasi = $this->opiRealisasiQuery($request)->paginate(20)->appends($request->query());
+
+        return view('admin.reports.opi_report', [
+            'realisasi' => $realisasi,
+            'tanggal_awal' => $request->input('tanggal_awal'),
+            'tanggal_akhir' => $request->input('tanggal_akhir'),
+        ]);
+    }
+
+    public function exportOpiRealisasi(Request $request)
+    {
+        if (!$request->filled('tanggal_awal') || !$request->filled('tanggal_akhir')) {
+            return redirect()->route('admin.report.opi')
+                ->with('error', 'Tanggal kirim awal dan akhir harus diisi untuk export.');
+        }
+
+        $this->validateOpiRealisasiDates($request);
+
+        $realisasi = $this->opiRealisasiQuery($request)->get();
+        $filename = 'OPI_Realisasi_Kirim_' . $request->input('tanggal_awal') . '_to_' . $request->input('tanggal_akhir');
+
+        return Excel::download(new OpiRealisasiExport($realisasi), $filename . '.xlsx');
+    }
+
+    private function validateOpiRealisasiDates(Request $request): void
+    {
+        $request->validate([
+            'tanggal_awal' => ['nullable', 'date'],
+            'tanggal_akhir' => ['nullable', 'date', 'after_or_equal:tanggal_awal'],
+        ]);
+    }
+
+    private function opiRealisasiQuery(Request $request)
+    {
+        $query = RealisasiKirim::with(['opi.kontrakm', 'opi.kontrakd', 'opi.mc', 'kontrakm'])
+            ->whereNotNull('opi_id');
+
+        if ($request->filled('tanggal_awal')) {
+            $query->whereDate('tanggal_kirim', '>=', $request->input('tanggal_awal'));
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('tanggal_kirim', '<=', $request->input('tanggal_akhir'));
+        }
+
+        return $query->orderBy('tanggal_kirim', 'desc')->orderBy('id', 'desc');
     }
 
     public function surat_jalan(Request $request)

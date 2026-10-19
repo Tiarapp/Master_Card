@@ -236,6 +236,11 @@ class Opi_M extends Model
         return $this->belongsTo(DeliveryTime::class, 'dt_id', 'id');
     }   
 
+    public function realisasiKirim()
+    {
+        return $this->hasMany(RealisasiKirim::class, 'opi_id', 'id');
+    }
+
     /**
      * Generate nomor OPI secara otomatis
      * @return string Generated OPI number
