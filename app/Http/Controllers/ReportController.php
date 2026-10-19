@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use App\Exports\DeadstockExport;
 use App\Exports\OpiRealisasiExport;
 use App\Exports\OpiExportReport;
+use Carbon\Carbon;
 use App\Models\Opi_M;
 use App\Exports\PersediaanBjExport;
 use App\Exports\SuratJalanExport;
@@ -773,10 +774,38 @@ class ReportController extends Controller
 
         $this->validateOpiRealisasiDates($request);
 
-        $opi = $this->opiExportQuery($request)->get();
+        $opi = $this->opiExportRawQuery($request);
         $filename = 'Export_OPI_' . $request->input('tanggal_awal') . '_to_' . $request->input('tanggal_akhir');
 
         return Excel::download(new OpiExportReport($opi), $filename . '.xlsx');
+    }
+
+    // Query ringan khusus download: join langsung, tanpa model/eager load
+    private function opiExportRawQuery(Request $request)
+    {
+        $realisasi = DB::table('realisasi_kirim')
+            ->selectRaw('opi_id, SUM(qty_kirim) as total_qty, SUM(kg_kirim) as total_kg, MAX(tanggal_kirim) as tgl_kirim')
+            ->whereNotNull('opi_id')
+            ->groupBy('opi_id');
+
+        $query = DB::table('opi_m as o')
+            ->leftJoin('kontrak_m as k', 'o.kontrak_m_id', '=', 'k.id')
+            ->leftJoin('kontrak_d as d', 'o.kontrak_d_id', '=', 'd.id')
+            ->leftJoin('mc', 'o.mc_id', '=', 'mc.id')
+            ->leftJoinSub($realisasi, 'r', 'r.opi_id', '=', 'o.id')
+            ->selectRaw("o.NoOPI, k.customer_name, mc.namaBarang, mc.tipeBox, mc.flute, d.harga_kg, k.kode as kontrak_kode, DATE_FORMAT(k.tglKontrak, '%d-%m-%Y') as tgl_kontrak, o.jumlahOrder, mc.gramSheetBoxKontrak2 as gram, DATE_FORMAT(o.tglKirimDt, '%d-%m-%Y') as tgl_estimasi, DATE_FORMAT(r.tgl_kirim, '%d-%m-%Y') as tgl_kirim, COALESCE(r.total_qty, 0) as total_qty, COALESCE(r.total_kg, 0) as total_kg")
+            ->whereNotNull('o.NoOPI')
+            ->where('o.NoOPI', 'NOT LIKE', '%CANCEL%')
+            ->where('o.NoOPI', 'NOT LIKE', '%PENDING%')
+            ->where(function ($q) {
+                $q->whereNull('o.status_opi')->orWhere('o.status_opi', '!=', 'Cancel');
+            });
+
+        // Rentang dibuat tanpa fungsi pada kolom agar index updated_at bisa dipakai
+        $query->where('o.updated_at', '>=', $request->input('tanggal_awal') . ' 00:00:00')
+            ->where('o.updated_at', '<', Carbon::parse($request->input('tanggal_akhir'))->addDay()->toDateString() . ' 00:00:00');
+
+        return $query->orderBy('o.updated_at', 'desc')->orderBy('o.id', 'desc');
     }
 
     // Satu baris per OPI; realisasi dijumlahkan dari realisasi_kirim

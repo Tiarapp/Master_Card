@@ -2,24 +2,29 @@
 
 namespace App\Exports;
 
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Query\Builder;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class OpiExportReport implements FromCollection, WithHeadings, WithMapping
+class OpiExportReport implements FromQuery, WithHeadings, WithMapping, WithChunkReading
 {
-    protected $opi;
+    protected $query;
 
-    public function __construct(Collection $opi)
+    public function __construct(Builder $query)
     {
-        $this->opi = $opi;
+        $this->query = $query;
     }
 
-    public function collection()
+    public function query()
     {
-        return $this->opi;
+        return $this->query;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 
     public function headings(): array
@@ -42,25 +47,23 @@ class OpiExportReport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    public function map($opi): array
+    public function map($row): array
     {
-        $gram = $opi->mc->gramSheetBoxKontrak2 ?? null;
-
         return [
-            $opi->NoOPI,
-            $opi->kontrakm->customer_name ?? '',
-            $opi->mc->namaBarang ?? '',
-            $opi->mc->tipeBox ?? '',
-            $opi->mc->flute ?? '',
-            $opi->kontrakd->harga_kg ?? '',
-            $opi->kontrakm->kode ?? '',
-            !empty($opi->kontrakm->tglKontrak) ? Carbon::parse($opi->kontrakm->tglKontrak)->format('d-m-Y') : '',
-            $opi->jumlahOrder,
-            $gram ? round($opi->jumlahOrder * $gram, 2) : '',
-            $opi->tglKirimDt ? Carbon::parse($opi->tglKirimDt)->format('d-m-Y') : '',
-            $opi->tanggal_realisasi ? Carbon::parse($opi->tanggal_realisasi)->format('d-m-Y') : '',
-            $opi->total_qty_realisasi ?? 0,
-            round($opi->total_kg_realisasi ?? 0, 2),
+            $row->NoOPI,
+            $row->customer_name ?? '',
+            $row->namaBarang ?? '',
+            $row->tipeBox ?? '',
+            $row->flute ?? '',
+            $row->harga_kg ?? '',
+            $row->kontrak_kode ?? '',
+            $row->tgl_kontrak ?? '',
+            $row->jumlahOrder,
+            $row->gram ? round($row->jumlahOrder * $row->gram, 2) : '',
+            $row->tgl_estimasi ?? '',
+            $row->tgl_kirim ?? '',
+            $row->total_qty,
+            round($row->total_kg, 2),
         ];
     }
 }
