@@ -225,14 +225,14 @@
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
-                        <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
+                        <td class="text-gray-800 bold">{{ $production->mc->namaBarang }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold"></td>
                         <td class="text-gray-800 bold">{{ $production->NoOPI }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->poCustomer }}</td>
                         <td class="text-gray-800 bold">
-                            {{ $production->kontrakd->mc->kode . ($production->kontrakd->mc->revisi == 'R0' ? '' : '-' . $production->kontrakd->mc->revisi) }}
+                            {{ $production->mc->kode . ($production->mc->revisi == 'R0' ? '' : '-' . $production->mc->revisi) }}
                         </td>
                         <td class="text-gray-800 bold">
                           @php

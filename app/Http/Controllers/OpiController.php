@@ -405,7 +405,6 @@ class OpiController extends Controller
         $productions = $productions->with([
             'dt',
             'kontrakm',
-            'kontrakd.mc',
             'mc.colorcombine',
             'mc.box',
             'mc.substanceproduksi.lineratas',
