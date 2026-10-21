@@ -17,6 +17,7 @@ class PaletMutasi extends Model
         'jenis',
         'namaCustomer',
         'item_palet_id',
+        'sj_palet_m_id',
         'qty',
         'noDokumen',
         'noPolisi',
@@ -30,6 +31,11 @@ class PaletMutasi extends Model
     public function palet(): BelongsTo
     {
         return $this->belongsTo(Palet::class, 'item_palet_id', 'id');
+    }
+
+    public function suratJalan(): BelongsTo
+    {
+        return $this->belongsTo(SJ_Palet_M::class, 'sj_palet_m_id', 'id');
     }
 
     public function scopeAktif($query)

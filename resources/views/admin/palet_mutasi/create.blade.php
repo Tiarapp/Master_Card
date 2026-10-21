@@ -43,46 +43,62 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Tanggal</label>
+                  <label>Referensi SJ Palet</label>
+                  <select name="sj_palet_m_id" id="sj_palet_m_id" class="form-control" required>
+                    <option value="">-- Pilih SJ Palet --</option>
+                    @foreach ($sjList as $sj)
+                      <option value="{{ $sj->id }}" {{ (string) old('sj_palet_m_id') === (string) $sj->id ? 'selected' : '' }}>
+                        {{ $sj->noSuratJalan }} - {{ $sj->namaCustomer }} ({{ \Carbon\Carbon::parse($sj->tanggal)->format('d-m-Y') }})
+                      </option>
+                    @endforeach
+                  </select>
+                  @if ($isKeluar)
+                    <small class="text-muted">Hanya SJ yang belum dicatat keluar yang ditampilkan.</small>
+                  @endif
+                </div>
+                <div class="form-group">
+                  <label>Tanggal {{ $isKeluar ? 'Keluar' : 'Masuk' }}</label>
                   <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', now()->toDateString()) }}" required>
                 </div>
                 <div class="form-group">
                   <label>Customer</label>
-                  <select name="namaCustomer" id="namaCustomer" class="form-control" required>
-                    <option value="">-- Pilih Customer --</option>
-                    @foreach ($customer as $nama)
-                      <option value="{{ $nama }}" {{ old('namaCustomer') === $nama ? 'selected' : '' }}>{{ $nama }}</option>
-                    @endforeach
-                  </select>
+                  <input type="text" id="namaCustomer" class="form-control" readonly>
                 </div>
-                <div class="form-group">
-                  <label>Palet</label>
-                  <select name="item_palet_id" class="form-control" required>
-                    <option value="">-- Pilih Palet --</option>
-                    @foreach ($palet as $item)
-                      <option value="{{ $item->id }}" {{ (string) old('item_palet_id') === (string) $item->id ? 'selected' : '' }}>{{ $item->nama }} - {{ $item->ukuran }}</option>
-                    @endforeach
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Qty</label>
-                  <input type="number" name="qty" min="1" class="form-control" value="{{ old('qty') }}" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>{{ $isKeluar ? 'No Surat Jalan / Dokumen' : 'No Dokumen Penerimaan' }}</label>
-                  <input type="text" name="noDokumen" class="form-control" value="{{ old('noDokumen') }}">
-                </div>
-                <div class="form-group">
-                  <label>No Polisi</label>
-                  <input type="text" name="noPolisi" class="form-control" value="{{ old('noPolisi') }}">
-                </div>
+
+                @if (!$isKeluar)
+                  <div class="form-group">
+                    <label>Palet</label>
+                    <select name="item_palet_id" id="item_palet_id" class="form-control" required>
+                      <option value="">-- Pilih SJ terlebih dahulu --</option>
+                    </select>
+                    <small class="text-muted" id="infoSisa"></small>
+                  </div>
+                  <div class="form-group">
+                    <label>Qty Masuk</label>
+                    <input type="number" name="qty" min="1" class="form-control" value="{{ old('qty') }}" required>
+                  </div>
+                @endif
+
                 <div class="form-group">
                   <label>Keterangan</label>
-                  <textarea name="keterangan" rows="4" class="form-control">{{ old('keterangan') }}</textarea>
+                  <textarea name="keterangan" rows="3" class="form-control">{{ old('keterangan') }}</textarea>
                 </div>
               </div>
+
+              @if ($isKeluar)
+                <div class="col-md-6">
+                  <label>Item Palet pada SJ</label>
+                  <table class="table table-bordered table-sm" id="tabelItem">
+                    <thead>
+                      <tr><th>Palet</th><th>Ukuran</th><th class="text-right">Qty</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="3" class="text-center text-muted">Pilih SJ Palet.</td></tr>
+                    </tbody>
+                  </table>
+                  <small class="text-muted">Semua item di atas akan dicatat sebagai palet keluar.</small>
+                </div>
+              @endif
             </div>
           </div>
           <div class="card-footer">
@@ -100,7 +116,47 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#namaCustomer').select2({ theme: 'bootstrap4', width: '100%' });
+    const isKeluar = {{ $isKeluar ? 'true' : 'false' }};
+    const oldItem = "{{ old('item_palet_id') }}";
+    const detailUrl = "{{ url('/admin/palet_mutasi/sj') }}/";
+    let items = [];
+
+    $('#sj_palet_m_id').select2({ theme: 'bootstrap4', width: '100%' });
+
+    function loadSj(id) {
+      $('#namaCustomer').val('');
+      if (!id) { return; }
+
+      $.getJSON(detailUrl + id, function(sj) {
+        items = sj.items;
+        $('#namaCustomer').val(sj.namaCustomer || '');
+
+        if (isKeluar) {
+          const rows = items.map(function(i) {
+            return $('<tr>').append($('<td>').text(i.nama), $('<td>').text(i.ukuran), $('<td class="text-right">').text(i.qty));
+          });
+          $('#tabelItem tbody').empty().append(rows.length ? rows : $('<tr><td colspan="3" class="text-center text-muted">SJ tidak memiliki item.</td></tr>'));
+          return;
+        }
+
+        const select = $('#item_palet_id').empty().append('<option value="">-- Pilih Palet --</option>');
+        items.forEach(function(i) {
+          select.append($('<option>').val(i.item_palet_id).text(i.nama + ' - ' + i.ukuran + ' (SJ: ' + i.qty + ')'));
+        });
+        if (oldItem) { select.val(oldItem); }
+        showSisa();
+      });
+    }
+
+    function showSisa() {
+      const item = items.find(function(i) { return String(i.item_palet_id) === $('#item_palet_id').val(); });
+      $('#infoSisa').text(item ? 'Qty SJ: ' + item.qty + ' | Sudah dikembalikan: ' + item.dikembalikan + ' | Sisa: ' + (item.qty - item.dikembalikan) : '');
+    }
+
+    $('#sj_palet_m_id').on('change', function() { loadSj($(this).val()); });
+    $('#item_palet_id').on('change', showSisa);
+
+    if ($('#sj_palet_m_id').val()) { loadSj($('#sj_palet_m_id').val()); }
   });
 </script>
 @endsection
