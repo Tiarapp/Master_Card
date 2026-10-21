@@ -94,6 +94,7 @@ class RolePermissionSeeder extends Seeder
             // ── Palet ────────────────────────────────────────────────────────
             ['slug' => 'palet',              'name' => 'Palet',            'parent_slug' => null, 'description' => 'Grup menu Palet'],
             ['slug' => 'palet.sj',           'name' => 'Surat Jalan Palet','parent_slug' => 'palet', 'description' => null],
+            ['slug' => 'palet.mutasi',       'name' => 'Mutasi Palet Customer', 'parent_slug' => 'palet', 'description' => null],
             ['slug' => 'palet.palet',        'name' => 'Palet',            'parent_slug' => 'palet', 'description' => null],
 
             // ── QC ───────────────────────────────────────────────────────────
@@ -210,7 +211,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'name' => 'Palet', 'slug' => 'palet-role',
                 'description' => 'Divisi Palet',
-                'permissions' => ['palet', 'palet.sj', 'palet.palet'],
+                'permissions' => ['palet', 'palet.sj', 'palet.mutasi', 'palet.palet'],
             ],
         ];
 

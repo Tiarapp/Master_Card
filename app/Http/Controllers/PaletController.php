@@ -33,39 +33,6 @@ class PaletController extends Controller
         return view('admin.palet.create');
     }
 
-    public function sync_sj()
-    {
-        DB::connection('firebird2')->beginTransaction();
-        $periode = date('02/2025');
-
-        $barang = DB::connection('firebird2')->table('TSuratJalan')->where('Periode', '=', $periode)->get();
-        
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'CA-22502'.'%')->update([
-            'NoUrut' => count($barang)
-        ]);
-        
-        DB::connection('firebird2')->commit();
-
-        return redirect('/admin/sj_palet');
-    }
-
-    public function sync_fa()
-    {
-        DB::connection('firebird2')->beginTransaction();
-        $periode = '03/2025';
-
-        $faktur = DB::connection('firebird2')->table('TFakturConv')->where('Periode', '=', $periode)->get();
-        
-        $key = DB::connection('firebird2')->table('TKeyfield')->where('Nama', 'LIKE', 'FA/III/25'.'%')->update([
-            'NoUrut' => count($faktur)
-        ]);
-        
-        DB::connection('firebird2')->commit();
-
-        return redirect('/admin/data/alamat');
-    }
-
-
     /**
      * Store a newly created resource in storage.
      *
@@ -77,7 +44,6 @@ class PaletController extends Controller
         $request->validate([
             'kodePalet' => 'required',
             'nama' => 'required',
-            'kodePalet' => 'required',
             'ukuran' => 'required',
             'keterangan' => 'nullable'
         ]);

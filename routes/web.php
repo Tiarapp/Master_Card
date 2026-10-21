@@ -281,6 +281,12 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/palet/delete/{id}', 'PaletController@updateDeleted');
     // Route::post('/admin/palet/getPalet/{id}', 'PaletController@updateDeleted')->name('palet.getPalet');
 
+    //Mutasi Palet Customer (keluar ke customer / masuk dari customer)
+    Route::get('/admin/palet_mutasi', 'PaletMutasiController@index')->name('palet_mutasi');
+    Route::get('/admin/palet_mutasi/create', 'PaletMutasiController@create')->name('palet_mutasi.create');
+    Route::post('/admin/palet_mutasi/store', 'PaletMutasiController@store')->name('palet_mutasi.store');
+    Route::delete('/admin/palet_mutasi/delete/{id}', 'PaletMutasiController@destroy')->name('palet_mutasi.destroy');
+
     //Surat Jalan
     Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');
     Route::get('/admin/sj_palet/create', 'SJ_Palet_DController@create')->name('sj_palet.create');
