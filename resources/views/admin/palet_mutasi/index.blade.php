@@ -30,12 +30,10 @@
       @endif
 
       <div class="mb-3">
-        <a href="{{ route('palet_mutasi.create', ['jenis' => 'keluar']) }}" class="btn btn-danger">
-          <i class="fas fa-arrow-up"></i> Palet Keluar (ke Customer)
+        <a href="{{ route('palet_mutasi.create') }}" class="btn btn-success">
+          <i class="fas fa-arrow-down"></i> Catat Palet Masuk (dari Customer)
         </a>
-        <a href="{{ route('palet_mutasi.create', ['jenis' => 'masuk']) }}" class="btn btn-success">
-          <i class="fas fa-arrow-down"></i> Palet Masuk (dari Customer)
-        </a>
+        <small class="text-muted ml-2">Palet keluar tercatat otomatis dari SJ Palet.</small>
       </div>
 
       <form method="GET" action="{{ route('palet_mutasi') }}" class="form-inline mb-3">
@@ -112,18 +110,22 @@
                     </span>
                   </td>
                   <td>{{ $row->namaCustomer }}</td>
-                  <td>{{ optional($row->palet)->nama }} {{ optional($row->palet)->ukuran }}</td>
+                  <td>{{ $row->palet }} {{ $row->ukuran }}</td>
                   <td class="text-right">{{ number_format($row->qty) }}</td>
                   <td>{{ $row->noDokumen }}</td>
                   <td>{{ $row->noPolisi }}</td>
                   <td>{{ $row->keterangan }}</td>
                   <td>{{ $row->createdBy }}</td>
                   <td>
-                    <form action="{{ route('palet_mutasi.destroy', $row->id) }}" method="POST" onsubmit="return confirm('Hapus catatan ini?')">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-outline-danger btn-sm">Hapus</button>
-                    </form>
+                    @if ($row->mutasi_id)
+                      <form action="{{ route('palet_mutasi.destroy', $row->mutasi_id) }}" method="POST" onsubmit="return confirm('Hapus catatan ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Hapus</button>
+                      </form>
+                    @else
+                      <span class="text-muted small">dari SJ Palet</span>
+                    @endif
                   </td>
                 </tr>
               @empty

@@ -5,13 +5,12 @@
 @extends('admin.templates.partials.default')
 
 @section('content')
-@php $isKeluar = $jenis === 'keluar'; @endphp
 <div class="content-wrapper">
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">{{ $isKeluar ? 'Palet Keluar (ke Customer)' : 'Palet Masuk (dari Customer)' }}</h1>
+          <h1 class="m-0">Palet Masuk (dari Customer)</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -37,7 +36,6 @@
 
       <form action="{{ route('palet_mutasi.store') }}" method="POST">
         @csrf
-        <input type="hidden" name="jenis" value="{{ $jenis }}">
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -52,12 +50,9 @@
                       </option>
                     @endforeach
                   </select>
-                  @if ($isKeluar)
-                    <small class="text-muted">Hanya SJ yang belum dicatat keluar yang ditampilkan.</small>
-                  @endif
                 </div>
                 <div class="form-group">
-                  <label>Tanggal {{ $isKeluar ? 'Keluar' : 'Masuk' }}</label>
+                  <label>Tanggal Masuk</label>
                   <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', now()->toDateString()) }}" required>
                 </div>
                 <div class="form-group">
@@ -65,44 +60,27 @@
                   <input type="text" id="namaCustomer" class="form-control" readonly>
                 </div>
 
-                @if (!$isKeluar)
-                  <div class="form-group">
-                    <label>Palet</label>
-                    <select name="item_palet_id" id="item_palet_id" class="form-control" required>
-                      <option value="">-- Pilih SJ terlebih dahulu --</option>
-                    </select>
-                    <small class="text-muted" id="infoSisa"></small>
-                  </div>
-                  <div class="form-group">
-                    <label>Qty Masuk</label>
-                    <input type="number" name="qty" min="1" class="form-control" value="{{ old('qty') }}" required>
-                  </div>
-                @endif
+                <div class="form-group">
+                  <label>Palet</label>
+                  <select name="item_palet_id" id="item_palet_id" class="form-control" required>
+                    <option value="">-- Pilih SJ terlebih dahulu --</option>
+                  </select>
+                  <small class="text-muted" id="infoSisa"></small>
+                </div>
+                <div class="form-group">
+                  <label>Qty Masuk</label>
+                  <input type="number" name="qty" min="1" class="form-control" value="{{ old('qty') }}" required>
+                </div>
 
                 <div class="form-group">
                   <label>Keterangan</label>
                   <textarea name="keterangan" rows="3" class="form-control">{{ old('keterangan') }}</textarea>
                 </div>
               </div>
-
-              @if ($isKeluar)
-                <div class="col-md-6">
-                  <label>Item Palet pada SJ</label>
-                  <table class="table table-bordered table-sm" id="tabelItem">
-                    <thead>
-                      <tr><th>Palet</th><th>Ukuran</th><th class="text-right">Qty</th></tr>
-                    </thead>
-                    <tbody>
-                      <tr><td colspan="3" class="text-center text-muted">Pilih SJ Palet.</td></tr>
-                    </tbody>
-                  </table>
-                  <small class="text-muted">Semua item di atas akan dicatat sebagai palet keluar.</small>
-                </div>
-              @endif
             </div>
           </div>
           <div class="card-footer">
-            <button type="submit" class="btn {{ $isKeluar ? 'btn-danger' : 'btn-success' }}">Simpan</button>
+            <button type="submit" class="btn btn-success">Simpan</button>
             <a href="{{ route('palet_mutasi') }}" class="btn btn-outline-secondary">Batal</a>
           </div>
         </div>
@@ -116,7 +94,6 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
-    const isKeluar = {{ $isKeluar ? 'true' : 'false' }};
     const oldItem = "{{ old('item_palet_id') }}";
     const detailUrl = "{{ url('/admin/palet_mutasi/sj') }}/";
     let items = [];
@@ -130,14 +107,6 @@
       $.getJSON(detailUrl + id, function(sj) {
         items = sj.items;
         $('#namaCustomer').val(sj.namaCustomer || '');
-
-        if (isKeluar) {
-          const rows = items.map(function(i) {
-            return $('<tr>').append($('<td>').text(i.nama), $('<td>').text(i.ukuran), $('<td class="text-right">').text(i.qty));
-          });
-          $('#tabelItem tbody').empty().append(rows.length ? rows : $('<tr><td colspan="3" class="text-center text-muted">SJ tidak memiliki item.</td></tr>'));
-          return;
-        }
 
         const select = $('#item_palet_id').empty().append('<option value="">-- Pilih Palet --</option>');
         items.forEach(function(i) {
