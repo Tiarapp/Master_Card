@@ -141,7 +141,8 @@
                     <th class="min-w-125px">{{ __('No OPI') }}</th>
                     <th class="min-w-125px">{{ __('Action') }}</th>
                     <th class="min-w-125px">{{ __('Kontrak') }}</th>
-                    <th class="min-w-125px">{{ __('OPI ke') }}</th>
+                    <th class="min-w-125px">{{ __('Tgl Dibuat') }}</th>
+                    <th class="min-w-125px">{{ __('Tgl Approved') }}</th>
                     <th class="min-w-125px">{{ __('DT') }}</th>
                     <th class="min-w-125px">{{ __('QTY Kirim') }}</th>
                     <th class="min-w-125px">{{ __('Sales') }}</th>
@@ -180,7 +181,6 @@
                     <th class="min-w-125px">{{ __('Box T') }}</th>
                     <th class="min-w-125px">{{ __('Koli') }}</th>
                     <th class="min-w-125px">{{ __('DT Perubahan') }}</th>
-                    <th class="min-w-125px">{{ __('Harga (kg)') }}</th>
                     <th class="min-w-125px">{{ __('Real Kirim') }}</th>
                     <th class="min-w-125px">{{ __('Sisa DT') }}</th>
                     <th class="min-w-125px">{{ __('Status') }}</th>
@@ -221,6 +221,7 @@
                         </td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->kode }}</td>
                         <td class="text-gray-800 bold">{{ $production->created_at }}</td>
+                        <td class="text-gray-800 bold">{{ $production->updated_at }}</td>
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
@@ -291,7 +292,6 @@
                         <td class="text-gray-800 bold">{{ $production->mc->box->tinggiDalamBox }}</td>
                         <td class="text-gray-800 bold">{{ $production->mc->koli }}</td>
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
-                        <td class="text-gray-800 bold">{{ $production->kontrakd->harga_kg }}</td>
                         <td class="text-gray-800 bold">-</td>
                         <td class="text-gray-800 bold">-</td>
                         <td class="text-gray-800 bold">
