@@ -228,7 +228,7 @@
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
-                            <td class="text-gray-800 bold">{{ number_format($production->kontrakd->harga_pcs / $production->kontrakd->mc->gramSheetBoxKontrak2, 2) }}</td>
+                            <td class="text-gray-800 bold">{{ number_format($production->kontrakd->harga_pcs / $production->kontrakd->mc->gramSheetBoxKontrak, 2) }}</td>
                         @endif
                         <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
