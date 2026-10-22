@@ -145,6 +145,9 @@
                     <th class="min-w-125px">{{ __('Tgl Approved') }}</th>
                     <th class="min-w-125px">{{ __('DT') }}</th>
                     <th class="min-w-125px">{{ __('QTY Kirim') }}</th>
+                    @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
+                        <th class="min-w-125px">{{ __('Harga (kg)') }}</th>
+                    @endif
                     <th class="min-w-125px">{{ __('Sales') }}</th>
                     <th class="min-w-125px">{{ __('Customer') }}</th>
                     <th class="min-w-125px">{{ __('Item') }}</th>
@@ -224,6 +227,9 @@
                         <td class="text-gray-800 bold">{{ $production->updated_at }}</td>
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
+                        @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
+                            <td class="text-gray-800 bold">{{ $production->kontrakd->harga_kg }}</td>
+                        @endif
                         <td class="text-gray-800 bold">{{ $production->kontrakm->sales }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakm->customer_name }}</td>
                         <td class="text-gray-800 bold">{{ $production->kontrakd->mc->namaBarang }}</td>
