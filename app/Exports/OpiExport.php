@@ -29,7 +29,7 @@ class OpiExport implements FromCollection, WithHeadings
             return [
                 'ID' => $item->id,
                 'OPI' => $item->NoOPI,
-                'action' => '',
+                'action' => $item->status_opi,
                 'kontrak' => $item->kontrakm->kode,
                 'opi_ke' => $item->created_at,
                 'dt' => Carbon::parse($item->dt->tglKirimDt)->format('d/m/Y'),
