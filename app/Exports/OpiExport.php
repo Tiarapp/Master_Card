@@ -4,9 +4,12 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class OpiExport implements FromCollection, WithHeadings
+class OpiExport implements FromCollection, WithHeadings, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -101,12 +104,35 @@ class OpiExport implements FromCollection, WithHeadings
         });
     }
 
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+                $lastRow = $sheet->getHighestRow();
+
+                // Kolom C = Status; baris 1 adalah heading
+                for ($row = 2; $row <= $lastRow; $row++) {
+                    $status = strtolower(trim((string) $sheet->getCell('C' . $row)->getValue()));
+
+                    $color = $status === 'proses' ? '198754' : ($status === 'closed' ? '0D6EFD' : null);
+
+                    if ($color) {
+                        $style = $sheet->getStyle('C' . $row);
+                        $style->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB($color);
+                        $style->getFont()->getColor()->setRGB('FFFFFF');
+                    }
+                }
+            },
+        ];
+    }
+
     public function headings(): array
     {
         return [
             'ID',
             'OPI',
-            'Action',
+            'Status',
             'Kontrak',
             'OPI Ke',
             'DT',

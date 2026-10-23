@@ -192,7 +192,6 @@ class MastercardController extends Controller
     public function create()
     {
         $nomer = Number_Sequence::where('noBukti', '=', 'mastercard')->first();
-        $kode = 'MC'. $nomer->nomer;
         $cust = Customer::all();
         $substance = DB::table('substance')
         ->leftJoin('jenis_gram as linerAtas', 'jenisGramLinerAtas_id', '=', 'linerAtas.id')
@@ -207,7 +206,6 @@ class MastercardController extends Controller
         $koli = DB::table('koli')->get();
 
         return view('admin.mastercard.create', compact([
-            'kode',
             'cust',
             'substance',
             'box',
