@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class PaletMutasiController extends Controller
 {
+    private const TANGGAL_MULAI_PERHITUNGAN = '2026-10-01';
+
     public function index(Request $request)
     {
         // Palet keluar dibaca langsung dari SJ Palet, palet masuk dari catatan manual
         $riwayat = DB::query()->fromSub($this->queryKeluar()->unionAll($this->queryMasuk()), 'mutasi')
+            ->whereDate('tanggal', '>=', self::TANGGAL_MULAI_PERHITUNGAN)
             ->orderBy('tanggal', 'desc')
             ->orderBy('noDokumen', 'desc');
 
@@ -145,8 +148,10 @@ class PaletMutasiController extends Controller
     // Saldo = palet keluar (SJ Palet) - palet masuk, yaitu palet yang masih ada di customer
     private function hitungSaldo(?string $customer)
     {
-        $keluar = DB::query()->fromSub($this->queryKeluar(), 't');
-        $masuk = DB::query()->fromSub($this->queryMasuk(), 't');
+        $keluar = DB::query()->fromSub($this->queryKeluar(), 't')
+            ->whereDate('tanggal', '>=', self::TANGGAL_MULAI_PERHITUNGAN);
+        $masuk = DB::query()->fromSub($this->queryMasuk(), 't')
+            ->whereDate('tanggal', '>=', self::TANGGAL_MULAI_PERHITUNGAN);
 
         foreach ([$keluar, $masuk] as $q) {
             if ($customer) {
