@@ -92,7 +92,7 @@
             <table class="table table-bordered table-sm">
               <thead>
                 <tr>
-                  <th style="min-width: 340px;">Data Palet / SJ Keluar</th>
+                  <th style="min-width: 340px;">Tipe Palet</th>
                   <th style="width: 140px;">Qty Bagus</th>
                   <th style="width: 140px;">Qty Jelek</th>
                   <th style="width: 100px;">Aksi</th>
@@ -100,7 +100,7 @@
               </thead>
               <tbody id="detailRows"></tbody>
             </table>
-            <small class="text-muted">Jumlah bagus dan jelek tidak boleh melebihi sisa palet yang masih ada di customer.</small>
+            <small class="text-muted">Pilih tipe palet dari master palet, lalu masukkan jumlah bagus dan jelek.</small>
           </div>
           <div class="card-footer">
             <button type="submit" class="btn btn-success">Simpan</button>
@@ -117,26 +117,21 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
-    const optionsUrl = "{{ route('palet_mutasi.palet_options') }}";
+    const palets = @json($palets);
     const previousDetails = @json(old('details', []));
-    let availableItems = [];
     let nextIndex = 0;
-    let optionsRequest = null;
 
     $('#namaCustomer').select2({ theme: 'bootstrap4', width: '100%' });
 
     function makeRow(detail) {
       const index = nextIndex++;
       const row = $('<tr>').attr('data-index', index);
-      const source = $('<select class="form-control detail-source" required>')
-        .append($('<option>').val('').text('-- Pilih Data Palet --'));
+      const paletSelect = $('<select class="form-control" name="details[' + index + '][item_palet_id]" required>')
+        .append($('<option>').val('').text('-- Pilih Tipe Palet --'));
       const good = $('<input type="number" min="0" class="form-control qty-good" required>');
       const bad = $('<input type="number" min="0" class="form-control qty-bad" required>');
 
-      row.append($('<td>').append(source)
-        .append($('<input type="hidden" class="source-sj" name="details[' + index + '][sj_palet_m_id]">'))
-        .append($('<input type="hidden" class="source-item" name="details[' + index + '][item_palet_id]">'))
-        .append($('<small class="text-muted d-block source-balance">')));
+      row.append($('<td>').append(paletSelect));
       row.append($('<td>').append(good.attr('name', 'details[' + index + '][qty_bagus]')));
       row.append($('<td>').append(bad.attr('name', 'details[' + index + '][qty_jelek]')));
       row.append($('<td class="text-center">').append(
@@ -144,88 +139,35 @@
       ));
       $('#detailRows').append(row);
 
-      availableItems.forEach(function(item) {
-        const value = item.sj_palet_m_id + '|' + item.item_palet_id;
-        const label = item.noSuratJalan + ' (' + item.tanggal + ') - ' + item.nama + ' ' + item.ukuran +
-          ' | Qty SJ: ' + item.qty + ' | Sisa: ' + item.sisa;
-        source.append($('<option>').val(value).text(label).data('item', item));
+      palets.forEach(function(palet) {
+        paletSelect.append($('<option>')
+          .val(palet.id)
+          .text(palet.nama + ' - ' + palet.ukuran));
       });
 
       if (detail) {
-        const oldValue = detail.sj_palet_m_id + '|' + detail.item_palet_id;
-        source.val(oldValue);
+        paletSelect.val(detail.item_palet_id);
         good.val(detail.qty_bagus);
         bad.val(detail.qty_jelek);
-        setSelectedSource(row, source.val());
       }
     }
-
-    function setSelectedSource(row, value) {
-      const selected = availableItems.find(function(item) {
-        return value === item.sj_palet_m_id + '|' + item.item_palet_id;
-      });
-      row.find('.source-sj').val(selected ? selected.sj_palet_m_id : '');
-      row.find('.source-item').val(selected ? selected.item_palet_id : '');
-      row.find('.qty-good, .qty-bad').attr('max', selected ? selected.sisa : '');
-      row.find('.source-balance').text(selected ? 'Sisa yang dapat diterima: ' + selected.sisa : '');
-    }
-
-    function loadPaletOptions(details) {
-      $('#detailRows').empty();
-      nextIndex = 0;
-      availableItems = [];
-      if (optionsRequest) {
-        optionsRequest.abort();
-      }
-      if (!$('#namaCustomer').val()) {
-        makeRow();
-        return;
-      }
-
-      optionsRequest = $.getJSON(optionsUrl, { customer: $('#namaCustomer').val() })
-        .done(function(items) {
-          availableItems = items;
-          if (details.length) {
-            details.forEach(function(detail) { makeRow(detail); });
-          } else {
-            makeRow();
-          }
-        })
-        .fail(function(xhr, status) {
-          if (status === 'abort') {
-            return;
-          }
-          $('#detailRows').empty();
-          makeRow();
-          window.alert('Data palet customer gagal dimuat. Silakan coba lagi.');
-        });
-    }
-
-    $('#namaCustomer').on('change', function() {
-      loadPaletOptions([]);
-    });
 
     $('#addDetail').on('click', function() {
       makeRow();
-    });
-
-    $('#detailRows').on('change', '.detail-source', function() {
-      setSelectedSource($(this).closest('tr'), $(this).val());
     });
 
     $('#detailRows').on('click', '.remove-detail', function() {
       const rows = $('#detailRows tr');
       if (rows.length === 1) {
         rows.find('select').val('');
-        rows.find('.source-sj, .source-item, .qty-good, .qty-bad').val('');
-        rows.find('.source-balance').text('');
+        rows.find('.qty-good, .qty-bad').val('');
         return;
       }
       $(this).closest('tr').remove();
     });
 
-    if ($('#namaCustomer').val()) {
-      loadPaletOptions(previousDetails);
+    if (previousDetails.length) {
+      previousDetails.forEach(function(detail) { makeRow(detail); });
     } else {
       makeRow();
     }

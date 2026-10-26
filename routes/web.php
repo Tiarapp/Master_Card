@@ -284,8 +284,6 @@ Route::middleware(['auth'])->group(function (){
     //Mutasi Palet Customer (keluar ke customer / masuk dari customer)
     Route::get('/admin/palet_mutasi', 'PaletMutasiController@index')->name('palet_mutasi');
     Route::get('/admin/palet_mutasi/create', 'PaletMutasiController@create')->name('palet_mutasi.create');
-    Route::get('/admin/palet_mutasi/sj/{id}', 'PaletMutasiController@sjDetail')->name('palet_mutasi.sj_detail');
-    Route::get('/admin/palet_mutasi/palet-options', 'PaletMutasiController@paletOptions')->name('palet_mutasi.palet_options');
     Route::post('/admin/palet_mutasi/store', 'PaletMutasiController@store')->name('palet_mutasi.store');
     Route::delete('/admin/palet_mutasi/delete/{id}', 'PaletMutasiController@destroy')->name('palet_mutasi.destroy');
 
