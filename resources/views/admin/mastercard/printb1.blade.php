@@ -545,7 +545,11 @@
 			}
 
 			$panjang = $mc->kuping - $mc->kuping2 + ($mc->panjangCrease * 2) + $mc->lebarCrease1 + $mc->lebarCrease2;
-			$lebar = ($mc->flapCrease * 2) + $mc->tinggiCrease;
+			if ($mc->tipeBox == 'B5') {
+                $lebar = $mc->flapCrease + $mc->tinggiCrease;
+            } else {
+                $lebar = ($mc->flapCrease * 2) + $mc->tinggiCrease;
+            }
 
 		?>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br>{{ $dt->format("l, F j, Y, g:i:s a") }}</font></td>
