@@ -61,7 +61,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>No. Polisi</label>
+                  <label>Kota</label>
                   <input type="text" name="noPolisi" class="form-control" value="{{ old('noPolisi') }}" maxlength="100" required>
                 </div>
                 <div class="form-group">
