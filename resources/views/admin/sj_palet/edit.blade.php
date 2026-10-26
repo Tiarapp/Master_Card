@@ -116,7 +116,7 @@
                                         <label>No. Surat Jalan</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan" value="{{ $sj_Palet_M->noSuratJalan }} readonly>">
+                                        <input type="text" class="form-control txt_line" name="noSuratJalan" id="noSuratJalan" value="{{ $sj_Palet_M->noSuratJalan }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-5">

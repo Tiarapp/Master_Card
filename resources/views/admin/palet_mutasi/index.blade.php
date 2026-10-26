@@ -91,8 +91,11 @@
                 <th>Tanggal</th>
                 <th>Jenis</th>
                 <th>Customer</th>
+                <th>Jenis Palet</th>
                 <th>Palet</th>
                 <th class="text-right">Qty</th>
+                <th class="text-right">Bagus</th>
+                <th class="text-right">Jelek</th>
                 <th>No Dokumen</th>
                 <th>No Polisi</th>
                 <th>Keterangan</th>
@@ -110,8 +113,11 @@
                     </span>
                   </td>
                   <td>{{ $row->namaCustomer }}</td>
+                  <td>{{ $row->jenisPalet ?? '-' }}</td>
                   <td>{{ $row->palet }} {{ $row->ukuran }}</td>
                   <td class="text-right">{{ number_format($row->qty) }}</td>
+                  <td class="text-right">{{ $row->qty_bagus !== null ? number_format($row->qty_bagus) : '-' }}</td>
+                  <td class="text-right">{{ $row->qty_jelek !== null ? number_format($row->qty_jelek) : '-' }}</td>
                   <td>{{ $row->noDokumen }}</td>
                   <td>{{ $row->noPolisi }}</td>
                   <td>{{ $row->keterangan }}</td>
@@ -129,7 +135,7 @@
                   </td>
                 </tr>
               @empty
-                <tr><td colspan="10" class="text-center text-muted">Belum ada catatan.</td></tr>
+                <tr><td colspan="13" class="text-center text-muted">Belum ada catatan.</td></tr>
               @endforelse
             </tbody>
           </table>

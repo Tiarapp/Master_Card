@@ -37,16 +37,19 @@
       <form action="{{ route('palet_mutasi.store') }}" method="POST">
         @csrf
         <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Master Palet Masuk</h3>
+          </div>
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Referensi SJ Palet</label>
-                  <select name="sj_palet_m_id" id="sj_palet_m_id" class="form-control" required>
-                    <option value="">-- Pilih SJ Palet --</option>
-                    @foreach ($sjList as $sj)
-                      <option value="{{ $sj->id }}" {{ (string) old('sj_palet_m_id') === (string) $sj->id ? 'selected' : '' }}>
-                        {{ $sj->noSuratJalan }} - {{ $sj->namaCustomer }} ({{ \Carbon\Carbon::parse($sj->tanggal)->format('d-m-Y') }})
+                  <label>Customer</label>
+                  <select name="namaCustomer" id="namaCustomer" class="form-control" required>
+                    <option value="">-- Pilih Customer --</option>
+                    @foreach ($customers as $customer)
+                      <option value="{{ $customer->Nama }}" {{ old('namaCustomer') === $customer->Nama ? 'selected' : '' }}>
+                        {{ $customer->Nama }}
                       </option>
                     @endforeach
                   </select>
@@ -55,29 +58,49 @@
                   <label>Tanggal Masuk</label>
                   <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', now()->toDateString()) }}" required>
                 </div>
+              </div>
+              <div class="col-md-6">
                 <div class="form-group">
-                  <label>Customer</label>
-                  <input type="text" id="namaCustomer" class="form-control" readonly>
+                  <label>No. Polisi</label>
+                  <input type="text" name="noPolisi" class="form-control" value="{{ old('noPolisi') }}" maxlength="100" required>
                 </div>
-
                 <div class="form-group">
-                  <label>Palet</label>
-                  <select name="item_palet_id" id="item_palet_id" class="form-control" required>
-                    <option value="">-- Pilih SJ terlebih dahulu --</option>
+                  <label>Jenis Palet</label>
+                  <select name="jenisPalet" class="form-control" required>
+                    <option value="">-- Pilih Jenis Palet --</option>
+                    <option value="Kayu" {{ old('jenisPalet') === 'Kayu' ? 'selected' : '' }}>Kayu</option>
+                    <option value="Plastik" {{ old('jenisPalet') === 'Plastik' ? 'selected' : '' }}>Plastik</option>
                   </select>
-                  <small class="text-muted" id="infoSisa"></small>
                 </div>
-                <div class="form-group">
-                  <label>Qty Masuk</label>
-                  <input type="number" name="qty" min="1" class="form-control" value="{{ old('qty') }}" required>
-                </div>
-
-                <div class="form-group">
+              </div>
+              <div class="col-12">
+                <div class="form-group mb-0">
                   <label>Keterangan</label>
-                  <textarea name="keterangan" rows="3" class="form-control">{{ old('keterangan') }}</textarea>
+                  <textarea name="keterangan" rows="2" class="form-control">{{ old('keterangan') }}</textarea>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Detail Palet Masuk</h3>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="addDetail">Tambah Baris</button>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th style="min-width: 340px;">Data Palet / SJ Keluar</th>
+                  <th style="width: 140px;">Qty Bagus</th>
+                  <th style="width: 140px;">Qty Jelek</th>
+                  <th style="width: 100px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="detailRows"></tbody>
+            </table>
+            <small class="text-muted">Jumlah bagus dan jelek tidak boleh melebihi sisa palet yang masih ada di customer.</small>
           </div>
           <div class="card-footer">
             <button type="submit" class="btn btn-success">Simpan</button>
@@ -94,38 +117,118 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   $(document).ready(function() {
-    const oldItem = "{{ old('item_palet_id') }}";
-    const detailUrl = "{{ url('/admin/palet_mutasi/sj') }}/";
-    let items = [];
+    const optionsUrl = "{{ route('palet_mutasi.palet_options') }}";
+    const previousDetails = @json(old('details', []));
+    let availableItems = [];
+    let nextIndex = 0;
+    let optionsRequest = null;
 
-    $('#sj_palet_m_id').select2({ theme: 'bootstrap4', width: '100%' });
+    $('#namaCustomer').select2({ theme: 'bootstrap4', width: '100%' });
 
-    function loadSj(id) {
-      $('#namaCustomer').val('');
-      if (!id) { return; }
+    function makeRow(detail) {
+      const index = nextIndex++;
+      const row = $('<tr>').attr('data-index', index);
+      const source = $('<select class="form-control detail-source" required>')
+        .append($('<option>').val('').text('-- Pilih Data Palet --'));
+      const good = $('<input type="number" min="0" class="form-control qty-good" required>');
+      const bad = $('<input type="number" min="0" class="form-control qty-bad" required>');
 
-      $.getJSON(detailUrl + id, function(sj) {
-        items = sj.items;
-        $('#namaCustomer').val(sj.namaCustomer || '');
+      row.append($('<td>').append(source)
+        .append($('<input type="hidden" class="source-sj" name="details[' + index + '][sj_palet_m_id]">'))
+        .append($('<input type="hidden" class="source-item" name="details[' + index + '][item_palet_id]">'))
+        .append($('<small class="text-muted d-block source-balance">')));
+      row.append($('<td>').append(good.attr('name', 'details[' + index + '][qty_bagus]')));
+      row.append($('<td>').append(bad.attr('name', 'details[' + index + '][qty_jelek]')));
+      row.append($('<td class="text-center">').append(
+        $('<button type="button" class="btn btn-outline-danger btn-sm remove-detail">Hapus</button>')
+      ));
+      $('#detailRows').append(row);
 
-        const select = $('#item_palet_id').empty().append('<option value="">-- Pilih Palet --</option>');
-        items.forEach(function(i) {
-          select.append($('<option>').val(i.item_palet_id).text(i.nama + ' - ' + i.ukuran + ' (SJ: ' + i.qty + ')'));
-        });
-        if (oldItem) { select.val(oldItem); }
-        showSisa();
+      availableItems.forEach(function(item) {
+        const value = item.sj_palet_m_id + '|' + item.item_palet_id;
+        const label = item.noSuratJalan + ' (' + item.tanggal + ') - ' + item.nama + ' ' + item.ukuran +
+          ' | Qty SJ: ' + item.qty + ' | Sisa: ' + item.sisa;
+        source.append($('<option>').val(value).text(label).data('item', item));
       });
+
+      if (detail) {
+        const oldValue = detail.sj_palet_m_id + '|' + detail.item_palet_id;
+        source.val(oldValue);
+        good.val(detail.qty_bagus);
+        bad.val(detail.qty_jelek);
+        setSelectedSource(row, source.val());
+      }
     }
 
-    function showSisa() {
-      const item = items.find(function(i) { return String(i.item_palet_id) === $('#item_palet_id').val(); });
-      $('#infoSisa').text(item ? 'Qty SJ: ' + item.qty + ' | Sudah dikembalikan: ' + item.dikembalikan + ' | Sisa: ' + (item.qty - item.dikembalikan) : '');
+    function setSelectedSource(row, value) {
+      const selected = availableItems.find(function(item) {
+        return value === item.sj_palet_m_id + '|' + item.item_palet_id;
+      });
+      row.find('.source-sj').val(selected ? selected.sj_palet_m_id : '');
+      row.find('.source-item').val(selected ? selected.item_palet_id : '');
+      row.find('.qty-good, .qty-bad').attr('max', selected ? selected.sisa : '');
+      row.find('.source-balance').text(selected ? 'Sisa yang dapat diterima: ' + selected.sisa : '');
     }
 
-    $('#sj_palet_m_id').on('change', function() { loadSj($(this).val()); });
-    $('#item_palet_id').on('change', showSisa);
+    function loadPaletOptions(details) {
+      $('#detailRows').empty();
+      nextIndex = 0;
+      availableItems = [];
+      if (optionsRequest) {
+        optionsRequest.abort();
+      }
+      if (!$('#namaCustomer').val()) {
+        makeRow();
+        return;
+      }
 
-    if ($('#sj_palet_m_id').val()) { loadSj($('#sj_palet_m_id').val()); }
+      optionsRequest = $.getJSON(optionsUrl, { customer: $('#namaCustomer').val() })
+        .done(function(items) {
+          availableItems = items;
+          if (details.length) {
+            details.forEach(function(detail) { makeRow(detail); });
+          } else {
+            makeRow();
+          }
+        })
+        .fail(function(xhr, status) {
+          if (status === 'abort') {
+            return;
+          }
+          $('#detailRows').empty();
+          makeRow();
+          window.alert('Data palet customer gagal dimuat. Silakan coba lagi.');
+        });
+    }
+
+    $('#namaCustomer').on('change', function() {
+      loadPaletOptions([]);
+    });
+
+    $('#addDetail').on('click', function() {
+      makeRow();
+    });
+
+    $('#detailRows').on('change', '.detail-source', function() {
+      setSelectedSource($(this).closest('tr'), $(this).val());
+    });
+
+    $('#detailRows').on('click', '.remove-detail', function() {
+      const rows = $('#detailRows tr');
+      if (rows.length === 1) {
+        rows.find('select').val('');
+        rows.find('.source-sj, .source-item, .qty-good, .qty-bad').val('');
+        rows.find('.source-balance').text('');
+        return;
+      }
+      $(this).closest('tr').remove();
+    });
+
+    if ($('#namaCustomer').val()) {
+      loadPaletOptions(previousDetails);
+    } else {
+      makeRow();
+    }
   });
 </script>
 @endsection

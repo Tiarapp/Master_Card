@@ -39,13 +39,57 @@ class PaletMutasiController extends Controller
 
     public function create()
     {
-        $sjList = SJ_Palet_M::whereNull('deletedAt')
-            ->orderBy('tanggal', 'desc')
-            ->orderBy('noSuratJalan', 'desc')
-            ->limit(500)
-            ->get(['id', 'noSuratJalan', 'tanggal', 'namaCustomer']);
+        $customers = DB::connection('firebird')->table('TCustomer')
+            ->orderBy('Nama')
+            ->get(['Nama']);
 
-        return view('admin.palet_mutasi.create', compact('sjList'));
+        return view('admin.palet_mutasi.create', compact('customers'));
+    }
+
+    public function paletOptions(Request $request)
+    {
+        $data = $request->validate([
+            'customer' => 'required|string',
+        ]);
+
+        $items = DB::table('sj_palet_m as m')
+            ->join('sj_palet_d as d', 'm.id', '=', 'd.sj_palet_m_id')
+            ->join('item_palet as p', 'd.item_palet_id', '=', 'p.id')
+            ->whereNull('m.deletedAt')
+            ->whereNull('d.deletedAt')
+            ->where('m.namaCustomer', $data['customer'])
+            ->groupBy('m.id', 'm.noSuratJalan', 'm.tanggal', 'd.item_palet_id', 'p.nama', 'p.ukuran')
+            ->orderBy('m.tanggal')
+            ->orderBy('m.noSuratJalan')
+            ->get([
+                'm.id as sj_palet_m_id',
+                'm.noSuratJalan',
+                'm.tanggal',
+                'd.item_palet_id',
+                'p.nama',
+                'p.ukuran',
+                DB::raw('SUM(d.qty) as qty'),
+            ]);
+
+        $dikembalikan = PaletMutasi::aktif()
+            ->where('jenis', PaletMutasi::MASUK)
+            ->whereIn('sj_palet_m_id', $items->pluck('sj_palet_m_id')->unique())
+            ->groupBy('sj_palet_m_id', 'item_palet_id')
+            ->selectRaw('sj_palet_m_id, item_palet_id, SUM(qty) as total')
+            ->get()
+            ->keyBy(function ($row) {
+                return $row->sj_palet_m_id . ':' . $row->item_palet_id;
+            });
+
+        return response()->json($items->map(function ($item) use ($dikembalikan) {
+            $key = $item->sj_palet_m_id . ':' . $item->item_palet_id;
+            $item->dikembalikan = (int) ($dikembalikan[$key]->total ?? 0);
+            $item->sisa = max(0, (int) $item->qty - $item->dikembalikan);
+
+            return $item;
+        })->filter(function ($item) {
+            return $item->sisa > 0;
+        })->values());
     }
 
     public function sjDetail($id)
@@ -82,34 +126,98 @@ class PaletMutasiController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'sj_palet_m_id' => 'required|exists:sj_palet_m,id',
             'tanggal' => 'required|date',
-            'item_palet_id' => 'required|integer',
-            'qty' => 'required|integer|min:1',
+            'namaCustomer' => 'required|string|max:255',
+            'noPolisi' => 'required|string|max:100',
+            'jenisPalet' => 'required|in:Kayu,Plastik',
+            'details' => 'required|array|min:1',
+            'details.*.sj_palet_m_id' => 'required|integer|exists:sj_palet_m,id',
+            'details.*.item_palet_id' => 'required|integer|exists:item_palet,id',
+            'details.*.qty_bagus' => 'required|integer|min:0',
+            'details.*.qty_jelek' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
         ]);
 
-        $sj = SJ_Palet_M::whereNull('deletedAt')->findOrFail($data['sj_palet_m_id']);
-
-        $itemDiSj = SJ_Palet_D::where('sj_palet_m_id', $sj->id)
-            ->where('item_palet_id', $data['item_palet_id'])
-            ->whereNull('deletedAt')
-            ->exists();
-
-        if (!$itemDiSj) {
-            return back()->withInput()->withErrors(['item_palet_id' => 'Palet tidak ada di SJ Palet yang dipilih.']);
+        foreach ($data['details'] as $index => $detail) {
+            if ($detail['qty_bagus'] + $detail['qty_jelek'] < 1) {
+                return back()->withInput()->withErrors([
+                    "details.{$index}.qty_bagus" => 'Jumlah bagus dan jelek harus lebih dari 0.',
+                ]);
+            }
         }
 
-        PaletMutasi::create($data + [
-            'jenis' => PaletMutasi::MASUK,
-            'namaCustomer' => $sj->namaCustomer,
-            'noDokumen' => $sj->noSuratJalan,
-            'noPolisi' => $sj->noPolisi,
-            'createdBy' => Auth::user()->name,
-        ]);
+        $sourceRows = DB::table('sj_palet_m as m')
+            ->join('sj_palet_d as d', 'm.id', '=', 'd.sj_palet_m_id')
+            ->whereNull('m.deletedAt')
+            ->whereNull('d.deletedAt')
+            ->where('m.namaCustomer', $data['namaCustomer'])
+            ->whereIn('m.id', collect($data['details'])->pluck('sj_palet_m_id')->unique())
+            ->groupBy('m.id', 'm.noSuratJalan', 'd.item_palet_id')
+            ->selectRaw('m.id as sj_palet_m_id, m.noSuratJalan, d.item_palet_id, SUM(d.qty) as qty')
+            ->get()
+            ->keyBy(function ($row) {
+                return $row->sj_palet_m_id . ':' . $row->item_palet_id;
+            });
+
+        $requested = collect($data['details'])->groupBy(function ($detail) {
+            return $detail['sj_palet_m_id'] . ':' . $detail['item_palet_id'];
+        });
+
+        $alreadyReturned = PaletMutasi::aktif()
+            ->where('jenis', PaletMutasi::MASUK)
+            ->whereIn('sj_palet_m_id', collect($data['details'])->pluck('sj_palet_m_id')->unique())
+            ->groupBy('sj_palet_m_id', 'item_palet_id')
+            ->selectRaw('sj_palet_m_id, item_palet_id, SUM(qty) as total')
+            ->get()
+            ->keyBy(function ($row) {
+                return $row->sj_palet_m_id . ':' . $row->item_palet_id;
+            });
+
+        foreach ($requested as $key => $details) {
+            $source = $sourceRows[$key] ?? null;
+            if (!$source) {
+                return back()->withInput()->withErrors([
+                    'details' => 'Data palet tidak ditemukan pada SJ customer yang dipilih.',
+                ]);
+            }
+
+            $quantity = $details->sum(function ($detail) {
+                return $detail['qty_bagus'] + $detail['qty_jelek'];
+            });
+            $returned = (int) ($alreadyReturned[$key]->total ?? 0);
+
+            if ($returned + $quantity > (int) $source->qty) {
+                return back()->withInput()->withErrors([
+                    'details' => "Jumlah palet melebihi sisa pada SJ {$source->noSuratJalan}.",
+                ]);
+            }
+        }
+
+        DB::transaction(function () use ($data, $sourceRows) {
+            foreach ($data['details'] as $detail) {
+                $source = $sourceRows[$detail['sj_palet_m_id'] . ':' . $detail['item_palet_id']];
+                $qty = $detail['qty_bagus'] + $detail['qty_jelek'];
+
+                PaletMutasi::create([
+                    'tanggal' => $data['tanggal'],
+                    'jenis' => PaletMutasi::MASUK,
+                    'namaCustomer' => $data['namaCustomer'],
+                    'jenisPalet' => $data['jenisPalet'],
+                    'item_palet_id' => $detail['item_palet_id'],
+                    'sj_palet_m_id' => $detail['sj_palet_m_id'],
+                    'qty' => $qty,
+                    'qty_bagus' => $detail['qty_bagus'],
+                    'qty_jelek' => $detail['qty_jelek'],
+                    'noDokumen' => $source->noSuratJalan,
+                    'noPolisi' => $data['noPolisi'],
+                    'keterangan' => $data['keterangan'] ?? null,
+                    'createdBy' => Auth::user()->name,
+                ]);
+            }
+        });
 
         return redirect()->route('palet_mutasi')
-            ->with('success', "Palet masuk dari customer (ref. SJ {$sj->noSuratJalan}) berhasil dicatat.");
+            ->with('success', 'Palet masuk dari customer berhasil dicatat.');
     }
 
     public function destroy($id)
@@ -130,8 +238,8 @@ class PaletMutasiController extends Controller
             ->join('item_palet as p', 'd.item_palet_id', '=', 'p.id')
             ->whereNull('m.deletedAt')
             ->whereNull('d.deletedAt')
-            ->selectRaw("m.tanggal, 'keluar' as jenis, m.namaCustomer, p.nama as palet, p.ukuran, d.qty,
-                m.noSuratJalan as noDokumen, m.noPolisi, d.keterangan, m.createdBy, NULL as mutasi_id");
+            ->selectRaw("m.tanggal, 'keluar' as jenis, m.namaCustomer, NULL as jenisPalet, p.nama as palet, p.ukuran, d.qty,
+                NULL as qty_bagus, NULL as qty_jelek, m.noSuratJalan as noDokumen, m.noPolisi, d.keterangan, m.createdBy, NULL as mutasi_id");
     }
 
     private function queryMasuk()
@@ -140,8 +248,8 @@ class PaletMutasiController extends Controller
             ->join('item_palet as p', 'pm.item_palet_id', '=', 'p.id')
             ->where('pm.jenis', PaletMutasi::MASUK)
             ->whereNull('pm.deletedAt')
-            ->selectRaw("pm.tanggal, 'masuk' as jenis, pm.namaCustomer, p.nama as palet, p.ukuran, pm.qty,
-                pm.noDokumen, pm.noPolisi, pm.keterangan, pm.createdBy, pm.id as mutasi_id");
+            ->selectRaw("pm.tanggal, 'masuk' as jenis, pm.namaCustomer, pm.jenisPalet, p.nama as palet, p.ukuran, pm.qty,
+                pm.qty_bagus, pm.qty_jelek, pm.noDokumen, pm.noPolisi, pm.keterangan, pm.createdBy, pm.id as mutasi_id");
     }
 
     // Saldo = palet keluar (SJ Palet) - palet masuk, yaitu palet yang masih ada di customer
