@@ -123,15 +123,22 @@
 
 @section('javascripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@php
+  $previousDetails = old('details');
+  if ($previousDetails === null && $isEditing) {
+      $previousDetails = [[
+          'item_palet_id' => old('item_palet_id', $mutasi->item_palet_id),
+          'qty_bagus' => old('qty_bagus', $mutasi->qty_bagus ?? 0),
+          'qty_jelek' => old('qty_jelek', $mutasi->qty_jelek ?? 0),
+      ]];
+  }
+  $previousDetails = $previousDetails ?? [];
+@endphp
 <script>
   $(document).ready(function() {
     const palets = @json($palets);
     const isEditing = @json($isEditing);
-    const previousDetails = @json(old('details', $isEditing ? [[
-      'item_palet_id' => old('item_palet_id', $mutasi->item_palet_id),
-      'qty_bagus' => old('qty_bagus', $mutasi->qty_bagus ?? 0),
-      'qty_jelek' => old('qty_jelek', $mutasi->qty_jelek ?? 0),
-    ]] : []));
+    const previousDetails = @json($previousDetails);
     let nextIndex = 0;
 
     $('#namaCustomer').select2({ theme: 'bootstrap4', width: '100%' });
