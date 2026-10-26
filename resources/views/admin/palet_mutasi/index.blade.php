@@ -124,11 +124,14 @@
                   <td>{{ $row->createdBy }}</td>
                   <td>
                     @if ($row->mutasi_id)
-                      <form action="{{ route('palet_mutasi.destroy', $row->mutasi_id) }}" method="POST" onsubmit="return confirm('Hapus catatan ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm">Hapus</button>
-                      </form>
+                      <div class="d-flex">
+                        <a href="{{ route('palet_mutasi.edit', $row->mutasi_id) }}" class="btn btn-outline-primary btn-sm mr-1">Edit</a>
+                        <form action="{{ route('palet_mutasi.destroy', $row->mutasi_id) }}" method="POST" onsubmit="return confirm('Hapus catatan ini?')">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-outline-danger btn-sm">Hapus</button>
+                        </form>
+                      </div>
                     @else
                       <span class="text-muted small">dari SJ Palet</span>
                     @endif

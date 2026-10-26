@@ -285,6 +285,8 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/palet_mutasi', 'PaletMutasiController@index')->name('palet_mutasi');
     Route::get('/admin/palet_mutasi/create', 'PaletMutasiController@create')->name('palet_mutasi.create');
     Route::post('/admin/palet_mutasi/store', 'PaletMutasiController@store')->name('palet_mutasi.store');
+    Route::get('/admin/palet_mutasi/edit/{id}', 'PaletMutasiController@edit')->name('palet_mutasi.edit');
+    Route::put('/admin/palet_mutasi/update/{id}', 'PaletMutasiController@update')->name('palet_mutasi.update');
     Route::delete('/admin/palet_mutasi/delete/{id}', 'PaletMutasiController@destroy')->name('palet_mutasi.destroy');
 
     //Surat Jalan

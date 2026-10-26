@@ -113,6 +113,84 @@ class PaletMutasiController extends Controller
             ->with('success', 'Palet masuk dari customer berhasil dicatat.');
     }
 
+    public function edit($id)
+    {
+        $mutasi = PaletMutasi::aktif()
+            ->where('jenis', PaletMutasi::MASUK)
+            ->findOrFail($id);
+
+        $customers = DB::connection('firebird')->table('TCustomer')
+            ->orderBy('Nama')
+            ->get(['Nama']);
+        $palets = DB::table('item_palet')
+            ->where(function ($query) use ($mutasi) {
+                $query->whereNull('deletedAt')
+                    ->orWhere('id', $mutasi->item_palet_id);
+            })
+            ->orderBy('nama')
+            ->orderBy('ukuran')
+            ->get(['id', 'nama', 'ukuran']);
+
+        return view('admin.palet_mutasi.create', compact('customers', 'palets', 'mutasi'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $mutasi = PaletMutasi::aktif()
+            ->where('jenis', PaletMutasi::MASUK)
+            ->findOrFail($id);
+
+        $data = $request->validate([
+            'tanggal' => 'required|date',
+            'namaCustomer' => 'required|string|max:255',
+            'noPolisi' => 'required|string|max:100',
+            'jenisPalet' => 'required|in:Kayu,Plastik',
+            'item_palet_id' => 'required|integer|exists:item_palet,id',
+            'qty_bagus' => 'required|integer|min:0',
+            'qty_jelek' => 'required|integer|min:0',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $paletAktif = DB::table('item_palet')
+            ->where('id', $data['item_palet_id'])
+            ->where(function ($query) use ($mutasi, $data) {
+                $query->whereNull('deletedAt');
+                if ((int) $data['item_palet_id'] === (int) $mutasi->item_palet_id) {
+                    $query->orWhere('id', $mutasi->item_palet_id);
+                }
+            })
+            ->exists();
+
+        if (!$paletAktif) {
+            return back()->withInput()->withErrors([
+                'item_palet_id' => 'Tipe palet yang dipilih tidak aktif atau tidak ditemukan.',
+            ]);
+        }
+
+        $qty = $data['qty_bagus'] + $data['qty_jelek'];
+        if ($qty < 1) {
+            return back()->withInput()->withErrors([
+                'qty_bagus' => 'Jumlah bagus dan jelek harus lebih dari 0.',
+            ]);
+        }
+
+        $mutasi->update([
+            'tanggal' => $data['tanggal'],
+            'namaCustomer' => $data['namaCustomer'],
+            'noPolisi' => $data['noPolisi'],
+            'jenisPalet' => $data['jenisPalet'],
+            'item_palet_id' => $data['item_palet_id'],
+            'qty' => $qty,
+            'qty_bagus' => $data['qty_bagus'],
+            'qty_jelek' => $data['qty_jelek'],
+            'keterangan' => $data['keterangan'] ?? null,
+            'lastUpdatedBy' => Auth::user()->name,
+        ]);
+
+        return redirect()->route('palet_mutasi')
+            ->with('success', 'Catatan palet masuk berhasil diperbarui.');
+    }
+
     public function destroy($id)
     {
         $mutasi = PaletMutasi::aktif()->where('jenis', PaletMutasi::MASUK)->findOrFail($id);
