@@ -565,23 +565,21 @@
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
-	<tr>
+	@if ($mc->tipeBox == 'B1')
+    <tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
 		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="right" valign=middle sdval="0" sdnum="1033;"><font face="Calibri" color="#000000" size=2></font></td>
-		@if ($mc->tipeBox == "B5")
-            <td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>0</font></td>
-        @else
-            <td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->flapCrease }}</font></td>
-        @endif
+		<td align="left" valign=middle><font face="Calibri" color="#000000" size='2'><br>{{ $mc->flapCrease }}</font></td>
 		<td align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 		<td align="left" valign=bottom><font face="Calibri" color="#000000"><br></font></td>
 	</tr>
+    @endif
 
 	<tr>
 		<td height="21" align="left" valign=middle><font face="Calibri" color="#000000"><br></font></td>
