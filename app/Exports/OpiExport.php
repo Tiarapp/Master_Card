@@ -32,7 +32,7 @@ class OpiExport implements FromCollection, WithHeadings, WithEvents
             return [
                 'ID' => $item->id,
                 'OPI' => $item->NoOPI,
-                'action' => $item->status_opi,
+                'action' => $item->status_opi == 'Proses' ? 'Proses' : 'Complete',
                 'kontrak' => $item->kontrakm->kode,
                 'opi_ke' => $item->created_at,
                 'dt' => Carbon::parse($item->dt->tglKirimDt)->format('d/m/Y'),
