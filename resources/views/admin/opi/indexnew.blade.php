@@ -62,6 +62,7 @@
         $exportParams = array_filter([
           'page' => request()->get('page', 1),
           'search' => request('search'),
+          'warna' => request('warna'),
           'date_start' => request('date_start'),
           'date_end' => request('date_end'),
         ], function ($value) {
@@ -96,6 +97,16 @@
                 autocomplete="off"
               >
             </div>
+            <input
+              type="text"
+              name="warna"
+              class="form-control"
+              placeholder="{{ __('Cari warna...') }}"
+              value="{{ request('warna') }}"
+              title="Cari nama warna"
+              style="max-width: 190px;"
+              autocomplete="off"
+            >
             <input
               type="date"
               name="date_start"

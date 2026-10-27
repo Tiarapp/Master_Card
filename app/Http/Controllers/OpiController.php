@@ -441,6 +441,13 @@ class OpiController extends Controller
             });
         }
 
+        if ($request->filled('warna')) {
+            $warna = $request->warna;
+            $productions->whereHas('mc.colorcombine', function ($query) use ($warna) {
+                $query->where('nama', 'LIKE', '%' . $warna . '%');
+            });
+        }
+
         if ($request->filled('date_start')) {
             $productions->whereDate('updated_at', '>=', $request->date_start);
         }

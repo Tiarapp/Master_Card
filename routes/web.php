@@ -469,6 +469,13 @@ Route::middleware(['auth'])->group(function (){
             });
         }
 
+        if ($request->filled('warna')) {
+            $warna = $request->warna;
+            $opi->whereHas('mc.colorcombine', function($query) use ($warna) {
+                $query->where('nama', 'LIKE', '%' . $warna . '%');
+            });
+        }
+
         if ($request->filled('date_start')) {
             $opi->whereDate('updated_at', '>=', $request->date_start);
         }
@@ -510,6 +517,13 @@ Route::middleware(['auth'])->group(function (){
                     $q->where('kode', 'LIKE', '%' . $search . '%')
                       ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
                 });
+            });
+        }
+
+        if ($request->filled('warna')) {
+            $warna = $request->warna;
+            $productions->whereHas('mc.colorcombine', function($query) use ($warna) {
+                $query->where('nama', 'LIKE', '%' . $warna . '%');
             });
         }
 
