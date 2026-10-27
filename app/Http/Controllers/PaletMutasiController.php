@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PaletMasukExport;
 use App\Models\PaletMutasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaletMutasiController extends Controller
 {
@@ -36,6 +38,29 @@ class PaletMutasiController extends Controller
         $saldo = $this->hitungSaldo($request->input('customer'));
 
         return view('admin.palet_mutasi.index', compact('mutasi', 'saldo'));
+    }
+
+    public function export(Request $request)
+    {
+        $query = $this->queryMasuk()
+            ->whereDate('pm.tanggal', '>=', self::TANGGAL_MULAI_PERHITUNGAN)
+            ->orderBy('pm.tanggal')
+            ->orderBy('pm.id');
+
+        if ($request->filled('customer')) {
+            $query->where('pm.namaCustomer', 'LIKE', '%' . $request->customer . '%');
+        }
+        if ($request->filled('start_date')) {
+            $query->whereDate('pm.tanggal', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('pm.tanggal', '<=', $request->end_date);
+        }
+
+        return Excel::download(
+            new PaletMasukExport($query->get()),
+            'palet_masuk_' . date('Ymd_His') . '.xlsx'
+        );
     }
 
     public function create()

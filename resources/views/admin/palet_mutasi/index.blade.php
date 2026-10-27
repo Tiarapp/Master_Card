@@ -46,7 +46,10 @@
         <input type="date" name="start_date" class="form-control mr-2 mb-2" value="{{ request('start_date') }}" title="Tanggal mulai">
         <input type="date" name="end_date" class="form-control mr-2 mb-2" value="{{ request('end_date') }}" title="Tanggal akhir">
         <button type="submit" class="btn btn-primary mr-2 mb-2">Cari</button>
-        <a href="{{ route('palet_mutasi') }}" class="btn btn-outline-secondary mb-2">Reset</a>
+        <a href="{{ route('palet_mutasi') }}" class="btn btn-outline-secondary mr-2 mb-2">Reset</a>
+        <a href="{{ route('palet_mutasi.export', request()->only(['customer', 'start_date', 'end_date'])) }}" class="btn btn-outline-success mb-2">
+          <i class="fas fa-file-excel"></i> Export Palet Masuk
+        </a>
       </form>
 
       <div class="card">
