@@ -115,7 +115,7 @@ class OpiExport implements FromCollection, WithHeadings, WithEvents
                 for ($row = 2; $row <= $lastRow; $row++) {
                     $status = strtolower(trim((string) $sheet->getCell('C' . $row)->getValue()));
 
-                    $color = $status === 'proses' ? '198754' : ($status === 'Complete' ? '0D6EFD' : null);
+                    $color = $status === 'proses' ? '198754' : ($status === 'complete' ? '0D6EFD' : null);
 
                     if ($color) {
                         $style = $sheet->getStyle('C' . $row);
