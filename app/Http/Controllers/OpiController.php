@@ -6,6 +6,8 @@ use App\Models\Kontrak_D;
 use App\Models\Opi_M;
 use App\Models\Tracking;
 use App\Exports\PlanKirimExport;
+use App\Models\PlanKirim;
+use App\Models\PlanKirimItem;
 use App\Exports\IntakeMonthlyExport;
 use App\Models\DeliveryTime;
 use Yajra\DataTables\DataTables;
@@ -675,94 +677,197 @@ class OpiController extends Controller
         return view('admin.opi.pdf', compact('opi2'));
     }
 
+    /**
+     * Query dasar plan kirim: hanya kolom relasi yang dipakai agar hemat memori
+     * (mis. mc.gambar tidak ikut dimuat).
+     */
+    private function planKirimQuery()
+    {
+        return Opi_M::with([
+            'mc:id,kodeBarang,namaBarang,gramSheetBoxKontrak2,flute,tipeBox,panjangSheet,lebarSheet,joint',
+            'kontrakm:id,kode,customer_name,poCustomer,tglKontrak,alamatKirim,keterangan',
+            'dt:id,keterangan,tglKirimDt,dt_perubahan,approve_mkt,approve_ppic',
+        ])->whereRaw('LOWER(TRIM(status_opi)) = ?', ['proses']);
+    }
+
     public function plan_kirim(Request $request)
     {
-        // Jika tidak ada parameter tanggal, hanya tampilkan form
-        if (!$request->has('start') || !$request->has('end')) {
-            return view('admin.opi.plan_kirim', [
-                'data' => collect(), // Empty collection
-                'start_date' => null,
-                'end_date' => null
-            ]);
-        }
+        return view('admin.opi.plan_kirim');
+    }
 
-        // Validasi input tanggal
+    /**
+     * Pencarian OPI Proses untuk draft plan kirim (dimuat bertahap agar ringan).
+     */
+    public function plan_kirim_search(Request $request)
+    {
         $request->validate([
-            'start' => 'required|date',
-            'end' => 'required|date|after_or_equal:start'
+            'q' => 'nullable|string|max:100',
+            'start' => 'nullable|date',
+            'end' => 'nullable|date',
+            'page' => 'nullable|integer|min:1',
         ]);
 
-        // Alternatif 1: Menggunakan subquery untuk ORDER BY
-        $data = Opi_M::with([
-                'mc',
-                'kontrakm',
-                'kontrakd',
-                'dt'
-            ])
-            ->whereBetween('tglKirimDt', [$request->start, $request->end])
-            ->where('status_opi', 'Proses')
-            ->orderByRaw('(SELECT kodeBarang FROM mc
-                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id
-                          WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
+        $perPage = 50;
+        $page = (int) $request->input('page', 1);
+
+        $query = $this->planKirimQuery();
+
+        if ($request->filled('start')) {
+            $query->where('tglKirimDt', '>=', $request->start);
+        }
+
+        if ($request->filled('end')) {
+            $query->where('tglKirimDt', '<=', $request->end);
+        }
+
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($builder) use ($search) {
+                $builder->where('NoOPI', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('kontrakm', function ($q) use ($search) {
+                        $q->where('customer_name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('poCustomer', 'LIKE', '%' . $search . '%')
+                            ->orWhere('kode', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('mc', function ($q) use ($search) {
+                        $q->where('kodeBarang', 'LIKE', '%' . $search . '%')
+                            ->orWhere('namaBarang', 'LIKE', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $items = $query->orderBy('tglKirimDt', 'asc')
+            ->orderBy('NoOPI', 'asc')
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage + 1)
             ->get();
 
-        // Ambil data stock dari Firebird database
-        DB::connection('firebird2')->beginTransaction(); // Enable query log for debugging
-            $stock = DB::connection('firebird2')->table('TPersediaan')
-                ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
-                ->where('Periode', '=', date('m/Y')) // Current month/year
-                ->get();
+        $hasMore = $items->count() > $perPage;
+        $items = $items->take($perPage);
 
+        return response()->json([
+            'html' => view('admin.opi._plan_kirim_rows', ['data' => $items])->render(),
+            'has_more' => $hasMore,
+            'next_page' => $page + 1,
+        ]);
+    }
 
-        // Clean up data: trim spaces dan convert ke numeric
-        $stock = $stock->map(function($item) {
-            return (object) [
-                'KodeBrg' => trim($item->KodeBrg), // Hapus spasi trailing
-                'quantity' => floatval($item->stock_quantity) // Convert to numeric
+    public function plan_kirim_draft_list()
+    {
+        $drafts = PlanKirim::withCount('items')
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->map(function ($draft) {
+                return [
+                    'id' => $draft->id,
+                    'nama' => $draft->nama,
+                    'jumlah' => $draft->items_count,
+                    'updated_at' => $draft->updated_at ? $draft->updated_at->format('d M Y H:i') : '',
+                ];
+            });
+
+        return response()->json(['drafts' => $drafts]);
+    }
+
+    public function plan_kirim_draft_show($id)
+    {
+        $draft = PlanKirim::with('items')->findOrFail($id);
+        $ids = $draft->items->pluck('opi_id')->all();
+
+        // Hanya OPI yang masih berstatus Proses yang dimuat kembali
+        $items = $this->planKirimQuery()
+            ->whereIn('id', $ids)
+            ->get()
+            ->sortBy(function ($item) use ($ids) {
+                return array_search($item->id, $ids);
+            })
+            ->values();
+
+        return response()->json([
+            'id' => $draft->id,
+            'nama' => $draft->nama,
+            'tgl_plan' => $draft->tgl_plan ? $draft->tgl_plan->format('Y-m-d') : null,
+            'catatan' => $draft->catatan,
+            'skipped' => count($ids) - $items->count(),
+            'html' => view('admin.opi._plan_kirim_rows', ['data' => $items])->render(),
+        ]);
+    }
+
+    public function plan_kirim_draft_store(Request $request)
+    {
+        $request->validate([
+            'id' => 'nullable|integer|exists:plan_kirim,id',
+            'nama' => 'required|string|max:150',
+            'tgl_plan' => 'nullable|date',
+            'catatan' => 'nullable|string|max:1000',
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        $ids = array_values(array_unique($request->ids));
+
+        $draft = DB::transaction(function () use ($request, $ids) {
+            $payload = [
+                'nama' => $request->nama,
+                'tgl_plan' => $request->tgl_plan,
+                'catatan' => $request->catatan,
+                'updated_by' => Auth::id(),
             ];
-        });
 
-
-        // Convert stock data ke collection dengan KodeBrg sebagai key untuk mapping yang lebih efisien
-        $stockMap = $stock->pluck('quantity', 'KodeBrg');
-
-        // Debug: Lihat hasil clean data
-        // dd('Cleaned stock:', $stock->take(3), 'Stock map:', $stockMap->take(3));
-
-        // Map quantity dari stock ke data OPI berdasarkan kodeBarang
-        $data = $data->map(function ($item) use ($stockMap) {
-            // Ambil kode barang dari relasi mc
-            $kodeBarang = $item->mc->kodeBarang ?? null;
-
-            // Cari quantity di stock berdasarkan kode barang
-            $quantity = $stockMap->get($kodeBarang, 0); // Default 0 jika tidak ditemukan
-
-            // Tambahkan property stock_quantity ke item
-            $item->stock_quantity = $quantity;
-
-            // Hitung stock status (aman, kurang, habis)
-            $needed = $item->jumlahOrder ?? 0;
-            if ($quantity >= $needed) {
-                $item->stock_status = 'aman';
-                $item->stock_indicator = 'success';
-            } elseif ($quantity > 0 && $quantity < $needed) {
-                $item->stock_status = 'kurang';
-                $item->stock_indicator = 'warning';
+            if ($request->filled('id')) {
+                $draft = PlanKirim::findOrFail($request->id);
+                $draft->update($payload);
+                $draft->items()->delete();
             } else {
-                $item->stock_status = 'habis';
-                $item->stock_indicator = 'danger';
+                $draft = PlanKirim::create($payload + ['created_by' => Auth::id()]);
             }
 
-            // Hitung selisih stock vs kebutuhan
-            $item->stock_difference = $quantity - $needed;
+            foreach ($ids as $index => $opiId) {
+                PlanKirimItem::create([
+                    'plan_kirim_id' => $draft->id,
+                    'opi_id' => $opiId,
+                    'urutan' => $index + 1,
+                ]);
+            }
 
-            return $item;
+            return $draft;
         });
 
-        $start_date = date('d M Y', strtotime($request->start));
-        $end_date = date('d M Y', strtotime($request->end));
+        return response()->json([
+            'success' => true,
+            'id' => $draft->id,
+            'nama' => $draft->nama,
+            'jumlah' => count($ids),
+        ]);
+    }
 
-        return view('admin.opi.plan_kirim', compact('data', 'start_date', 'end_date', 'stockMap'));
+    public function plan_kirim_draft_destroy($id)
+    {
+        PlanKirim::findOrFail($id)->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function plan_kirim_export_selected(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        $ids = array_values(array_unique($request->ids));
+
+        $data = $this->planKirimQuery()
+            ->whereIn('id', $ids)
+            ->get()
+            ->sortBy(function ($item) use ($ids) {
+                return array_search($item->id, $ids);
+            })
+            ->values();
+
+        $filename = 'Plan_Kirim_OPI_Draft_' . date('d-M-Y_His') . '.xlsx';
+
+        return Excel::download(new PlanKirimExport($data, date('d-M-Y'), null), $filename);
     }
 
     public function plan_kirim_export(Request $request)
@@ -770,71 +875,21 @@ class OpiController extends Controller
         // Validasi input tanggal
         $request->validate([
             'start' => 'required|date',
-            'end' => 'required|date|after_or_equal:start'
         ]);
 
-        // Ambil data OPI sesuai periode (sama seperti plan_kirim method)
-        $data = Opi_M::with([
-                'mc',
-                'kontrakm',
-                'kontrakd',
-                'dt'
-            ])
-            ->whereBetween('tglKirimDt', [$request->start, $request->end])
-            ->where('status_opi', 'Proses')
-            ->orderByRaw('(SELECT kodeBarang FROM mc
-                          JOIN kontrak_d ON mc.id = kontrak_d.mc_id
-                          WHERE kontrak_d.id = opi_m.kontrak_d_id) ASC')
+        // Ambil data OPI sesuai filter (sama seperti plan_kirim method)
+        $data = $this->planKirimQuery()
+            ->where('tglKirimDt', '>=', $request->start)
+            ->orderBy('tglKirimDt', 'asc')
+            ->orderBy('NoOPI', 'asc')
             ->get();
-
-        // Ambil data stock dari Firebird database
-        DB::connection('firebird2')->beginTransaction(); // Enable query log for debugging
-        $stock = DB::connection('firebird2')->table('TPersediaan')
-            ->select('KodeBrg', 'SaldoAkhirCrt as stock_quantity')
-            ->where('Periode', '=', date('m/Y'))
-            ->get();
-
-        // Clean up data dan mapping stock
-        $stock = $stock->map(function($item) {
-            return (object) [
-                'KodeBrg' => trim($item->KodeBrg),
-                'quantity' => floatval($item->stock_quantity)
-            ];
-        });
-
-        $stockMap = $stock->pluck('quantity', 'KodeBrg');
-
-        // Map quantity dari stock ke data OPI
-        $data = $data->map(function ($item) use ($stockMap) {
-            $kodeBarang = $item->mc->kodeBarang ?? null;
-            $quantity = $stockMap->get($kodeBarang, 0);
-
-            $item->stock_quantity = $quantity;
-
-            $needed = $item->jumlahOrder ?? 0;
-            if ($quantity >= $needed) {
-                $item->stock_status = 'aman';
-                $item->stock_indicator = 'success';
-            } elseif ($quantity > 0 && $quantity < $needed) {
-                $item->stock_status = 'kurang';
-                $item->stock_indicator = 'warning';
-            } else {
-                $item->stock_status = 'habis';
-                $item->stock_indicator = 'danger';
-            }
-
-            $item->stock_difference = $quantity - $needed;
-
-            return $item;
-        });
 
         // Format tanggal untuk filename dan display
         $start_date = date('d-M-Y', strtotime($request->start));
-        $end_date = date('d-M-Y', strtotime($request->end));
-        $filename = "Plan_Kirim_OPI_{$start_date}_to_{$end_date}.xlsx";
+        $filename = "Plan_Kirim_OPI_dari_{$start_date}.xlsx";
 
         // Export to Excel
-        return Excel::download(new PlanKirimExport($data, $start_date, $end_date), $filename);
+        return Excel::download(new PlanKirimExport($data, $start_date, null), $filename);
     }
 
     /**

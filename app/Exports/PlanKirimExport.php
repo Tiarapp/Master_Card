@@ -19,7 +19,7 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
     protected $startDate;
     protected $endDate;
 
-    public function __construct($data, $startDate, $endDate)
+    public function __construct($data, $startDate, $endDate = null)
     {
         $this->data = $data;
         $this->startDate = $startDate;
@@ -40,22 +40,6 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
                 $deliveryDate = Carbon::parse($item->tglKirimDt)->format('d/m/Y');
             }
 
-            // Stock status
-            $stockStatus = 'N/A';
-            if (isset($item->stock_status)) {
-                switch ($item->stock_status) {
-                    case 'aman':
-                        $stockStatus = 'AMAN';
-                        break;
-                    case 'kurang':
-                        $stockStatus = 'KURANG';
-                        break;
-                    case 'habis':
-                        $stockStatus = 'HABIS';
-                        break;
-                }
-            }
-
             return [
                 'no' => $index + 1,
                 'no_opi' => $item->NoOPI ?? '-',
@@ -68,9 +52,6 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
                 'weight_per_pcs' => number_format($item->mc->gramSheetBoxKontrak2 ?? 0, 2),
                 'total_kg' => number_format(($item->jumlahOrder ?? 0) * ($item->mc->gramSheetBoxKontrak2 ?? 0), 2),
                 'total_ton' => number_format((($item->jumlahOrder ?? 0) * ($item->mc->gramSheetBoxKontrak2 ?? 0)) / 1000, 3),
-                'stock_quantity' => number_format($item->stock_quantity ?? 0, 0),
-                'stock_status' => $stockStatus,
-                'stock_difference' => number_format($item->stock_difference ?? 0, 0),
                 'no_kontrak' => $item->kontrakm->kode ?? '-',
                 'tgl_kontrak' => $item->kontrakm->tglKontrak ? Carbon::parse($item->kontrakm->tglKontrak)->format('d/m/Y') : '-',
                 'flute' => $item->mc->flute ?? '-',
@@ -97,9 +78,6 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
             'Weight/pcs (kg)',
             'Total Weight (kg)',
             'Total Tonnage (ton)',
-            'Stock Tersedia (pcs)',
-            'Status Stock',
-            'Selisih Stock',
             'No Kontrak',
             'Tanggal Kontrak',
             'Flute',
@@ -152,22 +130,23 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
             'I' => 12,  // Weight/pcs (kg)
             'J' => 15,  // Total Weight (kg)
             'K' => 15,  // Total Tonnage (ton)
-            'L' => 15,  // Stock Tersedia
-            'M' => 12,  // Status Stock
-            'N' => 12,  // Selisih Stock
-            'O' => 18,  // No Kontrak
-            'P' => 15,  // Tanggal Kontrak
-            'Q' => 8,   // Flute
-            'R' => 12,  // Tipe Box
-            'S' => 18,  // Ukuran Sheet
-            'T' => 12,  // Joint
-            'U' => 30,  // Alamat Kirim
-            'V' => 25,  // Keterangan
+            'L' => 18,  // No Kontrak
+            'M' => 15,  // Tanggal Kontrak
+            'N' => 8,   // Flute
+            'O' => 12,  // Tipe Box
+            'P' => 18,  // Ukuran Sheet
+            'Q' => 12,  // Joint
+            'R' => 30,  // Alamat Kirim
+            'S' => 25,  // Keterangan
         ];
     }
 
     public function title(): string
     {
-        return 'Plan Kirim ' . $this->startDate . ' - ' . $this->endDate;
+        if ($this->endDate) {
+            return 'Plan Kirim ' . $this->startDate . ' - ' . $this->endDate;
+        }
+
+        return 'Plan Kirim >= ' . $this->startDate;
     }
 }

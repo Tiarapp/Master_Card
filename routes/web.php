@@ -401,7 +401,13 @@ Route::middleware(['auth'])->group(function (){
 
     Route::get('/admin/opinew', [OpiController::class, 'index_new'])->name('opinew');
     Route::get('/admin/opi/plan_kirim', [OpiController::class, 'plan_kirim'])->name('opi.plan_kirim');
+    Route::get('/admin/opi/plan_kirim/search', [OpiController::class, 'plan_kirim_search'])->name('opi.plan_kirim.search');
+    Route::get('/admin/opi/plan_kirim/drafts', [OpiController::class, 'plan_kirim_draft_list'])->name('opi.plan_kirim.draft.list');
+    Route::get('/admin/opi/plan_kirim/drafts/{id}', [OpiController::class, 'plan_kirim_draft_show'])->name('opi.plan_kirim.draft.show');
+    Route::post('/admin/opi/plan_kirim/drafts', [OpiController::class, 'plan_kirim_draft_store'])->name('opi.plan_kirim.draft.store');
+    Route::delete('/admin/opi/plan_kirim/drafts/{id}', [OpiController::class, 'plan_kirim_draft_destroy'])->name('opi.plan_kirim.draft.destroy');
     Route::get('/admin/opi/plan_kirim/export', [OpiController::class, 'plan_kirim_export'])->name('opi.plan_kirim.export');
+    Route::post('/admin/opi/plan_kirim/export', [OpiController::class, 'plan_kirim_export_selected'])->name('opi.plan_kirim.export.selected');
     Route::get('/admin/opi/intake', [OpiController::class, 'intakeMonthly'])->name('opi.intake');
     Route::get('/admin/opi/intake/export', [OpiController::class, 'exportIntakeMonthly'])->name('opi.intake.export');
     Route::get('/vendortt/export', function (Request $request){

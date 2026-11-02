@@ -34,6 +34,46 @@
     border-radius: 5px;
     display: inline-block;
 }
+
+.drag-handle {
+    cursor: move;
+    color: #6c757d;
+}
+
+.plan-row.dragging {
+    opacity: 0.45;
+}
+
+.plan-row.drag-over-top {
+    box-shadow: inset 0 3px 0 #0d6efd;
+}
+
+.plan-row.drag-over-bottom {
+    box-shadow: inset 0 -3px 0 #0d6efd;
+}
+
+.drop-zone {
+    transition: background-color .15s;
+}
+
+.drop-zone.drop-active {
+    background-color: #e7f1ff;
+}
+
+.list-scroll {
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+#available-list .col-num,
+.th-num-available {
+    display: none;
+}
+
+#plan-list .btn-add,
+#available-list .btn-remove {
+    display: none;
+}
 </style>
 
 @section('content')
@@ -69,80 +109,76 @@
         </div>
       @endif
 
-      <!-- Form Filter Tanggal -->
-      <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filter Periode Tanggal</h5>
-        </div>
+      <div class="plan-kirim-header">
+        <h3 class="mb-2"><i class="fas fa-calendar-alt me-2"></i>Rencana Pengiriman OPI</h3>
+        <small><i class="fas fa-info-circle me-2"></i>Status: Proses | Cari OPI di tanggal manapun, lalu drag & drop ke draft untuk memilih dan mengatur urutan</small>
+      </div>
+
+      <div class="card mb-3">
         <div class="card-body">
-          <form action="{{ route('opi.plan_kirim') }}" method="GET" class="row g-3">
-            <div class="col-md-4">
-              <label for="start_date" class="form-label">Tanggal Mulai</label>
-              <input type="date" class="form-control" id="start_date" name="start" value="{{ request('start', date('Y-m-d')) }}" required>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label mb-1 small">Nama Draft</label>
+              <input type="text" id="draft-nama" class="form-control form-control-sm" maxlength="150" placeholder="mis. Plan Kirim 30 Okt 2026">
             </div>
-            <div class="col-md-4">
-              <label for="end_date" class="form-label">Tanggal Selesai</label>
-              <input type="date" class="form-control" id="end_date" name="end" value="{{ request('end', date('Y-m-d', strtotime('+7 days'))) }}" required>
+            <div class="col-md-2">
+              <label class="form-label mb-1 small">Tanggal Plan</label>
+              <input type="date" id="draft-tgl" class="form-control form-control-sm">
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-              <button type="submit" class="btn btn-primary me-2">
-                <i class="fas fa-search me-2"></i>Cari
+            <div class="col-md-3">
+              <label class="form-label mb-1 small">Catatan</label>
+              <input type="text" id="draft-catatan" class="form-control form-control-sm" maxlength="1000">
+            </div>
+            <div class="col-md-4 d-flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-sm btn-primary" id="btn-save-draft" disabled>
+                <i class="fas fa-save me-1"></i><span id="save-label">Simpan Draft</span>
               </button>
-              <button type="button" class="btn btn-outline-secondary" onclick="resetDates()">
-                <i class="fas fa-sync-alt me-2"></i>Reset
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-new-draft" title="Mulai draft baru">
+                <i class="fas fa-file me-1"></i>Baru
               </button>
-            </div>
-          </form>
-          
-          <!-- Quick Date Presets -->
-          <div class="mt-3">
-            <small class="text-muted">Preset Cepat:</small>
-            <div class="btn-group btn-group-sm mt-1" role="group">
-              <button type="button" class="btn btn-outline-info" onclick="setDateRange(0, 0)">Hari Ini</button>
-              <button type="button" class="btn btn-outline-info" onclick="setDateRange(0, 6)">Minggu Ini</button>
-              <button type="button" class="btn btn-outline-info" onclick="setDateRange(0, 13)">2 Minggu</button>
-              <button type="button" class="btn btn-outline-info" onclick="setDateRange(0, 29)">Bulan Ini</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" id="btn-clear-plan">
+                <i class="fas fa-trash me-1"></i>Kosongkan
+              </button>
             </div>
           </div>
+          <div class="row g-2 align-items-end mt-1">
+            <div class="col-md-5">
+              <label class="form-label mb-1 small">Draft Tersimpan</label>
+              <select id="draft-select" class="form-control form-control-sm">
+                <option value="">-- pilih draft --</option>
+              </select>
+            </div>
+            <div class="col-md-7 d-flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-sm btn-info" id="btn-load-draft"><i class="fas fa-folder-open me-1"></i>Buka</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" id="btn-delete-draft"><i class="fas fa-times me-1"></i>Hapus Draft</button>
+              <form id="export-form" action="{{ route('opi.plan_kirim.export.selected') }}" method="POST" class="mb-0">
+                @csrf
+                <div id="export-ids"></div>
+                <button type="submit" id="btn-export" class="btn btn-sm btn-success" disabled>
+                  <i class="fas fa-file-excel me-1"></i>Export ke Excel
+                </button>
+              </form>
+              <a href="{{ route('opinew') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Kembali ke OPI
+              </a>
+            </div>
+          </div>
+          <div id="draft-info" class="small text-muted mt-2"></div>
         </div>
       </div>
 
-      @if(isset($start_date) && isset($end_date))
-      <!-- Header dengan periode tanggal -->
-      <div class="plan-kirim-header">
-        <h3 class="mb-3"><i class="fas fa-calendar-alt me-2"></i>Rencana Pengiriman OPI</h3>
-        <div class="date-range">
-          <i class="fas fa-calendar-check me-2"></i>
-          <strong>Periode: {{ $start_date }} - {{ $end_date }}</strong>
+      <!-- Draft Plan Kirim -->
+      <div class="card shadow mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0"><i class="fas fa-truck me-2"></i>Draft Plan Kirim (<span id="plan-count">0</span> OPI)</h5>
+          <small>Seret OPI dari daftar di bawah ke sini, lalu atur urutannya</small>
         </div>
-        <div class="mt-3">
-          <small><i class="fas fa-info-circle me-2"></i>Total OPI: {{ count($data) }} items | Status: Proses | Diurutkan berdasarkan Kode Barang</small>
-        </div>
-      </div>
-      @endif
-
-      @if(isset($data) && count($data) > 0)
-      <!-- Export dan Filter -->
-      <div class="row mb-4 align-items-center">
-        <div class="col-auto d-flex align-items-center gap-3">
-          {{-- <button onclick="window.print()" class="btn btn-primary mb-3">
-            <i class="fas fa-print me-2"></i>Print Rencana Kirim
-          </button> --}}
-          <a href="{{ route('opi.plan_kirim.export', ['start' => request('start'), 'end' => request('end')]) }}" class="btn btn-success mb-3">
-            <i class="fas fa-file-excel me-2"></i>Export to Excel
-          </a>
-          <a href="{{ route('opinew') }}" class="btn btn-outline-secondary mb-3">
-            <i class="fas fa-arrow-left me-2"></i>Kembali ke OPI
-          </a>
-        </div>
-      </div>
-
-      <!-- Tabel Plan Kirim -->
-      <div class="table-responsive shadow rounded-3">
-        <table class="table align-middle table-striped table-hover" style="background-color: #fff;">
+        <div class="table-responsive">
+          <table class="table align-middle table-striped table-hover mb-0" style="background-color: #fff;">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">Drag</th>
+                    <th scope="col" class="col-num">#</th>
                     <th scope="col">Tanggal Kirim</th>
                     <th scope="col">Customer</th>
                     <th scope="col">PO Customer</th>
@@ -151,234 +187,101 @@
                     <th scope="col">Kode Barang</th>
                     <th scope="col">Nama Barang</th>
                     <th scope="col">Qty Order</th>
-                    <th scope="col">Stock</th>
                     <th scope="col">Gram</th>
                     <th scope="col">Ton</th>
-                    <th scope="col">Status Stock</th>
                     <th scope="col">Keterangan</th>
+                    <th scope="col">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                @forelse ($data as $index => $item)
-                    <tr>
-                        <td class="fw-bold">{{ $index + 1 }}</td>
-                        <td>
-                            @if($item->dt_perubahan !== '' && $item->approve_mkt == 1 && $item->approve_ppic == 1)
-                                <span class="badge bg-warning text-dark">{{ date('d M Y', strtotime($item->dt_perubahan)) }}</span>
-                                <small class="d-block text-muted">Perubahan</small>
-                            @else
-                                <span class="badge bg-info">{{ date('d M Y', strtotime($item->tglKirimDt)) }}</span>
-                            @endif
-                        </td>
-                        <td>{{ $item->kontrakm->customer_name ?? '-' }}</td>
-                        <td>{{ $item->kontrakm->poCustomer ?? '-' }}</td>
-                        <td>{{ $item->kontrakm->kode ?? '-' }}</td>
-                        <td class="text-primary fw-bold">{{ $item->NoOPI }}</td>
-                        <td class="fw-bold text-success">{{ $item->mc->kodeBarang ?? '-' }}</td>
-                        <td>{{ $item->mc->namaBarang ?? '-' }}</td>
-                        <td class="text-end">
-                            <span class="badge bg-primary">{{ number_format($item->jumlahOrder) }} pcs</span>
-                        </td>
-                        <td class="text-end">
-                            <span class="fw-bold text-{{ $item->stock_indicator ?? 'muted' }}">
-                                {{ number_format($item->stock_quantity ?? 0) }} pcs
-                            </span>
-                            @if(isset($item->stock_difference))
-                                <br><small class="text-muted">
-                                    {{ $item->stock_difference >= 0 ? '+' : '' }}{{ number_format($item->stock_difference) }}
-                                </small>
-                            @endif
-                        </td>
-                        <td class="text-end">
-                            <span class="badge bg-secondary">{{ number_format($item->mc->gramSheetBoxKontrak2 ?? 0, 2) }} kg/pcs</span>
-                        </td>
-                        <td class="text-end">
-                            @php
-                                $totalKg = ($item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0)) / 1000; // Convert to tons
-                            @endphp
-                            <span class="fw-bold text-warning">{{ number_format($totalKg, 3) }} ton</span>
-                            <br><small class="text-muted">{{ number_format($item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0), 2) }} kg</small>
-                        </td>
-                        <td class="text-center">
-                            @if(isset($item->stock_status))
-                                <span class="badge bg-{{ $item->stock_indicator }}">
-                                    @if($item->stock_status == 'aman')
-                                        <i class="fas fa-check-circle me-1"></i>Aman
-                                    @elseif($item->stock_status == 'kurang')
-                                        <i class="fas fa-exclamation-triangle me-1"></i>Kurang
-                                    @else
-                                        <i class="fas fa-times-circle me-1"></i>Habis
-                                    @endif
-                                </span>
-                            @else
-                                <span class="badge bg-secondary">-</span>
-                            @endif
-                        </td>
-                        <td>
-                            <small>{{ Str::limit($item->dt->keterangan ?? '-', 500) }}</small>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="14" class="text-center py-5">
-                            <div class="text-muted">
-                                <i class="fas fa-inbox fa-3x mb-3"></i>
-                                <h5>Tidak ada data OPI</h5>
-                                <p>Tidak ada OPI yang dijadwalkan untuk periode tanggal yang dipilih.</p>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
+            <tbody id="plan-list" class="drop-zone" data-list="plan">
+                <tr class="empty-row">
+                    <td colspan="14" class="text-center text-muted py-4">
+                        <i class="fas fa-hand-pointer me-2"></i>Belum ada OPI di draft. Seret baris dari daftar OPI atau klik tombol <i class="fas fa-plus"></i>.
+                    </td>
+                </tr>
             </tbody>
-        </table>
+          </table>
+        </div>
       </div>
-      @else
-        <div class="card">
-          <div class="card-body text-center py-5">
-            <i class="fas fa-calendar-day fa-4x text-muted mb-3"></i>
-            <h4 class="text-muted">Pilih Periode Tanggal</h4>
-            <p class="text-muted">Silakan pilih tanggal mulai dan tanggal selesai untuk melihat rencana pengiriman OPI.</p>
+
+      <!-- Pencarian & Daftar OPI Tersedia -->
+      <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Daftar OPI Proses (<span id="available-count">0</span> dimuat)</h5>
+            <button type="button" class="btn btn-sm btn-light" id="btn-add-all" title="Masukkan semua OPI yang sedang dimuat">
+              <i class="fas fa-angle-double-up me-1"></i>Masukkan Semua yang Dimuat
+            </button>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <input type="text" id="filter-q" class="form-control form-control-sm" placeholder="Cari No OPI / customer / PO / kontrak / kode & nama barang..." autocomplete="off">
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text">Dari</span>
+                <input type="date" id="filter-start" class="form-control" value="{{ date('Y-m-d') }}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text">Sampai</span>
+                <input type="date" id="filter-end" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+              <button type="button" class="btn btn-sm btn-primary" id="btn-search"><i class="fas fa-search me-1"></i>Cari</button>
+              <button type="button" class="btn btn-sm btn-outline-light" id="btn-reset-filter">Semua Tanggal</button>
+            </div>
           </div>
         </div>
-      @endif
+        <div class="table-responsive list-scroll">
+          <table class="table align-middle table-striped table-hover mb-0" style="background-color: #fff;">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Drag</th>
+                    <th scope="col" class="th-num-available">#</th>
+                    <th scope="col">Tanggal Kirim</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">PO Customer</th>
+                    <th scope="col">No. Kontrak</th>
+                    <th scope="col">No OPI</th>
+                    <th scope="col">Kode Barang</th>
+                    <th scope="col">Nama Barang</th>
+                    <th scope="col">Qty Order</th>
+                    <th scope="col">Gram</th>
+                    <th scope="col">Ton</th>
+                    <th scope="col">Keterangan</th>
+                    <th scope="col">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="available-list" class="drop-zone" data-list="available"></tbody>
+          </table>
+          <div id="available-status" class="text-center text-muted py-3"></div>
+        </div>
+        <div class="card-footer text-center">
+          <button type="button" class="btn btn-outline-primary btn-sm" id="btn-load-more" style="display:none;">
+            <i class="fas fa-chevron-down me-1"></i>Muat lebih banyak
+          </button>
+        </div>
+      </div>
 
-      @if(isset($data) && count($data) > 0)
-      <!-- Summary -->
+      <!-- Ringkasan Draft -->
       <div class="card mt-4">
         <div class="card-header bg-light">
-          <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Ringkasan</h5>
+          <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Ringkasan Draft Plan Kirim</h5>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-2">
-              <div class="text-center">
-                <h4 class="text-primary">{{ count($data) }}</h4>
-                <small class="text-muted">Total OPI</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                <h4 class="text-success">{{ number_format($data->sum('jumlahOrder')) }}</h4>
-                <small class="text-muted">Total Quantity (pcs)</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                @php
-                    $totalKg = $data->sum(function($item) {
-                        return $item->jumlahOrder * ($item->mc->gramSheetBoxKontrak2 ?? 0);
-                    });
-                    $totalTon = $totalKg / 1000;
-                @endphp
-                <h4 class="text-warning">{{ number_format($totalTon, 3) }}</h4>
-                <small class="text-muted">Total Tonnage (ton)</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                <h4 class="text-info">{{ $data->unique('kontrakm.customer_name')->count() }}</h4>
-                <small class="text-muted">Unique Customers</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                <h4 class="text-warning">{{ $data->unique('mc.kodeBarang')->count() }}</h4>
-                <small class="text-muted">Unique Items</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                @php
-                  $stockAman = $data->where('stock_status', 'aman')->count();
-                @endphp
-                <h4 class="text-success">{{ $stockAman }}</h4>
-                <small class="text-muted">Stock Aman</small>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="text-center">
-                @php
-                  $stockKurang = $data->where('stock_status', 'kurang')->count() + $data->where('stock_status', 'habis')->count();
-                @endphp
-                <h4 class="text-danger">{{ $stockKurang }}</h4>
-                <small class="text-muted">Stock Kurang/Habis</small>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Tonnage Detail Summary -->
-          <div class="row mt-4">
-            <div class="col-12">
-              <div class="alert alert-info">
-                <div class="row text-center">
-                  <div class="col-md-3">
-                    <h3 class="text-primary mb-1">{{ number_format($totalTon, 3) }}</h3>
-                    <strong>Total Tonnage</strong>
-                    <small class="d-block text-muted">{{ number_format($totalKg, 2) }} kg</small>
-                  </div>
-                  <div class="col-md-3">
-                    <h3 class="text-success mb-1">{{ number_format($data->sum('jumlahOrder')) }}</h3>
-                    <strong>Total Pieces</strong>
-                    <small class="d-block text-muted">Semua OPI</small>
-                  </div>
-                  <div class="col-md-3">
-                    @php
-                        $avgWeight = $data->count() > 0 ? $totalKg / $data->sum('jumlahOrder') : 0;
-                    @endphp
-                    <h3 class="text-warning mb-1">{{ number_format($avgWeight, 3) }}</h3>
-                    <strong>Avg Weight/pcs</strong>
-                    <small class="d-block text-muted">kg per pieces</small>
-                  </div>
-                  <div class="col-md-3">
-                    @php
-                        $avgTonnagePerOPI = count($data) > 0 ? $totalTon / count($data) : 0;
-                    @endphp
-                    <h3 class="text-info mb-1">{{ number_format($avgTonnagePerOPI, 3) }}</h3>
-                    <strong>Avg Tonnage/OPI</strong>
-                    <small class="d-block text-muted">ton per OPI</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Stock Detail Summary -->
-          <div class="row mt-4">
-            <div class="col-12">
-              <h6 class="mb-3"><i class="fas fa-boxes me-2"></i>Detail Status Stock</h6>
-              <div class="row">
-                @php
-                  $stockSummary = $data->groupBy('stock_status')->map(function($items, $status) {
-                    return [
-                      'count' => $items->count(),
-                      'total_qty' => $items->sum('jumlahOrder'),
-                      'total_stock' => $items->sum('stock_quantity')
-                    ];
-                  });
-                @endphp
-                
-                @foreach(['aman' => 'success', 'kurang' => 'warning', 'habis' => 'danger'] as $status => $color)
-                  <div class="col-md-4">
-                    <div class="card border-{{ $color }}">
-                      <div class="card-body text-center">
-                        <h5 class="text-{{ $color }}">
-                          {{ $stockSummary[$status]['count'] ?? 0 }} OPI
-                        </h5>
-                        <p class="mb-1">
-                          <strong>Kebutuhan:</strong> {{ number_format($stockSummary[$status]['total_qty'] ?? 0) }} pcs<br>
-                          <strong>Stock:</strong> {{ number_format($stockSummary[$status]['total_stock'] ?? 0) }} pcs
-                        </p>
-                        <span class="badge bg-{{ $color }}">Stock {{ ucfirst($status) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
-            </div>
+          <div class="row text-center">
+            <div class="col"><h4 class="text-primary" id="sum-opi">0</h4><small class="text-muted">Total OPI</small></div>
+            <div class="col"><h4 class="text-success" id="sum-qty">0</h4><small class="text-muted">Total Quantity (pcs)</small></div>
+            <div class="col"><h4 class="text-warning" id="sum-ton">0.000</h4><small class="text-muted">Total Tonnage (ton)</small></div>
+            <div class="col"><h4 class="text-info" id="sum-cust">0</h4><small class="text-muted">Unique Customers</small></div>
+            <div class="col"><h4 class="text-warning" id="sum-items">0</h4><small class="text-muted">Unique Items</small></div>
+            <div class="col"><h4 class="text-secondary" id="sum-avg">0.000</h4><small class="text-muted">Avg Tonnage/OPI</small></div>
           </div>
         </div>
       </div>
-      @endif
 
       <!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -388,61 +291,400 @@
 
 @section('javascripts')
 <script>
-// Print functionality dengan style khusus
-window.addEventListener('beforeprint', function() {
-    document.title = 'Plan Kirim OPI - {{ $start_date ?? "Custom Date" }} to {{ $end_date ?? "Custom Date" }}';
-});
+(function initPlanKirim() {
+    const planList = document.getElementById('plan-list');
+    const availableList = document.getElementById('available-list');
+    const searchUrl = @json(route('opi.plan_kirim.search'));
 
-// Auto-hide alert setelah 5 detik
-$(document).ready(function() {
-    setTimeout(function() {
-        $('.alert').fadeOut('slow');
-    }, 5000);
-});
+    const filterQ = document.getElementById('filter-q');
+    const filterStart = document.getElementById('filter-start');
+    const filterEnd = document.getElementById('filter-end');
+    const statusBox = document.getElementById('available-status');
+    const loadMoreBtn = document.getElementById('btn-load-more');
 
-// Reset dates to default (today to +7 days)
-function resetDates() {
-    const today = new Date();
-    const nextWeek = new Date();
-    nextWeek.setDate(today.getDate() + 7);
-    
-    document.getElementById('start_date').value = today.toISOString().split('T')[0];
-    document.getElementById('end_date').value = nextWeek.toISOString().split('T')[0];
-}
+    let draggedRow = null;
+    let page = 1;
+    let loading = false;
+    let requestSeq = 0;
 
-// Validate date range
-document.getElementById('start_date').addEventListener('change', function() {
-    const startDate = new Date(this.value);
-    const endDateInput = document.getElementById('end_date');
-    const endDate = new Date(endDateInput.value);
-    
-    if (endDate < startDate) {
-        endDateInput.value = this.value;
-    }
-});
+    const rowsOf = (list) => Array.from(list.querySelectorAll('tr.plan-row'));
+    const planIds = () => new Set(rowsOf(planList).map((row) => row.dataset.id));
 
-document.getElementById('end_date').addEventListener('change', function() {
-    const endDate = new Date(this.value);
-    const startDateInput = document.getElementById('start_date');
-    const startDate = new Date(startDateInput.value);
-    
-    if (startDate > endDate) {
-        startDateInput.value = this.value;
-    }
-});
+    // Sisipkan sesuai urutan tanggal kirim + No OPI
+    const insertBySort = (list, row) => {
+        const key = row.dataset.sort;
+        const next = rowsOf(list).find((r) => r.dataset.sort > key);
+        list.insertBefore(row, next || null);
+    };
 
-// Quick date presets
-function setDateRange(startOffset, endOffset) {
-    const today = new Date();
-    const startDate = new Date();
-    const endDate = new Date();
-    
-    startDate.setDate(today.getDate() + startOffset);
-    endDate.setDate(today.getDate() + endOffset);
-    
-    document.getElementById('start_date').value = startDate.toISOString().split('T')[0];
-    document.getElementById('end_date').value = endDate.toISOString().split('T')[0];
-}
+    const refresh = () => {
+        const planRows = rowsOf(planList);
+        planRows.forEach((row, i) => {
+            row.querySelector('.row-number').textContent = i + 1;
+        });
+
+        const emptyRow = planList.querySelector('.empty-row');
+        if (emptyRow) {
+            emptyRow.style.display = planRows.length ? 'none' : '';
+        }
+
+        document.getElementById('plan-count').textContent = planRows.length;
+        document.getElementById('available-count').textContent = rowsOf(availableList).length;
+
+        let qty = 0, kg = 0;
+        const customers = new Set();
+        const items = new Set();
+        planRows.forEach((row) => {
+            qty += parseFloat(row.dataset.qty) || 0;
+            kg += parseFloat(row.dataset.kg) || 0;
+            customers.add(row.dataset.customer);
+            items.add(row.dataset.kode);
+        });
+        const ton = kg / 1000;
+        document.getElementById('sum-opi').textContent = planRows.length;
+        document.getElementById('sum-qty').textContent = Math.round(qty).toLocaleString('en-US');
+        document.getElementById('sum-ton').textContent = ton.toFixed(3);
+        document.getElementById('sum-cust').textContent = customers.size;
+        document.getElementById('sum-items').textContent = items.size;
+        document.getElementById('sum-avg').textContent = (planRows.length ? ton / planRows.length : 0).toFixed(3);
+
+        const exportIds = document.getElementById('export-ids');
+        exportIds.innerHTML = '';
+        planRows.forEach((row) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ids[]';
+            input.value = row.dataset.id;
+            exportIds.appendChild(input);
+        });
+        document.getElementById('btn-export').disabled = planRows.length === 0;
+        if (typeof updateSaveState === 'function') {
+            updateSaveState();
+        }
+    };
+
+    // Muat OPI dari server (bertahap), OPI yang sudah ada di draft tidak ditampilkan lagi
+    const loadAvailable = async (reset) => {
+        if (loading && !reset) {
+            return;
+        }
+        const seq = ++requestSeq;
+        loading = true;
+
+        if (reset) {
+            page = 1;
+            availableList.innerHTML = '';
+            loadMoreBtn.style.display = 'none';
+            refresh();
+        }
+        statusBox.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memuat data...';
+
+        const params = new URLSearchParams({ page });
+        if (filterQ.value.trim()) params.set('q', filterQ.value.trim());
+        if (filterStart.value) params.set('start', filterStart.value);
+        if (filterEnd.value) params.set('end', filterEnd.value);
+
+        try {
+            const response = await fetch(searchUrl + '?' + params.toString(), {
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin',
+            });
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            const result = await response.json();
+            if (seq !== requestSeq) {
+                return;
+            }
+
+            const template = document.createElement('template');
+            template.innerHTML = result.html.trim();
+            const inPlan = planIds();
+            Array.from(template.content.querySelectorAll('tr.plan-row')).forEach((row) => {
+                if (!inPlan.has(row.dataset.id)) {
+                    availableList.appendChild(row);
+                }
+            });
+
+            page = result.next_page;
+            loadMoreBtn.style.display = result.has_more ? '' : 'none';
+            statusBox.textContent = rowsOf(availableList).length ? '' : 'Tidak ada OPI status Proses yang cocok dengan pencarian.';
+        } catch (error) {
+            if (seq === requestSeq) {
+                statusBox.innerHTML = '<span class="text-danger">Gagal memuat data. Coba klik Cari lagi.</span>';
+            }
+        } finally {
+            if (seq === requestSeq) {
+                loading = false;
+                refresh();
+            }
+        }
+    };
+
+    const clearMarks = () => {
+        document.querySelectorAll('.drag-over-top, .drag-over-bottom').forEach((el) => {
+            el.classList.remove('drag-over-top', 'drag-over-bottom');
+        });
+        document.querySelectorAll('.drop-active').forEach((el) => el.classList.remove('drop-active'));
+    };
+
+    [planList, availableList].forEach((list) => {
+        list.addEventListener('dragstart', (event) => {
+            const row = event.target.closest('tr.plan-row');
+            if (!row) {
+                return;
+            }
+            draggedRow = row;
+            row.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', row.dataset.id);
+        });
+
+        list.addEventListener('dragend', () => {
+            if (draggedRow) {
+                draggedRow.classList.remove('dragging');
+            }
+            draggedRow = null;
+            clearMarks();
+        });
+
+        list.addEventListener('dragover', (event) => {
+            if (!draggedRow) {
+                return;
+            }
+            event.preventDefault();
+            clearMarks();
+            list.classList.add('drop-active');
+
+            const target = event.target.closest('tr.plan-row');
+            if (target && target !== draggedRow) {
+                const rect = target.getBoundingClientRect();
+                target.classList.add(event.clientY > rect.top + rect.height / 2 ? 'drag-over-bottom' : 'drag-over-top');
+            }
+        });
+
+        list.addEventListener('drop', (event) => {
+            if (!draggedRow) {
+                return;
+            }
+            event.preventDefault();
+
+            const target = event.target.closest('tr.plan-row');
+            const row = draggedRow;
+            clearMarks();
+
+            if (list === availableList) {
+                insertBySort(availableList, row);
+            } else if (target && target !== row) {
+                const rect = target.getBoundingClientRect();
+                const after = event.clientY > rect.top + rect.height / 2;
+                list.insertBefore(row, after ? target.nextSibling : target);
+            } else if (!target) {
+                list.appendChild(row);
+            }
+            refresh();
+        });
+
+        list.addEventListener('click', (event) => {
+            const row = event.target.closest('tr.plan-row');
+            if (!row) {
+                return;
+            }
+            if (event.target.closest('.btn-add')) {
+                planList.appendChild(row);
+                refresh();
+            } else if (event.target.closest('.btn-remove')) {
+                insertBySort(availableList, row);
+                refresh();
+            }
+        });
+    });
+
+    document.getElementById('btn-search').addEventListener('click', () => loadAvailable(true));
+    loadMoreBtn.addEventListener('click', () => loadAvailable(false));
+
+    let debounce = null;
+    filterQ.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => loadAvailable(true), 400);
+    });
+    [filterStart, filterEnd].forEach((input) => input.addEventListener('change', () => loadAvailable(true)));
+
+    document.getElementById('btn-reset-filter').addEventListener('click', () => {
+        filterStart.value = '';
+        filterEnd.value = '';
+        loadAvailable(true);
+    });
+
+    document.getElementById('btn-add-all').addEventListener('click', () => {
+        rowsOf(availableList).forEach((row) => planList.appendChild(row));
+        refresh();
+    });
+
+    document.getElementById('btn-clear-plan').addEventListener('click', () => {
+        rowsOf(planList).forEach((row) => insertBySort(availableList, row));
+        refresh();
+    });
+
+    // ===== Simpan / buka draft di database =====
+    const routes = {
+        list: @json(route('opi.plan_kirim.draft.list')),
+        store: @json(route('opi.plan_kirim.draft.store')),
+        show: @json(url('/admin/opi/plan_kirim/drafts')),
+    };
+    const csrf = document.querySelector('meta[name="csrf-token"]').content;
+    const draftSelect = document.getElementById('draft-select');
+    const draftNama = document.getElementById('draft-nama');
+    const draftTgl = document.getElementById('draft-tgl');
+    const draftCatatan = document.getElementById('draft-catatan');
+    const draftInfo = document.getElementById('draft-info');
+    const saveBtn = document.getElementById('btn-save-draft');
+    let currentDraftId = null;
+
+    const api = async (url, options = {}) => {
+        const response = await fetch(url, Object.assign({
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrf,
+            },
+        }, options));
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+            const firstError = data.errors ? Object.values(data.errors)[0][0] : null;
+            throw new Error(firstError || data.message || ('HTTP ' + response.status));
+        }
+        return data;
+    };
+
+    const updateSaveState = () => {
+        saveBtn.disabled = rowsOf(planList).length === 0;
+        document.getElementById('save-label').textContent = currentDraftId ? 'Simpan Perubahan' : 'Simpan Draft';
+    };
+
+    const loadDraftList = async (selectId) => {
+        const result = await api(routes.list);
+        draftSelect.innerHTML = '<option value="">-- pilih draft --</option>';
+        result.drafts.forEach((d) => {
+            const option = document.createElement('option');
+            option.value = d.id;
+            option.textContent = d.nama + ' (' + d.jumlah + ' OPI, ' + d.updated_at + ')';
+            draftSelect.appendChild(option);
+        });
+        if (selectId) {
+            draftSelect.value = selectId;
+        }
+    };
+
+    const resetDraft = () => {
+        rowsOf(planList).forEach((row) => insertBySort(availableList, row));
+        currentDraftId = null;
+        draftNama.value = '';
+        draftTgl.value = '';
+        draftCatatan.value = '';
+        draftSelect.value = '';
+        draftInfo.textContent = '';
+        refresh();
+    };
+
+    saveBtn.addEventListener('click', async () => {
+        const nama = draftNama.value.trim();
+        if (!nama) {
+            draftNama.focus();
+            alert('Nama draft wajib diisi.');
+            return;
+        }
+        saveBtn.disabled = true;
+        try {
+            const result = await api(routes.store, {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: currentDraftId,
+                    nama: nama,
+                    tgl_plan: draftTgl.value || null,
+                    catatan: draftCatatan.value || null,
+                    ids: rowsOf(planList).map((row) => row.dataset.id),
+                }),
+            });
+            currentDraftId = result.id;
+            await loadDraftList(result.id);
+            draftInfo.innerHTML = '<span class="text-success"><i class="fas fa-check-circle me-1"></i>Draft "' + result.nama.replace(/</g, '&lt;') + '" tersimpan (' + result.jumlah + ' OPI).</span>';
+        } catch (error) {
+            draftInfo.innerHTML = '<span class="text-danger">Gagal menyimpan: ' + error.message.replace(/</g, '&lt;') + '</span>';
+        } finally {
+            updateSaveState();
+        }
+    });
+
+    document.getElementById('btn-load-draft').addEventListener('click', async () => {
+        if (!draftSelect.value) {
+            return;
+        }
+        if (rowsOf(planList).length && !confirm('Draft yang sedang tampil akan diganti. Lanjutkan?')) {
+            return;
+        }
+        try {
+            const result = await api(routes.show + '/' + draftSelect.value);
+            rowsOf(planList).forEach((row) => insertBySort(availableList, row));
+
+            const template = document.createElement('template');
+            template.innerHTML = result.html.trim();
+            const loadedIds = new Set();
+            Array.from(template.content.querySelectorAll('tr.plan-row')).forEach((row) => {
+                loadedIds.add(row.dataset.id);
+                // Hindari duplikat jika OPI yang sama sedang ada di daftar pencarian
+                const dup = availableList.querySelector('tr.plan-row[data-id="' + row.dataset.id + '"]');
+                if (dup) {
+                    dup.remove();
+                }
+                planList.appendChild(row);
+            });
+
+            currentDraftId = result.id;
+            draftNama.value = result.nama;
+            draftTgl.value = result.tgl_plan || '';
+            draftCatatan.value = result.catatan || '';
+            draftInfo.innerHTML = result.skipped
+                ? '<span class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i>' + result.skipped + ' OPI tidak dimuat karena statusnya bukan Proses lagi.</span>'
+                : '';
+            refresh();
+        } catch (error) {
+            draftInfo.innerHTML = '<span class="text-danger">Gagal membuka draft: ' + error.message.replace(/</g, '&lt;') + '</span>';
+        }
+    });
+
+    document.getElementById('btn-delete-draft').addEventListener('click', async () => {
+        if (!draftSelect.value || !confirm('Hapus draft tersimpan ini?')) {
+            return;
+        }
+        const deletedId = parseInt(draftSelect.value, 10);
+        try {
+            await api(routes.show + '/' + deletedId, { method: 'DELETE' });
+            if (currentDraftId === deletedId) {
+                currentDraftId = null;
+            }
+            await loadDraftList();
+            draftInfo.textContent = 'Draft dihapus.';
+            updateSaveState();
+        } catch (error) {
+            draftInfo.innerHTML = '<span class="text-danger">Gagal menghapus: ' + error.message.replace(/</g, '&lt;') + '</span>';
+        }
+    });
+
+    document.getElementById('btn-new-draft').addEventListener('click', () => {
+        if (rowsOf(planList).length && !confirm('Draft yang sedang tampil akan dikosongkan. Lanjutkan?')) {
+            return;
+        }
+        resetDraft();
+    });
+
+    loadDraftList().catch(() => {});
+
+    refresh();
+    loadAvailable(true);
+})();
 </script>
 @endsection
 @endsection
