@@ -627,7 +627,7 @@
                 @if (hasMenuAccess('palet.mutasi'))
                   <li class="nav-item">
                     <a href="{{ route('palet_mutasi') }}" class="nav-link">
-                      <i class="fas fa-circle nav-icon"></i><p>Mutasi Palet Customer</p>
+                      <i class="fas fa-circle nav-icon"></i><p>Mutasi Palet</p>
                     </a>
                   </li>
                 @endif

@@ -289,6 +289,11 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/admin/palet_mutasi/edit/{id}', 'PaletMutasiController@edit')->name('palet_mutasi.edit');
     Route::put('/admin/palet_mutasi/update/{id}', 'PaletMutasiController@update')->name('palet_mutasi.update');
     Route::delete('/admin/palet_mutasi/delete/{id}', 'PaletMutasiController@destroy')->name('palet_mutasi.destroy');
+    Route::get('/admin/palet_mutasi/internal/create', 'PaletMutasiController@createInternal')->name('palet_mutasi.internal.create');
+    Route::post('/admin/palet_mutasi/internal/store', 'PaletMutasiController@storeInternal')->name('palet_mutasi.internal.store');
+    Route::get('/admin/palet_mutasi/internal/edit/{id}', 'PaletMutasiController@editInternal')->name('palet_mutasi.internal.edit');
+    Route::put('/admin/palet_mutasi/internal/update/{id}', 'PaletMutasiController@updateInternal')->name('palet_mutasi.internal.update');
+    Route::delete('/admin/palet_mutasi/internal/delete/{id}', 'PaletMutasiController@destroyInternal')->name('palet_mutasi.internal.destroy');
 
     //Surat Jalan
     Route::get('/admin/sj_palet', 'SJ_Palet_DController@index')->name('sj_palet');

@@ -9,12 +9,21 @@ class PaletMutasi extends Model
 {
     public const KELUAR = 'keluar';
     public const MASUK = 'masuk';
+    public const CUSTOMER = 'customer';
+    public const INTERNAL = 'internal';
+    public const PEMBELIAN = 'pembelian';
+    public const RETUR_PEMAKAIAN = 'retur_pemakaian';
+    public const PEMAKAIAN = 'pemakaian';
+    public const SALDO_AWAL = 'saldo_awal';
+    public const RETUR_BELI = 'retur_beli';
 
     protected $table = 'palet_mutasi';
 
     protected $fillable = [
         'tanggal',
         'jenis',
+        'kategori',
+        'sumber',
         'namaCustomer',
         'jenisPalet',
         'item_palet_id',
