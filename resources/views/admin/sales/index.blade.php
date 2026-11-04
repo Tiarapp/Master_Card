@@ -30,6 +30,9 @@
       <!-- Small boxes (Stat box) -->
 
       <a href="{{ route('sales.create') }}" style="margin-bottom: 20px;"> <i class="fas fa-plus-circle fa-2x"></i></a>
+      <a href="{{ route('sales.export_customer') }}" class="btn btn-success btn-sm" style="margin-bottom: 20px; margin-left: 10px;">
+        <i class="fas fa-file-excel"></i> Export Sales - Customer
+      </a>
       <div class="card-body">
         <table class="table table-bordered" id="data_sales">
           <thead>

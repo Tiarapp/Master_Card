@@ -263,6 +263,7 @@ Route::middleware(['auth'])->group(function (){
 
     //Sales
     Route::get('/admin/sales', 'SalesController@index')->name('sales');
+    Route::get('/admin/sales/export-customer', 'SalesController@exportCustomer')->name('sales.export_customer');
     Route::get('/admin/sales/create', 'SalesController@create')->name('sales.create');
     Route::post('/admin/sales/store', 'SalesController@store')->name('sales.store');
     Route::get('/admin/sales/show/{id}', 'SalesController@show');

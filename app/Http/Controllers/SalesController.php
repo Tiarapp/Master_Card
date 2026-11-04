@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SalesCustomerExport;
 use App\Models\Sales;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +23,32 @@ class SalesController extends Controller
             ->get();
 
             return view('admin.sales.index', compact('sales'));
+    }
+
+    public function exportCustomer()
+    {
+        $data = DB::table('kontrak_m as k')
+            ->leftJoin('sales_m as s', DB::raw('TRIM(s.nama)'), '=', DB::raw('TRIM(k.sales)'))
+            ->whereNull('k.deletedAt')
+            ->whereNotNull('k.sales')
+            ->where('k.sales', '!=', '')
+            ->groupBy('k.sales', 'k.customer_name', 's.aktif')
+            ->orderBy('k.sales')
+            ->orderBy('k.customer_name')
+            ->select(
+                DB::raw('TRIM(k.sales) as sales_nama'),
+                DB::raw("CASE s.aktif WHEN 1 THEN 'Aktif' WHEN 2 THEN 'Non Aktif' ELSE 'Tidak ada di master sales' END as sales_status"),
+                'k.customer_name as customer_nama',
+                DB::raw('COUNT(*) as jumlah_kontrak'),
+                DB::raw('MIN(k.tglKontrak) as kontrak_pertama'),
+                DB::raw('MAX(k.tglKontrak) as kontrak_terakhir')
+            )
+            ->get();
+
+        return Excel::download(
+            new SalesCustomerExport($data),
+            'sales_customer_' . date('Ymd_His') . '.xlsx'
+        );
     }
 
     /**
