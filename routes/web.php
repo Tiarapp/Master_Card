@@ -363,6 +363,7 @@ Route::middleware(['auth'])->group(function (){
     // Route::get('/admin/kontrak/json', 'Kontrak_DController@json')->name('kontrak.json');
     Route::get('/admin/kontrak/create', 'Kontrak_DController@create')->name('kontrak.create');
     Route::post('/admin/kontrak/store', 'Kontrak_DController@store')->name('kontrak.store');
+    Route::post('/admin/kontrak/import-realisasi', 'Kontrak_DController@importRealisasi')->name('kontrak.import_realisasi');
     Route::post('/admin/kontrak/store_realisasi', 'Kontrak_DController@store_realisasi')->name('kontrak.store_realisasi');
     Route::get('/admin/kontrak/edit/{id}', 'Kontrak_DController@edit')->name('kontrak.edit');
     Route::get('/admin/kontrak/realisasi/{id}', 'Kontrak_DController@add_realisasi')->name('kontrak.realisasi');

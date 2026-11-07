@@ -18,12 +18,17 @@ use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KontrakExport;
+use App\Imports\RealisasiKirimSpreadsheet;
 use App\Models\Accounting\Piutang;
 use App\Models\AlokasiKaret;
 use App\Models\Customer;
 use App\Models\Karet;
 use App\Models\Number_Sequence;
 use Illuminate\Support\Facades\Log;
+use App\Services\RealisasiKirimImporter;
+use InvalidArgumentException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Exception as SpreadsheetReaderException;
 
 class Kontrak_DController extends Controller
 {
@@ -1073,6 +1078,33 @@ class Kontrak_DController extends Controller
                 'kontrakMaster',
                 'sj'
             ));
+        }
+
+        public function importRealisasi(Request $request, RealisasiKirimSpreadsheet $parser, RealisasiKirimImporter $importer)
+        {
+            $request->validate([
+                'file_realisasi' => 'required|file|mimes:xlsx,xls|max:5120',
+            ]);
+
+            try {
+                $reader = IOFactory::createReaderForFile($request->file('file_realisasi')->getRealPath());
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($request->file('file_realisasi')->getRealPath());
+                try {
+                    $rows = $parser->rows($spreadsheet->getSheet(0));
+                } finally {
+                    $spreadsheet->disconnectWorksheets();
+                }
+            } catch (InvalidArgumentException $e) {
+                return redirect()->route('kontraknew')->withErrors(['file_realisasi' => $e->getMessage()]);
+            } catch (SpreadsheetReaderException $e) {
+                report($e);
+                return redirect()->route('kontraknew')->withErrors(['file_realisasi' => 'File Excel tidak dapat dibaca.']);
+            }
+
+            $result = $importer->import($rows, Auth::user()->name);
+
+            return redirect()->route('kontraknew')->with('realisasi_import', $result);
         }
 
         public function store_realisasi(Request $request)

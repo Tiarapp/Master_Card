@@ -56,6 +56,68 @@
           <strong>{{ $message }}</strong>
         </div>
       @endif
+      @if ($errors->any())
+        <div class="alert alert-danger">
+          <strong>Impor realisasi gagal:</strong>
+          <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
+      @if (session('realisasi_import'))
+        @php $import = session('realisasi_import'); @endphp
+        <div class="alert {{ count($import['errors']) ? 'alert-warning' : 'alert-success' }}">
+          <strong>Hasil impor realisasi:</strong>
+          {{ $import['imported'] }} berhasil, {{ $import['duplicates'] }} duplikat dilewati,
+          {{ count($import['errors']) }} baris bermasalah.
+          @if (count($import['duplicate_rows']))
+            <p class="mb-1 mt-2">Duplikat yang dilewati:</p>
+            <ul>
+              @foreach ($import['duplicate_rows'] as $message)
+                <li>{{ $message }}</li>
+              @endforeach
+            </ul>
+          @endif
+          @if (count($import['substitutions']))
+            <p class="mb-1 mt-2">OPI dipilih otomatis:</p>
+            <ul>
+              @foreach ($import['substitutions'] as $message)
+                <li>{{ $message }}</li>
+              @endforeach
+            </ul>
+          @endif
+          @if (count($import['errors']))
+            <p class="mb-1 mt-2">Baris yang tidak diimpor:</p>
+            <ul class="mb-0">
+              @foreach ($import['errors'] as $message)
+                <li>{{ $message }}</li>
+              @endforeach
+            </ul>
+          @endif
+        </div>
+      @endif
+      <div class="card">
+        <div class="card-body">
+          <form action="{{ route('kontrak.import_realisasi') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <label for="file_realisasi">Import Realisasi Kirim</label>
+            <div class="form-row align-items-center">
+              <div class="col-md-5">
+                <input type="file" id="file_realisasi" name="file_realisasi" class="form-control-file" accept=".xlsx,.xls" required>
+              </div>
+              <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Import Excel</button>
+              </div>
+            </div>
+            <small class="form-text text-muted">
+              Kolom wajib: TGL SJ, NO SJ, MOD, KONTRAK, PCS, OPI. Maksimal 2.000 baris dan 5 MB.
+              SJ yang sudah tercatat pada kontrak yang sama dilewati. OPI yang tidak cocok diganti hanya jika kontrak memiliki satu OPI.
+            </small>
+          </form>
+        </div>
+      </div>
       <!-- Small boxes (Stat box) -->
 
       <!-- Control Panel -->
