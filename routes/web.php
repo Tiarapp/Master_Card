@@ -509,6 +509,10 @@ Route::middleware(['auth'])->group(function (){
         return Excel::download(new OpiExport($opi), $fileName . '.xlsx');
     })->name('opi.export');
 
+    Route::post('/opi/export/queue', 'OpiExportController@store')->name('opi.export.queue');
+    Route::get('/opi/export/status', 'OpiExportController@status')->name('opi.export.status');
+    Route::get('/opi/export/download/{id}', 'OpiExportController@download')->name('opi.export.download');
+
     Route::get('/opi/export/karet', function (Request $request) {
         $productions = Opi_M::with('mc', 'dt', 'kontrakm', 'kontrakd')
             ->whereIn('status_opi', ['Proses','closed'])

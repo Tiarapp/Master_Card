@@ -77,9 +77,13 @@
           </a>
         </div>
         <div class="col-auto d-flex align-items-center gap-3">
-          <a href="{{ route('opi.export.karet', $exportParams) }}" class="btn btn-success mb-3">
-        Export History
-          </a>
+          <form action="{{ route('opi.export.queue') }}" method="POST" class="mb-0">
+            @csrf
+            @foreach (collect($exportParams)->except('page') as $name => $value)
+              <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+            @endforeach
+            <button type="submit" class="btn btn-success mb-3">Export History</button>
+          </form>
         </div>
         <div class="col text-end">
           <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('opinew') }}" method="GET" style="margin-bottom: 20px;">
@@ -131,6 +135,10 @@
             </a>
           </form>
         </div>
+      </div>
+      <div id="opi-export-panel" class="alert alert-light border d-none">
+        <strong>Export History</strong>
+        <ul class="list-unstyled mb-0 mt-2" id="opi-export-list"></ul>
       </div>
       <div class="d-flex flex-wrap align-items-center gap-3 mb-3 small text-muted" aria-label="Keterangan warna status OPI">
         <span class="fw-semibold">Status OPI:</span>
@@ -356,4 +364,44 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+  <script>
+    (function () {
+      var panel = document.getElementById('opi-export-panel');
+      var list = document.getElementById('opi-export-list');
+      var statusUrl = @json(route('opi.export.status'));
+      var labels = { pending: 'Menunggu antrian', processing: 'Sedang diproses...', done: 'Selesai', failed: 'Gagal' };
+
+      function render(items) {
+        var visible = items.filter(function (item) {
+          return item.status === 'pending' || item.status === 'processing' || item.status === 'failed' || item.download_url;
+        }).slice(0, 3);
+        list.innerHTML = '';
+        panel.classList.toggle('d-none', visible.length === 0);
+        visible.forEach(function (item) {
+          var li = document.createElement('li');
+          var text = item.created_at + ' - ' + item.file_name + ': ' + (labels[item.status] || item.status);
+          if (item.download_url) {
+            var a = document.createElement('a');
+            a.href = item.download_url;
+            a.textContent = ' Unduh';
+            li.appendChild(document.createTextNode(text));
+            li.appendChild(a);
+          } else {
+            li.textContent = text + (item.error ? ' (' + item.error + ')' : '');
+          }
+          list.appendChild(li);
+        });
+        return items.some(function (item) { return item.status === 'pending' || item.status === 'processing'; });
+      }
+
+      function poll() {
+        fetch(statusUrl, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+          .then(function (response) { return response.ok ? response.json() : []; })
+          .then(function (items) { if (render(items)) { setTimeout(poll, 5000); } })
+          .catch(function () {});
+      }
+
+      poll();
+    })();
+  </script>
   @endsection
