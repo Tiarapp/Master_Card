@@ -81,7 +81,7 @@
             Export History
           </a>
         </div>
-        <div class="col-auto d-flex align-items-center gap-3">
+        {{-- <div class="col-auto d-flex align-items-center gap-3">
           <form action="{{ route('opi.export.queue') }}" method="POST" class="mb-0">
             @csrf
             @foreach (collect($exportParams)->except('page') as $name => $value)
@@ -89,7 +89,7 @@
             @endforeach
             <button type="submit" class="btn btn-primary mb-3">Export History (Antrian)</button>
           </form>
-        </div>
+        </div> --}}
         <div class="col text-end">
           <form class="d-flex align-items-center justify-content-end gap-2" action="{{ route('opinew') }}" method="GET" style="margin-bottom: 20px;">
             <div class="input-group" style="max-width: 350px;">
@@ -141,10 +141,10 @@
           </form>
         </div>
       </div>
-      <div id="opi-export-panel" class="alert alert-light border d-none">
+      {{-- <div id="opi-export-panel" class="alert alert-light border d-none">
         <strong>Export History (Antrian)</strong>
         <ul class="list-unstyled mb-0 mt-2" id="opi-export-list"></ul>
-      </div>
+      </div> --}}
       <div class="d-flex flex-wrap align-items-center gap-3 mb-3 small text-muted" aria-label="Keterangan warna status OPI">
         <span class="fw-semibold">Status OPI:</span>
         <span class="d-inline-flex align-items-center gap-2">
