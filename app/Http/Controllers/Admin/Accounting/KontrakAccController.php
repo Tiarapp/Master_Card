@@ -51,7 +51,7 @@ class KontrakAccController extends Controller
                 {
                     $nestedData['kode'] = $kontrak->kode;
                     $nestedData['tglKontrak'] = $kontrak->tglKontrak;
-                    $nestedData['pcsKontrak'] = $kontrak->kontrak_d->pcsKontrak;
+                    $nestedData['pcsKontrak'] = $kontrak->kontrak_d->pcsKontrak ?? 0;
                     $nestedData['cust'] = $kontrak->customer_name;
                     $nestedData['poCustomer'] = $kontrak->poCustomer;
                     $nestedData['top'] = $kontrak->top;
