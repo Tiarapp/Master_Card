@@ -77,12 +77,17 @@
           </a>
         </div>
         <div class="col-auto d-flex align-items-center gap-3">
+          <a href="{{ route('opi.export.karet', $exportParams) }}" class="btn btn-success mb-3">
+            Export History
+          </a>
+        </div>
+        <div class="col-auto d-flex align-items-center gap-3">
           <form action="{{ route('opi.export.queue') }}" method="POST" class="mb-0">
             @csrf
             @foreach (collect($exportParams)->except('page') as $name => $value)
               <input type="hidden" name="{{ $name }}" value="{{ $value }}">
             @endforeach
-            <button type="submit" class="btn btn-success mb-3">Export History</button>
+            <button type="submit" class="btn btn-primary mb-3">Export History (Antrian)</button>
           </form>
         </div>
         <div class="col text-end">
@@ -137,7 +142,7 @@
         </div>
       </div>
       <div id="opi-export-panel" class="alert alert-light border d-none">
-        <strong>Export History</strong>
+        <strong>Export History (Antrian)</strong>
         <ul class="list-unstyled mb-0 mt-2" id="opi-export-list"></ul>
       </div>
       <div class="d-flex flex-wrap align-items-center gap-3 mb-3 small text-muted" aria-label="Keterangan warna status OPI">
