@@ -792,7 +792,6 @@
                                             <input type="file" name="gambar" id="gambar">
                                         </div>
                                     </div>
-                                    @include('admin.mastercard.approval-input')
                                 </div>
                             </div>
                         </div>

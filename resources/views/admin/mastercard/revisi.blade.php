@@ -828,7 +828,6 @@
                                             <input type="hidden" name="old" id="old" value="{{ $mc->gambar }}">
                                         </div>
                                     </div>
-                                    @include('admin.mastercard.approval-input')
                                 </div>
                             </div>
                         </div>

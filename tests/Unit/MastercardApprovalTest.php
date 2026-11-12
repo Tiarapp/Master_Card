@@ -3,8 +3,8 @@
 namespace Tests\Unit;
 
 use App\Http\Controllers\MastercardApprovalController;
-use App\Http\Controllers\MastercardController;
 use App\Models\Mastercard;
+use App\Services\MastercardApprovalService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
-use ReflectionMethod;
 use Tests\TestCase;
 
 class MastercardApprovalTest extends TestCase
@@ -68,30 +67,22 @@ class MastercardApprovalTest extends TestCase
         parent::tearDown();
     }
 
-    private function callPrivate($object, $method, array $arguments)
-    {
-        $reflection = new ReflectionMethod($object, $method);
-        $reflection->setAccessible(true);
-
-        return $reflection->invokeArgs($object, $arguments);
-    }
-
     public function test_upload_and_revision_copy_keep_original_files(): void
     {
-        $controller = new MastercardController();
+        $service = new MastercardApprovalService();
         $source = Mastercard::create(['kode' => 'MC1']);
         $request = Request::create('/', 'POST', [], [], [
             'approval_files' => [UploadedFile::fake()->createWithContent('approval.pdf', "%PDF-1.4\n%%EOF")],
         ]);
 
-        $this->callPrivate($controller, 'validateApprovals', [$request]);
-        $this->callPrivate($controller, 'saveApprovals', [$source, $request]);
+        $service->validate($request);
+        $service->save($source, $request);
         $original = $source->approvals()->firstOrFail();
         $this->assertTrue(Storage::disk('local')->exists($original->path));
         $this->assertSame('application/pdf', $original->mime_type);
 
         $revision = Mastercard::create(['kode' => 'MC1']);
-        $this->callPrivate($controller, 'saveApprovals', [$revision, Request::create('/'), $source]);
+        $service->save($revision, Request::create('/'), $source);
         $copy = $revision->approvals()->firstOrFail();
         $this->assertNotSame($original->id, $copy->id);
         $this->assertSame($original->path, $copy->path);
@@ -108,20 +99,20 @@ class MastercardApprovalTest extends TestCase
         ]);
 
         $this->expectException(ValidationException::class);
-        $this->callPrivate(new MastercardController(), 'validateApprovals', [$request]);
+        (new MastercardApprovalService())->validate($request);
     }
 
     public function test_jpeg_and_additional_revision_upload_are_supported(): void
     {
-        $controller = new MastercardController();
+        $service = new MastercardApprovalService();
         $source = Mastercard::create(['kode' => 'MC1']);
         $revision = Mastercard::create(['kode' => 'MC1']);
         $request = Request::create('/', 'POST', [], [], [
             'approval_files' => [UploadedFile::fake()->image('approval.jpg')],
         ]);
 
-        $this->callPrivate($controller, 'validateApprovals', [$request]);
-        $this->callPrivate($controller, 'saveApprovals', [$revision, $request, $source]);
+        $service->validate($request);
+        $service->save($revision, $request, $source);
         $approval = $revision->approvals()->firstOrFail();
         $this->assertSame('image/jpeg', $approval->mime_type);
         $this->assertTrue(Storage::disk('local')->exists($approval->path));
@@ -147,22 +138,22 @@ class MastercardApprovalTest extends TestCase
         $request = Request::create('/', 'POST', [], [], ['approval_files' => [$file]]);
 
         $this->expectException(ValidationException::class);
-        $this->callPrivate(new MastercardController(), 'validateApprovals', [$request]);
+        (new MastercardApprovalService())->validate($request);
     }
 
     public function test_failed_transaction_removes_new_file_and_rolls_back_record(): void
     {
-        $controller = new MastercardController();
+        $service = new MastercardApprovalService();
         $mastercard = Mastercard::create(['kode' => 'MC1']);
         $request = Request::create('/', 'POST', [], [], [
             'approval_files' => [UploadedFile::fake()->createWithContent('approval.pdf', "%PDF-1.4\n%%EOF")],
         ]);
 
         try {
-            $this->callPrivate($controller, 'withApprovalTransaction', [function () use ($controller, $mastercard, $request) {
-                $this->callPrivate($controller, 'saveApprovals', [$mastercard, $request]);
+            $service->transaction(function () use ($service, $mastercard, $request) {
+                $service->save($mastercard, $request);
                 throw new \RuntimeException('Test rollback');
-            }]);
+            });
             $this->fail('Transaksi seharusnya gagal.');
         } catch (\RuntimeException $exception) {
             $this->assertSame('Test rollback', $exception->getMessage());
@@ -170,5 +161,52 @@ class MastercardApprovalTest extends TestCase
 
         $this->assertSame(0, $mastercard->approvals()->count());
         $this->assertSame([], Storage::disk('local')->allFiles('mastercard-approvals'));
+    }
+
+    public function test_approval_page_upload_saves_multiple_files_for_selected_mastercard(): void
+    {
+        $this->withoutMiddleware(\App\Http\Middleware\Authenticate::class);
+        $mastercard = Mastercard::create(['kode' => 'MC1']);
+        $other = Mastercard::create(['kode' => 'MC2']);
+
+        $response = $this->post(route('mastercard.approvals.store', $mastercard->id), [
+            'approval_files' => [
+                UploadedFile::fake()->createWithContent('approval.pdf', "%PDF-1.4\n%%EOF"),
+                UploadedFile::fake()->image('approval.jpg'),
+            ],
+        ]);
+
+        $response->assertRedirect(route('mastercard.approvals', $mastercard->id));
+        $response->assertSessionHas('success');
+        $this->assertSame(2, $mastercard->approvals()->count());
+        $this->assertSame(0, $other->approvals()->count());
+        foreach ($mastercard->approvals as $approval) {
+            $this->assertTrue(Storage::disk('local')->exists($approval->path));
+        }
+    }
+
+    public function test_approval_page_requires_file_and_rejects_invalid_files(): void
+    {
+        $this->withoutMiddleware(\App\Http\Middleware\Authenticate::class);
+        $mastercard = Mastercard::create(['kode' => 'MC1']);
+        $url = route('mastercard.approvals.store', $mastercard->id);
+
+        $this->from(route('mastercard.approvals', $mastercard->id))
+            ->post($url, [])->assertSessionHasErrors('approval_files');
+        $this->post($url, ['approval_files' => [
+            UploadedFile::fake()->createWithContent('approval.txt', 'invalid'),
+        ]])->assertSessionHasErrors('approval_files.0');
+        $this->assertSame(0, $mastercard->approvals()->count());
+    }
+
+    public function test_approval_upload_requires_authentication(): void
+    {
+        $mastercard = Mastercard::create(['kode' => 'MC1']);
+
+        $this->post(route('mastercard.approvals.store', $mastercard->id), [
+            'approval_files' => [UploadedFile::fake()->createWithContent('approval.pdf', "%PDF-1.4\n%%EOF")],
+        ])->assertRedirect(route('login'));
+
+        $this->assertSame(0, $mastercard->approvals()->count());
     }
 }

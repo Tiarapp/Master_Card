@@ -342,6 +342,7 @@ Route::middleware(['auth'])->group(function (){
         Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
         Route::post('/update', 'MastercardController@update')->name('update');
         Route::get('/{id}/approvals', 'MastercardApprovalController@index')->middleware('auth')->name('approvals');
+        Route::post('/{id}/approvals', 'MastercardApprovalController@store')->middleware('auth')->name('approvals.store');
         Route::get('/{id}/approvals/{approvalId}', 'MastercardApprovalController@show')->middleware('auth')->name('approvals.show');
         Route::get('/{id}/approvals/{approvalId}/file', 'MastercardApprovalController@file')->middleware('auth')->name('approvals.file');
         Route::get('/pdf/{id}', 'MastercardController@pdfprint')->name('pdfb1');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mastercard;
+use App\Services\MastercardApprovalService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MastercardApprovalController extends Controller
@@ -12,6 +14,18 @@ class MastercardApprovalController extends Controller
         $mastercard = Mastercard::with('approvals')->findOrFail($id);
 
         return view('admin.mastercard.approvals', compact('mastercard'));
+    }
+
+    public function store(Request $request, $id, MastercardApprovalService $approvalService)
+    {
+        $mastercard = Mastercard::findOrFail($id);
+        $approvalService->validate($request, true);
+        $approvalService->transaction(function () use ($approvalService, $mastercard, $request) {
+            $approvalService->save($mastercard, $request);
+        });
+
+        return redirect()->route('mastercard.approvals', $mastercard->id)
+            ->with('success', 'File approval berhasil disimpan.');
     }
 
     public function show($id, $approvalId)
