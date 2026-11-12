@@ -111,6 +111,10 @@
                                                        title="Print PDF">
                                                         <i class="fas fa-print"></i> Print
                                                     </a>
+                                                    <a href="{{ route('mastercard.approvals', $mastercard->id) }}"
+                                                       class="btn btn-sm btn-info" title="File approval">
+                                                        <i class="fas fa-paperclip"></i> Approval
+                                                    </a>
                                                     <a href="{{ route('mastercard.revisi', $mastercard->id) }}"
                                                        class="btn btn-sm btn-warning"
                                                        title="Edit">

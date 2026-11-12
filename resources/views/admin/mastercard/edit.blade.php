@@ -843,6 +843,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="source_mastercard_id" value="{{ $mc->id }}">
+                                    @include('admin.mastercard.approval-input', ['copyApprovals' => true])
                                 </div>
                             </div>
                         </div>

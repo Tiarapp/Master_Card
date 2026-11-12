@@ -69,6 +69,11 @@ class Mastercard extends Model
         return $this->belongsTo(ColorCombine::class, 'colorCombine_id', 'id');
     }
 
+    public function approvals()
+    {
+        return $this->hasMany(MastercardApproval::class, 'mastercard_id');
+    }
+
     public function box()
     {
         return $this->belongsTo(Box::class, 'box_id', 'id');

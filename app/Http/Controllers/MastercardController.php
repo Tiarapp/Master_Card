@@ -12,11 +12,70 @@ use App\Services\CrossDatabaseRelationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class MastercardController extends Controller
 {
+    private $approvalPaths = [];
+
+    private function withApprovalTransaction(callable $callback)
+    {
+        $this->approvalPaths = [];
+
+        try {
+            return DB::transaction($callback);
+        } catch (\Throwable $exception) {
+            foreach ($this->approvalPaths as $path) {
+                if (!Storage::disk('local')->delete($path)) {
+                    Log::error('Gagal menghapus file approval setelah transaksi gagal.', ['path' => $path]);
+                }
+            }
+            throw $exception;
+        }
+    }
+
+    private function validateApprovals(Request $request)
+    {
+        $request->validate([
+            'approval_files' => 'nullable|array|max:10',
+            'approval_files.*' => 'required|file|mimes:pdf,jpeg,jpg|mimetypes:application/pdf,image/jpeg|max:5120',
+        ], [
+            'approval_files.max' => 'Maksimal 10 file approval per penyimpanan.',
+            'approval_files.*.mimes' => 'File approval harus berformat PDF atau JPEG/JPG.',
+            'approval_files.*.mimetypes' => 'File approval harus berformat PDF atau JPEG/JPG.',
+            'approval_files.*.max' => 'Ukuran setiap file approval maksimal 5 MB.',
+        ]);
+    }
+
+    private function saveApprovals(Mastercard $mastercard, Request $request, ?Mastercard $source = null)
+    {
+        if ($source) {
+            foreach ($source->approvals as $approval) {
+                $mastercard->approvals()->create([
+                    'original_name' => $approval->original_name,
+                    'path' => $approval->path,
+                    'mime_type' => $approval->mime_type,
+                ]);
+            }
+        }
+
+        foreach ($request->file('approval_files', []) as $file) {
+            $path = $file->store('mastercard-approvals', 'local');
+            if ($path === false) {
+                throw new \RuntimeException('Gagal menyimpan file approval.');
+            }
+            $this->approvalPaths[] = $path;
+            $mastercard->approvals()->create([
+                'original_name' => mb_substr($file->getClientOriginalName(), 0, 255),
+                'path' => $path,
+                'mime_type' => $file->getMimeType(),
+            ]);
+        }
+    }
     /**
     * Display a listing of the resource.
     *
@@ -223,6 +282,14 @@ class MastercardController extends Controller
     */
     public function store(Request $request)
     {
+        return $this->withApprovalTransaction(function () use ($request) {
+            return $this->storeWithApprovals($request);
+        });
+    }
+
+    private function storeWithApprovals(Request $request)
+    {
+        $this->validateApprovals($request);
         $messages = [
             'koli.required' => 'Mohon isi Kolom Koli'
         ];
@@ -335,6 +402,8 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
+        $this->saveApprovals($mc, $request);
+
         $nomer = Number_Sequence::where('noBukti', 'LIKE', 'mastercard')->first();
         $nomer->nomer = $nomer->nomer + 1;
 
@@ -422,6 +491,8 @@ class MastercardController extends Controller
 
         $revisi = count($kodemc);
 
+        $approvals = Mastercard::findOrFail($id)->approvals;
+
         return view('admin.mastercard.edit', compact([
             'cust',
             'tipe',
@@ -431,7 +502,8 @@ class MastercardController extends Controller
             'joint',
             'koli',
             'mc',
-            'revisi'
+            'revisi',
+            'approvals'
         ]));
     }
 
@@ -444,6 +516,18 @@ class MastercardController extends Controller
     */
     public function update(Request $request)
     {
+        return $this->withApprovalTransaction(function () use ($request) {
+            return $this->updateWithApprovals($request);
+        });
+    }
+
+    private function updateWithApprovals(Request $request)
+    {
+        $this->validateApprovals($request);
+        $request->validate([
+            'source_mastercard_id' => ['required', 'integer', Rule::exists('mc', 'id')->where('kode', $request->kode)],
+        ]);
+        $source = Mastercard::with('approvals')->findOrFail($request->source_mastercard_id);
 
         $kode = DB::table('mc')
         ->where('kode', '=', $request->kode)
@@ -564,6 +648,8 @@ class MastercardController extends Controller
             'createdBy' => $request->createdBy
         ]);
 
+        $this->saveApprovals($mc, $request, $source);
+
         Tracking::create([
             'user'   => Auth::user()->name,
             'tipe'   => 'Mastercard',
@@ -635,6 +721,8 @@ class MastercardController extends Controller
             $tipe = "";
         }
 
+        $approvals = Mastercard::findOrFail($id)->approvals;
+
         return view('admin.mastercard.revisi', compact([
             'cust',
             // 'item',
@@ -645,7 +733,8 @@ class MastercardController extends Controller
             'joint',
             'koli',
             'mc',
-            'revisi'
+            'revisi',
+            'approvals'
         ]));
     }
 
@@ -657,7 +746,15 @@ class MastercardController extends Controller
     */
     public function saveRevisi($id, Request $request)
     {
-        $mc = Mastercard::find($id);
+        return $this->withApprovalTransaction(function () use ($id, $request) {
+            return $this->saveRevisiWithApprovals($id, $request);
+        });
+    }
+
+    private function saveRevisiWithApprovals($id, Request $request)
+    {
+        $this->validateApprovals($request);
+        $mc = Mastercard::findOrFail($id);
 
         // Snapshot semua field MC sebelum diubah
         $before_mc = json_encode([
@@ -763,6 +860,7 @@ class MastercardController extends Controller
         $mc->gambar = $nama_file;
 
         $mc->save();
+        $this->saveApprovals($mc, $request);
 
         Tracking::create([
             'user'   => Auth::user()->name,
