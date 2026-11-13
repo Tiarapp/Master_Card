@@ -513,6 +513,13 @@
                 <p>PPIC <i class="right fas fa-angle-left"></i></p>
               </a>
               <ul class="nav nav-treeview">
+                @if (in_array(Auth::user()->divisi_id, [2, 5]) && hasMenuAccess('ppic.dt_approval'))
+                  <li class="nav-item">
+                    <a href="{{ route('ppic.dt.approval') }}" class="nav-link">
+                      <i class="fas fa-circle nav-icon"></i><p>Approval Perubahan DT</p>
+                    </a>
+                  </li>
+                @endif
                 @if (hasMenuAccess('ppic.roll') || hasMenuAccess('ppic.bbm_roll') || hasMenuAccess('ppic.bbk_roll') || hasMenuAccess('ppic.retur_roll'))
                   <li class="nav-item">
                     <a href="#" class="nav-link">

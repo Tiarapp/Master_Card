@@ -77,6 +77,7 @@ class RolePermissionSeeder extends Seeder
 
             // ── PPIC ─────────────────────────────────────────────────────────
             ['slug' => 'ppic',               'name' => 'PPIC',             'parent_slug' => null, 'description' => 'Grup menu PPIC'],
+            ['slug' => 'ppic.dt_approval',   'name' => 'Approval Perubahan DT', 'parent_slug' => 'ppic', 'description' => 'Persetujuan perubahan Delivery Time'],
             ['slug' => 'ppic.roll',          'name' => 'Persediaan Roll',  'parent_slug' => 'ppic', 'description' => null],
             ['slug' => 'ppic.bbm_roll',      'name' => 'BBM Roll',         'parent_slug' => 'ppic', 'description' => null],
             ['slug' => 'ppic.bbk_roll',      'name' => 'BBK Roll',         'parent_slug' => 'ppic', 'description' => null],
@@ -226,4 +227,3 @@ class RolePermissionSeeder extends Seeder
         }
     }
 }
-

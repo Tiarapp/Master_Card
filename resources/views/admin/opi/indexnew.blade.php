@@ -168,6 +168,7 @@
                     <th class="min-w-125px">{{ __('Tgl Dibuat') }}</th>
                     <th class="min-w-125px">{{ __('Tgl Approved') }}</th>
                     <th class="min-w-125px">{{ __('DT') }}</th>
+                    <th class="min-w-125px">{{ __('DT Perubahan') }}</th>
                     <th class="min-w-125px">{{ __('QTY Kirim') }}</th>
                     @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
                         <th class="min-w-125px">{{ __('Harga (kg)') }}</th>
@@ -250,6 +251,7 @@
                         <td class="text-gray-800 bold">{{ $production->created_at }}</td>
                         <td class="text-gray-800 bold">{{ $production->updated_at }}</td>
                         <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->tglKirimDt : '' }}</td>
+                        <td class="text-gray-800 bold">{{ $production->dt_id ? $production->dt->dt_perubahan : '' }}</td>
                         <td class="text-gray-800 bold">{{ $production->jumlahOrder }}</td>
                         @if (Auth::user()->divisi_id == 3 || Auth::user()->divisi_id == 2)
                             <td class="text-gray-800 bold">{{ number_format($production->kontrakd->harga_pcs / $production->kontrakd->mc->gramSheetBoxKontrak, 2) }}</td>

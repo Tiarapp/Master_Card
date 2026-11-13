@@ -121,15 +121,7 @@ class OpiController extends Controller
                 $nestedData['kode'] = $opi->kode;
                 $nestedData['created_at'] = date('j M Y H:i:s',strtotime($opi->created_at));
 
-                if ($opi->dt_perubahan !== '') {
-                    if ($opi->approve_mkt == 1 && $opi->approve_ppic == 1) {
-                        $dt = $opi->dt_perubahan;
-                    } else {
-                        $dt = $opi->tglKirimDt;
-                    }
-                } else {
-                    $dt = $opi->tglKirimDt;
-                }
+                $dt = \App\Models\DeliveryTime::effectiveDate($opi->tglKirimDt, $opi->dt_perubahan, $opi->approve_ppic);
 
                 $nestedData['tglKirimDt'] = $dt;
 
@@ -686,7 +678,7 @@ class OpiController extends Controller
         return Opi_M::with([
             'mc:id,kodeBarang,namaBarang,gramSheetBoxKontrak2,flute,tipeBox,panjangSheet,lebarSheet,joint',
             'kontrakm:id,kode,customer_name,poCustomer,tglKontrak,alamatKirim,keterangan',
-            'dt:id,keterangan,tglKirimDt,dt_perubahan,approve_mkt,approve_ppic',
+            'dt:id,keterangan,tglKirimDt,dt_perubahan,approve_ppic',
         ])->whereRaw('LOWER(TRIM(status_opi)) = ?', ['proses']);
     }
 

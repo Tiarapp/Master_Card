@@ -25,6 +25,16 @@ class DeliveryTime extends Model
         'lastUpdatedBy',
     ];
 
-    
+    public static function effectiveDate($original, $change, $approvedPpic)
+    {
+        return $change !== null && $change !== '' && $approvedPpic == 1
+            ? $change
+            : $original;
+    }
+
+    public function opi()
+    {
+        return $this->belongsTo(Opi_M::class, 'opi', 'id');
+    }
 
 }

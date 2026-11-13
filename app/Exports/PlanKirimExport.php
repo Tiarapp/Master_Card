@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\DeliveryTime;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -32,12 +33,14 @@ class PlanKirimExport implements FromCollection, WithHeadings, WithStyles, WithT
     public function collection()
     {
         return $this->data->map(function ($item, $index) {
-            // Determine delivery date
-            $deliveryDate = '';
-            if ($item->dt_perubahan !== '' && $item->approve_mkt == 1 && $item->approve_ppic == 1) {
-                $deliveryDate = Carbon::parse($item->dt_perubahan)->format('d/m/Y') . ' (Perubahan)';
-            } else {
-                $deliveryDate = Carbon::parse($item->tglKirimDt)->format('d/m/Y');
+            $dt = $item->dt;
+            $originalDate = $dt->tglKirimDt ?? $item->tglKirimDt;
+            $change = $dt->dt_perubahan ?? null;
+            $approved = $dt->approve_ppic ?? null;
+            $date = DeliveryTime::effectiveDate($originalDate, $change, $approved);
+            $deliveryDate = $date ? Carbon::parse($date)->format('d/m/Y') : '-';
+            if ($change !== null && $change !== '' && $approved == 1) {
+                $deliveryDate .= ' (Perubahan)';
             }
 
             return [

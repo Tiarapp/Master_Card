@@ -389,6 +389,8 @@ Route::middleware(['auth'])->group(function (){
 
     //Delivery Time
     Route::get('/admin/dt', 'DTController@index')->middleware(['auth'])->name('dt');
+    Route::get('/admin/ppic/dt-approval', 'DTController@pendingPpic')->name('ppic.dt.approval');
+    Route::post('/admin/ppic/dt-approval/{id}', 'DTController@approvePpic')->name('ppic.dt.approve');
     Route::get('/admin/dt/edit/{id}', 'DTController@edit')->name('dt.edit');
     Route::put('/admin/dt/update/{id}', 'DTController@update')->name('dt.update');
     Route::get('/admin/dt/approve/{id}', 'DTController@approve')->name('dt.approve');
