@@ -76,7 +76,12 @@
                                             <td>{{ $data->NoOPI ?? $data->nama ?? '-' }}</td>
                                             <td>{{ $deliveryTime->tglKirimDt ?? '-' }}</td>
                                             <td>{{ $deliveryTime->pcsDt ?? '-' }}</td>
-                                            <td>{{ $deliveryTime->dt_perubahan ?? '-' }}</td>
+                                            <td>
+                                                {{ $deliveryTime->dt_perubahan ?? '-' }}
+                                                @if ($deliveryTime && $deliveryTime->alasan_reject)
+                                                    <div class="text-danger"><strong>Alasan penolakan PPIC:</strong> {{ $deliveryTime->alasan_reject }}</div>
+                                                @endif
+                                            </td>
                                             <td class="text-center">
                                                 @if($deliveryTime)
                                                 <div class="btn-group" role="group">
@@ -168,6 +173,10 @@
                         <label for="edit-dt-qty">QTY</label>
                         <input type="text" class="form-control" name="pcsDt" id="edit-dt-qty">
                     </div>
+                    <div class="form-group">
+                        <label for="edit-dt-keterangan">Keterangan</label>
+                        <input type="text" class="form-control" name="keterangan" id="edit-dt-keterangan">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -190,6 +199,7 @@
             modal.find('#edit-dt-tanggal').val(button.attr('data-tanggal'));
             modal.find('#edit-dt-perubahan').val(button.attr('data-perubahan'));
             modal.find('#edit-dt-qty').val(button.attr('data-qty'));
+            modal.find('#edit-dt-keterangan').val(button.attr('data-keterangan'));
         });
 
         $('#dt-table').DataTable({

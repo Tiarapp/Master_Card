@@ -64,6 +64,18 @@ class DTController extends Controller
             'updated_at' => 'present|nullable|date_format:Y-m-d H:i:s',
             'pcsDt' => 'present|nullable|numeric',
         ]);
+        $query = $this->pendingDecisionQuery($id, $validated);
+        $updated = $query->update(['approve_ppic' => 1]);
+
+        if (!$updated) {
+            return redirect()->back()->with('error', 'Data DT sudah berubah atau telah disetujui. Muat ulang halaman sebelum mencoba lagi.');
+        }
+
+        return redirect()->back()->with('success', 'Perubahan DT berhasil disetujui oleh PPIC.');
+    }
+
+    private function pendingDecisionQuery($id, array $validated)
+    {
         $opi = Opi_M::where('status_opi', 'Proses')->findOrFail($id);
         $query = DeliveryTime::where('id', $opi->dt_id)
             ->where('approve_ppic', 0)
@@ -84,13 +96,7 @@ class DTController extends Controller
         } else {
             $query->where('pcsDt', $validated['pcsDt']);
         }
-        $updated = $query->update(['approve_ppic' => 1]);
-
-        if (!$updated) {
-            return redirect()->back()->with('error', 'Data DT sudah berubah atau telah disetujui. Muat ulang halaman sebelum mencoba lagi.');
-        }
-
-        return redirect()->back()->with('success', 'Perubahan DT berhasil disetujui oleh PPIC.');
+        return $query;
     }
 
     public function edit($id)
@@ -104,9 +110,13 @@ class DTController extends Controller
     {
         $dt = DeliveryTime::findOrFail($id);
 
-        $changed = $dt->dt_perubahan != $request->dt_perubahan || $dt->pcsDt != $request->pcsDt;
+        $changed = $dt->dt_perubahan != $request->dt_perubahan || $dt->pcsDt != $request->pcsDt || $dt->keterangan != $request->keterangan;
         $dt->dt_perubahan = $request->dt_perubahan;
         $dt->pcsDt = $request->pcsDt;
+        $dt->keterangan = $request->keterangan;
+        if ($changed && $request->dt_perubahan !== null && $request->dt_perubahan !== '') {
+            $dt->alasan_reject = null;
+        }
 
         if (Auth::user()->divisi_id == 5) {
             $dt->approve_ppic = 1;
@@ -139,5 +149,30 @@ class DTController extends Controller
         return redirect('admin/dt')->with('success', "Data Berhasil dihapus");
 
 
+    }
+
+    public function reject(Request $request, $id)
+    {
+        abort_unless(in_array(Auth::user()->divisi_id, [2, 5]) && hasMenuAccess('ppic.dt_approval'), 403);
+        $validated = $request->validate([
+            'dt_perubahan' => 'required|date_format:Y-m-d',
+            'updated_at' => 'present|nullable|date_format:Y-m-d H:i:s',
+            'pcsDt' => 'present|nullable|numeric',
+            'alasan_reject' => 'required|string|max:2000',
+        ], [
+            'alasan_reject.required' => 'Alasan penolakan wajib diisi.',
+            'alasan_reject.max' => 'Alasan penolakan maksimal 2000 karakter.',
+        ]);
+        $updated = $this->pendingDecisionQuery($id, $validated)->update([
+            'approve_ppic' => 0,
+            'dt_perubahan' => null,
+            'alasan_reject' => $validated['alasan_reject'],
+        ]);
+
+        if (!$updated) {
+            return redirect()->back()->with('error', 'Data DT sudah berubah atau telah diproses. Muat ulang halaman sebelum mencoba lagi.');
+        }
+
+        return redirect()->back()->with('success', 'Perubahan DT berhasil ditolak oleh PPIC.');
     }
 }

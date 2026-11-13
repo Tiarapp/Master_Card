@@ -34,6 +34,8 @@ class DeliveryTimeIndexTest extends TestCase
             $table->string('tglKirimDt')->nullable();
             $table->integer('pcsDt')->nullable();
             $table->string('dt_perubahan')->nullable();
+            $table->text('keterangan')->nullable();
+            $table->text('alasan_reject')->nullable();
             $table->integer('approve_mkt')->default(0);
             $table->integer('approve_ppic')->default(0);
             $table->timestamps();
@@ -452,5 +454,65 @@ class DeliveryTimeIndexTest extends TestCase
 
         $this->get(route('dt.approve', 1))->assertRedirect(route('ppic.dt.approval'));
         $this->assertSame(0, DB::table('dt')->where('id', 1)->value('approve_ppic'));
+    }
+
+    public function test_reject_popup_and_submission_preserve_original_note_and_show_reason(): void
+    {
+        $this->actAsPpic();
+        $this->insertDeliveryTime([
+            'dt_perubahan' => '2026-02-01', 'approve_ppic' => 0, 'keterangan' => 'Catatan pengajuan',
+        ]);
+        $this->get(route('ppic.dt.approval'))->assertOk()
+            ->assertSee('data-target="#reject-dt-modal"', false)
+            ->assertSee(route('ppic.dt.reject', 1001))
+            ->assertSee('name="alasan_reject"', false);
+
+        $this->from(route('ppic.dt.approval'))->post(route('ppic.dt.reject', 1001), [
+            'dt_perubahan' => '2026-02-01',
+            'updated_at' => '2026-01-01 10:00:00',
+            'pcsDt' => '100',
+            'alasan_reject' => 'Jadwal produksi penuh',
+        ])->assertSessionHas('success');
+
+        $dt = DB::table('dt')->where('id', 1)->first();
+        $this->assertNull($dt->dt_perubahan);
+        $this->assertSame('Catatan pengajuan', $dt->keterangan);
+        $this->assertSame('Jadwal produksi penuh', $dt->alasan_reject);
+        $this->assertSame(0, $dt->approve_ppic);
+        $this->get(route('ppic.dt.approval'))->assertDontSee('00001F');
+        $this->get(route('dt'))->assertSee('Jadwal produksi penuh')->assertSee(route('dt.edit', 1));
+    }
+
+    public function test_reject_requires_reason_and_rejects_stale_or_unauthorized_requests(): void
+    {
+        $this->actAsPpic();
+        $this->insertDeliveryTime(['dt_perubahan' => '2026-02-01', 'approve_ppic' => 0]);
+        $data = ['dt_perubahan' => '2026-02-01', 'updated_at' => '2026-01-01 10:00:00', 'pcsDt' => '100'];
+        $this->from(route('ppic.dt.approval'))->post(route('ppic.dt.reject', 1001), $data)
+            ->assertSessionHasErrors('alasan_reject');
+        $this->assertSame('2026-02-01', DB::table('dt')->where('id', 1)->value('dt_perubahan'));
+        DB::table('dt')->where('id', 1)->update(['pcsDt' => 200]);
+        $data['alasan_reject'] = 'Tidak sesuai kapasitas';
+        $this->from(route('ppic.dt.approval'))->post(route('ppic.dt.reject', 1001), $data)
+            ->assertSessionHas('error');
+        $this->assertSame('2026-02-01', DB::table('dt')->where('id', 1)->value('dt_perubahan'));
+        $user = new User(['name' => 'Marketing', 'divisi_id' => 3]);
+        $user->id = 3;
+        $this->actingAs($user);
+        $this->post(route('ppic.dt.reject', 1001), $data)->assertForbidden();
+    }
+
+    public function test_new_submission_clears_previous_rejection_reason(): void
+    {
+        $this->insertDeliveryTime([
+            'dt_perubahan' => null, 'approve_ppic' => 0, 'alasan_reject' => 'Jadwal penuh',
+        ]);
+        $this->put(route('dt.update', 1), [
+            'kontrak' => 'SPA/263/01/2026', 'dt_perubahan' => '2026-02-03',
+            'pcsDt' => '100', 'keterangan' => 'Pengajuan ulang',
+        ])->assertRedirect(url('admin/dt'));
+        $dt = DB::table('dt')->where('id', 1)->first();
+        $this->assertNull($dt->alasan_reject);
+        $this->assertSame(0, $dt->approve_ppic);
     }
 }

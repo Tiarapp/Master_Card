@@ -42,8 +42,14 @@
                             <table class="table table-striped table-hover">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>No.</th><th>Kontrak</th><th>OPI</th><th>Delivery</th>
-                                        <th>Qty Kirim</th><th>DT Perubahan</th><th class="text-center">Action</th>
+                                        <th>No.</th>
+                                        <th>Kontrak</th>
+                                        <th>OPI</th>
+                                        <th>Delivery</th>
+                                        <th>Qty Kirim</th>
+                                        <th>DT Perubahan</th>
+                                        <th>Alasan Perubahan</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,6 +62,11 @@
                                             <td>{{ $deliveryTime->tglKirimDt ?? '-' }}</td>
                                             <td>{{ $deliveryTime->pcsDt ?? '-' }}</td>
                                             <td>{{ $deliveryTime->dt_perubahan ?? '-' }}</td>
+                                            <td>
+                                                @if ($deliveryTime && $deliveryTime->keterangan)
+                                                    <div class="text-danger"><strong>Alasan Perubahan:</strong> {{ $deliveryTime->keterangan }}</div>
+                                                @endif
+                                            </td>
                                             <td class="text-center">
                                                 @if ($deliveryTime && $deliveryTime->dt_perubahan !== null && $deliveryTime->approve_ppic == 0)
                                                 <form method="POST" action="{{ route('ppic.dt.approve', $data->id) }}">
@@ -63,8 +74,17 @@
                                                     <input type="hidden" name="dt_perubahan" value="{{ $deliveryTime->dt_perubahan }}">
                                                     <input type="hidden" name="updated_at" value="{{ $deliveryTime->getRawOriginal('updated_at') }}">
                                                     <input type="hidden" name="pcsDt" value="{{ $deliveryTime->pcsDt }}">
+                                                    <input type="hidden" name="keterangan" value="{{ $deliveryTime->keterangan }}">
                                                     <button type="submit" class="btn btn-sm btn-success">Approve PPIC</button>
                                                 </form>
+                                                <button type="button" class="btn btn-sm btn-danger mt-1"
+                                                        data-toggle="modal" data-target="#reject-dt-modal"
+                                                        data-id="{{ $data->id }}"
+                                                        data-url="{{ route('ppic.dt.reject', $data->id) }}"
+                                                        data-opi="{{ $data->NoOPI ?? $data->nama }}"
+                                                        data-perubahan="{{ $deliveryTime->dt_perubahan }}"
+                                                        data-updated="{{ $deliveryTime->getRawOriginal('updated_at') }}"
+                                                        data-qty="{{ $deliveryTime->pcsDt }}">Reject PPIC</button>
                                                 @else
                                                     <span class="text-muted">Data sudah berubah, muat ulang halaman.</span>
                                                 @endif
@@ -101,4 +121,59 @@
         </div>
     </section>
 </div>
+<div class="modal fade" id="reject-dt-modal" tabindex="-1" role="dialog" aria-labelledby="reject-dt-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" id="reject-dt-form">
+                @csrf
+                <input type="hidden" name="reject_opi_id" id="reject-dt-id">
+                <input type="hidden" name="dt_perubahan" id="reject-dt-perubahan">
+                <input type="hidden" name="updated_at" id="reject-dt-updated">
+                <input type="hidden" name="pcsDt" id="reject-dt-qty">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reject-dt-title">Tolak Perubahan DT</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>OPI: <strong id="reject-dt-opi"></strong></p>
+                    <p>Tanggal perubahan akan dibatalkan dan pengajuan dapat diperbaiki.</p>
+                    <div class="form-group">
+                        <label for="reject-dt-reason">Alasan penolakan</label>
+                        <textarea class="form-control" name="alasan_reject" id="reject-dt-reason" rows="4" maxlength="2000" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Tolak Perubahan DT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('javascripts')
+<script>
+    $(function () {
+        var oldId = @json(old('reject_opi_id'));
+        var oldReason = @json(old('alasan_reject'));
+        $('#reject-dt-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+            modal.find('#reject-dt-form').attr('action', button.attr('data-url'));
+            modal.find('#reject-dt-id').val(button.attr('data-id'));
+            modal.find('#reject-dt-opi').text(button.attr('data-opi'));
+            modal.find('#reject-dt-perubahan').val(button.attr('data-perubahan'));
+            modal.find('#reject-dt-updated').val(button.attr('data-updated'));
+            modal.find('#reject-dt-qty').val(button.attr('data-qty'));
+            modal.find('#reject-dt-reason').val(String(oldId) === button.attr('data-id') ? oldReason : '');
+            oldId = null;
+        });
+        if (oldId) {
+            $('#reject-dt-modal').parent().find('button[data-target="#reject-dt-modal"]').filter(function () {
+                return $(this).attr('data-id') === String(oldId);
+            }).first().trigger('click');
+        }
+    });
+</script>
 @endsection
