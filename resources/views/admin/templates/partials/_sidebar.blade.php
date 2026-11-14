@@ -221,8 +221,8 @@
               </ul>
             </li>
           @endif
-          {{-- Inventory Management --}}
-          @if ((hasMenuAccess('inventory')))
+          {{-- Logistik --}}
+          @if (hasMenuAccess('logistik'))
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="fa-solid fa-warehouse nav-icon"></i>
