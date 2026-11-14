@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PersediaanBj;
+use App\Services\SheetInventoryFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -625,8 +626,35 @@ class BarangController extends Controller
         DB::connection('fbbp')->beginTransaction();
         $periode = date("m/Y");
 
-        $barang = DB::connection('fbbp')->table('TPersediaanConv')
+        $filterService = new SheetInventoryFilter();
+        $input = $request->input('filters', []);
+        if (!is_array($input)) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['filters' => 'Format filter tidak valid.']);
+        }
+        $filters = $filterService->parse($input);
+        $baseQuery = DB::connection('fbbp')->table('TPersediaanConv')
             ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
+            ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
+            ->where(function ($query) {
+                $query->where('TPersediaanConv.KodeBrg', 'LIKE', '11.18.%')
+                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '11.19.%')
+                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '12.19.%');
+            });
+
+        $filterOptions = [];
+        foreach (SheetInventoryFilter::COLUMNS as $key => $column) {
+            $expression = $key === 'nama'
+                ? DB::connection('fbbp')->getQueryGrammar()->wrap($column)
+                : $column;
+            $filterOptions[$key] = $filterService->apply(clone $baseQuery, $filters, $key)
+                ->selectRaw($expression . ' as "filter_value"')
+                ->distinct()->orderBy('filter_value')->pluck('filter_value');
+            $filterOptions[$key] = $filterOptions[$key]->map(function ($value) {
+                return $value === null ? null : (string) $value;
+            })->merge($filters[$key]['values'] ?? [])->uniqueStrict()->values();
+        }
+
+        $barang = $filterService->apply(clone $baseQuery, $filters)
             ->select(
                 'TPersediaanConv.KodeBrg',
                 'TBarang.NamaBrg',
@@ -637,14 +665,8 @@ class BarangController extends Controller
                 'TBarang.SatuanP',
                 'TBarang.SatuanS'
             )
-            ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
-            ->where(function ($query) {
-                $query->where('TPersediaanConv.KodeBrg', 'LIKE', '11.18.%')
-                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '11.19.%')
-                    ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '12.19.%');
-            })
             ->orderBy('TPersediaanConv.KodeBrg', 'asc')
-            ->paginate(20);
+            ->paginate(20)->appends($request->query());
 
         $kodeBrgList = collect($barang->items())->pluck('KodeBrg')->toArray();
         $lastMutasi = [];
@@ -695,7 +717,7 @@ class BarangController extends Controller
             }
         }
 
-        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi'));
+        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi', 'filterOptions', 'filters'));
     }
 
     public function get_mutasi_bp(Request $request)
