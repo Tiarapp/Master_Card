@@ -140,4 +140,52 @@ class SheetInventoryFilterTest extends TestCase
         $this->assertStringContainsString('mutasiModalBpSheet', $compiled);
         $this->assertStringContainsString("route('fb.bp.mutasi')", $compiled);
     }
+
+    public function test_search_matches_displayed_values_and_combines_with_checkbox_filters(): void
+    {
+        $service = new SheetInventoryFilter();
+        $options = [
+            'nama' => ['Kertas A', 'Kertas B', null],
+            'saldo_primer' => ['10', null],
+            'saldo_sekunder' => ['1.23', '2.2', null],
+        ];
+        $searches = $service->parseSearch(['nama' => 'kertas', 'saldo_sekunder' => '2.20']);
+        $checked = $service->parse(['nama' => ['mode' => 'exclude', 'values' => ['"Kertas A"']]]);
+        $query = $service->apply($this->query(), $checked);
+        $this->assertSame(['B'], $service->apply($query, $service->searchFilters($searches, $options))
+            ->pluck('TPersediaanConv.KodeBrg')->all());
+
+        $filters = $service->searchFilters(['nama' => '(kosong)'], $options);
+        $this->assertSame(['C'], $service->apply($this->query(), $filters)->pluck('TPersediaanConv.KodeBrg')->all());
+        $filters = $service->searchFilters(['nama' => 'tidak ada'], $options);
+        $this->assertSame([], $service->apply($this->query(), $filters)->pluck('TPersediaanConv.KodeBrg')->all());
+        $this->assertSame([], $service->parseSearch(['nama' => null, 'saldo_primer' => '']));
+    }
+
+    public function test_search_filters_all_rows_before_pagination(): void
+    {
+        for ($i = 0; $i < 25; $i++) {
+            $code = 'D' . str_pad($i, 2, '0', STR_PAD_LEFT);
+            DB::table('TBarang')->insert(['KodeBrg' => $code, 'NamaBrg' => 'Target']);
+            DB::table('TPersediaanConv')->insert(['KodeBrg' => $code, 'SaldoAkhirP' => 1000, 'SaldoAkhirS' => 1.23]);
+        }
+        $service = new SheetInventoryFilter();
+        $searches = $service->parseSearch(['nama' => 'target', 'saldo_primer' => '1,000']);
+        $filters = $service->searchFilters($searches, [
+            'nama' => ['Kertas A', 'Kertas B', 'Target', null],
+            'saldo_primer' => ['10', '1000', null],
+        ]);
+        $page = $service->apply($this->query(), $filters)
+            ->orderBy('TPersediaanConv.KodeBrg')->paginate(20, ['TPersediaanConv.KodeBrg'], 'page', 2)
+            ->appends(['search' => $searches]);
+        $this->assertSame(25, $page->total());
+        $this->assertCount(5, $page->items());
+        $this->assertStringContainsString('search%5Bnama%5D=target', $page->url(1));
+    }
+
+    public function test_search_rejects_invalid_input(): void
+    {
+        $this->expectException(ValidationException::class);
+        (new SheetInventoryFilter())->parseSearch(['nama' => ['invalid']]);
+    }
 }

@@ -43,6 +43,49 @@ class SheetInventoryFilter
         return $filters;
     }
 
+    public function parseSearch($input): array
+    {
+        if (!is_array($input)) {
+            throw ValidationException::withMessages(['search' => 'Format pencarian tidak valid.']);
+        }
+
+        $searches = [];
+        foreach (self::COLUMNS as $key => $column) {
+            if (!array_key_exists($key, $input) || $input[$key] === '' || $input[$key] === null) {
+                continue;
+            }
+            if (!is_string($input[$key]) || mb_strlen($input[$key]) > 200) {
+                throw ValidationException::withMessages(['search' => 'Pencarian harus berupa teks maksimal 200 karakter.']);
+            }
+            $searches[$key] = $input[$key];
+        }
+
+        return $searches;
+    }
+
+    public function searchFilters(array $searches, array $options): array
+    {
+        $filters = [];
+        foreach ($searches as $key => $search) {
+            $matching = [];
+            $other = [];
+            foreach ($options[$key] as $value) {
+                $label = $value === null ? '(Kosong)' : ($key === 'nama'
+                    ? $value
+                    : number_format((float) $value, $key === 'saldo_primer' ? 0 : 2));
+                if (mb_stripos($label, $search) !== false) {
+                    $matching[] = $value;
+                } else {
+                    $other[] = $value;
+                }
+            }
+            $include = count($matching) <= count($other);
+            $filters[$key] = ['mode' => $include ? 'include' : 'exclude', 'values' => $include ? $matching : $other];
+        }
+
+        return $filters;
+    }
+
     public function apply(Builder $query, array $filters, ?string $except = null): Builder
     {
         foreach ($filters as $key => $filter) {

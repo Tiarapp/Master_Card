@@ -46,6 +46,7 @@
           <a href="{{ route('fb.list.bp_sheet') }}" class="btn btn-outline-secondary btn-sm">Hapus Semua Filter</a>
         </div>
         <div class="alert alert-danger d-none" id="sheet-filter-error" role="alert"></div>
+        <div class="small text-muted" id="sheet-search-status" aria-live="polite"></div>
         <noscript><div class="alert alert-warning">Aktifkan JavaScript untuk menggunakan filter.</div></noscript>
       </form>
       <div class="card-body table-responsive p-0">
@@ -63,12 +64,13 @@
                 <th scope="col">
                   {{ $filterLabel }}
                   <div class="dropdown d-inline-block sheet-filter" data-filter="{{ $filterKey }}">
-                    <button class="btn btn-sm {{ isset($filters[$filterKey]) ? 'btn-primary' : 'btn-outline-secondary' }} dropdown-toggle"
+                    <button class="btn btn-sm {{ isset($filters[$filterKey]) || isset($searches[$filterKey]) ? 'btn-primary' : 'btn-outline-secondary' }} dropdown-toggle"
                             type="button" data-toggle="dropdown" aria-label="Filter {{ $filterLabel }}" aria-expanded="false">
                       <i class="fas fa-filter"></i>
                     </button>
                     <div class="dropdown-menu p-2" style="min-width: 260px; max-width: 350px;">
-                      <input type="search" class="form-control form-control-sm mb-2 filter-search" placeholder="Cari nilai..." aria-label="Cari nilai {{ $filterLabel }}">
+                      <input type="search" class="form-control form-control-sm mb-2 filter-search" name="search[{{ $filterKey }}]" form="sheet-filter-form" maxlength="200" value="{{ $searches[$filterKey] ?? '' }}" placeholder="Cari nilai..." aria-label="Cari nilai {{ $filterLabel }}">
+                      <small class="text-muted d-block mb-2">Pencarian langsung memperbarui tabel.</small>
                       <label class="d-block mb-1"><input type="checkbox" class="filter-all"> Pilih semua nilai yang terlihat</label>
                       <div class="filter-options" style="max-height: 240px; overflow-y: auto;">
                         @foreach ($filterOptions[$filterKey] as $option)
@@ -91,7 +93,7 @@
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="sheet-results">
             @forelse($barang as $index => $item)
               <tr>
                 <td>{{ $barang->firstItem() + $index }}</td>
@@ -118,7 +120,7 @@
         </table>
       </div>
 
-      <div class="card-footer clearfix">
+      <div class="card-footer clearfix" id="sheet-pagination">
         {{ $barang->links('pagination::bootstrap-4') }}
       </div>
       <!-- /.row -->
@@ -159,6 +161,9 @@
 <script>
   $(function () {
     var originalFilters = @json($filters);
+    var searchTimer;
+    var searchRequest;
+    var searchVersion = 0;
     $('#sheet-filter-form button[type=submit]').prop('disabled', false);
     $('.sheet-filter .dropdown-menu').on('click', function (event) {
       event.stopPropagation();
@@ -176,13 +181,60 @@
     }).on('shown.bs.dropdown', function () {
       updateSelectAll($(this));
     });
-    $('.filter-search').on('input', function () {
-      var filter = $(this).closest('.sheet-filter');
-      var text = $(this).val().toLocaleLowerCase();
+    function filterOptions(input) {
+      var filter = input.closest('.sheet-filter');
+      var text = input.val().toLocaleLowerCase();
       filter.find('.filter-option').each(function () {
         $(this).toggle($(this).find('span').text().toLocaleLowerCase().indexOf(text) !== -1);
       });
       updateSelectAll(filter);
+    }
+
+    $('.filter-search').each(function () {
+      filterOptions($(this));
+    }).on('input', function () {
+      filterOptions($(this));
+      clearTimeout(searchTimer);
+      if (searchRequest) searchRequest.abort();
+      var version = ++searchVersion;
+      $('#sheet-filter-error').addClass('d-none').text('');
+      $('#sheet-search-status').text('Mencari data...');
+      searchTimer = setTimeout(function () {
+        var params = new URLSearchParams(window.location.search);
+        params.delete('page');
+        $('.filter-search').each(function () {
+          var name = this.name;
+          params.delete(name);
+          if (this.value !== '') params.set(name, this.value);
+        });
+        var query = params.toString();
+        var url = $('#sheet-filter-form').attr('action') + (query ? '?' + query : '');
+        searchRequest = $.ajax({ url: url, method: 'GET', dataType: 'html' })
+          .done(function (html) {
+            if (version !== searchVersion) return;
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var results = doc.querySelector('#sheet-results');
+            var pagination = doc.querySelector('#sheet-pagination');
+            if (!results || !pagination) {
+              $('#sheet-search-status').text('');
+              $('#sheet-filter-error').text('Data tidak dapat diperbarui. Periksa sesi Anda dan coba lagi.').removeClass('d-none');
+              return;
+            }
+            $('#sheet-results').html(results.innerHTML);
+            $('#sheet-pagination').html(pagination.innerHTML);
+            $('.sheet-filter').each(function () {
+              var active = Boolean(originalFilters[$(this).attr('data-filter')]) || $(this).find('.filter-search').val() !== '';
+              $(this).find('button.dropdown-toggle').toggleClass('btn-primary', active).toggleClass('btn-outline-secondary', !active);
+            });
+            window.history.replaceState(null, '', url);
+            $('#sheet-search-status').text('');
+          })
+          .fail(function (xhr, status) {
+            if (status === 'abort' || version !== searchVersion) return;
+            $('#sheet-search-status').text('');
+            $('#sheet-filter-error').text('Pencarian gagal. Periksa koneksi dan coba lagi.').removeClass('d-none');
+          });
+      }, 400);
     });
     $('.filter-all').on('change', function () {
       var filter = $(this).closest('.sheet-filter');
@@ -196,6 +248,9 @@
     });
     $('#sheet-filter-form').on('submit', function (event) {
       var form = $(this);
+      clearTimeout(searchTimer);
+      searchVersion++;
+      if (searchRequest) searchRequest.abort();
       form.find('.generated-filter').remove();
       $('.sheet-filter').each(function () {
         var key = $(this).attr('data-filter');

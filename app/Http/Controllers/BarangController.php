@@ -632,6 +632,7 @@ class BarangController extends Controller
             throw \Illuminate\Validation\ValidationException::withMessages(['filters' => 'Format filter tidak valid.']);
         }
         $filters = $filterService->parse($input);
+        $searches = $filterService->parseSearch($request->input('search', []));
         $baseQuery = DB::connection('fbbp')->table('TPersediaanConv')
             ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
             ->where('TPersediaanConv.Periode', 'LIKE', "%".$periode."%")
@@ -654,7 +655,8 @@ class BarangController extends Controller
             })->merge($filters[$key]['values'] ?? [])->uniqueStrict()->values();
         }
 
-        $barang = $filterService->apply(clone $baseQuery, $filters)
+        $filteredQuery = $filterService->apply(clone $baseQuery, $filters);
+        $barang = $filterService->apply($filteredQuery, $filterService->searchFilters($searches, $filterOptions))
             ->select(
                 'TPersediaanConv.KodeBrg',
                 'TBarang.NamaBrg',
@@ -717,7 +719,7 @@ class BarangController extends Controller
             }
         }
 
-        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi', 'filterOptions', 'filters'));
+        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi', 'filterOptions', 'filters', 'searches'));
     }
 
     public function get_mutasi_bp(Request $request)
