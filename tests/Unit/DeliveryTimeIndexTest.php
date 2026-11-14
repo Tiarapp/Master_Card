@@ -515,4 +515,36 @@ class DeliveryTimeIndexTest extends TestCase
         $this->assertNull($dt->alasan_reject);
         $this->assertSame(0, $dt->approve_ppic);
     }
+
+    public function test_dt_notification_matches_pending_opi_list_and_updates_after_approval(): void
+    {
+        $this->actAsPpic();
+        $this->insertDeliveryTime(['opi' => 'PENDING-1', 'dt_perubahan' => '2026-02-01', 'approve_ppic' => 0]);
+        $this->insertDeliveryTime(['opi' => 'APPROVED', 'dt_perubahan' => '2026-02-01', 'approve_ppic' => 1]);
+        $this->insertDeliveryTime(['opi' => 'NO-CHANGE', 'dt_perubahan' => null, 'approve_ppic' => 0]);
+        $this->insertDeliveryTime(['opi' => 'CLOSED', 'dt_perubahan' => '2026-02-01', 'approve_ppic' => 0]);
+        DB::table('opi_m')->where('NoOPI', 'CLOSED')->update(['status_opi' => 'closed']);
+        DB::table('opi_m')->insert([
+            'id' => 2000, 'dt_id' => 1, 'NoOPI' => 'PENDING-2', 'status_opi' => 'Proses',
+        ]);
+
+        $this->get(route('ppic.dt.approval'))->assertOk()->assertSee('2 Total Records');
+        $this->getJson(route('notif.dt_approval'))->assertOk()->assertExactJson([
+            'count' => 2, 'url' => route('ppic.dt.approval'),
+        ]);
+
+        $this->from(route('ppic.dt.approval'))->post(route('ppic.dt.approve', 1001), [
+            'dt_perubahan' => '2026-02-01', 'updated_at' => '2026-01-01 10:00:00', 'pcsDt' => '100',
+        ])->assertSessionHas('success');
+        $this->getJson(route('notif.dt_approval'))->assertOk()->assertJsonPath('count', 0);
+    }
+
+    public function test_dt_notification_requires_approval_permission_and_division(): void
+    {
+        $this->getJson(route('notif.dt_approval'))->assertForbidden();
+        $user = new User(['name' => 'PPIC Tanpa Izin', 'divisi_id' => 5]);
+        $user->id = 50;
+        $this->actingAs($user);
+        $this->getJson(route('notif.dt_approval'))->assertForbidden();
+    }
 }

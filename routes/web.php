@@ -782,6 +782,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('hrd/stationary', [StationaryController::class, 'getBarang'])->name('stationary.barang');
 
         Route::get('/getnotif', [NavbarController::class, 'getNotifOpenKontrak'])->name('notif.open');
+        Route::get('/getnotif/dt-approval', [NavbarController::class, 'getPendingDtApproval'])->name('notif.dt_approval');
         Route::get('/jobs', [NavbarController::class, 'index'])->name('job.index');
         Route::get('/jobs/create', [NavbarController::class, 'create'])->name('job.create');
         Route::post('/jobs/store', [NavbarController::class, 'store'])->name('job.store');

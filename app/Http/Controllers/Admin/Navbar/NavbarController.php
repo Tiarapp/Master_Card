@@ -5,11 +5,22 @@ namespace App\Http\Controllers\Admin\Navbar;
 use App\Http\Controllers\Controller;
 use App\Models\Kontrak_M;
 use App\Models\Navbar\Notification;
+use App\Models\Opi_M;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NavbarController extends Controller
 {
+    public function getPendingDtApproval()
+    {
+        abort_unless(in_array(Auth::user()->divisi_id, [2, 5]) && hasMenuAccess('ppic.dt_approval'), 403);
+
+        return response()->json([
+            'count' => Opi_M::pendingPpicDtApproval()->count(),
+            'url' => route('ppic.dt.approval'),
+        ]);
+    }
+
     public function getNotifOpenKontrak()
     {
         if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 13) {
@@ -28,7 +39,7 @@ class NavbarController extends Controller
         $notificationsQuery = Notification::with('kontrak');
 
         $user = Auth::user()->id;
-        
+
         if (Auth::user()->divisi_id == 2 || Auth::user()->divisi_id == 13) {
             if ($request->search) {
                 $notificationsQuery->where(function($query) use ($request) {
@@ -63,7 +74,7 @@ class NavbarController extends Controller
         $data = [
             'notifications' => $notifications,
         ];
-        
+
         return view('admin.notif.index', $data);
     }
 
@@ -78,7 +89,7 @@ class NavbarController extends Controller
     {
         // dd($request->all());
 
-        for ($i=0; $i < count($request->kontrak_id) ; $i++) { 
+        for ($i=0; $i < count($request->kontrak_id) ; $i++) {
             Notification::create([
                 'kontrak_id' => $request->kontrak_id[$i],
                 'user_id' => Auth::user()->id,
@@ -106,4 +117,5 @@ class NavbarController extends Controller
 
         return redirect()->back()->with('success', 'Berhasil update !');
     }
+
 }

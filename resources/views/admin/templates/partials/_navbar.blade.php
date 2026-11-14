@@ -84,6 +84,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown" id="notificationList">
         <h6 class="dropdown-header">Notifications</h6>
+        <span class="dropdown-item-text text-danger notification-error d-none">Sebagian notifikasi tidak dapat dimuat. Coba muat ulang halaman.</span>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{ route('job.index') }}">
           <i class="fas fa-eye"></i> See All Notifications
@@ -101,49 +102,97 @@
 </nav>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    fetchNotifications();
+    const notificationCount = document.getElementById('notificationCount');
+    const notificationList = document.getElementById('notificationList');
+    const canApproveDt = @json(in_array(Auth::user()->divisi_id, [2, 5]) && hasMenuAccess('ppic.dt_approval'));
+    let contractCount = 0;
+    let dtCount = 0;
+    let contractAvailable = false;
+    let dtAvailable = !canApproveDt;
 
-    function fetchNotifications() {
-      fetch('/getnotif')
-        .then(response => response.json())
+    function renderSummary() {
+      notificationCount.textContent = contractCount + dtCount;
+      notificationCount.title = contractAvailable && dtAvailable ? '' : 'Sebagian notifikasi tidak dapat dimuat';
+      notificationList.querySelector('.notification-error').classList.toggle('d-none', contractAvailable && dtAvailable);
+      const empty = notificationList.querySelector('.notification-empty');
+      if (empty) empty.remove();
+      if (contractAvailable && dtAvailable && contractCount + dtCount === 0) {
+        const item = document.createElement('span');
+        item.className = 'dropdown-item-text notification-empty';
+        item.textContent = 'No new notifications';
+        notificationList.insertBefore(item, notificationList.querySelector('.dropdown-divider'));
+      }
+    }
+
+    function fetchContractNotifications() {
+      fetch(@json(route('notif.open')))
+        .then(response => {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
         .then(data => {
-          const notificationCount = document.getElementById('notificationCount');
-          const notificationList = document.getElementById('notificationList');
-
-          notificationCount.textContent = data.length;
-
-          // Clear existing notifications except header and see all link
-          const existingItems = notificationList.querySelectorAll('.notification-item');
+          contractCount = data.length;
+          contractAvailable = true;
+          const existingItems = notificationList.querySelectorAll('.contract-notification');
           existingItems.forEach(item => item.remove());
 
-          if (data.length === 0) {
-            const noNotifItem = document.createElement('span');
-            noNotifItem.className = 'dropdown-item-text notification-item';
-            noNotifItem.textContent = 'No new notifications';
-            // Insert before the divider
-            const divider = notificationList.querySelector('.dropdown-divider');
-            notificationList.insertBefore(noNotifItem, divider);
-          } else {
-            const divider = notificationList.querySelector('.dropdown-divider');
-            data.forEach(notif => {
-              const item = document.createElement('a');
-              item.className = 'dropdown-item notification-item';
-              item.href = '#';
-              item.innerHTML = `
-                <strong>${notif.kode}</strong><br>
-                <small class="text-muted">${notif.pemohon}</small>
-              `;
-              notificationList.insertBefore(item, divider);
-            });
-          }
+          const divider = notificationList.querySelector('.dropdown-divider');
+          data.forEach(notif => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item contract-notification';
+            item.href = '#';
+            const code = document.createElement('strong');
+            code.textContent = notif.kode || '';
+            const requester = document.createElement('small');
+            requester.className = 'text-muted';
+            requester.textContent = notif.pemohon || '';
+            item.append(code, document.createElement('br'), requester);
+            notificationList.insertBefore(item, divider);
+          });
+          renderSummary();
         })
         .catch(error => {
+          contractAvailable = false;
+          renderSummary();
           console.error('Error fetching notifications:', error);
         });
     }
 
-    // Refresh notifications every 30 seconds
-    setInterval(fetchNotifications, 30000);
+    function fetchDtNotifications() {
+      if (!canApproveDt) return;
+      fetch(@json(route('notif.dt_approval')))
+        .then(response => {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(data => {
+          dtCount = data.count;
+          dtAvailable = true;
+          const previous = notificationList.querySelector('.dt-notification');
+          if (previous) previous.remove();
+          if (dtCount > 0) {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item dt-notification';
+            item.href = data.url;
+            item.textContent = dtCount + ' OPI menunggu approval perubahan DT';
+            notificationList.insertBefore(item, notificationList.querySelector('.dropdown-divider'));
+          }
+          renderSummary();
+        })
+        .catch(error => {
+          dtAvailable = false;
+          renderSummary();
+          console.error('Error fetching DT approval notifications:', error);
+        });
+    }
+
+    function refreshNotifications() {
+      fetchContractNotifications();
+      fetchDtNotifications();
+    }
+
+    refreshNotifications();
+    setInterval(refreshNotifications, 30000);
   });
 </script>
 <!-- /.navbar -->

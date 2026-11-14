@@ -47,9 +47,7 @@ class DTController extends Controller
         abort_unless(in_array(Auth::user()->divisi_id, [2, 5]) && hasMenuAccess('ppic.dt_approval'), 403);
         $search = $request->input('search');
         $dt = $this->processOpiQuery($search)
-            ->whereHas('dt', function ($query) {
-                $query->whereNotNull('dt_perubahan')->where('approve_ppic', 0);
-            })
+            ->pendingPpicDtApproval()
             ->orderBy('created_at', 'desc')->orderBy('id', 'desc')->paginate(10);
         $dt->appends($request->query());
 
