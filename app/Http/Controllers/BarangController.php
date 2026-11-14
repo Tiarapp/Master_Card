@@ -627,11 +627,6 @@ class BarangController extends Controller
         $periode = date("m/Y");
 
         $filterService = new SheetInventoryFilter();
-        $input = $request->input('filters', []);
-        if (!is_array($input)) {
-            throw \Illuminate\Validation\ValidationException::withMessages(['filters' => 'Format filter tidak valid.']);
-        }
-        $filters = $filterService->parse($input);
         $searches = $filterService->parseSearch($request->input('search', []));
         $baseQuery = DB::connection('fbbp')->table('TPersediaanConv')
             ->leftJoin('TBarang', 'TPersediaanConv.KodeBrg', '=', 'TBarang.KodeBrg')
@@ -643,20 +638,20 @@ class BarangController extends Controller
             });
 
         $filterOptions = [];
-        foreach (SheetInventoryFilter::COLUMNS as $key => $column) {
+        foreach ($searches as $key => $search) {
+            $column = SheetInventoryFilter::COLUMNS[$key];
             $expression = $key === 'nama'
                 ? DB::connection('fbbp')->getQueryGrammar()->wrap($column)
                 : $column;
-            $filterOptions[$key] = $filterService->apply(clone $baseQuery, $filters, $key)
+            $filterOptions[$key] = (clone $baseQuery)
                 ->selectRaw($expression . ' as "filter_value"')
                 ->distinct()->orderBy('filter_value')->pluck('filter_value');
             $filterOptions[$key] = $filterOptions[$key]->map(function ($value) {
                 return $value === null ? null : (string) $value;
-            })->merge($filters[$key]['values'] ?? [])->uniqueStrict()->values();
+            });
         }
 
-        $filteredQuery = $filterService->apply(clone $baseQuery, $filters);
-        $barang = $filterService->apply($filteredQuery, $filterService->searchFilters($searches, $filterOptions))
+        $barang = $filterService->apply(clone $baseQuery, $filterService->searchFilters($searches, $filterOptions))
             ->select(
                 'TPersediaanConv.KodeBrg',
                 'TBarang.NamaBrg',
@@ -668,7 +663,7 @@ class BarangController extends Controller
                 'TBarang.SatuanS'
             )
             ->orderBy('TPersediaanConv.KodeBrg', 'asc')
-            ->paginate(20)->appends($request->query());
+            ->paginate(20)->appends(['search' => $searches]);
 
         $kodeBrgList = collect($barang->items())->pluck('KodeBrg')->toArray();
         $lastMutasi = [];
@@ -719,7 +714,7 @@ class BarangController extends Controller
             }
         }
 
-        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi', 'filterOptions', 'filters', 'searches'));
+        return view('admin.barangpembantu.sheet', compact('barang', 'lastMutasi', 'searches'));
     }
 
     public function get_mutasi_bp(Request $request)

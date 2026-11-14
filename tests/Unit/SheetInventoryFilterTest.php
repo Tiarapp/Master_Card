@@ -137,6 +137,11 @@ class SheetInventoryFilterTest extends TestCase
     {
         $compiled = Blade::compileString(file_get_contents(resource_path('views/admin/barangpembantu/sheet.blade.php')));
         $this->assertStringContainsString('sheet-filter-form', $compiled);
+        $this->assertStringContainsString('name="search[<?php echo e($filterKey); ?>]"', $compiled);
+        $this->assertStringContainsString('type="submit" class="btn btn-primary">Cari', $compiled);
+        $this->assertStringContainsString('class="btn btn-outline-secondary">Reset', $compiled);
+        $this->assertStringNotContainsString('filter-value', $compiled);
+        $this->assertStringNotContainsString('dropdown-menu', $compiled);
         $this->assertStringContainsString('mutasiModalBpSheet', $compiled);
         $this->assertStringContainsString("route('fb.bp.mutasi')", $compiled);
     }

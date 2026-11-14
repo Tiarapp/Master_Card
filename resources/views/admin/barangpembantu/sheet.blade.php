@@ -40,14 +40,24 @@
           @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
         </div>
       @endif
-      <form method="GET" action="{{ route('fb.list.bp_sheet') }}" id="sheet-filter-form">
-        <div class="mb-2">
-          <button type="submit" class="btn btn-primary btn-sm" disabled>Terapkan Filter</button>
-          <a href="{{ route('fb.list.bp_sheet') }}" class="btn btn-outline-secondary btn-sm">Hapus Semua Filter</a>
+      <form method="GET" action="{{ route('fb.list.bp_sheet') }}" id="sheet-filter-form" class="mb-3">
+        <div class="form-row align-items-end">
+          @foreach (['nama' => 'Nama', 'saldo_primer' => 'Saldo Primer', 'saldo_sekunder' => 'Saldo Sekunder'] as $filterKey => $filterLabel)
+            <div class="form-group col-md-3">
+              <label for="sheet-search-{{ $filterKey }}">{{ $filterLabel }}</label>
+              <input type="search" class="form-control sheet-search" id="sheet-search-{{ $filterKey }}"
+                     name="search[{{ $filterKey }}]" maxlength="200" value="{{ $searches[$filterKey] ?? '' }}"
+                     placeholder="Cari {{ $filterLabel }}">
+            </div>
+          @endforeach
+          <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-primary">Cari</button>
+            <a href="{{ route('fb.list.bp_sheet') }}" class="btn btn-outline-secondary">Reset</a>
+          </div>
         </div>
+        <small class="form-text text-muted">Tabel diperbarui saat mengetik atau setelah menekan Cari.</small>
         <div class="alert alert-danger d-none" id="sheet-filter-error" role="alert"></div>
         <div class="small text-muted" id="sheet-search-status" aria-live="polite"></div>
-        <noscript><div class="alert alert-warning">Aktifkan JavaScript untuk menggunakan filter.</div></noscript>
       </form>
       <div class="card-body table-responsive p-0">
         <table class="table table-bordered table-hover mb-0">
@@ -55,40 +65,12 @@
             <tr>
               <th scope="col">No</th>
               <th scope="col">Kode</th>
-              @foreach (['nama' => 'Nama', 'saldo_primer' => 'Saldo Primer', 'saldo_sekunder' => 'Saldo Sekunder'] as $filterKey => $filterLabel)
-                @if ($filterKey === 'saldo_primer')
-                  <th scope="col">Satuan Primer</th>
-                  <th scope="col">Satuan Sekunder</th>
-                  <th scope="col">Berat std</th>
-                @endif
-                <th scope="col">
-                  {{ $filterLabel }}
-                  <div class="dropdown d-inline-block sheet-filter" data-filter="{{ $filterKey }}">
-                    <button class="btn btn-sm {{ isset($filters[$filterKey]) || isset($searches[$filterKey]) ? 'btn-primary' : 'btn-outline-secondary' }} dropdown-toggle"
-                            type="button" data-toggle="dropdown" aria-label="Filter {{ $filterLabel }}" aria-expanded="false">
-                      <i class="fas fa-filter"></i>
-                    </button>
-                    <div class="dropdown-menu p-2" style="min-width: 260px; max-width: 350px;">
-                      <input type="search" class="form-control form-control-sm mb-2 filter-search" name="search[{{ $filterKey }}]" form="sheet-filter-form" maxlength="200" value="{{ $searches[$filterKey] ?? '' }}" placeholder="Cari nilai..." aria-label="Cari nilai {{ $filterLabel }}">
-                      <small class="text-muted d-block mb-2">Pencarian langsung memperbarui tabel.</small>
-                      <label class="d-block mb-1"><input type="checkbox" class="filter-all"> Pilih semua nilai yang terlihat</label>
-                      <div class="filter-options" style="max-height: 240px; overflow-y: auto;">
-                        @foreach ($filterOptions[$filterKey] as $option)
-                          @php
-                            $value = $option === null ? null : (string) $option;
-                            $filter = $filters[$filterKey] ?? null;
-                            $selected = $filter === null || (($filter['mode'] === 'include') === in_array($value, $filter['values'], true));
-                          @endphp
-                          <label class="d-block filter-option">
-                            <input type="checkbox" class="filter-value" value="{{ json_encode($value) }}" {{ $selected ? 'checked' : '' }}>
-                            <span>{{ $value === null ? '(Kosong)' : ($filterKey === 'nama' ? $value : number_format((float) $value, $filterKey === 'saldo_primer' ? 0 : 2)) }}</span>
-                          </label>
-                        @endforeach
-                      </div>
-                    </div>
-                  </div>
-                </th>
-              @endforeach
+              <th scope="col">Nama</th>
+              <th scope="col">Satuan Primer</th>
+              <th scope="col">Satuan Sekunder</th>
+              <th scope="col">Berat std</th>
+              <th scope="col">Saldo Primer</th>
+              <th scope="col">Saldo Sekunder</th>
               <th scope="col">Last Mutasi</th>
               <th scope="col">Action</th>
             </tr>
@@ -160,52 +142,19 @@
 @section('javascripts')
 <script>
   $(function () {
-    var originalFilters = @json($filters);
     var searchTimer;
     var searchRequest;
     var searchVersion = 0;
-    $('#sheet-filter-form button[type=submit]').prop('disabled', false);
-    $('.sheet-filter .dropdown-menu').on('click', function (event) {
-      event.stopPropagation();
-    });
-
-    function updateSelectAll(filter) {
-      var visible = filter.find('.filter-option:visible .filter-value');
-      var checked = visible.filter(':checked').length;
-      filter.find('.filter-all').prop('checked', visible.length > 0 && checked === visible.length)
-        .prop('indeterminate', checked > 0 && checked < visible.length);
-    }
-
-    $('.sheet-filter').each(function () {
-      updateSelectAll($(this));
-    }).on('shown.bs.dropdown', function () {
-      updateSelectAll($(this));
-    });
-    function filterOptions(input) {
-      var filter = input.closest('.sheet-filter');
-      var text = input.val().toLocaleLowerCase();
-      filter.find('.filter-option').each(function () {
-        $(this).toggle($(this).find('span').text().toLocaleLowerCase().indexOf(text) !== -1);
-      });
-      updateSelectAll(filter);
-    }
-
-    $('.filter-search').each(function () {
-      filterOptions($(this));
-    }).on('input', function () {
-      filterOptions($(this));
+    $('.sheet-search').on('input', function () {
       clearTimeout(searchTimer);
       if (searchRequest) searchRequest.abort();
       var version = ++searchVersion;
       $('#sheet-filter-error').addClass('d-none').text('');
       $('#sheet-search-status').text('Mencari data...');
       searchTimer = setTimeout(function () {
-        var params = new URLSearchParams(window.location.search);
-        params.delete('page');
-        $('.filter-search').each(function () {
-          var name = this.name;
-          params.delete(name);
-          if (this.value !== '') params.set(name, this.value);
+        var params = new URLSearchParams();
+        $('.sheet-search').each(function () {
+          if (this.value !== '') params.set(this.name, this.value);
         });
         var query = params.toString();
         var url = $('#sheet-filter-form').attr('action') + (query ? '?' + query : '');
@@ -222,10 +171,6 @@
             }
             $('#sheet-results').html(results.innerHTML);
             $('#sheet-pagination').html(pagination.innerHTML);
-            $('.sheet-filter').each(function () {
-              var active = Boolean(originalFilters[$(this).attr('data-filter')]) || $(this).find('.filter-search').val() !== '';
-              $(this).find('button.dropdown-toggle').toggleClass('btn-primary', active).toggleClass('btn-outline-secondary', !active);
-            });
             window.history.replaceState(null, '', url);
             $('#sheet-search-status').text('');
           })
@@ -236,48 +181,10 @@
           });
       }, 400);
     });
-    $('.filter-all').on('change', function () {
-      var filter = $(this).closest('.sheet-filter');
-      filter.attr('data-dirty', '1');
-      filter.find('.filter-option:visible .filter-value').prop('checked', this.checked);
-      updateSelectAll(filter);
-    });
-    $('.filter-value').on('change', function () {
-      var filter = $(this).closest('.sheet-filter').attr('data-dirty', '1');
-      updateSelectAll(filter);
-    });
-    $('#sheet-filter-form').on('submit', function (event) {
-      var form = $(this);
+    $('#sheet-filter-form').on('submit', function () {
       clearTimeout(searchTimer);
       searchVersion++;
       if (searchRequest) searchRequest.abort();
-      form.find('.generated-filter').remove();
-      $('.sheet-filter').each(function () {
-        var key = $(this).attr('data-filter');
-        if ($(this).attr('data-dirty') !== '1') {
-          var original = originalFilters[key];
-          if (original) {
-            $('<input>', { type: 'hidden', name: 'filters[' + key + '][mode]', value: original.mode, class: 'generated-filter' }).appendTo(form);
-            original.values.forEach(function (value) {
-              $('<input>', { type: 'hidden', name: 'filters[' + key + '][values][]', value: JSON.stringify(value), class: 'generated-filter' }).appendTo(form);
-            });
-          }
-          return;
-        }
-        var options = $(this).find('.filter-value');
-        var unchecked = options.not(':checked');
-        if (!unchecked.length) return;
-        var checked = options.filter(':checked');
-        var useInclude = checked.length <= unchecked.length;
-        $('<input>', { type: 'hidden', name: 'filters[' + key + '][mode]', value: useInclude ? 'include' : 'exclude', class: 'generated-filter' }).appendTo(form);
-        (useInclude ? checked : unchecked).each(function () {
-          $('<input>', { type: 'hidden', name: 'filters[' + key + '][values][]', value: this.value, class: 'generated-filter' }).appendTo(form);
-        });
-      });
-      if (form.find('.generated-filter').length > 900 || form.serialize().length > 6000) {
-        event.preventDefault();
-        $('#sheet-filter-error').text('Terlalu banyak nilai dipilih untuk dikirim. Kurangi pilihan filter atau gunakan filter lain terlebih dahulu.').removeClass('d-none');
-      }
     });
   });
   $(document).on("click", '.mutasi', function() {
