@@ -78,6 +78,63 @@ class SheetInventoryFilterTest extends TestCase
         $this->assertSame([], $this->result(['nama' => '__']));
     }
 
+    public function test_primer_comparisons_use_displayed_rounded_values_and_exclude_nulls(): void
+    {
+        DB::table('TBarang')->insert([
+            ['KodeBrg' => 'E', 'NamaBrg' => 'Kertas kecil'],
+            ['KodeBrg' => 'F', 'NamaBrg' => 'Kertas nol'],
+        ]);
+        DB::table('TPersediaanConv')->insert([
+            ['KodeBrg' => 'E', 'SaldoAkhirP' => 0.4, 'SaldoAkhirS' => 1],
+            ['KodeBrg' => 'F', 'SaldoAkhirP' => 0, 'SaldoAkhirS' => 1],
+        ]);
+
+        $this->assertSame(['A', 'B'], $this->result(['saldo_primer_operator' => 'gt', 'saldo_primer' => '0']));
+        $this->assertSame(['D'], $this->result(['saldo_primer_operator' => 'lt', 'saldo_primer' => '0']));
+        $this->assertSame(['E', 'F'], $this->result(['saldo_primer_operator' => 'eq', 'saldo_primer' => '0']));
+        $this->assertSame(['A', 'B', 'D'], $this->result(['saldo_primer_operator' => 'ne', 'saldo_primer' => '0']));
+        $this->assertSame(['A', 'B', 'E', 'F'], $this->result(['saldo_primer_operator' => 'gte', 'saldo_primer' => '0']));
+        $this->assertSame(['D', 'E', 'F'], $this->result(['saldo_primer_operator' => 'lte', 'saldo_primer' => '0']));
+        $this->assertSame(['A'], $this->result(['nama' => 'kertas a', 'saldo_primer_operator' => 'gt', 'saldo_primer' => '0']));
+        $this->assertSame(['A', 'B', 'C', 'D', 'E', 'F'], $this->result(['saldo_primer_operator' => 'gt', 'saldo_primer' => '']));
+    }
+
+    public function test_comparison_input_and_operator_are_validated(): void
+    {
+        $service = new SheetInventoryFilter();
+        foreach ([
+            ['saldo_primer_operator' => 'gt', 'saldo_primer' => '1,000'],
+            ['saldo_primer_operator' => 'gt', 'saldo_primer' => 'invalid'],
+            ['saldo_primer_operator' => 'DROP', 'saldo_primer' => '0'],
+            ['saldo_primer_operator' => ['gt'], 'saldo_primer' => '0'],
+        ] as $input) {
+            try {
+                $service->parseSearch($input);
+                $this->fail('Invalid comparison was accepted.');
+            } catch (ValidationException $exception) {
+                $this->assertNotEmpty($exception->errors());
+            }
+        }
+    }
+
+    public function test_comparison_survives_pagination_and_firebird_sql_uses_a_bound_number(): void
+    {
+        $service = new SheetInventoryFilter();
+        $searches = $service->parseSearch(['saldo_primer_operator' => 'gt', 'saldo_primer' => '0']);
+        $page = $service->applySearch($this->query(), $searches)
+            ->orderBy('TPersediaanConv.KodeBrg')->paginate(1, ['TPersediaanConv.KodeBrg'], 'page', 2)
+            ->appends(['search' => $searches]);
+        $this->assertSame(2, $page->total());
+        $this->assertStringContainsString('search%5Bsaldo_primer_operator%5D=gt', $page->url(1));
+        $this->assertStringContainsString('search%5Bsaldo_primer%5D=0', $page->url(1));
+
+        $connection = new \Illuminate\Database\Connection(null, '', '', ['driver' => 'firebird']);
+        $connection->setQueryGrammar(new \HarryGulliford\Firebird\Query\Grammars\FirebirdGrammar());
+        $query = $service->applySearch($connection->table('TPersediaanConv'), $searches);
+        $this->assertStringContainsString('ROUND("TPersediaanConv"."SaldoAkhirP", 0) > CAST(? AS DOUBLE PRECISION)', $query->toSql());
+        $this->assertSame(['0'], $query->getBindings());
+    }
+
     public function test_search_filters_all_rows_before_pagination_with_bounded_sql(): void
     {
         for ($i = 0; $i < 25; $i++) {

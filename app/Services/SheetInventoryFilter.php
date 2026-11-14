@@ -8,6 +8,15 @@ use Illuminate\Validation\ValidationException;
 class SheetInventoryFilter
 {
     private const COLUMNS = ['nama', 'saldo_primer', 'saldo_sekunder'];
+    private const PRIMER_OPERATORS = [
+        'contains' => null,
+        'eq' => '=',
+        'ne' => '<>',
+        'gt' => '>',
+        'gte' => '>=',
+        'lt' => '<',
+        'lte' => '<=',
+    ];
 
     public function parseSearch($input): array
     {
@@ -26,12 +35,33 @@ class SheetInventoryFilter
             $searches[$key] = $input[$key];
         }
 
+        $operator = $input['saldo_primer_operator'] ?? 'contains';
+        if (!is_string($operator) || !array_key_exists($operator, self::PRIMER_OPERATORS)) {
+            throw ValidationException::withMessages(['search' => 'Operator Saldo Primer tidak valid.']);
+        }
+        if ($operator !== 'contains') {
+            if (isset($searches['saldo_primer']) && (!preg_match('/^-?\d+(?:\.\d+)?$/D', $searches['saldo_primer'])
+                || !is_finite((float) $searches['saldo_primer']))) {
+                throw ValidationException::withMessages(['search' => 'Nilai Saldo Primer harus berupa angka; gunakan titik untuk desimal tanpa pemisah ribuan.']);
+            }
+            $searches['saldo_primer_operator'] = $operator;
+        }
+
         return $searches;
     }
 
     public function applySearch(Builder $query, array $searches): Builder
     {
         foreach ($searches as $key => $search) {
+            if ($key === 'saldo_primer_operator') {
+                continue;
+            }
+            $operator = $searches['saldo_primer_operator'] ?? 'contains';
+            if ($key === 'saldo_primer' && $operator !== 'contains') {
+                $query->whereRaw('ROUND("TPersediaanConv"."SaldoAkhirP", 0) '
+                    . self::PRIMER_OPERATORS[$operator] . ' CAST(? AS DOUBLE PRECISION)', [$search]);
+                continue;
+            }
             $matchNull = mb_stripos('(Kosong)', $search) !== false;
             if ($key === 'nama') {
                 $column = '"TBarang"."NamaBrg"';

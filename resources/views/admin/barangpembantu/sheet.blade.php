@@ -45,6 +45,13 @@
           @foreach (['nama' => 'Nama', 'saldo_primer' => 'Saldo Primer', 'saldo_sekunder' => 'Saldo Sekunder'] as $filterKey => $filterLabel)
             <div class="form-group col-md-3">
               <label for="sheet-search-{{ $filterKey }}">{{ $filterLabel }}</label>
+              @if ($filterKey === 'saldo_primer')
+                <select class="form-control sheet-search mb-1" name="search[saldo_primer_operator]" id="sheet-primer-operator" aria-label="Operator Saldo Primer">
+                  @foreach (['contains' => 'Mengandung', 'eq' => 'Sama dengan (=)', 'ne' => 'Tidak sama dengan (≠)', 'gt' => 'Lebih besar dari (>)', 'gte' => 'Lebih besar atau sama dengan (≥)', 'lt' => 'Lebih kecil dari (<)', 'lte' => 'Lebih kecil atau sama dengan (≤)'] as $operator => $label)
+                    <option value="{{ $operator }}" {{ ($searches['saldo_primer_operator'] ?? 'contains') === $operator ? 'selected' : '' }}>{{ $label }}</option>
+                  @endforeach
+                </select>
+              @endif
               <input type="search" class="form-control sheet-search" id="sheet-search-{{ $filterKey }}"
                      name="search[{{ $filterKey }}]" maxlength="200" value="{{ $searches[$filterKey] ?? '' }}"
                      placeholder="Cari {{ $filterLabel }}">
@@ -56,6 +63,7 @@
           </div>
         </div>
         <small class="form-text text-muted">Tabel diperbarui saat mengetik atau setelah menekan Cari.</small>
+        <small class="form-text text-muted">Perbandingan Saldo Primer menggunakan angka yang ditampilkan (dibulatkan). Masukkan angka tanpa pemisah ribuan.</small>
         <div class="alert alert-danger d-none" id="sheet-filter-error" role="alert"></div>
         <div class="small text-muted" id="sheet-search-status" aria-live="polite"></div>
       </form>
@@ -145,11 +153,22 @@
     var searchTimer;
     var searchRequest;
     var searchVersion = 0;
-    $('.sheet-search').on('input', function () {
+    function validatePrimer() {
+      var value = $('#sheet-search-saldo_primer').val();
+      var invalid = $('#sheet-primer-operator').val() !== 'contains' && value !== '' && !/^-?\d+(\.\d+)?$/.test(value);
+      $('#sheet-search-saldo_primer')[0].setCustomValidity(invalid ? 'Masukkan angka tanpa pemisah ribuan; gunakan titik untuk desimal.' : '');
+      return !invalid;
+    }
+    $('.sheet-search').on('input change', function () {
       clearTimeout(searchTimer);
       if (searchRequest) searchRequest.abort();
       var version = ++searchVersion;
       $('#sheet-filter-error').addClass('d-none').text('');
+      if (!validatePrimer()) {
+        $('#sheet-search-status').text('');
+        $('#sheet-filter-error').text('Masukkan Saldo Primer berupa angka tanpa pemisah ribuan; gunakan titik untuk desimal.').removeClass('d-none');
+        return;
+      }
       $('#sheet-search-status').text('Mencari data...');
       searchTimer = setTimeout(function () {
         var params = new URLSearchParams();
