@@ -637,21 +637,7 @@ class BarangController extends Controller
                     ->orWhere('TPersediaanConv.KodeBrg', 'LIKE', '12.19.%');
             });
 
-        $filterOptions = [];
-        foreach ($searches as $key => $search) {
-            $column = SheetInventoryFilter::COLUMNS[$key];
-            $expression = $key === 'nama'
-                ? DB::connection('fbbp')->getQueryGrammar()->wrap($column)
-                : $column;
-            $filterOptions[$key] = (clone $baseQuery)
-                ->selectRaw($expression . ' as "filter_value"')
-                ->distinct()->orderBy('filter_value')->pluck('filter_value');
-            $filterOptions[$key] = $filterOptions[$key]->map(function ($value) {
-                return $value === null ? null : (string) $value;
-            });
-        }
-
-        $barang = $filterService->apply(clone $baseQuery, $filterService->searchFilters($searches, $filterOptions))
+        $barang = $filterService->applySearch(clone $baseQuery, $searches)
             ->select(
                 'TPersediaanConv.KodeBrg',
                 'TBarang.NamaBrg',
