@@ -22,7 +22,7 @@ class DTController extends Controller
 
     private function processOpiQuery($search)
     {
-        $dt = Opi_M::with(['dt', 'kontrakm'])->where('status_opi', 'Proses');
+        $dt = Opi_M::with(['dt', 'kontrakm', 'mc'])->where('status_opi', 'Proses');
         if ($search !== null && $search !== '') {
             $dt->where(function($query) use ($search) {
                 $query->where('kontrak_m_id', 'like', "%{$search}%")

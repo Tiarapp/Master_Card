@@ -43,11 +43,17 @@ class DeliveryTimeIndexTest extends TestCase
         Schema::create('kontrak_m', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kode');
+            $table->string('customer_name')->nullable();
+        });
+        Schema::create('mc', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('namaBarang')->nullable();
         });
         Schema::create('opi_m', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('dt_id')->nullable();
             $table->unsignedInteger('kontrak_m_id')->nullable();
+            $table->unsignedInteger('mc_id')->nullable();
             $table->string('NoOPI')->nullable();
             $table->string('nama')->nullable();
             $table->string('status_opi')->nullable();
@@ -308,6 +314,28 @@ class DeliveryTimeIndexTest extends TestCase
             ->assertDontSee('DISETUJUI')->assertDontSee('TANPA-DT')->assertDontSee('TERTUTUP');
         $this->get(route('ppic.dt.approval', ['search' => 'tidak-ada']))
             ->assertOk()->assertSee('Tidak ada OPI yang menunggu approval PPIC');
+    }
+
+    public function test_ppic_list_displays_customer_and_product_instead_of_contract_code(): void
+    {
+        $this->actAsPpic();
+        $this->insertDeliveryTime(['dt_perubahan' => '2026-02-01', 'approve_ppic' => 0]);
+        DB::table('kontrak_m')->insert(['id' => 20454, 'kode' => 'KONTRAK-123', 'customer_name' => 'Customer Contoh']);
+        DB::table('mc')->insert(['id' => 30, 'namaBarang' => 'Barang Contoh']);
+        DB::table('opi_m')->where('id', 1001)->update(['mc_id' => 30]);
+
+        $this->get(route('ppic.dt.approval'))->assertOk()
+            ->assertSee('<td>Customer Contoh</td>', false)
+            ->assertSee('<td>Barang Contoh</td>', false)
+            ->assertDontSee('<td>SPA/263/01/2026</td>', false);
+    }
+
+    public function test_ppic_list_handles_missing_customer_and_product(): void
+    {
+        $this->actAsPpic();
+        $this->insertDeliveryTime(['dt_perubahan' => '2026-02-01', 'approve_ppic' => 0]);
+        $this->get(route('ppic.dt.approval'))->assertOk()
+            ->assertSee('<td>-</td>', false);
     }
 
     public function test_ppic_can_approve_once_and_pending_list_is_updated(): void

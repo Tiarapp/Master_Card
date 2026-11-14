@@ -43,8 +43,9 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Kontrak</th>
+                                        <th>Customer</th>
                                         <th>OPI</th>
+                                        <th>Nama Barang</th>
                                         <th>Delivery</th>
                                         <th>Qty Kirim</th>
                                         <th>DT Perubahan</th>
@@ -57,8 +58,9 @@
                                         @php($deliveryTime = $data->dt)
                                         <tr>
                                             <td>{{ $dt->firstItem() + $loop->index }}</td>
-                                            <td>{{ $deliveryTime->kodeKontrak ?? $data->kontrakm->kode ?? '-' }}</td>
+                                            <td>{{ $data->kontrakm->customer_name ?? '-' }}</td>
                                             <td>{{ $data->NoOPI ?? $data->nama ?? '-' }}</td>
+                                            <td>{{ $data->mc->namaBarang ?? '-' }}</td>
                                             <td>{{ $deliveryTime->tglKirimDt ?? '-' }}</td>
                                             <td>{{ $deliveryTime->pcsDt ?? '-' }}</td>
                                             <td>{{ $deliveryTime->dt_perubahan ?? '-' }}</td>
