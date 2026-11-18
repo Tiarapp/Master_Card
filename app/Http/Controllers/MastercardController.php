@@ -1231,10 +1231,16 @@ class MastercardController extends Controller
 
         $mastercards = $mastercards->orderBy('created_at', 'desc')->paginate(20);
 
+        $codes = $mastercards->getCollection()->pluck('kodeBarang')
+            ->filter(function ($code) { return is_string($code) && trim($code) !== ''; })
+            ->map(function ($code) { return trim($code); })->unique()->values();
+        $generatedCodes = $codes->isEmpty() ? [] : DB::table('mastercard_firebird_generations')
+            ->whereIn('kode_barang', $codes->all())->pluck('kode_barang')->flip()->all();
+
         // Append all request parameters to pagination links
         $mastercards->appends($request->query());
 
-        return view('admin.mastercard.index_new', compact('mastercards', 'search'));
+        return view('admin.mastercard.index_new', compact('mastercards', 'search', 'generatedCodes'));
     }
 
     public function history($id)

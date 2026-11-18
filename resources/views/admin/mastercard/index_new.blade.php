@@ -5,6 +5,17 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
+            @if(session('generate_success'))
+                <div class="alert alert-success" role="alert">{{ session('generate_success') }}</div>
+            @endif
+            @if(session('generate_warning'))
+                <div class="alert alert-warning" role="alert">{{ session('generate_warning') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    @foreach($errors->all() as $error)<div>{{ $error }}</div>@endforeach
+                </div>
+            @endif
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Mastercard</h1>
@@ -90,7 +101,14 @@
                                                     <span class="badge badge-success">Original</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $mastercard->kodeBarang }}</td>
+                                            <td>
+                                                {{ $mastercard->kodeBarang }}
+                                                @if(isset($generatedCodes[trim((string) $mastercard->kodeBarang)]))
+                                                    <span class="badge badge-success">Sudah digenerate</span>
+                                                @else
+                                                    <span class="badge badge-secondary">Belum tercatat</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $mastercard->namaBarang }}</td>
                                             <td>
                                                 <span class="badge badge-secondary">{{ $mastercard->tipeBox ?? 'N/A' }}</span>
@@ -115,6 +133,17 @@
                                                        class="btn btn-sm btn-info" title="File approval">
                                                         <i class="fas fa-paperclip"></i> Approval
                                                     </a>
+                                                    @if(hasMenuAccess('mastercard'))
+                                                        <button type="button" class="btn btn-sm btn-success generate-firebird"
+                                                                data-toggle="modal" data-target="#generateFirebirdModal"
+                                                                data-id="{{ $mastercard->id }}"
+                                                                data-url="{{ route('mastercard.generate_firebird', $mastercard->id) }}"
+                                                                data-kode="{{ $mastercard->kodeBarang }}"
+                                                                data-nama="{{ $mastercard->namaBarang }}"
+                                                                title="Generate barang ke Firebird">
+                                                            <i class="fas fa-database"></i> Generate Barang
+                                                        </button>
+                                                    @endif
                                                     <a href="{{ route('mastercard.revisi', $mastercard->id) }}"
                                                        class="btn btn-sm btn-warning"
                                                        title="Edit">
@@ -176,6 +205,9 @@
 
         </div>
     </section>
+    @if(hasMenuAccess('mastercard'))
+        @include('admin.mastercard.generate-firebird-modal')
+    @endif
     <!-- /.content -->
 </div>
 @endsection
@@ -183,6 +215,22 @@
 @section('javascripts')
 <script>
 $(document).ready(function() {
+    $('#generateFirebirdModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        $('#generate-firebird-form').attr('action', button.attr('data-url'));
+        $('#generate-mastercard-id').val(button.attr('data-id'));
+        $('#generate-confirmed-kode').val(button.attr('data-kode') || '');
+        $('#generate-confirmed-nama').val(button.attr('data-nama') || '');
+        $('#generate-kode').text(button.attr('data-kode') || '(belum diisi)');
+        $('#generate-nama').text(button.attr('data-nama') || '(belum diisi)');
+    });
+
+    @if($errors->any() && old('generate_mastercard_id'))
+        var previousButton = $('.generate-firebird').filter(function () {
+            return $(this).attr('data-id') === @json((string) old('generate_mastercard_id'));
+        }).first();
+        if (previousButton.length) previousButton.trigger('click');
+    @endif
     // Auto-focus search input if there's a search term
     @if(request('search'))
         $('input[name="search"]').focus();

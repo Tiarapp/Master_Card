@@ -337,6 +337,7 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/dc', 'MastercardController@indexdc')->middleware(['auth'])->name('dc');
         Route::get('/create', 'MastercardController@create')->name('create');
         Route::post('/store', 'MastercardController@store')->name('store');
+        Route::post('/{id}/generate-firebird', 'MastercardFirebirdItemController@store')->middleware('auth')->name('generate_firebird');
         Route::get('/edit/{id}', 'MastercardController@edit')->name('edit');
         Route::get('/revisi/{id}', 'MastercardController@revisi')->name('revisi');
         Route::post('/prosesRevisi/{id}', 'MastercardController@saveRevisi')->name('saveRevisi');
