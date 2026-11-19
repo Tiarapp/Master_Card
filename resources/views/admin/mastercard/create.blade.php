@@ -745,7 +745,7 @@
                                             <label class="control-label">FSC</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="fsc" id="fsc">
+                                            <select class="js-example-basic-single col-md-12" name="fsc" id="fsc" onchange="getKodeBarang()">
                                                 <option value='0'>Non FSC</option>
                                                 <option value='1'>FSC</option>
                                             </select>
@@ -1121,6 +1121,7 @@
         var golongan = document.getElementById("golongan").value;
         var koli = document.getElementById("koli").value;
         var kode = document.getElementById("kode").value;
+        var kodeFsc = document.getElementById("fsc").value === '1' ? 'F' : 'E';
 
         nomc = kode.substring(2,6);
 
@@ -1170,9 +1171,9 @@
         }
 
         if (tipemc == 'F' || tipebox == 'R' || tipemc == 'P') {
-            kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+kodeFsc+"."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
-            kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+kodeFsc+"."+flute+".01.S"+kodeKoli+"."+nomc+"0."+golongan;
         }
 
         //

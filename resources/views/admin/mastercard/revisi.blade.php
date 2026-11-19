@@ -781,7 +781,7 @@
                                             <label class="control-label">FSC</label>
                                         </div>
                                         <div class="col-md-4">
-                                            <select class="js-example-basic-single col-md-12" name="fsc" id="fsc">
+                                            <select class="js-example-basic-single col-md-12" name="fsc" id="fsc" onchange="updateKodeFsc()">
                                                 <option value='0' {{ $mc->fsc == 0 ? 'selected' : '' }}>Non FSC</option>
                                                 <option value='1' {{ $mc->fsc == 1 ? 'selected' : '' }}>FSC</option>
                                             </select>
@@ -1265,6 +1265,15 @@
         } );
     } );
 
+    function updateKodeFsc() {
+        var field = document.getElementById("kodeBarang");
+        if (/^[LE][A-Z0-9][EF]\./.test(field.value)) {
+            field.value = field.value.slice(0, 2) + (document.getElementById("fsc").value === '1' ? 'F' : 'E') + field.value.slice(3);
+        } else {
+            getKodeBarang();
+        }
+    }
+
     function getKodeBarang() {
         var tujuan = document.getElementById("tujuan").value;
         var tipebox = document.getElementById("tipebox").value;
@@ -1274,6 +1283,7 @@
         var koli = document.getElementById("koli").value;
         var kode = document.getElementById("kode").value;
         var revisi = document.getElementById("revisi").value;
+        var kodeFsc = document.getElementById("fsc").value === '1' ? 'F' : 'E';
 
         nomc = kode.substring(2,6);
 
@@ -1323,9 +1333,9 @@
         // console.log(tipemc);
 
         if (tipemc == 'F' || tipebox == 'R') {
-            kodebarang = tujuan+tipemc+"E."+flute+".01.W01."+nomc+"0."+golongan;
+            kodebarang = tujuan+tipemc+kodeFsc+"."+flute+".01.W01."+nomc+"0."+golongan;
         } else {
-            kodebarang = tujuan+tipemc+"E."+flute+".01.S"+kodeKoli+"."+nomc+revisi+"."+golongan;
+            kodebarang = tujuan+tipemc+kodeFsc+"."+flute+".01.S"+kodeKoli+"."+nomc+revisi+"."+golongan;
         }
 
         // console.log(kodebarang);

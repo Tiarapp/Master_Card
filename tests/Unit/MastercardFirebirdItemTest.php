@@ -117,6 +117,23 @@ class MastercardFirebirdItemTest extends TestCase
         $this->assertSame(0, $balance->SaldoAkhirCrt);
     }
 
+    public function test_fsc_code_is_created_with_matching_eceran(): void
+    {
+        $connection = DB::connection('item_test');
+        $mastercard = $this->mastercard();
+        $mastercard->kodeBarang = 'LBF.01.01.S05.12340.001';
+        (new MastercardFirebirdItemService())->generate($connection, $mastercard, $this->input());
+        $item = $connection->table('TBarangConv')->first();
+        $this->assertSame('LBF.01.01.S05.12340.001', $item->KodeBrg);
+        $this->assertSame('F', $item->Eceran);
+    }
+
+    public function test_other_eceran_code_is_rejected(): void
+    {
+        $this->expectException(ValidationException::class);
+        (new MastercardFirebirdItemService())->parseCode('LBX.01.01.S05.12340.001');
+    }
+
     public function test_duplicate_does_not_change_item_or_balance(): void
     {
         $connection = DB::connection('item_test');

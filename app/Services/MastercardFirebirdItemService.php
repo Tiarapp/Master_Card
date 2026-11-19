@@ -11,7 +11,7 @@ class MastercardFirebirdItemService
     public function parseCode(?string $code): array
     {
         $code = trim((string) $code);
-        if (!preg_match('/^([LE])([A-Z0-9])(E)\.([A-Z0-9]{2})\.([A-Z0-9]{2})\.([SW])([0-9]{2})\.([A-Z0-9]{4})([A-Z0-9])\.([A-Z0-9]{3})$/D', $code, $parts)) {
+        if (!preg_match('/^([LE])([A-Z0-9])([EF])\.([A-Z0-9]{2})\.([A-Z0-9]{2})\.([SW])([0-9]{2})\.([A-Z0-9]{4})([A-Z0-9])\.([A-Z0-9]{3})$/D', $code, $parts)) {
             throw ValidationException::withMessages([
                 'generate' => 'Format kode barang Mastercard tidak sesuai. Periksa dan perbaiki kode sebelum generate.',
             ]);
